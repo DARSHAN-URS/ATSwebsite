@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
 import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTemplates";
@@ -40,7 +40,9 @@ export default function Resumes() {
   const [skillInput, setSkillInput] = useState("");
   const [aiLoading, setAiLoading] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
-
+  const [tailorOpen, setTailorOpen] = useState(false);
+  const [tailorJD, setTailorJD] = useState("");
+  const [tailoring, setTailoring] = useState(false);
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("created_at", { ascending: false });
     setResumes(data ?? []);
@@ -226,6 +228,40 @@ export default function Resumes() {
     toast({ title: "PDF downloaded!" });
   };
 
+  const handleTailor = async () => {
+    if (!tailorJD.trim()) return;
+    setTailoring(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("tailor-resume", {
+        body: { resumeData, jobDescription: tailorJD },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "AI Error", description: data.error, variant: "destructive" });
+        return;
+      }
+      setResumeData((prev) => {
+        const updated = { ...prev };
+        if (data.summary) updated.summary = data.summary;
+        if (data.skills) updated.skills = data.skills;
+        if (data.experience && prev.experience) {
+          updated.experience = prev.experience.map((exp, i) => ({
+            ...exp,
+            bullets: data.experience[i]?.bullets || exp.bullets,
+          }));
+        }
+        return updated;
+      });
+      toast({ title: "Resume tailored to job description!" });
+      setTailorOpen(false);
+      setTailorJD("");
+    } catch (e: any) {
+      toast({ title: "Tailoring failed", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
+    } finally {
+      setTailoring(false);
+    }
+  };
+
   if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
 
   // Editor view
@@ -239,6 +275,27 @@ export default function Resumes() {
             <h1 className="text-xl font-bold">Edit Resume</h1>
           </div>
           <div className="flex gap-2">
+            <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-2" />Tailor to Job</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-lg">
+                <DialogHeader>
+                  <DialogTitle>Tailor Resume to Job Description</DialogTitle>
+                  <DialogDescription>Paste a job description and AI will rewrite your summary, skills, and bullet points to match.</DialogDescription>
+                </DialogHeader>
+                <Textarea
+                  rows={8}
+                  value={tailorJD}
+                  onChange={(e) => setTailorJD(e.target.value)}
+                  placeholder="Paste the full job description here..."
+                  className="min-h-[200px]"
+                />
+                <Button onClick={handleTailor} disabled={tailoring || !tailorJD.trim()} className="w-full">
+                  {tailoring ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Tailoring...</> : <><Sparkles className="h-4 w-4 mr-2" />Tailor My Resume</>}
+                </Button>
+              </DialogContent>
+            </Dialog>
             <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
             <Button size="sm" onClick={handleSaveEdit}>Save Changes</Button>
           </div>
