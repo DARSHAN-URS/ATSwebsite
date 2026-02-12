@@ -12,6 +12,8 @@ export interface PersonalInfo {
 export interface ExperienceItem {
   title: string;
   company: string;
+  startDate?: string;
+  endDate?: string;
   description: string;
   bullets: string[];
 }
@@ -19,6 +21,8 @@ export interface ExperienceItem {
 export interface EducationItem {
   degree: string;
   school: string;
+  startDate?: string;
+  endDate?: string;
   year?: string;
 }
 

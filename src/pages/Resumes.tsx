@@ -265,7 +265,7 @@ export default function Resumes() {
   const addExperience = () => {
     setResumeData((prev) => ({
       ...prev,
-      experience: [...(prev.experience || []), { title: "", company: "", description: "", bullets: [] }],
+      experience: [...(prev.experience || []), { title: "", company: "", startDate: "", endDate: "", description: "", bullets: [] }],
     }));
   };
 
@@ -287,7 +287,7 @@ export default function Resumes() {
   const addEducation = () => {
     setResumeData((prev) => ({
       ...prev,
-      education: [...(prev.education || []), { degree: "", school: "", year: "" }],
+      education: [...(prev.education || []), { degree: "", school: "", startDate: "", endDate: "", year: "" }],
     }));
   };
 
@@ -592,6 +592,16 @@ export default function Resumes() {
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 ml-2" onClick={() => removeExperience(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                     </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs">Start Date</Label>
+                        <Input value={exp.startDate || ""} onChange={(e) => updateExperience(i, "startDate", e.target.value)} placeholder="e.g. Jan 2020" />
+                      </div>
+                      <div>
+                        <Label className="text-xs">End Date</Label>
+                        <Input value={exp.endDate || ""} onChange={(e) => updateExperience(i, "endDate", e.target.value)} placeholder="e.g. Present" />
+                      </div>
+                    </div>
                     <div>
                       <Label className="text-xs">Brief Description (for AI context)</Label>
                       <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder="What did you do in this role?" />
@@ -648,13 +658,30 @@ export default function Resumes() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {(resumeData.education || []).map((edu, i) => (
-                  <div key={i} className="flex gap-3 items-start">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">
-                      <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
-                      <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
-                      <Input value={edu.year || ""} onChange={(e) => updateEducation(i, "year", e.target.value)} placeholder="Year" />
+                  <div key={i} className="space-y-2 p-3 rounded-lg border bg-muted/30">
+                    <div className="flex gap-3 items-start">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1">
+                        <div>
+                          <Label className="text-xs">Degree</Label>
+                          <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
+                        </div>
+                        <div>
+                          <Label className="text-xs">School</Label>
+                          <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon" className="shrink-0 mt-4" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs">Start Date</Label>
+                        <Input value={edu.startDate || ""} onChange={(e) => updateEducation(i, "startDate", e.target.value)} placeholder="e.g. Sep 2016" />
+                      </div>
+                      <div>
+                        <Label className="text-xs">End Date</Label>
+                        <Input value={edu.endDate || ""} onChange={(e) => updateEducation(i, "endDate", e.target.value)} placeholder="e.g. Jun 2020" />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </CardContent>

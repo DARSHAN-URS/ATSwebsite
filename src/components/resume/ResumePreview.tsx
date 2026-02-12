@@ -118,12 +118,14 @@ function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateI
     const bulletsHtml = exp.bullets?.length
       ? `<ul style="margin:2px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:2px;font-size:10px;line-height:1.5">${escapeHtml(b)}</li>`).join("")}</ul>`
       : exp.description ? `<p style="font-size:10px;margin:2px 0 0;color:#444">${escapeHtml(exp.description)}</p>` : "";
-    return `<div style="margin-bottom:8px"><strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span>${bulletsHtml}</div>`;
+    const dateStr = formatDateRange(exp.startDate, exp.endDate);
+    return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:9px;color:#666;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>${bulletsHtml}</div>`;
   }).join("");
 
-  const educationHtml = (data.education || []).map((edu) =>
-    `<p style="font-size:10px;margin:2px 0"><strong>${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}${edu.year ? ` (${escapeHtml(edu.year)})` : ""}</p>`
-  ).join("");
+  const educationHtml = (data.education || []).map((edu) => {
+    const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year ? edu.year : "");
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;margin:2px 0"><div><strong style="font-size:10px">${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}</div>${dateStr ? `<span style="font-size:9px;color:#666;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+  }).join("");
 
   const skillsText = (data.skills || []).map(escapeHtml).join("  •  ");
 
@@ -240,12 +242,14 @@ function buildSidebarHTML(data: ResumeData, title: string): string {
     const bulletsHtml = exp.bullets?.length
       ? `<ul style="margin:2px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:2px;font-size:10px;line-height:1.5">${escapeHtml(b)}</li>`).join("")}</ul>`
       : exp.description ? `<p style="font-size:10px;margin:2px 0 0;color:#444">${escapeHtml(exp.description)}</p>` : "";
-    return `<div style="margin-bottom:8px"><strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span>${bulletsHtml}</div>`;
+    const dateStr = formatDateRange(exp.startDate, exp.endDate);
+    return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:9px;color:#b4d2ff;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>${bulletsHtml}</div>`;
   }).join("");
 
-  const educationHtml = (data.education || []).map((edu) =>
-    `<p style="font-size:10px;margin:2px 0"><strong>${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}${edu.year ? ` (${escapeHtml(edu.year)})` : ""}</p>`
-  ).join("");
+  const educationHtml = (data.education || []).map((edu) => {
+    const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year ? edu.year : "");
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;margin:2px 0"><div><strong style="font-size:10px">${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}</div>${dateStr ? `<span style="font-size:9px;color:#666;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+  }).join("");
 
   const customHtml = (data.customSections || []).filter(s => s.title).map((s) => {
     const items = s.items.filter(Boolean).map(item => `<p style="font-size:10px;margin:1px 0 1px 8px">• ${escapeHtml(item)}</p>`).join("");
@@ -277,13 +281,15 @@ function buildTwoColumnHTML(data: ResumeData, title: string): string {
     const bulletsHtml = exp.bullets?.length
       ? `<ul style="margin:2px 0 0 14px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:1px;font-size:9px;line-height:1.4">${escapeHtml(b)}</li>`).join("")}</ul>`
       : "";
-    return `<div style="margin-bottom:6px"><strong style="font-size:9px">${escapeHtml(exp.title)} — ${escapeHtml(exp.company)}</strong>${bulletsHtml}</div>`;
+    const dateStr = formatDateRange(exp.startDate, exp.endDate);
+    return `<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:baseline"><strong style="font-size:9px">${escapeHtml(exp.title)} — ${escapeHtml(exp.company)}</strong>${dateStr ? `<span style="font-size:8px;color:#666;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>${bulletsHtml}</div>`;
   }).join("");
 
   const skillsHtml = (data.skills || []).map(s => `<span style="font-size:9px">• ${escapeHtml(s)}</span>`).join("<br/>");
-  const educationHtml = (data.education || []).map((edu) =>
-    `<p style="font-size:9px;margin:2px 0"><strong>${escapeHtml(edu.degree)}</strong><br/>${escapeHtml(edu.school)}${edu.year ? ` (${escapeHtml(edu.year)})` : ""}</p>`
-  ).join("");
+  const educationHtml = (data.education || []).map((edu) => {
+    const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year ? edu.year : "");
+    return `<p style="font-size:9px;margin:2px 0"><strong>${escapeHtml(edu.degree)}</strong><br/>${escapeHtml(edu.school)}${dateStr ? ` (${escapeHtml(dateStr)})` : ""}</p>`;
+  }).join("");
 
   const customHtml = (data.customSections || []).filter(s => s.title).map((s) => {
     const items = s.items.filter(Boolean).map(item => `<p style="font-size:9px;margin:1px 0">• ${escapeHtml(item)}</p>`).join("");
@@ -313,4 +319,10 @@ function buildTwoColumnHTML(data: ResumeData, title: string): string {
 }
 function escapeHtml(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function formatDateRange(startDate?: string, endDate?: string): string {
+  if (!startDate && !endDate) return "";
+  const parts = [startDate, endDate].filter(Boolean).join(" — ");
+  return parts;
 }

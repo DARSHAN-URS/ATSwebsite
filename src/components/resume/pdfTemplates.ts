@@ -44,6 +44,11 @@ function textHeight(doc: jsPDF, text: string, maxWidth: number, fontSize: number
   return lines.length * lineSpacing;
 }
 
+function formatDateRangePdf(startDate?: string, endDate?: string): string {
+  if (!startDate && !endDate) return "";
+  return [startDate, endDate].filter(Boolean).join(" — ");
+}
+
 // ─── Classic ───────────────────────────────────────────
 function renderClassic(doc: jsPDF, data: ResumeData, title: string) {
   const ctx: PdfContext = { doc, y: 22, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
@@ -309,6 +314,13 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
       doc.text(`${exp.title} — ${exp.company}`, ctx.margin, leftY);
+      const expDate = formatDateRangePdf(exp.startDate, exp.endDate);
+      if (expDate) {
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
+        doc.text(expDate, ctx.margin, leftY + 4);
+        leftY += 4;
+      }
       leftY += 4;
       doc.setFont("helvetica", "normal");
       if (exp.bullets?.length) {
@@ -342,7 +354,8 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
       doc.text(edu.degree, rightX, rightY);
       rightY += 4;
       doc.setFont("helvetica", "normal");
-      doc.text(`${edu.school}${edu.year ? ` (${edu.year})` : ""}`, rightX, rightY);
+      const eduDate = formatDateRangePdf(edu.startDate, edu.endDate) || (edu.year || "");
+      doc.text(`${edu.school}${eduDate ? ` (${eduDate})` : ""}`, rightX, rightY);
       rightY += 5;
     });
   }
@@ -521,6 +534,14 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
       doc.text(`${exp.title} — ${exp.company}`, ctx.margin, ctx.y);
+      // Date range on the right
+      const dateRange = formatDateRangePdf(exp.startDate, exp.endDate);
+      if (dateRange) {
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "normal");
+        const dateWidth = doc.getTextWidth(dateRange);
+        doc.text(dateRange, ctx.pageWidth - ctx.margin - dateWidth, ctx.y);
+      }
       ctx.y += 5;
       doc.setFont("helvetica", "normal");
       if (exp.bullets?.length) {
@@ -544,11 +565,18 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
     addSection("Education");
     (data.education || []).forEach((edu) => {
       doc.setFontSize(10);
-      const line = `${edu.degree} — ${edu.school}${edu.year ? ` (${edu.year})` : ""}`;
-      const lines = doc.splitTextToSize(line, ctx.maxWidth);
+      const dateStr = formatDateRangePdf(edu.startDate, edu.endDate) || (edu.year || "");
+      const line = `${edu.degree} — ${edu.school}`;
+      const lines = doc.splitTextToSize(line, ctx.maxWidth - (dateStr ? 50 : 0));
       checkPageBreak(ctx, lines.length * 5 + 2);
       doc.setFont("helvetica", "bold");
       doc.text(lines, ctx.margin, ctx.y);
+      if (dateStr) {
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "normal");
+        const dateWidth = doc.getTextWidth(dateStr);
+        doc.text(dateStr, ctx.pageWidth - ctx.margin - dateWidth, ctx.y);
+      }
       ctx.y += lines.length * 5 + 2;
     });
   }
