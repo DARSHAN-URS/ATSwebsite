@@ -218,8 +218,6 @@ export default function Resumes() {
   };
 
   const handleExportPDF = () => {
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
     const pi = resumeData.personalInfo || {};
     const contactParts: string[] = [];
     if (pi.email) contactParts.push(pi.email);
@@ -228,7 +226,6 @@ export default function Resumes() {
     const linkParts: string[] = [];
     if (pi.linkedin) linkParts.push(`<a href="${pi.linkedin.startsWith("http") ? pi.linkedin : "https://" + pi.linkedin}">${pi.linkedin}</a>`);
     if (pi.portfolio) linkParts.push(`<a href="${pi.portfolio.startsWith("http") ? pi.portfolio : "https://" + pi.portfolio}">${pi.portfolio}</a>`);
-    
 
     const exp = (resumeData.experience || []).map((e) =>
       `<div style="margin-bottom:12px"><strong>${e.title}</strong> — ${e.company}${e.bullets?.length ? `<ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : e.description ? `<p>${e.description}</p>` : ""}</div>`
@@ -240,7 +237,7 @@ export default function Resumes() {
       `<h2>${s.title}</h2>${s.items.filter(Boolean).map(item => `<p>• ${item}</p>`).join("")}`
     ).join("");
 
-    printWindow.document.write(`
+    const htmlContent = `
       <html><head><title>${pi.fullName || title}</title>
       <style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;line-height:1.6;color:#222;padding:20px}
       h1{margin-bottom:4px}h2{border-bottom:1px solid #ccc;padding-bottom:4px;margin-top:20px}
@@ -257,9 +254,19 @@ export default function Resumes() {
       ${edu ? `<h2>Education</h2>${edu}` : ""}
       ${customHtml}
       </body></html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
+    `;
+
+    // Use blob download instead of window.open to avoid popup blockers
+    const blob = new Blob([htmlContent], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast({ title: "Resume downloaded!", description: "Open the HTML file and use your browser's Print → Save as PDF to create a PDF." });
   };
 
   if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
