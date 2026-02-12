@@ -1,7 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { type TemplateId } from "./pdfTemplates";
 import type { ResumeData } from "./types";
 import { Loader2 } from "lucide-react";
+
+const PAGE_HEIGHT = 842; // A4 proportional height at 595px width
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -11,8 +13,10 @@ interface ResumePreviewProps {
 
 export default function ResumePreview({ resumeData, title, templateId }: ResumePreviewProps) {
   const [pages, setPages] = useState<string[]>([]);
+  const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const measureRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -30,64 +34,65 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
     return () => clearTimeout(debounceRef.current);
   }, [resumeData, title, templateId]);
 
+  // Measure content height and calculate page count
+  const updatePageCount = useCallback(() => {
+    if (measureRef.current) {
+      const totalHeight = measureRef.current.scrollHeight;
+      setPageCount(Math.max(1, Math.ceil(totalHeight / PAGE_HEIGHT)));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Re-measure after HTML updates
+    const timer = setTimeout(updatePageCount, 100);
+    return () => clearTimeout(timer);
+  }, [pages, updatePageCount]);
+
   return (
     <div className="h-full w-full flex flex-col rounded-lg border bg-muted/30 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2 border-b bg-card shrink-0">
         <span className="text-sm font-medium text-muted-foreground">Live Preview</span>
-        {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
+        <div className="flex items-center gap-2">
+          {pageCount > 1 && (
+            <span className="text-xs text-muted-foreground">{pageCount} pages</span>
+          )}
+          {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
+        </div>
       </div>
-      <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-4 bg-muted/50">
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-6 bg-muted/50">
         {pages.length > 0 ? (
-          pages.map((html, i) => (
-            <div key={i} className="relative w-full max-w-[595px]">
-              <div
-                className="bg-white shadow-md rounded w-full"
-                style={{ padding: 0, minHeight: 842 }}
-                dangerouslySetInnerHTML={{ __html: html }}
-              />
-              {/* Page break overlay lines */}
-              <PageBreakOverlay />
-            </div>
-          ))
+          <>
+            {/* Hidden measurement container */}
+            <div
+              ref={measureRef}
+              className="absolute opacity-0 pointer-events-none"
+              style={{ width: 595, left: -9999 }}
+              dangerouslySetInnerHTML={{ __html: pages[0] }}
+            />
+            {/* Visible page slices */}
+            {Array.from({ length: pageCount }, (_, i) => (
+              <div key={i} className="w-full max-w-[595px] flex flex-col">
+                <div className="text-[10px] text-muted-foreground mb-1 text-right">
+                  Page {i + 1} of {pageCount}
+                </div>
+                <div
+                  className="bg-white shadow-lg rounded border overflow-hidden"
+                  style={{ height: PAGE_HEIGHT }}
+                >
+                  <div
+                    style={{ marginTop: -(i * PAGE_HEIGHT) }}
+                    dangerouslySetInnerHTML={{ __html: pages[0] }}
+                  />
+                </div>
+              </div>
+            ))}
+          </>
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
             Generating preview…
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-/** Renders dashed page-break lines at every A4-page interval (842px) */
-function PageBreakOverlay() {
-  const PAGE_HEIGHT = 842; // A4 at ~72dpi preview scale
-  const [lines, setLines] = useState<number[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = containerRef.current?.parentElement;
-    if (!el) return;
-    const observer = new ResizeObserver(() => {
-      const h = el.scrollHeight;
-      const count = Math.floor(h / PAGE_HEIGHT);
-      setLines(Array.from({ length: count }, (_, i) => (i + 1) * PAGE_HEIGHT));
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={containerRef} className="absolute inset-0 pointer-events-none" aria-hidden>
-      {lines.map((top) => (
-        <div key={top} className="absolute left-0 right-0 flex items-center gap-2" style={{ top }}>
-          <div className="flex-1 border-t-2 border-dashed border-destructive/40" />
-          <span className="text-[10px] text-destructive/60 font-medium whitespace-nowrap bg-white/80 px-1.5 py-0.5 rounded">
-            Page break
-          </span>
-          <div className="flex-1 border-t-2 border-dashed border-destructive/40" />
-        </div>
-      ))}
     </div>
   );
 }
