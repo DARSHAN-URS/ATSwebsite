@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, ChevronDown } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import dashboardPreview from "@/assets/dashboard-preview.png";
@@ -128,6 +128,94 @@ const Index = () => {
             <div className="overflow-hidden rounded-xl border border-border shadow-2xl">
               <img src={dashboardPreview} alt="JobFlow AI dashboard showing resume score, templates, and job application tracker" className="w-full" loading="lazy" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="border-t border-border bg-secondary/30 py-20">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Loved by Job Seekers Worldwide</h2>
+            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+              Join thousands of professionals who landed their dream jobs with JobFlow AI.
+            </p>
+          </div>
+
+          {/* Stats bar */}
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+            {[
+              { value: "10,000+", label: "Active Users" },
+              { value: "4.8/5", label: "Average Rating" },
+              { value: "3×", label: "More Interviews" },
+              { value: "1M+", label: "Resumes Built" },
+            ].map((s) => (
+              <div key={s.label} className="rounded-xl border border-border bg-card p-5 text-center">
+                <p className="text-2xl font-extrabold text-primary">{s.value}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Review cards */}
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                name: "Sarah M.",
+                role: "Software Engineer → Google",
+                text: "I was applying for months with zero callbacks. After using JobFlow AI's resume grader and tailoring my resume, I got 5 interviews in 2 weeks — including one at Google. I start next month!",
+                stars: 5,
+              },
+              {
+                name: "James R.",
+                role: "Marketing Manager → HubSpot",
+                text: "The one-click tailoring feature is a game-changer. I used to spend hours customizing each resume. Now I paste the job description and get a perfectly optimized version in seconds.",
+                stars: 5,
+              },
+              {
+                name: "Priya K.",
+                role: "Recent Graduate → Deloitte",
+                text: "As a new grad with limited experience, I had no idea my resume was getting filtered by ATS. JobFlow AI helped me restructure everything and I landed my first consulting role within a month.",
+                stars: 5,
+              },
+              {
+                name: "David L.",
+                role: "Data Analyst → Amazon",
+                text: "The AI grader caught keyword gaps I never would have noticed. My resume score went from 45 to 92, and suddenly I was getting recruiter messages on LinkedIn every week.",
+                stars: 5,
+              },
+              {
+                name: "Emily T.",
+                role: "Product Designer → Figma",
+                text: "I love the templates — clean, professional, and they actually pass ATS scans. Combined with the cover letter generator, JobFlow AI is the only tool I recommend to my design friends.",
+                stars: 5,
+              },
+              {
+                name: "Carlos V.",
+                role: "Career Changer → Salesforce",
+                text: "Switching from teaching to tech felt impossible until I found JobFlow AI. The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.",
+                stars: 5,
+              },
+            ].map((t) => (
+              <div key={t.name} className="group rounded-xl border border-border bg-card p-6 transition hover:shadow-lg hover:-translate-y-1 duration-300">
+                <Quote className="mb-3 h-5 w-5 text-primary/40" />
+                <p className="text-sm leading-relaxed text-muted-foreground">{t.text}</p>
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                  </div>
+                  <div className="ml-auto flex gap-0.5">
+                    {Array.from({ length: t.stars }).map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
