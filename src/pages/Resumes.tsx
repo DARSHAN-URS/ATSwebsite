@@ -10,28 +10,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
+import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
+import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 
 type Resume = Tables<"resumes">;
-
-interface ExperienceItem {
-  title: string;
-  company: string;
-  description: string;
-  bullets: string[];
-}
-
-interface EducationItem {
-  degree: string;
-  school: string;
-  year?: string;
-}
-
-interface ResumeData {
-  summary?: string;
-  skills?: string[];
-  experience?: ExperienceItem[];
-  education?: EducationItem[];
-}
 
 export default function Resumes() {
   const { user } = useAuth();
@@ -44,10 +27,12 @@ export default function Resumes() {
   // Form state
   const [title, setTitle] = useState("");
   const [resumeData, setResumeData] = useState<ResumeData>({
+    personalInfo: {},
     summary: "",
     skills: [],
     experience: [],
     education: [],
+    customSections: [],
   });
   const [skillInput, setSkillInput] = useState("");
   const [aiLoading, setAiLoading] = useState<string | null>(null);
@@ -62,25 +47,8 @@ export default function Resumes() {
 
   const resetForm = () => {
     setTitle("");
-    setResumeData({ summary: "", skills: [], experience: [], education: [] });
+    setResumeData({ personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] });
     setSkillInput("");
-  };
-
-  const handleCreate = async () => {
-    if (!user || !title) return;
-    const { error } = await supabase.from("resumes").insert({
-      user_id: user.id,
-      title,
-      resume_data: resumeData as any,
-    });
-    if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Resume created" });
-      setCreateOpen(false);
-      resetForm();
-      fetchResumes();
-    }
   };
 
   const handleSaveEdit = async () => {
@@ -108,6 +76,7 @@ export default function Resumes() {
     setTitle(resume.title);
     const data = resume.resume_data as any as ResumeData;
     setResumeData({
+      personalInfo: data?.personalInfo || {},
       summary: data?.summary || "",
       skills: data?.skills || [],
       experience: (data?.experience || []).map((e: any) => ({
@@ -117,6 +86,7 @@ export default function Resumes() {
         bullets: e.bullets || [],
       })),
       education: data?.education || [],
+      customSections: data?.customSections || [],
     });
   };
 
@@ -250,22 +220,42 @@ export default function Resumes() {
   const handleExportPDF = () => {
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
+    const pi = resumeData.personalInfo || {};
+    const contactParts: string[] = [];
+    if (pi.email) contactParts.push(pi.email);
+    if (pi.phone) contactParts.push(pi.phone);
+    if (pi.location) contactParts.push(pi.location);
+    const linkParts: string[] = [];
+    if (pi.linkedin) linkParts.push(`<a href="${pi.linkedin.startsWith("http") ? pi.linkedin : "https://" + pi.linkedin}">${pi.linkedin}</a>`);
+    if (pi.portfolio) linkParts.push(`<a href="${pi.portfolio.startsWith("http") ? pi.portfolio : "https://" + pi.portfolio}">${pi.portfolio}</a>`);
+    if (pi.github) linkParts.push(`<a href="${pi.github.startsWith("http") ? pi.github : "https://" + pi.github}">${pi.github}</a>`);
+
     const exp = (resumeData.experience || []).map((e) =>
       `<div style="margin-bottom:12px"><strong>${e.title}</strong> — ${e.company}${e.bullets?.length ? `<ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : e.description ? `<p>${e.description}</p>` : ""}</div>`
     ).join("");
     const edu = (resumeData.education || []).map((e) =>
       `<p><strong>${e.degree}</strong> — ${e.school}${e.year ? ` (${e.year})` : ""}</p>`
     ).join("");
+    const customHtml = (resumeData.customSections || []).filter(s => s.title).map((s) =>
+      `<h2>${s.title}</h2>${s.items.filter(Boolean).map(item => `<p>• ${item}</p>`).join("")}`
+    ).join("");
+
     printWindow.document.write(`
-      <html><head><title>${title}</title>
+      <html><head><title>${pi.fullName || title}</title>
       <style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;line-height:1.6;color:#222;padding:20px}
       h1{margin-bottom:4px}h2{border-bottom:1px solid #ccc;padding-bottom:4px;margin-top:20px}
-      ul{margin:4px 0;padding-left:20px}li{margin-bottom:4px}</style></head><body>
-      <h1>${title}</h1>
+      ul{margin:4px 0;padding-left:20px}li{margin-bottom:4px}
+      .contact{color:#555;font-size:14px;margin-bottom:4px}
+      .links{font-size:13px;color:#0066cc}
+      a{color:#0066cc;text-decoration:none}</style></head><body>
+      <h1>${pi.fullName || title}</h1>
+      ${contactParts.length ? `<p class="contact">${contactParts.join(" • ")}</p>` : ""}
+      ${linkParts.length ? `<p class="links">${linkParts.join(" • ")}</p>` : ""}
       ${resumeData.summary ? `<h2>Summary</h2><p>${resumeData.summary}</p>` : ""}
       ${(resumeData.skills || []).length > 0 ? `<h2>Skills</h2><p>${(resumeData.skills || []).join(" • ")}</p>` : ""}
       ${exp ? `<h2>Experience</h2>${exp}` : ""}
       ${edu ? `<h2>Education</h2>${edu}` : ""}
+      ${customHtml}
       </body></html>
     `);
     printWindow.document.close();
@@ -293,6 +283,15 @@ export default function Resumes() {
           <Label>Resume Title</Label>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
+
+        {/* Personal Information */}
+        {user && (
+          <PersonalInfoSection
+            personalInfo={resumeData.personalInfo || {}}
+            onChange={(info) => setResumeData((prev) => ({ ...prev, personalInfo: info }))}
+            userId={user.id}
+          />
+        )}
 
         {/* Summary */}
         <Card>
@@ -428,6 +427,15 @@ export default function Resumes() {
             ))}
           </CardContent>
         </Card>
+
+        {/* Custom Sections */}
+        <div>
+          <h2 className="text-base font-semibold mb-3">Custom Sections</h2>
+          <CustomSectionsEditor
+            sections={resumeData.customSections || []}
+            onChange={(sections) => setResumeData((prev) => ({ ...prev, customSections: sections }))}
+          />
+        </div>
       </div>
     );
   }
@@ -459,7 +467,7 @@ export default function Resumes() {
                 const { data, error } = await supabase.from("resumes").insert({
                   user_id: user.id,
                   title,
-                  resume_data: { summary: "", skills: [], experience: [], education: [] } as any,
+                  resume_data: { personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] } as any,
                 }).select().single();
                 if (error) {
                   toast({ title: "Error", description: error.message, variant: "destructive" });
