@@ -303,19 +303,19 @@ export default function Resumes() {
   // Editor view
   if (editingId) {
     return (
-      <div className="h-[calc(100vh-4rem)] flex flex-col">
+      <div className="h-[calc(100vh-4rem)] md:h-screen flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 gap-2">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => { setEditingId(null); resetForm(); }}>← Back</Button>
-            <h1 className="text-xl font-bold">Edit Resume</h1>
+            <h1 className="text-lg sm:text-xl font-bold">Edit Resume</h1>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-2" />Tailor to Job</Button>
+                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Tailor to Job</span><span className="sm:hidden">Tailor</span></Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-lg">
+              <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Tailor Resume to Job Description</DialogTitle>
                   <DialogDescription>Paste a job description and AI will rewrite your summary, skills, and bullet points to match.</DialogDescription>
@@ -334,7 +334,7 @@ export default function Resumes() {
             </Dialog>
             <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-2" />Grade Resume</Button>
+                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Grade Resume</span><span className="sm:hidden">Grade</span></Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
                 <DialogHeader>
@@ -379,7 +379,7 @@ export default function Resumes() {
                           <span className={`text-2xl font-bold ${scoreColor(data.score)}`}>{data.score}</span>
                         </div>
                         <Progress value={data.score} className={`h-2 ${progressColor(data.score)}`} />
-                        <div className="grid grid-cols-2 gap-4 mt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                           <div>
                             <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Strengths</h4>
                             <ul className="space-y-1.5">
@@ -413,15 +413,15 @@ export default function Resumes() {
                 )}
               </DialogContent>
             </Dialog>
-            <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
-            <Button size="sm" onClick={handleSaveEdit}>Save Changes</Button>
+            <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Export PDF</span><span className="sm:hidden">PDF</span></Button>
+            <Button size="sm" onClick={handleSaveEdit}>Save</Button>
           </div>
         </div>
 
-        {/* Side-by-side layout */}
-        <div className="flex-1 min-h-0 flex">
+        {/* Side-by-side layout (stacked on mobile) */}
+        <div className="flex-1 min-h-0 flex flex-col md:flex-row">
           {/* Editor panel */}
-          <div className="w-1/2 overflow-y-auto p-6 space-y-5 border-r">
+          <div className="md:w-1/2 overflow-y-auto p-4 sm:p-6 space-y-5 border-b md:border-b-0 md:border-r">
             <div className="space-y-2">
               <Label>Resume Title</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -502,7 +502,7 @@ export default function Resumes() {
                 {(resumeData.experience || []).map((exp, i) => (
                   <div key={i} className="space-y-3 p-4 rounded-lg border bg-muted/30">
                     <div className="flex justify-between items-start">
-                      <div className="grid grid-cols-2 gap-3 flex-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
                         <div>
                           <Label className="text-xs">Job Title</Label>
                           <Input value={exp.title} onChange={(e) => updateExperience(i, "title", e.target.value)} placeholder="Senior Developer" />
@@ -571,7 +571,7 @@ export default function Resumes() {
               <CardContent className="space-y-3">
                 {(resumeData.education || []).map((edu, i) => (
                   <div key={i} className="flex gap-3 items-start">
-                    <div className="grid grid-cols-3 gap-2 flex-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">
                       <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
                       <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
                       <Input value={edu.year || ""} onChange={(e) => updateEducation(i, "year", e.target.value)} placeholder="Year" />
@@ -592,8 +592,8 @@ export default function Resumes() {
             </div>
           </div>
 
-          {/* Preview panel */}
-          <div className="w-1/2 p-4">
+          {/* Preview panel - hidden on mobile, shown on md+ */}
+          <div className="hidden md:block md:w-1/2 p-4">
             <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} />
           </div>
         </div>
@@ -603,7 +603,7 @@ export default function Resumes() {
 
   // List view
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
