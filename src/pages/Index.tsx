@@ -71,7 +71,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="JobFlow AI" className="h-8" />
+            <img src={logo} alt="JobFlow AI" className="h-10" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">Resume Templates</Link>
@@ -299,7 +299,7 @@ const Index = () => {
         <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="JobFlow AI" className="h-8 brightness-0 invert" />
+              <img src={logo} alt="JobFlow AI" className="h-10 brightness-0 invert" />
             </div>
             <p className="mt-3 max-w-xs text-xs leading-relaxed text-background/70">
               The world's most accurate AI-powered resume builder and ATS optimization suite. Built for job seekers, by recruiters.
@@ -351,7 +351,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src={logo} alt="JobFlow AI" className="h-7" />
+              <img src={logo} alt="JobFlow AI" className="h-9" />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>
