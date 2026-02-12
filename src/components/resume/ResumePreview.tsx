@@ -41,8 +41,8 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
           pages.map((html, i) => (
             <div
               key={i}
-              className="bg-white shadow-md rounded w-full max-w-[595px] min-h-[842px] overflow-hidden"
-              style={{ aspectRatio: "210/297" }}
+              className="bg-white shadow-md rounded w-full max-w-[595px] min-h-[842px]"
+              style={{ padding: 0 }}
               dangerouslySetInnerHTML={{ __html: html }}
             />
           ))
