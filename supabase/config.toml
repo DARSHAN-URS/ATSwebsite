@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.tailor-resume]
 verify_jwt = false
+
+[functions.grade-resume]
+verify_jwt = false

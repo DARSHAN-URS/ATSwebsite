@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
 import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTemplates";
@@ -43,6 +44,10 @@ export default function Resumes() {
   const [tailorOpen, setTailorOpen] = useState(false);
   const [tailorJD, setTailorJD] = useState("");
   const [tailoring, setTailoring] = useState(false);
+  const [gradeOpen, setGradeOpen] = useState(false);
+  const [gradeJD, setGradeJD] = useState("");
+  const [grading, setGrading] = useState(false);
+  const [gradeResult, setGradeResult] = useState<any>(null);
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("created_at", { ascending: false });
     setResumes(data ?? []);
@@ -261,6 +266,37 @@ export default function Resumes() {
       setTailoring(false);
     }
   };
+  const handleGrade = async () => {
+    setGrading(true);
+    setGradeResult(null);
+    try {
+      const { data, error } = await supabase.functions.invoke("grade-resume", {
+        body: { resumeData, jobDescription: gradeJD },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "AI Error", description: data.error, variant: "destructive" });
+        return;
+      }
+      setGradeResult(data);
+    } catch (e: any) {
+      toast({ title: "Grading failed", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
+    } finally {
+      setGrading(false);
+    }
+  };
+
+  const scoreColor = (score: number) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
+  };
+
+  const progressColor = (score: number) => {
+    if (score >= 80) return "[&>div]:bg-green-500";
+    if (score >= 60) return "[&>div]:bg-yellow-500";
+    return "[&>div]:bg-red-500";
+  };
 
   if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
 
@@ -294,6 +330,87 @@ export default function Resumes() {
                 <Button onClick={handleTailor} disabled={tailoring || !tailorJD.trim()} className="w-full">
                   {tailoring ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Tailoring...</> : <><Sparkles className="h-4 w-4 mr-2" />Tailor My Resume</>}
                 </Button>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-2" />Grade Resume</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Resume Grader</DialogTitle>
+                  <DialogDescription>Get an AI-powered grade on ATS compatibility, job fit, and writing quality.</DialogDescription>
+                </DialogHeader>
+                {!gradeResult ? (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Job Description (optional — for job-specific fit scoring)</Label>
+                      <Textarea
+                        rows={6}
+                        value={gradeJD}
+                        onChange={(e) => setGradeJD(e.target.value)}
+                        placeholder="Paste a job description for targeted grading, or leave blank for general assessment..."
+                        className="min-h-[150px]"
+                      />
+                    </div>
+                    <Button onClick={handleGrade} disabled={grading} className="w-full">
+                      {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Grading...</> : <><ClipboardCheck className="h-4 w-4 mr-2" />Grade My Resume</>}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Overall Score */}
+                    <div className="text-center p-6 rounded-lg border bg-muted/30">
+                      <div className={`text-5xl font-bold ${scoreColor(gradeResult.overallScore)}`}>{gradeResult.overallScore}</div>
+                      <div className="text-sm text-muted-foreground mt-1">Overall Score</div>
+                      <Progress value={gradeResult.overallScore} className={`mt-3 h-3 ${progressColor(gradeResult.overallScore)}`} />
+                      <p className="text-sm mt-4 text-left">{gradeResult.overallAssessment}</p>
+                    </div>
+
+                    {/* Category Scores */}
+                    {[
+                      { key: "ats", label: "ATS Compatibility", data: gradeResult.ats },
+                      { key: "fit", label: gradeResult.fit?.label || "Job Fit", data: gradeResult.fit },
+                      { key: "writing", label: "Writing Quality", data: gradeResult.writing },
+                    ].map(({ key, label, data }) => (
+                      <div key={key} className="p-4 rounded-lg border space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold">{label}</h3>
+                          <span className={`text-2xl font-bold ${scoreColor(data.score)}`}>{data.score}</span>
+                        </div>
+                        <Progress value={data.score} className={`h-2 ${progressColor(data.score)}`} />
+                        <div className="grid grid-cols-2 gap-4 mt-2">
+                          <div>
+                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Strengths</h4>
+                            <ul className="space-y-1.5">
+                              {data.strengths.map((s: string, i: number) => (
+                                <li key={i} className="text-sm flex gap-2 items-start">
+                                  <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                                  {s}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Improvements</h4>
+                            <ul className="space-y-1.5">
+                              {data.improvements.map((s: string, i: number) => (
+                                <li key={i} className="text-sm flex gap-2 items-start">
+                                  <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
+                                  {s}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    <Button variant="outline" onClick={() => { setGradeResult(null); }} className="w-full">
+                      Grade Again
+                    </Button>
+                  </div>
+                )}
               </DialogContent>
             </Dialog>
             <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
