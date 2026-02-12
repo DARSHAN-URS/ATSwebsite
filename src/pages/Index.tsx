@@ -302,7 +302,7 @@ const Index = () => {
               <Sparkles className="h-5 w-5 text-primary" />
               JobFlow <span className="text-primary">AI</span>
             </div>
-            <p className="mt-3 max-w-xs text-xs leading-relaxed text-sidebar-accent-foreground/70">
+            <p className="mt-3 max-w-xs text-xs leading-relaxed text-sidebar-foreground/80">
               The world's most accurate AI-powered resume builder and ATS optimization suite. Built for job seekers, by recruiters.
             </p>
           </div>
