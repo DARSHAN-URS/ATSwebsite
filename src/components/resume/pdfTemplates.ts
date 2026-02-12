@@ -265,10 +265,9 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
   });
 }
 
-// ─── Main export ───────────────────────────────────────
-export function generateResumePDF(data: ResumeData, title: string, templateId: TemplateId = "classic") {
+// ─── Main exports ──────────────────────────────────────
+function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): jsPDF {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-
   switch (templateId) {
     case "modern":
       renderModern(doc, data, title);
@@ -282,8 +281,17 @@ export function generateResumePDF(data: ResumeData, title: string, templateId: T
     default:
       renderClassic(doc, data, title);
   }
+  return doc;
+}
 
+export function generateResumePDF(data: ResumeData, title: string, templateId: TemplateId = "classic") {
+  const doc = buildDoc(data, title, templateId);
   const pi = data.personalInfo || {};
   const filename = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.pdf`;
   doc.save(filename);
+}
+
+export function generateResumePDFBlobUrl(data: ResumeData, title: string, templateId: TemplateId = "classic"): string {
+  const doc = buildDoc(data, title, templateId);
+  return doc.output("bloburl") as unknown as string;
 }
