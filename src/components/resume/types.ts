@@ -5,7 +5,7 @@ export interface PersonalInfo {
   location?: string;
   linkedin?: string;
   portfolio?: string;
-  github?: string;
+  
   photoUrl?: string;
 }
 

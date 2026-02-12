@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe, Github } from "lucide-react";
+import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { PersonalInfo } from "./types";
@@ -103,7 +103,7 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
         </div>
 
         {/* Links */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" />LinkedIn</Label>
             <Input value={personalInfo.linkedin || ""} onChange={(e) => update("linkedin", e.target.value)} placeholder="linkedin.com/in/johndoe" />
@@ -111,10 +111,6 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
           <div>
             <Label className="text-xs flex items-center gap-1"><Globe className="h-3 w-3" />Portfolio</Label>
             <Input value={personalInfo.portfolio || ""} onChange={(e) => update("portfolio", e.target.value)} placeholder="johndoe.com" />
-          </div>
-          <div>
-            <Label className="text-xs flex items-center gap-1"><Github className="h-3 w-3" />GitHub</Label>
-            <Input value={personalInfo.github || ""} onChange={(e) => update("github", e.target.value)} placeholder="github.com/johndoe" />
           </div>
         </div>
       </CardContent>

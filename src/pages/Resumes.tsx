@@ -228,7 +228,7 @@ export default function Resumes() {
     const linkParts: string[] = [];
     if (pi.linkedin) linkParts.push(`<a href="${pi.linkedin.startsWith("http") ? pi.linkedin : "https://" + pi.linkedin}">${pi.linkedin}</a>`);
     if (pi.portfolio) linkParts.push(`<a href="${pi.portfolio.startsWith("http") ? pi.portfolio : "https://" + pi.portfolio}">${pi.portfolio}</a>`);
-    if (pi.github) linkParts.push(`<a href="${pi.github.startsWith("http") ? pi.github : "https://" + pi.github}">${pi.github}</a>`);
+    
 
     const exp = (resumeData.experience || []).map((e) =>
       `<div style="margin-bottom:12px"><strong>${e.title}</strong> — ${e.company}${e.bullets?.length ? `<ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : e.description ? `<p>${e.description}</p>` : ""}</div>`
