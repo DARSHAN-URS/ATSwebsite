@@ -100,16 +100,12 @@ const Index = () => {
             Our free AI resume builder helps you create a professional, ATS-optimized resume in minutes. Use our <strong className="text-foreground">AI resume grader</strong> to scan your content, identify keyword gaps, and land 3× more interviews.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link to="/resumes">
-              <Button size="lg" className="gap-2 rounded-full px-8 font-semibold">
-                Build Free ATS Resume <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/resumes">
-              <Button variant="outline" size="lg" className="gap-2 rounded-full px-8 font-semibold">
-                <Upload className="h-4 w-4" /> Upload Existing Resume
-              </Button>
-            </Link>
+            <Button size="lg" className="gap-2 rounded-full px-8 font-semibold" onClick={() => openAuth("signup")}>
+              Build Free ATS Resume <ArrowRight className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="lg" className="gap-2 rounded-full px-8 font-semibold" onClick={() => openAuth("signup")}>
+              <Upload className="h-4 w-4" /> Upload Existing Resume
+            </Button>
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> 100% ATS-Friendly</span>
@@ -178,11 +174,9 @@ const Index = () => {
                 </li>
               ))}
             </ul>
-            <Link to="/resumes" className="mt-8 inline-block">
-              <Button className="gap-2 rounded-full font-semibold">
-                Fix My Resume Now <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button className="gap-2 rounded-full font-semibold mt-8" onClick={() => openAuth("signup")}>
+              Fix My Resume Now <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-xl border border-border shadow-2xl">
