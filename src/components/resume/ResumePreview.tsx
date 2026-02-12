@@ -39,12 +39,15 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
       <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-4 bg-muted/50">
         {pages.length > 0 ? (
           pages.map((html, i) => (
-            <div
-              key={i}
-              className="bg-white shadow-md rounded w-full max-w-[595px] min-h-[842px]"
-              style={{ padding: 0 }}
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
+            <div key={i} className="relative w-full max-w-[595px]">
+              <div
+                className="bg-white shadow-md rounded w-full"
+                style={{ padding: 0, minHeight: 842 }}
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+              {/* Page break overlay lines */}
+              <PageBreakOverlay />
+            </div>
           ))
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
@@ -52,6 +55,39 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Renders dashed page-break lines at every A4-page interval (842px) */
+function PageBreakOverlay() {
+  const PAGE_HEIGHT = 842; // A4 at ~72dpi preview scale
+  const [lines, setLines] = useState<number[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current?.parentElement;
+    if (!el) return;
+    const observer = new ResizeObserver(() => {
+      const h = el.scrollHeight;
+      const count = Math.floor(h / PAGE_HEIGHT);
+      setLines(Array.from({ length: count }, (_, i) => (i + 1) * PAGE_HEIGHT));
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none" aria-hidden>
+      {lines.map((top) => (
+        <div key={top} className="absolute left-0 right-0 flex items-center gap-2" style={{ top }}>
+          <div className="flex-1 border-t-2 border-dashed border-destructive/40" />
+          <span className="text-[10px] text-destructive/60 font-medium whitespace-nowrap bg-white/80 px-1.5 py-0.5 rounded">
+            Page break
+          </span>
+          <div className="flex-1 border-t-2 border-dashed border-destructive/40" />
+        </div>
+      ))}
     </div>
   );
 }
