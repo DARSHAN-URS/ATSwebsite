@@ -30,10 +30,18 @@ interface PdfContext {
 }
 
 function checkPageBreak(ctx: PdfContext, needed: number) {
-  if (ctx.y + needed > ctx.doc.internal.pageSize.getHeight() - 15) {
+  const pageBottom = ctx.doc.internal.pageSize.getHeight() - 12;
+  if (ctx.y + needed > pageBottom) {
     ctx.doc.addPage();
     ctx.y = 20;
   }
+}
+
+/** Estimate mm height for wrapped text lines */
+function textHeight(doc: jsPDF, text: string, maxWidth: number, fontSize: number, lineSpacing = 5): number {
+  doc.setFontSize(fontSize);
+  const lines = doc.splitTextToSize(text, maxWidth);
+  return lines.length * lineSpacing;
 }
 
 // ─── Classic ───────────────────────────────────────────
@@ -475,9 +483,10 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     const lines = doc.splitTextToSize(data.summary, ctx.maxWidth);
-    checkPageBreak(ctx, lines.length * 5);
+    const h = lines.length * 5;
+    checkPageBreak(ctx, h);
     doc.text(lines, ctx.margin, ctx.y);
-    ctx.y += lines.length * 5;
+    ctx.y += h;
   }
 
   if ((data.skills || []).length > 0) {
@@ -485,15 +494,30 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     const lines = doc.splitTextToSize((data.skills || []).join("  •  "), ctx.maxWidth);
-    checkPageBreak(ctx, lines.length * 5);
+    const h = lines.length * 5;
+    checkPageBreak(ctx, h);
     doc.text(lines, ctx.margin, ctx.y);
-    ctx.y += lines.length * 5;
+    ctx.y += h;
   }
 
   if ((data.experience || []).length > 0) {
     addSection("Experience");
     (data.experience || []).forEach((exp) => {
-      checkPageBreak(ctx, 14);
+      // Estimate total height for this entry: title + bullets/description
+      doc.setFontSize(10);
+      let entryHeight = 7; // title line + gap
+      if (exp.bullets?.length) {
+        exp.bullets.forEach((bullet) => {
+          const bLines = doc.splitTextToSize(`•  ${bullet}`, ctx.maxWidth - 4);
+          entryHeight += bLines.length * 5;
+        });
+      } else if (exp.description) {
+        const dLines = doc.splitTextToSize(exp.description, ctx.maxWidth);
+        entryHeight += dLines.length * 5;
+      }
+      // If the whole entry fits, keep it together; otherwise at least keep the title on the page
+      checkPageBreak(ctx, Math.min(entryHeight, 25));
+
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
       doc.text(`${exp.title} — ${exp.company}`, ctx.margin, ctx.y);
@@ -512,18 +536,20 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
         doc.text(lines, ctx.margin, ctx.y);
         ctx.y += lines.length * 5;
       }
-      ctx.y += 2;
+      ctx.y += 3;
     });
   }
 
   if ((data.education || []).length > 0) {
     addSection("Education");
     (data.education || []).forEach((edu) => {
-      checkPageBreak(ctx, 7);
       doc.setFontSize(10);
+      const line = `${edu.degree} — ${edu.school}${edu.year ? ` (${edu.year})` : ""}`;
+      const lines = doc.splitTextToSize(line, ctx.maxWidth);
+      checkPageBreak(ctx, lines.length * 5 + 2);
       doc.setFont("helvetica", "bold");
-      doc.text(`${edu.degree} — ${edu.school}${edu.year ? ` (${edu.year})` : ""}`, ctx.margin, ctx.y);
-      ctx.y += 6;
+      doc.text(lines, ctx.margin, ctx.y);
+      ctx.y += lines.length * 5 + 2;
     });
   }
 
