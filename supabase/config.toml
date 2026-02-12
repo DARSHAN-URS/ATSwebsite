@@ -2,3 +2,6 @@ project_id = "hkgevmagiqcbndvkbekk"
 
 [functions.generate-cover-letter]
 verify_jwt = false
+
+[functions.resume-assist]
+verify_jwt = false
