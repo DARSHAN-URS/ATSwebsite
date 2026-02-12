@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/components/AppLayout";
-import Auth from "@/pages/Auth";
+
 import Dashboard from "@/pages/Dashboard";
 import Resumes from "@/pages/Resumes";
 import FindJobs from "@/pages/FindJobs";
@@ -19,16 +19,10 @@ const queryClient = new QueryClient();
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center h-screen text-muted-foreground">Loading...</div>;
-  if (!user) return <Navigate to="/auth" replace />;
+  if (!user) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
 
-function AuthRoute() {
-  const { user, loading } = useAuth();
-  if (loading) return <div className="flex items-center justify-center h-screen text-muted-foreground">Loading...</div>;
-  if (user) return <Navigate to="/dashboard" replace />;
-  return <Auth />;
-}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -39,7 +33,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<AuthRoute />} />
+            <Route path="/auth" element={<Navigate to="/" replace />} />
             <Route
               element={
                 <ProtectedRoute>
