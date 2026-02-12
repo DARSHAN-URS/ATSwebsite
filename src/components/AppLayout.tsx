@@ -1,12 +1,13 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Sparkles, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/resumes", icon: FileText, label: "Resumes" },
+  { to: "/cover-letters", icon: Mail, label: "Cover Letters" },
   { to: "/jobs", icon: Search, label: "Find Jobs" },
   { to: "/tracker", icon: Briefcase, label: "Job Tracker" },
 ];
