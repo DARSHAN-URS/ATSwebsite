@@ -12,6 +12,8 @@ import FindJobs from "@/pages/FindJobs";
 import JobTracker from "@/pages/JobTracker";
 import CoverLetters from "@/pages/CoverLetters";
 import Index from "@/pages/Index";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +36,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Navigate to="/" replace />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             <Route
               element={
                 <ProtectedRoute>
