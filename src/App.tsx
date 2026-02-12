@@ -11,6 +11,7 @@ import Resumes from "@/pages/Resumes";
 import FindJobs from "@/pages/FindJobs";
 import JobTracker from "@/pages/JobTracker";
 import CoverLetters from "@/pages/CoverLetters";
+import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,7 +26,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 function AuthRoute() {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center h-screen text-muted-foreground">Loading...</div>;
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to="/dashboard" replace />;
   return <Auth />;
 }
 
@@ -37,6 +38,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthRoute />} />
             <Route
               element={
@@ -45,7 +47,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             >
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/resumes" element={<Resumes />} />
               <Route path="/cover-letters" element={<CoverLetters />} />
               <Route path="/jobs" element={<FindJobs />} />
