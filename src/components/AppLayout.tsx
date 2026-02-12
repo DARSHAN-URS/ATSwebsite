@@ -20,7 +20,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   return (
     <>
       <div className="p-6 flex items-center gap-2">
-        <img src={logo} alt="JobFlow AI" className="h-10" />
+        <img src={logo} alt="JobFlow AI" className="h-14" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -91,7 +91,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <img src={logo} alt="JobFlow AI" className="h-9" />
+            <img src={logo} alt="JobFlow AI" className="h-12" />
           </div>
         </header>
       )}
