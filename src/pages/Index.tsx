@@ -295,20 +295,20 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-sidebar-background text-sidebar-foreground">
+      <footer className="border-t border-border bg-foreground text-background">
         <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 text-lg font-bold">
               <Sparkles className="h-5 w-5 text-primary" />
               JobFlow <span className="text-primary">AI</span>
             </div>
-            <p className="mt-3 max-w-xs text-xs leading-relaxed text-sidebar-foreground/80">
+            <p className="mt-3 max-w-xs text-xs leading-relaxed text-background/70">
               The world's most accurate AI-powered resume builder and ATS optimization suite. Built for job seekers, by recruiters.
             </p>
           </div>
           <div>
-            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-sidebar-accent-foreground/50">Platform</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-background/60">Platform</h4>
+            <ul className="space-y-2 text-sm text-background/80">
               <li><Link to="/resumes" className="transition hover:text-primary">Resume Templates</Link></li>
               <li><Link to="/resumes" className="transition hover:text-primary">AI Resume Grader</Link></li>
               <li><Link to="/tracker" className="transition hover:text-primary">Job Tracking</Link></li>
@@ -316,15 +316,15 @@ const Index = () => {
             </ul>
           </div>
           <div>
-            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-sidebar-accent-foreground/50">Legal</h4>
-            <ul className="space-y-2 text-sm">
-              <li><span className="cursor-default text-sidebar-accent-foreground/70">Privacy Policy</span></li>
-              <li><span className="cursor-default text-sidebar-accent-foreground/70">Terms of Service</span></li>
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-background/60">Legal</h4>
+            <ul className="space-y-2 text-sm text-background/80">
+              <li><span className="cursor-default">Privacy Policy</span></li>
+              <li><span className="cursor-default">Terms of Service</span></li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-sidebar-border px-4 py-4 pb-16">
-          <p className="mx-auto max-w-5xl text-center text-xs text-sidebar-accent-foreground/50">
+        <div className="border-t border-background/10 px-4 py-4 pb-16">
+          <p className="mx-auto max-w-5xl text-center text-xs text-background/50">
             © {new Date().getFullYear()} JobFlow AI. All rights reserved. Built with ❤️ for job seekers everywhere.
           </p>
         </div>
