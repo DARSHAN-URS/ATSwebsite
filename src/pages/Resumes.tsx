@@ -9,11 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download } from "lucide-react";
-import jsPDF from "jspdf";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
+import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTemplates";
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
+import TemplateSelector from "@/components/resume/TemplateSelector";
 
 type Resume = Tables<"resumes">;
 
@@ -37,6 +38,7 @@ export default function Resumes() {
   });
   const [skillInput, setSkillInput] = useState("");
   const [aiLoading, setAiLoading] = useState<string | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
 
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("created_at", { ascending: false });
@@ -219,139 +221,7 @@ export default function Resumes() {
   };
 
   const handleExportPDF = () => {
-    const pi = resumeData.personalInfo || {};
-    const doc = new jsPDF({ unit: "mm", format: "a4" });
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 20;
-    const maxWidth = pageWidth - margin * 2;
-    let y = 20;
-
-    const checkPageBreak = (needed: number) => {
-      if (y + needed > doc.internal.pageSize.getHeight() - 15) {
-        doc.addPage();
-        y = 20;
-      }
-    };
-
-    const addSection = (title: string) => {
-      checkPageBreak(12);
-      y += 4;
-      doc.setDrawColor(180);
-      doc.line(margin, y, pageWidth - margin, y);
-      y += 6;
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text(title, margin, y);
-      y += 6;
-    };
-
-    // Name
-    doc.setFontSize(20);
-    doc.setFont("helvetica", "bold");
-    doc.text(pi.fullName || title || "Resume", margin, y);
-    y += 7;
-
-    // Contact line
-    const contactParts: string[] = [];
-    if (pi.email) contactParts.push(pi.email);
-    if (pi.phone) contactParts.push(pi.phone);
-    if (pi.location) contactParts.push(pi.location);
-    if (contactParts.length) {
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.text(contactParts.join("  •  "), margin, y);
-      y += 5;
-    }
-
-    // Links
-    const linkParts: string[] = [];
-    if (pi.linkedin) linkParts.push(pi.linkedin);
-    if (pi.portfolio) linkParts.push(pi.portfolio);
-    if (linkParts.length) {
-      doc.setFontSize(9);
-      doc.setTextColor(0, 102, 204);
-      doc.text(linkParts.join("  •  "), margin, y);
-      doc.setTextColor(0);
-      y += 5;
-    }
-
-    // Summary
-    if (resumeData.summary) {
-      addSection("Summary");
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      const lines = doc.splitTextToSize(resumeData.summary, maxWidth);
-      checkPageBreak(lines.length * 5);
-      doc.text(lines, margin, y);
-      y += lines.length * 5;
-    }
-
-    // Skills
-    if ((resumeData.skills || []).length > 0) {
-      addSection("Skills");
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      const skillText = (resumeData.skills || []).join("  •  ");
-      const lines = doc.splitTextToSize(skillText, maxWidth);
-      checkPageBreak(lines.length * 5);
-      doc.text(lines, margin, y);
-      y += lines.length * 5;
-    }
-
-    // Experience
-    if ((resumeData.experience || []).length > 0) {
-      addSection("Experience");
-      (resumeData.experience || []).forEach((exp) => {
-        checkPageBreak(14);
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text(`${exp.title} — ${exp.company}`, margin, y);
-        y += 5;
-        doc.setFont("helvetica", "normal");
-        if (exp.bullets?.length) {
-          exp.bullets.forEach((bullet) => {
-            const lines = doc.splitTextToSize(`•  ${bullet}`, maxWidth - 4);
-            checkPageBreak(lines.length * 5);
-            doc.text(lines, margin + 2, y);
-            y += lines.length * 5;
-          });
-        } else if (exp.description) {
-          const lines = doc.splitTextToSize(exp.description, maxWidth);
-          checkPageBreak(lines.length * 5);
-          doc.text(lines, margin, y);
-          y += lines.length * 5;
-        }
-        y += 2;
-      });
-    }
-
-    // Education
-    if ((resumeData.education || []).length > 0) {
-      addSection("Education");
-      (resumeData.education || []).forEach((edu) => {
-        checkPageBreak(7);
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text(`${edu.degree} — ${edu.school}${edu.year ? ` (${edu.year})` : ""}`, margin, y);
-        y += 6;
-      });
-    }
-
-    // Custom sections
-    (resumeData.customSections || []).filter(s => s.title).forEach((section) => {
-      addSection(section.title);
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      section.items.filter(Boolean).forEach((item) => {
-        const lines = doc.splitTextToSize(`•  ${item}`, maxWidth - 4);
-        checkPageBreak(lines.length * 5);
-        doc.text(lines, margin + 2, y);
-        y += lines.length * 5;
-      });
-    });
-
-    const filename = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.pdf`;
-    doc.save(filename);
+    generateResumePDF(resumeData, title, selectedTemplate);
     toast({ title: "PDF downloaded!" });
   };
 
@@ -376,6 +246,17 @@ export default function Resumes() {
           <Label>Resume Title</Label>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
+
+        {/* Template Selection */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">PDF Template</CardTitle>
+            <CardDescription>Choose a visual style for your exported PDF</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
+          </CardContent>
+        </Card>
 
         {/* Personal Information */}
         {user && (
