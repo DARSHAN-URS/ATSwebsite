@@ -26,6 +26,8 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    // Reset input so the same file can be re-selected
+    if (fileInputRef.current) fileInputRef.current.value = "";
     if (!file) return;
     if (!file.type.startsWith("image/")) {
       toast({ title: "Please select an image file", variant: "destructive" });
@@ -41,7 +43,8 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
       onChange({ ...personalInfo, photoUrl: urlData.publicUrl });
       toast({ title: "Photo uploaded!" });
     } catch (err: any) {
-      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+      console.error("Photo upload error:", err);
+      toast({ title: "Upload failed", description: "Could not upload photo. Please try again.", variant: "destructive" });
     } finally {
       setUploading(false);
     }
