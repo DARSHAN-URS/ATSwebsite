@@ -11,7 +11,10 @@ serve(async (req) => {
   try {
     const { resumeData, jobDescription, tone } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY is not configured");
+      throw new Error("Service configuration error");
+    }
 
     const systemPrompt = `You are an expert cover letter writer. Generate a tailored cover letter based on the provided resume and job description. The tone should be: ${tone || "professional"}.`;
 
@@ -81,7 +84,7 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("generate-cover-letter error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+    return new Response(JSON.stringify({ error: "An unexpected error occurred. Please try again later." }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

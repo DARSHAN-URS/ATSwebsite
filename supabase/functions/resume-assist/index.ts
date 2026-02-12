@@ -11,7 +11,10 @@ serve(async (req) => {
   try {
     const { type, context } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY is not configured");
+      throw new Error("Service configuration error");
+    }
 
     let systemPrompt = "";
     let userPrompt = "";
@@ -122,7 +125,7 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("resume-assist error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+    return new Response(JSON.stringify({ error: "An unexpected error occurred. Please try again later." }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
