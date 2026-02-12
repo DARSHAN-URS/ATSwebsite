@@ -1,23 +1,36 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2 } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Resume = Tables<"resumes">;
 
+interface ExperienceItem {
+  title: string;
+  company: string;
+  description: string;
+  bullets: string[];
+}
+
+interface EducationItem {
+  degree: string;
+  school: string;
+  year?: string;
+}
+
 interface ResumeData {
   summary?: string;
   skills?: string[];
-  experience?: { title: string; company: string; description: string }[];
-  education?: { degree: string; school: string }[];
+  experience?: ExperienceItem[];
+  education?: EducationItem[];
 }
 
 export default function Resumes() {
@@ -25,11 +38,19 @@ export default function Resumes() {
   const { toast } = useToast();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  // Form state
   const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
-  const [skills, setSkills] = useState("");
-  const [experience, setExperience] = useState("");
+  const [resumeData, setResumeData] = useState<ResumeData>({
+    summary: "",
+    skills: [],
+    experience: [],
+    education: [],
+  });
+  const [skillInput, setSkillInput] = useState("");
+  const [aiLoading, setAiLoading] = useState<string | null>(null);
 
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("created_at", { ascending: false });
@@ -37,17 +58,16 @@ export default function Resumes() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (user) fetchResumes();
-  }, [user]);
+  useEffect(() => { if (user) fetchResumes(); }, [user]);
+
+  const resetForm = () => {
+    setTitle("");
+    setResumeData({ summary: "", skills: [], experience: [], education: [] });
+    setSkillInput("");
+  };
 
   const handleCreate = async () => {
     if (!user || !title) return;
-    const resumeData: ResumeData = {
-      summary,
-      skills: skills.split(",").map((s) => s.trim()).filter(Boolean),
-      experience: experience ? [{ title: experience, company: "", description: "" }] : [],
-    };
     const { error } = await supabase.from("resumes").insert({
       user_id: user.id,
       title,
@@ -57,80 +77,423 @@ export default function Resumes() {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Resume created" });
-      setOpen(false);
-      setTitle("");
-      setSummary("");
-      setSkills("");
-      setExperience("");
+      setCreateOpen(false);
+      resetForm();
+      fetchResumes();
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingId) return;
+    const { error } = await supabase.from("resumes").update({
+      title,
+      resume_data: resumeData as any,
+    }).eq("id", editingId);
+    if (error) {
+      toast({ title: "Error saving", variant: "destructive" });
+    } else {
+      toast({ title: "Resume saved!" });
       fetchResumes();
     }
   };
 
   const handleDelete = async (id: string) => {
     await supabase.from("resumes").delete().eq("id", id);
+    if (editingId === id) setEditingId(null);
     fetchResumes();
   };
 
+  const openEditor = (resume: Resume) => {
+    setEditingId(resume.id);
+    setTitle(resume.title);
+    const data = resume.resume_data as any as ResumeData;
+    setResumeData({
+      summary: data?.summary || "",
+      skills: data?.skills || [],
+      experience: (data?.experience || []).map((e: any) => ({
+        title: e.title || "",
+        company: e.company || "",
+        description: e.description || "",
+        bullets: e.bullets || [],
+      })),
+      education: data?.education || [],
+    });
+  };
+
+  // AI helpers
+  const aiAssist = async (type: string, context: any) => {
+    setAiLoading(type);
+    try {
+      const { data, error } = await supabase.functions.invoke("resume-assist", {
+        body: { type, context },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "AI Error", description: data.error, variant: "destructive" });
+        return null;
+      }
+      return data;
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+      return null;
+    } finally {
+      setAiLoading(null);
+    }
+  };
+
+  const generateSummary = async () => {
+    const result = await aiAssist("summary", {
+      jobTitle: title,
+      skills: resumeData.skills,
+      experience: resumeData.experience,
+    });
+    if (result?.summary) {
+      setResumeData((prev) => ({ ...prev, summary: result.summary }));
+      toast({ title: "Summary generated!" });
+    }
+  };
+
+  const generateBullets = async (expIndex: number) => {
+    const exp = resumeData.experience?.[expIndex];
+    if (!exp) return;
+    const result = await aiAssist("bullets", {
+      title: exp.title,
+      company: exp.company,
+      description: exp.description,
+      skills: resumeData.skills,
+    });
+    if (result?.bullets) {
+      setResumeData((prev) => {
+        const experience = [...(prev.experience || [])];
+        experience[expIndex] = { ...experience[expIndex], bullets: result.bullets };
+        return { ...prev, experience };
+      });
+      toast({ title: "Bullet points generated!" });
+    }
+  };
+
+  const suggestSkills = async () => {
+    const result = await aiAssist("skills", {
+      jobTitle: title,
+      experience: resumeData.experience,
+      existingSkills: resumeData.skills,
+    });
+    if (result?.skills) {
+      setResumeData((prev) => ({
+        ...prev,
+        skills: [...new Set([...(prev.skills || []), ...result.skills])],
+      }));
+      toast({ title: "Skills suggested!" });
+    }
+  };
+
+  const addSkill = () => {
+    if (!skillInput.trim()) return;
+    setResumeData((prev) => ({
+      ...prev,
+      skills: [...(prev.skills || []), skillInput.trim()],
+    }));
+    setSkillInput("");
+  };
+
+  const removeSkill = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      skills: (prev.skills || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const addExperience = () => {
+    setResumeData((prev) => ({
+      ...prev,
+      experience: [...(prev.experience || []), { title: "", company: "", description: "", bullets: [] }],
+    }));
+  };
+
+  const updateExperience = (index: number, field: string, value: string) => {
+    setResumeData((prev) => {
+      const experience = [...(prev.experience || [])];
+      experience[index] = { ...experience[index], [field]: value };
+      return { ...prev, experience };
+    });
+  };
+
+  const removeExperience = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      experience: (prev.experience || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const addEducation = () => {
+    setResumeData((prev) => ({
+      ...prev,
+      education: [...(prev.education || []), { degree: "", school: "", year: "" }],
+    }));
+  };
+
+  const updateEducation = (index: number, field: string, value: string) => {
+    setResumeData((prev) => {
+      const education = [...(prev.education || [])];
+      education[index] = { ...education[index], [field]: value };
+      return { ...prev, education };
+    });
+  };
+
+  const removeEducation = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      education: (prev.education || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleExportPDF = () => {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    const exp = (resumeData.experience || []).map((e) =>
+      `<div style="margin-bottom:12px"><strong>${e.title}</strong> — ${e.company}${e.bullets?.length ? `<ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : e.description ? `<p>${e.description}</p>` : ""}</div>`
+    ).join("");
+    const edu = (resumeData.education || []).map((e) =>
+      `<p><strong>${e.degree}</strong> — ${e.school}${e.year ? ` (${e.year})` : ""}</p>`
+    ).join("");
+    printWindow.document.write(`
+      <html><head><title>${title}</title>
+      <style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;line-height:1.6;color:#222;padding:20px}
+      h1{margin-bottom:4px}h2{border-bottom:1px solid #ccc;padding-bottom:4px;margin-top:20px}
+      ul{margin:4px 0;padding-left:20px}li{margin-bottom:4px}</style></head><body>
+      <h1>${title}</h1>
+      ${resumeData.summary ? `<h2>Summary</h2><p>${resumeData.summary}</p>` : ""}
+      ${(resumeData.skills || []).length > 0 ? `<h2>Skills</h2><p>${(resumeData.skills || []).join(" • ")}</p>` : ""}
+      ${exp ? `<h2>Experience</h2>${exp}` : ""}
+      ${edu ? `<h2>Education</h2>${edu}` : ""}
+      </body></html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
+
+  // Editor view
+  if (editingId) {
+    return (
+      <div className="p-8 max-w-4xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <Button variant="ghost" onClick={() => { setEditingId(null); resetForm(); }} className="mb-2">← Back</Button>
+            <h1 className="text-2xl font-bold">Edit Resume</h1>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Resume Title</Label>
+          <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+
+        {/* Summary */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Professional Summary</CardTitle>
+              <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
+                {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                AI Generate
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Textarea rows={3} value={resumeData.summary || ""} onChange={(e) => setResumeData((prev) => ({ ...prev, summary: e.target.value }))} placeholder="Write a professional summary..." />
+          </CardContent>
+        </Card>
+
+        {/* Skills */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Skills</CardTitle>
+              <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
+                {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                AI Suggest
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex gap-2">
+              <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder="Add a skill..." onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())} />
+              <Button variant="outline" onClick={addSkill}>Add</Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {(resumeData.skills || []).map((skill, i) => (
+                <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-full text-xs">
+                  {skill}
+                  <button onClick={() => removeSkill(i)} className="hover:text-destructive"><X className="h-3 w-3" /></button>
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Experience */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Experience</CardTitle>
+              <Button size="sm" variant="outline" onClick={addExperience}><Plus className="h-3 w-3 mr-1" />Add</Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {(resumeData.experience || []).map((exp, i) => (
+              <div key={i} className="space-y-3 p-4 rounded-lg border bg-muted/30">
+                <div className="flex justify-between items-start">
+                  <div className="grid grid-cols-2 gap-3 flex-1">
+                    <div>
+                      <Label className="text-xs">Job Title</Label>
+                      <Input value={exp.title} onChange={(e) => updateExperience(i, "title", e.target.value)} placeholder="Senior Developer" />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Company</Label>
+                      <Input value={exp.company} onChange={(e) => updateExperience(i, "company", e.target.value)} placeholder="Acme Inc." />
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="icon" className="shrink-0 ml-2" onClick={() => removeExperience(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                </div>
+                <div>
+                  <Label className="text-xs">Brief Description (for AI context)</Label>
+                  <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder="What did you do in this role?" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs">Bullet Points</Label>
+                  <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
+                    {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                    AI Generate Bullets
+                  </Button>
+                </div>
+                {exp.bullets && exp.bullets.length > 0 ? (
+                  <ul className="space-y-1">
+                    {exp.bullets.map((bullet, bi) => (
+                      <li key={bi} className="flex gap-2 items-start">
+                        <span className="text-muted-foreground mt-1">•</span>
+                        <Input
+                          value={bullet}
+                          className="h-8 text-sm"
+                          onChange={(e) => {
+                            const experience = [...(resumeData.experience || [])];
+                            const bullets = [...experience[i].bullets];
+                            bullets[bi] = e.target.value;
+                            experience[i] = { ...experience[i], bullets };
+                            setResumeData((prev) => ({ ...prev, experience }));
+                          }}
+                        />
+                        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => {
+                          const experience = [...(resumeData.experience || [])];
+                          experience[i] = { ...experience[i], bullets: experience[i].bullets.filter((_, j) => j !== bi) };
+                          setResumeData((prev) => ({ ...prev, experience }));
+                        }}><X className="h-3 w-3" /></Button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No bullet points yet. Use AI to generate them.</p>
+                )}
+              </div>
+            ))}
+            {(resumeData.experience || []).length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-4">No experience added yet.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Education */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Education</CardTitle>
+              <Button size="sm" variant="outline" onClick={addEducation}><Plus className="h-3 w-3 mr-1" />Add</Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {(resumeData.education || []).map((edu, i) => (
+              <div key={i} className="flex gap-3 items-start">
+                <div className="grid grid-cols-3 gap-2 flex-1">
+                  <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
+                  <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
+                  <Input value={edu.year || ""} onChange={(e) => updateEducation(i, "year", e.target.value)} placeholder="Year" />
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // List view
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
-          <p className="text-muted-foreground mt-1">Manage your resumes for job matching</p>
+          <p className="text-muted-foreground mt-1">Build and manage your resumes with AI assistance.</p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
             <Button><Plus className="h-4 w-4 mr-2" />New Resume</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Create Resume</DialogTitle>
+              <DialogDescription>Give your resume a title to get started. You can add details in the editor.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Title</Label>
-                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Full Stack Developer" />
+                <Label>Resume Title</Label>
+                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Full Stack Developer Resume" />
               </div>
-              <div className="space-y-2">
-                <Label>Professional Summary</Label>
-                <Textarea value={summary} onChange={(e) => setSummary(e.target.value)} placeholder="Brief summary of your experience..." />
-              </div>
-              <div className="space-y-2">
-                <Label>Skills (comma-separated)</Label>
-                <Input value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="React, TypeScript, Node.js..." />
-              </div>
-              <div className="space-y-2">
-                <Label>Current/Latest Job Title</Label>
-                <Input value={experience} onChange={(e) => setExperience(e.target.value)} placeholder="e.g. Senior Developer" />
-              </div>
-              <Button onClick={handleCreate} className="w-full">Create Resume</Button>
+              <Button onClick={async () => {
+                if (!user || !title) return;
+                const { data, error } = await supabase.from("resumes").insert({
+                  user_id: user.id,
+                  title,
+                  resume_data: { summary: "", skills: [], experience: [], education: [] } as any,
+                }).select().single();
+                if (error) {
+                  toast({ title: "Error", description: error.message, variant: "destructive" });
+                } else {
+                  toast({ title: "Resume created" });
+                  setCreateOpen(false);
+                  setTitle("");
+                  fetchResumes();
+                  if (data) openEditor(data);
+                }
+              }} className="w-full">Create & Open Editor</Button>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {loading ? (
-        <p className="text-muted-foreground">Loading...</p>
-      ) : resumes.length === 0 ? (
+      {resumes.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
             <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
             <h3 className="text-lg font-semibold">No resumes yet</h3>
-            <p className="text-sm text-muted-foreground mt-1">Create your first resume to start finding matching jobs</p>
+            <p className="text-sm text-muted-foreground mt-1">Create your first resume with AI-powered writing assistance.</p>
           </CardContent>
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {resumes.map((resume) => {
-            const data = resume.resume_data as ResumeData | null;
+            const data = resume.resume_data as any as ResumeData;
             return (
-              <Card key={resume.id}>
-                <CardHeader className="flex flex-row items-start justify-between">
+              <Card key={resume.id} className="hover:shadow-md transition-shadow">
+                <CardHeader className="flex flex-row items-start justify-between pb-2">
                   <div>
                     <CardTitle className="text-base">{resume.title}</CardTitle>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {new Date(resume.created_at).toLocaleDateString()}
-                    </p>
+                    <CardDescription>{new Date(resume.created_at).toLocaleDateString()}</CardDescription>
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => handleDelete(resume.id)}>
                     <Trash2 className="h-4 w-4 text-destructive" />
@@ -138,17 +501,16 @@ export default function Resumes() {
                 </CardHeader>
                 <CardContent>
                   {data?.skills && data.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-1 mb-3">
                       {data.skills.slice(0, 5).map((skill, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">
-                          {skill}
-                        </span>
+                        <span key={i} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">{skill}</span>
                       ))}
                       {data.skills.length > 5 && (
-                        <span className="px-2 py-0.5 text-muted-foreground text-xs">+{data.skills.length - 5} more</span>
+                        <span className="px-2 py-0.5 text-muted-foreground text-xs">+{data.skills.length - 5}</span>
                       )}
                     </div>
                   )}
+                  <Button size="sm" variant="outline" onClick={() => openEditor(resume)}><Edit className="h-3 w-3 mr-1" />Edit</Button>
                 </CardContent>
               </Card>
             );
