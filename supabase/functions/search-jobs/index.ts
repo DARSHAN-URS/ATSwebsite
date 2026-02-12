@@ -12,83 +12,117 @@ serve(async (req) => {
   }
 
   try {
-    const { resume_data, resume_title, location, job_type } = await req.json();
+    const { resume_data, resume_title, location, job_type, query } = await req.json();
+    
+    const JSEARCH_API_KEY = Deno.env.get("Jsearch_API_key");
+    if (!JSEARCH_API_KEY) throw new Error("JSearch API key is not configured");
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Extract skills and keywords from resume using AI
+    // Build search query from resume data or user query
     const skills = resume_data?.skills || [];
-    const summary = resume_data?.summary || "";
     const experience = resume_data?.experience || [];
     const latestTitle = experience[0]?.title || resume_title || "";
+    
+    let searchQuery = query || latestTitle || skills.slice(0, 3).join(" ");
+    if (location) searchQuery += ` in ${location}`;
 
-    const searchPrompt = `Based on this resume information, generate realistic job listings that would match this candidate's profile.
-
-Resume Title: ${resume_title}
-Skills: ${skills.join(", ")}
-Summary: ${summary}
-Latest Job Title: ${latestTitle}
-${location ? `Preferred Location: ${location}` : ""}
-${job_type ? `Job Type: ${job_type}` : ""}
-
-Generate exactly 8 realistic job listings as a JSON array. Each job should have:
-- job_title: string
-- company: string (use real-sounding company names)
-- location: string
-- job_type: string (remote/hybrid/onsite)
-- description: string (2-3 sentences about the role)
-- url: string (use "#" as placeholder)
-- posted_date: string (recent date in YYYY-MM-DD format)
-- match_score: number (0-100, how well this job matches the resume)
-- match_explanation: string (1 sentence explaining the match score)
-
-Make the jobs realistic and varied in match quality. Some should be excellent matches (80-95%), some good (60-79%), and some moderate (40-59%).
-Return ONLY the JSON array, no other text.`;
-
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: "You are a job search assistant. Return only valid JSON arrays." },
-          { role: "user", content: searchPrompt },
-        ],
-      }),
+    // Call JSearch API
+    const params = new URLSearchParams({
+      query: searchQuery,
+      page: "1",
+      num_pages: "1",
     });
-
-    if (!aiResponse.ok) {
-      if (aiResponse.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ error: "Payment required, please add credits." }), {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      const errText = await aiResponse.text();
-      console.error("AI gateway error:", aiResponse.status, errText);
-      throw new Error("AI gateway error");
+    if (job_type && job_type !== "all") {
+      const remoteFilter = job_type === "remote" ? "true" : "false";
+      params.set("remote_jobs_only", remoteFilter);
     }
 
-    const aiData = await aiResponse.json();
-    const content = aiData.choices?.[0]?.message?.content || "[]";
+    const jsearchResponse = await fetch(
+      `https://jsearch.p.rapidapi.com/search?${params.toString()}`,
+      {
+        method: "GET",
+        headers: {
+          "x-rapidapi-host": "jsearch.p.rapidapi.com",
+          "x-rapidapi-key": JSEARCH_API_KEY,
+        },
+      }
+    );
 
-    // Parse JSON from AI response (handle markdown code blocks)
-    let jobs = [];
-    try {
-      const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-      jobs = JSON.parse(cleaned);
-    } catch {
-      console.error("Failed to parse AI response:", content);
-      jobs = [];
+    if (!jsearchResponse.ok) {
+      const errText = await jsearchResponse.text();
+      console.error("JSearch API error:", jsearchResponse.status, errText);
+      throw new Error(`JSearch API error: ${jsearchResponse.status}`);
+    }
+
+    const jsearchData = await jsearchResponse.json();
+    const rawJobs = jsearchData.data || [];
+
+    // Map JSearch results to our format
+    const jobs = rawJobs.map((j: any) => ({
+      job_title: j.job_title || "Untitled",
+      company: j.employer_name || "Unknown",
+      location: j.job_city && j.job_state
+        ? `${j.job_city}, ${j.job_state}`
+        : j.job_country || "Not specified",
+      job_type: j.job_is_remote ? "Remote" : "On-site",
+      description: j.job_description?.slice(0, 500) || "",
+      url: j.job_apply_link || j.job_google_link || "#",
+      posted_date: j.job_posted_at_datetime_utc
+        ? j.job_posted_at_datetime_utc.split("T")[0]
+        : null,
+      employer_logo: j.employer_logo || null,
+      job_id: j.job_id || null,
+    }));
+
+    // Use AI to score matches against resume
+    if (jobs.length > 0 && resume_data) {
+      const matchPrompt = `Score how well each job matches this resume. Return a JSON array of objects with "index" (0-based), "match_score" (0-100), and "match_explanation" (1 sentence).
+
+Resume:
+- Title: ${resume_title}
+- Skills: ${skills.join(", ")}
+- Summary: ${resume_data.summary || ""}
+- Latest Role: ${latestTitle}
+
+Jobs:
+${jobs.map((j: any, i: number) => `${i}. ${j.job_title} at ${j.company} - ${j.description?.slice(0, 150)}`).join("\n")}
+
+Return ONLY a JSON array.`;
+
+      try {
+        const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-3-flash-preview",
+            messages: [
+              { role: "system", content: "You score job-resume matches. Return only valid JSON arrays." },
+              { role: "user", content: matchPrompt },
+            ],
+          }),
+        });
+
+        if (aiResponse.ok) {
+          const aiData = await aiResponse.json();
+          const content = aiData.choices?.[0]?.message?.content || "[]";
+          const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+          const scores = JSON.parse(cleaned);
+          for (const score of scores) {
+            if (typeof score.index === "number" && jobs[score.index]) {
+              jobs[score.index].match_score = score.match_score;
+              jobs[score.index].match_explanation = score.match_explanation;
+            }
+          }
+        }
+      } catch (aiErr) {
+        console.error("AI scoring failed (non-critical):", aiErr);
+        // Jobs still returned without scores
+      }
     }
 
     return new Response(JSON.stringify({ jobs }), {
