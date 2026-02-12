@@ -10,6 +10,7 @@ import Dashboard from "@/pages/Dashboard";
 import Resumes from "@/pages/Resumes";
 import FindJobs from "@/pages/FindJobs";
 import JobTracker from "@/pages/JobTracker";
+import CoverLetters from "@/pages/CoverLetters";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
             >
               <Route path="/" element={<Dashboard />} />
               <Route path="/resumes" element={<Resumes />} />
+              <Route path="/cover-letters" element={<CoverLetters />} />
               <Route path="/jobs" element={<FindJobs />} />
               <Route path="/tracker" element={<JobTracker />} />
             </Route>

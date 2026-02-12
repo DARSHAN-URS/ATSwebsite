@@ -2,26 +2,28 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Briefcase, Bookmark, Search } from "lucide-react";
+import { FileText, Briefcase, Bookmark, Search, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ resumes: 0, applications: 0, savedJobs: 0 });
+  const [stats, setStats] = useState({ resumes: 0, applications: 0, savedJobs: 0, coverLetters: 0 });
 
   useEffect(() => {
     if (!user) return;
     const fetchStats = async () => {
-      const [resumes, apps, saved] = await Promise.all([
+      const [resumes, apps, saved, cls] = await Promise.all([
         supabase.from("resumes").select("id", { count: "exact", head: true }),
         supabase.from("job_applications").select("id", { count: "exact", head: true }),
         supabase.from("saved_jobs").select("id", { count: "exact", head: true }).eq("is_bookmarked", true),
+        supabase.from("cover_letters").select("id", { count: "exact", head: true }),
       ]);
       setStats({
         resumes: resumes.count ?? 0,
         applications: apps.count ?? 0,
         savedJobs: saved.count ?? 0,
+        coverLetters: cls.count ?? 0,
       });
     };
     fetchStats();
@@ -29,6 +31,7 @@ export default function Dashboard() {
 
   const cards = [
     { title: "Resumes", value: stats.resumes, icon: FileText, description: "Created resumes", action: () => navigate("/resumes") },
+    { title: "Cover Letters", value: stats.coverLetters, icon: Mail, description: "Generated letters", action: () => navigate("/cover-letters") },
     { title: "Applications", value: stats.applications, icon: Briefcase, description: "Tracked applications", action: () => navigate("/tracker") },
     { title: "Saved Jobs", value: stats.savedJobs, icon: Bookmark, description: "Bookmarked listings", action: () => navigate("/jobs") },
   ];
@@ -40,7 +43,7 @@ export default function Dashboard() {
         <p className="text-muted-foreground mt-1">Welcome back! Here's your job search overview.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {cards.map((card) => (
           <Card
             key={card.title}
