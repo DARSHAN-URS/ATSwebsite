@@ -7,7 +7,7 @@ const PrivacyPolicy = () => (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="JobFlow AI" className="h-8" />
+          <img src={logo} alt="JobFlow AI" className="h-10" />
         </Link>
         <Link to="/" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition">
           <ArrowLeft className="h-4 w-4" /> Back to Home
