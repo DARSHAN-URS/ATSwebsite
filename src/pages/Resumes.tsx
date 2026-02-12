@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
@@ -48,6 +48,9 @@ export default function Resumes() {
   const [gradeJD, setGradeJD] = useState("");
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState<any>(null);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("created_at", { ascending: false });
     setResumes(data ?? []);
@@ -60,6 +63,81 @@ export default function Resumes() {
     setTitle("");
     setResumeData({ personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] });
     setSkillInput("");
+  };
+
+  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (pdfInputRef.current) pdfInputRef.current.value = "";
+    if (!file || !user) return;
+    if (file.type !== "application/pdf") {
+      toast({ title: "Please select a PDF file", variant: "destructive" });
+      return;
+    }
+    setUploadingPdf(true);
+    try {
+      // Extract text from PDF client-side
+      const pdfjsLib = await import("pdfjs-dist");
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        fullText += content.items.map((item: any) => item.str).join(" ") + "\n";
+      }
+
+      if (fullText.trim().length < 20) {
+        toast({ title: "Could not extract text from this PDF", description: "The file may be scanned or image-based.", variant: "destructive" });
+        return;
+      }
+
+      // Send to AI for parsing
+      const { data, error } = await supabase.functions.invoke("parse-resume", {
+        body: { text: fullText },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "Parse Error", description: data.error, variant: "destructive" });
+        return;
+      }
+
+      // Create new resume with parsed data
+      const resumeTitle = data.personalInfo?.fullName
+        ? `${data.personalInfo.fullName}'s Resume`
+        : file.name.replace(/\.pdf$/i, "");
+
+      const parsedData: ResumeData = {
+        personalInfo: data.personalInfo || {},
+        summary: data.summary || "",
+        skills: data.skills || [],
+        experience: (data.experience || []).map((exp: any) => ({
+          title: exp.title || "",
+          company: exp.company || "",
+          description: exp.description || "",
+          bullets: exp.bullets || [],
+        })),
+        education: data.education || [],
+        customSections: data.customSections || [],
+      };
+
+      const { data: created, error: createError } = await supabase.from("resumes").insert({
+        user_id: user.id,
+        title: resumeTitle,
+        resume_data: parsedData as any,
+      }).select().single();
+
+      if (createError) throw createError;
+
+      toast({ title: "Resume imported!", description: "Your PDF has been parsed and filled automatically." });
+      fetchResumes();
+      if (created) openEditor(created);
+    } catch (err: any) {
+      console.error("PDF upload error:", err);
+      toast({ title: "Upload failed", description: err.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setUploadingPdf(false);
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -609,10 +687,15 @@ export default function Resumes() {
           <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
           <p className="text-muted-foreground mt-1">Build and manage your resumes with AI assistance.</p>
         </div>
-        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-          <DialogTrigger asChild>
-            <Button><Plus className="h-4 w-4 mr-2" />New Resume</Button>
-          </DialogTrigger>
+        <div className="flex gap-2">
+          <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
+          <Button variant="outline" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
+            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Parsing...</> : <><Upload className="h-4 w-4 mr-2" />Upload Resume</>}
+          </Button>
+          <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+            <DialogTrigger asChild>
+              <Button><Plus className="h-4 w-4 mr-2" />New Resume</Button>
+            </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Create Resume</DialogTitle>
@@ -643,6 +726,7 @@ export default function Resumes() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {resumes.length === 0 ? (
