@@ -45,6 +45,7 @@ export default function FindJobs() {
   const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
   const [searching, setSearching] = useState(false);
   const [expandedJob, setExpandedJob] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"match" | "date" | "company">("match");
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export default function FindJobs() {
           resume_title: resume.title,
           location: location || undefined,
           job_type: jobType === "all" ? undefined : jobType,
+          query: searchQuery || undefined,
         },
       });
       if (error) throw error;
@@ -173,7 +175,7 @@ export default function FindJobs() {
           {/* Search filters */}
           <Card>
             <CardContent className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <Label>Resume</Label>
                   <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
@@ -188,6 +190,10 @@ export default function FindJobs() {
                   </Select>
                 </div>
                 <div className="space-y-2">
+                  <Label>Search Query (optional)</Label>
+                  <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="e.g. React developer" />
+                </div>
+                <div className="space-y-2">
                   <Label>Location</Label>
                   <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. Remote, New York" />
                 </div>
@@ -200,7 +206,6 @@ export default function FindJobs() {
                     <SelectContent>
                       <SelectItem value="all">All Types</SelectItem>
                       <SelectItem value="remote">Remote</SelectItem>
-                      <SelectItem value="hybrid">Hybrid</SelectItem>
                       <SelectItem value="onsite">On-site</SelectItem>
                     </SelectContent>
                   </Select>
