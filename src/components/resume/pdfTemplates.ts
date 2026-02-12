@@ -291,7 +291,13 @@ export function generateResumePDF(data: ResumeData, title: string, templateId: T
   doc.save(filename);
 }
 
-export function generateResumePDFBlobUrl(data: ResumeData, title: string, templateId: TemplateId = "classic"): string {
+export function generateResumePDFDataUrls(data: ResumeData, title: string, templateId: TemplateId = "classic"): string[] {
   const doc = buildDoc(data, title, templateId);
-  return doc.output("bloburl") as unknown as string;
+  const pageCount = doc.getNumberOfPages();
+  const urls: string[] = [];
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    urls.push(doc.output("datauristring"));
+  }
+  return urls;
 }
