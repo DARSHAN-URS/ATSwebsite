@@ -51,7 +51,7 @@ serve(async (req) => {
         method: "GET",
         headers: {
           "x-rapidapi-host": "jsearch.p.rapidapi.com",
-          "x-rapidapi-key": JSEARCH_API_KEY,
+          "X-API-Key": JSEARCH_API_KEY,
         },
       }
     );
