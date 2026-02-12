@@ -4,6 +4,7 @@ import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle,
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import logo from "@/assets/logo.png";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,9 +70,8 @@ const Index = () => {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span>JobFlow <span className="text-primary">AI</span></span>
+          <Link to="/" className="flex items-center gap-2">
+            <img src={logo} alt="JobFlow AI" className="h-8" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">Resume Templates</Link>
@@ -298,9 +298,8 @@ const Index = () => {
       <footer className="border-t border-border bg-foreground text-background">
         <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 md:grid-cols-4">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 text-lg font-bold">
-              <Sparkles className="h-5 w-5 text-primary" />
-              JobFlow <span className="text-primary">AI</span>
+            <div className="flex items-center gap-2">
+              <img src={logo} alt="JobFlow AI" className="h-8 brightness-0 invert" />
             </div>
             <p className="mt-3 max-w-xs text-xs leading-relaxed text-background/70">
               The world's most accurate AI-powered resume builder and ATS optimization suite. Built for job seekers, by recruiters.
@@ -352,8 +351,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
-              JobFlow AI
+              <img src={logo} alt="JobFlow AI" className="h-7" />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>

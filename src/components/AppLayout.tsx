@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Sparkles, Mail, Menu } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -19,9 +20,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   return (
     <>
       <div className="p-6 flex items-center gap-2">
-        <Briefcase className="h-6 w-6 text-sidebar-primary" />
-        <Sparkles className="h-4 w-4 text-sidebar-primary" />
-        <span className="text-lg font-bold">JobFlow AI</span>
+        <img src={logo} alt="JobFlow AI" className="h-8" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -92,8 +91,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <Briefcase className="h-5 w-5 text-primary" />
-            <span className="font-bold">JobFlow AI</span>
+            <img src={logo} alt="JobFlow AI" className="h-7" />
           </div>
         </header>
       )}
