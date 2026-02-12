@@ -15,10 +15,16 @@ serve(async (req) => {
     const { resume_data, resume_title, location, job_type, query } = await req.json();
     
     const JSEARCH_API_KEY = Deno.env.get("Jsearch_API_key");
-    if (!JSEARCH_API_KEY) throw new Error("JSearch API key is not configured");
+    if (!JSEARCH_API_KEY) {
+      console.error("JSearch API key is not configured");
+      throw new Error("Service configuration error");
+    }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY is not configured");
+      throw new Error("Service configuration error");
+    }
 
     // Build search query from resume data or user query
     const skills = resume_data?.skills || [];
@@ -53,7 +59,7 @@ serve(async (req) => {
     if (!jsearchResponse.ok) {
       const errText = await jsearchResponse.text();
       console.error("JSearch API error:", jsearchResponse.status, errText);
-      throw new Error(`JSearch API error: ${jsearchResponse.status}`);
+      throw new Error("Job search service error");
     }
 
     const jsearchData = await jsearchResponse.json();
@@ -130,7 +136,7 @@ Return ONLY a JSON array.`;
     });
   } catch (e) {
     console.error("search-jobs error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+    return new Response(JSON.stringify({ error: "An unexpected error occurred. Please try again later." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
