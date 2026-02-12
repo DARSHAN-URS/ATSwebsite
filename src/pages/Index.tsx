@@ -318,8 +318,8 @@ const Index = () => {
           <div>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-background/60">Legal</h4>
             <ul className="space-y-2 text-sm text-background/80">
-              <li><span className="cursor-default">Privacy Policy</span></li>
-              <li><span className="cursor-default">Terms of Service</span></li>
+              <li><Link to="/privacy" className="transition hover:text-primary">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="transition hover:text-primary">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
