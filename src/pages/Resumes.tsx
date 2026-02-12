@@ -15,6 +15,7 @@ import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTempl
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 import TemplateSelector from "@/components/resume/TemplateSelector";
+import ResumePreview from "@/components/resume/ResumePreview";
 
 type Resume = Tables<"resumes">;
 
@@ -230,185 +231,197 @@ export default function Resumes() {
   // Editor view
   if (editingId) {
     return (
-      <div className="p-8 max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <Button variant="ghost" onClick={() => { setEditingId(null); resetForm(); }} className="mb-2">← Back</Button>
-            <h1 className="text-2xl font-bold">Edit Resume</h1>
+      <div className="h-[calc(100vh-4rem)] flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => { setEditingId(null); resetForm(); }}>← Back</Button>
+            <h1 className="text-xl font-bold">Edit Resume</h1>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
-            <Button onClick={handleSaveEdit}>Save Changes</Button>
+            <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
+            <Button size="sm" onClick={handleSaveEdit}>Save Changes</Button>
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label>Resume Title</Label>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-
-        {/* Template Selection */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">PDF Template</CardTitle>
-            <CardDescription>Choose a visual style for your exported PDF</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
-          </CardContent>
-        </Card>
-
-        {/* Personal Information */}
-        {user && (
-          <PersonalInfoSection
-            personalInfo={resumeData.personalInfo || {}}
-            onChange={(info) => setResumeData((prev) => ({ ...prev, personalInfo: info }))}
-            userId={user.id}
-          />
-        )}
-
-        {/* Summary */}
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Professional Summary</CardTitle>
-              <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
-                {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                AI Generate
-              </Button>
+        {/* Side-by-side layout */}
+        <div className="flex-1 min-h-0 flex">
+          {/* Editor panel */}
+          <div className="w-1/2 overflow-y-auto p-6 space-y-5 border-r">
+            <div className="space-y-2">
+              <Label>Resume Title</Label>
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
-          </CardHeader>
-          <CardContent>
-            <Textarea rows={3} value={resumeData.summary || ""} onChange={(e) => setResumeData((prev) => ({ ...prev, summary: e.target.value }))} placeholder="Write a professional summary..." />
-          </CardContent>
-        </Card>
 
-        {/* Skills */}
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Skills</CardTitle>
-              <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
-                {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                AI Suggest
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex gap-2">
-              <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder="Add a skill..." onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())} />
-              <Button variant="outline" onClick={addSkill}>Add</Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {(resumeData.skills || []).map((skill, i) => (
-                <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-full text-xs">
-                  {skill}
-                  <button onClick={() => removeSkill(i)} className="hover:text-destructive"><X className="h-3 w-3" /></button>
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+            {/* Template Selection */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">PDF Template</CardTitle>
+                <CardDescription>Choose a visual style for your exported PDF</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
+              </CardContent>
+            </Card>
 
-        {/* Experience */}
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Experience</CardTitle>
-              <Button size="sm" variant="outline" onClick={addExperience}><Plus className="h-3 w-3 mr-1" />Add</Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {(resumeData.experience || []).map((exp, i) => (
-              <div key={i} className="space-y-3 p-4 rounded-lg border bg-muted/30">
-                <div className="flex justify-between items-start">
-                  <div className="grid grid-cols-2 gap-3 flex-1">
-                    <div>
-                      <Label className="text-xs">Job Title</Label>
-                      <Input value={exp.title} onChange={(e) => updateExperience(i, "title", e.target.value)} placeholder="Senior Developer" />
-                    </div>
-                    <div>
-                      <Label className="text-xs">Company</Label>
-                      <Input value={exp.company} onChange={(e) => updateExperience(i, "company", e.target.value)} placeholder="Acme Inc." />
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="icon" className="shrink-0 ml-2" onClick={() => removeExperience(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                </div>
-                <div>
-                  <Label className="text-xs">Brief Description (for AI context)</Label>
-                  <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder="What did you do in this role?" />
-                </div>
+            {/* Personal Information */}
+            {user && (
+              <PersonalInfoSection
+                personalInfo={resumeData.personalInfo || {}}
+                onChange={(info) => setResumeData((prev) => ({ ...prev, personalInfo: info }))}
+                userId={user.id}
+              />
+            )}
+
+            {/* Summary */}
+            <Card>
+              <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-xs">Bullet Points</Label>
-                  <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
-                    {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                    AI Generate Bullets
+                  <CardTitle className="text-base">Professional Summary</CardTitle>
+                  <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
+                    {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                    AI Generate
                   </Button>
                 </div>
-                {exp.bullets && exp.bullets.length > 0 ? (
-                  <ul className="space-y-1">
-                    {exp.bullets.map((bullet, bi) => (
-                      <li key={bi} className="flex gap-2 items-start">
-                        <span className="text-muted-foreground mt-1">•</span>
-                        <Input
-                          value={bullet}
-                          className="h-8 text-sm"
-                          onChange={(e) => {
-                            const experience = [...(resumeData.experience || [])];
-                            const bullets = [...experience[i].bullets];
-                            bullets[bi] = e.target.value;
-                            experience[i] = { ...experience[i], bullets };
-                            setResumeData((prev) => ({ ...prev, experience }));
-                          }}
-                        />
-                        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => {
-                          const experience = [...(resumeData.experience || [])];
-                          experience[i] = { ...experience[i], bullets: experience[i].bullets.filter((_, j) => j !== bi) };
-                          setResumeData((prev) => ({ ...prev, experience }));
-                        }}><X className="h-3 w-3" /></Button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-xs text-muted-foreground">No bullet points yet. Use AI to generate them.</p>
-                )}
-              </div>
-            ))}
-            {(resumeData.experience || []).length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">No experience added yet.</p>
-            )}
-          </CardContent>
-        </Card>
+              </CardHeader>
+              <CardContent>
+                <Textarea rows={3} value={resumeData.summary || ""} onChange={(e) => setResumeData((prev) => ({ ...prev, summary: e.target.value }))} placeholder="Write a professional summary..." />
+              </CardContent>
+            </Card>
 
-        {/* Education */}
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Education</CardTitle>
-              <Button size="sm" variant="outline" onClick={addEducation}><Plus className="h-3 w-3 mr-1" />Add</Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {(resumeData.education || []).map((edu, i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <div className="grid grid-cols-3 gap-2 flex-1">
-                  <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
-                  <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
-                  <Input value={edu.year || ""} onChange={(e) => updateEducation(i, "year", e.target.value)} placeholder="Year" />
+            {/* Skills */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">Skills</CardTitle>
+                  <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
+                    {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                    AI Suggest
+                  </Button>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex gap-2">
+                  <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder="Add a skill..." onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())} />
+                  <Button variant="outline" onClick={addSkill}>Add</Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(resumeData.skills || []).map((skill, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-full text-xs">
+                      {skill}
+                      <button onClick={() => removeSkill(i)} className="hover:text-destructive"><X className="h-3 w-3" /></button>
+                    </span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Custom Sections */}
-        <div>
-          <h2 className="text-base font-semibold mb-3">Custom Sections</h2>
-          <CustomSectionsEditor
-            sections={resumeData.customSections || []}
-            onChange={(sections) => setResumeData((prev) => ({ ...prev, customSections: sections }))}
-          />
+            {/* Experience */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">Experience</CardTitle>
+                  <Button size="sm" variant="outline" onClick={addExperience}><Plus className="h-3 w-3 mr-1" />Add</Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {(resumeData.experience || []).map((exp, i) => (
+                  <div key={i} className="space-y-3 p-4 rounded-lg border bg-muted/30">
+                    <div className="flex justify-between items-start">
+                      <div className="grid grid-cols-2 gap-3 flex-1">
+                        <div>
+                          <Label className="text-xs">Job Title</Label>
+                          <Input value={exp.title} onChange={(e) => updateExperience(i, "title", e.target.value)} placeholder="Senior Developer" />
+                        </div>
+                        <div>
+                          <Label className="text-xs">Company</Label>
+                          <Input value={exp.company} onChange={(e) => updateExperience(i, "company", e.target.value)} placeholder="Acme Inc." />
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon" className="shrink-0 ml-2" onClick={() => removeExperience(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                    <div>
+                      <Label className="text-xs">Brief Description (for AI context)</Label>
+                      <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder="What did you do in this role?" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label className="text-xs">Bullet Points</Label>
+                      <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
+                        {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                        AI Generate Bullets
+                      </Button>
+                    </div>
+                    {exp.bullets && exp.bullets.length > 0 ? (
+                      <ul className="space-y-1">
+                        {exp.bullets.map((bullet, bi) => (
+                          <li key={bi} className="flex gap-2 items-start">
+                            <span className="text-muted-foreground mt-1">•</span>
+                            <Input
+                              value={bullet}
+                              className="h-8 text-sm"
+                              onChange={(e) => {
+                                const experience = [...(resumeData.experience || [])];
+                                const bullets = [...experience[i].bullets];
+                                bullets[bi] = e.target.value;
+                                experience[i] = { ...experience[i], bullets };
+                                setResumeData((prev) => ({ ...prev, experience }));
+                              }}
+                            />
+                            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => {
+                              const experience = [...(resumeData.experience || [])];
+                              experience[i] = { ...experience[i], bullets: experience[i].bullets.filter((_, j) => j !== bi) };
+                              setResumeData((prev) => ({ ...prev, experience }));
+                            }}><X className="h-3 w-3" /></Button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">No bullet points yet. Use AI to generate them.</p>
+                    )}
+                  </div>
+                ))}
+                {(resumeData.experience || []).length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">No experience added yet.</p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Education */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">Education</CardTitle>
+                  <Button size="sm" variant="outline" onClick={addEducation}><Plus className="h-3 w-3 mr-1" />Add</Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {(resumeData.education || []).map((edu, i) => (
+                  <div key={i} className="flex gap-3 items-start">
+                    <div className="grid grid-cols-3 gap-2 flex-1">
+                      <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
+                      <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
+                      <Input value={edu.year || ""} onChange={(e) => updateEducation(i, "year", e.target.value)} placeholder="Year" />
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Custom Sections */}
+            <div>
+              <h2 className="text-base font-semibold mb-3">Custom Sections</h2>
+              <CustomSectionsEditor
+                sections={resumeData.customSections || []}
+                onChange={(sections) => setResumeData((prev) => ({ ...prev, customSections: sections }))}
+              />
+            </div>
+          </div>
+
+          {/* Preview panel */}
+          <div className="w-1/2 p-4">
+            <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} />
+          </div>
         </div>
       </div>
     );
