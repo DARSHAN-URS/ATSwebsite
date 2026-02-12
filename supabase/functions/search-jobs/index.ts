@@ -46,11 +46,10 @@ serve(async (req) => {
     }
 
     const jsearchResponse = await fetch(
-      `https://jsearch.p.rapidapi.com/search?${params.toString()}`,
+      `https://api.openwebninja.com/v1/jsearch/search?${params.toString()}`,
       {
         method: "GET",
         headers: {
-          "x-rapidapi-host": "jsearch.p.rapidapi.com",
           "X-API-Key": JSEARCH_API_KEY,
         },
       }
