@@ -323,7 +323,7 @@ const Index = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-sidebar-border px-4 py-4">
+        <div className="border-t border-sidebar-border px-4 py-4 pb-16">
           <p className="mx-auto max-w-5xl text-center text-xs text-sidebar-accent-foreground/50">
             © {new Date().getFullYear()} JobFlow AI. All rights reserved. Built with ❤️ for job seekers everywhere.
           </p>
