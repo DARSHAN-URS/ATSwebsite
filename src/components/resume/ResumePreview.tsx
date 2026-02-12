@@ -58,6 +58,9 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
 
 // Build an HTML representation that mirrors the PDF templates
 function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateId): string[] {
+  if (templateId === "sidebar") return [buildSidebarHTML(data, title)];
+  if (templateId === "twocolumn") return [buildTwoColumnHTML(data, title)];
+
   const pi = data.personalInfo || {};
   const contactParts: string[] = [];
   if (pi.email) contactParts.push(pi.email);
@@ -116,6 +119,10 @@ function sectionHeader(label: string, templateId: TemplateId): string {
       return `<div style="margin:14px 0 5px"><span style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px">${escapeHtml(label)}</span></div>`;
     case "executive":
       return `<div style="background:#1e1e1e;color:#fff;padding:3px 8px;margin:10px 0 6px;border-radius:2px"><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">${escapeHtml(label)}</span></div>`;
+    case "creative":
+      return `<div style="margin:12px 0 6px"><span style="font-size:12px;font-weight:700;color:#dc3545;text-transform:uppercase;letter-spacing:0.5px">${escapeHtml(label)}</span><div style="width:30px;height:2px;background:#dc3545;margin-top:2px"></div></div>`;
+    case "compact":
+      return `<div style="margin:6px 0 4px;border-bottom:1px solid #bbb;padding-bottom:1px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">${escapeHtml(label)}</span></div>`;
     default: // classic
       return `<div style="border-bottom:1px solid #ccc;margin:12px 0 6px;padding-bottom:3px"><span style="font-size:11px;font-weight:700">${escapeHtml(label)}</span></div>`;
   }
@@ -152,6 +159,24 @@ function getTemplateStyles(templateId: TemplateId) {
         contactStyle: "font-size:8px;color:#c8c8c8;margin:0",
         linkStyle: "font-size:8px;color:#c8c8c8;margin:0",
       };
+    case "creative":
+      return {
+        container: base,
+        headerBefore: `<div style="width:40px;height:3px;background:#dc3545;margin-bottom:6px"></div>`,
+        headerAfter: "",
+        nameStyle: "font-size:24px;font-weight:700;color:#dc3545;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px",
+        contactStyle: "font-size:9px;color:#555;margin:0 0 2px",
+        linkStyle: "font-size:9px;color:#dc3545;margin:0 0 4px",
+      };
+    case "compact":
+      return {
+        container: base + "padding:16px 14px;",
+        headerBefore: "",
+        headerAfter: `<div style="border-bottom:1px solid #000;margin:4px 0"></div>`,
+        nameStyle: "font-size:14px;font-weight:700;text-align:center;margin-bottom:2px",
+        contactStyle: "font-size:7px;color:#555;margin:0;text-align:center",
+        linkStyle: "font-size:7px;color:#0066cc;margin:0 0 2px;text-align:center",
+      };
     default: // classic
       return {
         container: base,
@@ -164,6 +189,87 @@ function getTemplateStyles(templateId: TemplateId) {
   }
 }
 
+function buildSidebarHTML(data: ResumeData, title: string): string {
+  const pi = data.personalInfo || {};
+  const name = pi.fullName || title || "Resume";
+  const contactItems = [pi.email, pi.phone, pi.location, pi.linkedin, pi.portfolio].filter(Boolean);
+  const skillsHtml = (data.skills || []).map(s => `<p style="font-size:9px;margin:1px 0;color:#ddd">• ${escapeHtml(s)}</p>`).join("");
+
+  const experienceHtml = (data.experience || []).map((exp) => {
+    const bulletsHtml = exp.bullets?.length
+      ? `<ul style="margin:2px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:2px;font-size:10px;line-height:1.5">${escapeHtml(b)}</li>`).join("")}</ul>`
+      : exp.description ? `<p style="font-size:10px;margin:2px 0 0;color:#444">${escapeHtml(exp.description)}</p>` : "";
+    return `<div style="margin-bottom:8px"><strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span>${bulletsHtml}</div>`;
+  }).join("");
+
+  const educationHtml = (data.education || []).map((edu) =>
+    `<p style="font-size:10px;margin:2px 0"><strong>${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}${edu.year ? ` (${escapeHtml(edu.year)})` : ""}</p>`
+  ).join("");
+
+  const customHtml = (data.customSections || []).filter(s => s.title).map((s) => {
+    const items = s.items.filter(Boolean).map(item => `<p style="font-size:10px;margin:1px 0 1px 8px">• ${escapeHtml(item)}</p>`).join("");
+    return `<div style="background:#1e3a5f;color:#fff;padding:3px 8px;margin:10px 0 6px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">${escapeHtml(s.title)}</span></div>${items}`;
+  }).join("");
+
+  return `<div style="display:flex;font-family:Helvetica,Arial,sans-serif;min-height:100%;color:#222">
+    <div style="width:35%;background:#1e3a5f;color:#fff;padding:20px 12px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px;word-break:break-word">${escapeHtml(name)}</div>
+      ${contactItems.length ? `<div style="margin-bottom:10px"><p style="font-size:8px;font-weight:700;color:#b4d2ff;text-transform:uppercase;margin-bottom:4px">Contact</p>${contactItems.map(c => `<p style="font-size:8px;color:#ddd;margin:2px 0;word-break:break-all">${escapeHtml(c!)}</p>`).join("")}</div>` : ""}
+      ${skillsHtml ? `<div><p style="font-size:8px;font-weight:700;color:#b4d2ff;text-transform:uppercase;margin-bottom:4px">Skills</p>${skillsHtml}</div>` : ""}
+    </div>
+    <div style="flex:1;padding:20px 16px">
+      ${data.summary ? `<div style="background:#1e3a5f;color:#fff;padding:3px 8px;margin:0 0 6px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">Summary</span></div><p style="font-size:10px;line-height:1.5;margin:0 0 8px">${escapeHtml(data.summary)}</p>` : ""}
+      ${experienceHtml ? `<div style="background:#1e3a5f;color:#fff;padding:3px 8px;margin:8px 0 6px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">Experience</span></div>${experienceHtml}` : ""}
+      ${educationHtml ? `<div style="background:#1e3a5f;color:#fff;padding:3px 8px;margin:8px 0 6px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">Education</span></div>${educationHtml}` : ""}
+      ${customHtml}
+    </div>
+  </div>`;
+}
+
+function buildTwoColumnHTML(data: ResumeData, title: string): string {
+  const pi = data.personalInfo || {};
+  const name = pi.fullName || title || "Resume";
+  const parts = [pi.email, pi.phone, pi.location].filter(Boolean);
+  const linkParts = [pi.linkedin, pi.portfolio].filter(Boolean);
+
+  const experienceHtml = (data.experience || []).map((exp) => {
+    const bulletsHtml = exp.bullets?.length
+      ? `<ul style="margin:2px 0 0 14px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:1px;font-size:9px;line-height:1.4">${escapeHtml(b)}</li>`).join("")}</ul>`
+      : "";
+    return `<div style="margin-bottom:6px"><strong style="font-size:9px">${escapeHtml(exp.title)} — ${escapeHtml(exp.company)}</strong>${bulletsHtml}</div>`;
+  }).join("");
+
+  const skillsHtml = (data.skills || []).map(s => `<span style="font-size:9px">• ${escapeHtml(s)}</span>`).join("<br/>");
+  const educationHtml = (data.education || []).map((edu) =>
+    `<p style="font-size:9px;margin:2px 0"><strong>${escapeHtml(edu.degree)}</strong><br/>${escapeHtml(edu.school)}${edu.year ? ` (${escapeHtml(edu.year)})` : ""}</p>`
+  ).join("");
+
+  const customHtml = (data.customSections || []).filter(s => s.title).map((s) => {
+    const items = s.items.filter(Boolean).map(item => `<p style="font-size:9px;margin:1px 0">• ${escapeHtml(item)}</p>`).join("");
+    return `<div style="margin-top:6px"><span style="font-size:9px;font-weight:700;color:#2d3748;text-transform:uppercase">${escapeHtml(s.title)}</span><div style="border-bottom:1px solid #2d3748;margin:2px 0 4px"></div>${items}</div>`;
+  }).join("");
+
+  const sectionLabel = (l: string) => `<div style="margin-top:8px"><span style="font-size:9px;font-weight:700;color:#2d3748;text-transform:uppercase">${escapeHtml(l)}</span><div style="border-bottom:1px solid #2d3748;margin:2px 0 4px"></div></div>`;
+
+  return `<div style="font-family:Helvetica,Arial,sans-serif;color:#222">
+    <div style="background:#2d3748;padding:12px 16px;margin:-28px -24px 0;color:#fff">
+      <div style="font-size:18px;font-weight:700">${escapeHtml(name)}</div>
+      ${parts.length ? `<p style="font-size:8px;color:#ccc;margin:4px 0 0">${parts.join("  |  ")}</p>` : ""}
+    </div>
+    <div style="display:flex;gap:12px;padding:16px 16px 20px">
+      <div style="flex:1.2">
+        ${data.summary ? `${sectionLabel("Summary")}<p style="font-size:9px;line-height:1.5;margin:0">${escapeHtml(data.summary)}</p>` : ""}
+        ${experienceHtml ? `${sectionLabel("Experience")}${experienceHtml}` : ""}
+      </div>
+      <div style="flex:0.8">
+        ${skillsHtml ? `${sectionLabel("Skills")}${skillsHtml}` : ""}
+        ${educationHtml ? `${sectionLabel("Education")}${educationHtml}` : ""}
+        ${linkParts.length ? `${sectionLabel("Links")}${linkParts.map(l => `<p style="font-size:8px;color:#0066cc;margin:1px 0">${escapeHtml(l!)}</p>`).join("")}` : ""}
+        ${customHtml}
+      </div>
+    </div>
+  </div>`;
+}
 function escapeHtml(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
