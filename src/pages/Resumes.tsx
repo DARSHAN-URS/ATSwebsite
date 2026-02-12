@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download } from "lucide-react";
+import jsPDF from "jspdf";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
@@ -219,54 +220,139 @@ export default function Resumes() {
 
   const handleExportPDF = () => {
     const pi = resumeData.personalInfo || {};
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - margin * 2;
+    let y = 20;
+
+    const checkPageBreak = (needed: number) => {
+      if (y + needed > doc.internal.pageSize.getHeight() - 15) {
+        doc.addPage();
+        y = 20;
+      }
+    };
+
+    const addSection = (title: string) => {
+      checkPageBreak(12);
+      y += 4;
+      doc.setDrawColor(180);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 6;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text(title, margin, y);
+      y += 6;
+    };
+
+    // Name
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text(pi.fullName || title || "Resume", margin, y);
+    y += 7;
+
+    // Contact line
     const contactParts: string[] = [];
     if (pi.email) contactParts.push(pi.email);
     if (pi.phone) contactParts.push(pi.phone);
     if (pi.location) contactParts.push(pi.location);
+    if (contactParts.length) {
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.text(contactParts.join("  •  "), margin, y);
+      y += 5;
+    }
+
+    // Links
     const linkParts: string[] = [];
-    if (pi.linkedin) linkParts.push(`<a href="${pi.linkedin.startsWith("http") ? pi.linkedin : "https://" + pi.linkedin}">${pi.linkedin}</a>`);
-    if (pi.portfolio) linkParts.push(`<a href="${pi.portfolio.startsWith("http") ? pi.portfolio : "https://" + pi.portfolio}">${pi.portfolio}</a>`);
+    if (pi.linkedin) linkParts.push(pi.linkedin);
+    if (pi.portfolio) linkParts.push(pi.portfolio);
+    if (linkParts.length) {
+      doc.setFontSize(9);
+      doc.setTextColor(0, 102, 204);
+      doc.text(linkParts.join("  •  "), margin, y);
+      doc.setTextColor(0);
+      y += 5;
+    }
 
-    const exp = (resumeData.experience || []).map((e) =>
-      `<div style="margin-bottom:12px"><strong>${e.title}</strong> — ${e.company}${e.bullets?.length ? `<ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : e.description ? `<p>${e.description}</p>` : ""}</div>`
-    ).join("");
-    const edu = (resumeData.education || []).map((e) =>
-      `<p><strong>${e.degree}</strong> — ${e.school}${e.year ? ` (${e.year})` : ""}</p>`
-    ).join("");
-    const customHtml = (resumeData.customSections || []).filter(s => s.title).map((s) =>
-      `<h2>${s.title}</h2>${s.items.filter(Boolean).map(item => `<p>• ${item}</p>`).join("")}`
-    ).join("");
+    // Summary
+    if (resumeData.summary) {
+      addSection("Summary");
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const lines = doc.splitTextToSize(resumeData.summary, maxWidth);
+      checkPageBreak(lines.length * 5);
+      doc.text(lines, margin, y);
+      y += lines.length * 5;
+    }
 
-    const htmlContent = `
-      <html><head><title>${pi.fullName || title}</title>
-      <style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;line-height:1.6;color:#222;padding:20px}
-      h1{margin-bottom:4px}h2{border-bottom:1px solid #ccc;padding-bottom:4px;margin-top:20px}
-      ul{margin:4px 0;padding-left:20px}li{margin-bottom:4px}
-      .contact{color:#555;font-size:14px;margin-bottom:4px}
-      .links{font-size:13px;color:#0066cc}
-      a{color:#0066cc;text-decoration:none}</style></head><body>
-      <h1>${pi.fullName || title}</h1>
-      ${contactParts.length ? `<p class="contact">${contactParts.join(" • ")}</p>` : ""}
-      ${linkParts.length ? `<p class="links">${linkParts.join(" • ")}</p>` : ""}
-      ${resumeData.summary ? `<h2>Summary</h2><p>${resumeData.summary}</p>` : ""}
-      ${(resumeData.skills || []).length > 0 ? `<h2>Skills</h2><p>${(resumeData.skills || []).join(" • ")}</p>` : ""}
-      ${exp ? `<h2>Experience</h2>${exp}` : ""}
-      ${edu ? `<h2>Education</h2>${edu}` : ""}
-      ${customHtml}
-      </body></html>
-    `;
+    // Skills
+    if ((resumeData.skills || []).length > 0) {
+      addSection("Skills");
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const skillText = (resumeData.skills || []).join("  •  ");
+      const lines = doc.splitTextToSize(skillText, maxWidth);
+      checkPageBreak(lines.length * 5);
+      doc.text(lines, margin, y);
+      y += lines.length * 5;
+    }
 
-    // Use blob download instead of window.open to avoid popup blockers
-    const blob = new Blob([htmlContent], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast({ title: "Resume downloaded!", description: "Open the HTML file and use your browser's Print → Save as PDF to create a PDF." });
+    // Experience
+    if ((resumeData.experience || []).length > 0) {
+      addSection("Experience");
+      (resumeData.experience || []).forEach((exp) => {
+        checkPageBreak(14);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text(`${exp.title} — ${exp.company}`, margin, y);
+        y += 5;
+        doc.setFont("helvetica", "normal");
+        if (exp.bullets?.length) {
+          exp.bullets.forEach((bullet) => {
+            const lines = doc.splitTextToSize(`•  ${bullet}`, maxWidth - 4);
+            checkPageBreak(lines.length * 5);
+            doc.text(lines, margin + 2, y);
+            y += lines.length * 5;
+          });
+        } else if (exp.description) {
+          const lines = doc.splitTextToSize(exp.description, maxWidth);
+          checkPageBreak(lines.length * 5);
+          doc.text(lines, margin, y);
+          y += lines.length * 5;
+        }
+        y += 2;
+      });
+    }
+
+    // Education
+    if ((resumeData.education || []).length > 0) {
+      addSection("Education");
+      (resumeData.education || []).forEach((edu) => {
+        checkPageBreak(7);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text(`${edu.degree} — ${edu.school}${edu.year ? ` (${edu.year})` : ""}`, margin, y);
+        y += 6;
+      });
+    }
+
+    // Custom sections
+    (resumeData.customSections || []).filter(s => s.title).forEach((section) => {
+      addSection(section.title);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      section.items.filter(Boolean).forEach((item) => {
+        const lines = doc.splitTextToSize(`•  ${item}`, maxWidth - 4);
+        checkPageBreak(lines.length * 5);
+        doc.text(lines, margin + 2, y);
+        y += lines.length * 5;
+      });
+    });
+
+    const filename = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.pdf`;
+    doc.save(filename);
+    toast({ title: "PDF downloaded!" });
   };
 
   if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
