@@ -32,6 +32,11 @@ export interface CustomSection {
   items: string[];
 }
 
+export interface LanguageItem {
+  name: string;
+  proficiency: string;
+}
+
 export interface ResumeData {
   personalInfo?: PersonalInfo;
   summary?: string;
@@ -39,4 +44,5 @@ export interface ResumeData {
   experience?: ExperienceItem[];
   education?: EducationItem[];
   customSections?: CustomSection[];
+  languages?: LanguageItem[];
 }

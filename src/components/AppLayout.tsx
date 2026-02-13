@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
@@ -7,16 +8,18 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
-const navItems = [
-  { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/resumes", icon: FileText, label: "Resumes" },
-  { to: "/cover-letters", icon: Mail, label: "Cover Letters" },
-  { to: "/jobs", icon: Search, label: "Find Jobs" },
-  { to: "/tracker", icon: Briefcase, label: "Job Tracker" },
+const navKeys = [
+  { to: "/", icon: LayoutDashboard, key: "dashboard" as const },
+  { to: "/resumes", icon: FileText, key: "resumes" as const },
+  { to: "/cover-letters", icon: Mail, key: "coverLetters" as const },
+  { to: "/jobs", icon: Search, key: "findJobs" as const },
+  { to: "/tracker", icon: Briefcase, key: "jobTracker" as const },
 ];
 
 function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut: () => void; onNavClick?: () => void }) {
+  const { t } = useLanguage();
   return (
     <>
       <div className="p-6 flex items-center gap-2">
@@ -24,7 +27,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
-        {navItems.map((item) => (
+        {navKeys.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -40,12 +43,15 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
             }
           >
             <item.icon className="h-4 w-4" />
-            {item.label}
+            {t.nav[item.key]}
           </NavLink>
         ))}
       </nav>
 
-      <div className="p-3 border-t border-sidebar-border">
+      <div className="p-3 space-y-2 border-t border-sidebar-border">
+        <div className="px-3">
+          <LanguageSwitcher className="w-full h-8 text-xs" />
+        </div>
         <div className="px-3 py-2 text-xs text-sidebar-foreground/50 truncate">
           {user?.email}
         </div>
@@ -56,7 +62,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
           className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
         >
           <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
+          {t.nav.signOut}
         </Button>
       </div>
     </>
