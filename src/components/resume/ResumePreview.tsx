@@ -76,11 +76,16 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
                   Page {i + 1} of {pageCount}
                 </div>
                 <div
-                  className="bg-white shadow-lg rounded border overflow-hidden"
-                  style={{ height: PAGE_HEIGHT }}
+                  className="bg-white shadow-lg rounded border"
+                  style={{ height: PAGE_HEIGHT, overflow: "hidden", position: "relative" }}
                 >
                   <div
-                    style={{ marginTop: -(i * PAGE_HEIGHT) }}
+                    style={{
+                      position: "absolute",
+                      top: -(i * PAGE_HEIGHT),
+                      left: 0,
+                      right: 0,
+                    }}
                     dangerouslySetInnerHTML={{ __html: pages[0] }}
                   />
                 </div>
