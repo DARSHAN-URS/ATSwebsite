@@ -56,7 +56,7 @@ export default function Auth() {
             <Briefcase className="h-8 w-8" />
             <Sparkles className="h-5 w-5" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">JobFlow AI</h1>
+          <h1 className="text-3xl font-bold tracking-tight">ATS Pro Resume Builder</h1>
           <p className="text-muted-foreground">AI-powered job discovery & resume matching</p>
         </div>
 

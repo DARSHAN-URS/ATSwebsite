@@ -94,7 +94,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="JobFlow AI" className="h-[72px]" />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-[72px]" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</Link>
@@ -204,7 +204,7 @@ const Index = () => {
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-xl border border-border shadow-2xl">
-              <img src={dashboardPreview} alt="JobFlow AI dashboard showing resume score, templates, and job application tracker" className="w-full" loading="lazy" />
+              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard showing resume score, templates, and job application tracker" className="w-full" loading="lazy" />
             </div>
           </div>
         </div>
@@ -216,7 +216,7 @@ const Index = () => {
           <div className="text-center">
             <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Loved by Job Seekers Worldwide</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-              Join thousands of professionals who landed their dream jobs with JobFlow AI.
+              Join thousands of professionals who landed their dream jobs with ATS Pro Resume Builder.
             </p>
           </div>
 
@@ -241,7 +241,7 @@ const Index = () => {
               {
                 name: "Sarah M.",
                 role: "Software Engineer → Google",
-                text: "I was applying for months with zero callbacks. After using JobFlow AI's resume grader and tailoring my resume, I got 5 interviews in 2 weeks — including one at Google. I start next month!",
+                text: "I was applying for months with zero callbacks. After using ATS Pro's resume grader and tailoring my resume, I got 5 interviews in 2 weeks — including one at Google. I start next month!",
                 stars: 5,
               },
               {
@@ -253,7 +253,7 @@ const Index = () => {
               {
                 name: "Priya K.",
                 role: "Recent Graduate → Deloitte",
-                text: "As a new grad with limited experience, I had no idea my resume was getting filtered by ATS. JobFlow AI helped me restructure everything and I landed my first consulting role within a month.",
+                text: "As a new grad with limited experience, I had no idea my resume was getting filtered by ATS. ATS Pro helped me restructure everything and I landed my first consulting role within a month.",
                 stars: 5,
               },
               {
@@ -265,13 +265,13 @@ const Index = () => {
               {
                 name: "Emily T.",
                 role: "Product Designer → Figma",
-                text: "I love the templates — clean, professional, and they actually pass ATS scans. Combined with the cover letter generator, JobFlow AI is the only tool I recommend to my design friends.",
+                text: "I love the templates — clean, professional, and they actually pass ATS scans. Combined with the cover letter generator, ATS Pro is the only tool I recommend to my design friends.",
                 stars: 5,
               },
               {
                 name: "Carlos V.",
                 role: "Career Changer → Salesforce",
-                text: "Switching from teaching to tech felt impossible until I found JobFlow AI. The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.",
+                text: "Switching from teaching to tech felt impossible until I found ATS Pro. The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.",
                 stars: 5,
               },
             ].map((t) => (
@@ -304,7 +304,7 @@ const Index = () => {
           <h2 className="mb-10 text-center text-2xl font-bold tracking-tight md:text-3xl">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {[
-              { q: "What is an ATS and why does it matter?", a: "An Applicant Tracking System (ATS) is software used by employers to filter resumes. Over 75% of resumes are rejected before a human ever sees them. JobFlow AI ensures your resume passes these filters." },
+              { q: "What is an ATS and why does it matter?", a: "An Applicant Tracking System (ATS) is software used by employers to filter resumes. Over 75% of resumes are rejected before a human ever sees them. ATS Pro Resume Builder ensures your resume passes these filters." },
               { q: "Is this AI resume builder really free?", a: "Yes! You can create, edit, and download ATS-optimized resumes for free. Our AI-powered grading and tailoring features are also available at no cost." },
               { q: "How does the AI resume grader work?", a: "Our AI analyzes your resume against industry standards and specific job descriptions. It checks for keyword optimization, formatting, readability, and ATS compatibility, then provides an actionable score and suggestions." },
               { q: "Can I import my existing LinkedIn or resume?", a: "Absolutely. You can upload an existing PDF resume and our AI will parse it into an editable format, preserving your content while optimizing the structure for ATS compatibility." },
@@ -323,7 +323,7 @@ const Index = () => {
         <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="JobFlow AI" className="h-[72px] brightness-0 invert" />
+              <img src={logo} alt="ATS Pro Resume Builder" className="h-[72px] brightness-0 invert" />
             </div>
             <p className="mt-3 max-w-xs text-xs leading-relaxed text-background/70">
               The world's most accurate AI-powered resume builder and ATS optimization suite. Built for job seekers, by recruiters.
@@ -348,7 +348,7 @@ const Index = () => {
         </div>
         <div className="border-t border-background/10 px-4 py-4 pb-16">
           <p className="mx-auto max-w-5xl text-center text-xs text-background/50">
-            © {new Date().getFullYear()} JobFlow AI. All rights reserved. Built with ❤️ for job seekers everywhere.
+            © {new Date().getFullYear()} ATS Pro Resume Builder. All rights reserved. Built with ❤️ for job seekers everywhere.
           </p>
         </div>
       </footer>
@@ -360,7 +360,7 @@ const Index = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "JobFlow AI",
+            name: "ATS Pro Resume Builder",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
             description: "AI-powered ATS resume builder that helps job seekers create optimized resumes, track applications, and land more interviews.",
@@ -375,7 +375,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src={logo} alt="JobFlow AI" className="h-14" />
+              <img src={logo} alt="ATS Pro Resume Builder" className="h-14" />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>
