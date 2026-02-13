@@ -1,24 +1,29 @@
 import jsPDF from "jspdf";
 import type { ResumeData } from "./types";
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact";
+export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant";
 
 export interface ResumeTemplate {
   id: TemplateId;
   name: string;
   description: string;
   preview: string; // emoji/icon hint
+  category?: string;
 }
 
 export const RESUME_TEMPLATES: ResumeTemplate[] = [
-  { id: "classic", name: "Classic", description: "Traditional layout with serif-style headers and clean dividers", preview: "📄" },
-  { id: "modern", name: "Modern", description: "Bold accent bar with contemporary spacing and styling", preview: "🎨" },
-  { id: "minimal", name: "Minimal", description: "Ultra-clean with generous whitespace and subtle typography", preview: "✨" },
-  { id: "executive", name: "Executive", description: "Professional dark header block with structured sections", preview: "💼" },
-  { id: "sidebar", name: "Sidebar", description: "Two-column layout with a colored sidebar for contact details", preview: "📊" },
-  { id: "twocolumn", name: "Two Column", description: "Balanced two-column design for maximum content density", preview: "📰" },
-  { id: "creative", name: "Creative", description: "Bold headings with accent colors and modern typography", preview: "🎯" },
-  { id: "compact", name: "Compact", description: "Dense single-column layout optimized for ATS scanners", preview: "📋" },
+  { id: "classic", name: "Classic", description: "Traditional layout with serif-style headers and clean dividers", preview: "📄", category: "Traditional" },
+  { id: "modern", name: "Modern", description: "Bold accent bar with contemporary spacing and styling", preview: "🎨", category: "Modern" },
+  { id: "minimal", name: "Minimal", description: "Ultra-clean with generous whitespace and subtle typography", preview: "✨", category: "Simple" },
+  { id: "executive", name: "Executive", description: "Professional dark header block with structured sections", preview: "💼", category: "Professional" },
+  { id: "sidebar", name: "Sidebar", description: "Two-column layout with a colored sidebar for contact details", preview: "📊", category: "Modern" },
+  { id: "twocolumn", name: "Two Column", description: "Balanced two-column design for maximum content density", preview: "📰", category: "Professional" },
+  { id: "creative", name: "Creative", description: "Bold headings with accent colors and modern typography", preview: "🎯", category: "Creative" },
+  { id: "compact", name: "Compact", description: "Dense single-column layout optimized for ATS scanners", preview: "📋", category: "ATS" },
+  { id: "professional", name: "Professional", description: "Polished corporate design with navy accents and refined typography", preview: "🏢", category: "Professional" },
+  { id: "ats", name: "ATS Optimized", description: "Plain text-friendly format designed to pass all ATS systems", preview: "🤖", category: "ATS" },
+  { id: "simple", name: "Simple", description: "Clean and timeless with a classic balanced structure", preview: "📝", category: "Simple" },
+  { id: "elegant", name: "Elegant", description: "Sophisticated design with subtle gold accents and fine lines", preview: "👔", category: "Traditional" },
 ];
 
 interface PdfContext {
@@ -594,6 +599,197 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
   });
 }
 
+// ─── Professional ──────────────────────────────────────
+function renderProfessional(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  // Navy top bar
+  doc.setFillColor(25, 42, 86);
+  doc.rect(0, 0, ctx.pageWidth, 6, "F");
+  ctx.y = 20;
+
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(25, 42, 86);
+  doc.text(pi.fullName || title || "Resume", ctx.margin, ctx.y);
+  doc.setTextColor(0);
+  ctx.y += 7;
+  renderContactAndLinks(ctx, pi);
+
+  // Thin navy line under contact
+  doc.setDrawColor(25, 42, 86);
+  doc.setLineWidth(0.5);
+  doc.line(ctx.margin, ctx.y, ctx.pageWidth - ctx.margin, ctx.y);
+  doc.setLineWidth(0.2);
+  ctx.y += 4;
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 14);
+    ctx.y += 5;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(25, 42, 86);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(25, 42, 86);
+    doc.line(ctx.margin, ctx.y + 2, ctx.pageWidth - ctx.margin, ctx.y + 2);
+    doc.setTextColor(0);
+    ctx.y += 8;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
+// ─── ATS Optimized ─────────────────────────────────────
+function renderATS(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 18, margin: 18, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(pi.fullName || title || "Resume", ctx.margin, ctx.y);
+  ctx.y += 6;
+
+  // Contact on one line, plain
+  const parts: string[] = [];
+  if (pi.email) parts.push(pi.email);
+  if (pi.phone) parts.push(pi.phone);
+  if (pi.location) parts.push(pi.location);
+  if (pi.linkedin) parts.push(pi.linkedin);
+  if (pi.portfolio) parts.push(pi.portfolio);
+  if (parts.length) {
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(parts.join(" | "), ctx.margin, ctx.y);
+    ctx.y += 5;
+  }
+  doc.setDrawColor(0);
+  doc.line(ctx.margin, ctx.y, ctx.pageWidth - ctx.margin, ctx.y);
+  ctx.y += 5;
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 12);
+    ctx.y += 4;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(0);
+    doc.line(ctx.margin, ctx.y + 1.5, ctx.pageWidth - ctx.margin, ctx.y + 1.5);
+    ctx.y += 7;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
+// ─── Simple ────────────────────────────────────────────
+function renderSimple(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 22, margin: 22, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  doc.setFontSize(20);
+  doc.setFont("helvetica", "bold");
+  doc.text(pi.fullName || title || "Resume", ctx.pageWidth / 2, ctx.y, { align: "center" });
+  ctx.y += 6;
+
+  const parts: string[] = [];
+  if (pi.email) parts.push(pi.email);
+  if (pi.phone) parts.push(pi.phone);
+  if (pi.location) parts.push(pi.location);
+  if (parts.length) {
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(parts.join("  •  "), ctx.pageWidth / 2, ctx.y, { align: "center" });
+    ctx.y += 4;
+  }
+  const linkParts: string[] = [];
+  if (pi.linkedin) linkParts.push(pi.linkedin);
+  if (pi.portfolio) linkParts.push(pi.portfolio);
+  if (linkParts.length) {
+    doc.setFontSize(9);
+    doc.setTextColor(0, 102, 204);
+    doc.text(linkParts.join("  •  "), ctx.pageWidth / 2, ctx.y, { align: "center" });
+    doc.setTextColor(0);
+    ctx.y += 5;
+  }
+  ctx.y += 2;
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 12);
+    ctx.y += 5;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text(label, ctx.margin, ctx.y);
+    doc.setDrawColor(200);
+    doc.line(ctx.margin, ctx.y + 2, ctx.pageWidth - ctx.margin, ctx.y + 2);
+    doc.setTextColor(0);
+    ctx.y += 7;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
+// ─── Elegant ───────────────────────────────────────────
+function renderElegant(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  // Gold accent line
+  doc.setFillColor(180, 145, 70);
+  doc.rect(ctx.margin, 14, ctx.maxWidth, 1, "F");
+  ctx.y = 22;
+
+  doc.setFontSize(20);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(60, 60, 60);
+  doc.text(pi.fullName || title || "Resume", ctx.pageWidth / 2, ctx.y, { align: "center" });
+  ctx.y += 6;
+
+  const parts: string[] = [];
+  if (pi.email) parts.push(pi.email);
+  if (pi.phone) parts.push(pi.phone);
+  if (pi.location) parts.push(pi.location);
+  if (parts.length) {
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100);
+    doc.text(parts.join("  |  "), ctx.pageWidth / 2, ctx.y, { align: "center" });
+    ctx.y += 4;
+  }
+  const linkParts: string[] = [];
+  if (pi.linkedin) linkParts.push(pi.linkedin);
+  if (pi.portfolio) linkParts.push(pi.portfolio);
+  if (linkParts.length) {
+    doc.setFontSize(9);
+    doc.setTextColor(180, 145, 70);
+    doc.text(linkParts.join("  |  "), ctx.pageWidth / 2, ctx.y, { align: "center" });
+    ctx.y += 4;
+  }
+
+  doc.setFillColor(180, 145, 70);
+  doc.rect(ctx.margin, ctx.y, ctx.maxWidth, 0.5, "F");
+  ctx.y += 5;
+  doc.setTextColor(0);
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 14);
+    ctx.y += 5;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(180, 145, 70);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(180, 145, 70);
+    doc.line(ctx.margin, ctx.y + 2, ctx.pageWidth - ctx.margin, ctx.y + 2);
+    doc.setTextColor(60, 60, 60);
+    ctx.y += 8;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
 // ─── Main exports ──────────────────────────────────────
 function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): jsPDF {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -618,6 +814,18 @@ function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "cla
       break;
     case "compact":
       renderCompact(doc, data, title);
+      break;
+    case "professional":
+      renderProfessional(doc, data, title);
+      break;
+    case "ats":
+      renderATS(doc, data, title);
+      break;
+    case "simple":
+      renderSimple(doc, data, title);
+      break;
+    case "elegant":
+      renderElegant(doc, data, title);
       break;
     default:
       renderClassic(doc, data, title);
