@@ -7,7 +7,7 @@ const PrivacyPolicy = () => (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="JobFlow AI" className="h-[72px]" />
+          <img src={logo} alt="ATS Pro Resume Builder" className="h-[72px]" />
         </Link>
         <Link to="/" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition">
           <ArrowLeft className="h-4 w-4" /> Back to Home
@@ -22,7 +22,7 @@ const PrivacyPolicy = () => (
       <div className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <section>
           <h2 className="text-lg font-semibold text-foreground mb-3">1. Information We Collect</h2>
-          <p>When you use JobFlow AI, we collect information you provide directly, including your name, email address, and resume content. We also automatically collect usage data such as pages visited, features used, and device information to improve our services.</p>
+          <p>When you use ATS Pro Resume Builder, we collect information you provide directly, including your name, email address, and resume content. We also automatically collect usage data such as pages visited, features used, and device information to improve our services.</p>
         </section>
 
         <section>
@@ -58,7 +58,7 @@ const PrivacyPolicy = () => (
 
         <section>
           <h2 className="text-lg font-semibold text-foreground mb-3">7. Contact Us</h2>
-          <p>If you have questions about this Privacy Policy or our data practices, please contact us at <span className="text-primary font-medium">support@jobflowai.com</span>.</p>
+          <p>If you have questions about this Privacy Policy or our data practices, please contact us at <span className="text-primary font-medium">support@atsproresumebuilder.com</span>.</p>
         </section>
       </div>
     </main>

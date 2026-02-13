@@ -235,7 +235,7 @@ const en = {
     whyFailTitle: "Why 75% of Resumes Never Get Seen by a Recruiter",
     fixResume: "Fix My Resume Now",
     lovedBy: "Loved by Job Seekers Worldwide",
-    lovedByDesc: "Join thousands of professionals who landed their dream jobs with JobFlow AI.",
+    lovedByDesc: "Join thousands of professionals who landed their dream jobs with ATS Pro Resume Builder.",
     activeUsers: "Active Users",
     averageRating: "Average Rating",
     moreInterviews: "More Interviews",
