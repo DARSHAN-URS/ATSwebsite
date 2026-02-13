@@ -12,3 +12,11 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /resumes
+Disallow: /cover-letters
+Disallow: /jobs
+Disallow: /companies
+Disallow: /tracker
+
+Sitemap: https://jobflowai.com/sitemap.xml

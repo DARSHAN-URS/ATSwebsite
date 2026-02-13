@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import dashboardPreview from "@/assets/dashboard-preview.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   const [authOpen, setAuthOpen] = useState(false);
@@ -90,6 +91,11 @@ const Index = () => {
   };
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="ATS Pro Resume Builder — Free AI Resume Builder for ATS Success"
+        description="Build ATS-optimized resumes in minutes with ATS Pro Resume Builder. Free AI resume grader, one-click tailoring, 12+ professional templates. Land 3× more interviews."
+        canonical="https://jobflowai.com/"
+      />
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -361,11 +367,56 @@ const Index = () => {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             name: "ATS Pro Resume Builder",
+            url: "https://jobflowai.com",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
             description: "AI-powered ATS resume builder that helps job seekers create optimized resumes, track applications, and land more interviews.",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "2400" },
+            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "2400", bestRating: "5" },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "What is an ATS and why does it matter?", acceptedAnswer: { "@type": "Answer", text: "An Applicant Tracking System (ATS) is software used by employers to filter resumes. Over 75% of resumes are rejected before a human ever sees them. ATS Pro Resume Builder ensures your resume passes these filters." } },
+              { "@type": "Question", name: "Is this AI resume builder really free?", acceptedAnswer: { "@type": "Answer", text: "Yes! You can create, edit, and download ATS-optimized resumes for free. Our AI-powered grading and tailoring features are also available at no cost." } },
+              { "@type": "Question", name: "How does the AI resume grader work?", acceptedAnswer: { "@type": "Answer", text: "Our AI analyzes your resume against industry standards and specific job descriptions. It checks for keyword optimization, formatting, readability, and ATS compatibility, then provides an actionable score and suggestions." } },
+              { "@type": "Question", name: "Can I import my existing LinkedIn or resume?", acceptedAnswer: { "@type": "Answer", text: "Absolutely. You can upload an existing PDF resume and our AI will parse it into an editable format, preserving your content while optimizing the structure for ATS compatibility." } },
+            ],
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "ATS Pro Resume Builder",
+            url: "https://jobflowai.com",
+            logo: "https://jobflowai.com/favicon.png",
+            sameAs: [],
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "ATS Pro Resume Builder",
+            url: "https://jobflowai.com",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "https://jobflowai.com/?q={search_term_string}",
+              "query-input": "required name=search_term_string",
+            },
           }),
         }}
       />

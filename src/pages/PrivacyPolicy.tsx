@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import logo from "@/assets/logo.png";
+import SEOHead from "@/components/SEOHead";
 
 const PrivacyPolicy = () => (
   <div className="min-h-screen bg-background text-foreground">
+    <SEOHead
+      title="Privacy Policy — ATS Pro Resume Builder"
+      description="Learn how ATS Pro Resume Builder collects, uses, and protects your personal information and resume data."
+      canonical="https://jobflowai.com/privacy"
+    />
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
