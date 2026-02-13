@@ -183,6 +183,14 @@ function sectionHeader(label: string, templateId: TemplateId): string {
       return `<div style="margin:12px 0 6px"><span style="font-size:12px;font-weight:700;color:#dc3545;text-transform:uppercase;letter-spacing:0.5px">${escapeHtml(label)}</span><div style="width:30px;height:2px;background:#dc3545;margin-top:2px"></div></div>`;
     case "compact":
       return `<div style="margin:6px 0 4px;border-bottom:1px solid #bbb;padding-bottom:1px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">${escapeHtml(label)}</span></div>`;
+    case "professional":
+      return `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700;color:#192a56;text-transform:uppercase">${escapeHtml(label)}</span><div style="border-bottom:2px solid #192a56;margin-top:2px"></div></div>`;
+    case "ats":
+      return `<div style="margin:10px 0 5px"><span style="font-size:11px;font-weight:700;text-transform:uppercase">${escapeHtml(label)}</span><div style="border-bottom:1px solid #000;margin-top:2px"></div></div>`;
+    case "simple":
+      return `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700">${escapeHtml(label)}</span><div style="border-bottom:1px solid #ccc;margin-top:2px"></div></div>`;
+    case "elegant":
+      return `<div style="margin:12px 0 6px"><span style="font-size:10px;font-weight:700;color:#b49146;text-transform:uppercase;letter-spacing:1px">${escapeHtml(label)}</span><div style="border-bottom:1px solid #b49146;margin-top:2px"></div></div>`;
     default: // classic
       return `<div style="border-bottom:1px solid #ccc;margin:12px 0 6px;padding-bottom:3px"><span style="font-size:11px;font-weight:700">${escapeHtml(label)}</span></div>`;
   }
@@ -236,6 +244,42 @@ function getTemplateStyles(templateId: TemplateId) {
         nameStyle: "font-size:14px;font-weight:700;text-align:center;margin-bottom:2px",
         contactStyle: "font-size:7px;color:#555;margin:0;text-align:center",
         linkStyle: "font-size:7px;color:#0066cc;margin:0 0 2px;text-align:center",
+      };
+    case "professional":
+      return {
+        container: base,
+        headerBefore: `<div style="height:6px;background:#192a56;margin:-28px -24px 16px"></div>`,
+        headerAfter: `<div style="border-bottom:2px solid #192a56;margin:4px 0 8px"></div>`,
+        nameStyle: "font-size:22px;font-weight:700;color:#192a56;margin-bottom:3px",
+        contactStyle: "font-size:9px;color:#555;margin:0 0 2px",
+        linkStyle: "font-size:9px;color:#192a56;margin:0 0 4px",
+      };
+    case "ats":
+      return {
+        container: base + "padding:24px 18px;",
+        headerBefore: "",
+        headerAfter: `<div style="border-bottom:1px solid #000;margin:4px 0 6px"></div>`,
+        nameStyle: "font-size:16px;font-weight:700;margin-bottom:3px",
+        contactStyle: "font-size:9px;color:#333;margin:0 0 2px",
+        linkStyle: "font-size:9px;color:#333;margin:0 0 2px",
+      };
+    case "simple":
+      return {
+        container: base + "padding:28px 26px;",
+        headerBefore: "",
+        headerAfter: "",
+        nameStyle: "font-size:20px;font-weight:700;text-align:center;margin-bottom:4px",
+        contactStyle: "font-size:9px;color:#555;margin:0 0 2px;text-align:center",
+        linkStyle: "font-size:9px;color:#0066cc;margin:0 0 6px;text-align:center",
+      };
+    case "elegant":
+      return {
+        container: base,
+        headerBefore: `<div style="border-top:2px solid #b49146;margin:-28px -24px 0;padding:20px 24px 0">`,
+        headerAfter: `<div style="border-bottom:1px solid #b49146;margin:6px 0 8px"></div></div>`,
+        nameStyle: "font-size:20px;font-weight:700;color:#3c3c3c;text-align:center;margin-bottom:4px",
+        contactStyle: "font-size:9px;color:#666;margin:0 0 2px;text-align:center",
+        linkStyle: "font-size:9px;color:#b49146;margin:0 0 2px;text-align:center",
       };
     default: // classic
       return {
