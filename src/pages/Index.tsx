@@ -25,19 +25,14 @@ const Index = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
     if (error) {
-      setLoading(false);
       toast({ title: "Login failed", description: error.message, variant: "destructive" });
-    } else {
-      // Wait for onAuthStateChange to propagate the session before navigating
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === "SIGNED_IN") {
-          subscription.unsubscribe();
-          setLoading(false);
-          navigate("/dashboard");
-        }
-      });
+    } else if (data.session) {
+      setAuthOpen(false);
+      // Small delay to let AuthProvider pick up the session
+      setTimeout(() => navigate("/dashboard"), 100);
     }
   };
 
