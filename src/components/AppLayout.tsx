@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -15,6 +15,7 @@ const navKeys = [
   { to: "/resumes", icon: FileText, key: "resumes" as const },
   { to: "/cover-letters", icon: Mail, key: "coverLetters" as const },
   { to: "/jobs", icon: Search, key: "findJobs" as const },
+  { to: "/companies", icon: Building2, key: "companies" as const },
   { to: "/tracker", icon: Briefcase, key: "jobTracker" as const },
 ];
 
