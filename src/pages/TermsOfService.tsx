@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import logo from "@/assets/logo.png";
+import SEOHead from "@/components/SEOHead";
 
 const TermsOfService = () => (
   <div className="min-h-screen bg-background text-foreground">
+    <SEOHead
+      title="Terms of Service — ATS Pro Resume Builder"
+      description="Read the Terms of Service for ATS Pro Resume Builder. Understand your rights and responsibilities when using our AI resume tools."
+      canonical="https://jobflowai.com/terms"
+    />
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
