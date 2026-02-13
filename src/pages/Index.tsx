@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -12,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import dashboardPreview from "@/assets/dashboard-preview.png";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Index = () => {
   const [authOpen, setAuthOpen] = useState(false);
@@ -23,6 +25,7 @@ const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -37,7 +40,7 @@ const Index = () => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      toast({ title: "Login failed", description: error.message, variant: "destructive" });
+      toast({ title: t.common.loginFailed, description: error.message, variant: "destructive" });
     }
     // Navigation handled by useEffect watching auth state
   };
@@ -55,9 +58,9 @@ const Index = () => {
     });
     setLoading(false);
     if (error) {
-      toast({ title: "Signup failed", description: error.message, variant: "destructive" });
+      toast({ title: t.common.signupFailed, description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Check your email", description: "We sent you a confirmation link." });
+      toast({ title: t.common.checkEmail, description: t.common.confirmationSent });
       setAuthOpen(false);
     }
   };
@@ -75,12 +78,13 @@ const Index = () => {
             <img src={logo} alt="JobFlow AI" className="h-[72px]" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
-            <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">Resume Templates</Link>
-            <Link to="/tracker" className="text-sm text-muted-foreground transition hover:text-foreground">Job Tracker</Link>
+            <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</Link>
+            <Link to="/tracker" className="text-sm text-muted-foreground transition hover:text-foreground">{t.nav.jobTracker}</Link>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="rounded-full font-semibold" onClick={() => openAuth("login")}>Log In</Button>
-            <Button size="sm" className="rounded-full font-semibold" onClick={() => openAuth("signup")}>Get Started</Button>
+            <LanguageSwitcher className="w-[120px] h-8 text-xs" />
+            <Button variant="ghost" size="sm" className="rounded-full font-semibold" onClick={() => openAuth("login")}>{t.nav.logIn}</Button>
+            <Button size="sm" className="rounded-full font-semibold" onClick={() => openAuth("signup")}>{t.nav.getStarted}</Button>
           </div>
         </div>
       </nav>
@@ -357,40 +361,40 @@ const Index = () => {
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Log In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="login">{t.nav.logIn}</TabsTrigger>
+              <TabsTrigger value="signup">{t.nav.signUp}</TabsTrigger>
             </TabsList>
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="lp-login-email">Email</Label>
+                  <Label htmlFor="lp-login-email">{t.common.email}</Label>
                   <Input id="lp-login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lp-login-password">Password</Label>
+                  <Label htmlFor="lp-login-password">{t.common.password}</Label>
                   <Input id="lp-login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign In"}
+                  {loading ? t.common.signingIn : t.common.signIn}
                 </Button>
               </form>
             </TabsContent>
             <TabsContent value="signup">
               <form onSubmit={handleSignup} className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="lp-signup-name">Display Name</Label>
+                  <Label htmlFor="lp-signup-name">{t.common.displayName}</Label>
                   <Input id="lp-signup-name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lp-signup-email">Email</Label>
+                  <Label htmlFor="lp-signup-email">{t.common.email}</Label>
                   <Input id="lp-signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lp-signup-password">Password</Label>
+                  <Label htmlFor="lp-signup-password">{t.common.password}</Label>
                   <Input id="lp-signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
+                  {loading ? t.common.creatingAccount : t.common.createAccount}
                 </Button>
               </form>
             </TabsContent>

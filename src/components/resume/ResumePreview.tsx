@@ -134,6 +134,11 @@ function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateI
     return `${sectionHeader(s.title, templateId)}${items}`;
   }).join("");
 
+  const languagesHtml = (data.languages || []).filter(l => l.name).map(l => 
+    `<span style="font-size:10px">${escapeHtml(l.name)}${l.proficiency ? ` (${escapeHtml(l.proficiency)})` : ""}</span>`
+  ).join("  •  ");
+
+
   const styles = getTemplateStyles(templateId);
 
   const html = `
@@ -147,6 +152,7 @@ function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateI
       ${skillsText ? `${sectionHeader("Skills", templateId)}<p style="font-size:10px;margin:0">${skillsText}</p>` : ""}
       ${experienceHtml ? `${sectionHeader("Experience", templateId)}${experienceHtml}` : ""}
       ${educationHtml ? `${sectionHeader("Education", templateId)}${educationHtml}` : ""}
+      ${languagesHtml ? `${sectionHeader("Languages", templateId)}<p style="font-size:10px;margin:0">${languagesHtml}</p>` : ""}
       ${customHtml}
     </div>
   `;

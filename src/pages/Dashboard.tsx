@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Briefcase, Bookmark, Search, Mail } from "lucide-react";
@@ -7,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [stats, setStats] = useState({ resumes: 0, applications: 0, savedJobs: 0, coverLetters: 0 });
 
@@ -30,26 +32,22 @@ export default function Dashboard() {
   }, [user]);
 
   const cards = [
-    { title: "Resumes", value: stats.resumes, icon: FileText, description: "Created resumes", action: () => navigate("/resumes") },
-    { title: "Cover Letters", value: stats.coverLetters, icon: Mail, description: "Generated letters", action: () => navigate("/cover-letters") },
-    { title: "Applications", value: stats.applications, icon: Briefcase, description: "Tracked applications", action: () => navigate("/tracker") },
-    { title: "Saved Jobs", value: stats.savedJobs, icon: Bookmark, description: "Bookmarked listings", action: () => navigate("/jobs") },
+    { title: t.dashboard.resumes, value: stats.resumes, icon: FileText, description: t.dashboard.createdResumes, action: () => navigate("/resumes") },
+    { title: t.dashboard.coverLetters, value: stats.coverLetters, icon: Mail, description: t.dashboard.generatedLetters, action: () => navigate("/cover-letters") },
+    { title: t.dashboard.applications, value: stats.applications, icon: Briefcase, description: t.dashboard.trackedApps, action: () => navigate("/tracker") },
+    { title: t.dashboard.savedJobs, value: stats.savedJobs, icon: Bookmark, description: t.dashboard.bookmarkedListings, action: () => navigate("/jobs") },
   ];
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Welcome back! Here's your job search overview.</p>
+        <h1 className="text-3xl font-bold tracking-tight">{t.dashboard.title}</h1>
+        <p className="text-muted-foreground mt-1">{t.dashboard.welcome}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {cards.map((card) => (
-          <Card
-            key={card.title}
-            className="cursor-pointer hover:shadow-md transition-shadow"
-            onClick={card.action}
-          >
+          <Card key={card.title} className="cursor-pointer hover:shadow-md transition-shadow" onClick={card.action}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
               <card.icon className="h-4 w-4 text-muted-foreground" />
@@ -66,14 +64,12 @@ export default function Dashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Search className="h-5 w-5 text-primary" />
-            Find Jobs
+            {t.dashboard.findJobs}
           </CardTitle>
-          <CardDescription>Discover jobs matched to your resume using AI</CardDescription>
+          <CardDescription>{t.dashboard.findJobsDesc}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Select a resume and let AI find the best job matches for you. Get match scores, save listings, and track your applications — all in one place.
-          </p>
+          <p className="text-sm text-muted-foreground">{t.dashboard.findJobsDetail}</p>
         </CardContent>
       </Card>
     </div>

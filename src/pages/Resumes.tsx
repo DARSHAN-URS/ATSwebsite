@@ -11,12 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
-import type { ResumeData, PersonalInfo, CustomSection } from "@/components/resume/types";
+import type { ResumeData, PersonalInfo, CustomSection, LanguageItem } from "@/components/resume/types";
 import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTemplates";
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 import TemplateSelector from "@/components/resume/TemplateSelector";
 import ResumePreview from "@/components/resume/ResumePreview";
+import LanguagesEditor from "@/components/resume/LanguagesEditor";
 
 type Resume = Tables<"resumes">;
 
@@ -61,7 +62,7 @@ export default function Resumes() {
 
   const resetForm = () => {
     setTitle("");
-    setResumeData({ personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] });
+    setResumeData({ personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [], languages: [] });
     setSkillInput("");
   };
 
@@ -176,6 +177,7 @@ export default function Resumes() {
       })),
       education: data?.education || [],
       customSections: data?.customSections || [],
+      languages: data?.languages || [],
     });
   };
 
@@ -686,6 +688,12 @@ export default function Resumes() {
                 ))}
               </CardContent>
             </Card>
+
+            {/* Languages */}
+            <LanguagesEditor
+              languages={resumeData.languages || []}
+              onChange={(languages) => setResumeData((prev) => ({ ...prev, languages }))}
+            />
 
             {/* Custom Sections */}
             <div>
