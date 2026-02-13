@@ -12,7 +12,7 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
         <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="z-50 bg-popover border border-border shadow-lg">
         {(Object.entries(localeNames) as [Locale, string][]).map(([code, name]) => (
           <SelectItem key={code} value={code} className="text-sm">
             {name}
