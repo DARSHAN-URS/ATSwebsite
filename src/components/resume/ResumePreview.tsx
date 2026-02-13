@@ -59,32 +59,38 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
           {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
         </div>
       </div>
-      <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-6 bg-muted/50">
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-8 bg-muted/50">
         {pages.length > 0 ? (
           <>
-            {/* Hidden measurement container */}
+            {/* Hidden measurement container - must match visible page width */}
             <div
               ref={measureRef}
-              className="absolute opacity-0 pointer-events-none"
-              style={{ width: 595, left: -9999 }}
+              className="pointer-events-none"
+              style={{ position: "fixed", visibility: "hidden", width: 595, left: -9999, top: 0 }}
               dangerouslySetInnerHTML={{ __html: pages[0] }}
             />
             {/* Visible page slices */}
             {Array.from({ length: pageCount }, (_, i) => (
-              <div key={i} className="w-full max-w-[595px] flex flex-col">
-                <div className="text-[10px] text-muted-foreground mb-1 text-right">
+              <div key={i} className="w-full flex flex-col items-center">
+                <div className="w-full max-w-[595px] text-[10px] text-muted-foreground mb-1 text-right">
                   Page {i + 1} of {pageCount}
                 </div>
                 <div
-                  className="bg-white shadow-lg rounded border"
-                  style={{ height: PAGE_HEIGHT, overflow: "hidden", position: "relative" }}
+                  className="bg-white rounded border"
+                  style={{
+                    width: 595,
+                    height: PAGE_HEIGHT,
+                    overflow: "hidden",
+                    position: "relative",
+                    boxShadow: "0 4px 20px -4px rgba(0,0,0,0.15)",
+                  }}
                 >
                   <div
                     style={{
                       position: "absolute",
                       top: -(i * PAGE_HEIGHT),
                       left: 0,
-                      right: 0,
+                      width: 595,
                     }}
                     dangerouslySetInnerHTML={{ __html: pages[0] }}
                   />
