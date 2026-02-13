@@ -10,6 +10,7 @@ import AppLayout from "@/components/AppLayout";
 import Dashboard from "@/pages/Dashboard";
 import Resumes from "@/pages/Resumes";
 import FindJobs from "@/pages/FindJobs";
+import Companies from "@/pages/Companies";
 import JobTracker from "@/pages/JobTracker";
 import CoverLetters from "@/pages/CoverLetters";
 import Index from "@/pages/Index";
@@ -51,6 +52,7 @@ const App = () => (
                 <Route path="/resumes" element={<Resumes />} />
                 <Route path="/cover-letters" element={<CoverLetters />} />
                 <Route path="/jobs" element={<FindJobs />} />
+                <Route path="/companies" element={<Companies />} />
                 <Route path="/tracker" element={<JobTracker />} />
               </Route>
               <Route path="*" element={<NotFound />} />
