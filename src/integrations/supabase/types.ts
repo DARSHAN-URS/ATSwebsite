@@ -118,6 +118,45 @@ export type Database = {
           },
         ]
       }
+      pinned_companies: {
+        Row: {
+          city: string | null
+          company_logo: string | null
+          company_name: string
+          company_type: string | null
+          company_website: string | null
+          country: string | null
+          created_at: string
+          id: string
+          state: string | null
+          user_id: string
+        }
+        Insert: {
+          city?: string | null
+          company_logo?: string | null
+          company_name: string
+          company_type?: string | null
+          company_website?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          state?: string | null
+          user_id: string
+        }
+        Update: {
+          city?: string | null
+          company_logo?: string | null
+          company_name?: string
+          company_type?: string | null
+          company_website?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          state?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
