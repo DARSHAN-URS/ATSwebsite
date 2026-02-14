@@ -28,6 +28,7 @@ const en = {
     getStarted: "Get Started",
     jobBoard: "Job Board",
     myJobPosts: "My Job Posts",
+    analytics: "Analytics",
   },
   common: {
     save: "Save",
@@ -273,6 +274,7 @@ const ar: TranslationKeys = {
     getStarted: "ابدأ الآن",
     jobBoard: "لوحة الوظائف",
     myJobPosts: "إعلاناتي الوظيفية",
+    analytics: "التحليلات",
   },
   common: {
     save: "حفظ",
@@ -511,6 +513,7 @@ const es: TranslationKeys = {
     getStarted: "Comenzar",
     jobBoard: "Bolsa de Trabajo",
     myJobPosts: "Mis Ofertas",
+    analytics: "Analíticas",
   },
   common: {
     save: "Guardar",
@@ -749,6 +752,7 @@ const fr: TranslationKeys = {
     getStarted: "Commencer",
     jobBoard: "Offres d'emploi",
     myJobPosts: "Mes annonces",
+    analytics: "Analytique",
   },
   common: {
     save: "Enregistrer",
@@ -987,6 +991,7 @@ const hi: TranslationKeys = {
     getStarted: "शुरू करें",
     jobBoard: "जॉब बोर्ड",
     myJobPosts: "मेरी नौकरी पोस्ट",
+    analytics: "विश्लेषण",
   },
   common: {
     save: "सहेजें",
@@ -1225,6 +1230,7 @@ const pt: TranslationKeys = {
     getStarted: "Começar",
     jobBoard: "Painel de Vagas",
     myJobPosts: "Minhas Vagas",
+    analytics: "Análises",
   },
   common: {
     save: "Salvar",
