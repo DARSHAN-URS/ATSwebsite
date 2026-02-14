@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Briefcase, DollarSign } from "lucide-react";
+import { Search, MapPin, Briefcase, DollarSign, SendHorizontal, CheckCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface JobPost {
   id: string;
@@ -21,11 +24,14 @@ interface JobPost {
 }
 
 export default function JobBoard() {
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [jobs, setJobs] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -40,6 +46,49 @@ export default function JobBoard() {
     };
     fetchJobs();
   }, []);
+
+  // Fetch user's existing applications
+  useEffect(() => {
+    if (!user) return;
+    const fetchApplied = async () => {
+      const { data } = await supabase
+        .from("job_post_applications")
+        .select("job_post_id")
+        .eq("applicant_id", user.id) as any;
+      if (data) setAppliedIds(new Set(data.map((d: any) => d.job_post_id)));
+    };
+    fetchApplied();
+  }, [user]);
+
+  // Track view when expanding a job
+  const handleExpand = async (jobId: string) => {
+    const isExpanding = expandedId !== jobId;
+    setExpandedId(isExpanding ? jobId : null);
+
+    if (isExpanding && user) {
+      await supabase
+        .from("job_post_views")
+        .upsert({ job_post_id: jobId, viewer_id: user.id } as any, { onConflict: "job_post_id,viewer_id" });
+    }
+  };
+
+  const handleApply = async (e: React.MouseEvent, jobId: string) => {
+    e.stopPropagation();
+    if (!user) return;
+    const { error } = await supabase
+      .from("job_post_applications")
+      .insert({ job_post_id: jobId, applicant_id: user.id } as any);
+    if (error) {
+      if (error.code === "23505") {
+        toast({ title: "Already applied", description: "You've already applied to this job." });
+      } else {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      }
+    } else {
+      setAppliedIds((prev) => new Set(prev).add(jobId));
+      toast({ title: "Application submitted!" });
+    }
+  };
 
   const filtered = jobs.filter((job) => {
     const matchesSearch =
@@ -99,7 +148,7 @@ export default function JobBoard() {
             <Card
               key={job.id}
               className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => setExpandedId(expandedId === job.id ? null : job.id)}
+              onClick={() => handleExpand(job.id)}
             >
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
@@ -107,9 +156,25 @@ export default function JobBoard() {
                     <CardTitle className="text-lg">{job.title}</CardTitle>
                     <p className="text-sm text-muted-foreground">{job.company_name}</p>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(job.created_at).toLocaleDateString()}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(job.created_at).toLocaleDateString()}
+                    </span>
+                    {appliedIds.has(job.id) ? (
+                      <Badge variant="secondary" className="flex items-center gap-1">
+                        <CheckCircle className="h-3 w-3" /> Applied
+                      </Badge>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="default"
+                        className="gap-1"
+                        onClick={(e) => handleApply(e, job.id)}
+                      >
+                        <SendHorizontal className="h-3 w-3" /> Apply
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>

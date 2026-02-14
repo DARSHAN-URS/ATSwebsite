@@ -118,6 +118,80 @@ export type Database = {
           },
         ]
       }
+      job_post_applications: {
+        Row: {
+          applicant_id: string
+          created_at: string
+          id: string
+          job_post_id: string
+          resume_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          applicant_id: string
+          created_at?: string
+          id?: string
+          job_post_id: string
+          resume_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          applicant_id?: string
+          created_at?: string
+          id?: string
+          job_post_id?: string
+          resume_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_post_applications_job_post_id_fkey"
+            columns: ["job_post_id"]
+            isOneToOne: false
+            referencedRelation: "job_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_post_applications_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "resumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_post_views: {
+        Row: {
+          id: string
+          job_post_id: string
+          viewed_at: string
+          viewer_id: string
+        }
+        Insert: {
+          id?: string
+          job_post_id: string
+          viewed_at?: string
+          viewer_id: string
+        }
+        Update: {
+          id?: string
+          job_post_id?: string
+          viewed_at?: string
+          viewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_post_views_job_post_id_fkey"
+            columns: ["job_post_id"]
+            isOneToOne: false
+            referencedRelation: "job_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_posts: {
         Row: {
           company_name: string

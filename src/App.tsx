@@ -21,6 +21,7 @@ import NotFound from "@/pages/NotFound";
 import RoleSelection from "@/pages/RoleSelection";
 import RecruiterJobs from "@/pages/RecruiterJobs";
 import JobBoard from "@/pages/JobBoard";
+import RecruiterAnalytics from "@/pages/RecruiterAnalytics";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const App = () => (
                 <Route path="/tracker" element={<JobTracker />} />
                 <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
                 <Route path="/job-board" element={<JobBoard />} />
+                <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
