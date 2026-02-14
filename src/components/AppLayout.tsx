@@ -24,7 +24,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   return (
     <>
       <div className="p-6 flex items-center gap-2">
-        <img src={logo} alt="ATS Pro Resume Builder" className="h-[96px]" />
+        <img src={logo} alt="ATS Pro Resume Builder" className="h-[92px]" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
