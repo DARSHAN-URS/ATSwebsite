@@ -26,6 +26,8 @@ const en = {
     logIn: "Log In",
     signUp: "Sign Up",
     getStarted: "Get Started",
+    jobBoard: "Job Board",
+    myJobPosts: "My Job Posts",
   },
   common: {
     save: "Save",
@@ -269,6 +271,8 @@ const ar: TranslationKeys = {
     logIn: "تسجيل الدخول",
     signUp: "إنشاء حساب",
     getStarted: "ابدأ الآن",
+    jobBoard: "لوحة الوظائف",
+    myJobPosts: "إعلاناتي الوظيفية",
   },
   common: {
     save: "حفظ",
@@ -505,6 +509,8 @@ const es: TranslationKeys = {
     logIn: "Iniciar sesión",
     signUp: "Registrarse",
     getStarted: "Comenzar",
+    jobBoard: "Bolsa de Trabajo",
+    myJobPosts: "Mis Ofertas",
   },
   common: {
     save: "Guardar",
@@ -741,6 +747,8 @@ const fr: TranslationKeys = {
     logIn: "Connexion",
     signUp: "S'inscrire",
     getStarted: "Commencer",
+    jobBoard: "Offres d'emploi",
+    myJobPosts: "Mes annonces",
   },
   common: {
     save: "Enregistrer",
@@ -977,6 +985,8 @@ const hi: TranslationKeys = {
     logIn: "लॉग इन",
     signUp: "साइन अप",
     getStarted: "शुरू करें",
+    jobBoard: "जॉब बोर्ड",
+    myJobPosts: "मेरी नौकरी पोस्ट",
   },
   common: {
     save: "सहेजें",
@@ -1213,6 +1223,8 @@ const pt: TranslationKeys = {
     logIn: "Entrar",
     signUp: "Cadastrar",
     getStarted: "Começar",
+    jobBoard: "Painel de Vagas",
+    myJobPosts: "Minhas Vagas",
   },
   common: {
     save: "Salvar",

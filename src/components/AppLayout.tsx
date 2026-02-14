@@ -1,7 +1,8 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2 } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -10,17 +11,26 @@ import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
-const navKeys = [
-  { to: "/", icon: LayoutDashboard, key: "dashboard" as const },
+const jobSeekerNav = [
+  { to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
   { to: "/resumes", icon: FileText, key: "resumes" as const },
   { to: "/cover-letters", icon: Mail, key: "coverLetters" as const },
   { to: "/jobs", icon: Search, key: "findJobs" as const },
+  { to: "/job-board", icon: ClipboardList, key: "jobBoard" as const },
   { to: "/companies", icon: Building2, key: "companies" as const },
   { to: "/tracker", icon: Briefcase, key: "jobTracker" as const },
 ];
 
+const recruiterNav = [
+  { to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
+  { to: "/recruiter/jobs", icon: Briefcase, key: "myJobPosts" as const },
+];
+
 function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut: () => void; onNavClick?: () => void }) {
   const { t } = useLanguage();
+  const { role } = useUserRole();
+  const navItems = role === "recruiter" ? recruiterNav : jobSeekerNav;
+
   return (
     <>
       <div className="p-6 flex items-center gap-2">
@@ -28,11 +38,11 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
-        {navKeys.map((item) => (
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === "/"}
+            end={item.to === "/dashboard"}
             onClick={onNavClick}
             className={({ isActive }) =>
               cn(
@@ -83,7 +93,6 @@ export default function AppLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Mobile header */}
       {isMobile && (
         <header className="fixed top-0 left-0 right-0 z-40 h-14 flex items-center px-4 border-b bg-background">
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -103,14 +112,12 @@ export default function AppLayout() {
         </header>
       )}
 
-      {/* Desktop sidebar */}
       {!isMobile && (
         <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border shrink-0">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       )}
 
-      {/* Main content */}
       <main className={cn("flex-1 overflow-auto", isMobile && "pt-14")}>
         <Outlet />
       </main>
