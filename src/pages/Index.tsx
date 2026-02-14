@@ -108,8 +108,8 @@ const Index = () => {
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</button>
-            <Link to="/tracker" className="text-sm text-muted-foreground transition hover:text-foreground">{t.nav.jobTracker}</Link>
-            <Link to="/job-board" className="text-sm text-muted-foreground transition hover:text-foreground">Job Board</Link>
+            <button onClick={() => openAuth("login")} className="text-sm text-muted-foreground transition hover:text-foreground">{t.nav.jobTracker}</button>
+            <button onClick={() => openAuth("login")} className="text-sm text-muted-foreground transition hover:text-foreground">Job Board</button>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="w-[120px] h-8 text-xs" />
