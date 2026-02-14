@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/i18n/LanguageContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import AppLayout from "@/components/AppLayout";
 
 import Dashboard from "@/pages/Dashboard";
@@ -17,16 +18,31 @@ import Index from "@/pages/Index";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import NotFound from "@/pages/NotFound";
+import RoleSelection from "@/pages/RoleSelection";
+import RecruiterJobs from "@/pages/RecruiterJobs";
+import JobBoard from "@/pages/JobBoard";
 
 const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="flex items-center justify-center h-screen text-muted-foreground">Loading...</div>;
+  const { role, loading: roleLoading } = useUserRole();
+
+  if (loading || roleLoading) return <div className="flex items-center justify-center h-screen text-muted-foreground">Loading...</div>;
   if (!user) return <Navigate to="/" replace />;
+  if (!role) return <Navigate to="/select-role" replace />;
   return <>{children}</>;
 }
 
+function RoleRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const { role, loading: roleLoading } = useUserRole();
+
+  if (loading || roleLoading) return <div className="flex items-center justify-center h-screen text-muted-foreground">Loading...</div>;
+  if (!user) return <Navigate to="/" replace />;
+  if (role) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -41,6 +57,7 @@ const App = () => (
               <Route path="/auth" element={<Navigate to="/" replace />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
               <Route
                 element={
                   <ProtectedRoute>
@@ -54,6 +71,8 @@ const App = () => (
                 <Route path="/jobs" element={<FindJobs />} />
                 <Route path="/companies" element={<Companies />} />
                 <Route path="/tracker" element={<JobTracker />} />
+                <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
+                <Route path="/job-board" element={<JobBoard />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
