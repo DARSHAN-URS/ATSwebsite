@@ -116,7 +116,9 @@ const Index = () => {
 
       {/* Hero */}
       <section className="relative overflow-hidden py-20 md:py-32">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,hsl(221_83%_53%/0.08),transparent_60%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,hsl(252_68%_58%/0.1),transparent_50%),radial-gradient(ellipse_at_bottom_right,hsl(340_72%_62%/0.08),transparent_50%)]" />
+        <div className="absolute top-20 right-[15%] -z-10 h-20 w-20 rounded-full bg-primary/10 animate-float" />
+        <div className="absolute bottom-10 left-[10%] -z-10 h-14 w-14 rounded-2xl bg-accent/10 animate-float [animation-delay:1s]" />
         <div className="mx-auto max-w-3xl px-4 text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-1.5 text-xs font-medium text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -146,7 +148,7 @@ const Index = () => {
       </section>
 
       {/* Features */}
-      <section className="border-t border-border bg-secondary/30 py-20">
+      <section className="border-t border-border bg-secondary/40 py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="text-center">
             <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Powerful AI Features to Beat the Bots</h2>
@@ -172,7 +174,7 @@ const Index = () => {
                 desc: "Access a library of 8 professional, recruiter-approved resume templates designed specifically to be parsed by ATS software.",
               },
             ].map((f) => (
-              <div key={f.title} className="rounded-xl border border-border bg-card p-6 transition hover:shadow-lg">
+              <div key={f.title} className="rounded-2xl border border-border bg-card p-6 transition hover:shadow-xl hover:-translate-y-1 duration-300">
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">{f.icon}</div>
                 <h3 className="mb-2 font-semibold">{f.title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
@@ -234,7 +236,7 @@ const Index = () => {
               { value: "3×", label: "More Interviews" },
               { value: "1M+", label: "Resumes Built" },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-border bg-card p-5 text-center">
+              <div key={s.label} className="rounded-2xl border border-border bg-card p-5 text-center">
                 <p className="text-2xl font-extrabold text-primary">{s.value}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
               </div>
@@ -281,7 +283,7 @@ const Index = () => {
                 stars: 5,
               },
             ].map((t) => (
-              <div key={t.name} className="group rounded-xl border border-border bg-card p-6 transition hover:shadow-lg hover:-translate-y-1 duration-300">
+              <div key={t.name} className="group rounded-2xl border border-border bg-card p-6 transition hover:shadow-xl hover:-translate-y-1 duration-300">
                 <Quote className="mb-3 h-5 w-5 text-primary/40" />
                 <p className="text-sm leading-relaxed text-muted-foreground">{t.text}</p>
                 <div className="mt-5 flex items-center gap-3">
