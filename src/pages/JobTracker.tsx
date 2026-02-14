@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase, ExternalLink, Mail, Trash2 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import SEOHead from "@/components/SEOHead";
 
 type JobApp = Tables<"job_applications">;
 
@@ -94,6 +95,7 @@ export default function JobTracker() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
+      <SEOHead title="Job Tracker — ATS Pro Resume Builder" description="Track your job applications in one place." noindex />
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Job Tracker</h1>
         <p className="text-muted-foreground mt-1">Track your job applications in one place</p>

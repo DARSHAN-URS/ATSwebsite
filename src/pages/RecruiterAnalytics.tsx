@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Users, Briefcase, TrendingUp, BarChart3 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import SEOHead from "@/components/SEOHead";
 
 interface JobAnalytics {
   id: string;
@@ -109,6 +110,7 @@ export default function RecruiterAnalytics() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <SEOHead title="Recruiter Analytics — ATS Pro Resume Builder" description="View analytics for your job postings." noindex />
       <div>
         <h1 className="text-2xl font-bold text-foreground">Recruiter Analytics</h1>
         <p className="text-muted-foreground">Overview of your job postings performance</p>

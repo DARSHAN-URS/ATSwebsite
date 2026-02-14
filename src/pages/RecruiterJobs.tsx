@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Label } from "@/components/ui/label";
 import { Plus, Edit, Trash2, Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import SEOHead from "@/components/SEOHead";
 
 interface JobPost {
   id: string;
@@ -132,6 +133,7 @@ export default function RecruiterJobs() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <SEOHead title="My Job Posts — ATS Pro Resume Builder" description="Manage your job postings." noindex />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">My Job Posts</h1>

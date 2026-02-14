@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Download, Sparkles, Loader2 } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 interface CoverLetterData {
   greeting: string;
@@ -236,6 +237,7 @@ export default function CoverLetters() {
   // List view
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8">
+      <SEOHead title="Cover Letters — ATS Pro Resume Builder" description="Generate AI-tailored cover letters." noindex />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Cover Letters</h1>

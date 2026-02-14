@@ -12,11 +12,16 @@ Allow: /
 
 User-agent: *
 Allow: /
+Allow: /job-board
+Allow: /privacy
+Allow: /terms
 Disallow: /dashboard
 Disallow: /resumes
 Disallow: /cover-letters
 Disallow: /jobs
 Disallow: /companies
 Disallow: /tracker
+Disallow: /recruiter/
+Disallow: /select-role
 
-Sitemap: https://jobflowai.com/sitemap.xml
+Sitemap: https://atsproresumebuilder.com/sitemap.xml

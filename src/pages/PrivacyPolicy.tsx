@@ -8,7 +8,8 @@ const PrivacyPolicy = () => (
     <SEOHead
       title="Privacy Policy — ATS Pro Resume Builder"
       description="Learn how ATS Pro Resume Builder collects, uses, and protects your personal information and resume data."
-      canonical="https://jobflowai.com/privacy"
+      canonical="https://atsproresumebuilder.com/privacy"
+      keywords="privacy policy, data protection, resume data security"
     />
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
