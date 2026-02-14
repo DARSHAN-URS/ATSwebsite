@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   Search, ExternalLink, MapPin, Building2, Globe, Briefcase, Loader2, ChevronDown, ChevronUp, Pin, PinOff,
 } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 interface OpenJob {
   job_title: string;
@@ -297,6 +298,7 @@ export default function Companies() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
+      <SEOHead title="Companies — ATS Pro Resume Builder" description="Discover companies and open positions." noindex />
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t.companies.title}</h1>
         <p className="text-muted-foreground mt-1">{t.companies.subtitle}</p>

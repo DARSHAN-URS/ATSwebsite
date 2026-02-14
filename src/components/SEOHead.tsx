@@ -7,25 +7,25 @@ interface SEOHeadProps {
   ogType?: string;
   ogImage?: string;
   noindex?: boolean;
+  keywords?: string;
 }
 
 /**
  * Dynamically sets document <head> meta tags for SEO.
- * Use on every public-facing page.
+ * Use on every page — public pages get full SEO, protected pages get noindex.
  */
 const SEOHead = ({
   title,
   description,
   canonical,
   ogType = "website",
-  ogImage = "https://jobflowai.com/favicon.png",
+  ogImage = "https://atsproresumebuilder.com/favicon.png",
   noindex = false,
+  keywords,
 }: SEOHeadProps) => {
   useEffect(() => {
-    // Title
     document.title = title;
 
-    // Helper to set or create a meta tag
     const setMeta = (attr: string, key: string, content: string) => {
       let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
       if (!el) {
@@ -36,19 +36,29 @@ const SEOHead = ({
       el.setAttribute("content", content);
     };
 
+    // Standard meta
     setMeta("name", "description", description);
+    if (keywords) setMeta("name", "keywords", keywords);
+
+    // Open Graph
     setMeta("property", "og:title", title);
     setMeta("property", "og:description", description);
     setMeta("property", "og:type", ogType);
     setMeta("property", "og:image", ogImage);
+    setMeta("property", "og:site_name", "ATS Pro Resume Builder");
+    if (canonical) setMeta("property", "og:url", canonical);
+
+    // Twitter Card
     setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", title);
+    setMeta("name", "twitter:description", description);
     setMeta("name", "twitter:image", ogImage);
 
+    // Robots
     if (noindex) {
       setMeta("name", "robots", "noindex, nofollow");
     } else {
-      const robotsMeta = document.querySelector('meta[name="robots"]');
-      if (robotsMeta) robotsMeta.remove();
+      setMeta("name", "robots", "index, follow");
     }
 
     // Canonical
@@ -60,8 +70,10 @@ const SEOHead = ({
         document.head.appendChild(link);
       }
       link.setAttribute("href", canonical);
+    } else if (link) {
+      link.remove();
     }
-  }, [title, description, canonical, ogType, ogImage, noindex]);
+  }, [title, description, canonical, ogType, ogImage, noindex, keywords]);
 
   return null;
 };

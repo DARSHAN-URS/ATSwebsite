@@ -8,7 +8,8 @@ const TermsOfService = () => (
     <SEOHead
       title="Terms of Service — ATS Pro Resume Builder"
       description="Read the Terms of Service for ATS Pro Resume Builder. Understand your rights and responsibilities when using our AI resume tools."
-      canonical="https://jobflowai.com/terms"
+      canonical="https://atsproresumebuilder.com/terms"
+      keywords="terms of service, user agreement, ATS resume builder terms"
     />
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">

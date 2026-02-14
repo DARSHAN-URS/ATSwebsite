@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Briefcase, Bookmark, Search, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import SEOHead from "@/components/SEOHead";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -40,6 +41,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8">
+      <SEOHead title="Dashboard — ATS Pro Resume Builder" description="Manage your resumes, cover letters, and job applications." noindex />
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t.dashboard.title}</h1>
         <p className="text-muted-foreground mt-1">{t.dashboard.welcome}</p>

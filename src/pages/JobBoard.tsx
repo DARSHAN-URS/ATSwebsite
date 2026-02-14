@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, MapPin, Briefcase, DollarSign, SendHorizontal, CheckCircle } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 import { useToast } from "@/hooks/use-toast";
 
 interface JobPost {
@@ -102,6 +103,12 @@ export default function JobBoard() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <SEOHead
+        title="Job Board — Browse Open Positions | ATS Pro Resume Builder"
+        description="Browse job openings posted by recruiters. Search by title, company, location, and job type. Apply directly with your ATS-optimized resume."
+        canonical="https://atsproresumebuilder.com/job-board"
+        keywords="job board, job openings, recruiter jobs, job search, find jobs, career opportunities"
+      />
       <div>
         <h1 className="text-2xl font-bold text-foreground">Job Board</h1>
         <p className="text-muted-foreground">Browse open positions posted by recruiters</p>

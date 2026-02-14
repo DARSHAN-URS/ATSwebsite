@@ -93,8 +93,9 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
         title="ATS Pro Resume Builder — Free AI Resume Builder for ATS Success"
-        description="Build ATS-optimized resumes in minutes with ATS Pro Resume Builder. Free AI resume grader, one-click tailoring, 12+ professional templates. Land 3× more interviews."
-        canonical="https://jobflowai.com/"
+        description="Build ATS-optimized resumes in minutes with ATS Pro Resume Builder. Free AI resume grader, recruiter job board, one-click tailoring, and 8+ professional templates. Land 3× more interviews."
+        canonical="https://atsproresumebuilder.com/"
+        keywords="ATS resume builder, AI resume grader, free resume builder, ATS-friendly resume, resume templates, job application tracker, recruiter job board, cover letter generator"
       />
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
@@ -425,7 +426,7 @@ const Index = () => {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             name: "ATS Pro Resume Builder",
-            url: "https://jobflowai.com",
+            url: "https://atsproresumebuilder.com",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
             description: "AI-powered ATS resume builder that helps job seekers create optimized resumes, track applications, and land more interviews.",
@@ -456,8 +457,8 @@ const Index = () => {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "ATS Pro Resume Builder",
-            url: "https://jobflowai.com",
-            logo: "https://jobflowai.com/favicon.png",
+            url: "https://atsproresumebuilder.com",
+            logo: "https://atsproresumebuilder.com/favicon.png",
             sameAs: [],
           }),
         }}
@@ -469,10 +470,10 @@ const Index = () => {
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "ATS Pro Resume Builder",
-            url: "https://jobflowai.com",
+            url: "https://atsproresumebuilder.com",
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://jobflowai.com/?q={search_term_string}",
+              target: "https://atsproresumebuilder.com/?q={search_term_string}",
               "query-input": "required name=search_term_string",
             },
           }),

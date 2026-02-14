@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Briefcase, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import SEOHead from "@/components/SEOHead";
 
 export default function RoleSelection() {
   const { setUserRole } = useUserRole();
@@ -25,6 +26,7 @@ export default function RoleSelection() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <SEOHead title="Select Your Role — ATS Pro Resume Builder" description="Choose your role to get started." noindex />
       <div className="max-w-2xl w-full space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-foreground">Welcome! How will you use the platform?</h1>

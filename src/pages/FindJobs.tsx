@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Search, Bookmark, BookmarkCheck, ExternalLink, MapPin, Building2, Clock, Sparkles, Loader2 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import SEOHead from "@/components/SEOHead";
 
 type Resume = Tables<"resumes">;
 type SavedJob = Tables<"saved_jobs">;
@@ -160,6 +161,7 @@ export default function FindJobs() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
+      <SEOHead title="Find Jobs — ATS Pro Resume Builder" description="AI-powered job discovery matched to your resume." noindex />
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Find Jobs</h1>
         <p className="text-muted-foreground mt-1">AI-powered job discovery matched to your resume</p>

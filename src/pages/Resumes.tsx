@@ -18,6 +18,7 @@ import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 import TemplateSelector from "@/components/resume/TemplateSelector";
 import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
+import SEOHead from "@/components/SEOHead";
 
 type Resume = Tables<"resumes">;
 
@@ -717,6 +718,7 @@ export default function Resumes() {
   // List view
   return (
     <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
+      <SEOHead title="Resumes — ATS Pro Resume Builder" description="Create and manage ATS-optimized resumes." noindex />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
