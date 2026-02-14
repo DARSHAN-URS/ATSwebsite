@@ -1,73 +1,36 @@
 
 
-# Cover Letter Builder - Implementation Plan
+## Improve Resume Template Selector with Tab Filters
 
-## Overview
-Add a full Cover Letter Builder feature that lets users generate AI-tailored cover letters based on their resume and a job description, with manual editing, tone selection, and PDF export.
+Redesign the template selector to use horizontal filter tabs (similar to the reference screenshot) instead of grouped category sections.
 
----
+### What Changes
 
-## What You'll Get
+**Current**: Templates grouped under category headings (Traditional, Modern, Simple, etc.) in separate sections.
 
-1. **New "Cover Letters" page** in the sidebar navigation
-2. **AI-powered generation** -- select a resume, paste a job description, pick a tone, and AI writes a tailored cover letter
-3. **Section-based editor** -- manually edit greeting, opening, body paragraphs, and closing
-4. **Tone selector** -- Professional, Enthusiastic, or Conversational
-5. **Cover letter management** -- list, edit, delete saved cover letters
-6. **PDF export** -- download your cover letter as a clean PDF
-7. **Dashboard integration** -- cover letter count shown on the dashboard
+**New**: A single horizontal tab bar at the top with filter options:
+- All Templates (default, shows all 12)
+- Simple
+- Modern
+- Professional
+- Creative
+- Traditional
+- ATS
 
----
+Clicking a tab filters the grid to show only templates in that category. "All Templates" shows everything.
 
-## Technical Details
+### Visual Style
+- Tabs displayed as a horizontal row with icons (matching the reference)
+- Active tab highlighted with primary color
+- Template cards remain the same thumbnail + name + description layout below
 
-### 1. Database: `cover_letters` table
+### Technical Details
 
-New table with columns:
-- `id` (uuid, primary key)
-- `user_id` (uuid, not null)
-- `title` (text, not null)
-- `resume_id` (uuid, nullable, references resumes)
-- `job_description` (text, nullable)
-- `tone` (text, default 'professional')
-- `cover_letter_data` (jsonb) -- stores sections: greeting, opening, body, closing
-- `created_at`, `updated_at` (timestamptz)
+**File: `src/components/resume/TemplateSelector.tsx`**
+- Replace the category-grouped layout with a `Tabs` component (already available via Radix UI)
+- Add an "All Templates" default tab plus one tab per unique category
+- Filter `RESUME_TEMPLATES` based on the selected tab
+- Display filtered templates in a single grid below the tabs
 
-RLS policies: users can only CRUD their own cover letters.
-
-### 2. Edge Function: `generate-cover-letter`
-
-- Accepts: resume data, job description, tone
-- Uses Lovable AI (Gemini Flash) to generate a structured cover letter with sections (greeting, opening, body, closing)
-- Uses tool calling to extract structured JSON output
-- Handles 429/402 rate limit errors gracefully
-
-### 3. New Page: `CoverLetters.tsx` (`/cover-letters`)
-
-- Lists all saved cover letters in a card grid
-- "New Cover Letter" dialog:
-  - Select a resume from dropdown
-  - Paste job description
-  - Choose tone (Professional / Enthusiastic / Conversational)
-  - "Generate with AI" button
-- After generation, opens a section editor for manual tweaking
-- Preview panel showing formatted cover letter
-- "Download PDF" button using browser print
-
-### 4. Navigation & Dashboard Updates
-
-- Add "Cover Letters" nav item to sidebar (between Resumes and Find Jobs)
-- Add cover letter count card to Dashboard
-- Add `cover_letter_id` column to `job_applications` table for linking
-
-### 5. Files Changed/Created
-
-| File | Action |
-|------|--------|
-| `supabase/migrations/...` | Create `cover_letters` table + RLS + add `cover_letter_id` to `job_applications` |
-| `supabase/functions/generate-cover-letter/index.ts` | New edge function for AI generation |
-| `src/pages/CoverLetters.tsx` | New page with list, create, edit, preview, export |
-| `src/components/AppLayout.tsx` | Add Cover Letters nav item |
-| `src/pages/Dashboard.tsx` | Add cover letter count stat |
-| `src/App.tsx` | Add `/cover-letters` route |
+No other files need to change. The template data and categories already exist in `pdfTemplates.ts`.
 
