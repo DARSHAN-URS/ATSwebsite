@@ -110,6 +110,7 @@ const Index = () => {
             <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</button>
             <button onClick={() => openAuth("login")} className="text-sm text-muted-foreground transition hover:text-foreground">{t.nav.jobTracker}</button>
             <button onClick={() => openAuth("login")} className="text-sm text-muted-foreground transition hover:text-foreground">Job Board</button>
+            <button onClick={() => openAuth("signup")} className="text-sm text-muted-foreground transition hover:text-foreground">Post Jobs</button>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="w-[120px] h-8 text-xs" />
