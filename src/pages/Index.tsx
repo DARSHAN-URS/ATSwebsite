@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users } from "lucide-react";
+import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
+import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -18,6 +20,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
+  const templatesRef = useRef<HTMLDivElement>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login");
   const [email, setEmail] = useState("");
@@ -104,7 +107,7 @@ const Index = () => {
             <img src={logo} alt="ATS Pro Resume Builder" className="h-[72px]" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
-            <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</Link>
+            <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</button>
             <Link to="/tracker" className="text-sm text-muted-foreground transition hover:text-foreground">{t.nav.jobTracker}</Link>
             <Link to="/job-board" className="text-sm text-muted-foreground transition hover:text-foreground">Job Board</Link>
           </div>
@@ -362,6 +365,40 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Resume Templates Showcase */}
+      <section ref={templatesRef} id="templates" className="border-t border-border py-20">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Professional Resume Templates</h2>
+            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+              Choose from {RESUME_TEMPLATES.length} ATS-optimized, recruiter-approved templates. Click any template to get started.
+            </p>
+          </div>
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {RESUME_TEMPLATES.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => openAuth("signup")}
+                className="group relative flex flex-col rounded-xl border-2 border-border bg-card overflow-hidden transition-all hover:border-primary/60 hover:shadow-lg hover:-translate-y-1 duration-300"
+              >
+                <div className="p-1.5">
+                  <TemplateThumbnail templateId={t.id} />
+                </div>
+                <div className="px-3 pb-3 pt-1 text-left">
+                  <span className="text-sm font-semibold leading-tight">{t.name}</span>
+                  <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2 mt-0.5">{t.description}</p>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <span className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg">
+                    Use Template →
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="border-t border-border py-20">
         <div className="mx-auto max-w-2xl px-4">
@@ -396,7 +433,7 @@ const Index = () => {
           <div>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-background/60">Platform</h4>
             <ul className="space-y-2 text-sm text-background/80">
-              <li><Link to="/resumes" className="transition hover:text-primary">Resume Templates</Link></li>
+              <li><button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="transition hover:text-primary">Resume Templates</button></li>
               <li><Link to="/resumes" className="transition hover:text-primary">AI Resume Grader</Link></li>
               <li><Link to="/tracker" className="transition hover:text-primary">Job Tracking</Link></li>
               <li><Link to="/cover-letters" className="transition hover:text-primary">Cover Letters</Link></li>
