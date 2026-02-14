@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -105,6 +105,7 @@ const Index = () => {
           <div className="hidden items-center gap-6 md:flex">
             <Link to="/resumes" className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</Link>
             <Link to="/tracker" className="text-sm text-muted-foreground transition hover:text-foreground">{t.nav.jobTracker}</Link>
+            <Link to="/job-board" className="text-sm text-muted-foreground transition hover:text-foreground">Job Board</Link>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="w-[120px] h-8 text-xs" />
@@ -156,7 +157,7 @@ const Index = () => {
               Stop getting rejected by Applicant Tracking Systems (ATS). Our tools ensure your resume reaches real recruiters and humans.
             </p>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: <BarChart3 className="h-6 w-6 text-primary" />,
@@ -172,6 +173,11 @@ const Index = () => {
                 icon: <LayoutTemplate className="h-6 w-6 text-primary" />,
                 title: "ATS Templates",
                 desc: "Access a library of 8 professional, recruiter-approved resume templates designed specifically to be parsed by ATS software.",
+              },
+              {
+                icon: <Briefcase className="h-6 w-6 text-primary" />,
+                title: "Recruiter Job Portal",
+                desc: "Recruiters can post job openings directly on the platform, visible to thousands of active job seekers browsing the board.",
               },
             ].map((f) => (
               <div key={f.title} className="rounded-2xl border border-border bg-card p-6 transition hover:shadow-xl hover:-translate-y-1 duration-300">
@@ -306,6 +312,55 @@ const Index = () => {
         </div>
       </section>
 
+      {/* For Recruiters CTA */}
+      <section className="border-t border-border bg-primary/5 py-20">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="grid gap-10 md:grid-cols-2 items-center">
+            <div>
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
+                <Users className="h-3.5 w-3.5" /> For Recruiters
+              </div>
+              <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+                Post Jobs & Find Top Talent
+              </h2>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-md">
+                Create a recruiter account to post job openings directly on our platform. Your listings are instantly visible to thousands of active, qualified job seekers with ATS-optimized resumes.
+              </p>
+              <ul className="mt-6 space-y-3">
+                {[
+                  "Post unlimited job listings with detailed descriptions",
+                  "Reach job seekers who have optimized, professional resumes",
+                  "Manage and track all your postings from one dashboard",
+                  "Close or reopen positions with a single click",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Button className="gap-2 rounded-full font-semibold mt-8" onClick={() => openAuth("signup")}>
+                Start Hiring Now <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { value: "10K+", label: "Active Job Seekers", icon: <Users className="h-5 w-5 text-primary" /> },
+                { value: "Free", label: "To Post Jobs", icon: <Briefcase className="h-5 w-5 text-primary" /> },
+                { value: "Instant", label: "Job Visibility", icon: <Sparkles className="h-5 w-5 text-primary" /> },
+                { value: "Easy", label: "Dashboard Management", icon: <LayoutTemplate className="h-5 w-5 text-primary" /> },
+              ].map((s) => (
+                <div key={s.label} className="rounded-2xl border border-border bg-card p-5 text-center">
+                  <div className="flex justify-center mb-2">{s.icon}</div>
+                  <p className="text-xl font-extrabold text-primary">{s.value}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="border-t border-border py-20">
         <div className="mx-auto max-w-2xl px-4">
@@ -344,6 +399,7 @@ const Index = () => {
               <li><Link to="/resumes" className="transition hover:text-primary">AI Resume Grader</Link></li>
               <li><Link to="/tracker" className="transition hover:text-primary">Job Tracking</Link></li>
               <li><Link to="/cover-letters" className="transition hover:text-primary">Cover Letters</Link></li>
+              <li><Link to="/job-board" className="transition hover:text-primary">Job Board</Link></li>
             </ul>
           </div>
           <div>
