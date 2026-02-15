@@ -84,6 +84,8 @@ Deno.serve(async (req) => {
     }
 
     const profile = await response.json();
+    console.log("Profile response keys:", JSON.stringify(Object.keys(profile)));
+    console.log("Profile raw data:", JSON.stringify(profile).substring(0, 2000));
     console.log("Profile fetched, mapping data...");
 
     // Map to ResumeData
