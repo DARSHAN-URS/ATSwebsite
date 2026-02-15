@@ -8,11 +8,11 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
 
   return (
     <Select value={locale} onValueChange={(v) => setLocale(v as Locale)}>
-      <SelectTrigger className={className || "w-[140px] h-8 text-xs bg-background text-foreground border-border"}>
+      <SelectTrigger className={className || "w-[140px] h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border"}>
         <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
         <SelectValue />
       </SelectTrigger>
-      <SelectContent className="z-50 bg-popover border border-border shadow-lg">
+      <SelectContent className="z-[100] bg-popover text-popover-foreground border border-border shadow-lg">
         {(Object.entries(localeNames) as [Locale, string][]).map(([code, name]) => (
           <SelectItem key={code} value={code} className="text-sm">
             {name}
