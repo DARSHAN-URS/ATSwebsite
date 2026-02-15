@@ -63,92 +63,64 @@ Deno.serve(async (req) => {
 
     console.log("Fetching LinkedIn profile:", linkedinUrl);
 
-    // Try multiple known LinkedIn Scraper API hosts
-    const hosts = [
-      "linkedin-scraper-api.p.rapidapi.com",
-      "linkedin-profile-data-api.p.rapidapi.com", 
-      "linkedin-api8.p.rapidapi.com",
-      "linkedin-data-api.p.rapidapi.com",
-    ];
-
-    let profile: any = null;
-    let lastError = "";
-
-    for (const host of hosts) {
-      try {
-        console.log("Trying host:", host);
-        const response = await fetch(
-          `https://${host}/get-profile-data-by-url?url=${encodeURIComponent(linkedinUrl)}`,
-          {
-            method: "GET",
-            headers: {
-              "x-rapidapi-host": host,
-              "x-rapidapi-key": apiKey,
-            },
-          }
-        );
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Success with host:", host, "Keys:", JSON.stringify(Object.keys(data)));
-          console.log("Response preview:", JSON.stringify(data).substring(0, 1500));
-          
-          if (data.success === false) {
-            lastError = data.message || "API returned unsuccessful response";
-            continue;
-          }
-          
-          profile = data;
-          break;
-        } else {
-          const text = await response.text();
-          console.log(`Host ${host} returned ${response.status}: ${text.substring(0, 200)}`);
-          lastError = `Status ${response.status}`;
-        }
-      } catch (e) {
-        console.log(`Host ${host} error:`, e);
-        lastError = e instanceof Error ? e.message : String(e);
+    const host = "fresh-linkedin-profile-data.p.rapidapi.com";
+    const response = await fetch(
+      `https://${host}/get-linkedin-profile?linkedin_url=${encodeURIComponent(linkedinUrl)}&include_skills=true`,
+      {
+        method: "GET",
+        headers: {
+          "x-rapidapi-host": host,
+          "x-rapidapi-key": apiKey,
+        },
       }
-    }
+    );
 
-    if (!profile) {
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("API error:", response.status, errorText);
       return new Response(
-        JSON.stringify({ error: `Could not fetch LinkedIn data. Last error: ${lastError}. Please verify your RapidAPI subscription.` }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: `LinkedIn API error (${response.status}). Check your RapidAPI subscription.` }),
+        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Map to ResumeData
+    const profile = await response.json();
+    console.log("Profile keys:", JSON.stringify(Object.keys(profile)));
+    console.log("Profile preview:", JSON.stringify(profile).substring(0, 1500));
+
+    // Map to ResumeData (Fresh LinkedIn Profile Data format)
     const resumeData = {
       personalInfo: {
-        fullName: [profile.firstName, profile.lastName].filter(Boolean).join(" ") || "",
-        location: profile.geo?.full || "",
+        fullName: [profile.first_name, profile.last_name].filter(Boolean).join(" ") || profile.full_name || "",
+        email: profile.email || "",
+        location: profile.location || profile.city || "",
+        linkedin: linkedinUrl,
       },
-      summary: profile.summary || "",
+      summary: profile.about || profile.summary || "",
       skills: Array.isArray(profile.skills)
-        ? profile.skills.map((s: any) => (typeof s === "string" ? s : s.name || "")).filter(Boolean)
+        ? profile.skills.map((s: any) => (typeof s === "string" ? s : s.name || s.title || "")).filter(Boolean)
         : [],
-      experience: Array.isArray(profile.position)
-        ? profile.position.map((pos: any) => ({
-            title: pos.title || "",
-            company: pos.companyName || "",
+      experience: Array.isArray(profile.experiences)
+        ? profile.experiences.map((pos: any) => ({
+            title: pos.title || pos.position || "",
+            company: pos.company || pos.company_name || "",
             description: pos.description || "",
-            startDate: formatDate(pos.start),
-            endDate: pos.end ? formatDate(pos.end) : "Present",
+            startDate: pos.start_date || formatDate(pos.start),
+            endDate: pos.end_date || (pos.end ? formatDate(pos.end) : "Present"),
             bullets: [],
           }))
         : [],
       education: Array.isArray(profile.educations)
         ? profile.educations.map((edu: any) => ({
-            degree: [edu.degree, edu.fieldOfStudy].filter(Boolean).join(" in ") || edu.degreeName || "",
-            school: edu.schoolName || "",
-            startDate: formatDate(edu.start),
-            endDate: formatDate(edu.end),
+            degree: edu.degree || [edu.degree_name, edu.field_of_study].filter(Boolean).join(" in ") || "",
+            school: edu.school || edu.school_name || "",
+            startDate: edu.start_date || formatDate(edu.start),
+            endDate: edu.end_date || formatDate(edu.end),
           }))
         : [],
       languages: Array.isArray(profile.languages)
         ? profile.languages.map((lang: any) => ({
-            name: typeof lang === "string" ? lang : lang.name || "",
+            name: typeof lang === "string" ? lang : lang.name || lang.title || "",
             proficiency: typeof lang === "string" ? "" : lang.proficiency || "",
           }))
         : [],
