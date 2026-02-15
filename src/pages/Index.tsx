@@ -112,6 +112,7 @@ const Index = () => {
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobTracker}</button>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobBoard}</button>
             <button onClick={() => openAuth("signup")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.jobBoard.postJobs}</button>
+            <Link to="/about" className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">About</Link>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="hidden md:inline-flex w-[110px] h-8 text-xs" />
@@ -128,6 +129,7 @@ const Index = () => {
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
             <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.jobBoard.postJobs}</button>
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">About</Link>
             <div className="pt-2 border-t border-border/60 flex items-center gap-2">
               <LanguageSwitcher className="w-[110px] h-8 text-xs" />
               <Button variant="ghost" size="sm" className="font-medium" onClick={() => { openAuth("login"); setMobileMenuOpen(false); }}>{t.nav.logIn}</Button>
@@ -429,6 +431,7 @@ const Index = () => {
             <div className="md:col-span-2">
               <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.company}</h4>
               <ul className="space-y-2.5 text-[13px] text-background/70">
+                <li><Link to="/about" className="transition hover:text-background">About</Link></li>
                 <li><Link to="/privacy" className="transition hover:text-background">{t.landing.privacyPolicy}</Link></li>
                 <li><Link to="/terms" className="transition hover:text-background">{t.landing.termsOfService}</Link></li>
               </ul>
