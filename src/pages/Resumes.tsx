@@ -319,6 +319,11 @@ export default function Resumes() {
 
   const handleLinkedInImport = async () => {
     if (!linkedinUrl.trim() || !user) return;
+    const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]{3,100}\/?$/i;
+    if (!linkedinRegex.test(linkedinUrl.trim())) {
+      toast({ title: "Invalid LinkedIn URL", description: "Please enter a valid LinkedIn profile URL (e.g. https://www.linkedin.com/in/username)", variant: "destructive" });
+      return;
+    }
     setLinkedinLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("sync-linkedin", {
