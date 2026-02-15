@@ -1,40 +1,65 @@
 
 
-## Merge Job Board: Show Both External Jobs and Recruiter Posts
+## LinkedIn Profile Sync using RapidAPI Real-Time LinkedIn Scraper
 
-Currently, the Job Board (`/job-board`) only shows recruiter-posted jobs from the database. The user wants it to also display external job listings (from the JSearch API) alongside recruiter posts -- all in one unified view.
+Import LinkedIn profile data into the resume editor by pasting a LinkedIn URL. Uses the RapidAPI "Real-Time LinkedIn Scraper API" to fetch structured profile data directly -- no AI parsing needed for most fields.
+
+### Setup
+
+**API Key**: You will need a RapidAPI key with access to the "Real-Time LinkedIn Scraper API" (linkedin-data-api). You'll be prompted to securely store it as a backend secret.
 
 ### What Changes
 
-**Single unified Job Board page** (`src/pages/JobBoard.tsx`) that displays two sections using tabs:
+**1. New backend function: `sync-linkedin`** (`supabase/functions/sync-linkedin/index.ts`)
+- Accepts a LinkedIn profile URL from the client
+- Calls `https://linkedin-data-api.p.rapidapi.com/get-profile-data-by-url` with the RapidAPI key
+- Maps the structured response directly to the `ResumeData` type:
+  - `firstName` + `lastName` -> `personalInfo.fullName`
+  - `geo.full` -> `personalInfo.location`  
+  - `summary` -> `summary`
+  - `position` array -> `experience[]` (title, companyName, description, start/end dates)
+  - `educations` array -> `education[]` (degree, schoolName, start/end dates)
+  - `skills` array -> `skills[]`
+  - `languages` array -> `languages[]`
+- Returns the mapped `ResumeData` to the client
+- Requires authentication (uses the shared auth helper)
 
-1. **"All Jobs" tab** -- Shows recruiter-posted jobs from the database (loaded automatically on page load, as it works today)
-2. **"Find External Jobs" tab** -- Shows AI-matched external jobs from the JSearch API (requires selecting a resume and searching, similar to the current Find Jobs page)
+**2. Update `supabase/config.toml`**
+- Add `[functions.sync-linkedin]` with `verify_jwt = false`
 
-### Implementation Details
+**3. Update Resume Editor UI** (`src/pages/Resumes.tsx`)
+- Add a "Import from LinkedIn" button in the resume list header (next to the Upload Resume button)
+- Clicking opens a dialog with:
+  - A text input for the LinkedIn profile URL
+  - A submit button that calls the `sync-linkedin` function
+  - Loading state while fetching
+- On success, creates a new resume populated with the LinkedIn data and opens the editor
+- On error, shows a toast with the error message
 
-**File: `src/pages/JobBoard.tsx`**
+### Data Mapping Details
 
-- Add Tabs component with two tabs: "Recruiter Posts" and "External Jobs"
-- **Recruiter Posts tab**: Keep the existing recruiter job listing logic (fetching from `job_posts` table, search/filter, apply button, expand details)
-- **External Jobs tab**: Port the search-jobs functionality from `FindJobs.tsx`:
-  - Resume selector dropdown
-  - Search query, location, and job type filters
-  - Call the `search-jobs` edge function
-  - Display results with match scores and save/track actions
-- Both tabs share the same search bar for filtering by keyword
-- Add a "source" badge on each card so users can distinguish between "Platform" (recruiter) and "External" jobs
+The RapidAPI response provides structured JSON, so mapping is straightforward without needing AI:
 
-**File: `src/pages/FindJobs.tsx`**
+```text
+API Response Field        ->  ResumeData Field
+─────────────────────────────────────────────────
+firstName + lastName      ->  personalInfo.fullName
+geo.full                  ->  personalInfo.location
+summary                   ->  summary
+position[].title          ->  experience[].title
+position[].companyName    ->  experience[].company
+position[].description    ->  experience[].description
+position[].start/end      ->  experience[].startDate/endDate
+educations[].degree       ->  education[].degree
+educations[].schoolName   ->  education[].school
+educations[].start/end    ->  education[].startDate/endDate
+skills[]                  ->  skills[]
+languages[].name          ->  languages[].name
+languages[].proficiency   ->  languages[].proficiency
+```
 
-- No changes needed -- it remains as a separate dedicated page for power users who want the full AI job search experience
+### Files to Create/Modify
 
-**Navigation**: No route changes needed. The `/job-board` page simply becomes richer with the additional tab.
-
-### Technical Steps
-
-1. Import Tabs, resume fetching logic, and the `search-jobs` edge function invocation into `JobBoard.tsx`
-2. Add state for external jobs, selected resume, search query, location, loading state
-3. Add a Tabs wrapper around the existing recruiter job list, placing it under a "Recruiter Posts" tab
-4. Create an "External Jobs" tab with the resume selector, filters, search button, and results list with match scores
-5. Make the header layout responsive (`flex-col sm:flex-row`) to fix mobile styling consistency
+- **Create**: `supabase/functions/sync-linkedin/index.ts`
+- **Modify**: `src/pages/Resumes.tsx` (add LinkedIn import button and dialog)
+- **Modify**: `supabase/config.toml` (add function entry)
