@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.parse-resume]
 verify_jwt = false
+
+[functions.sync-linkedin]
+verify_jwt = false
