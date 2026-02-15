@@ -195,9 +195,13 @@ function renderSidebar(doc: jsPDF, data: ResumeData, title: string) {
   ctx.maxWidth = ctx.pageWidth - ctx.margin - 15;
   const pi = data.personalInfo || {};
 
-  // Sidebar background
-  doc.setFillColor(30, 58, 95);
-  doc.rect(0, 0, 60, pageHeight, "F");
+  // Draw sidebar background on current page
+  const drawSidebarBg = () => {
+    doc.setFillColor(30, 58, 95);
+    doc.rect(0, 0, 60, pageHeight, "F");
+  };
+
+  drawSidebarBg();
 
   // Name in sidebar
   doc.setFontSize(12);
@@ -244,10 +248,19 @@ function renderSidebar(doc: jsPDF, data: ResumeData, title: string) {
     });
   }
 
-  // Main content area
+  // Main content area - override checkPageBreak to also draw sidebar bg on new pages
+  const originalCheckPageBreak = (needed: number) => {
+    const pageBottom = doc.internal.pageSize.getHeight() - 12;
+    if (ctx.y + needed > pageBottom) {
+      doc.addPage();
+      drawSidebarBg();
+      ctx.y = 20;
+    }
+  };
+
   doc.setTextColor(0);
   const addSection = (label: string) => {
-    checkPageBreak(ctx, 12);
+    originalCheckPageBreak(12);
     ctx.y += 4;
     doc.setFillColor(30, 58, 95);
     doc.rect(ctx.margin, ctx.y - 2, ctx.maxWidth, 7, "F");
@@ -260,8 +273,18 @@ function renderSidebar(doc: jsPDF, data: ResumeData, title: string) {
   };
 
   // Render body without skills (already in sidebar)
+  // We need to monkey-patch the page break to draw sidebar bg
   const dataWithoutSkills = { ...data, skills: [] };
   renderBody(ctx, dataWithoutSkills, addSection);
+  
+  // Draw sidebar bg on any additional pages that renderBody may have created
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 2; p <= totalPages; p++) {
+    doc.setPage(p);
+    drawSidebarBg();
+  }
+  // Reset to last page
+  doc.setPage(totalPages);
 }
 
 // ─── Two Column ────────────────────────────────────────
@@ -270,6 +293,15 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
   ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
   const pi = data.personalInfo || {};
   const colWidth = (ctx.pageWidth - 35) / 2;
+  const pageBottom = doc.internal.pageSize.getHeight() - 12;
+
+  const checkY = (y: number, needed: number): number => {
+    if (y + needed > pageBottom) {
+      doc.addPage();
+      return 20;
+    }
+    return y;
+  };
 
   // Header
   doc.setFillColor(45, 55, 72);
@@ -294,6 +326,7 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
   let rightY = 36;
 
   const sectionLabel = (x: number, y: number, label: string): number => {
+    y = checkY(y, 10);
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(45, 55, 72);
@@ -310,27 +343,31 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
     const lines = doc.splitTextToSize(data.summary, colWidth);
+    leftY = checkY(leftY, lines.length * 4);
     doc.text(lines, ctx.margin, leftY);
     leftY += lines.length * 4 + 4;
   }
   if ((data.experience || []).length > 0) {
     leftY = sectionLabel(ctx.margin, leftY, "Experience");
     (data.experience || []).forEach((exp) => {
+      leftY = checkY(leftY, 12);
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
-      doc.text(`${exp.title} — ${exp.company}`, ctx.margin, leftY);
+      const titleLines = doc.splitTextToSize(`${exp.title} — ${exp.company}`, colWidth);
+      doc.text(titleLines, ctx.margin, leftY);
+      leftY += titleLines.length * 4;
       const expDate = formatDateRangePdf(exp.startDate, exp.endDate);
       if (expDate) {
         doc.setFontSize(8);
         doc.setFont("helvetica", "normal");
-        doc.text(expDate, ctx.margin, leftY + 4);
+        doc.text(expDate, ctx.margin, leftY);
         leftY += 4;
       }
-      leftY += 4;
       doc.setFont("helvetica", "normal");
       if (exp.bullets?.length) {
         exp.bullets.forEach((b) => {
           const lines = doc.splitTextToSize(`• ${b}`, colWidth - 2);
+          leftY = checkY(leftY, lines.length * 4);
           doc.text(lines, ctx.margin + 2, leftY);
           leftY += lines.length * 4;
         });
@@ -339,13 +376,14 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
     });
   }
 
-  // Right column: Skills + Education + Custom
+  // Right column: Skills + Education + Languages + Custom + Links
   const rightX = ctx.margin + colWidth + 5;
   if ((data.skills || []).length > 0) {
     rightY = sectionLabel(rightX, rightY, "Skills");
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
     (data.skills || []).forEach((skill) => {
+      rightY = checkY(rightY, 4);
       doc.text(`• ${skill}`, rightX, rightY);
       rightY += 4;
     });
@@ -354,6 +392,7 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
   if ((data.education || []).length > 0) {
     rightY = sectionLabel(rightX, rightY, "Education");
     (data.education || []).forEach((edu) => {
+      rightY = checkY(rightY, 9);
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
       doc.text(edu.degree, rightX, rightY);
@@ -364,6 +403,19 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
       rightY += 5;
     });
   }
+  // Languages
+  const langs = (data.languages || []).filter(l => l.name);
+  if (langs.length > 0) {
+    rightY = sectionLabel(rightX, rightY, "Languages");
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    langs.forEach((l) => {
+      rightY = checkY(rightY, 4);
+      doc.text(`• ${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`, rightX, rightY);
+      rightY += 4;
+    });
+    rightY += 3;
+  }
   if ((data.customSections || []).length > 0) {
     (data.customSections || []).filter(s => s.title).forEach((section) => {
       rightY = sectionLabel(rightX, rightY, section.title);
@@ -371,6 +423,7 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
       doc.setFont("helvetica", "normal");
       section.items.filter(Boolean).forEach((item) => {
         const lines = doc.splitTextToSize(`• ${item}`, colWidth - 2);
+        rightY = checkY(rightY, lines.length * 4);
         doc.text(lines, rightX, rightY);
         rightY += lines.length * 4;
       });
@@ -385,7 +438,11 @@ function renderTwoColumn(doc: jsPDF, data: ResumeData, title: string) {
     rightY += 2;
     doc.setFontSize(8);
     doc.setTextColor(0, 102, 204);
-    linkParts.forEach((l) => { doc.text(l, rightX, rightY); rightY += 4; });
+    linkParts.forEach((l) => {
+      rightY = checkY(rightY, 4);
+      doc.text(l, rightX, rightY);
+      rightY += 4;
+    });
     doc.setTextColor(0);
   }
 }
@@ -584,6 +641,21 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
       }
       ctx.y += lines.length * 5 + 2;
     });
+  }
+
+  // Languages section
+  if ((data.languages || []).length > 0) {
+    const langs = (data.languages || []).filter(l => l.name);
+    if (langs.length > 0) {
+      addSection("Languages");
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const langText = langs.map(l => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join("  •  ");
+      const lines = doc.splitTextToSize(langText, ctx.maxWidth);
+      checkPageBreak(ctx, lines.length * 5);
+      doc.text(lines, ctx.margin, ctx.y);
+      ctx.y += lines.length * 5;
+    }
   }
 
   (data.customSections || []).filter((s) => s.title).forEach((section) => {
