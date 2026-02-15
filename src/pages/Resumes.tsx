@@ -19,12 +19,14 @@ import TemplateSelector from "@/components/resume/TemplateSelector";
 import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
 import SEOHead from "@/components/SEOHead";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 type Resume = Tables<"resumes">;
 
 export default function Resumes() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
@@ -75,12 +77,11 @@ export default function Resumes() {
     if (pdfInputRef.current) pdfInputRef.current.value = "";
     if (!file || !user) return;
     if (file.type !== "application/pdf") {
-      toast({ title: "Please select a PDF file", variant: "destructive" });
+      toast({ title: t.resumes.selectPdf, variant: "destructive" });
       return;
     }
     setUploadingPdf(true);
     try {
-      // Extract text from PDF client-side
       const pdfjsLib = await import("pdfjs-dist");
       pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
       const arrayBuffer = await file.arrayBuffer();
@@ -93,21 +94,19 @@ export default function Resumes() {
       }
 
       if (fullText.trim().length < 20) {
-        toast({ title: "Could not extract text from this PDF", description: "The file may be scanned or image-based.", variant: "destructive" });
+        toast({ title: t.resumes.couldNotExtract, description: t.resumes.couldNotExtractDesc, variant: "destructive" });
         return;
       }
 
-      // Send to AI for parsing
       const { data, error } = await supabase.functions.invoke("parse-resume", {
         body: { text: fullText },
       });
       if (error) throw error;
       if (data?.error) {
-        toast({ title: "Parse Error", description: data.error, variant: "destructive" });
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
         return;
       }
 
-      // Create new resume with parsed data
       const resumeTitle = data.personalInfo?.fullName
         ? `${data.personalInfo.fullName}'s Resume`
         : file.name.replace(/\.pdf$/i, "");
@@ -134,12 +133,12 @@ export default function Resumes() {
 
       if (createError) throw createError;
 
-      toast({ title: "Resume imported!", description: "Your PDF has been parsed and filled automatically." });
+      toast({ title: t.resumes.resumeImported, description: t.resumes.resumeImportedDesc });
       fetchResumes();
       if (created) openEditor(created);
     } catch (err: any) {
       console.error("PDF upload error:", err);
-      toast({ title: "Upload failed", description: err.message || "Please try again.", variant: "destructive" });
+      toast({ title: t.resumes.uploadFailed, description: err.message || t.resumes.unexpectedError, variant: "destructive" });
     } finally {
       setUploadingPdf(false);
     }
@@ -152,9 +151,9 @@ export default function Resumes() {
       resume_data: resumeData as any,
     }).eq("id", editingId);
     if (error) {
-      toast({ title: "Error saving", variant: "destructive" });
+      toast({ title: t.resumes.errorSaving, variant: "destructive" });
     } else {
-      toast({ title: "Resume saved!" });
+      toast({ title: t.resumes.saved });
       fetchResumes();
     }
   };
@@ -194,12 +193,12 @@ export default function Resumes() {
       });
       if (error) throw error;
       if (data?.error) {
-        toast({ title: "AI Error", description: data.error, variant: "destructive" });
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
         return null;
       }
       return data;
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: t.common.error, description: e.message, variant: "destructive" });
       return null;
     } finally {
       setAiLoading(null);
@@ -214,7 +213,7 @@ export default function Resumes() {
     });
     if (result?.summary) {
       setResumeData((prev) => ({ ...prev, summary: result.summary }));
-      toast({ title: "Summary generated!" });
+      toast({ title: t.resumes.summaryGenerated });
     }
   };
 
@@ -233,7 +232,7 @@ export default function Resumes() {
         experience[expIndex] = { ...experience[expIndex], bullets: result.bullets };
         return { ...prev, experience };
       });
-      toast({ title: "Bullet points generated!" });
+      toast({ title: t.resumes.bulletsGenerated });
     }
   };
 
@@ -248,7 +247,7 @@ export default function Resumes() {
         ...prev,
         skills: [...new Set([...(prev.skills || []), ...result.skills])],
       }));
-      toast({ title: "Skills suggested!" });
+      toast({ title: t.resumes.skillsSuggested });
     }
   };
 
@@ -314,14 +313,14 @@ export default function Resumes() {
 
   const handleExportPDF = () => {
     generateResumePDF(resumeData, title, selectedTemplate);
-    toast({ title: "PDF downloaded!" });
+    toast({ title: t.resumes.pdfDownloaded });
   };
 
   const handleLinkedInImport = async () => {
     if (!linkedinUrl.trim() || !user) return;
     const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]{3,100}\/?$/i;
     if (!linkedinRegex.test(linkedinUrl.trim())) {
-      toast({ title: "Invalid LinkedIn URL", description: "Please enter a valid LinkedIn profile URL (e.g. https://www.linkedin.com/in/username)", variant: "destructive" });
+      toast({ title: t.resumes.invalidLinkedinUrl, description: t.resumes.invalidLinkedinUrlDesc, variant: "destructive" });
       return;
     }
     setLinkedinLoading(true);
@@ -331,7 +330,7 @@ export default function Resumes() {
       });
       if (error) throw error;
       if (data?.error) {
-        toast({ title: "Import Error", description: data.error, variant: "destructive" });
+        toast({ title: t.resumes.importFailed, description: data.error, variant: "destructive" });
         return;
       }
 
@@ -347,14 +346,14 @@ export default function Resumes() {
 
       if (createError) throw createError;
 
-      toast({ title: "LinkedIn profile imported!", description: "Your resume has been populated from LinkedIn." });
+      toast({ title: t.resumes.linkedinImported, description: t.resumes.linkedinImportedDesc });
       setLinkedinOpen(false);
       setLinkedinUrl("");
       fetchResumes();
       if (created) openEditor(created);
     } catch (err: any) {
       console.error("LinkedIn import error:", err);
-      toast({ title: "Import failed", description: err.message || "Please try again.", variant: "destructive" });
+      toast({ title: t.resumes.importFailed, description: err.message || t.resumes.unexpectedError, variant: "destructive" });
     } finally {
       setLinkedinLoading(false);
     }
@@ -369,7 +368,7 @@ export default function Resumes() {
       });
       if (error) throw error;
       if (data?.error) {
-        toast({ title: "AI Error", description: data.error, variant: "destructive" });
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
         return;
       }
       setResumeData((prev) => {
@@ -384,15 +383,16 @@ export default function Resumes() {
         }
         return updated;
       });
-      toast({ title: "Resume tailored to job description!" });
+      toast({ title: t.resumes.resumeTailored });
       setTailorOpen(false);
       setTailorJD("");
     } catch (e: any) {
-      toast({ title: "Tailoring failed", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
+      toast({ title: t.resumes.tailoringFailed, description: t.resumes.unexpectedError, variant: "destructive" });
     } finally {
       setTailoring(false);
     }
   };
+
   const handleGrade = async () => {
     setGrading(true);
     setGradeResult(null);
@@ -402,12 +402,12 @@ export default function Resumes() {
       });
       if (error) throw error;
       if (data?.error) {
-        toast({ title: "AI Error", description: data.error, variant: "destructive" });
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
         return;
       }
       setGradeResult(data);
     } catch (e: any) {
-      toast({ title: "Grading failed", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
+      toast({ title: t.resumes.gradingFailed, description: t.resumes.unexpectedError, variant: "destructive" });
     } finally {
       setGrading(false);
     }
@@ -425,7 +425,7 @@ export default function Resumes() {
     return "[&>div]:bg-red-500";
   };
 
-  if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
+  if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">{t.common.loading}</div>;
 
   // Editor view
   if (editingId) {
@@ -434,71 +434,69 @@ export default function Resumes() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 gap-2">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => { setEditingId(null); resetForm(); }}>← Back</Button>
-            <h1 className="text-lg sm:text-xl font-bold">Edit Resume</h1>
+            <Button variant="ghost" size="sm" onClick={() => { setEditingId(null); resetForm(); }}>{t.common.back}</Button>
+            <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
           </div>
           <div className="flex flex-wrap gap-2">
             <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Tailor to Job</span><span className="sm:hidden">Tailor</span></Button>
+                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.tailorToJob}</span><span className="sm:hidden">{t.resumes.tailorToJob}</span></Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Tailor Resume to Job Description</DialogTitle>
-                  <DialogDescription>Paste a job description and AI will rewrite your summary, skills, and bullet points to match.</DialogDescription>
+                  <DialogTitle>{t.resumes.tailorTitle}</DialogTitle>
+                  <DialogDescription>{t.resumes.tailorDesc}</DialogDescription>
                 </DialogHeader>
                 <Textarea
                   rows={8}
                   value={tailorJD}
                   onChange={(e) => setTailorJD(e.target.value)}
-                  placeholder="Paste the full job description here..."
+                  placeholder={t.resumes.tailorPlaceholder}
                   className="min-h-[200px]"
                 />
                 <Button onClick={handleTailor} disabled={tailoring || !tailorJD.trim()} className="w-full">
-                  {tailoring ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Tailoring...</> : <><Sparkles className="h-4 w-4 mr-2" />Tailor My Resume</>}
+                  {tailoring ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.tailoring}</> : <><Sparkles className="h-4 w-4 mr-2" />{t.resumes.tailorMyResume}</>}
                 </Button>
               </DialogContent>
             </Dialog>
             <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Grade Resume</span><span className="sm:hidden">Grade</span></Button>
+                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.gradeResume}</span><span className="sm:hidden">{t.resumes.gradeResume}</span></Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Resume Grader</DialogTitle>
-                  <DialogDescription>Get an AI-powered grade on ATS compatibility, job fit, and writing quality.</DialogDescription>
+                  <DialogTitle>{t.resumes.gradeTitle}</DialogTitle>
+                  <DialogDescription>{t.resumes.gradeDesc}</DialogDescription>
                 </DialogHeader>
                 {!gradeResult ? (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label>Job Description (optional — for job-specific fit scoring)</Label>
+                      <Label>{t.resumes.gradeJdLabel}</Label>
                       <Textarea
                         rows={6}
                         value={gradeJD}
                         onChange={(e) => setGradeJD(e.target.value)}
-                        placeholder="Paste a job description for targeted grading, or leave blank for general assessment..."
+                        placeholder={t.resumes.gradeJdPlaceholder}
                         className="min-h-[150px]"
                       />
                     </div>
                     <Button onClick={handleGrade} disabled={grading} className="w-full">
-                      {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Grading...</> : <><ClipboardCheck className="h-4 w-4 mr-2" />Grade My Resume</>}
+                      {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.grading}</> : <><ClipboardCheck className="h-4 w-4 mr-2" />{t.resumes.gradeMyResume}</>}
                     </Button>
                   </div>
                 ) : (
                   <div className="space-y-6">
-                    {/* Overall Score */}
                     <div className="text-center p-6 rounded-lg border bg-muted/30">
                       <div className={`text-5xl font-bold ${scoreColor(gradeResult.overallScore)}`}>{gradeResult.overallScore}</div>
-                      <div className="text-sm text-muted-foreground mt-1">Overall Score</div>
+                      <div className="text-sm text-muted-foreground mt-1">{t.resumes.overallScore}</div>
                       <Progress value={gradeResult.overallScore} className={`mt-3 h-3 ${progressColor(gradeResult.overallScore)}`} />
                       <p className="text-sm mt-4 text-left">{gradeResult.overallAssessment}</p>
                     </div>
 
-                    {/* Category Scores */}
                     {[
-                      { key: "ats", label: "ATS Compatibility", data: gradeResult.ats },
-                      { key: "fit", label: gradeResult.fit?.label || "Job Fit", data: gradeResult.fit },
-                      { key: "writing", label: "Writing Quality", data: gradeResult.writing },
+                      { key: "ats", label: t.resumes.atsCompatibility, data: gradeResult.ats },
+                      { key: "fit", label: gradeResult.fit?.label || t.resumes.jobFit, data: gradeResult.fit },
+                      { key: "writing", label: t.resumes.writingQuality, data: gradeResult.writing },
                     ].map(({ key, label, data }) => (
                       <div key={key} className="p-4 rounded-lg border space-y-3">
                         <div className="flex items-center justify-between">
@@ -508,7 +506,7 @@ export default function Resumes() {
                         <Progress value={data.score} className={`h-2 ${progressColor(data.score)}`} />
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                           <div>
-                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Strengths</h4>
+                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t.resumes.strengths}</h4>
                             <ul className="space-y-1.5">
                               {data.strengths.map((s: string, i: number) => (
                                 <li key={i} className="text-sm flex gap-2 items-start">
@@ -519,7 +517,7 @@ export default function Resumes() {
                             </ul>
                           </div>
                           <div>
-                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Improvements</h4>
+                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t.resumes.improvements}</h4>
                             <ul className="space-y-1.5">
                               {data.improvements.map((s: string, i: number) => (
                                 <li key={i} className="text-sm flex gap-2 items-start">
@@ -534,14 +532,14 @@ export default function Resumes() {
                     ))}
 
                     <Button variant="outline" onClick={() => { setGradeResult(null); }} className="w-full">
-                      Grade Again
+                      {t.resumes.gradeAgain}
                     </Button>
                   </div>
                 )}
               </DialogContent>
             </Dialog>
-            <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">Export PDF</span><span className="sm:hidden">PDF</span></Button>
-            <Button size="sm" onClick={handleSaveEdit}>Save</Button>
+            <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.exportPDF}</span><span className="sm:hidden">PDF</span></Button>
+            <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
           </div>
         </div>
 
@@ -550,15 +548,15 @@ export default function Resumes() {
           {/* Editor panel */}
           <div className="md:w-1/2 overflow-y-auto p-4 sm:p-6 space-y-5 border-b md:border-b-0 md:border-r">
             <div className="space-y-2">
-              <Label>Resume Title</Label>
+              <Label>{t.resumes.resumeTitle}</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
 
             {/* Template Selection */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">PDF Template</CardTitle>
-                <CardDescription>Choose a visual style for your exported PDF</CardDescription>
+                <CardTitle className="text-base">{t.resumes.pdfTemplate}</CardTitle>
+                <CardDescription>{t.resumes.choosePdfStyle}</CardDescription>
               </CardHeader>
               <CardContent>
                 <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
@@ -578,15 +576,15 @@ export default function Resumes() {
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Professional Summary</CardTitle>
+                  <CardTitle className="text-base">{t.resumes.professionalSummary}</CardTitle>
                   <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
                     {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                    AI Generate
+                    {t.resumes.aiGenerate}
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <Textarea rows={3} value={resumeData.summary || ""} onChange={(e) => setResumeData((prev) => ({ ...prev, summary: e.target.value }))} placeholder="Write a professional summary..." />
+                <Textarea rows={3} value={resumeData.summary || ""} onChange={(e) => setResumeData((prev) => ({ ...prev, summary: e.target.value }))} placeholder={t.resumes.writeSummaryPlaceholder} />
               </CardContent>
             </Card>
 
@@ -594,17 +592,17 @@ export default function Resumes() {
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Skills</CardTitle>
+                  <CardTitle className="text-base">{t.resumes.skills}</CardTitle>
                   <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
                     {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                    AI Suggest
+                    {t.resumes.aiSuggest}
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex gap-2">
-                  <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder="Add a skill..." onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())} />
-                  <Button variant="outline" onClick={addSkill}>Add</Button>
+                  <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder={t.resumes.addSkillPlaceholder} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())} />
+                  <Button variant="outline" onClick={addSkill}>{t.common.add}</Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {(resumeData.skills || []).map((skill, i) => (
@@ -621,8 +619,8 @@ export default function Resumes() {
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Experience</CardTitle>
-                  <Button size="sm" variant="outline" onClick={addExperience}><Plus className="h-3 w-3 mr-1" />Add</Button>
+                  <CardTitle className="text-base">{t.resumes.experience}</CardTitle>
+                  <Button size="sm" variant="outline" onClick={addExperience}><Plus className="h-3 w-3 mr-1" />{t.common.add}</Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -631,11 +629,11 @@ export default function Resumes() {
                     <div className="flex justify-between items-start">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
                         <div>
-                          <Label className="text-xs">Job Title</Label>
+                          <Label className="text-xs">{t.resumes.jobTitle}</Label>
                           <Input value={exp.title} onChange={(e) => updateExperience(i, "title", e.target.value)} placeholder="Senior Developer" />
                         </div>
                         <div>
-                          <Label className="text-xs">Company</Label>
+                          <Label className="text-xs">{t.resumes.company}</Label>
                           <Input value={exp.company} onChange={(e) => updateExperience(i, "company", e.target.value)} placeholder="Acme Inc." />
                         </div>
                       </div>
@@ -643,23 +641,23 @@ export default function Resumes() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-xs">Start Date</Label>
+                        <Label className="text-xs">{t.resumes.startDate}</Label>
                         <Input value={exp.startDate || ""} onChange={(e) => updateExperience(i, "startDate", e.target.value)} placeholder="e.g. Jan 2020" />
                       </div>
                       <div>
-                        <Label className="text-xs">End Date</Label>
+                        <Label className="text-xs">{t.resumes.endDate}</Label>
                         <Input value={exp.endDate || ""} onChange={(e) => updateExperience(i, "endDate", e.target.value)} placeholder="e.g. Present" />
                       </div>
                     </div>
                     <div>
-                      <Label className="text-xs">Brief Description (for AI context)</Label>
-                      <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder="What did you do in this role?" />
+                      <Label className="text-xs">{t.resumes.briefDesc}</Label>
+                      <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder={t.resumes.whatDidYouDo} />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label className="text-xs">Bullet Points</Label>
+                      <Label className="text-xs">{t.resumes.bullets}</Label>
                       <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
                         {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                        AI Generate Bullets
+                        {t.resumes.aiGenerateBullets}
                       </Button>
                     </div>
                     {exp.bullets && exp.bullets.length > 0 ? (
@@ -687,12 +685,12 @@ export default function Resumes() {
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-xs text-muted-foreground">No bullet points yet. Use AI to generate them.</p>
+                      <p className="text-xs text-muted-foreground">{t.resumes.noBullets}</p>
                     )}
                   </div>
                 ))}
                 {(resumeData.experience || []).length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-4">No experience added yet.</p>
+                  <p className="text-sm text-muted-foreground text-center py-4">{t.resumes.noExperience}</p>
                 )}
               </CardContent>
             </Card>
@@ -701,8 +699,8 @@ export default function Resumes() {
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Education</CardTitle>
-                  <Button size="sm" variant="outline" onClick={addEducation}><Plus className="h-3 w-3 mr-1" />Add</Button>
+                  <CardTitle className="text-base">{t.resumes.education}</CardTitle>
+                  <Button size="sm" variant="outline" onClick={addEducation}><Plus className="h-3 w-3 mr-1" />{t.common.add}</Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -711,23 +709,23 @@ export default function Resumes() {
                     <div className="flex gap-3 items-start">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1">
                         <div>
-                          <Label className="text-xs">Degree</Label>
-                          <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder="Degree" />
+                          <Label className="text-xs">{t.resumes.degree}</Label>
+                          <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder={t.resumes.degree} />
                         </div>
                         <div>
-                          <Label className="text-xs">School</Label>
-                          <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder="School" />
+                          <Label className="text-xs">{t.resumes.school}</Label>
+                          <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder={t.resumes.school} />
                         </div>
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 mt-4" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <Label className="text-xs">Start Date</Label>
+                        <Label className="text-xs">{t.resumes.startDate}</Label>
                         <Input value={edu.startDate || ""} onChange={(e) => updateEducation(i, "startDate", e.target.value)} placeholder="e.g. Sep 2016" />
                       </div>
                       <div>
-                        <Label className="text-xs">End Date</Label>
+                        <Label className="text-xs">{t.resumes.endDate}</Label>
                         <Input value={edu.endDate || ""} onChange={(e) => updateEducation(i, "endDate", e.target.value)} placeholder="e.g. Jun 2020" />
                       </div>
                     </div>
@@ -744,7 +742,7 @@ export default function Resumes() {
 
             {/* Custom Sections */}
             <div>
-              <h2 className="text-base font-semibold mb-3">Custom Sections</h2>
+              <h2 className="text-base font-semibold mb-3">{t.resumes.customSections}</h2>
               <CustomSectionsEditor
                 sections={resumeData.customSections || []}
                 onChange={(sections) => setResumeData((prev) => ({ ...prev, customSections: sections }))}
@@ -767,29 +765,29 @@ export default function Resumes() {
       <SEOHead title="Resumes — ATS Pro Resume Builder" description="Create and manage ATS-optimized resumes." noindex />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
-          <p className="text-muted-foreground mt-1">Build and manage your resumes with AI assistance.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t.resumes.title}</h1>
+          <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
         </div>
         <div className="flex gap-2 shrink-0">
           <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
           <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
-            <Linkedin className="h-4 w-4 mr-2" />Import LinkedIn
+            <Linkedin className="h-4 w-4 mr-2" />{t.resumes.importLinkedin}
           </Button>
           <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
-            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Parsing...</> : <><Upload className="h-4 w-4 mr-2" />Upload Resume</>}
+            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.parsing}</> : <><Upload className="h-4 w-4 mr-2" />{t.resumes.uploadResume}</>}
           </Button>
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>
-              <Button size="sm"><Plus className="h-4 w-4 mr-2" />New Resume</Button>
+              <Button size="sm"><Plus className="h-4 w-4 mr-2" />{t.resumes.newResume}</Button>
             </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create Resume</DialogTitle>
-              <DialogDescription>Give your resume a title to get started. You can add details in the editor.</DialogDescription>
+              <DialogTitle>{t.resumes.createResume}</DialogTitle>
+              <DialogDescription>{t.resumes.createResumeDesc}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Resume Title</Label>
+                <Label>{t.resumes.resumeTitle}</Label>
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Full Stack Developer Resume" />
               </div>
               <Button onClick={async () => {
@@ -800,15 +798,15 @@ export default function Resumes() {
                   resume_data: { personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] } as any,
                 }).select().single();
                 if (error) {
-                  toast({ title: "Error", description: error.message, variant: "destructive" });
+                  toast({ title: t.common.error, description: error.message, variant: "destructive" });
                 } else {
-                  toast({ title: "Resume created" });
+                  toast({ title: t.resumes.resumeCreated });
                   setCreateOpen(false);
                   setTitle("");
                   fetchResumes();
                   if (data) openEditor(data);
                 }
-              }} className="w-full">Create & Open Editor</Button>
+              }} className="w-full">{t.resumes.createAndOpen}</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -819,8 +817,8 @@ export default function Resumes() {
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
             <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-semibold">No resumes yet</h3>
-            <p className="text-sm text-muted-foreground mt-1">Create your first resume with AI-powered writing assistance.</p>
+            <h3 className="text-lg font-semibold">{t.resumes.noResumes}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t.resumes.noResumesDesc}</p>
           </CardContent>
         </Card>
       ) : (
@@ -849,7 +847,7 @@ export default function Resumes() {
                       )}
                     </div>
                   )}
-                  <Button size="sm" variant="outline" onClick={() => openEditor(resume)}><Edit className="h-3 w-3 mr-1" />Edit</Button>
+                  <Button size="sm" variant="outline" onClick={() => openEditor(resume)}><Edit className="h-3 w-3 mr-1" />{t.common.edit}</Button>
                 </CardContent>
               </Card>
             );
@@ -861,12 +859,12 @@ export default function Resumes() {
       <Dialog open={linkedinOpen} onOpenChange={setLinkedinOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Import from LinkedIn</DialogTitle>
-            <DialogDescription>Paste your LinkedIn profile URL to auto-fill a new resume with your profile data.</DialogDescription>
+            <DialogTitle>{t.resumes.importFromLinkedin}</DialogTitle>
+            <DialogDescription>{t.resumes.importLinkedinDesc}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>LinkedIn Profile URL</Label>
+              <Label>{t.resumes.linkedinUrl}</Label>
               <Input
                 value={linkedinUrl}
                 onChange={(e) => setLinkedinUrl(e.target.value)}
@@ -874,7 +872,7 @@ export default function Resumes() {
               />
             </div>
             <Button onClick={handleLinkedInImport} disabled={linkedinLoading || !linkedinUrl.trim()} className="w-full">
-              {linkedinLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Importing...</> : <><Linkedin className="h-4 w-4 mr-2" />Import Profile</>}
+              {linkedinLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.importing}</> : <><Linkedin className="h-4 w-4 mr-2" />{t.resumes.importProfile}</>}
             </Button>
           </div>
         </DialogContent>

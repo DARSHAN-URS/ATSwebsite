@@ -48,7 +48,6 @@ const Index = () => {
     if (error) {
       toast({ title: t.common.loginFailed, description: error.message, variant: "destructive" });
     }
-    // Navigation handled by useEffect watching auth state
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -111,8 +110,8 @@ const Index = () => {
           <div className="hidden items-center gap-8 md:flex">
             <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.landing.resumeTemplates}</button>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobTracker}</button>
-            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">Job Board</button>
-            <button onClick={() => openAuth("signup")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">Post Jobs</button>
+            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobBoard}</button>
+            <button onClick={() => openAuth("signup")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.jobBoard.postJobs}</button>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="hidden md:inline-flex w-[110px] h-8 text-xs" />
@@ -127,8 +126,8 @@ const Index = () => {
           <div className="md:hidden border-t border-border/60 bg-background px-4 py-3 space-y-0.5 animate-in slide-in-from-top-2 duration-200">
             <button onClick={() => { templatesRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
-            <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">Job Board</button>
-            <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">Post Jobs</button>
+            <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
+            <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.jobBoard.postJobs}</button>
             <div className="pt-2 border-t border-border/60 flex items-center gap-2">
               <LanguageSwitcher className="w-[110px] h-8 text-xs" />
               <Button variant="ghost" size="sm" className="font-medium" onClick={() => { openAuth("login"); setMobileMenuOpen(false); }}>{t.nav.logIn}</Button>
@@ -139,33 +138,32 @@ const Index = () => {
 
       {/* Hero — geometric accent line */}
       <section className="relative overflow-hidden py-16 md:py-36">
-        {/* Subtle grid pattern */}
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,hsl(220_13%_91%/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(220_13%_91%/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-[600px] h-[600px] rounded-full bg-primary/[0.04] blur-3xl" />
         <div className="mx-auto max-w-3xl px-4 text-center">
           <div className="mb-5 md:mb-7 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-[11px] md:text-xs font-medium text-muted-foreground shadow-sm">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-            <span className="font-mono">10,000+</span> job seekers — Free to start
+            {t.landing.heroTagline}
           </div>
           <h1 className="text-[2rem] font-extrabold leading-[1.15] tracking-tight md:text-[3.5rem]">
-            The AI Resume Builder for{" "}
-            <span className="text-primary">ATS Success</span>
+            {t.landing.heroTitle}{" "}
+            <span className="text-primary">{t.landing.heroHighlight}</span>
           </h1>
           <p className="mx-auto mt-5 md:mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Create professional, ATS-optimized resumes in minutes. Our <strong className="text-foreground font-semibold">AI resume grader</strong> scans your content, identifies keyword gaps, and helps you land 3× more interviews.
+            {t.landing.heroDesc}
           </p>
           <div className="mt-8 md:mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" className="gap-2 rounded-lg px-8 font-semibold w-full sm:w-auto shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-shadow" onClick={() => openAuth("signup")}>
-              Build Free Resume <ArrowRight className="h-4 w-4" />
+              {t.landing.buildFreeResume} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="lg" className="gap-2 rounded-lg px-8 font-semibold w-full sm:w-auto" onClick={() => openAuth("signup")}>
-              <Upload className="h-4 w-4" /> Upload Resume
+              <Upload className="h-4 w-4" /> {t.landing.uploadResume}
             </Button>
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-5 md:gap-8 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> ATS-Friendly</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> 2,400+ Reviews</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> 1M+ Resumes</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> {t.landing.atsFriendly}</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> {t.landing.reviews}</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> {t.landing.resumesBuilt}</span>
           </div>
         </div>
       </section>
@@ -174,18 +172,18 @@ const Index = () => {
       <section className="border-t border-border/60 py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Features</p>
-            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Powerful AI to Beat the Bots</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.features}</p>
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">{t.landing.featuresTitle}</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-              Stop getting rejected by ATS. Our tools ensure your resume reaches real humans.
+              {t.landing.featuresDesc}
             </p>
           </div>
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: <BarChart3 className="h-5 w-5" />, title: "AI Resume Grader", desc: "Scan your resume against ATS criteria. Find missing keywords, fix formatting, improve readability." },
-              { icon: <Sparkles className="h-5 w-5" />, title: "One-Click Tailoring", desc: "Paste a job description and get a perfectly optimized resume version in seconds." },
-              { icon: <LayoutTemplate className="h-5 w-5" />, title: "ATS Templates", desc: "8 recruiter-approved templates designed specifically to be parsed by ATS software." },
-              { icon: <Briefcase className="h-5 w-5" />, title: "Recruiter Portal", desc: "Recruiters post jobs directly on the platform, visible to thousands of active job seekers." },
+              { icon: <BarChart3 className="h-5 w-5" />, title: t.landing.aiGrader, desc: t.landing.aiGraderDesc },
+              { icon: <Sparkles className="h-5 w-5" />, title: t.landing.oneClickTailor, desc: t.landing.oneClickTailorDesc },
+              { icon: <LayoutTemplate className="h-5 w-5" />, title: t.landing.atsTemplates, desc: t.landing.atsTemplatesDesc },
+              { icon: <Briefcase className="h-5 w-5" />, title: t.landing.recruiterPortal, desc: t.landing.recruiterPortalDesc },
             ].map((f) => (
               <div key={f.title} className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 duration-300">
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">{f.icon}</div>
@@ -201,15 +199,15 @@ const Index = () => {
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto grid max-w-5xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">The Problem</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.theProblem}</p>
             <h2 className="text-xl font-bold tracking-tight md:text-3xl">
-              75% of Resumes Never Get Seen
+              {t.landing.whyFailTitle}
             </h2>
             <ul className="mt-8 space-y-5">
               {[
-                { icon: <AlertTriangle className="h-4 w-4 text-warning" />, title: "Generic Keywords", desc: "Most resumes lack tailored ATS-friendly keywords, leading to instant rejection." },
-                { icon: <XCircle className="h-4 w-4 text-destructive" />, title: "Missing Keywords", desc: "If your resume doesn't match the specific keywords in a job description, it's filtered out." },
-                { icon: <FileWarning className="h-4 w-4 text-destructive" />, title: "Poor Readability", desc: "Dense formatting and generic language block your resume from making it past filters." },
+                { icon: <AlertTriangle className="h-4 w-4 text-warning" />, title: t.landing.genericKeywords, desc: t.landing.genericKeywordsDesc },
+                { icon: <XCircle className="h-4 w-4 text-destructive" />, title: t.landing.missingKeywords, desc: t.landing.missingKeywordsDesc },
+                { icon: <FileWarning className="h-4 w-4 text-destructive" />, title: t.landing.poorReadability, desc: t.landing.poorReadabilityDesc },
               ].map((item) => (
                 <li key={item.title} className="flex gap-3">
                   <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-destructive/10">{item.icon}</div>
@@ -221,7 +219,7 @@ const Index = () => {
               ))}
             </ul>
             <Button className="gap-2 rounded-lg font-semibold mt-8 shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
-              Fix My Resume Now <ArrowRight className="h-4 w-4" />
+              {t.landing.fixResume} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
           <div className="relative">
@@ -236,17 +234,17 @@ const Index = () => {
       <section className="border-t border-border/60 py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Testimonials</p>
-            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Loved by Job Seekers Worldwide</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.testimonials}</p>
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
           </div>
 
           {/* Stats */}
           <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
             {[
-              { value: "10,000+", label: "Active Users" },
-              { value: "4.8/5", label: "Average Rating" },
-              { value: "3×", label: "More Interviews" },
-              { value: "1M+", label: "Resumes Built" },
+              { value: "10,000+", label: t.landing.activeUsers },
+              { value: "4.8/5", label: t.landing.averageRating },
+              { value: "3×", label: t.landing.moreInterviews },
+              { value: "1M+", label: t.landing.resumesBuiltStat },
             ].map((s) => (
               <div key={s.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
                 <p className="text-xl font-extrabold text-primary font-mono">{s.value}</p>
@@ -255,7 +253,7 @@ const Index = () => {
             ))}
           </div>
 
-          {/* Review cards */}
+          {/* Review cards - these are testimonials, keep English names but could localize text */}
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
               { name: "Sarah M.", role: "Software Engineer → Google", text: "After using ATS Pro's resume grader, I got 5 interviews in 2 weeks — including one at Google.", stars: 5 },
@@ -264,21 +262,21 @@ const Index = () => {
               { name: "David L.", role: "Data Analyst → Amazon", text: "My resume score went from 45 to 92, and suddenly I was getting recruiter messages on LinkedIn every week.", stars: 5 },
               { name: "Emily T.", role: "Product Designer → Figma", text: "Clean templates that actually pass ATS scans. Combined with the cover letter generator — the only tool I recommend.", stars: 5 },
               { name: "Carlos V.", role: "Career Changer → Salesforce", text: "The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.", stars: 5 },
-            ].map((t) => (
-              <div key={t.name} className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 duration-300">
+            ].map((review) => (
+              <div key={review.name} className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 duration-300">
                 <div className="flex gap-0.5 mb-3">
-                  {Array.from({ length: t.stars }).map((_, i) => (
+                  {Array.from({ length: review.stars }).map((_, i) => (
                     <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />
                   ))}
                 </div>
-                <p className="text-[13px] leading-relaxed text-muted-foreground">{t.text}</p>
+                <p className="text-[13px] leading-relaxed text-muted-foreground">{review.text}</p>
                 <div className="mt-4 flex items-center gap-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
-                    {t.name.charAt(0)}
+                    {review.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-[13px] font-semibold">{t.name}</p>
-                    <p className="text-[11px] text-muted-foreground">{t.role}</p>
+                    <p className="text-[13px] font-semibold">{review.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{review.role}</p>
                   </div>
                 </div>
               </div>
@@ -292,19 +290,19 @@ const Index = () => {
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">For Recruiters</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.forRecruiters}</p>
               <h2 className="text-xl font-bold tracking-tight md:text-3xl">
-                Post Jobs & Find Top Talent
+                {t.landing.postJobsTitle}
               </h2>
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-md">
-                Post job openings directly on our platform. Your listings are instantly visible to thousands of active, qualified job seekers.
+                {t.landing.postJobsDesc}
               </p>
               <ul className="mt-6 space-y-3">
                 {[
-                  "Post unlimited job listings",
-                  "Reach job seekers with optimized resumes",
-                  "Manage postings from one dashboard",
-                  "Close or reopen positions instantly",
+                  t.landing.postUnlimited,
+                  t.landing.reachSeekers,
+                  t.landing.manageFromDashboard,
+                  t.landing.closeReopen,
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-[13px] text-muted-foreground">
                     <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
@@ -313,15 +311,15 @@ const Index = () => {
                 ))}
               </ul>
               <Button className="gap-2 rounded-lg font-semibold mt-8 shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
-                Start Hiring Now <ArrowRight className="h-4 w-4" />
+                {t.landing.startHiring} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { value: "10K+", label: "Active Job Seekers", icon: <Users className="h-5 w-5" /> },
-                { value: "Free", label: "To Post Jobs", icon: <Briefcase className="h-5 w-5" /> },
-                { value: "Instant", label: "Job Visibility", icon: <Sparkles className="h-5 w-5" /> },
-                { value: "Easy", label: "Management", icon: <LayoutTemplate className="h-5 w-5" /> },
+                { value: "10K+", label: t.landing.activeJobSeekers, icon: <Users className="h-5 w-5" /> },
+                { value: t.landing.free, label: t.landing.freeToPost, icon: <Briefcase className="h-5 w-5" /> },
+                { value: t.landing.instant, label: t.landing.instantVisibility, icon: <Sparkles className="h-5 w-5" /> },
+                { value: t.landing.easy, label: t.landing.easyManagement, icon: <LayoutTemplate className="h-5 w-5" /> },
               ].map((s) => (
                 <div key={s.label} className="rounded-xl border border-border/60 bg-card p-5 text-center">
                   <div className="flex justify-center mb-2 text-primary">{s.icon}</div>
@@ -338,29 +336,29 @@ const Index = () => {
       <section ref={templatesRef} id="templates" className="border-t border-border/60 py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Templates</p>
-            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Professional Resume Templates</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.templates}</p>
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">{t.landing.professionalTemplates}</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-              {RESUME_TEMPLATES.length} ATS-optimized, recruiter-approved templates. Click any to get started.
+              {t.landing.templatesCount}
             </p>
           </div>
           <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {RESUME_TEMPLATES.map((t) => (
+            {RESUME_TEMPLATES.map((tmpl) => (
               <button
-                key={t.id}
+                key={tmpl.id}
                 onClick={() => openAuth("signup")}
                 className="group relative flex flex-col rounded-xl border border-border/60 bg-card overflow-hidden transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 duration-300"
               >
                 <div className="p-1.5">
-                  <TemplateThumbnail templateId={t.id} />
+                  <TemplateThumbnail templateId={tmpl.id} />
                 </div>
                 <div className="px-3 pb-3 pt-1 text-left">
-                  <span className="text-[13px] font-semibold leading-tight">{t.name}</span>
-                  <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2 mt-0.5">{t.description}</p>
+                  <span className="text-[13px] font-semibold leading-tight">{tmpl.name}</span>
+                  <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2 mt-0.5">{tmpl.description}</p>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center bg-background/85 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <span className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg">
-                    Use Template →
+                    {t.landing.useTemplate}
                   </span>
                 </div>
               </button>
@@ -372,14 +370,14 @@ const Index = () => {
       {/* FAQ */}
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto max-w-2xl px-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono text-center">FAQ</p>
-          <h2 className="mb-8 md:mb-10 text-center text-xl font-bold tracking-tight md:text-3xl">Frequently Asked Questions</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono text-center">{t.landing.faq}</p>
+          <h2 className="mb-8 md:mb-10 text-center text-xl font-bold tracking-tight md:text-3xl">{t.landing.faqTitle}</h2>
           <Accordion type="single" collapsible className="w-full">
             {[
-              { q: "What is an ATS and why does it matter?", a: "An Applicant Tracking System (ATS) is software used by employers to filter resumes. Over 75% of resumes are rejected before a human ever sees them. ATS Pro Resume Builder ensures your resume passes these filters." },
-              { q: "Is this AI resume builder really free?", a: "Yes! You can create, edit, and download ATS-optimized resumes for free. Our AI-powered grading and tailoring features are also available at no cost." },
-              { q: "How does the AI resume grader work?", a: "Our AI analyzes your resume against industry standards and specific job descriptions. It checks for keyword optimization, formatting, readability, and ATS compatibility, then provides an actionable score and suggestions." },
-              { q: "Can I import my existing LinkedIn or resume?", a: "Absolutely. You can upload an existing PDF resume and our AI will parse it into an editable format, preserving your content while optimizing the structure for ATS compatibility." },
+              { q: t.landing.faq1q, a: t.landing.faq1a },
+              { q: t.landing.faq2q, a: t.landing.faq2a },
+              { q: t.landing.faq3q, a: t.landing.faq3a },
+              { q: t.landing.faq4q, a: t.landing.faq4a },
             ].map((item, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
                 <AccordionTrigger className="text-left text-sm font-medium">{item.q}</AccordionTrigger>
@@ -397,7 +395,7 @@ const Index = () => {
             <div className="md:col-span-5">
               <img src={logo} alt="ATS Pro Resume Builder" className="h-[56px] brightness-0 invert" />
               <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-background/60">
-                AI-powered resume builder and ATS optimization suite. Built for job seekers, by recruiters.
+                {t.landing.footerDesc}
               </p>
               {/* Social Media Icons */}
               <div className="mt-6 flex items-center gap-3">
@@ -419,24 +417,24 @@ const Index = () => {
               </div>
             </div>
             <div className="md:col-span-3">
-              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">Platform</h4>
+              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.platform}</h4>
               <ul className="space-y-2.5 text-[13px] text-background/70">
-                <li><button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="transition hover:text-background">Resume Templates</button></li>
-                <li><Link to="/resumes" className="transition hover:text-background">AI Resume Grader</Link></li>
-                <li><Link to="/tracker" className="transition hover:text-background">Job Tracking</Link></li>
-                <li><Link to="/cover-letters" className="transition hover:text-background">Cover Letters</Link></li>
-                <li><Link to="/job-board" className="transition hover:text-background">Job Board</Link></li>
+                <li><button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="transition hover:text-background">{t.landing.resumeTemplates}</button></li>
+                <li><Link to="/resumes" className="transition hover:text-background">{t.landing.aiResumeGrader}</Link></li>
+                <li><Link to="/tracker" className="transition hover:text-background">{t.landing.jobTracking}</Link></li>
+                <li><Link to="/cover-letters" className="transition hover:text-background">{t.coverLetters.title}</Link></li>
+                <li><Link to="/job-board" className="transition hover:text-background">{t.nav.jobBoard}</Link></li>
               </ul>
             </div>
             <div className="md:col-span-2">
-              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">Company</h4>
+              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.company}</h4>
               <ul className="space-y-2.5 text-[13px] text-background/70">
-                <li><Link to="/privacy" className="transition hover:text-background">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="transition hover:text-background">Terms of Service</Link></li>
+                <li><Link to="/privacy" className="transition hover:text-background">{t.landing.privacyPolicy}</Link></li>
+                <li><Link to="/terms" className="transition hover:text-background">{t.landing.termsOfService}</Link></li>
               </ul>
             </div>
             <div className="md:col-span-2">
-              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">Connect</h4>
+              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.connect}</h4>
               <ul className="space-y-2.5 text-[13px] text-background/70">
                 <li><a href="#" className="transition hover:text-background">Facebook</a></li>
                 <li><a href="#" className="transition hover:text-background">Instagram</a></li>
@@ -449,7 +447,7 @@ const Index = () => {
         </div>
         <div className="border-t border-background/10 px-4 py-4 pb-16">
           <p className="mx-auto max-w-5xl text-center text-xs text-background/40">
-            © {new Date().getFullYear()} ATS Pro Resume Builder. All rights reserved.
+            © {new Date().getFullYear()} ATS Pro Resume Builder. {t.landing.copyright}
           </p>
         </div>
       </footer>
@@ -544,15 +542,15 @@ const Index = () => {
                 </Button>
                 <div className="relative my-2">
                   <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
-                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">or</span></div>
+                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t.auth.orContinueWith}</span></div>
                 </div>
                 <Button type="button" variant="outline" className="w-full gap-2" onClick={handleGoogleSignIn}>
                   <svg className="h-4 w-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                  Continue with Google
+                  {t.auth.continueWithGoogle}
                 </Button>
                 <Button type="button" variant="outline" className="w-full gap-2" onClick={handleAppleSignIn}>
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-                  Continue with Apple
+                  {t.auth.continueWithApple}
                 </Button>
               </form>
             </TabsContent>
@@ -575,15 +573,15 @@ const Index = () => {
                 </Button>
                 <div className="relative my-2">
                   <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
-                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">or</span></div>
+                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t.auth.orContinueWith}</span></div>
                 </div>
                 <Button type="button" variant="outline" className="w-full gap-2" onClick={handleGoogleSignIn}>
                   <svg className="h-4 w-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                  Continue with Google
+                  {t.auth.continueWithGoogle}
                 </Button>
                 <Button type="button" variant="outline" className="w-full gap-2" onClick={handleAppleSignIn}>
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-                  Continue with Apple
+                  {t.auth.continueWithApple}
                 </Button>
               </form>
             </TabsContent>
