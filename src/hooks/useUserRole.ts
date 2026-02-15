@@ -38,7 +38,7 @@ export function useUserRole() {
     if (!user) return;
     const { error } = await supabase
       .from("user_roles")
-      .insert({ user_id: user.id, role: newRole } as any);
+      .upsert({ user_id: user.id, role: newRole } as any, { onConflict: "user_id" });
 
     if (!error) {
       setRole(newRole);
