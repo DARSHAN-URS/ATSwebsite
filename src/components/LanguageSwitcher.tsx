@@ -8,7 +8,7 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
 
   return (
     <Select value={locale} onValueChange={(v) => setLocale(v as Locale)}>
-      <SelectTrigger className={className || "w-[140px] h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border"}>
+      <SelectTrigger className={className || "w-[140px] h-8 text-xs bg-sidebar-accent/80 text-sidebar-foreground border-sidebar-border [&>svg]:text-sidebar-foreground"}>
         <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
         <SelectValue />
       </SelectTrigger>

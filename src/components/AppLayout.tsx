@@ -62,7 +62,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
 
       <div className="p-3 space-y-2 border-t border-sidebar-border">
         <div className="px-3">
-          <LanguageSwitcher className="w-full h-8 text-xs" />
+          <LanguageSwitcher className="w-full h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border [&>svg]:text-sidebar-foreground" />
         </div>
         <div className="px-3 py-2 text-xs text-sidebar-foreground/50 truncate">
           {user?.email}
