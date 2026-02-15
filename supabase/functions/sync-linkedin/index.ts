@@ -63,30 +63,60 @@ Deno.serve(async (req) => {
 
     console.log("Fetching LinkedIn profile:", linkedinUrl);
 
-    const response = await fetch(
-      `https://linkedin-data-api.p.rapidapi.com/get-profile-data-by-url?url=${encodeURIComponent(linkedinUrl)}`,
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
-          "x-rapidapi-key": apiKey,
-        },
-      }
-    );
+    // Try multiple known LinkedIn Scraper API hosts
+    const hosts = [
+      "linkedin-scraper-api.p.rapidapi.com",
+      "linkedin-profile-data-api.p.rapidapi.com", 
+      "linkedin-api8.p.rapidapi.com",
+      "linkedin-data-api.p.rapidapi.com",
+    ];
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("RapidAPI error:", response.status, errorText);
-      return new Response(
-        JSON.stringify({ error: `LinkedIn API error (${response.status}). Check your API subscription.` }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    let profile: any = null;
+    let lastError = "";
+
+    for (const host of hosts) {
+      try {
+        console.log("Trying host:", host);
+        const response = await fetch(
+          `https://${host}/get-profile-data-by-url?url=${encodeURIComponent(linkedinUrl)}`,
+          {
+            method: "GET",
+            headers: {
+              "x-rapidapi-host": host,
+              "x-rapidapi-key": apiKey,
+            },
+          }
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Success with host:", host, "Keys:", JSON.stringify(Object.keys(data)));
+          console.log("Response preview:", JSON.stringify(data).substring(0, 1500));
+          
+          if (data.success === false) {
+            lastError = data.message || "API returned unsuccessful response";
+            continue;
+          }
+          
+          profile = data;
+          break;
+        } else {
+          const text = await response.text();
+          console.log(`Host ${host} returned ${response.status}: ${text.substring(0, 200)}`);
+          lastError = `Status ${response.status}`;
+        }
+      } catch (e) {
+        console.log(`Host ${host} error:`, e);
+        lastError = e instanceof Error ? e.message : String(e);
+      }
     }
 
-    const profile = await response.json();
-    console.log("Profile response keys:", JSON.stringify(Object.keys(profile)));
-    console.log("Profile raw data:", JSON.stringify(profile).substring(0, 2000));
-    console.log("Profile fetched, mapping data...");
+    if (!profile) {
+      return new Response(
+        JSON.stringify({ error: `Could not fetch LinkedIn data. Last error: ${lastError}. Please verify your RapidAPI subscription.` }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Map to ResumeData
     const resumeData = {
