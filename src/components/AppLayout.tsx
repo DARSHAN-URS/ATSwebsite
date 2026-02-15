@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList, BarChart3 } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList, BarChart3, Users } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -23,7 +23,9 @@ const jobSeekerNav = [
 
 const recruiterNav = [
   { to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
+  { to: "/recruiter/company", icon: Building2, key: "companyProfile" as const },
   { to: "/recruiter/jobs", icon: Briefcase, key: "myJobPosts" as const },
+  { to: "/recruiter/candidates", icon: Users, key: "candidates" as const },
   { to: "/recruiter/analytics", icon: BarChart3, key: "analytics" as const },
 ];
 

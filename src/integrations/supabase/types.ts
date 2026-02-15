@@ -123,7 +123,9 @@ export type Database = {
           applicant_id: string
           created_at: string
           id: string
+          is_shortlisted: boolean
           job_post_id: string
+          recruiter_notes: string | null
           resume_id: string | null
           status: string
           updated_at: string
@@ -132,7 +134,9 @@ export type Database = {
           applicant_id: string
           created_at?: string
           id?: string
+          is_shortlisted?: boolean
           job_post_id: string
+          recruiter_notes?: string | null
           resume_id?: string | null
           status?: string
           updated_at?: string
@@ -141,7 +145,9 @@ export type Database = {
           applicant_id?: string
           created_at?: string
           id?: string
+          is_shortlisted?: boolean
           job_post_id?: string
+          recruiter_notes?: string | null
           resume_id?: string | null
           status?: string
           updated_at?: string
@@ -303,6 +309,45 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      recruiter_companies: {
+        Row: {
+          company_name: string
+          company_size: string | null
+          created_at: string
+          description: string | null
+          id: string
+          industry: string | null
+          logo_url: string | null
+          recruiter_id: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          company_name: string
+          company_size?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          recruiter_id: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          company_name?: string
+          company_size?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          recruiter_id?: string
+          updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }

@@ -29,6 +29,8 @@ const en = {
     jobBoard: "Job Board",
     myJobPosts: "My Job Posts",
     analytics: "Analytics",
+    companyProfile: "Company Profile",
+    candidates: "Candidates",
   },
   common: {
     save: "Save",
@@ -409,6 +411,8 @@ const ar: TranslationKeys = {
     jobBoard: "لوحة الوظائف",
     myJobPosts: "إعلاناتي الوظيفية",
     analytics: "التحليلات",
+    companyProfile: "ملف الشركة",
+    candidates: "المرشحون",
   },
   common: {
     save: "حفظ",
@@ -779,6 +783,8 @@ const es: TranslationKeys = {
     jobBoard: "Bolsa de Trabajo",
     myJobPosts: "Mis Ofertas",
     analytics: "Analíticas",
+    companyProfile: "Perfil de Empresa",
+    candidates: "Candidatos",
   },
   common: {
     save: "Guardar",
@@ -1149,6 +1155,8 @@ const fr: TranslationKeys = {
     jobBoard: "Offres d'emploi",
     myJobPosts: "Mes annonces",
     analytics: "Analytique",
+    companyProfile: "Profil Entreprise",
+    candidates: "Candidats",
   },
   common: {
     save: "Enregistrer",
@@ -1519,6 +1527,8 @@ const hi: TranslationKeys = {
     jobBoard: "जॉब बोर्ड",
     myJobPosts: "मेरी नौकरी पोस्ट",
     analytics: "विश्लेषण",
+    companyProfile: "कंपनी प्रोफ़ाइल",
+    candidates: "उम्मीदवार",
   },
   common: {
     save: "सहेजें",
@@ -1889,6 +1899,8 @@ const pt: TranslationKeys = {
     jobBoard: "Painel de Vagas",
     myJobPosts: "Minhas Vagas",
     analytics: "Análises",
+    companyProfile: "Perfil da Empresa",
+    candidates: "Candidatos",
   },
   common: {
     save: "Salvar",
