@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase, Sparkles } from "lucide-react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ export default function Auth() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      toast({ title: "Login failed", description: error.message, variant: "destructive" });
+      toast({ title: t.common.loginFailed, description: error.message, variant: "destructive" });
     } else {
       navigate("/dashboard");
     }
@@ -42,9 +44,9 @@ export default function Auth() {
     });
     setLoading(false);
     if (error) {
-      toast({ title: "Signup failed", description: error.message, variant: "destructive" });
+      toast({ title: t.common.signupFailed, description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Check your email", description: "We sent you a confirmation link." });
+      toast({ title: t.common.checkEmail, description: t.common.confirmationSent });
     }
   };
 
@@ -56,16 +58,16 @@ export default function Auth() {
             <Briefcase className="h-8 w-8" />
             <Sparkles className="h-5 w-5" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">ATS Pro Resume Builder</h1>
-          <p className="text-muted-foreground">AI-powered job discovery & resume matching</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t.auth.title}</h1>
+          <p className="text-muted-foreground">{t.auth.subtitle}</p>
         </div>
 
         <Card>
           <Tabs defaultValue="login">
             <CardHeader className="pb-4">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="login">{t.auth.login}</TabsTrigger>
+                <TabsTrigger value="signup">{t.auth.signUp}</TabsTrigger>
               </TabsList>
             </CardHeader>
 
@@ -73,15 +75,15 @@ export default function Auth() {
               <form onSubmit={handleLogin}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="login-email">{t.common.email}</Label>
                     <Input id="login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
+                    <Label htmlFor="login-password">{t.common.password}</Label>
                     <Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Signing in..." : "Sign In"}
+                    {loading ? t.common.signingIn : t.common.signIn}
                   </Button>
                 </CardContent>
               </form>
@@ -91,19 +93,19 @@ export default function Auth() {
               <form onSubmit={handleSignup}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name">Display Name</Label>
+                    <Label htmlFor="signup-name">{t.common.displayName}</Label>
                     <Input id="signup-name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email">{t.common.email}</Label>
                     <Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">{t.common.password}</Label>
                     <Input id="signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Creating account..." : "Create Account"}
+                    {loading ? t.common.creatingAccount : t.common.createAccount}
                   </Button>
                 </CardContent>
               </form>

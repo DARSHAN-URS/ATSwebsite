@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Briefcase, Globe } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/i18n/LanguageContext";
 import RecruiterJobsList from "@/components/job-board/RecruiterJobsList";
 import ExternalJobsSearch from "@/components/job-board/ExternalJobsSearch";
 
@@ -27,6 +28,7 @@ interface JobPost {
 export default function JobBoard() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [jobs, setJobs] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -78,13 +80,13 @@ export default function JobBoard() {
       .insert({ job_post_id: jobId, applicant_id: user.id } as any);
     if (error) {
       if (error.code === "23505") {
-        toast({ title: "Already applied", description: "You've already applied to this job." });
+        toast({ title: t.jobBoard.alreadyApplied, description: t.jobBoard.alreadyApplied });
       } else {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
+        toast({ title: t.common.error, description: error.message, variant: "destructive" });
       }
     } else {
       setAppliedIds((prev) => new Set(prev).add(jobId));
-      toast({ title: "Application submitted!" });
+      toast({ title: t.jobBoard.applicationSubmitted });
     }
   };
 
@@ -108,18 +110,18 @@ export default function JobBoard() {
       />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Job Board</h1>
-          <p className="text-muted-foreground">Browse recruiter posts and discover external jobs</p>
+          <h1 className="text-2xl font-bold text-foreground">{t.jobBoard.title}</h1>
+          <p className="text-muted-foreground">{t.jobBoard.subtitle}</p>
         </div>
       </div>
 
       <Tabs defaultValue="recruiter">
         <TabsList>
           <TabsTrigger value="recruiter" className="gap-1.5">
-            <Briefcase className="h-4 w-4" />Recruiter Posts
+            <Briefcase className="h-4 w-4" />{t.jobBoard.recruiterPosts}
           </TabsTrigger>
           <TabsTrigger value="external" className="gap-1.5">
-            <Globe className="h-4 w-4" />External Jobs
+            <Globe className="h-4 w-4" />{t.jobBoard.externalJobs}
           </TabsTrigger>
         </TabsList>
 
@@ -128,7 +130,7 @@ export default function JobBoard() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by title, company, or location..."
+                placeholder={t.jobBoard.searchPlaceholder}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -136,14 +138,14 @@ export default function JobBoard() {
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Job Type" />
+                <SelectValue placeholder={t.findJobs.jobType} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="full-time">Full-time</SelectItem>
-                <SelectItem value="part-time">Part-time</SelectItem>
-                <SelectItem value="contract">Contract</SelectItem>
-                <SelectItem value="remote">Remote</SelectItem>
+                <SelectItem value="all">{t.jobBoard.allTypes}</SelectItem>
+                <SelectItem value="full-time">{t.jobBoard.fullTime}</SelectItem>
+                <SelectItem value="part-time">{t.jobBoard.partTime}</SelectItem>
+                <SelectItem value="contract">{t.jobBoard.contract}</SelectItem>
+                <SelectItem value="remote">{t.jobBoard.remote}</SelectItem>
               </SelectContent>
             </Select>
           </div>
