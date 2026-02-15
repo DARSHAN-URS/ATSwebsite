@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection, LanguageItem } from "@/components/resume/types";
@@ -51,6 +51,9 @@ export default function Resumes() {
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState<any>(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
+  const [linkedinOpen, setLinkedinOpen] = useState(false);
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [linkedinLoading, setLinkedinLoading] = useState(false);
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const fetchResumes = async () => {
@@ -312,6 +315,44 @@ export default function Resumes() {
   const handleExportPDF = () => {
     generateResumePDF(resumeData, title, selectedTemplate);
     toast({ title: "PDF downloaded!" });
+  };
+
+  const handleLinkedInImport = async () => {
+    if (!linkedinUrl.trim() || !user) return;
+    setLinkedinLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("sync-linkedin", {
+        body: { linkedinUrl: linkedinUrl.trim() },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "Import Error", description: data.error, variant: "destructive" });
+        return;
+      }
+
+      const resumeTitle = data.personalInfo?.fullName
+        ? `${data.personalInfo.fullName}'s Resume`
+        : "LinkedIn Resume";
+
+      const { data: created, error: createError } = await supabase.from("resumes").insert({
+        user_id: user.id,
+        title: resumeTitle,
+        resume_data: data as any,
+      }).select().single();
+
+      if (createError) throw createError;
+
+      toast({ title: "LinkedIn profile imported!", description: "Your resume has been populated from LinkedIn." });
+      setLinkedinOpen(false);
+      setLinkedinUrl("");
+      fetchResumes();
+      if (created) openEditor(created);
+    } catch (err: any) {
+      console.error("LinkedIn import error:", err);
+      toast({ title: "Import failed", description: err.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setLinkedinLoading(false);
+    }
   };
 
   const handleTailor = async () => {
@@ -726,6 +767,9 @@ export default function Resumes() {
         </div>
         <div className="flex gap-2 shrink-0">
           <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
+          <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
+            <Linkedin className="h-4 w-4 mr-2" />Import LinkedIn
+          </Button>
           <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
             {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Parsing...</> : <><Upload className="h-4 w-4 mr-2" />Upload Resume</>}
           </Button>
@@ -807,6 +851,29 @@ export default function Resumes() {
           })}
         </div>
       )}
+
+      {/* LinkedIn Import Dialog */}
+      <Dialog open={linkedinOpen} onOpenChange={setLinkedinOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Import from LinkedIn</DialogTitle>
+            <DialogDescription>Paste your LinkedIn profile URL to auto-fill a new resume with your profile data.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>LinkedIn Profile URL</Label>
+              <Input
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                placeholder="https://www.linkedin.com/in/your-profile"
+              />
+            </div>
+            <Button onClick={handleLinkedInImport} disabled={linkedinLoading || !linkedinUrl.trim()} className="w-full">
+              {linkedinLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Importing...</> : <><Linkedin className="h-4 w-4 mr-2" />Import Profile</>}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
