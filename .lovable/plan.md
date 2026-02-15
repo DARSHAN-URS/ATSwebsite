@@ -1,51 +1,40 @@
 
 
-## Add Recruiter Job Portal (Two-Sided Job Board)
+## Merge Job Board: Show Both External Jobs and Recruiter Posts
 
-Enable recruiters to post jobs on your platform that are visible to job seekers browsing the site.
+Currently, the Job Board (`/job-board`) only shows recruiter-posted jobs from the database. The user wants it to also display external job listings (from the JSearch API) alongside recruiter posts -- all in one unified view.
 
-### How It Works
+### What Changes
 
-**User Roles**: When signing up, users choose whether they are a "Job Seeker" or a "Recruiter." Each role gets a different experience:
+**Single unified Job Board page** (`src/pages/JobBoard.tsx`) that displays two sections using tabs:
 
-- **Recruiters** see a dashboard to create, edit, and manage job postings
-- **Job Seekers** see a "Job Board" page listing all active recruiter-posted jobs, with search and filters
+1. **"All Jobs" tab** -- Shows recruiter-posted jobs from the database (loaded automatically on page load, as it works today)
+2. **"Find External Jobs" tab** -- Shows AI-matched external jobs from the JSearch API (requires selecting a resume and searching, similar to the current Find Jobs page)
 
-### New Database Tables
+### Implementation Details
 
-1. **`user_roles`** -- Stores whether a user is a `job_seeker` or `recruiter` (using an enum `app_role`)
-2. **`job_posts`** -- Recruiter-created job listings with fields: title, company, location, job type (full-time/part-time/contract/remote), description, requirements, salary range, status (active/closed), and timestamps
+**File: `src/pages/JobBoard.tsx`**
 
-RLS policies ensure recruiters can only manage their own posts, while all authenticated users can view active job posts.
+- Add Tabs component with two tabs: "Recruiter Posts" and "External Jobs"
+- **Recruiter Posts tab**: Keep the existing recruiter job listing logic (fetching from `job_posts` table, search/filter, apply button, expand details)
+- **External Jobs tab**: Port the search-jobs functionality from `FindJobs.tsx`:
+  - Resume selector dropdown
+  - Search query, location, and job type filters
+  - Call the `search-jobs` edge function
+  - Display results with match scores and save/track actions
+- Both tabs share the same search bar for filtering by keyword
+- Add a "source" badge on each card so users can distinguish between "Platform" (recruiter) and "External" jobs
 
-### New Pages and Components
+**File: `src/pages/FindJobs.tsx`**
 
-1. **Role Selection** -- After signup, new users pick their role (Job Seeker or Recruiter) via a simple selection screen
-2. **Recruiter Dashboard (`/recruiter/jobs`)** -- List, create, edit, and close job postings with a form dialog
-3. **Job Board (`/job-board`)** -- Public-facing page for job seekers to browse all active job postings with search by title/company and filters by job type and location
+- No changes needed -- it remains as a separate dedicated page for power users who want the full AI job search experience
 
-### Navigation Changes
+**Navigation**: No route changes needed. The `/job-board` page simply becomes richer with the additional tab.
 
-- Sidebar navigation adapts based on role: recruiters see "My Job Posts" instead of resume/cover letter links; job seekers see a new "Job Board" link
-- Both roles share common pages like Dashboard
+### Technical Steps
 
-### Technical Details
-
-**Database migration (SQL):**
-- Create enum: `app_role` with values `job_seeker`, `recruiter`
-- Create `user_roles` table with `user_id`, `role`, RLS policies
-- Create `has_role()` security definer function
-- Create `job_posts` table with columns: `id`, `recruiter_id`, `title`, `company_name`, `location`, `job_type`, `description`, `requirements`, `salary_min`, `salary_max`, `salary_currency`, `status`, `created_at`, `updated_at`
-- RLS: recruiters CRUD own posts; all authenticated users SELECT active posts
-
-**New files:**
-- `src/pages/RoleSelection.tsx` -- post-signup role picker
-- `src/pages/RecruiterJobs.tsx` -- recruiter job management page
-- `src/pages/JobBoard.tsx` -- job seeker browsing page
-- `src/hooks/useUserRole.ts` -- hook to fetch current user's role
-
-**Modified files:**
-- `src/App.tsx` -- add new routes, role-based routing
-- `src/components/AppLayout.tsx` -- dynamic sidebar nav based on role
-- `src/i18n/translations.ts` -- add translation keys for new pages
-
+1. Import Tabs, resume fetching logic, and the `search-jobs` edge function invocation into `JobBoard.tsx`
+2. Add state for external jobs, selected resume, search query, location, loading state
+3. Add a Tabs wrapper around the existing recruiter job list, placing it under a "Recruiter Posts" tab
+4. Create an "External Jobs" tab with the resume selector, filters, search button, and results list with match scores
+5. Make the header layout responsive (`flex-col sm:flex-row`) to fix mobile styling consistency
