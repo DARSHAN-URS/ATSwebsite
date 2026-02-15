@@ -719,19 +719,19 @@ export default function Resumes() {
   return (
     <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
       <SEOHead title="Resumes — ATS Pro Resume Builder" description="Create and manage ATS-optimized resumes." noindex />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
           <p className="text-muted-foreground mt-1">Build and manage your resumes with AI assistance.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
-          <Button variant="outline" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
+          <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
             {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Parsing...</> : <><Upload className="h-4 w-4 mr-2" />Upload Resume</>}
           </Button>
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>
-              <Button><Plus className="h-4 w-4 mr-2" />New Resume</Button>
+              <Button size="sm"><Plus className="h-4 w-4 mr-2" />New Resume</Button>
             </DialogTrigger>
           <DialogContent>
             <DialogHeader>
