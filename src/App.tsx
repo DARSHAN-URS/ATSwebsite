@@ -25,6 +25,7 @@ import RecruiterAnalytics from "@/pages/RecruiterAnalytics";
 import RecruiterCompany from "@/pages/RecruiterCompany";
 import RecruiterApplicants from "@/pages/RecruiterApplicants";
 import RecruiterCandidates from "@/pages/RecruiterCandidates";
+import About from "@/pages/About";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
               <Route path="/auth" element={<Navigate to="/" replace />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/about" element={<About />} />
               <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
               <Route
                 element={
