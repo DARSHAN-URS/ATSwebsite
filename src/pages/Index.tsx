@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X } from "lucide-react";
 import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
 import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import SEOHead from "@/components/SEOHead";
 const Index = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const [authOpen, setAuthOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -102,9 +103,9 @@ const Index = () => {
       />
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <div className="mx-auto flex h-14 md:h-16 max-w-6xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="ATS Pro Resume Builder" className="h-[72px]" />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-[52px] md:h-[72px]" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-sm text-muted-foreground transition hover:text-foreground">{t.landing.resumeTemplates}</button>
@@ -113,39 +114,55 @@ const Index = () => {
             <button onClick={() => openAuth("signup")} className="text-sm text-muted-foreground transition hover:text-foreground">Post Jobs</button>
           </div>
           <div className="flex items-center gap-2">
-            <LanguageSwitcher className="w-[120px] h-8 text-xs" />
-            <Button variant="ghost" size="sm" className="rounded-full font-semibold" onClick={() => openAuth("login")}>{t.nav.logIn}</Button>
-            <Button size="sm" className="rounded-full font-semibold" onClick={() => openAuth("signup")}>{t.nav.getStarted}</Button>
+            <LanguageSwitcher className="hidden md:inline-flex w-[120px] h-8 text-xs" />
+            <Button variant="ghost" size="sm" className="hidden md:inline-flex rounded-full font-semibold" onClick={() => openAuth("login")}>{t.nav.logIn}</Button>
+            <Button size="sm" className="rounded-full font-semibold text-xs md:text-sm" onClick={() => openAuth("signup")}>{t.nav.getStarted}</Button>
+            <Button variant="ghost" size="icon" className="md:hidden h-9 w-9" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
           </div>
         </div>
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-border bg-background px-4 py-3 space-y-1 animate-in slide-in-from-top-2 duration-200">
+            <button onClick={() => { templatesRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
+            <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
+            <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-secondary transition">Job Board</button>
+            <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-secondary transition">Post Jobs</button>
+            <div className="pt-2 border-t border-border flex items-center gap-2">
+              <LanguageSwitcher className="w-[120px] h-8 text-xs" />
+              <Button variant="ghost" size="sm" className="rounded-full font-semibold" onClick={() => { openAuth("login"); setMobileMenuOpen(false); }}>{t.nav.logIn}</Button>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden py-20 md:py-32">
+      <section className="relative overflow-hidden py-14 md:py-32">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,hsl(252_68%_58%/0.1),transparent_50%),radial-gradient(ellipse_at_bottom_right,hsl(340_72%_62%/0.08),transparent_50%)]" />
-        <div className="absolute top-20 right-[15%] -z-10 h-20 w-20 rounded-full bg-primary/10 animate-float" />
-        <div className="absolute bottom-10 left-[10%] -z-10 h-14 w-14 rounded-2xl bg-accent/10 animate-float [animation-delay:1s]" />
+        <div className="absolute top-20 right-[15%] -z-10 h-20 w-20 rounded-full bg-primary/10 animate-float hidden md:block" />
+        <div className="absolute bottom-10 left-[10%] -z-10 h-14 w-14 rounded-2xl bg-accent/10 animate-float [animation-delay:1s] hidden md:block" />
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-1.5 text-xs font-medium text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <div className="mb-4 md:mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 md:px-4 py-1.5 text-[11px] md:text-xs font-medium text-muted-foreground">
+            <Sparkles className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
             Trusted by 10,000+ job seekers — Free to start
           </div>
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight md:text-6xl">
             The Best AI Resume Builder for{" "}
             <span className="text-primary">Modern ATS Success.</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
+          <p className="mx-auto mt-4 md:mt-5 max-w-xl text-sm text-muted-foreground md:text-lg">
             Our free AI resume builder helps you create a professional, ATS-optimized resume in minutes. Use our <strong className="text-foreground">AI resume grader</strong> to scan your content, identify keyword gaps, and land 3× more interviews.
           </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" className="gap-2 rounded-full px-8 font-semibold" onClick={() => openAuth("signup")}>
+          <div className="mt-6 md:mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button size="lg" className="gap-2 rounded-full px-8 font-semibold w-full sm:w-auto" onClick={() => openAuth("signup")}>
               Build Free ATS Resume <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg" className="gap-2 rounded-full px-8 font-semibold" onClick={() => openAuth("signup")}>
+            <Button variant="outline" size="lg" className="gap-2 rounded-full px-8 font-semibold w-full sm:w-auto" onClick={() => openAuth("signup")}>
               <Upload className="h-4 w-4" /> Upload Existing Resume
             </Button>
           </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
+          <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-4 md:gap-6 text-[11px] md:text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> 100% ATS-Friendly</span>
             <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> 2,400+ 5-Star Reviews</span>
             <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-success" /> Over 1M Resumes Built</span>
@@ -154,11 +171,11 @@ const Index = () => {
       </section>
 
       {/* Features */}
-      <section className="border-t border-border bg-secondary/40 py-20">
+      <section className="border-t border-border bg-secondary/40 py-14 md:py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="text-center">
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Powerful AI Features to Beat the Bots</h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Powerful AI Features to Beat the Bots</h2>
+            <p className="mx-auto mt-3 max-w-lg text-xs md:text-sm text-muted-foreground">
               Stop getting rejected by Applicant Tracking Systems (ATS). Our tools ensure your resume reaches real recruiters and humans.
             </p>
           </div>
@@ -196,10 +213,10 @@ const Index = () => {
       </section>
 
       {/* Why Resumes Fail */}
-      <section className="py-20">
-        <div className="mx-auto grid max-w-5xl items-center gap-12 px-4 md:grid-cols-2">
+      <section className="py-14 md:py-20">
+        <div className="mx-auto grid max-w-5xl items-center gap-8 md:gap-12 px-4 md:grid-cols-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">
               Why 75% of Resumes Never Get Seen by a Recruiter
             </h2>
             <ul className="mt-8 space-y-5">
@@ -230,11 +247,11 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="border-t border-border bg-secondary/30 py-20">
+      <section className="border-t border-border bg-secondary/30 py-14 md:py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="text-center">
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Loved by Job Seekers Worldwide</h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Loved by Job Seekers Worldwide</h2>
+            <p className="mx-auto mt-3 max-w-lg text-xs md:text-sm text-muted-foreground">
               Join thousands of professionals who landed their dream jobs with ATS Pro Resume Builder.
             </p>
           </div>
@@ -318,14 +335,14 @@ const Index = () => {
       </section>
 
       {/* For Recruiters CTA */}
-      <section className="border-t border-border bg-primary/5 py-20">
+      <section className="border-t border-border bg-primary/5 py-14 md:py-20">
         <div className="mx-auto max-w-5xl px-4">
-          <div className="grid gap-10 md:grid-cols-2 items-center">
+          <div className="grid gap-8 md:gap-10 md:grid-cols-2 items-center">
             <div>
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
                 <Users className="h-3.5 w-3.5" /> For Recruiters
               </div>
-              <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+              <h2 className="text-xl font-bold tracking-tight md:text-3xl">
                 Post Jobs & Find Top Talent
               </h2>
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-md">
@@ -367,11 +384,11 @@ const Index = () => {
       </section>
 
       {/* Resume Templates Showcase */}
-      <section ref={templatesRef} id="templates" className="border-t border-border py-20">
+      <section ref={templatesRef} id="templates" className="border-t border-border py-14 md:py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="text-center">
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Professional Resume Templates</h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Professional Resume Templates</h2>
+            <p className="mx-auto mt-3 max-w-lg text-xs md:text-sm text-muted-foreground">
               Choose from {RESUME_TEMPLATES.length} ATS-optimized, recruiter-approved templates. Click any template to get started.
             </p>
           </div>
@@ -401,9 +418,9 @@ const Index = () => {
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-border py-20">
+      <section className="border-t border-border py-14 md:py-20">
         <div className="mx-auto max-w-2xl px-4">
-          <h2 className="mb-10 text-center text-2xl font-bold tracking-tight md:text-3xl">Frequently Asked Questions</h2>
+          <h2 className="mb-8 md:mb-10 text-center text-xl font-bold tracking-tight md:text-3xl">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {[
               { q: "What is an ATS and why does it matter?", a: "An Applicant Tracking System (ATS) is software used by employers to filter resumes. Over 75% of resumes are rejected before a human ever sees them. ATS Pro Resume Builder ensures your resume passes these filters." },
