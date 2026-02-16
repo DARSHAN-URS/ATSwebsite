@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X, Crown, Zap, XIcon } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff } from "lucide-react";
 import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
 import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,8 @@ const Index = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -645,7 +647,12 @@ const Index = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lp-login-password">{t.common.password}</Label>
-                  <Input id="lp-login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  <div className="relative">
+                    <Input id="lp-login-password" type={showLoginPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="pr-10" />
+                    <button type="button" onClick={() => setShowLoginPassword(!showLoginPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                      {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? t.common.signingIn : t.common.signIn}
@@ -676,7 +683,23 @@ const Index = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lp-signup-password">{t.common.password}</Label>
-                  <Input id="lp-signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+                  <div className="relative">
+                    <Input id="lp-signup-password" type={showSignupPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="pr-10" />
+                    <button type="button" onClick={() => setShowSignupPassword(!showSignupPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                      {showSignupPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  <ul className="mt-1.5 space-y-1 text-[11px] text-muted-foreground">
+                    <li className={`flex items-center gap-1 ${password.length >= 6 ? "text-primary" : ""}`}>
+                      {password.length >= 6 ? <CheckCircle className="h-3 w-3" /> : <span className="h-3 w-3 rounded-full border border-muted-foreground/40 inline-block" />} At least 6 characters
+                    </li>
+                    <li className={`flex items-center gap-1 ${/[A-Z]/.test(password) ? "text-primary" : ""}`}>
+                      {/[A-Z]/.test(password) ? <CheckCircle className="h-3 w-3" /> : <span className="h-3 w-3 rounded-full border border-muted-foreground/40 inline-block" />} One uppercase letter
+                    </li>
+                    <li className={`flex items-center gap-1 ${/[0-9]/.test(password) ? "text-primary" : ""}`}>
+                      {/[0-9]/.test(password) ? <CheckCircle className="h-3 w-3" /> : <span className="h-3 w-3 rounded-full border border-muted-foreground/40 inline-block" />} One number
+                    </li>
+                  </ul>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? t.common.creatingAccount : t.common.createAccount}
