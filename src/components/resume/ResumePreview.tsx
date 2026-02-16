@@ -152,7 +152,7 @@ function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateI
   ).join("  •  ");
 
 
-  const styles = getTemplateStyles(templateId);
+  const styles = getTemplateStyles(templateId, pi.photoUrl);
 
   const html = `
     <div style="${styles.container}">
@@ -202,7 +202,7 @@ function sectionHeader(label: string, templateId: TemplateId): string {
   }
 }
 
-function getTemplateStyles(templateId: TemplateId) {
+function getTemplateStyles(templateId: TemplateId, photoUrl?: string) {
   const base = "font-family:Helvetica,Arial,sans-serif;padding:28px 24px;color:#222;line-height:1.4;";
 
   switch (templateId) {
@@ -300,7 +300,7 @@ function getTemplateStyles(templateId: TemplateId) {
       return {
         container: base,
         headerBefore: `<div style="background:#10a37f;margin:-28px -24px 0;padding:16px 24px 12px;display:flex;justify-content:space-between;align-items:center"><div>`,
-        headerAfter: `</div><div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.3);flex-shrink:0"></div></div><div style="height:10px"></div>`,
+        headerAfter: `</div>${photoUrl ? `<img src="${escapeHtml(photoUrl)}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,255,255,0.5)" />` : `<div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.3);flex-shrink:0"></div>`}</div><div style="height:10px"></div>`,
         nameStyle: "font-size:20px;font-weight:700;color:#fff;margin-bottom:4px",
         contactStyle: "font-size:8px;color:#dcfff0;margin:0 0 2px",
         linkStyle: "font-size:8px;color:#dcfff0;margin:0",
@@ -341,8 +341,11 @@ function buildSidebarHTML(data: ResumeData, title: string): string {
     return `<div style="background:#1e3a5f;color:#fff;padding:3px 8px;margin:10px 0 6px"><span style="font-size:9px;font-weight:700;text-transform:uppercase">${escapeHtml(s.title)}</span></div>${items}`;
   }).join("");
 
+  const photoHtml = pi.photoUrl ? `<div style="text-align:center;margin-bottom:10px"><img src="${escapeHtml(pi.photoUrl)}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4)" /></div>` : "";
+
   return `<div style="display:flex;font-family:Helvetica,Arial,sans-serif;min-height:100%;color:#222">
     <div style="width:35%;background:#1e3a5f;color:#fff;padding:20px 12px">
+      ${photoHtml}
       <div style="font-size:13px;font-weight:700;margin-bottom:12px;word-break:break-word">${escapeHtml(name)}</div>
       ${contactItems.length ? `<div style="margin-bottom:10px"><p style="font-size:8px;font-weight:700;color:#b4d2ff;text-transform:uppercase;margin-bottom:4px">Contact</p>${contactItems.map(c => `<p style="font-size:8px;color:#ddd;margin:2px 0;word-break:break-all">${escapeHtml(c!)}</p>`).join("")}</div>` : ""}
       ${skillsHtml ? `<div><p style="font-size:8px;font-weight:700;color:#b4d2ff;text-transform:uppercase;margin-bottom:4px">Skills</p>${skillsHtml}</div>` : ""}
@@ -483,8 +486,11 @@ function buildPolishedHTML(data: ResumeData, title: string): string {
 
   const sectionLabel = (l: string) => `<div style="margin-top:8px"><span style="font-size:10px;font-weight:700;color:#a64834;text-transform:uppercase">${escapeHtml(l)}</span><div style="border-bottom:1px solid #a64834;margin:2px 0 4px"></div></div>`;
 
+  const photoHtml = pi.photoUrl ? `<div style="text-align:center;margin-bottom:10px"><img src="${escapeHtml(pi.photoUrl)}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4)" /></div>` : "";
+
   return `<div style="display:flex;font-family:Helvetica,Arial,sans-serif;min-height:100%;color:#222">
     <div style="width:35%;background:#a64834;color:#fff;padding:20px 12px">
+      ${photoHtml}
       <div style="font-size:13px;font-weight:700;margin-bottom:12px;word-break:break-word">${escapeHtml(name)}</div>
       ${contactItems.length ? `<div style="margin-bottom:10px"><p style="font-size:8px;font-weight:700;color:#ffd2be;text-transform:uppercase;margin-bottom:4px">Contact</p>${contactItems.map(c => `<p style="font-size:8px;color:#f0d0c0;margin:2px 0;word-break:break-all">${escapeHtml(c!)}</p>`).join("")}</div>` : ""}
       ${skillsHtml ? `<div style="margin-bottom:10px"><p style="font-size:8px;font-weight:700;color:#ffd2be;text-transform:uppercase;margin-bottom:4px">Skills</p>${skillsHtml}</div>` : ""}
