@@ -54,38 +54,38 @@ function JobSeekerDashboard() {
   ];
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8">
       <SEOHead title="Dashboard — ATS Pro Resume Builder" description="Manage your resumes, cover letters, and job applications." noindex />
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t.dashboard.title}</h1>
-        <p className="text-muted-foreground mt-1">{t.dashboard.welcome}</p>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t.dashboard.title}</h1>
+        <p className="text-muted-foreground mt-1 text-sm">{t.dashboard.welcome}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {cards.map((card) => (
           <Card key={card.title} className="cursor-pointer hover:shadow-md transition-shadow" onClick={card.action}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
-              <card.icon className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 p-3 md:p-6">
+              <CardTitle className="text-[11px] md:text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
+              <card.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{card.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">{card.description}</p>
+            <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+              <div className="text-2xl md:text-3xl font-bold">{card.value}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 md:mt-1">{card.description}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
       <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/jobs")}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5 text-primary" />
+        <CardHeader className="p-4 md:p-6">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+            <Search className="h-4 w-4 md:h-5 md:w-5 text-primary" />
             {t.dashboard.findJobs}
           </CardTitle>
-          <CardDescription>{t.dashboard.findJobsDesc}</CardDescription>
+          <CardDescription className="text-[12px] md:text-sm">{t.dashboard.findJobsDesc}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">{t.dashboard.findJobsDetail}</p>
+        <CardContent className="px-4 pb-4 md:px-6 md:pb-6 pt-0">
+          <p className="text-[12px] md:text-sm text-muted-foreground">{t.dashboard.findJobsDetail}</p>
         </CardContent>
       </Card>
     </div>
@@ -134,46 +134,46 @@ function RecruiterDashboard() {
   ];
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8">
       <SEOHead title="Recruiter Dashboard — ATS Pro" description="Manage your job posts and candidates." noindex />
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Recruiter Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Welcome back! Here's an overview of your hiring activity.</p>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Recruiter Dashboard</h1>
+        <p className="text-muted-foreground mt-1 text-sm">Welcome back! Here's an overview of your hiring activity.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
         {cards.map((card) => (
           <Card key={card.title} className="cursor-pointer hover:shadow-md transition-shadow" onClick={card.action}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
-              <card.icon className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 p-3 md:p-6">
+              <CardTitle className="text-[11px] md:text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
+              <card.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{loading ? "—" : card.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">{card.description}</p>
+            <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+              <div className="text-2xl md:text-3xl font-bold">{loading ? "—" : card.value}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 md:mt-1">{card.description}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
         <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/recruiter/company")}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-primary" />
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+              <Building2 className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               Company Profile
             </CardTitle>
-            <CardDescription>Set up your company information to display on job listings.</CardDescription>
+            <CardDescription className="text-[12px] md:text-sm">Set up your company information to display on job listings.</CardDescription>
           </CardHeader>
         </Card>
 
         <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/recruiter/jobs")}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-primary" />
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+              <Briefcase className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               Post a New Job
             </CardTitle>
-            <CardDescription>Create job listings and manage your open positions.</CardDescription>
+            <CardDescription className="text-[12px] md:text-sm">Create job listings and manage your open positions.</CardDescription>
           </CardHeader>
         </Card>
       </div>
