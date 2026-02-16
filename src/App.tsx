@@ -29,7 +29,6 @@ import About from "@/pages/About";
 import Pricing from "@/pages/Pricing";
 import ResetPassword from "@/pages/ResetPassword";
 import ATSKeywordScanner from "@/pages/ATSKeywordScanner";
-import JobSeekerAnalytics from "@/pages/JobSeekerAnalytics";
 
 const queryClient = new QueryClient();
 
@@ -90,7 +89,7 @@ const App = () => (
                 <Route path="/job-board" element={<JobBoard />} />
                 <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
                 <Route path="/ats-scanner" element={<ATSKeywordScanner />} />
-                <Route path="/analytics" element={<JobSeekerAnalytics />} />
+                
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
