@@ -220,7 +220,7 @@ export default function About() {
           <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">{ta.ctaDesc}</p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button asChild size="lg" className="px-8"><Link to="/">{ta.ctaBtn1}</Link></Button>
-            <Button asChild variant="outline" size="lg" className="px-8"><Link to="/job-board">{ta.ctaBtn2}</Link></Button>
+            <Button asChild variant="outline" size="lg" className="px-8"><Link to="/jobs">{ta.ctaBtn2}</Link></Button>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">{ta.ctaNote}</p>
         </div>
