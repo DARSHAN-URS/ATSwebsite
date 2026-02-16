@@ -31,6 +31,7 @@ const en = {
     analytics: "Analytics",
     companyProfile: "Company Profile",
     candidates: "Candidates",
+    pricing: "Pricing",
   },
   common: {
     save: "Save",
@@ -413,6 +414,7 @@ const ar: TranslationKeys = {
     analytics: "التحليلات",
     companyProfile: "ملف الشركة",
     candidates: "المرشحون",
+    pricing: "الأسعار",
   },
   common: {
     save: "حفظ",
@@ -785,6 +787,7 @@ const es: TranslationKeys = {
     analytics: "Analíticas",
     companyProfile: "Perfil de Empresa",
     candidates: "Candidatos",
+    pricing: "Precios",
   },
   common: {
     save: "Guardar",
@@ -1157,6 +1160,7 @@ const fr: TranslationKeys = {
     analytics: "Analytique",
     companyProfile: "Profil Entreprise",
     candidates: "Candidats",
+    pricing: "Tarifs",
   },
   common: {
     save: "Enregistrer",
@@ -1529,6 +1533,7 @@ const hi: TranslationKeys = {
     analytics: "विश्लेषण",
     companyProfile: "कंपनी प्रोफ़ाइल",
     candidates: "उम्मीदवार",
+    pricing: "मूल्य निर्धारण",
   },
   common: {
     save: "सहेजें",
@@ -1901,6 +1906,7 @@ const pt: TranslationKeys = {
     analytics: "Análises",
     companyProfile: "Perfil da Empresa",
     candidates: "Candidatos",
+    pricing: "Preços",
   },
   common: {
     save: "Salvar",
