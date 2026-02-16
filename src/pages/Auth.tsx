@@ -136,16 +136,21 @@ export default function Auth() {
               onSubmit={async (e) => {
                 e.preventDefault();
                 setForgotLoading(true);
-                const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
-                  redirectTo: `${window.location.origin}/reset-password`,
-                });
-                setForgotLoading(false);
-                if (error) {
-                  toast({ title: "Error", description: error.message, variant: "destructive" });
-                } else {
+                try {
+                  const res = await supabase.functions.invoke("send-email", {
+                    body: {
+                      type: "password_reset",
+                      email: forgotEmail,
+                      redirectTo: `${window.location.origin}/reset-password`,
+                    },
+                  });
+                  if (res.error) throw res.error;
                   toast({ title: "Check your email", description: "We sent you a password reset link." });
                   setForgotOpen(false);
+                } catch (err: any) {
+                  toast({ title: "Error", description: err.message || "Failed to send reset email", variant: "destructive" });
                 }
+                setForgotLoading(false);
               }}
               className="space-y-4"
             >
