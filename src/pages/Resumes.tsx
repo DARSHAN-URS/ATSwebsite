@@ -20,6 +20,8 @@ import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useSubscription } from "@/hooks/useSubscription";
+import ProFeatureGate from "@/components/ProFeatureGate";
 
 type Resume = Tables<"resumes">;
 
@@ -27,6 +29,7 @@ export default function Resumes() {
   const { user } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { isPro } = useSubscription();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
@@ -438,6 +441,7 @@ export default function Resumes() {
             <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
           </div>
           <div className="flex flex-wrap gap-2">
+            {isPro ? (
             <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.tailorToJob}</span><span className="sm:hidden">{t.resumes.tailorToJob}</span></Button>
@@ -459,6 +463,10 @@ export default function Resumes() {
                 </Button>
               </DialogContent>
             </Dialog>
+            ) : (
+              <ProFeatureGate inline message="AI Tailor"><span /></ProFeatureGate>
+            )}
+            {isPro ? (
             <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.gradeResume}</span><span className="sm:hidden">{t.resumes.gradeResume}</span></Button>
@@ -538,6 +546,9 @@ export default function Resumes() {
                 )}
               </DialogContent>
             </Dialog>
+            ) : (
+              <ProFeatureGate inline message="AI Grade"><span /></ProFeatureGate>
+            )}
             <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.exportPDF}</span><span className="sm:hidden">PDF</span></Button>
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
           </div>
@@ -577,10 +588,14 @@ export default function Resumes() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{t.resumes.professionalSummary}</CardTitle>
-                  <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
-                    {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                    {t.resumes.aiGenerate}
-                  </Button>
+                  {isPro ? (
+                    <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
+                      {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                      {t.resumes.aiGenerate}
+                    </Button>
+                  ) : (
+                    <ProFeatureGate inline message="AI Generate"><span /></ProFeatureGate>
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
@@ -593,10 +608,14 @@ export default function Resumes() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{t.resumes.skills}</CardTitle>
-                  <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
-                    {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                    {t.resumes.aiSuggest}
-                  </Button>
+                  {isPro ? (
+                    <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
+                      {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                      {t.resumes.aiSuggest}
+                    </Button>
+                  ) : (
+                    <ProFeatureGate inline message="AI Suggest"><span /></ProFeatureGate>
+                  )}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -655,10 +674,14 @@ export default function Resumes() {
                     </div>
                     <div className="flex items-center justify-between">
                       <Label className="text-xs">{t.resumes.bullets}</Label>
-                      <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
-                        {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                        {t.resumes.aiGenerateBullets}
-                      </Button>
+                      {isPro ? (
+                        <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
+                          {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                          {t.resumes.aiGenerateBullets}
+                        </Button>
+                      ) : (
+                        <ProFeatureGate inline message="AI Bullets"><span /></ProFeatureGate>
+                      )}
                     </div>
                     {exp.bullets && exp.bullets.length > 0 ? (
                       <ul className="space-y-1">
@@ -770,9 +793,13 @@ export default function Resumes() {
         </div>
         <div className="flex gap-2 shrink-0">
           <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
-          <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
-            <Linkedin className="h-4 w-4 mr-2" />{t.resumes.importLinkedin}
-          </Button>
+          {isPro ? (
+            <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
+              <Linkedin className="h-4 w-4 mr-2" />{t.resumes.importLinkedin}
+            </Button>
+          ) : (
+            <ProFeatureGate inline message="LinkedIn Import"><span /></ProFeatureGate>
+          )}
           <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
             {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.parsing}</> : <><Upload className="h-4 w-4 mr-2" />{t.resumes.uploadResume}</>}
           </Button>
