@@ -45,4 +45,5 @@ export interface ResumeData {
   education?: EducationItem[];
   customSections?: CustomSection[];
   languages?: LanguageItem[];
+  templateId?: string;
 }

@@ -17,6 +17,7 @@ import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTempl
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 import TemplateSelector from "@/components/resume/TemplateSelector";
+import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
 import SEOHead from "@/components/SEOHead";
@@ -63,7 +64,7 @@ export default function Resumes() {
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const fetchResumes = async () => {
-    const { data } = await supabase.from("resumes").select("*").order("created_at", { ascending: false });
+    const { data } = await supabase.from("resumes").select("*").order("updated_at", { ascending: false });
     setResumes(data ?? []);
     setLoading(false);
   };
@@ -150,9 +151,10 @@ export default function Resumes() {
 
   const handleSaveEdit = async () => {
     if (!editingId) return;
+    const dataToSave = { ...resumeData, templateId: selectedTemplate };
     const { error } = await supabase.from("resumes").update({
       title,
-      resume_data: resumeData as any,
+      resume_data: dataToSave as any,
     }).eq("id", editingId);
     if (error) {
       toast({ title: t.resumes.errorSaving, variant: "destructive" });
@@ -172,6 +174,7 @@ export default function Resumes() {
     setEditingId(resume.id);
     setTitle(resume.title);
     const data = resume.resume_data as any as ResumeData;
+    setSelectedTemplate((data?.templateId as TemplateId) || "classic");
     setResumeData({
       personalInfo: data?.personalInfo || {},
       summary: data?.summary || "",
@@ -185,6 +188,7 @@ export default function Resumes() {
       education: data?.education || [],
       customSections: data?.customSections || [],
       languages: data?.languages || [],
+      templateId: data?.templateId,
     });
   };
 
@@ -854,29 +858,37 @@ export default function Resumes() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {resumes.map((resume) => {
             const data = resume.resume_data as any as ResumeData;
+            const tplId = (data?.templateId as TemplateId) || "classic";
             return (
-              <Card key={resume.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="flex flex-row items-start justify-between pb-2">
-                  <div>
-                    <CardTitle className="text-base">{resume.title}</CardTitle>
-                    <CardDescription>{new Date(resume.created_at).toLocaleDateString()}</CardDescription>
-                  </div>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(resume.id)}>
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  {data?.skills && data.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {data.skills.slice(0, 5).map((skill, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">{skill}</span>
-                      ))}
-                      {data.skills.length > 5 && (
-                        <span className="px-2 py-0.5 text-muted-foreground text-xs">+{data.skills.length - 5}</span>
+              <Card key={resume.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => openEditor(resume)}>
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    {/* Mini template thumbnail */}
+                    <div className="w-20 shrink-0">
+                      <TemplateThumbnail templateId={tplId} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-base truncate">{resume.title}</CardTitle>
+                          <CardDescription>{new Date(resume.updated_at).toLocaleDateString()}</CardDescription>
+                        </div>
+                        <Button variant="ghost" size="icon" className="shrink-0" onClick={(e) => { e.stopPropagation(); handleDelete(resume.id); }}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                      {data?.skills && data.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {data.skills.slice(0, 4).map((skill, i) => (
+                            <span key={i} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">{skill}</span>
+                          ))}
+                          {data.skills.length > 4 && (
+                            <span className="px-2 py-0.5 text-muted-foreground text-xs">+{data.skills.length - 4}</span>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                  <Button size="sm" variant="outline" onClick={() => openEditor(resume)}><Edit className="h-3 w-3 mr-1" />{t.common.edit}</Button>
+                  </div>
                 </CardContent>
               </Card>
             );
