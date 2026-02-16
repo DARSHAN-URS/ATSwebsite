@@ -329,19 +329,36 @@ export default function InterviewPrep() {
               <Square className="h-3 w-3 mr-1" /> End Interview
             </Button>
 
-            <button
-              onClick={toggleListening}
-              disabled={phase === "thinking"}
-              className={cn(
-                "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg",
-                isListening
-                  ? "bg-destructive text-destructive-foreground scale-110 ring-4 ring-destructive/30 animate-pulse"
-                  : "bg-primary text-primary-foreground hover:scale-105 hover:shadow-xl",
-                phase === "thinking" && "opacity-50 cursor-not-allowed"
+            <div className="relative flex items-center justify-center">
+              {/* Waveform rings when listening */}
+              {isListening && (
+                <>
+                  <span className="absolute w-24 h-24 rounded-full border-2 border-destructive/40 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                  <span className="absolute w-20 h-20 rounded-full border-2 border-destructive/30 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_0.3s_infinite]" />
+                  <span className="absolute w-28 h-28 rounded-full border border-destructive/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.6s_infinite]" />
+                </>
               )}
-            >
-              {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
-            </button>
+              {/* Coach speaking rings */}
+              {phase === "speaking" && (
+                <>
+                  <span className="absolute w-24 h-24 rounded-full border-2 border-primary/30 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                  <span className="absolute w-28 h-28 rounded-full border border-primary/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.5s_infinite]" />
+                </>
+              )}
+              <button
+                onClick={toggleListening}
+                disabled={phase === "thinking"}
+                className={cn(
+                  "relative z-10 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg",
+                  isListening
+                    ? "bg-destructive text-destructive-foreground scale-110"
+                    : "bg-primary text-primary-foreground hover:scale-105 hover:shadow-xl",
+                  phase === "thinking" && "opacity-50 cursor-not-allowed"
+                )}
+              >
+                {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
+              </button>
+            </div>
 
             <div className="w-[100px]" /> {/* spacer for centering */}
           </div>
