@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { CheckCircle, Crown, Zap } from "lucide-react";
+import { ArrowLeft, CheckCircle, Crown, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import SEOHead from "@/components/SEOHead";
@@ -90,6 +90,11 @@ export default function Pricing() {
   return (
     <div className="container mx-auto max-w-4xl py-10 px-4">
       <SEOHead title="Pricing — ATS Pro Resume Builder" description="Compare free and pro plans for ATS Pro Resume Builder. AI resume grading, tailoring, cover letters, and unlimited resumes starting at ₹299/month." canonical="https://atsproresumebuilder.com/pricing" keywords="resume builder pricing, ATS pro plans, AI resume subscription" />
+      <div className="mb-6">
+        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-1.5">
+          <ArrowLeft className="h-4 w-4" /> Back
+        </Button>
+      </div>
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold tracking-tight">{t.pricingPage.title}</h1>
         <p className="mt-2 text-muted-foreground">{t.pricingPage.subtitle}</p>
