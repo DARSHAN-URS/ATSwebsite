@@ -91,7 +91,7 @@ export default function Pricing() {
     <div className="container mx-auto max-w-4xl py-10 px-4">
       <SEOHead title="Pricing — ATS Pro Resume Builder" description="Compare free and pro plans for ATS Pro Resume Builder. AI resume grading, tailoring, cover letters, and unlimited resumes starting at ₹299/month." canonical="https://atsproresumebuilder.com/pricing" keywords="resume builder pricing, ATS pro plans, AI resume subscription" />
       <div className="mb-6">
-        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-1.5">
+        <Button variant="ghost" size="sm" onClick={() => user ? navigate("/dashboard") : navigate("/")} className="gap-1.5">
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
       </div>
