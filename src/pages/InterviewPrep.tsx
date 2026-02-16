@@ -1,11 +1,12 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mic, MicOff, Volume2, VolumeX, Play, Square, RotateCcw, Send, User, Bot } from "lucide-react";
+import { Mic, MicOff, Volume2, VolumeX, Play, Square, RotateCcw, Send, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type Message = { role: "user" | "assistant"; content: string };
 type Phase = "setup" | "listening" | "thinking" | "speaking" | "idle" | "summary";
@@ -220,13 +221,13 @@ export default function InterviewPrep() {
     return (
       <div className="flex items-center justify-center h-full p-6">
         <div className="max-w-md w-full space-y-8 text-center">
-          {/* Coach avatar */}
-          <div className="mx-auto w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-            <Bot className="h-12 w-12 text-primary" />
-          </div>
+         {/* Coach avatar */}
+          <Avatar className="mx-auto w-24 h-24">
+            <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">AC</AvatarFallback>
+          </Avatar>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Interview Coach</h1>
-            <p className="text-muted-foreground mt-1">Your AI-powered one-on-one mock interview</p>
+            <h1 className="text-2xl font-bold text-foreground">Alex Carter</h1>
+            <p className="text-muted-foreground mt-1">Senior Hiring Manager • 15+ years experience</p>
           </div>
           <Card className="text-left">
             <CardContent className="pt-6 space-y-4">
@@ -251,11 +252,11 @@ export default function InterviewPrep() {
 
   // --- Interview screen ---
   const phaseLabel = {
-    listening: "Listening to you...",
-    thinking: "Coach is thinking...",
-    speaking: "Coach is speaking...",
-    idle: "Tap the mic to answer",
-    summary: "Interview Summary",
+    listening: "Alex is listening...",
+    thinking: "Alex is thinking...",
+    speaking: "Alex is talking...",
+    idle: "Your turn — tap the mic or type",
+    summary: "Alex's Feedback",
   }[phase] || "";
 
   return (
@@ -279,15 +280,16 @@ export default function InterviewPrep() {
       {/* Central conversation area */}
       <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0 overflow-auto">
         {/* Coach avatar with pulse */}
-        <div className={cn(
-          "w-20 h-20 rounded-full flex items-center justify-center mb-4 transition-all duration-300",
-          phase === "speaking" && "bg-primary/20 animate-pulse ring-4 ring-primary/30",
-          phase === "thinking" && "bg-muted animate-pulse",
-          phase === "listening" && "bg-accent",
-          (phase === "idle" || phase === "summary") && "bg-primary/10",
+        <Avatar className={cn(
+          "w-20 h-20 mb-4 transition-all duration-300",
+          phase === "speaking" && "ring-4 ring-primary/30 animate-pulse",
+          phase === "thinking" && "animate-pulse",
         )}>
-          <Bot className={cn("h-10 w-10 transition-colors", phase === "speaking" ? "text-primary" : "text-muted-foreground")} />
-        </div>
+          <AvatarFallback className={cn(
+            "text-xl font-bold transition-colors",
+            phase === "speaking" ? "bg-primary/20 text-primary" : "bg-primary/10 text-muted-foreground",
+          )}>AC</AvatarFallback>
+        </Avatar>
 
         {/* Phase label */}
         <p className="text-sm font-medium text-muted-foreground mb-3">{phaseLabel}</p>

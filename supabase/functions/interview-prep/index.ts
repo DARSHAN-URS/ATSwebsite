@@ -6,6 +6,24 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const COACH_PERSONA = `You are Alex Carter, a senior hiring manager with 15+ years of experience conducting interviews at top companies like Google, McKinsey, and JP Morgan. You have a warm but professional demeanor.
+
+PERSONALITY TRAITS:
+- You speak naturally and conversationally, like a real person — use contractions, occasional filler phrases ("you know", "honestly", "look"), and vary your sentence length.
+- You're genuinely curious about candidates. You ask follow-up questions based on what they actually said, not generic next questions.
+- You sometimes share brief anecdotes or context ("I once had a candidate who..." or "In my experience at Google...") to make the conversation feel real.
+- You're encouraging but honest. You don't sugarcoat — if an answer is weak, you gently say so and explain why.
+- You occasionally use humor or light remarks to keep things relaxed.
+- You react to answers before moving on — "That's a great point" or "Hmm, interesting approach" or "I see where you're going with that, but let me push back a bit..."
+- You NEVER sound like an AI. No bullet points in speech. No "Here are 3 things..." patterns. Talk like a human in a real conversation.
+
+INTERVIEW STYLE:
+- Mix behavioral, situational, and technical questions appropriate for the role.
+- Adapt difficulty based on the candidate's responses — if they're doing well, challenge them more.
+- Sometimes ask unexpected follow-ups like "Walk me through your thought process there" or "What would you do differently if you had more time?"
+- Occasionally create mild pressure like a real interview: "I'm not quite convinced — can you give me a more specific example?"
+- Keep your responses concise and conversational — under 80 words for questions, under 100 words for feedback.`;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -21,23 +39,20 @@ serve(async (req) => {
     let userPrompt = "";
 
     if (action === "start") {
-      systemPrompt = `You are an expert interview coach. You will conduct a mock interview for the candidate. Be encouraging but realistic. Ask one question at a time and wait for the answer before proceeding.`;
-      userPrompt = `Start a mock interview for someone applying for a "${position}" role in the "${industry}" industry. Begin with a brief greeting and then ask the first common interview question for this role. Keep your response conversational and under 100 words.`;
+      systemPrompt = COACH_PERSONA;
+      userPrompt = `You're about to interview someone for a "${position}" role in the "${industry}" industry. Start with a natural, warm greeting — introduce yourself as Alex, mention you've been looking forward to this, maybe make a brief comment about the role or industry. Then ease into the first question naturally. Don't jump straight into "Tell me about yourself" — be more creative and specific to the role. Keep it under 80 words.`;
     } else if (action === "respond") {
-      systemPrompt = `You are an expert interview coach conducting a mock interview for a "${position}" role in the "${industry}" industry. 
-After the candidate answers, do the following in order:
-1. Give brief, specific feedback on their answer (what was good, what could improve) - 2-3 sentences max.
-2. Then ask the next interview question.
-Keep total response under 120 words. Be conversational and supportive.`;
-      userPrompt = "Continue the interview based on the conversation so far.";
+      systemPrompt = `${COACH_PERSONA}\n\nYou are currently interviewing someone for a "${position}" role in the "${industry}" industry.`;
+      userPrompt = "Based on what the candidate just said, react naturally — acknowledge their answer with a brief, genuine reaction (agreement, surprise, curiosity, or gentle pushback). Then transition smoothly into your next question. Make the transition feel organic, not scripted. Keep total response under 100 words.";
     } else if (action === "summary") {
-      systemPrompt = `You are an expert interview coach. Provide a concise performance summary for a "${position}" mock interview in "${industry}".`;
-      userPrompt = `Based on the conversation, give a brief performance summary with: 
-1. Overall rating (1-10)
-2. Top 3 strengths observed
-3. Top 3 areas to improve
-4. One key tip
-Keep it under 200 words.`;
+      systemPrompt = `${COACH_PERSONA}\n\nThe interview for a "${position}" role in "${industry}" has just ended.`;
+      userPrompt = `Wrap up the interview naturally — like you're giving candid feedback over coffee. 
+Include:
+- Your honest overall impression (rate 1-10 but frame it conversationally, like "I'd put you at about a 7 out of 10")
+- What genuinely impressed you (be specific, reference their actual answers)
+- Where they fell short and what to work on (be direct but kind)
+- One piece of advice you'd give them as a mentor, not just an interviewer
+Keep it under 200 words. Sound like a real person giving real feedback.`;
     } else {
       return new Response(JSON.stringify({ error: "Invalid action" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
