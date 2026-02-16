@@ -18,6 +18,7 @@ import { lovable } from "@/integrations/lovable/index";
 import dashboardPreview from "@/assets/dashboard-preview.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
+import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 
 const Index = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
@@ -34,6 +35,7 @@ const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
+  const localCurrency = useLocalCurrency();
   const { t } = useLanguage();
 
   // Redirect to dashboard if already authenticated
@@ -398,7 +400,7 @@ const Index = () => {
                 </div>
               </div>
               <div className="mb-6">
-                <span className="text-4xl font-extrabold">₹0</span>
+                <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
                 <span className="text-sm text-muted-foreground ml-1">forever</span>
               </div>
               <ul className="space-y-3 flex-1 mb-6">
@@ -446,7 +448,7 @@ const Index = () => {
                 </div>
               </div>
               <div className="mb-6">
-                <span className="text-4xl font-extrabold">₹299</span>
+                <span className="text-4xl font-extrabold">{localCurrency.formatProPrice()}</span>
                 <span className="text-sm text-muted-foreground ml-1">/month</span>
               </div>
               <ul className="space-y-3 flex-1 mb-6">
