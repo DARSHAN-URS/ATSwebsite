@@ -21,6 +21,7 @@ import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login");
@@ -113,7 +114,7 @@ const Index = () => {
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobBoard}</button>
             <button onClick={() => openAuth("signup")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.jobBoard.postJobs}</button>
             <Link to="/about" className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">About</Link>
-            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">Pricing</button>
+            <button onClick={() => pricingRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">Pricing</button>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher className="hidden md:inline-flex w-[110px] h-8 text-xs" />
@@ -131,7 +132,7 @@ const Index = () => {
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
             <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.jobBoard.postJobs}</button>
             <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">About</Link>
-            <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">Pricing</button>
+            <button onClick={() => { pricingRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">Pricing</button>
             <div className="pt-2 border-t border-border/60 flex items-center gap-2">
               <LanguageSwitcher className="w-[110px] h-8 text-xs" />
               <Button variant="ghost" size="sm" className="font-medium" onClick={() => { openAuth("login"); setMobileMenuOpen(false); }}>{t.nav.logIn}</Button>
@@ -372,7 +373,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
+      <section ref={pricingRef} className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Pricing</p>
