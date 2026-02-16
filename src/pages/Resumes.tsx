@@ -791,17 +791,17 @@ export default function Resumes() {
           <h1 className="text-3xl font-bold tracking-tight">{t.resumes.title}</h1>
           <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex flex-wrap gap-2 shrink-0">
           <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
           {isPro ? (
             <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
-              <Linkedin className="h-4 w-4 mr-2" />{t.resumes.importLinkedin}
+              <Linkedin className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.importLinkedin}</span><span className="sm:hidden">LinkedIn</span>
             </Button>
           ) : (
             <ProFeatureGate inline message="LinkedIn Import"><span /></ProFeatureGate>
           )}
           <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
-            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.parsing}</> : <><Upload className="h-4 w-4 mr-2" />{t.resumes.uploadResume}</>}
+            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /><span className="hidden sm:inline">{t.resumes.parsing}</span></> : <><Upload className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.uploadResume}</span><span className="sm:hidden">Upload</span></>}
           </Button>
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>

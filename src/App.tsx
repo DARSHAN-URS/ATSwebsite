@@ -65,6 +65,7 @@ const App = () => (
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/about" element={<About />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
               <Route
@@ -86,7 +87,6 @@ const App = () => (
                 <Route path="/recruiter/candidates" element={<RecruiterCandidates />} />
                 <Route path="/job-board" element={<JobBoard />} />
                 <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
-                <Route path="/pricing" element={<Pricing />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
