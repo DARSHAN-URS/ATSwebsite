@@ -9,12 +9,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase, Sparkles } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -82,6 +86,15 @@ export default function Auth() {
                     <Label htmlFor="login-password">{t.common.password}</Label>
                     <Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                   </div>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      className="text-sm text-primary hover:underline"
+                      onClick={() => { setForgotEmail(email); setForgotOpen(true); }}
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? t.common.signingIn : t.common.signIn}
                   </Button>
@@ -112,6 +125,46 @@ export default function Auth() {
             </TabsContent>
           </Tabs>
         </Card>
+
+        <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Reset Password</DialogTitle>
+              <DialogDescription>Enter your email and we'll send you a reset link.</DialogDescription>
+            </DialogHeader>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setForgotLoading(true);
+                const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+                  redirectTo: `${window.location.origin}/reset-password`,
+                });
+                setForgotLoading(false);
+                if (error) {
+                  toast({ title: "Error", description: error.message, variant: "destructive" });
+                } else {
+                  toast({ title: "Check your email", description: "We sent you a password reset link." });
+                  setForgotOpen(false);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div className="space-y-2">
+                <Label htmlFor="forgot-email">{t.common.email}</Label>
+                <Input
+                  id="forgot-email"
+                  type="email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={forgotLoading}>
+                {forgotLoading ? "Sending..." : "Send Reset Link"}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
