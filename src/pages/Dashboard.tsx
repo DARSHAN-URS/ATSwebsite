@@ -9,15 +9,8 @@ import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 
 export default function Dashboard() {
-  const { user } = useAuth();
-  const { t } = useLanguage();
   const { role } = useUserRole();
-  const navigate = useNavigate();
-
-  if (role === "recruiter") {
-    return <RecruiterDashboard />;
-  }
-
+  if (role === "recruiter") return <RecruiterDashboard />;
   return <JobSeekerDashboard />;
 }
 
@@ -60,7 +53,6 @@ function JobSeekerDashboard() {
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t.dashboard.title}</h1>
         <p className="text-muted-foreground mt-1 text-sm">{t.dashboard.welcome}</p>
       </div>
-
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {cards.map((card) => (
           <Card key={card.title} className="cursor-pointer hover:shadow-md transition-shadow" onClick={card.action}>
@@ -75,7 +67,6 @@ function JobSeekerDashboard() {
           </Card>
         ))}
       </div>
-
       <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/jobs")}>
         <CardHeader className="p-4 md:p-6">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -94,6 +85,7 @@ function JobSeekerDashboard() {
 
 function RecruiterDashboard() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [stats, setStats] = useState({ jobPosts: 0, activeJobs: 0, totalViews: 0, totalApplicants: 0 });
   const [loading, setLoading] = useState(true);
@@ -105,14 +97,11 @@ function RecruiterDashboard() {
         .from("job_posts")
         .select("id, status")
         .eq("recruiter_id", user.id);
-
       const jobList = jobs || [];
       const jobIds = jobList.map((j) => j.id);
       const activeJobs = jobList.filter((j) => j.status === "active").length;
-
       let totalViews = 0;
       let totalApplicants = 0;
-
       if (jobIds.length > 0) {
         const [{ count: viewCount }, { count: appCount }] = await Promise.all([
           supabase.from("job_post_views").select("id", { count: "exact", head: true }).in("job_post_id", jobIds),
@@ -121,26 +110,24 @@ function RecruiterDashboard() {
         totalViews = viewCount ?? 0;
         totalApplicants = appCount ?? 0;
       }
-
       setStats({ jobPosts: jobList.length, activeJobs, totalViews, totalApplicants });
       setLoading(false);
     })();
   }, [user]);
 
   const cards = [
-    { title: "Job Posts", value: stats.jobPosts, icon: Briefcase, description: `${stats.activeJobs} active`, action: () => navigate("/recruiter/jobs") },
-    { title: "Total Views", value: stats.totalViews, icon: Eye, description: "Across all posts", action: () => navigate("/recruiter/analytics") },
-    { title: "Total Applicants", value: stats.totalApplicants, icon: Users, description: "All candidates", action: () => navigate("/recruiter/candidates") },
+    { title: t.recruiterDashboard.jobPosts, value: stats.jobPosts, icon: Briefcase, description: `${stats.activeJobs} ${t.recruiterDashboard.active}`, action: () => navigate("/recruiter/jobs") },
+    { title: t.recruiterDashboard.totalViews, value: stats.totalViews, icon: Eye, description: t.recruiterDashboard.acrossAllPosts, action: () => navigate("/recruiter/analytics") },
+    { title: t.recruiterDashboard.totalApplicants, value: stats.totalApplicants, icon: Users, description: t.recruiterDashboard.allCandidates, action: () => navigate("/recruiter/candidates") },
   ];
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8">
       <SEOHead title="Recruiter Dashboard — ATS Pro" description="Manage your job posts and candidates." noindex />
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Recruiter Dashboard</h1>
-        <p className="text-muted-foreground mt-1 text-sm">Welcome back! Here's an overview of your hiring activity.</p>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t.recruiterDashboard.title}</h1>
+        <p className="text-muted-foreground mt-1 text-sm">{t.recruiterDashboard.welcome}</p>
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
         {cards.map((card) => (
           <Card key={card.title} className="cursor-pointer hover:shadow-md transition-shadow" onClick={card.action}>
@@ -155,25 +142,23 @@ function RecruiterDashboard() {
           </Card>
         ))}
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
         <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/recruiter/company")}>
           <CardHeader className="p-4 md:p-6">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Building2 className="h-4 w-4 md:h-5 md:w-5 text-primary" />
-              Company Profile
+              {t.recruiterDashboard.companyProfileTitle}
             </CardTitle>
-            <CardDescription className="text-[12px] md:text-sm">Set up your company information to display on job listings.</CardDescription>
+            <CardDescription className="text-[12px] md:text-sm">{t.recruiterDashboard.companyProfileDesc}</CardDescription>
           </CardHeader>
         </Card>
-
         <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/recruiter/jobs")}>
           <CardHeader className="p-4 md:p-6">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Briefcase className="h-4 w-4 md:h-5 md:w-5 text-primary" />
-              Post a New Job
+              {t.recruiterDashboard.postNewJob}
             </CardTitle>
-            <CardDescription className="text-[12px] md:text-sm">Create job listings and manage your open positions.</CardDescription>
+            <CardDescription className="text-[12px] md:text-sm">{t.recruiterDashboard.postNewJobDesc}</CardDescription>
           </CardHeader>
         </Card>
       </div>
