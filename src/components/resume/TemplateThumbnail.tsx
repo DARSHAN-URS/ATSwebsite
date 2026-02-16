@@ -160,6 +160,62 @@ function getThumbnailHTML(templateId: TemplateId): string {
         ${DUMMY.exp.map(e => `<div style="${s(3.5)}"><b>${e.title}</b> — ${e.company}</div>`).join("")}
       </div>`;
 
+    case "ivyleague":
+      return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3;text-align:center">
+        <div style="${s(7)}font-weight:700">${DUMMY.name}</div>
+        <div style="${s(3)}color:#666;margin-bottom:2px">${DUMMY.contact}</div>
+        <div style="border-top:1.5px solid #555;border-bottom:0.5px solid #555;height:2px;margin:3px 0"></div>
+        <div style="text-align:left">
+          <div style="${s(3.5)}font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin:3px 0 1px;border-bottom:0.5px solid #888;padding-bottom:1px">EXPERIENCE</div>
+          ${DUMMY.exp.map(e => `<div style="${s(3.5)}"><b>${e.title}</b> — ${e.company}</div>`).join("")}
+          <div style="${s(3.5)}font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin:3px 0 1px;border-bottom:0.5px solid #888;padding-bottom:1px">EDUCATION</div>
+          <div style="${s(3.5)}">${DUMMY.edu.degree}</div>
+        </div>
+      </div>`;
+
+    case "timeline":
+      return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3">
+        <div style="height:2px;background:#2962ff;margin:-8px -7px 5px"></div>
+        <div style="${s(7)}font-weight:700;color:#2962ff">${DUMMY.name}</div>
+        <div style="${s(3.5)}color:#888;margin-bottom:4px">${DUMMY.contact}</div>
+        <div style="${s(4)}font-weight:700;color:#2962ff;margin:3px 0 2px">EXPERIENCE</div>
+        ${DUMMY.exp.map((e, i) => `<div style="display:flex;gap:3px;margin-bottom:2px"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:4px;height:4px;border-radius:50%;background:#2962ff;flex-shrink:0;margin-top:1px"></div>${i < DUMMY.exp.length - 1 ? '<div style="width:0.5px;flex:1;background:#2962ff"></div>' : ''}</div><div style="${s(3.5)}"><b>${e.title}</b> — ${e.company}<br/><span style="color:#888;${s(2.5)}">${e.date}</span></div></div>`).join("")}
+      </div>`;
+
+    case "contemporary":
+      return `<div style="font-family:Arial,sans-serif;color:#222;line-height:1.3">
+        <div style="background:#10a37f;padding:5px 7px 4px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="${s(7)}font-weight:700;color:#fff">${DUMMY.name}</div>
+            <div style="${s(3)}color:#dcfff0">${DUMMY.contact}</div>
+          </div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#fff;flex-shrink:0"></div>
+        </div>
+        <div style="padding:2px 7px">
+          <div style="${s(3.5)}font-weight:700;color:#10a37f;text-transform:uppercase;border-bottom:1px solid #10a37f;margin:3px 0 2px;padding-bottom:1px">EXPERIENCE</div>
+          ${DUMMY.exp.map(e => `<div style="${s(3.5)}"><b>${e.title}</b> — ${e.company}</div>`).join("")}
+        </div>
+      </div>`;
+
+    case "polished":
+      return `<div style="display:flex;font-family:Arial,sans-serif;height:100%;color:#222;line-height:1.3">
+        <div style="width:35%;background:#a64834;color:#fff;padding:6px 5px">
+          <div style="${s(5)}font-weight:700;margin-bottom:4px">${DUMMY.name}</div>
+          <div style="${s(3)}color:#ffd2be;font-weight:700;margin-bottom:1px">CONTACT</div>
+          <div style="${s(2.5)}color:#f0d0c0">john@email.com</div>
+          <div style="${s(2.5)}color:#f0d0c0">(555) 123-4567</div>
+          <div style="${s(3)}color:#ffd2be;font-weight:700;margin:3px 0 1px">SKILLS</div>
+          <div style="${s(2.5)}color:#f0d0c0">• React</div>
+          <div style="${s(2.5)}color:#f0d0c0">• TypeScript</div>
+        </div>
+        <div style="flex:1;padding:6px 5px">
+          <div style="${s(3.5)}font-weight:700;color:#a64834;text-transform:uppercase;border-bottom:1px solid #a64834;margin-bottom:2px;padding-bottom:1px">EXPERIENCE</div>
+          ${DUMMY.exp.map(e => `<div style="${s(3)}"><b>${e.title}</b></div>`).join("")}
+          <div style="${s(3.5)}font-weight:700;color:#a64834;text-transform:uppercase;border-bottom:1px solid #a64834;margin:3px 0 2px;padding-bottom:1px">EDUCATION</div>
+          <div style="${s(3)}">${DUMMY.edu.degree}</div>
+        </div>
+      </div>`;
+
     default: // classic
       return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3">
         <div style="${s(7)}font-weight:700">${DUMMY.name}</div>

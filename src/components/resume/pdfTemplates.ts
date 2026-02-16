@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import type { ResumeData } from "./types";
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant";
+export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished";
 
 export interface ResumeTemplate {
   id: TemplateId;
@@ -24,6 +24,10 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
   { id: "ats", name: "ATS Optimized", description: "Plain text-friendly format designed to pass all ATS systems", preview: "🤖", category: "ATS" },
   { id: "simple", name: "Simple", description: "Clean and timeless with a classic balanced structure", preview: "📝", category: "Simple" },
   { id: "elegant", name: "Elegant", description: "Sophisticated design with subtle gold accents and fine lines", preview: "👔", category: "Traditional" },
+  { id: "ivyleague", name: "Ivy League", description: "Classic recruiter-approved format with clean lines and refined structure", preview: "🎓", category: "Traditional" },
+  { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern" },
+  { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
+  { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional" },
 ];
 
 interface PdfContext {
@@ -862,45 +866,369 @@ function renderElegant(doc: jsPDF, data: ResumeData, title: string) {
   renderBody(ctx, data, addSection);
 }
 
+// ─── Ivy League ────────────────────────────────────────
+function renderIvyLeague(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 22, margin: 22, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  // Name centered, classic style
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.text(pi.fullName || title || "Resume", ctx.pageWidth / 2, ctx.y, { align: "center" });
+  ctx.y += 7;
+
+  // Contact centered
+  const parts: string[] = [];
+  if (pi.email) parts.push(pi.email);
+  if (pi.phone) parts.push(pi.phone);
+  if (pi.location) parts.push(pi.location);
+  if (pi.linkedin) parts.push(pi.linkedin);
+  if (pi.portfolio) parts.push(pi.portfolio);
+  if (parts.length) {
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100);
+    doc.text(parts.join("  |  "), ctx.pageWidth / 2, ctx.y, { align: "center" });
+    doc.setTextColor(0);
+    ctx.y += 5;
+  }
+
+  // Double line separator
+  doc.setDrawColor(80);
+  doc.setLineWidth(0.6);
+  doc.line(ctx.margin, ctx.y, ctx.pageWidth - ctx.margin, ctx.y);
+  doc.setLineWidth(0.2);
+  doc.line(ctx.margin, ctx.y + 1.5, ctx.pageWidth - ctx.margin, ctx.y + 1.5);
+  ctx.y += 6;
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 14);
+    ctx.y += 5;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(80);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(80);
+    doc.setLineWidth(0.3);
+    doc.line(ctx.margin, ctx.y + 2, ctx.pageWidth - ctx.margin, ctx.y + 2);
+    doc.setLineWidth(0.2);
+    doc.setTextColor(0);
+    ctx.y += 7;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
+// ─── Timeline ──────────────────────────────────────────
+function renderTimeline(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+  const accent = { r: 41, g: 98, b: 255 };
+
+  // Blue accent bar
+  doc.setFillColor(accent.r, accent.g, accent.b);
+  doc.rect(0, 0, ctx.pageWidth, 5, "F");
+  ctx.y = 18;
+
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(accent.r, accent.g, accent.b);
+  doc.text(pi.fullName || title || "Resume", ctx.margin, ctx.y);
+  doc.setTextColor(0);
+  ctx.y += 7;
+  renderContactAndLinks(ctx, pi);
+
+  // Summary
+  if (data.summary) {
+    ctx.y += 4;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const lines = doc.splitTextToSize(data.summary, ctx.maxWidth);
+    checkPageBreak(ctx, lines.length * 5);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * 5 + 2;
+  }
+
+  // Skills
+  if ((data.skills || []).length > 0) {
+    ctx.y += 3;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(accent.r, accent.g, accent.b);
+    doc.text("SKILLS", ctx.margin, ctx.y);
+    doc.setTextColor(0);
+    ctx.y += 5;
+    doc.setFont("helvetica", "normal");
+    const lines = doc.splitTextToSize((data.skills || []).join("  •  "), ctx.maxWidth);
+    checkPageBreak(ctx, lines.length * 5);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * 5 + 2;
+  }
+
+  // Experience with timeline
+  if ((data.experience || []).length > 0) {
+    ctx.y += 4;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(accent.r, accent.g, accent.b);
+    doc.text("EXPERIENCE", ctx.margin, ctx.y);
+    doc.setTextColor(0);
+    ctx.y += 6;
+
+    const timelineX = ctx.margin + 4;
+    const contentX = ctx.margin + 12;
+    const contentWidth = ctx.maxWidth - 12;
+
+    (data.experience || []).forEach((exp, idx) => {
+      checkPageBreak(ctx, 15);
+      // Timeline dot
+      doc.setFillColor(accent.r, accent.g, accent.b);
+      doc.circle(timelineX, ctx.y - 1, 1.5, "F");
+      // Timeline line (except last)
+      if (idx < (data.experience || []).length - 1) {
+        doc.setDrawColor(accent.r, accent.g, accent.b);
+        doc.setLineWidth(0.4);
+        doc.line(timelineX, ctx.y + 1, timelineX, ctx.y + 18);
+        doc.setLineWidth(0.2);
+      }
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${exp.title} — ${exp.company}`, contentX, ctx.y);
+      const dateRange = formatDateRangePdf(exp.startDate, exp.endDate);
+      if (dateRange) {
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100);
+        doc.text(dateRange, contentX, ctx.y + 4);
+        doc.setTextColor(0);
+        ctx.y += 4;
+      }
+      ctx.y += 5;
+      doc.setFont("helvetica", "normal");
+      if (exp.bullets?.length) {
+        exp.bullets.forEach((b) => {
+          const lines = doc.splitTextToSize(`• ${b}`, contentWidth - 4);
+          checkPageBreak(ctx, lines.length * 5);
+          doc.text(lines, contentX + 2, ctx.y);
+          ctx.y += lines.length * 5;
+        });
+      }
+      ctx.y += 4;
+    });
+  }
+
+  // Education, languages, custom via standard body minus summary/skills/experience
+  const restData = { ...data, summary: undefined, skills: [], experience: [] };
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 12);
+    ctx.y += 4;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(accent.r, accent.g, accent.b);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setTextColor(0);
+    ctx.y += 6;
+  };
+  renderBody(ctx, restData, addSection);
+}
+
+// ─── Contemporary ──────────────────────────────────────
+function renderContemporary(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+  const accent = { r: 16, g: 163, b: 127 }; // teal-green
+
+  // Header with accent background
+  doc.setFillColor(accent.r, accent.g, accent.b);
+  doc.rect(0, 0, ctx.pageWidth, 36, "F");
+
+  // Photo placeholder circle (right side of header)
+  doc.setFillColor(255, 255, 255);
+  doc.circle(ctx.pageWidth - 35, 18, 12, "F");
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text("Photo", ctx.pageWidth - 35, 20, { align: "center" });
+
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255);
+  doc.text(pi.fullName || title || "Resume", ctx.margin, 16);
+
+  // Subtitle / title line
+  const parts: string[] = [];
+  if (pi.email) parts.push(pi.email);
+  if (pi.phone) parts.push(pi.phone);
+  if (pi.location) parts.push(pi.location);
+  if (parts.length) {
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(220, 255, 240);
+    doc.text(parts.join("  •  "), ctx.margin, 24);
+  }
+  const linkParts: string[] = [];
+  if (pi.linkedin) linkParts.push(pi.linkedin);
+  if (pi.portfolio) linkParts.push(pi.portfolio);
+  if (linkParts.length) {
+    doc.setFontSize(8);
+    doc.setTextColor(220, 255, 240);
+    doc.text(linkParts.join("  •  "), ctx.margin, 30);
+  }
+
+  doc.setTextColor(0);
+  ctx.y = 44;
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 14);
+    ctx.y += 5;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(accent.r, accent.g, accent.b);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(accent.r, accent.g, accent.b);
+    doc.setLineWidth(0.5);
+    doc.line(ctx.margin, ctx.y + 2, ctx.pageWidth - ctx.margin, ctx.y + 2);
+    doc.setLineWidth(0.2);
+    doc.setTextColor(0);
+    ctx.y += 8;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
+// ─── Polished ──────────────────────────────────────────
+function renderPolished(doc: jsPDF, data: ResumeData, title: string) {
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const ctx: PdfContext = { doc, y: 20, margin: 70, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin - 15;
+  const pi = data.personalInfo || {};
+  const accent = { r: 166, g: 72, b: 52 }; // warm rust
+
+  const drawSidebarBg = () => {
+    doc.setFillColor(accent.r, accent.g, accent.b);
+    doc.rect(0, 0, 60, pageHeight, "F");
+  };
+
+  drawSidebarBg();
+
+  // Name in sidebar
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255);
+  const nameLines = doc.splitTextToSize(pi.fullName || title || "Resume", 50);
+  doc.text(nameLines, 5, 20);
+  let sy = 20 + nameLines.length * 6 + 6;
+
+  // Contact in sidebar
+  const contactItems = [pi.email, pi.phone, pi.location, pi.linkedin, pi.portfolio].filter(Boolean);
+  if (contactItems.length) {
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 210, 190);
+    doc.text("CONTACT", 5, sy);
+    sy += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(240);
+    contactItems.forEach((item) => {
+      const lines = doc.splitTextToSize(item!, 50);
+      doc.text(lines, 5, sy);
+      sy += lines.length * 4 + 2;
+    });
+    sy += 3;
+  }
+
+  // Skills in sidebar
+  if ((data.skills || []).length > 0) {
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 210, 190);
+    doc.text("SKILLS", 5, sy);
+    sy += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(240);
+    doc.setFontSize(7);
+    (data.skills || []).forEach((skill) => {
+      if (sy > pageHeight - 10) return;
+      doc.text(`• ${skill}`, 5, sy);
+      sy += 4;
+    });
+  }
+
+  // Languages in sidebar
+  const langs = (data.languages || []).filter(l => l.name);
+  if (langs.length > 0) {
+    sy += 4;
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 210, 190);
+    doc.text("LANGUAGES", 5, sy);
+    sy += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(240);
+    langs.forEach((l) => {
+      if (sy > pageHeight - 10) return;
+      doc.text(`• ${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`, 5, sy);
+      sy += 4;
+    });
+  }
+
+  const originalCheckPageBreak = (needed: number) => {
+    const pageBottom = doc.internal.pageSize.getHeight() - 12;
+    if (ctx.y + needed > pageBottom) {
+      doc.addPage();
+      drawSidebarBg();
+      ctx.y = 20;
+    }
+  };
+
+  doc.setTextColor(0);
+  const addSection = (label: string) => {
+    originalCheckPageBreak(12);
+    ctx.y += 4;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(accent.r, accent.g, accent.b);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(accent.r, accent.g, accent.b);
+    doc.line(ctx.margin, ctx.y + 2, ctx.pageWidth - 15, ctx.y + 2);
+    doc.setTextColor(0);
+    ctx.y += 8;
+  };
+
+  const dataWithoutSkills = { ...data, skills: [], languages: [] };
+  renderBody(ctx, dataWithoutSkills, addSection);
+
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 2; p <= totalPages; p++) {
+    doc.setPage(p);
+    drawSidebarBg();
+  }
+  doc.setPage(totalPages);
+}
+
 // ─── Main exports ──────────────────────────────────────
 function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): jsPDF {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   switch (templateId) {
-    case "modern":
-      renderModern(doc, data, title);
-      break;
-    case "minimal":
-      renderMinimal(doc, data, title);
-      break;
-    case "executive":
-      renderExecutive(doc, data, title);
-      break;
-    case "sidebar":
-      renderSidebar(doc, data, title);
-      break;
-    case "twocolumn":
-      renderTwoColumn(doc, data, title);
-      break;
-    case "creative":
-      renderCreative(doc, data, title);
-      break;
-    case "compact":
-      renderCompact(doc, data, title);
-      break;
-    case "professional":
-      renderProfessional(doc, data, title);
-      break;
-    case "ats":
-      renderATS(doc, data, title);
-      break;
-    case "simple":
-      renderSimple(doc, data, title);
-      break;
-    case "elegant":
-      renderElegant(doc, data, title);
-      break;
-    default:
-      renderClassic(doc, data, title);
+    case "modern": renderModern(doc, data, title); break;
+    case "minimal": renderMinimal(doc, data, title); break;
+    case "executive": renderExecutive(doc, data, title); break;
+    case "sidebar": renderSidebar(doc, data, title); break;
+    case "twocolumn": renderTwoColumn(doc, data, title); break;
+    case "creative": renderCreative(doc, data, title); break;
+    case "compact": renderCompact(doc, data, title); break;
+    case "professional": renderProfessional(doc, data, title); break;
+    case "ats": renderATS(doc, data, title); break;
+    case "simple": renderSimple(doc, data, title); break;
+    case "elegant": renderElegant(doc, data, title); break;
+    case "ivyleague": renderIvyLeague(doc, data, title); break;
+    case "timeline": renderTimeline(doc, data, title); break;
+    case "contemporary": renderContemporary(doc, data, title); break;
+    case "polished": renderPolished(doc, data, title); break;
+    default: renderClassic(doc, data, title);
   }
   return doc;
 }
