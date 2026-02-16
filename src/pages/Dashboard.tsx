@@ -8,6 +8,7 @@ import { FileText, Briefcase, Bookmark, Search, Mail, Eye, Users, Building2, Tre
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
 
 const STATUS_COLORS: Record<string, string> = {
   applied: "hsl(200, 80%, 52%)",
@@ -178,6 +179,9 @@ function JobSeekerDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Job Tracker */}
+      <JobTrackerSection />
 
       {/* Find Jobs CTA */}
       <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/jobs")}>
