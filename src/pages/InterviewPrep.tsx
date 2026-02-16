@@ -142,14 +142,13 @@ export default function InterviewPrep() {
     setCurrentCoachText("");
     setPhase("thinking");
     try {
-      const text = await streamResponse({
+      await streamResponse({
         action: "summary",
         position,
         industry,
         conversation: messages,
       });
       setPhase("summary");
-      speak(text);
     } catch (e: any) {
       toast({ title: e.message, variant: "destructive" });
       setPhase("idle");
