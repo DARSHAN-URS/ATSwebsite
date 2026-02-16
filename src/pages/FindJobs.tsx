@@ -12,6 +12,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Search, Bookmark, BookmarkCheck, ExternalLink, MapPin, Building2, Clock, Sparkles, Loader2 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 import SEOHead from "@/components/SEOHead";
+import { useSubscription } from "@/hooks/useSubscription";
+import ProFeatureGate from "@/components/ProFeatureGate";
 
 type Resume = Tables<"resumes">;
 type SavedJob = Tables<"saved_jobs">;
@@ -38,6 +40,7 @@ function getScoreColor(score: number) {
 export default function FindJobs() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { isPro } = useSubscription();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>("");
   const [location, setLocation] = useState("");
@@ -174,6 +177,16 @@ export default function FindJobs() {
         </TabsList>
 
         <TabsContent value="search" className="space-y-6 mt-4">
+          {!isPro ? (
+            <ProFeatureGate message="AI Job Search">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="h-32" />
+                </CardContent>
+              </Card>
+            </ProFeatureGate>
+          ) : (
+          <>
           {/* Search filters */}
           <Card>
             <CardContent className="pt-6">
@@ -307,6 +320,8 @@ export default function FindJobs() {
               <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
               <p className="text-muted-foreground">AI is finding the best jobs for your resume...</p>
             </div>
+          )}
+          </>
           )}
         </TabsContent>
 

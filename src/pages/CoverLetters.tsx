@@ -11,6 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Download, Sparkles, Loader2 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import { useSubscription } from "@/hooks/useSubscription";
+import ProFeatureGate from "@/components/ProFeatureGate";
 
 interface CoverLetterData {
   greeting: string;
@@ -39,6 +41,7 @@ interface Resume {
 export default function CoverLetters() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { isPro } = useSubscription();
   const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
@@ -238,6 +241,12 @@ export default function CoverLetters() {
   return (
     <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
       <SEOHead title="Cover Letters — ATS Pro Resume Builder" description="Generate AI-tailored cover letters." noindex />
+      {!isPro ? (
+        <ProFeatureGate message="AI Cover Letter Generator">
+          <div className="h-64" />
+        </ProFeatureGate>
+      ) : (
+      <>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Cover Letters</h1>
@@ -317,6 +326,8 @@ export default function CoverLetters() {
             </Card>
           ))}
         </div>
+      )}
+      </>
       )}
     </div>
   );
