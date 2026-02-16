@@ -538,9 +538,9 @@ const Index = () => {
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
                 <li><button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="transition hover:text-background">{t.landing.resumeTemplates}</button></li>
                 <li><Link to="/resumes" className="transition hover:text-background">{t.landing.aiResumeGrader}</Link></li>
-                <li><Link to="/tracker" className="transition hover:text-background">{t.landing.jobTracking}</Link></li>
+                <li><Link to="/jobs" className="transition hover:text-background">{t.landing.jobTracking}</Link></li>
                 <li><Link to="/cover-letters" className="transition hover:text-background">{t.coverLetters.title}</Link></li>
-                <li><Link to="/job-board" className="transition hover:text-background">{t.nav.jobBoard}</Link></li>
+                <li><Link to="/jobs" className="transition hover:text-background">{t.nav.findJobs}</Link></li>
               </ul>
             </div>
             <div className="md:col-span-2">
