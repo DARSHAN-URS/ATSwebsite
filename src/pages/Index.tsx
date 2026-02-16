@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X, Crown, Zap, XIcon } from "lucide-react";
 import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
 import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import { Button } from "@/components/ui/button";
@@ -367,6 +367,110 @@ const Index = () => {
                 </div>
               </button>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
+        <div className="mx-auto max-w-5xl px-4 md:px-6">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Pricing</p>
+            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Simple, Transparent Pricing</h2>
+            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+              Build and download resumes for free. Upgrade to Pro to unlock AI-powered features and supercharge your job search.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
+            {/* Free Plan */}
+            <div className="rounded-xl border border-border/60 bg-card p-6 md:p-8 flex flex-col">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold">Free</h3>
+                  <p className="text-xs text-muted-foreground">Forever free, no card required</p>
+                </div>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-extrabold">₹0</span>
+                <span className="text-sm text-muted-foreground ml-1">forever</span>
+              </div>
+              <ul className="space-y-3 flex-1 mb-6">
+                {[
+                  { text: "Create & edit resumes", included: true },
+                  { text: "All 8+ professional templates", included: true },
+                  { text: "PDF download & upload", included: true },
+                  { text: "Job tracker (up to 10 jobs)", included: true },
+                  { text: "Browse job board", included: true },
+                  { text: "Pin & track companies", included: true },
+                  { text: "AI resume grading", included: false },
+                  { text: "AI one-click tailoring", included: false },
+                  { text: "AI cover letter generator", included: false },
+                  { text: "AI-powered job search", included: false },
+                  { text: "LinkedIn import", included: false },
+                  { text: "Unlimited job tracking", included: false },
+                ].map((f) => (
+                  <li key={f.text} className="flex items-center gap-2 text-[13px]">
+                    {f.included ? (
+                      <CheckCircle className="h-4 w-4 text-primary shrink-0" />
+                    ) : (
+                      <XIcon className="h-4 w-4 text-muted-foreground/40 shrink-0" />
+                    )}
+                    <span className={f.included ? "text-foreground" : "text-muted-foreground/60"}>{f.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button variant="outline" className="w-full rounded-lg font-semibold" onClick={() => openAuth("signup")}>
+                Get Started Free
+              </Button>
+            </div>
+
+            {/* Pro Plan */}
+            <div className="relative rounded-xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col shadow-lg shadow-primary/10">
+              <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-bl-lg rounded-tr-[10px]">
+                Most Popular
+              </div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Crown className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold">Pro</h3>
+                  <p className="text-xs text-muted-foreground">Unlock all premium features</p>
+                </div>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-extrabold">₹299</span>
+                <span className="text-sm text-muted-foreground ml-1">/month</span>
+              </div>
+              <ul className="space-y-3 flex-1 mb-6">
+                {[
+                  "Unlimited resumes",
+                  "All premium templates",
+                  "PDF download & upload",
+                  "AI resume grading & scoring",
+                  "AI one-click resume tailoring",
+                  "AI bullet point & summary generation",
+                  "AI cover letter generator",
+                  "AI-powered job search & matching",
+                  "LinkedIn profile import",
+                  "Unlimited job tracking",
+                  "Priority support",
+                  "Early access to new features",
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-[13px]">
+                    <CheckCircle className="h-4 w-4 text-primary shrink-0" />
+                    <span className="text-foreground">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full rounded-lg font-semibold shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
+                Start Pro Trial <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
           </div>
         </div>
       </section>
