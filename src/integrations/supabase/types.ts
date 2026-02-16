@@ -458,6 +458,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          expires_at: string | null
+          id: string
+          plan_name: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          razorpay_subscription_id: string | null
+          starts_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          id?: string
+          plan_name?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          razorpay_subscription_id?: string | null
+          starts_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          id?: string
+          plan_name?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          razorpay_subscription_id?: string | null
+          starts_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
