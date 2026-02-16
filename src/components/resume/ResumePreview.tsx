@@ -112,6 +112,8 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
 function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateId): string[] {
   if (templateId === "sidebar") return [buildSidebarHTML(data, title)];
   if (templateId === "twocolumn") return [buildTwoColumnHTML(data, title)];
+  if (templateId === "polished") return [buildPolishedHTML(data, title)];
+  if (templateId === "timeline") return [buildTimelineHTML(data, title)];
 
   const pi = data.personalInfo || {};
   const contactParts: string[] = [];
@@ -191,6 +193,10 @@ function sectionHeader(label: string, templateId: TemplateId): string {
       return `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700">${escapeHtml(label)}</span><div style="border-bottom:1px solid #ccc;margin-top:2px"></div></div>`;
     case "elegant":
       return `<div style="margin:12px 0 6px"><span style="font-size:10px;font-weight:700;color:#b49146;text-transform:uppercase;letter-spacing:1px">${escapeHtml(label)}</span><div style="border-bottom:1px solid #b49146;margin-top:2px"></div></div>`;
+    case "ivyleague":
+      return `<div style="margin:12px 0 6px"><span style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px">${escapeHtml(label)}</span><div style="border-bottom:0.5px solid #888;margin-top:2px"></div></div>`;
+    case "contemporary":
+      return `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700;color:#10a37f;text-transform:uppercase">${escapeHtml(label)}</span><div style="border-bottom:1.5px solid #10a37f;margin-top:2px"></div></div>`;
     default: // classic
       return `<div style="border-bottom:1px solid #ccc;margin:12px 0 6px;padding-bottom:3px"><span style="font-size:11px;font-weight:700">${escapeHtml(label)}</span></div>`;
   }
@@ -280,6 +286,24 @@ function getTemplateStyles(templateId: TemplateId) {
         nameStyle: "font-size:20px;font-weight:700;color:#3c3c3c;text-align:center;margin-bottom:4px",
         contactStyle: "font-size:9px;color:#666;margin:0 0 2px;text-align:center",
         linkStyle: "font-size:9px;color:#b49146;margin:0 0 2px;text-align:center",
+      };
+    case "ivyleague":
+      return {
+        container: base,
+        headerBefore: "",
+        headerAfter: `<div style="border-top:1.5px solid #555;border-bottom:0.5px solid #555;height:2px;margin:4px 0 8px"></div>`,
+        nameStyle: "font-size:22px;font-weight:700;text-align:center;margin-bottom:4px",
+        contactStyle: "font-size:8px;color:#666;margin:0 0 2px;text-align:center",
+        linkStyle: "font-size:8px;color:#333;margin:0 0 2px;text-align:center",
+      };
+    case "contemporary":
+      return {
+        container: base,
+        headerBefore: `<div style="background:#10a37f;margin:-28px -24px 0;padding:16px 24px 12px;display:flex;justify-content:space-between;align-items:center"><div>`,
+        headerAfter: `</div><div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.3);flex-shrink:0"></div></div><div style="height:10px"></div>`,
+        nameStyle: "font-size:20px;font-weight:700;color:#fff;margin-bottom:4px",
+        contactStyle: "font-size:8px;color:#dcfff0;margin:0 0 2px",
+        linkStyle: "font-size:8px;color:#dcfff0;margin:0",
       };
     default: // classic
       return {
@@ -378,6 +402,103 @@ function buildTwoColumnHTML(data: ResumeData, title: string): string {
     </div>
   </div>`;
 }
+function buildTimelineHTML(data: ResumeData, title: string): string {
+  const pi = data.personalInfo || {};
+  const name = pi.fullName || title || "Resume";
+  const contactParts = [pi.email, pi.phone, pi.location].filter(Boolean);
+  const linkParts = [pi.linkedin, pi.portfolio].filter(Boolean);
+
+  const experienceHtml = (data.experience || []).map((exp, idx) => {
+    const bulletsHtml = exp.bullets?.length
+      ? `<ul style="margin:2px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:2px;font-size:10px;line-height:1.5">${escapeHtml(b)}</li>`).join("")}</ul>`
+      : exp.description ? `<p style="font-size:10px;margin:2px 0 0;color:#444">${escapeHtml(exp.description)}</p>` : "";
+    const dateStr = formatDateRange(exp.startDate, exp.endDate);
+    return `<div style="display:flex;gap:10px;margin-bottom:8px;padding-bottom:4px">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:12px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#2962ff;flex-shrink:0;margin-top:2px"></div>
+        ${idx < (data.experience || []).length - 1 ? '<div style="width:1px;flex:1;background:#2962ff;min-height:20px"></div>' : ''}
+      </div>
+      <div style="flex:1">
+        <strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span>
+        ${dateStr ? `<div style="font-size:9px;color:#666">${escapeHtml(dateStr)}</div>` : ""}
+        ${bulletsHtml}
+      </div>
+    </div>`;
+  }).join("");
+
+  const educationHtml = (data.education || []).map((edu) => {
+    const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year ? edu.year : "");
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;margin:2px 0"><div><strong style="font-size:10px">${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}</div>${dateStr ? `<span style="font-size:9px;color:#666">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+  }).join("");
+
+  const skillsText = (data.skills || []).map(escapeHtml).join("  •  ");
+  const customHtml = (data.customSections || []).filter(s => s.title).map((s) => {
+    const items = s.items.filter(Boolean).map(item => `<p style="font-size:10px;margin:1px 0 1px 8px">• ${escapeHtml(item)}</p>`).join("");
+    return `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700;color:#2962ff;text-transform:uppercase">${escapeHtml(s.title)}</span></div>${items}`;
+  }).join("");
+  const languagesHtml = (data.languages || []).filter(l => l.name).map(l =>
+    `<span style="font-size:10px">${escapeHtml(l.name)}${l.proficiency ? ` (${escapeHtml(l.proficiency)})` : ""}</span>`
+  ).join("  •  ");
+
+  return `<div style="font-family:Helvetica,Arial,sans-serif;padding:28px 24px;color:#222;line-height:1.4">
+    <div style="height:5px;background:#2962ff;margin:-28px -24px 16px"></div>
+    <div style="font-size:22px;font-weight:700;color:#2962ff;margin-bottom:3px">${escapeHtml(name)}</div>
+    ${contactParts.length ? `<p style="font-size:9px;color:#555;margin:0 0 2px">${contactParts.join("  •  ")}</p>` : ""}
+    ${linkParts.length ? `<p style="font-size:9px;color:#2962ff;margin:0 0 4px">${linkParts.join("  •  ")}</p>` : ""}
+    ${data.summary ? `<p style="font-size:10px;line-height:1.5;margin:8px 0">${escapeHtml(data.summary)}</p>` : ""}
+    ${skillsText ? `<div style="margin:8px 0 6px"><span style="font-size:10px;font-weight:700;color:#2962ff;text-transform:uppercase">Skills</span></div><p style="font-size:10px;margin:0">${skillsText}</p>` : ""}
+    ${experienceHtml ? `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700;color:#2962ff;text-transform:uppercase">Experience</span></div>${experienceHtml}` : ""}
+    ${educationHtml ? `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700;color:#2962ff;text-transform:uppercase">Education</span></div>${educationHtml}` : ""}
+    ${languagesHtml ? `<div style="margin:12px 0 6px"><span style="font-size:11px;font-weight:700;color:#2962ff;text-transform:uppercase">Languages</span></div><p style="font-size:10px;margin:0">${languagesHtml}</p>` : ""}
+    ${customHtml}
+  </div>`;
+}
+
+function buildPolishedHTML(data: ResumeData, title: string): string {
+  const pi = data.personalInfo || {};
+  const name = pi.fullName || title || "Resume";
+  const contactItems = [pi.email, pi.phone, pi.location, pi.linkedin, pi.portfolio].filter(Boolean);
+  const skillsHtml = (data.skills || []).map(s => `<p style="font-size:9px;margin:1px 0;color:#f0d0c0">• ${escapeHtml(s)}</p>`).join("");
+  const langsHtml = (data.languages || []).filter(l => l.name).map(l =>
+    `<p style="font-size:9px;margin:1px 0;color:#f0d0c0">• ${escapeHtml(l.name)}${l.proficiency ? ` (${escapeHtml(l.proficiency)})` : ""}</p>`
+  ).join("");
+
+  const experienceHtml = (data.experience || []).map((exp) => {
+    const bulletsHtml = exp.bullets?.length
+      ? `<ul style="margin:2px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map((b) => `<li style="margin-bottom:2px;font-size:10px;line-height:1.5">${escapeHtml(b)}</li>`).join("")}</ul>`
+      : exp.description ? `<p style="font-size:10px;margin:2px 0 0;color:#444">${escapeHtml(exp.description)}</p>` : "";
+    const dateStr = formatDateRange(exp.startDate, exp.endDate);
+    return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:10px">${escapeHtml(exp.title)}</strong><span style="font-size:10px"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:9px;color:#666;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>${bulletsHtml}</div>`;
+  }).join("");
+
+  const educationHtml = (data.education || []).map((edu) => {
+    const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year ? edu.year : "");
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;margin:2px 0"><div><strong style="font-size:10px">${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}</div>${dateStr ? `<span style="font-size:9px;color:#666;white-space:nowrap">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+  }).join("");
+
+  const customHtml = (data.customSections || []).filter(s => s.title).map((s) => {
+    const items = s.items.filter(Boolean).map(item => `<p style="font-size:10px;margin:1px 0 1px 8px">• ${escapeHtml(item)}</p>`).join("");
+    return `<div style="margin-top:8px"><span style="font-size:10px;font-weight:700;color:#a64834;text-transform:uppercase">${escapeHtml(s.title)}</span><div style="border-bottom:1px solid #a64834;margin:2px 0 4px"></div>${items}</div>`;
+  }).join("");
+
+  const sectionLabel = (l: string) => `<div style="margin-top:8px"><span style="font-size:10px;font-weight:700;color:#a64834;text-transform:uppercase">${escapeHtml(l)}</span><div style="border-bottom:1px solid #a64834;margin:2px 0 4px"></div></div>`;
+
+  return `<div style="display:flex;font-family:Helvetica,Arial,sans-serif;min-height:100%;color:#222">
+    <div style="width:35%;background:#a64834;color:#fff;padding:20px 12px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px;word-break:break-word">${escapeHtml(name)}</div>
+      ${contactItems.length ? `<div style="margin-bottom:10px"><p style="font-size:8px;font-weight:700;color:#ffd2be;text-transform:uppercase;margin-bottom:4px">Contact</p>${contactItems.map(c => `<p style="font-size:8px;color:#f0d0c0;margin:2px 0;word-break:break-all">${escapeHtml(c!)}</p>`).join("")}</div>` : ""}
+      ${skillsHtml ? `<div style="margin-bottom:10px"><p style="font-size:8px;font-weight:700;color:#ffd2be;text-transform:uppercase;margin-bottom:4px">Skills</p>${skillsHtml}</div>` : ""}
+      ${langsHtml ? `<div><p style="font-size:8px;font-weight:700;color:#ffd2be;text-transform:uppercase;margin-bottom:4px">Languages</p>${langsHtml}</div>` : ""}
+    </div>
+    <div style="flex:1;padding:20px 16px">
+      ${data.summary ? `${sectionLabel("Summary")}<p style="font-size:10px;line-height:1.5;margin:0 0 8px">${escapeHtml(data.summary)}</p>` : ""}
+      ${experienceHtml ? `${sectionLabel("Experience")}${experienceHtml}` : ""}
+      ${educationHtml ? `${sectionLabel("Education")}${educationHtml}` : ""}
+      ${customHtml}
+    </div>
+  </div>`;
+}
+
 function escapeHtml(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
