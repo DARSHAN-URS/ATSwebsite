@@ -99,11 +99,11 @@ export default function AppLayout() {
   return (
     <div className="flex h-screen overflow-hidden">
       {isMobile && (
-        <header className="fixed top-0 left-0 right-0 z-40 h-14 flex items-center px-4 border-b bg-background">
+        <header className="fixed top-0 left-0 right-0 z-40 h-12 flex items-center px-3 border-b bg-background">
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground flex flex-col">
@@ -112,7 +112,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <img src={logo} alt="ATS Pro Resume Builder" className="h-[72px]" />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-10" />
           </div>
         </header>
       )}
@@ -123,7 +123,7 @@ export default function AppLayout() {
         </aside>
       )}
 
-      <main className={cn("flex-1 overflow-auto", isMobile && "pt-14")}>
+      <main className={cn("flex-1 overflow-auto", isMobile && "pt-12")}>
         <Outlet />
       </main>
     </div>
