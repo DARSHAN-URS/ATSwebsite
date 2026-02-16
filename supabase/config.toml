@@ -20,3 +20,9 @@ verify_jwt = false
 
 [functions.sync-linkedin]
 verify_jwt = false
+
+[functions.razorpay-order]
+verify_jwt = false
+
+[functions.razorpay-verify]
+verify_jwt = false
