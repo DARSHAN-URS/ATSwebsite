@@ -401,7 +401,7 @@ const Index = () => {
               </p>
               {/* Social Media Icons */}
               <div className="mt-6 flex items-center gap-3">
-                <a href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-lg bg-background/10 text-background/60 transition hover:bg-primary hover:text-primary-foreground">
+                <a href="https://www.facebook.com/share/18EkeUXY8P/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-lg bg-background/10 text-background/60 transition hover:bg-primary hover:text-primary-foreground">
                   <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
                 <a href="https://www.instagram.com/atsproresumebuilder?igsh=eGg2M3FmaTF5NGRw" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-lg bg-background/10 text-background/60 transition hover:bg-primary hover:text-primary-foreground">
@@ -439,7 +439,7 @@ const Index = () => {
             <div className="md:col-span-2">
               <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.connect}</h4>
               <ul className="space-y-2.5 text-[13px] text-background/70">
-                <li><a href="#" className="transition hover:text-background">Facebook</a></li>
+                <li><a href="https://www.facebook.com/share/18EkeUXY8P/" target="_blank" rel="noopener noreferrer" className="transition hover:text-background">Facebook</a></li>
                 <li><a href="https://www.instagram.com/atsproresumebuilder?igsh=eGg2M3FmaTF5NGRw" target="_blank" rel="noopener noreferrer" className="transition hover:text-background">Instagram</a></li>
                 <li><a href="https://x.com/Atspro_official" target="_blank" rel="noopener noreferrer" className="transition hover:text-background">Twitter / X</a></li>
                 <li><a href="https://www.linkedin.com/company/ats-pro-resume-builder/" target="_blank" rel="noopener noreferrer" className="transition hover:text-background">LinkedIn</a></li>
