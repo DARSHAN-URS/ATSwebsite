@@ -150,16 +150,16 @@ const Index = () => {
 
       {/* Hero — geometric accent line */}
       <section className="relative overflow-hidden py-12 md:py-36">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,hsl(220_13%_91%/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(220_13%_91%/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,hsl(36_15%_88%/0.4)_1px,transparent_1px),linear-gradient(to_bottom,hsl(36_15%_88%/0.4)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-[400px] md:w-[600px] h-[400px] md:h-[600px] rounded-full bg-primary/[0.04] blur-3xl" />
         <div className="mx-auto max-w-3xl px-5 text-center">
           <div className="mb-4 md:mb-7 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-[11px] md:text-xs font-medium text-muted-foreground shadow-sm">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
             {t.landing.heroTagline}
           </div>
-          <h1 className="text-[1.75rem] font-extrabold leading-[1.15] tracking-tight sm:text-[2rem] md:text-[3.5rem]">
+          <h1 className="font-serif text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-[2rem] md:text-[3.5rem]">
             {t.landing.heroTitle}{" "}
-            <span className="text-primary">{t.landing.heroHighlight}</span>
+            <span className="italic">{t.landing.heroHighlight}</span>
           </h1>
           <p className="mx-auto mt-4 md:mt-6 max-w-xl text-[13px] leading-relaxed text-muted-foreground md:text-base px-2 sm:px-0">
             {t.landing.heroDesc}
@@ -185,7 +185,7 @@ const Index = () => {
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.features}</p>
-            <h2 className="text-lg font-bold tracking-tight md:text-3xl">{t.landing.featuresTitle}</h2>
+            <h2 className="font-serif text-lg font-bold tracking-tight md:text-3xl">{t.landing.featuresTitle}</h2>
             <p className="mx-auto mt-2 md:mt-3 max-w-lg text-[13px] md:text-sm text-muted-foreground">
               {t.landing.featuresDesc}
             </p>
@@ -212,7 +212,7 @@ const Index = () => {
         <div className="mx-auto grid max-w-7xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.theProblem}</p>
-            <h2 className="text-xl font-bold tracking-tight md:text-3xl">
+            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">
               {t.landing.whyFailTitle}
             </h2>
             <ul className="mt-8 space-y-5">
@@ -247,7 +247,7 @@ const Index = () => {
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.testimonials}</p>
-            <h2 className="text-lg font-bold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
+            <h2 className="font-serif text-lg font-bold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
           </div>
 
           {/* Stats */}
@@ -303,7 +303,7 @@ const Index = () => {
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.forRecruiters}</p>
-              <h2 className="text-xl font-bold tracking-tight md:text-3xl">
+              <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">
                 {t.landing.postJobsTitle}
               </h2>
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-md">
@@ -349,7 +349,7 @@ const Index = () => {
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.templates}</p>
-            <h2 className="text-xl font-bold tracking-tight md:text-3xl">{t.landing.professionalTemplates}</h2>
+            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">{t.landing.professionalTemplates}</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
               {t.landing.templatesCount}
             </p>
@@ -384,7 +384,7 @@ const Index = () => {
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Pricing</p>
-            <h2 className="text-xl font-bold tracking-tight md:text-3xl">Simple, Transparent Pricing</h2>
+            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">Simple, Transparent Pricing</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
               Build and download resumes for free. Upgrade to Pro to unlock AI-powered features and supercharge your job search.
             </p>
@@ -488,7 +488,7 @@ const Index = () => {
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto max-w-2xl px-4">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono text-center">{t.landing.faq}</p>
-          <h2 className="mb-8 md:mb-10 text-center text-xl font-bold tracking-tight md:text-3xl">{t.landing.faqTitle}</h2>
+          <h2 className="font-serif mb-8 md:mb-10 text-center text-xl font-bold tracking-tight md:text-3xl">{t.landing.faqTitle}</h2>
           <Accordion type="single" collapsible className="w-full">
             {[
               { q: t.landing.faq1q, a: t.landing.faq1a },
