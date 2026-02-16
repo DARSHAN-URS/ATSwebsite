@@ -20,7 +20,7 @@ import TermsOfService from "@/pages/TermsOfService";
 import NotFound from "@/pages/NotFound";
 import RoleSelection from "@/pages/RoleSelection";
 import RecruiterJobs from "@/pages/RecruiterJobs";
-import JobBoard from "@/pages/JobBoard";
+
 import RecruiterAnalytics from "@/pages/RecruiterAnalytics";
 import RecruiterCompany from "@/pages/RecruiterCompany";
 import RecruiterApplicants from "@/pages/RecruiterApplicants";
@@ -86,7 +86,7 @@ const App = () => (
                 <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
                 <Route path="/recruiter/jobs/:jobId/applicants" element={<RecruiterApplicants />} />
                 <Route path="/recruiter/candidates" element={<RecruiterCandidates />} />
-                <Route path="/job-board" element={<JobBoard />} />
+                
                 <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
                 
                 
