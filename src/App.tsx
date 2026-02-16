@@ -27,6 +27,7 @@ import RecruiterApplicants from "@/pages/RecruiterApplicants";
 import RecruiterCandidates from "@/pages/RecruiterCandidates";
 import About from "@/pages/About";
 import Pricing from "@/pages/Pricing";
+import ResetPassword from "@/pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/about" element={<About />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
               <Route
                 element={
