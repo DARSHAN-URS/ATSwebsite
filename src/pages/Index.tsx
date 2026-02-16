@@ -32,6 +32,9 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -657,6 +660,15 @@ const Index = () => {
                     </button>
                   </div>
                 </div>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    className="text-sm text-primary hover:underline"
+                    onClick={() => { setForgotEmail(email); setForgotOpen(true); }}
+                  >
+                    Forgot password?
+                  </button>
+                </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? t.common.signingIn : t.common.signIn}
                 </Button>
@@ -722,6 +734,46 @@ const Index = () => {
               </form>
             </TabsContent>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reset Password</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">Enter your email and we'll send you a reset link.</p>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setForgotLoading(true);
+              const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+                redirectTo: `${window.location.origin}/reset-password`,
+              });
+              setForgotLoading(false);
+              if (error) {
+                toast({ title: "Error", description: error.message, variant: "destructive" });
+              } else {
+                toast({ title: "Check your email", description: "We sent you a password reset link." });
+                setForgotOpen(false);
+              }
+            }}
+            className="space-y-4"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="forgot-email">{t.common.email}</Label>
+              <Input
+                id="forgot-email"
+                type="email"
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={forgotLoading}>
+              {forgotLoading ? "Sending..." : "Send Reset Link"}
+            </Button>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
