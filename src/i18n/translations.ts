@@ -33,6 +33,7 @@ const en = {
     candidates: "Candidates",
     pricing: "Pricing",
     atsScanner: "ATS Scanner",
+    interviewPrep: "Interview Prep",
   },
   common: {
     save: "Save",
@@ -463,6 +464,7 @@ const ar: TranslationKeys = {
     candidates: "المرشحون",
     pricing: "الأسعار",
     atsScanner: "ماسح ATS",
+    interviewPrep: "تحضير المقابلة",
   },
   common: {
     save: "حفظ",
@@ -883,6 +885,7 @@ const es: TranslationKeys = {
     candidates: "Candidatos",
     pricing: "Precios",
     atsScanner: "Escáner ATS",
+    interviewPrep: "Preparación Entrevista",
   },
   common: {
     save: "Guardar",
@@ -1303,6 +1306,7 @@ const fr: TranslationKeys = {
     candidates: "Candidats",
     pricing: "Tarifs",
     atsScanner: "Scan ATS",
+    interviewPrep: "Prépa Entretien",
   },
   common: {
     save: "Enregistrer",
@@ -1723,6 +1727,7 @@ const hi: TranslationKeys = {
     candidates: "उम्मीदवार",
     pricing: "मूल्य निर्धारण",
     atsScanner: "ATS स्कैनर",
+    interviewPrep: "साक्षात्कार तैयारी",
   },
   common: {
     save: "सहेजें",
@@ -2143,6 +2148,7 @@ const pt: TranslationKeys = {
     candidates: "Candidatos",
     pricing: "Preços",
     atsScanner: "Scanner ATS",
+    interviewPrep: "Prep. Entrevista",
   },
   common: {
     save: "Salvar",

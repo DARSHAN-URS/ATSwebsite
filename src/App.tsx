@@ -28,6 +28,7 @@ import RecruiterCandidates from "@/pages/RecruiterCandidates";
 import About from "@/pages/About";
 import Pricing from "@/pages/Pricing";
 import ResetPassword from "@/pages/ResetPassword";
+import InterviewPrep from "@/pages/InterviewPrep";
 
 
 const queryClient = new QueryClient();
@@ -81,6 +82,7 @@ const App = () => (
                 <Route path="/cover-letters" element={<CoverLetters />} />
                 <Route path="/jobs" element={<FindJobs />} />
                 <Route path="/companies" element={<Companies />} />
+                <Route path="/interview-prep" element={<InterviewPrep />} />
                 
                 <Route path="/recruiter/company" element={<RecruiterCompany />} />
                 <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
