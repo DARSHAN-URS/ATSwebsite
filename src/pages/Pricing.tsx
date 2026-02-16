@@ -89,7 +89,7 @@ export default function Pricing() {
 
   return (
     <div className="container mx-auto max-w-4xl py-10 px-4">
-      <SEOHead title="Pricing — ATS Pro Resume Builder" description="Choose a plan that fits your needs." noindex />
+      <SEOHead title="Pricing — ATS Pro Resume Builder" description="Compare free and pro plans for ATS Pro Resume Builder. AI resume grading, tailoring, cover letters, and unlimited resumes starting at ₹299/month." canonical="https://atsproresumebuilder.com/pricing" keywords="resume builder pricing, ATS pro plans, AI resume subscription" />
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold tracking-tight">{t.pricingPage.title}</h1>
         <p className="mt-2 text-muted-foreground">{t.pricingPage.subtitle}</p>
