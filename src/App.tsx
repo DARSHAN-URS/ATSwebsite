@@ -12,7 +12,7 @@ import Dashboard from "@/pages/Dashboard";
 import Resumes from "@/pages/Resumes";
 import FindJobs from "@/pages/FindJobs";
 import Companies from "@/pages/Companies";
-import JobTracker from "@/pages/JobTracker";
+
 import CoverLetters from "@/pages/CoverLetters";
 import Index from "@/pages/Index";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -81,7 +81,7 @@ const App = () => (
                 <Route path="/cover-letters" element={<CoverLetters />} />
                 <Route path="/jobs" element={<FindJobs />} />
                 <Route path="/companies" element={<Companies />} />
-                <Route path="/tracker" element={<JobTracker />} />
+                
                 <Route path="/recruiter/company" element={<RecruiterCompany />} />
                 <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
                 <Route path="/recruiter/jobs/:jobId/applicants" element={<RecruiterApplicants />} />

@@ -19,7 +19,7 @@ const jobSeekerNav = [
   { to: "/jobs", icon: Search, key: "findJobs" as const },
   { to: "/job-board", icon: ClipboardList, key: "jobBoard" as const },
   { to: "/companies", icon: Building2, key: "companies" as const },
-  { to: "/tracker", icon: Briefcase, key: "jobTracker" as const },
+  
   { to: "/ats-scanner", icon: ScanSearch, key: "atsScanner" as const },
   { to: "/pricing", icon: CreditCard, key: "pricing" as const },
 ];
