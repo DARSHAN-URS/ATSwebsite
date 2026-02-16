@@ -20,8 +20,6 @@ const PLANS = [
   {
     id: "free",
     name: "Free",
-    price: 0,
-    currency: "INR",
     period: "",
     description: "Get started with basic features",
     features: [
@@ -35,8 +33,6 @@ const PLANS = [
   {
     id: "pro_monthly",
     name: "Pro",
-    price: 299,
-    currency: "INR",
     period: "/month",
     description: "Unlock all premium features",
     features: [
@@ -104,8 +100,8 @@ export default function Pricing() {
           },
           body: JSON.stringify({
             plan_name: plan.id,
-            amount: plan.price,
-            currency: plan.currency,
+            amount: localCurrency.proPrice,
+            currency: localCurrency.code,
           }),
         }
       );
@@ -237,7 +233,7 @@ export default function Pricing() {
               <CardDescription>{plan.description}</CardDescription>
               <div className="mt-4">
                 <span className="text-4xl font-extrabold">
-                  {plan.price === 0 ? localCurrency.formatPrice(0) : localCurrency.formatProPrice()}
+                  {plan.id === "free" ? localCurrency.formatPrice(0) : localCurrency.formatProPrice()}
                 </span>
                 {plan.period && (
                   <span className="text-muted-foreground text-sm">{plan.period}</span>
