@@ -8,6 +8,7 @@ import { CheckCircle, Crown, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import SEOHead from "@/components/SEOHead";
+import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 
 declare global {
   interface Window {
@@ -58,6 +59,7 @@ export default function Pricing() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [processingPlan, setProcessingPlan] = useState<string | null>(null);
+  const localCurrency = useLocalCurrency();
 
   const loadRazorpayScript = (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -235,7 +237,7 @@ export default function Pricing() {
               <CardDescription>{plan.description}</CardDescription>
               <div className="mt-4">
                 <span className="text-4xl font-extrabold">
-                  {plan.price === 0 ? "Free" : `₹${plan.price}`}
+                  {plan.price === 0 ? localCurrency.formatPrice(0) : localCurrency.formatProPrice()}
                 </span>
                 {plan.period && (
                   <span className="text-muted-foreground text-sm">{plan.period}</span>
