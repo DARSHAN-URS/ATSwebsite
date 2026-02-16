@@ -50,10 +50,10 @@ Deno.serve(async (req) => {
 
       if (error || !data) {
         console.error("Generate link error:", error);
-        return new Response(
-          JSON.stringify({ error: error?.message || "Failed to generate reset link" }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
+        // Don't reveal whether user exists - return success silently
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
       const resetLink = `${redirectTo}#access_token=${data.properties.access_token}&refresh_token=${data.properties.refresh_token}&type=recovery`;
