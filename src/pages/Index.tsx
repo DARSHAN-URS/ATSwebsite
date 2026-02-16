@@ -111,7 +111,7 @@ const Index = () => {
 
       {/* Navbar — clean minimal */}
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 md:h-16 max-w-6xl items-center justify-between px-4 md:px-6">
+        <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <img src={logo} alt="ATS Pro Resume Builder" className="h-10 md:h-[56px]" />
           </Link>
@@ -182,7 +182,7 @@ const Index = () => {
 
       {/* Features — clean cards with subtle left accent */}
       <section className="border-t border-border/60 py-12 md:py-24">
-        <div className="mx-auto max-w-5xl px-5 md:px-6">
+          <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.features}</p>
             <h2 className="text-lg font-bold tracking-tight md:text-3xl">{t.landing.featuresTitle}</h2>
@@ -209,7 +209,7 @@ const Index = () => {
 
       {/* Why Resumes Fail */}
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.theProblem}</p>
             <h2 className="text-xl font-bold tracking-tight md:text-3xl">
@@ -244,7 +244,7 @@ const Index = () => {
 
       {/* Testimonials */}
       <section className="border-t border-border/60 py-12 md:py-24">
-        <div className="mx-auto max-w-5xl px-5 md:px-6">
+          <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.testimonials}</p>
             <h2 className="text-lg font-bold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
@@ -299,7 +299,7 @@ const Index = () => {
 
       {/* For Recruiters CTA */}
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-4 md:px-6">
+          <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.forRecruiters}</p>
@@ -346,7 +346,7 @@ const Index = () => {
 
       {/* Resume Templates */}
       <section ref={templatesRef} id="templates" className="border-t border-border/60 py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-4 md:px-6">
+          <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.templates}</p>
             <h2 className="text-xl font-bold tracking-tight md:text-3xl">{t.landing.professionalTemplates}</h2>
@@ -381,7 +381,7 @@ const Index = () => {
 
       {/* Pricing Section */}
       <section ref={pricingRef} className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-4 md:px-6">
+          <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Pricing</p>
             <h2 className="text-xl font-bold tracking-tight md:text-3xl">Simple, Transparent Pricing</h2>
@@ -507,7 +507,7 @@ const Index = () => {
 
       {/* Footer with social media */}
       <footer className="border-t border-border/60 bg-foreground text-background">
-        <div className="mx-auto max-w-5xl px-5 md:px-6 py-10 md:py-14">
+        <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
               <img src={logo} alt="ATS Pro Resume Builder" className="h-12 md:h-[56px] brightness-0 invert mx-auto md:mx-0" />
@@ -564,7 +564,7 @@ const Index = () => {
           </div>
         </div>
         <div className="border-t border-background/10 px-4 py-4 pb-8 md:pb-16">
-          <p className="mx-auto max-w-5xl text-center text-[11px] md:text-xs text-background/40">
+          <p className="mx-auto max-w-7xl text-center text-[11px] md:text-xs text-background/40">
             © {new Date().getFullYear()} ATS Pro Resume Builder. {t.landing.copyright}
           </p>
         </div>
