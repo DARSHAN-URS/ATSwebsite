@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList, BarChart3, Users, CreditCard } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList, BarChart3, Users, CreditCard, ScanSearch, TrendingUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const jobSeekerNav = [
   { to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
@@ -19,6 +20,8 @@ const jobSeekerNav = [
   { to: "/job-board", icon: ClipboardList, key: "jobBoard" as const },
   { to: "/companies", icon: Building2, key: "companies" as const },
   { to: "/tracker", icon: Briefcase, key: "jobTracker" as const },
+  { to: "/ats-scanner", icon: ScanSearch, key: "atsScanner" as const },
+  { to: "/analytics", icon: TrendingUp, key: "analytics" as const },
   { to: "/pricing", icon: CreditCard, key: "pricing" as const },
 ];
 
@@ -65,8 +68,9 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
       </nav>
 
       <div className="p-3 space-y-2 border-t border-sidebar-border">
-        <div className="px-3">
-          <LanguageSwitcher className="w-full h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border [&>svg]:text-sidebar-foreground" />
+        <div className="px-3 flex gap-2">
+          <LanguageSwitcher className="flex-1 h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border [&>svg]:text-sidebar-foreground" />
+          <ThemeToggle className="h-8 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50" />
         </div>
         <div className="px-3 py-2 text-xs text-sidebar-foreground/50 truncate">
           {user?.email}

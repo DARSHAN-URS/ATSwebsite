@@ -32,6 +32,7 @@ const en = {
     companyProfile: "Company Profile",
     candidates: "Candidates",
     pricing: "Pricing",
+    atsScanner: "ATS Scanner",
   },
   common: {
     save: "Save",
@@ -461,6 +462,7 @@ const ar: TranslationKeys = {
     companyProfile: "ملف الشركة",
     candidates: "المرشحون",
     pricing: "الأسعار",
+    atsScanner: "ماسح ATS",
   },
   common: {
     save: "حفظ",
@@ -880,6 +882,7 @@ const es: TranslationKeys = {
     companyProfile: "Perfil de Empresa",
     candidates: "Candidatos",
     pricing: "Precios",
+    atsScanner: "Escáner ATS",
   },
   common: {
     save: "Guardar",
@@ -1299,6 +1302,7 @@ const fr: TranslationKeys = {
     companyProfile: "Profil Entreprise",
     candidates: "Candidats",
     pricing: "Tarifs",
+    atsScanner: "Scan ATS",
   },
   common: {
     save: "Enregistrer",
@@ -1718,6 +1722,7 @@ const hi: TranslationKeys = {
     companyProfile: "कंपनी प्रोफ़ाइल",
     candidates: "उम्मीदवार",
     pricing: "मूल्य निर्धारण",
+    atsScanner: "ATS स्कैनर",
   },
   common: {
     save: "सहेजें",
@@ -2137,6 +2142,7 @@ const pt: TranslationKeys = {
     companyProfile: "Perfil da Empresa",
     candidates: "Candidatos",
     pricing: "Preços",
+    atsScanner: "Scanner ATS",
   },
   common: {
     save: "Salvar",
