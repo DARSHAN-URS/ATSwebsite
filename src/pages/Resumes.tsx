@@ -314,8 +314,8 @@ export default function Resumes() {
     }));
   };
 
-  const handleExportPDF = () => {
-    generateResumePDF(resumeData, title, selectedTemplate);
+  const handleExportPDF = async () => {
+    await generateResumePDF(resumeData, title, selectedTemplate);
     toast({ title: t.resumes.pdfDownloaded });
   };
 

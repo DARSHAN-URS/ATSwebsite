@@ -1,6 +1,38 @@
 import jsPDF from "jspdf";
 import type { ResumeData } from "./types";
 
+/** Load an image URL and return a base64 data URL for jsPDF */
+async function loadImageAsBase64(url: string): Promise<string | null> {
+  if (!url) return null;
+  try {
+    const res = await fetch(url, { mode: "cors" });
+    const blob = await res.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
+/** Draw a circular-clipped photo in the PDF */
+function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, radius: number, bgColor?: { r: number; g: number; b: number }) {
+  // Draw white circle background first
+  if (bgColor) {
+    doc.setFillColor(bgColor.r, bgColor.g, bgColor.b);
+  } else {
+    doc.setFillColor(255, 255, 255);
+  }
+  doc.circle(cx, cy, radius + 0.5, "F");
+  // jsPDF doesn't support clip paths, so we add a square image and rely on the circle bg blending
+  // We'll use addImage with the image cropped to a square region
+  const imgSize = radius * 2;
+  doc.addImage(imgData, "JPEG", cx - radius, cy - radius, imgSize, imgSize);
+}
+
 export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished";
 
 export interface ResumeTemplate {
@@ -193,7 +225,7 @@ function renderExecutive(doc: jsPDF, data: ResumeData, title: string) {
 }
 
 // ─── Sidebar ───────────────────────────────────────────
-function renderSidebar(doc: jsPDF, data: ResumeData, title: string) {
+function renderSidebar(doc: jsPDF, data: ResumeData, title: string, photoData?: string | null) {
   const pageHeight = doc.internal.pageSize.getHeight();
   const ctx: PdfContext = { doc, y: 20, margin: 70, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
   ctx.maxWidth = ctx.pageWidth - ctx.margin - 15;
@@ -207,13 +239,21 @@ function renderSidebar(doc: jsPDF, data: ResumeData, title: string) {
 
   drawSidebarBg();
 
+  let sy = 16;
+
+  // Photo in sidebar
+  if (photoData) {
+    addCircularPhoto(doc, photoData, 30, sy + 10, 10, { r: 30, g: 58, b: 95 });
+    sy += 24;
+  }
+
   // Name in sidebar
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(255);
   const nameLines = doc.splitTextToSize(pi.fullName || title || "Resume", 50);
-  doc.text(nameLines, 5, 20);
-  let sy = 20 + nameLines.length * 6 + 6;
+  doc.text(nameLines, 5, sy);
+  sy += nameLines.length * 6 + 6;
 
   // Contact in sidebar
   const contactItems = [
@@ -1036,7 +1076,7 @@ function renderTimeline(doc: jsPDF, data: ResumeData, title: string) {
 }
 
 // ─── Contemporary ──────────────────────────────────────
-function renderContemporary(doc: jsPDF, data: ResumeData, title: string) {
+async function renderContemporary(doc: jsPDF, data: ResumeData, title: string) {
   const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
   ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
   const pi = data.personalInfo || {};
@@ -1046,12 +1086,17 @@ function renderContemporary(doc: jsPDF, data: ResumeData, title: string) {
   doc.setFillColor(accent.r, accent.g, accent.b);
   doc.rect(0, 0, ctx.pageWidth, 36, "F");
 
-  // Photo placeholder circle (right side of header)
-  doc.setFillColor(255, 255, 255);
-  doc.circle(ctx.pageWidth - 35, 18, 12, "F");
-  doc.setFontSize(8);
-  doc.setTextColor(150);
-  doc.text("Photo", ctx.pageWidth - 35, 20, { align: "center" });
+  // Photo circle (right side of header)
+  const photoData = pi.photoUrl ? await loadImageAsBase64(pi.photoUrl) : null;
+  if (photoData) {
+    addCircularPhoto(doc, photoData, ctx.pageWidth - 35, 18, 12, { r: accent.r, g: accent.g, b: accent.b });
+  } else {
+    doc.setFillColor(255, 255, 255);
+    doc.circle(ctx.pageWidth - 35, 18, 12, "F");
+    doc.setFontSize(8);
+    doc.setTextColor(150);
+    doc.text("Photo", ctx.pageWidth - 35, 20, { align: "center" });
+  }
 
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
@@ -1100,7 +1145,7 @@ function renderContemporary(doc: jsPDF, data: ResumeData, title: string) {
 }
 
 // ─── Polished ──────────────────────────────────────────
-function renderPolished(doc: jsPDF, data: ResumeData, title: string) {
+function renderPolished(doc: jsPDF, data: ResumeData, title: string, photoData?: string | null) {
   const pageHeight = doc.internal.pageSize.getHeight();
   const ctx: PdfContext = { doc, y: 20, margin: 70, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
   ctx.maxWidth = ctx.pageWidth - ctx.margin - 15;
@@ -1114,13 +1159,21 @@ function renderPolished(doc: jsPDF, data: ResumeData, title: string) {
 
   drawSidebarBg();
 
+  let sy = 16;
+
+  // Photo in sidebar
+  if (photoData) {
+    addCircularPhoto(doc, photoData, 30, sy + 10, 10, { r: accent.r, g: accent.g, b: accent.b });
+    sy += 24;
+  }
+
   // Name in sidebar
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(255);
   const nameLines = doc.splitTextToSize(pi.fullName || title || "Resume", 50);
-  doc.text(nameLines, 5, 20);
-  let sy = 20 + nameLines.length * 6 + 6;
+  doc.text(nameLines, 5, sy);
+  sy = sy + nameLines.length * 6 + 6;
 
   // Contact in sidebar
   const contactItems = [pi.email, pi.phone, pi.location, pi.linkedin, pi.portfolio].filter(Boolean);
@@ -1210,13 +1263,22 @@ function renderPolished(doc: jsPDF, data: ResumeData, title: string) {
 }
 
 // ─── Main exports ──────────────────────────────────────
-function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): jsPDF {
+async function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): Promise<jsPDF> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+
+  // Pre-load photo for templates that support it
+  const pi = data.personalInfo || {};
+  const photoTemplates: TemplateId[] = ["contemporary", "sidebar", "polished"];
+  let photoData: string | null = null;
+  if (pi.photoUrl && photoTemplates.includes(templateId)) {
+    photoData = await loadImageAsBase64(pi.photoUrl);
+  }
+
   switch (templateId) {
     case "modern": renderModern(doc, data, title); break;
     case "minimal": renderMinimal(doc, data, title); break;
     case "executive": renderExecutive(doc, data, title); break;
-    case "sidebar": renderSidebar(doc, data, title); break;
+    case "sidebar": renderSidebar(doc, data, title, photoData); break;
     case "twocolumn": renderTwoColumn(doc, data, title); break;
     case "creative": renderCreative(doc, data, title); break;
     case "compact": renderCompact(doc, data, title); break;
@@ -1226,22 +1288,22 @@ function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "cla
     case "elegant": renderElegant(doc, data, title); break;
     case "ivyleague": renderIvyLeague(doc, data, title); break;
     case "timeline": renderTimeline(doc, data, title); break;
-    case "contemporary": renderContemporary(doc, data, title); break;
-    case "polished": renderPolished(doc, data, title); break;
+    case "contemporary": await renderContemporary(doc, data, title); break;
+    case "polished": renderPolished(doc, data, title, photoData); break;
     default: renderClassic(doc, data, title);
   }
   return doc;
 }
 
-export function generateResumePDF(data: ResumeData, title: string, templateId: TemplateId = "classic") {
-  const doc = buildDoc(data, title, templateId);
+export async function generateResumePDF(data: ResumeData, title: string, templateId: TemplateId = "classic") {
+  const doc = await buildDoc(data, title, templateId);
   const pi = data.personalInfo || {};
   const filename = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.pdf`;
   doc.save(filename);
 }
 
-export function generateResumePDFDataUrls(data: ResumeData, title: string, templateId: TemplateId = "classic"): string[] {
-  const doc = buildDoc(data, title, templateId);
+export async function generateResumePDFDataUrls(data: ResumeData, title: string, templateId: TemplateId = "classic"): Promise<string[]> {
+  const doc = await buildDoc(data, title, templateId);
   const pageCount = doc.getNumberOfPages();
   const urls: string[] = [];
   for (let i = 1; i <= pageCount; i++) {
