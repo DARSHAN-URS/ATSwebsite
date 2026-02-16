@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList, BarChart3, Users, CreditCard, ScanSearch } from "lucide-react";
+import { Briefcase, FileText, Search, LayoutDashboard, LogOut, Mail, Menu, Building2, ClipboardList, BarChart3, Users, CreditCard } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -20,7 +20,7 @@ const jobSeekerNav = [
   { to: "/job-board", icon: ClipboardList, key: "jobBoard" as const },
   { to: "/companies", icon: Building2, key: "companies" as const },
   
-  { to: "/ats-scanner", icon: ScanSearch, key: "atsScanner" as const },
+  
   { to: "/pricing", icon: CreditCard, key: "pricing" as const },
 ];
 

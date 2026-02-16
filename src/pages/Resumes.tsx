@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin } from "lucide-react";
+import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection, LanguageItem } from "@/components/resume/types";
@@ -549,6 +550,7 @@ export default function Resumes() {
             ) : (
               <ProFeatureGate inline message="AI Grade"><span /></ProFeatureGate>
             )}
+            <ATSScannerDialog resumeData={resumeData} />
             <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.exportPDF}</span><span className="sm:hidden">PDF</span></Button>
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
           </div>
