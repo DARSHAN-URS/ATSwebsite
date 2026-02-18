@@ -29,6 +29,7 @@ import About from "@/pages/About";
 import Pricing from "@/pages/Pricing";
 import ResetPassword from "@/pages/ResetPassword";
 import InterviewPrep from "@/pages/InterviewPrep";
+import Blog from "@/pages/Blog";
 
 
 const queryClient = new QueryClient();
@@ -69,6 +70,7 @@ const App = () => (
               <Route path="/about" element={<About />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/blog" element={<Blog />} />
               <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
               <Route
                 element={
