@@ -32,3 +32,6 @@ verify_jwt = false
 
 [functions.interview-prep]
 verify_jwt = false
+
+[functions.export-resume]
+verify_jwt = false

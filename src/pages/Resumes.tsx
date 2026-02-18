@@ -13,7 +13,8 @@ import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData, PersonalInfo, CustomSection, LanguageItem } from "@/components/resume/types";
-import { generateResumePDF, type TemplateId } from "@/components/resume/pdfTemplates";
+import { type TemplateId } from "@/components/resume/pdfTemplates";
+import ResumeExportDialog from "@/components/resume/ResumeExportDialog";
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 import TemplateSelector from "@/components/resume/TemplateSelector";
@@ -322,6 +323,7 @@ export default function Resumes() {
   };
 
   const handleExportPDF = async () => {
+    const { generateResumePDF } = await import("@/components/resume/pdfTemplates");
     await generateResumePDF(resumeData, title, selectedTemplate);
     toast({ title: t.resumes.pdfDownloaded });
   };
@@ -557,7 +559,7 @@ export default function Resumes() {
               <ProFeatureGate inline message="AI Grade"><span /></ProFeatureGate>
             )}
             <ATSScannerDialog resumeData={resumeData} />
-            <Button variant="outline" size="sm" onClick={handleExportPDF}><Download className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.exportPDF}</span><span className="sm:hidden">PDF</span></Button>
+            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} />
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
           </div>
         </div>
