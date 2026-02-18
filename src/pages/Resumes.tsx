@@ -580,7 +580,7 @@ export default function Resumes() {
                 <CardDescription>{t.resumes.choosePdfStyle}</CardDescription>
               </CardHeader>
               <CardContent>
-                <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
+                <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} jobTitle={title} />
               </CardContent>
             </Card>
 

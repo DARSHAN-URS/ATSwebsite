@@ -5,6 +5,7 @@ import { Download, FileText, FileType, FileCode, Loader2, CheckCircle2, AlertTri
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { generateResumePDF, type TemplateId } from "./pdfTemplates";
+import { getATSConfig, isATSTemplateId } from "./atsTemplateConfig";
 import type { ResumeData } from "./types";
 
 interface ResumeExportDialogProps {
@@ -80,8 +81,10 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
         await generateResumePDF(resumeData, title, templateId);
         toast({ title: "PDF downloaded successfully" });
       } else {
+        const atsConfig = isATSTemplateId(templateId) ? getATSConfig(templateId) : undefined;
+        const sectionOrder = atsConfig?.sectionOrder;
         const { data, error } = await supabase.functions.invoke("export-resume", {
-          body: { resumeData, format },
+          body: { resumeData, format, sectionOrder },
         });
 
         if (error) throw error;

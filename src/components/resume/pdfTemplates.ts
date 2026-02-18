@@ -33,7 +33,9 @@ function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, r
   doc.addImage(imgData, "JPEG", cx - radius, cy - radius, imgSize, imgSize);
 }
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished";
+import { ATS_TEMPLATES, getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
+
+export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination";
 
 export interface ResumeTemplate {
   id: TemplateId;
@@ -41,6 +43,8 @@ export interface ResumeTemplate {
   description: string;
   preview: string; // emoji/icon hint
   category?: string;
+  isBestForATS?: boolean;
+  recommendedFor?: string;
 }
 
 export const RESUME_TEMPLATES: ResumeTemplate[] = [
@@ -60,6 +64,16 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
   { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern" },
   { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
   { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional" },
+  // Config-driven ATS templates
+  ...ATS_TEMPLATES.map(t => ({
+    id: t.id as TemplateId,
+    name: t.name,
+    description: t.description,
+    preview: "📋",
+    category: "ATS",
+    isBestForATS: t.isBestForATS,
+    recommendedFor: t.recommendedFor,
+  })),
 ];
 
 interface PdfContext {
@@ -715,6 +729,204 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
   });
 }
 
+
+// ─── Config-driven ATS renderer ───────────────────────
+function renderATSFromConfig(doc: jsPDF, data: ResumeData, title: string, config: ATSTemplateConfig) {
+  const ctx: PdfContext = {
+    doc, y: config.marginSize + 2,
+    margin: config.marginSize,
+    pageWidth: doc.internal.pageSize.getWidth(),
+    maxWidth: 0,
+  };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  // Name
+  doc.setFontSize(config.nameFontSize);
+  doc.setFont(config.fontFamily, "bold");
+  doc.text(pi.fullName || title || "Resume", ctx.margin, ctx.y);
+  ctx.y += config.nameFontSize * 0.35 + 2;
+
+  // Contact line
+  const contactParts: string[] = [];
+  if (pi.email) contactParts.push(pi.email);
+  if (pi.phone) contactParts.push(pi.phone);
+  if (pi.location) contactParts.push(pi.location);
+  if (contactParts.length) {
+    doc.setFontSize(config.baseFontSize - 1);
+    doc.setFont(config.fontFamily, "normal");
+    doc.text(contactParts.join("  |  "), ctx.margin, ctx.y);
+    ctx.y += config.lineSpacing;
+  }
+  const linkParts: string[] = [];
+  if (pi.linkedin) linkParts.push(pi.linkedin);
+  if (pi.portfolio) linkParts.push(pi.portfolio);
+  if (linkParts.length) {
+    doc.setFontSize(config.baseFontSize - 1);
+    doc.setFont(config.fontFamily, "normal");
+    doc.text(linkParts.join("  |  "), ctx.margin, ctx.y);
+    ctx.y += config.lineSpacing;
+  }
+
+  // Divider under header
+  doc.setDrawColor(0);
+  doc.line(ctx.margin, ctx.y, ctx.pageWidth - ctx.margin, ctx.y);
+  ctx.y += 4;
+
+  // Section heading builder
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, config.headingFontSize + 4);
+    ctx.y += 4;
+    doc.setFontSize(config.headingFontSize);
+    doc.setFont(config.fontFamily, "bold");
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(100);
+    doc.line(ctx.margin, ctx.y + 1.5, ctx.pageWidth - ctx.margin, ctx.y + 1.5);
+    ctx.y += config.headingFontSize * 0.4 + 3;
+  };
+
+  // Render sections in config order
+  renderBodyOrdered(ctx, data, addSection, config);
+}
+
+/** renderBody with configurable section order */
+function renderBodyOrdered(ctx: PdfContext, data: ResumeData, addSection: (t: string) => void, config: ATSTemplateConfig) {
+  const { doc } = ctx;
+  const ls = config.lineSpacing;
+  const fs = config.baseFontSize;
+
+  const renderSummary = () => {
+    if (!data.summary) return;
+    addSection("Summary");
+    doc.setFontSize(fs);
+    doc.setFont(config.fontFamily, "normal");
+    const lines = doc.splitTextToSize(data.summary, ctx.maxWidth);
+    checkPageBreak(ctx, lines.length * ls);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * ls;
+  };
+
+  const renderSkills = () => {
+    if (!(data.skills || []).length) return;
+    addSection("Skills");
+    doc.setFontSize(fs);
+    doc.setFont(config.fontFamily, "normal");
+    const lines = doc.splitTextToSize((data.skills || []).join("  •  "), ctx.maxWidth);
+    checkPageBreak(ctx, lines.length * ls);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * ls;
+  };
+
+  const renderExperience = () => {
+    if (!(data.experience || []).length) return;
+    addSection("Experience");
+    (data.experience || []).forEach((exp) => {
+      doc.setFontSize(fs);
+      let entryHeight = 7;
+      if (exp.bullets?.length) {
+        exp.bullets.forEach((bullet) => {
+          const bLines = doc.splitTextToSize(`•  ${bullet}`, ctx.maxWidth - 4);
+          entryHeight += bLines.length * ls;
+        });
+      } else if (exp.description) {
+        const dLines = doc.splitTextToSize(exp.description, ctx.maxWidth);
+        entryHeight += dLines.length * ls;
+      }
+      checkPageBreak(ctx, Math.min(entryHeight, 25));
+
+      doc.setFontSize(fs);
+      doc.setFont(config.fontFamily, "bold");
+      doc.text(`${exp.title} — ${exp.company}`, ctx.margin, ctx.y);
+      const dateRange = formatDateRangePdf(exp.startDate, exp.endDate);
+      if (dateRange) {
+        doc.setFontSize(fs - 1);
+        doc.setFont(config.fontFamily, "normal");
+        const dateWidth = doc.getTextWidth(dateRange);
+        doc.text(dateRange, ctx.pageWidth - ctx.margin - dateWidth, ctx.y);
+      }
+      ctx.y += ls;
+      doc.setFont(config.fontFamily, "normal");
+      if (exp.bullets?.length) {
+        exp.bullets.forEach((bullet) => {
+          const lines = doc.splitTextToSize(`•  ${bullet}`, ctx.maxWidth - 4);
+          checkPageBreak(ctx, lines.length * ls);
+          doc.text(lines, ctx.margin + 2, ctx.y);
+          ctx.y += lines.length * ls;
+        });
+      } else if (exp.description) {
+        const lines = doc.splitTextToSize(exp.description, ctx.maxWidth);
+        checkPageBreak(ctx, lines.length * ls);
+        doc.text(lines, ctx.margin, ctx.y);
+        ctx.y += lines.length * ls;
+      }
+      ctx.y += 3;
+    });
+  };
+
+  const renderEducation = () => {
+    if (!(data.education || []).length) return;
+    addSection("Education");
+    (data.education || []).forEach((edu) => {
+      doc.setFontSize(fs);
+      const dateStr = formatDateRangePdf(edu.startDate, edu.endDate) || (edu.year || "");
+      const line = `${edu.degree} — ${edu.school}`;
+      const lines = doc.splitTextToSize(line, ctx.maxWidth - (dateStr ? 50 : 0));
+      checkPageBreak(ctx, lines.length * ls + 2);
+      doc.setFont(config.fontFamily, "bold");
+      doc.text(lines, ctx.margin, ctx.y);
+      if (dateStr) {
+        doc.setFontSize(fs - 1);
+        doc.setFont(config.fontFamily, "normal");
+        const dateWidth = doc.getTextWidth(dateStr);
+        doc.text(dateStr, ctx.pageWidth - ctx.margin - dateWidth, ctx.y);
+      }
+      ctx.y += lines.length * ls + 2;
+    });
+  };
+
+  const renderLanguages = () => {
+    const langs = (data.languages || []).filter(l => l.name);
+    if (!langs.length) return;
+    addSection("Languages");
+    doc.setFontSize(fs);
+    doc.setFont(config.fontFamily, "normal");
+    const langText = langs.map(l => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join("  •  ");
+    const lines = doc.splitTextToSize(langText, ctx.maxWidth);
+    checkPageBreak(ctx, lines.length * ls);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * ls;
+  };
+
+  const renderCustom = () => {
+    (data.customSections || []).filter((s) => s.title).forEach((section) => {
+      addSection(section.title);
+      doc.setFontSize(fs);
+      doc.setFont(config.fontFamily, "normal");
+      section.items.filter(Boolean).forEach((item) => {
+        const lines = doc.splitTextToSize(`•  ${item}`, ctx.maxWidth - 4);
+        checkPageBreak(ctx, lines.length * ls);
+        doc.text(lines, ctx.margin + 2, ctx.y);
+        ctx.y += lines.length * ls;
+      });
+    });
+  };
+
+  const sectionMap: Record<ATSSection, () => void> = {
+    summary: renderSummary,
+    skills: renderSkills,
+    experience: renderExperience,
+    education: renderEducation,
+    languages: renderLanguages,
+    custom: renderCustom,
+  };
+
+  for (const sectionId of config.sectionOrder) {
+    if (config.sectionVisibility[sectionId]) {
+      sectionMap[sectionId]();
+    }
+  }
+}
+
 // ─── Professional ──────────────────────────────────────
 function renderProfessional(doc: jsPDF, data: ResumeData, title: string) {
   const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
@@ -1272,6 +1484,15 @@ async function buildDoc(data: ResumeData, title: string, templateId: TemplateId 
   let photoData: string | null = null;
   if (pi.photoUrl && photoTemplates.includes(templateId)) {
     photoData = await loadImageAsBase64(pi.photoUrl);
+  }
+
+  // Check for config-driven ATS templates first
+  if (isATSTemplateId(templateId)) {
+    const atsConfig = getATSConfig(templateId);
+    if (atsConfig) {
+      renderATSFromConfig(doc, data, title, atsConfig);
+      return doc;
+    }
   }
 
   switch (templateId) {

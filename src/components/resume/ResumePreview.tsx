@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { type TemplateId } from "./pdfTemplates";
 import type { ResumeData } from "./types";
+import { getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 import { Loader2 } from "lucide-react";
 
 const PAGE_HEIGHT = 842; // A4 proportional height at 595px width
@@ -110,6 +111,12 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
 
 // Build an HTML representation that mirrors the PDF templates
 function buildHTMLPreview(data: ResumeData, title: string, templateId: TemplateId): string[] {
+  // Config-driven ATS templates
+  if (isATSTemplateId(templateId)) {
+    const config = getATSConfig(templateId);
+    if (config) return [buildATSConfigHTML(data, title, config)];
+  }
+
   if (templateId === "sidebar") return [buildSidebarHTML(data, title)];
   if (templateId === "twocolumn") return [buildTwoColumnHTML(data, title)];
   if (templateId === "polished") return [buildPolishedHTML(data, title)];
@@ -513,4 +520,84 @@ function formatDateRange(startDate?: string, endDate?: string): string {
   if (!startDate && !endDate) return "";
   const parts = [startDate, endDate].filter(Boolean).join(" — ");
   return parts;
+}
+
+/** Config-driven ATS HTML preview builder */
+function buildATSConfigHTML(data: ResumeData, title: string, config: ATSTemplateConfig): string {
+  const pi = data.personalInfo || {};
+  const name = pi.fullName || title || "Resume";
+  const contactParts = [pi.email, pi.phone, pi.location].filter(Boolean);
+  const linkParts = [pi.linkedin, pi.portfolio].filter(Boolean);
+
+  const fsCss = `${config.baseFontSize}px`;
+  const headCss = `${config.headingFontSize}px`;
+  const nameCss = `${config.nameFontSize}px`;
+  const marginCss = `${config.marginSize * 1.2}px`;
+
+  const sectionHdr = (label: string) =>
+    `<div style="margin:${config.lineSpacing * 2.2}px 0 ${config.lineSpacing}px;border-bottom:1px solid #000;padding-bottom:2px"><span style="font-size:${headCss};font-weight:700;font-family:${config.fontFamilyCSS};text-transform:uppercase">${escapeHtml(label)}</span></div>`;
+
+  const buildSummary = () => data.summary
+    ? `${sectionHdr("Summary")}<p style="font-size:${fsCss};line-height:1.5;margin:0;font-family:${config.fontFamilyCSS}">${escapeHtml(data.summary)}</p>` : "";
+
+  const buildSkills = () => (data.skills || []).length
+    ? `${sectionHdr("Skills")}<p style="font-size:${fsCss};margin:0;font-family:${config.fontFamilyCSS}">${(data.skills || []).map(escapeHtml).join("  •  ")}</p>` : "";
+
+  const buildExperience = () => {
+    if (!(data.experience || []).length) return "";
+    const items = (data.experience || []).map((exp) => {
+      const dateStr = formatDateRange(exp.startDate, exp.endDate);
+      const bulletsHtml = exp.bullets?.length
+        ? `<ul style="margin:2px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map(b => `<li style="margin-bottom:2px;font-size:${fsCss};line-height:1.5;font-family:${config.fontFamilyCSS}">${escapeHtml(b)}</li>`).join("")}</ul>`
+        : exp.description ? `<p style="font-size:${fsCss};margin:2px 0 0;font-family:${config.fontFamilyCSS}">${escapeHtml(exp.description)}</p>` : "";
+      return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:${fsCss};font-family:${config.fontFamilyCSS}">${escapeHtml(exp.title)}</strong><span style="font-size:${fsCss};font-family:${config.fontFamilyCSS}"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:${parseInt(fsCss) - 1}px;color:#666;white-space:nowrap;font-family:${config.fontFamilyCSS}">${escapeHtml(dateStr)}</span>` : ""}</div>${bulletsHtml}</div>`;
+    }).join("");
+    return `${sectionHdr("Experience")}${items}`;
+  };
+
+  const buildEducation = () => {
+    if (!(data.education || []).length) return "";
+    const items = (data.education || []).map((edu) => {
+      const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year || "");
+      return `<div style="display:flex;justify-content:space-between;align-items:baseline;margin:2px 0"><div><strong style="font-size:${fsCss};font-family:${config.fontFamilyCSS}">${escapeHtml(edu.degree)}</strong><span style="font-size:${fsCss};font-family:${config.fontFamilyCSS}"> — ${escapeHtml(edu.school)}</span></div>${dateStr ? `<span style="font-size:${parseInt(fsCss) - 1}px;color:#666;white-space:nowrap;font-family:${config.fontFamilyCSS}">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+    }).join("");
+    return `${sectionHdr("Education")}${items}`;
+  };
+
+  const buildLanguages = () => {
+    const langs = (data.languages || []).filter(l => l.name);
+    if (!langs.length) return "";
+    return `${sectionHdr("Languages")}<p style="font-size:${fsCss};margin:0;font-family:${config.fontFamilyCSS}">${langs.map(l => `${escapeHtml(l.name)}${l.proficiency ? ` (${escapeHtml(l.proficiency)})` : ""}`).join("  •  ")}</p>`;
+  };
+
+  const buildCustom = () => {
+    return (data.customSections || []).filter(s => s.title).map(s => {
+      const items = s.items.filter(Boolean).map(item => `<p style="font-size:${fsCss};margin:1px 0 1px 8px;font-family:${config.fontFamilyCSS}">• ${escapeHtml(item)}</p>`).join("");
+      return `${sectionHdr(s.title)}${items}`;
+    }).join("");
+  };
+
+  const sectionBuilders: Record<ATSSection, () => string> = {
+    summary: buildSummary,
+    skills: buildSkills,
+    experience: buildExperience,
+    education: buildEducation,
+    languages: buildLanguages,
+    custom: buildCustom,
+  };
+
+  const sectionsHtml = config.sectionOrder
+    .filter(s => config.sectionVisibility[s])
+    .map(s => sectionBuilders[s]())
+    .join("");
+
+  return `
+    <div style="font-family:${config.fontFamilyCSS};padding:${marginCss};color:#222;line-height:1.4">
+      <div style="font-size:${nameCss};font-weight:700;margin-bottom:3px;font-family:${config.fontFamilyCSS}">${escapeHtml(name)}</div>
+      ${contactParts.length ? `<p style="font-size:${parseInt(fsCss) - 1}px;color:#333;margin:0 0 2px;font-family:${config.fontFamilyCSS}">${contactParts.join("  |  ")}</p>` : ""}
+      ${linkParts.length ? `<p style="font-size:${parseInt(fsCss) - 1}px;color:#333;margin:0 0 2px;font-family:${config.fontFamilyCSS}">${linkParts.join("  |  ")}</p>` : ""}
+      <div style="border-bottom:1px solid #000;margin:4px 0 6px"></div>
+      ${sectionsHtml}
+    </div>
+  `;
 }
