@@ -14,7 +14,14 @@ User-agent: *
 Allow: /
 Allow: /about
 Allow: /pricing
-Allow: /job-board
+Allow: /blog
+Allow: /blog/
+Allow: /ats-resume-builder
+Allow: /resume-templates
+Allow: /resume-builder-for-freshers
+Allow: /software-engineer-resume
+Allow: /interview-preparation
+Allow: /resume-download
 Allow: /privacy
 Allow: /terms
 Disallow: /dashboard
@@ -25,5 +32,6 @@ Disallow: /companies
 Disallow: /tracker
 Disallow: /recruiter/
 Disallow: /select-role
+Disallow: /interview-prep
 
 Sitemap: https://atsproresumebuilder.com/sitemap.xml

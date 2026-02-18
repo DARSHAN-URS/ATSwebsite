@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExternalLink, Calendar, Search, BookOpen } from "lucide-react";
+import { ExternalLink, Calendar, Search, BookOpen, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
+import { SEED_ARTICLES } from "@/pages/seo/BlogArticles";
 
 // ⚙️ Change this to your WordPress site URL
 const WORDPRESS_API_URL = "https://your-wordpress-site.com/wp-json/wp/v2";
@@ -130,9 +132,13 @@ export default function Blog() {
     setSearch(searchInput);
   };
 
+  const filteredSeedArticles = SEED_ARTICLES.filter((a) =>
+    !search || a.title.toLowerCase().includes(search.toLowerCase()) || a.category.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <>
-      <SEOHead title="Blog | Clever Career" description="Career tips, resume advice, and job search strategies from our blog." />
+      <SEOHead title="Career Blog — Resume Tips & Interview Advice" description="Expert career advice on ATS resumes, interview preparation, job search strategies, and more. Read free guides to land your dream job." canonical="https://atsproresumebuilder.com/blog" keywords="resume tips, interview advice, ATS resume guide, career blog, job search tips" />
       <div className="min-h-screen bg-background">
         {/* Hero */}
         <section className="border-b border-border bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-4">
@@ -144,7 +150,7 @@ export default function Blog() {
               Career Insights & Tips
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Expert advice on resumes, interviews, and landing your dream job.
+              Expert advice on <Link to="/ats-resume-builder" className="text-primary underline">ATS resumes</Link>, <Link to="/interview-preparation" className="text-primary underline">interviews</Link>, and landing your dream job.
             </p>
 
             <form onSubmit={handleSearch} className="max-w-md mx-auto flex gap-2">
@@ -162,8 +168,35 @@ export default function Blog() {
           </div>
         </section>
 
-        {/* Posts grid */}
+        {/* Seed Articles */}
+        {filteredSeedArticles.length > 0 && (
+          <section className="max-w-6xl mx-auto px-4 py-12">
+            <h2 className="text-xl font-bold mb-6">Featured Guides</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {filteredSeedArticles.map((article) => (
+                <Link key={article.slug} to={`/blog/${article.slug}`} className="group block">
+                  <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/60 bg-card">
+                    <CardHeader className="pb-2">
+                      <Badge variant="secondary" className="text-xs font-medium w-fit mb-2">{article.category}</Badge>
+                      <h3 className="text-sm font-bold leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2">{article.title}</h3>
+                    </CardHeader>
+                    <CardContent className="pb-2">
+                      <p className="text-xs text-muted-foreground line-clamp-3">{article.description}</p>
+                    </CardContent>
+                    <CardFooter className="pt-0 flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{new Date(article.date).toLocaleDateString(undefined, { year: "numeric", month: "short" })}</span>
+                      <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-opacity">Read <ArrowRight className="h-3 w-3" /></span>
+                    </CardFooter>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* WordPress Posts grid */}
         <section className="max-w-6xl mx-auto px-4 py-12">
+          {data && data.posts.length > 0 && <h2 className="text-xl font-bold mb-6">Latest Posts</h2>}
           {isError && (
             <div className="text-center py-16">
               <p className="text-destructive font-medium mb-2">Failed to load posts</p>
@@ -179,7 +212,7 @@ export default function Blog() {
               : data?.posts.map((post) => <PostCard key={post.id} post={post} />)}
           </div>
 
-          {!isLoading && data?.posts.length === 0 && (
+          {!isLoading && data?.posts.length === 0 && !isError && filteredSeedArticles.length === 0 && (
             <p className="text-center text-muted-foreground py-16">No articles found.</p>
           )}
 
@@ -203,7 +236,31 @@ export default function Blog() {
             </div>
           )}
         </section>
+
+        {/* Internal Links */}
+        <section className="border-t border-border/60 bg-secondary/30 py-10">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-lg font-bold mb-4">Explore Our Tools</h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button variant="outline" size="sm" asChild><Link to="/ats-resume-builder">ATS Resume Builder</Link></Button>
+              <Button variant="outline" size="sm" asChild><Link to="/resume-templates">Resume Templates</Link></Button>
+              <Button variant="outline" size="sm" asChild><Link to="/interview-preparation">Interview Prep</Link></Button>
+              <Button variant="outline" size="sm" asChild><Link to="/resume-builder-for-freshers">Fresher Resume</Link></Button>
+              <Button variant="outline" size="sm" asChild><Link to="/software-engineer-resume">Engineer Resume</Link></Button>
+            </div>
+          </div>
+        </section>
       </div>
+
+      {/* Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        name: "ATS Pro Resume Builder Blog",
+        url: "https://atsproresumebuilder.com/blog",
+        description: "Expert career advice on ATS resumes, interview preparation, and job search strategies.",
+        publisher: { "@type": "Organization", name: "ATS Pro Resume Builder" },
+      }) }} />
     </>
   );
 }
