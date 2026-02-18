@@ -53,6 +53,10 @@ interface ResumeData {
   languages?: LanguageItem[];
 }
 
+type SectionId = "summary" | "skills" | "experience" | "education" | "languages" | "custom";
+
+const DEFAULT_SECTION_ORDER: SectionId[] = ["summary", "skills", "experience", "education", "languages", "custom"];
+
 function formatDateRange(start?: string, end?: string): string {
   if (!start && !end) return "";
   const s = start || "";
@@ -73,7 +77,7 @@ function validateResumeData(data: ResumeData): string[] {
 }
 
 // ─── Plain Text Builder ────────────────────────────────────────────────────
-function buildPlainText(data: ResumeData): string {
+function buildPlainText(data: ResumeData, sectionOrder: SectionId[] = DEFAULT_SECTION_ORDER): string {
   const lines: string[] = [];
   const pi = data.personalInfo || {};
 
@@ -84,60 +88,73 @@ function buildPlainText(data: ResumeData): string {
   if (links) lines.push(links);
   lines.push("");
 
-  if (data.summary) {
-    lines.push("PROFESSIONAL SUMMARY");
-    lines.push("─".repeat(40));
-    lines.push(data.summary);
-    lines.push("");
-  }
-
-  if (data.skills?.length) {
-    lines.push("SKILLS");
-    lines.push("─".repeat(40));
-    lines.push(data.skills.join(", "));
-    lines.push("");
-  }
-
-  if (data.experience?.length) {
-    lines.push("EXPERIENCE");
-    lines.push("─".repeat(40));
-    for (const exp of data.experience) {
-      const dateStr = formatDateRange(exp.startDate, exp.endDate);
-      lines.push(`${exp.title} — ${exp.company}${dateStr ? `  (${dateStr})` : ""}`);
-      if (exp.bullets?.length) {
-        for (const b of exp.bullets) lines.push(`  • ${b}`);
-      } else if (exp.description) {
-        lines.push(`  ${exp.description}`);
+  const sectionBuilders: Record<SectionId, () => void> = {
+    summary: () => {
+      if (data.summary) {
+        lines.push("PROFESSIONAL SUMMARY");
+        lines.push("─".repeat(40));
+        lines.push(data.summary);
+        lines.push("");
       }
-      lines.push("");
-    }
-  }
+    },
+    skills: () => {
+      if (data.skills?.length) {
+        lines.push("SKILLS");
+        lines.push("─".repeat(40));
+        lines.push(data.skills.join(", "));
+        lines.push("");
+      }
+    },
+    experience: () => {
+      if (data.experience?.length) {
+        lines.push("EXPERIENCE");
+        lines.push("─".repeat(40));
+        for (const exp of data.experience) {
+          const dateStr = formatDateRange(exp.startDate, exp.endDate);
+          lines.push(`${exp.title} — ${exp.company}${dateStr ? `  (${dateStr})` : ""}`);
+          if (exp.bullets?.length) {
+            for (const b of exp.bullets) lines.push(`  • ${b}`);
+          } else if (exp.description) {
+            lines.push(`  ${exp.description}`);
+          }
+          lines.push("");
+        }
+      }
+    },
+    education: () => {
+      if (data.education?.length) {
+        lines.push("EDUCATION");
+        lines.push("─".repeat(40));
+        for (const edu of data.education) {
+          const dateStr = formatDateRange(edu.startDate, edu.endDate) || edu.year || "";
+          lines.push(`${edu.degree} — ${edu.school}${dateStr ? `  (${dateStr})` : ""}`);
+        }
+        lines.push("");
+      }
+    },
+    languages: () => {
+      if (data.languages?.length) {
+        lines.push("LANGUAGES");
+        lines.push("─".repeat(40));
+        lines.push(data.languages.map((l) => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join(", "));
+        lines.push("");
+      }
+    },
+    custom: () => {
+      if (data.customSections?.length) {
+        for (const sec of data.customSections) {
+          if (!sec.title) continue;
+          lines.push(sec.title.toUpperCase());
+          lines.push("─".repeat(40));
+          for (const item of sec.items.filter(Boolean)) lines.push(`  • ${item}`);
+          lines.push("");
+        }
+      }
+    },
+  };
 
-  if (data.education?.length) {
-    lines.push("EDUCATION");
-    lines.push("─".repeat(40));
-    for (const edu of data.education) {
-      const dateStr = formatDateRange(edu.startDate, edu.endDate) || edu.year || "";
-      lines.push(`${edu.degree} — ${edu.school}${dateStr ? `  (${dateStr})` : ""}`);
-    }
-    lines.push("");
-  }
-
-  if (data.languages?.length) {
-    lines.push("LANGUAGES");
-    lines.push("─".repeat(40));
-    lines.push(data.languages.map((l) => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join(", "));
-    lines.push("");
-  }
-
-  if (data.customSections?.length) {
-    for (const sec of data.customSections) {
-      if (!sec.title) continue;
-      lines.push(sec.title.toUpperCase());
-      lines.push("─".repeat(40));
-      for (const item of sec.items.filter(Boolean)) lines.push(`  • ${item}`);
-      lines.push("");
-    }
+  for (const sectionId of sectionOrder) {
+    sectionBuilders[sectionId]();
   }
 
   return lines.join("\n");
@@ -168,7 +185,7 @@ function sectionHeading(text: string): string {
   return `<w:p><w:pPr><w:spacing w:before="240" w:after="60"/><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="1" w:color="auto"/></w:pBdr><w:rPr><w:b/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t>${escapeXml(text.toUpperCase())}</w:t></w:r></w:p>`;
 }
 
-function buildDocxContent(data: ResumeData): string {
+function buildDocxContent(data: ResumeData, sectionOrder: SectionId[] = DEFAULT_SECTION_ORDER): string {
   const parts: string[] = [];
   const pi = data.personalInfo || {};
 
@@ -181,54 +198,61 @@ function buildDocxContent(data: ResumeData): string {
   const links = [pi.linkedin, pi.portfolio].filter(Boolean).join("  |  ");
   if (links) parts.push(docxParagraph(links, { size: 9 }));
 
-  // Summary
-  if (data.summary) {
-    parts.push(sectionHeading("Professional Summary"));
-    parts.push(docxParagraph(data.summary, { size: 10 }));
-  }
-
-  // Skills
-  if (data.skills?.length) {
-    parts.push(sectionHeading("Skills"));
-    parts.push(docxParagraph(data.skills.join(", "), { size: 10 }));
-  }
-
-  // Experience
-  if (data.experience?.length) {
-    parts.push(sectionHeading("Experience"));
-    for (const exp of data.experience) {
-      const dateStr = formatDateRange(exp.startDate, exp.endDate);
-      parts.push(docxParagraph(`${exp.title} — ${exp.company}${dateStr ? `  (${dateStr})` : ""}`, { bold: true, size: 10 }));
-      if (exp.bullets?.length) {
-        for (const b of exp.bullets) parts.push(docxBullet(b));
-      } else if (exp.description) {
-        parts.push(docxParagraph(exp.description, { size: 10 }));
+  const sectionBuilders: Record<SectionId, () => void> = {
+    summary: () => {
+      if (data.summary) {
+        parts.push(sectionHeading("Professional Summary"));
+        parts.push(docxParagraph(data.summary, { size: 10 }));
       }
-    }
-  }
+    },
+    skills: () => {
+      if (data.skills?.length) {
+        parts.push(sectionHeading("Skills"));
+        parts.push(docxParagraph(data.skills.join(", "), { size: 10 }));
+      }
+    },
+    experience: () => {
+      if (data.experience?.length) {
+        parts.push(sectionHeading("Experience"));
+        for (const exp of data.experience) {
+          const dateStr = formatDateRange(exp.startDate, exp.endDate);
+          parts.push(docxParagraph(`${exp.title} — ${exp.company}${dateStr ? `  (${dateStr})` : ""}`, { bold: true, size: 10 }));
+          if (exp.bullets?.length) {
+            for (const b of exp.bullets) parts.push(docxBullet(b));
+          } else if (exp.description) {
+            parts.push(docxParagraph(exp.description, { size: 10 }));
+          }
+        }
+      }
+    },
+    education: () => {
+      if (data.education?.length) {
+        parts.push(sectionHeading("Education"));
+        for (const edu of data.education) {
+          const dateStr = formatDateRange(edu.startDate, edu.endDate) || edu.year || "";
+          parts.push(docxParagraph(`${edu.degree} — ${edu.school}${dateStr ? `  (${dateStr})` : ""}`, { bold: true, size: 10 }));
+        }
+      }
+    },
+    languages: () => {
+      if (data.languages?.length) {
+        parts.push(sectionHeading("Languages"));
+        parts.push(docxParagraph(data.languages.map((l) => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join(", "), { size: 10 }));
+      }
+    },
+    custom: () => {
+      if (data.customSections?.length) {
+        for (const sec of data.customSections) {
+          if (!sec.title) continue;
+          parts.push(sectionHeading(sec.title));
+          for (const item of sec.items.filter(Boolean)) parts.push(docxBullet(item));
+        }
+      }
+    },
+  };
 
-  // Education
-  if (data.education?.length) {
-    parts.push(sectionHeading("Education"));
-    for (const edu of data.education) {
-      const dateStr = formatDateRange(edu.startDate, edu.endDate) || edu.year || "";
-      parts.push(docxParagraph(`${edu.degree} — ${edu.school}${dateStr ? `  (${dateStr})` : ""}`, { bold: true, size: 10 }));
-    }
-  }
-
-  // Languages
-  if (data.languages?.length) {
-    parts.push(sectionHeading("Languages"));
-    parts.push(docxParagraph(data.languages.map((l) => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join(", "), { size: 10 }));
-  }
-
-  // Custom sections
-  if (data.customSections?.length) {
-    for (const sec of data.customSections) {
-      if (!sec.title) continue;
-      parts.push(sectionHeading(sec.title));
-      for (const item of sec.items.filter(Boolean)) parts.push(docxBullet(item));
-    }
+  for (const sectionId of sectionOrder) {
+    sectionBuilders[sectionId]();
   }
 
   return parts.join("");
@@ -385,7 +409,8 @@ serve(async (req) => {
   }
 
   try {
-    const { resumeData, format } = await req.json();
+    const { resumeData, format, sectionOrder } = await req.json();
+    const order: SectionId[] = Array.isArray(sectionOrder) ? sectionOrder : DEFAULT_SECTION_ORDER;
 
     if (!resumeData || !format) {
       return new Response(JSON.stringify({ error: "Missing resumeData or format" }), {
@@ -411,7 +436,7 @@ serve(async (req) => {
     }
 
     if (format === "txt") {
-      const text = buildPlainText(resumeData);
+      const text = buildPlainText(resumeData, order);
       const base64 = btoa(unescape(encodeURIComponent(text)));
       return new Response(JSON.stringify({ data: base64, mimeType: "text/plain" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -419,7 +444,7 @@ serve(async (req) => {
     }
 
     if (format === "docx") {
-      const bodyXml = buildDocxContent(resumeData);
+      const bodyXml = buildDocxContent(resumeData, order);
       const zipBytes = buildDocxZip(bodyXml);
       const base64 = btoa(String.fromCharCode(...zipBytes));
       return new Response(

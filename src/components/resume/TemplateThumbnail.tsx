@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { TemplateId } from "./pdfTemplates";
+import { getATSConfig, isATSTemplateId, type ATSTemplateConfig } from "./atsTemplateConfig";
 
 const DUMMY = {
   name: "John Doe",
@@ -216,7 +217,13 @@ function getThumbnailHTML(templateId: TemplateId): string {
         </div>
       </div>`;
 
-    default: // classic
+    default: {
+      // Config-driven ATS templates
+      if (isATSTemplateId(templateId)) {
+        const config = getATSConfig(templateId);
+        if (config) return buildATSThumbnail(config);
+      }
+      // Classic fallback
       return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3">
         <div style="${s(7)}font-weight:700">${DUMMY.name}</div>
         <div style="${s(3.5)}color:#888;margin-bottom:3px">${DUMMY.contact}</div>
@@ -225,7 +232,41 @@ function getThumbnailHTML(templateId: TemplateId): string {
         <div style="border-bottom:1px solid #ccc;margin:3px 0 2px;padding-bottom:1px"><span style="${s(4)}font-weight:700">EDUCATION</span></div>
         <div style="${s(3.5)}">${DUMMY.edu.degree} — ${DUMMY.edu.school}</div>
       </div>`;
+    }
   }
+}
+
+function buildATSThumbnail(config: ATSTemplateConfig): string {
+  const s = (fontSize: number) => `font-size:${fontSize}px;font-family:${config.fontFamilyCSS};`;
+  const nameSize = Math.min(config.nameFontSize * 0.45, 9);
+  const headSize = Math.min(config.headingFontSize * 0.4, 5);
+  const baseSize = Math.min(config.baseFontSize * 0.38, 4);
+  const padSize = Math.max(config.marginSize * 0.35, 5);
+
+  const sectionLabel = (label: string) =>
+    `<div style="border-bottom:1px solid #000;margin:${config.lineSpacing * 0.6}px 0 ${config.lineSpacing * 0.3}px;padding-bottom:1px"><span style="${s(headSize)}font-weight:700;text-transform:uppercase">${label}</span></div>`;
+
+  const sectionBuilders: Record<string, () => string> = {
+    summary: () => `${sectionLabel("Summary")}<div style="${s(baseSize)}color:#444">${DUMMY.summary}</div>`,
+    skills: () => `${sectionLabel("Skills")}<div style="${s(baseSize)}">${DUMMY.skills}</div>`,
+    experience: () => `${sectionLabel("Experience")}${DUMMY.exp.map(e => `<div style="${s(baseSize)}"><b>${e.title}</b> — ${e.company} <span style="color:#888">${e.date}</span></div>`).join("")}`,
+    education: () => `${sectionLabel("Education")}<div style="${s(baseSize)}">${DUMMY.edu.degree} — ${DUMMY.edu.school}</div>`,
+    languages: () => "",
+    custom: () => "",
+  };
+
+  const content = config.sectionOrder
+    .filter(sec => config.sectionVisibility[sec])
+    .map(sec => sectionBuilders[sec]?.() || "")
+    .filter(Boolean)
+    .join("");
+
+  return `<div style="font-family:${config.fontFamilyCSS};padding:${padSize}px;color:#222;line-height:1.3">
+    <div style="${s(nameSize)}font-weight:700">${DUMMY.name}</div>
+    <div style="${s(baseSize - 0.5)}color:#888;margin-bottom:2px">${DUMMY.contact}</div>
+    <div style="border-bottom:1px solid #000;margin:2px 0 3px"></div>
+    ${content}
+  </div>`;
 }
 
 interface TemplateThumbnailProps {
