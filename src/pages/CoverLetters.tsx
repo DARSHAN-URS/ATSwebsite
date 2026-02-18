@@ -239,19 +239,14 @@ export default function CoverLetters() {
 
   // List view
   return (
-    <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
-      <SEOHead title="Cover Letters — ATS Pro Resume Builder" description="Generate AI-tailored cover letters." noindex />
+    <div className="space-y-6">
       {!isPro ? (
         <ProFeatureGate message="AI Cover Letter Generator">
           <div className="h-64" />
         </ProFeatureGate>
       ) : (
       <>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Cover Letters</h1>
-          <p className="text-muted-foreground mt-1">Generate AI-tailored cover letters from your resume.</p>
-        </div>
+      <div className="flex justify-end">
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
             <Button size="sm" className="shrink-0 self-start"><Plus className="h-4 w-4 mr-2" />New Cover Letter</Button>
