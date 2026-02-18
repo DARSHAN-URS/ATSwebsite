@@ -536,17 +536,20 @@ const Index = () => {
             <div className="md:col-span-3">
               <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.platform}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
-                <li><button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="transition hover:text-background">{t.landing.resumeTemplates}</button></li>
-                <li><Link to="/resumes" className="transition hover:text-background">{t.landing.aiResumeGrader}</Link></li>
-                <li><Link to="/jobs" className="transition hover:text-background">{t.landing.jobTracking}</Link></li>
-                <li><Link to="/cover-letters" className="transition hover:text-background">{t.coverLetters.title}</Link></li>
-                <li><Link to="/jobs" className="transition hover:text-background">{t.nav.findJobs}</Link></li>
+                <li><Link to="/ats-resume-builder" className="transition hover:text-background">ATS Resume Builder</Link></li>
+                <li><Link to="/resume-templates" className="transition hover:text-background">Resume Templates</Link></li>
+                <li><Link to="/resume-builder-for-freshers" className="transition hover:text-background">Fresher Resume Builder</Link></li>
+                <li><Link to="/software-engineer-resume" className="transition hover:text-background">Engineer Resume</Link></li>
+                <li><Link to="/interview-preparation" className="transition hover:text-background">Interview Preparation</Link></li>
+                <li><Link to="/resume-download" className="transition hover:text-background">Resume Download</Link></li>
               </ul>
             </div>
             <div className="md:col-span-2">
               <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.company}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
                 <li><Link to="/about" className="transition hover:text-background">About</Link></li>
+                <li><Link to="/blog" className="transition hover:text-background">Blog</Link></li>
+                <li><Link to="/pricing" className="transition hover:text-background">Pricing</Link></li>
                 <li><Link to="/privacy" className="transition hover:text-background">{t.landing.privacyPolicy}</Link></li>
                 <li><Link to="/terms" className="transition hover:text-background">{t.landing.termsOfService}</Link></li>
               </ul>
@@ -611,7 +614,13 @@ const Index = () => {
             name: "ATS Pro Resume Builder",
             url: "https://atsproresumebuilder.com",
             logo: "https://atsproresumebuilder.com/favicon.png",
-            sameAs: [],
+            sameAs: [
+              "https://www.facebook.com/share/18EkeUXY8P/",
+              "https://www.instagram.com/atsproresumebuilder",
+              "https://x.com/Atspro_official",
+              "https://www.linkedin.com/company/ats-pro-resume-builder/",
+              "https://www.tiktok.com/@atsproresumebuilder"
+            ],
           }),
         }}
       />

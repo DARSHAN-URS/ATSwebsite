@@ -30,6 +30,13 @@ import Pricing from "@/pages/Pricing";
 import ResetPassword from "@/pages/ResetPassword";
 import InterviewPrep from "@/pages/InterviewPrep";
 import Blog from "@/pages/Blog";
+import ATSResumeBuilderSEO from "@/pages/seo/ATSResumeBuilder";
+import ResumeTemplatesSEO from "@/pages/seo/ResumeTemplates";
+import ResumeBuilderForFreshers from "@/pages/seo/ResumeBuilderForFreshers";
+import SoftwareEngineerResume from "@/pages/seo/SoftwareEngineerResume";
+import InterviewPreparationSEO from "@/pages/seo/InterviewPreparation";
+import ResumeDownloadFormats from "@/pages/seo/ResumeDownloadFormats";
+import { BlogArticlePage } from "@/pages/seo/BlogArticles";
 
 
 const queryClient = new QueryClient();
@@ -71,6 +78,13 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogArticlePage />} />
+              <Route path="/ats-resume-builder" element={<ATSResumeBuilderSEO />} />
+              <Route path="/resume-templates" element={<ResumeTemplatesSEO />} />
+              <Route path="/resume-builder-for-freshers" element={<ResumeBuilderForFreshers />} />
+              <Route path="/software-engineer-resume" element={<SoftwareEngineerResume />} />
+              <Route path="/interview-preparation" element={<InterviewPreparationSEO />} />
+              <Route path="/resume-download" element={<ResumeDownloadFormats />} />
               <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
               <Route
                 element={
