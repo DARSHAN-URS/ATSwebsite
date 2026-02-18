@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail } from "lucide-react";
 import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
@@ -24,6 +24,8 @@ import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import ProFeatureGate from "@/components/ProFeatureGate";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CoverLetters from "@/pages/CoverLetters";
 
 type Resume = Tables<"resumes">;
 
@@ -792,12 +794,19 @@ export default function Resumes() {
   return (
     <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
       <SEOHead title="Resumes — ATS Pro Resume Builder" description="Create and manage ATS-optimized resumes." noindex />
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t.resumes.title}</h1>
-          <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
-        </div>
-        <div className="flex flex-wrap gap-2 shrink-0">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{t.resumes.title}</h1>
+        <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
+      </div>
+
+      <Tabs defaultValue="resumes" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="resumes" className="gap-2"><FileText className="h-4 w-4" />Resumes</TabsTrigger>
+          <TabsTrigger value="cover-letters" className="gap-2"><Mail className="h-4 w-4" />Cover Letters</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="resumes" className="space-y-6">
+      <div className="flex flex-wrap gap-2 justify-end shrink-0">
           <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
           {isPro ? (
             <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
@@ -843,7 +852,6 @@ export default function Resumes() {
             </div>
           </DialogContent>
         </Dialog>
-        </div>
       </div>
 
       {resumes.length === 0 ? (
@@ -918,6 +926,12 @@ export default function Resumes() {
           </div>
         </DialogContent>
       </Dialog>
+        </TabsContent>
+
+        <TabsContent value="cover-letters">
+          <CoverLetters />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
