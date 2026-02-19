@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Briefcase, ExternalLink, Mail, Trash2 } from "lucide-react";
+import { Briefcase, ExternalLink, Mail, Trash2, RefreshCw } from "lucide-react";
 import EmailComposeDialog from "./EmailComposeDialog";
+import ResendEmailDialog from "./ResendEmailDialog";
 import type { Tables } from "@/integrations/supabase/types";
 
 type JobApp = Tables<"job_applications">;
@@ -26,6 +27,7 @@ export default function JobTrackerSection() {
   const [apps, setApps] = useState<JobApp[]>([]);
   const [loading, setLoading] = useState(true);
   const [emailOpen, setEmailOpen] = useState(false);
+  const [resendOpen, setResendOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<JobApp | null>(null);
 
   const fetchApps = async () => {
@@ -58,6 +60,11 @@ export default function JobTrackerSection() {
   const openEmail = (app: JobApp) => {
     setSelectedApp(app);
     setEmailOpen(true);
+  };
+
+  const openResend = (app: JobApp) => {
+    setSelectedApp(app);
+    setResendOpen(true);
   };
 
   return (
@@ -129,6 +136,9 @@ export default function JobTrackerSection() {
                   <Button variant="ghost" size="icon" onClick={() => openEmail(app)} title="Email HR">
                     <Mail className="h-4 w-4" />
                   </Button>
+                  <Button variant="ghost" size="icon" onClick={() => openResend(app)} title="Resend email directly">
+                    <RefreshCw className="h-4 w-4 text-primary" />
+                  </Button>
                   {app.url && (
                     <Button variant="ghost" size="icon" asChild>
                       <a href={app.url} target="_blank" rel="noopener noreferrer">
@@ -149,6 +159,12 @@ export default function JobTrackerSection() {
       <EmailComposeDialog
         open={emailOpen}
         onOpenChange={setEmailOpen}
+        app={selectedApp}
+      />
+
+      <ResendEmailDialog
+        open={resendOpen}
+        onOpenChange={setResendOpen}
         app={selectedApp}
       />
     </div>
