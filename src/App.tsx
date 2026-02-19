@@ -41,6 +41,7 @@ const ResumeDownloadFormats = lazy(() => import("@/pages/seo/ResumeDownloadForma
 const BlogArticlePage = lazy(() =>
   import("@/pages/seo/BlogArticles").then((m) => ({ default: m.BlogArticlePage }))
 );
+const JobTracker = lazy(() => import("@/pages/JobTracker"));
 
 const queryClient = new QueryClient();
 
@@ -103,6 +104,7 @@ const App = () => (
                 >
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/resumes" element={<Resumes />} />
+                  <Route path="/job-tracker" element={<JobTracker />} />
                   <Route path="/cover-letters" element={<Navigate to="/resumes" replace />} />
                   <Route path="/jobs" element={<FindJobs />} />
                   <Route path="/companies" element={<Companies />} />
