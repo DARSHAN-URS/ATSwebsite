@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff, ChevronDown } from "lucide-react";
 import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
 import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import { Button } from "@/components/ui/button";
@@ -116,7 +116,37 @@ const Index = () => {
             <img src={logo} alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:invert dark:brightness-200" width={64} height={64} />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
-            <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.landing.resumeTemplates}</button>
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">
+                {t.landing.resumeTemplates} <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180" />
+              </button>
+              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
+                <div className="w-[480px] rounded-xl border border-border/60 bg-card shadow-xl shadow-foreground/5 p-4">
+                  <div className="grid grid-cols-3 gap-2">
+                    {RESUME_TEMPLATES.slice(0, 6).map((tmpl) => (
+                      <button
+                        key={tmpl.id}
+                        onClick={() => openAuth("signup")}
+                        className="group/item flex flex-col rounded-lg border border-border/40 bg-background overflow-hidden transition-all hover:border-primary/40 hover:shadow-md"
+                      >
+                        <div className="p-1">
+                          <TemplateThumbnail templateId={tmpl.id} />
+                        </div>
+                        <div className="px-2 pb-2 pt-0.5">
+                          <span className="text-[11px] font-semibold">{tmpl.name}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })}
+                    className="mt-3 w-full text-center text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                  >
+                    View all {RESUME_TEMPLATES.length} templates →
+                  </button>
+                </div>
+              </div>
+            </div>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobTracker}</button>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobBoard}</button>
             <button onClick={() => openAuth("signup")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.jobBoard.postJobs}</button>
