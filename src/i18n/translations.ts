@@ -4238,4 +4238,5 @@ const ko: TranslationKeys = {
   },
 };
 
+export { en };
 export const translations: Record<Locale, TranslationKeys> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };
