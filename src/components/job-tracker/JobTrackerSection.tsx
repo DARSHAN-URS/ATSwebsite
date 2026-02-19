@@ -48,7 +48,7 @@ export default function JobTrackerSection() {
     const client = supabase as any;
     const { data } = await client
       .from("email_outreach_history")
-      .select("id, job_application_id, recruiter_email, subject, body, sent_at, resume_id")
+      .select("id, job_application_id, recruiter_email, subject, body, sent_at, resume_id, attachments")
       .in("job_application_id", appIds)
       .order("sent_at", { ascending: false });
 
@@ -64,6 +64,7 @@ export default function JobTrackerSection() {
           body: row.body,
           sent_at: row.sent_at,
           resume_id: row.resume_id,
+          attachments: row.attachments ?? null,
         });
       }
       setEmailHistory(grouped);

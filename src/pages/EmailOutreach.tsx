@@ -95,10 +95,11 @@ export default function EmailOutreach() {
     }
   };
 
-  const saveToJobTracker = async () => {
-    if (!user) return;
+  const saveToJobTracker = async (additionalDocsToSave?: { name: string; base64: string; mimeType: string }[]): Promise<string | null> => {
+    if (!user) return null;
     try {
-      await supabase.from("job_applications").insert({
+      // Insert job application and get its id
+      const { data: appData } = await supabase.from("job_applications").insert({
         user_id: user.id,
         company,
         position,
@@ -106,9 +107,32 @@ export default function EmailOutreach() {
         date_applied: new Date().toISOString().split("T")[0],
         notes: `📧 Sent via Email Outreach on ${new Date().toLocaleDateString()}${recruiterEmail ? ` — to ${recruiterEmail}` : ""}`,
         url: null,
+        resume_id: selectedResumeId || null,
+      }).select("id").maybeSingle();
+
+      const jobAppId = appData?.id ?? null;
+
+      // Save full email details to history for Job Tracker resend
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const client = supabase as any;
+      await client.from("email_outreach_history").insert({
+        user_id: user.id,
+        job_application_id: jobAppId,
+        company,
+        position,
+        recruiter_email: recruiterEmail.trim(),
+        subject: subject.trim(),
+        body: body.trim(),
+        resume_id: selectedResumeId || null,
+        attachments: additionalDocsToSave && additionalDocsToSave.length > 0
+          ? additionalDocsToSave.map((d) => ({ name: d.name, base64: d.base64, mimeType: d.mimeType }))
+          : null,
       });
+
+      return jobAppId;
     } catch {
       // Non-critical
+      return null;
     }
   };
 
@@ -226,7 +250,7 @@ export default function EmailOutreach() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to send");
 
-      await saveToJobTracker();
+      await saveToJobTracker(additionalDocs);
       const attachCount = (resumePdfBase64 ? 1 : 0) + additionalDocs.length;
       toast({
         title: "✅ Email sent!",
@@ -250,7 +274,7 @@ export default function EmailOutreach() {
     try { await navigator.clipboard.writeText(fullText); } catch { /* ignore */ }
 
     setSaving(true);
-    await saveToJobTracker();
+    await saveToJobTracker(additionalDocs);
     setSaving(false);
 
     const attachNote = "\n\n[Please attach your resume before sending]";

@@ -117,6 +117,7 @@ export type Database = {
       }
       email_outreach_history: {
         Row: {
+          attachments: Json | null
           body: string
           company: string
           id: string
@@ -129,6 +130,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          attachments?: Json | null
           body: string
           company: string
           id?: string
@@ -141,6 +143,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          attachments?: Json | null
           body?: string
           company?: string
           id?: string
