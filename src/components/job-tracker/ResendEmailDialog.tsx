@@ -14,28 +14,39 @@ import type { Tables } from "@/integrations/supabase/types";
 
 type JobApp = Tables<"job_applications">;
 
+export interface EmailHistoryEntry {
+  id: string;
+  recruiter_email: string;
+  subject: string;
+  body: string;
+  sent_at: string;
+  resume_id: string | null;
+}
+
 interface ResendEmailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   app: JobApp | null;
+  prefill?: EmailHistoryEntry | null;
+  onSent?: () => void;
 }
 
-export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEmailDialogProps) {
+export default function ResendEmailDialog({ open, onOpenChange, app, prefill, onSent }: ResendEmailDialogProps) {
   const { user, session } = useAuth();
   const { toast } = useToast();
 
-  const [recruiterEmail, setRecruiterEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [body, setBody] = useState("");
+  const [recruiterEmail, setRecruiterEmail] = useState(prefill?.recruiter_email ?? "");
+  const [subject, setSubject] = useState(prefill?.subject ?? (app ? `Following Up — ${app.position} at ${app.company}` : ""));
+  const [body, setBody] = useState(prefill?.body ?? "");
   const [attachResume, setAttachResume] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
 
   const handleOpenChange = (val: boolean) => {
-    if (val && app) {
-      setRecruiterEmail("");
-      setSubject(`Following Up — ${app.position} at ${app.company}`);
-      setBody("");
+    if (val) {
+      setRecruiterEmail(prefill?.recruiter_email ?? "");
+      setSubject(prefill?.subject ?? (app ? `Following Up — ${app.position} at ${app.company}` : ""));
+      setBody(prefill?.body ?? "");
     }
     onOpenChange(val);
   };
@@ -74,13 +85,12 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
     }
   };
 
-  const generateResumePdf = async (): Promise<{ base64: string; filename: string } | null> => {
-    if (!app?.resume_id) return null;
+  const generateResumePdf = async (resumeId: string): Promise<{ base64: string; filename: string } | null> => {
     try {
       const { data: resumeRow } = await supabase
         .from("resumes")
         .select("*")
-        .eq("id", app.resume_id)
+        .eq("id", resumeId)
         .single();
       if (!resumeRow?.resume_data) return null;
       const resumeData = resumeRow.resume_data as ResumeData;
@@ -108,12 +118,13 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
 
     setSending(true);
     try {
+      const resumeIdToUse = app?.resume_id ?? prefill?.resume_id ?? null;
       let resumePdfBase64: string | undefined;
       let resumeFilename: string | undefined;
 
-      if (attachResume && app?.resume_id) {
+      if (attachResume && resumeIdToUse) {
         toast({ title: "Preparing resume…", description: "Generating PDF attachment." });
-        const pdf = await generateResumePdf();
+        const pdf = await generateResumePdf(resumeIdToUse);
         if (pdf) {
           resumePdfBase64 = pdf.base64;
           resumeFilename = pdf.filename;
@@ -144,10 +155,27 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to send");
 
+      // Save to email history
+      if (user && app) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const client = supabase as any;
+        await client.from("email_outreach_history").insert({
+          user_id: user.id,
+          job_application_id: app.id,
+          company: app.company,
+          position: app.position,
+          recruiter_email: recruiterEmail.trim(),
+          subject: subject.trim(),
+          body: body.trim(),
+          resume_id: resumeIdToUse,
+        });
+      }
+
       toast({
         title: "✅ Email sent!",
         description: `Sent to ${recruiterEmail}${resumePdfBase64 ? " with resume attached" : ""}. Replies go to your email.`,
       });
+      onSent?.();
       onOpenChange(false);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to send email.";
@@ -157,6 +185,7 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
     }
   };
 
+  const resumeIdForToggle = app?.resume_id ?? prefill?.resume_id ?? null;
   const canSend = subject.trim() && body.trim() && recruiterEmail.trim();
 
   return (
@@ -165,11 +194,17 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-4 w-4 text-primary" />
-            Resend Email — {app?.position} at {app?.company}
+            {prefill ? "Resend Email" : "Email Hiring Team"} — {app?.position} at {app?.company}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
+          {prefill && (
+            <div className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-foreground">
+              ✉️ Pre-filled from your last sent email — edit as needed before sending.
+            </div>
+          )}
+
           <Button
             variant="outline"
             className="w-full border-primary/40 text-primary hover:bg-primary/5"
@@ -179,7 +214,7 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
             {generating ? (
               <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Drafting with AI…</>
             ) : (
-              <><Sparkles className="h-4 w-4 mr-2" />Generate Email with AI</>
+              <><Sparkles className="h-4 w-4 mr-2" />Generate Fresh Email with AI</>
             )}
           </Button>
 
@@ -216,7 +251,7 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
             />
           </div>
 
-          {app?.resume_id && (
+          {resumeIdForToggle && (
             <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
               <Paperclip className="h-4 w-4 text-primary shrink-0" />
               <span className="text-sm flex-1 font-medium">Attach resume as PDF</span>
@@ -251,7 +286,7 @@ export default function ResendEmailDialog({ open, onOpenChange, app }: ResendEma
             {sending ? (
               <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sending…</>
             ) : (
-              <><Send className="h-4 w-4 mr-2" />Send Email{attachResume && app?.resume_id ? " with Resume" : ""}</>
+              <><Send className="h-4 w-4 mr-2" />Send{attachResume && resumeIdForToggle ? " with Resume" : ""}</>
             )}
           </Button>
         </DialogFooter>
