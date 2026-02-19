@@ -133,4 +133,84 @@ const pt: PrivacyTranslations = {
   backToHome: "Voltar ao Início",
 };
 
-export const privacyTranslations: Record<Locale, PrivacyTranslations> = { en, ar, es, fr, hi, pt };
+const de: PrivacyTranslations = {
+  title: "Datenschutzrichtlinie",
+  lastUpdated: "Letzte Aktualisierung:",
+  s1Title: "1. Erhobene Informationen",
+  s1Content: "Bei der Nutzung von ATS Pro Resume Builder erfassen wir Informationen, die Sie direkt angeben, einschließlich Name, E-Mail-Adresse und Lebenslauf-Inhalte. Wir erheben auch automatisch Nutzungsdaten zur Verbesserung unserer Dienste.",
+  s2Title: "2. Verwendung Ihrer Informationen",
+  s2Items: ["Zur Bereitstellung und Verbesserung unserer Lebenslauf- und Bewerbungsdienste", "Zur Verarbeitung Ihrer Lebenslaufdaten durch KI-Optimierungstools", "Zum Versand kontobezogener Benachrichtigungen", "Zur Analyse von Nutzungsmustern", "Zum Schutz vor Betrug und unbefugtem Zugriff"],
+  s3Title: "3. Datenspeicherung & Sicherheit",
+  s3Content: "Ihre Daten werden sicher mit Industriestandard-Verschlüsselung gespeichert. Wir setzen geeignete technische und organisatorische Maßnahmen zum Schutz Ihrer persönlichen Daten um.",
+  s4Title: "4. Datenweitergabe",
+  s4Content: "Wir verkaufen Ihre persönlichen Informationen nicht an Dritte. Wir können Daten mit vertrauenswürdigen Dienstleistern teilen, die unter strengen Vertraulichkeitsvereinbarungen stehen.",
+  s5Title: "5. Ihre Rechte",
+  s5Content: "Sie haben das Recht, jederzeit auf Ihre persönlichen Daten zuzugreifen, sie zu korrigieren oder zu löschen. Sie können Ihre Lebenslaufdaten exportieren oder eine Kontolöschung beantragen.",
+  s6Title: "6. Cookies",
+  s6Content: "Wir verwenden essentielle Cookies für Authentifizierung und Sitzungsverwaltung. Sie können Cookie-Einstellungen über Ihren Browser steuern.",
+  s7Title: "7. Kontakt",
+  s7Content: "Bei Fragen zu dieser Datenschutzrichtlinie kontaktieren Sie uns unter",
+  backToHome: "Zurück zur Startseite",
+};
+
+const zh: PrivacyTranslations = {
+  title: "隐私政策",
+  lastUpdated: "最后更新：",
+  s1Title: "1. 我们收集的信息",
+  s1Content: "使用ATS Pro简历生成器时，我们收集您直接提供的信息，包括姓名、电子邮件和简历内容。我们还自动收集使用数据以改进服务。",
+  s2Title: "2. 如何使用您的信息",
+  s2Items: ["提供和改进简历创建及求职追踪服务", "通过AI优化工具处理您的简历数据", "发送账户相关通知", "分析使用模式以改善体验", "防止欺诈和未授权访问"],
+  s3Title: "3. 数据存储与安全",
+  s3Content: "您的数据使用行业标准加密安全存储。我们采取适当的技术和组织措施保护您的个人数据。",
+  s4Title: "4. 数据共享",
+  s4Content: "我们不会将您的个人信息出售给第三方。我们可能与受严格保密协议约束的可信服务提供商共享数据。",
+  s5Title: "5. 您的权利",
+  s5Content: "您有权随时访问、更正或删除您的个人数据。您可以导出简历数据或申请删除账户。",
+  s6Title: "6. Cookie",
+  s6Content: "我们使用必要的Cookie进行身份验证和会话管理。您可以通过浏览器设置控制Cookie偏好。",
+  s7Title: "7. 联系我们",
+  s7Content: "如果您对本隐私政策有疑问，请联系我们",
+  backToHome: "返回首页",
+};
+
+const ja: PrivacyTranslations = {
+  title: "プライバシーポリシー",
+  lastUpdated: "最終更新日：",
+  s1Title: "1. 収集する情報",
+  s1Content: "ATS Pro履歴書ビルダーをご利用の際、お名前、メールアドレス、履歴書の内容など、直接提供される情報を収集します。また、サービス改善のため利用データも自動的に収集します。",
+  s2Title: "2. 情報の利用方法",
+  s2Items: ["履歴書作成・求職追跡サービスの提供と改善", "AI最適化ツールによる履歴書データの処理", "アカウント関連の通知送信", "利用パターンの分析と体験改善", "不正行為と不正アクセスの防止"],
+  s3Title: "3. データの保存とセキュリティ",
+  s3Content: "お客様のデータは業界標準の暗号化を使用して安全に保存されます。個人データを保護するための適切な技術的・組織的措置を講じています。",
+  s4Title: "4. データの共有",
+  s4Content: "お客様の個人情報を第三者に販売することはありません。厳格な機密保持契約の下、信頼できるサービスプロバイダーとデータを共有する場合があります。",
+  s5Title: "5. お客様の権利",
+  s5Content: "いつでも個人データへのアクセス、訂正、削除を行う権利があります。履歴書データのエクスポートやアカウント削除を申請できます。",
+  s6Title: "6. Cookie",
+  s6Content: "認証とセッション管理のために必須Cookieを使用しています。ブラウザの設定でCookieの設定を制御できます。",
+  s7Title: "7. お問い合わせ",
+  s7Content: "本プライバシーポリシーについてご質問がある場合は、こちらまでご連絡ください",
+  backToHome: "ホームに戻る",
+};
+
+const ko: PrivacyTranslations = {
+  title: "개인정보 처리방침",
+  lastUpdated: "최종 업데이트:",
+  s1Title: "1. 수집하는 정보",
+  s1Content: "ATS Pro 이력서 빌더를 사용할 때 이름, 이메일 주소, 이력서 내용 등 직접 제공하는 정보를 수집합니다. 서비스 개선을 위해 사용 데이터도 자동으로 수집합니다.",
+  s2Title: "2. 정보 사용 방법",
+  s2Items: ["이력서 작성 및 구직 추적 서비스 제공 및 개선", "AI 최적화 도구를 통한 이력서 데이터 처리", "계정 관련 알림 발송", "사용 패턴 분석 및 사용자 경험 개선", "사기 및 무단 접근 방지"],
+  s3Title: "3. 데이터 저장 및 보안",
+  s3Content: "귀하의 데이터는 산업 표준 암호화를 사용하여 안전하게 저장됩니다. 개인 데이터를 보호하기 위한 적절한 기술적, 조직적 조치를 시행합니다.",
+  s4Title: "4. 데이터 공유",
+  s4Content: "귀하의 개인 정보를 제3자에게 판매하지 않습니다. 엄격한 기밀 유지 계약에 따라 신뢰할 수 있는 서비스 제공업체와 데이터를 공유할 수 있습니다.",
+  s5Title: "5. 귀하의 권리",
+  s5Content: "언제든지 개인 데이터에 접근, 수정 또는 삭제할 권리가 있습니다. 이력서 데이터를 내보내거나 계정 삭제를 요청할 수 있습니다.",
+  s6Title: "6. 쿠키",
+  s6Content: "인증 및 세션 관리를 위한 필수 쿠키를 사용합니다. 브라우저 설정을 통해 쿠키 기본 설정을 제어할 수 있습니다.",
+  s7Title: "7. 문의",
+  s7Content: "본 개인정보 처리방침에 대해 질문이 있으시면 다음으로 연락해 주세요",
+  backToHome: "홈으로 돌아가기",
+};
+
+export const privacyTranslations: Record<Locale, PrivacyTranslations> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };
