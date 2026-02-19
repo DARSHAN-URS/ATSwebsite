@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,14 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Loader2, Mail, ExternalLink, Info } from "lucide-react";
+import { Sparkles, Loader2, Mail, ExternalLink, Info, FileText } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Resume = Tables<"resumes">;
 
 export default function EmailOutreach() {
   const { user, session } = useAuth();
   const { toast } = useToast();
 
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [selectedResumeId, setSelectedResumeId] = useState<string>("");
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [recruiterEmail, setRecruiterEmail] = useState("");
@@ -21,6 +27,33 @@ export default function EmailOutreach() {
   const [body, setBody] = useState("");
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Fetch user's resumes on mount
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("resumes")
+      .select("*")
+      .order("updated_at", { ascending: false })
+      .then(({ data }) => {
+        if (data) {
+          setResumes(data);
+          if (data.length > 0) setSelectedResumeId(data[0].id);
+        }
+      });
+  }, [user]);
+
+  // Auto-fill name/position from selected resume
+  useEffect(() => {
+    if (!selectedResumeId) return;
+    const resume = resumes.find((r) => r.id === selectedResumeId);
+    if (!resume?.resume_data) return;
+    const rd = resume.resume_data as Record<string, unknown>;
+    const personal = rd.personalInfo as Record<string, string> | undefined;
+    const jobTitle = personal?.jobTitle || personal?.title || "";
+    // Pre-fill position if empty
+    if (jobTitle && !position) setPosition(jobTitle);
+  }, [selectedResumeId, resumes]);
 
   const generateWithAI = async () => {
     if (!company || !position) {
@@ -38,7 +71,7 @@ export default function EmailOutreach() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session?.access_token}`,
           },
-          body: JSON.stringify({ position, company }),
+          body: JSON.stringify({ position, company, resumeId: selectedResumeId || undefined }),
         }
       );
       const data = await res.json();
@@ -126,6 +159,28 @@ export default function EmailOutreach() {
             When you open your mail client, this application is automatically logged in your <strong>Job Tracker</strong> so you can track the status.
           </span>
         </div>
+
+        {/* Resume selector */}
+        {resumes.length > 0 && (
+          <div className="space-y-2">
+            <Label htmlFor="eo-resume" className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-primary" />
+              Select Resume <span className="text-muted-foreground text-xs font-normal">(AI will use this resume to personalise the email)</span>
+            </Label>
+            <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
+              <SelectTrigger id="eo-resume">
+                <SelectValue placeholder="Choose a resume…" />
+              </SelectTrigger>
+              <SelectContent>
+                {resumes.map((r) => (
+                  <SelectItem key={r.id} value={r.id}>
+                    {r.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
