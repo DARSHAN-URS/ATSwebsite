@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json();
-    const { to, subject, body: emailBody, fromName, replyTo, position, company, resumePdfBase64, resumeFilename } = body;
+    const { to, subject, body: emailBody, fromName, replyTo, position, company, resumePdfBase64, resumeFilename, additionalAttachments } = body;
 
     // Validate required fields
     if (!isValidEmail(to)) {
@@ -167,6 +167,19 @@ Deno.serve(async (req) => {
           content: resumePdfBase64,
         },
       ];
+    }
+
+    // Attach additional documents if provided
+    if (Array.isArray(additionalAttachments) && additionalAttachments.length > 0) {
+      const existingAttachments = (resendPayload.attachments as unknown[] | undefined) ?? [];
+      const extraAttachments = additionalAttachments
+        .filter((a: { filename?: string; content?: string }) => a && typeof a.content === "string" && a.content.length > 0)
+        .slice(0, 5) // max 5 extra docs
+        .map((a: { filename?: string; content?: string; type?: string }) => ({
+          filename: String(a.filename ?? "document").replace(/[^a-zA-Z0-9_\-. ]/g, "").trim() || "document",
+          content: a.content,
+        }));
+      resendPayload.attachments = [...existingAttachments, ...extraAttachments];
     }
 
     const resendRes = await fetch("https://api.resend.com/emails", {
