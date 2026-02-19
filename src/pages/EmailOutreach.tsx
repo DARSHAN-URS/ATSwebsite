@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Loader2, Mail, ExternalLink, Info, FileText, Copy, Check } from "lucide-react";
+import { Sparkles, Loader2, Mail, ExternalLink, FileText, Copy, Check, Send, Info } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -23,9 +23,11 @@ export default function EmailOutreach() {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [recruiterEmail, setRecruiterEmail] = useState("");
+  const [fromName, setFromName] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [generating, setGenerating] = useState(false);
+  const [sending, setSending] = useState(false);
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -52,8 +54,9 @@ export default function EmailOutreach() {
     const rd = resume.resume_data as Record<string, unknown>;
     const personal = rd.personalInfo as Record<string, string> | undefined;
     const jobTitle = personal?.jobTitle || personal?.title || "";
-    // Pre-fill position if empty
+    const name = personal?.fullName || personal?.name || "";
     if (jobTitle && !position) setPosition(jobTitle);
+    if (name && !fromName) setFromName(name);
   }, [selectedResumeId, resumes]);
 
   const generateWithAI = async () => {
@@ -90,24 +93,67 @@ export default function EmailOutreach() {
 
   const saveToJobTracker = async () => {
     if (!user) return;
-    setSaving(true);
     try {
-      const { error } = await supabase.from("job_applications").insert({
+      await supabase.from("job_applications").insert({
         user_id: user.id,
         company,
         position,
         status: "applied",
         date_applied: new Date().toISOString().split("T")[0],
-        notes: `📧 Applied via Email Outreach on ${new Date().toLocaleDateString()}${recruiterEmail ? ` — sent to ${recruiterEmail}` : ""}`,
+        notes: `📧 Sent via Email Outreach on ${new Date().toLocaleDateString()}${recruiterEmail ? ` — to ${recruiterEmail}` : ""}`,
         url: null,
       });
-      if (error) throw error;
-      toast({ title: "Saved to Job Tracker!", description: `${position} at ${company} has been added to your tracker.` });
+    } catch {
+      // Non-critical — don't fail the send
+    }
+  };
+
+  // Send directly from the platform via Resend
+  const sendDirectly = async () => {
+    if (!recruiterEmail.trim()) {
+      toast({ title: "Recipient required", description: "Please enter the recruiter's email address to send directly.", variant: "destructive" });
+      return;
+    }
+    if (!subject.trim() || !body.trim()) {
+      toast({ title: "Nothing to send", description: "Generate or write an email first.", variant: "destructive" });
+      return;
+    }
+
+    setSending(true);
+    try {
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+      const res = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/send-outreach-email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({
+            to: recruiterEmail.trim(),
+            subject: subject.trim(),
+            body: body.trim(),
+            fromName: fromName.trim() || undefined,
+            replyTo: user?.email,
+            position,
+            company,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to send");
+
+      await saveToJobTracker();
+      toast({
+        title: "✅ Email sent!",
+        description: `Your email was sent to ${recruiterEmail}. Replies will come to your email. Application saved to Job Tracker.`,
+      });
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to save";
-      toast({ title: "Save failed", description: message, variant: "destructive" });
+      const message = err instanceof Error ? err.message : "Failed to send email.";
+      toast({ title: "Send failed", description: message, variant: "destructive" });
     } finally {
-      setSaving(false);
+      setSending(false);
     }
   };
 
@@ -117,19 +163,13 @@ export default function EmailOutreach() {
       return;
     }
 
-    // 1. Copy full email to clipboard so nothing is ever lost
     const fullText = `Subject: ${subject}\n\n${body}`;
-    try {
-      await navigator.clipboard.writeText(fullText);
-    } catch {
-      // clipboard access denied — proceed anyway
-    }
+    try { await navigator.clipboard.writeText(fullText); } catch { /* ignore */ }
 
-    // Save to job tracker
+    setSaving(true);
     await saveToJobTracker();
+    setSaving(false);
 
-    // 2. Build a SHORT URL — only pass subject + a trimmed body (≤500 chars)
-    //    The full content is in clipboard; user pastes the rest if needed
     const attachNote = "\n\n[Please attach your resume before sending]";
     const safeBody = body.length > 500
       ? body.slice(0, 500) + "…\n\n[Full email copied to clipboard — paste to complete]" + attachNote
@@ -149,14 +189,14 @@ export default function EmailOutreach() {
     }
 
     window.open(url, "_blank", "noopener,noreferrer");
-
     toast({
-      title: "✅ Full email copied to clipboard",
-      description: "Your mail app is opening. If the body looks short, just paste (Ctrl+V / Cmd+V) the full email.",
+      title: "✅ Email copied to clipboard",
+      description: "Your mail app is opening. Paste if the body looks short.",
     });
   };
 
   const canSend = subject.trim() && body.trim() && company.trim() && position.trim();
+  const canSendDirectly = canSend && recruiterEmail.trim();
 
   return (
     <>
@@ -168,7 +208,7 @@ export default function EmailOutreach() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Email Outreach</h1>
           <p className="text-muted-foreground mt-1">
-            Compose AI-powered outreach emails to recruiters. Emails open in your own inbox (Gmail, Yahoo, etc.) — applications are automatically saved to your Job Tracker.
+            Compose AI-powered outreach emails and send directly from the platform — or open in your own inbox.
           </p>
         </div>
 
@@ -176,7 +216,7 @@ export default function EmailOutreach() {
         <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-foreground">
           <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
           <span>
-            When you open your mail client, this application is automatically logged in your <strong>Job Tracker</strong> so you can track the status.
+            <strong>Send directly</strong> — the email is sent from our platform with your name and reply-to set to your email. The recipient can reply directly to you. Applications are automatically logged in your <strong>Job Tracker</strong>.
           </span>
         </div>
 
@@ -185,7 +225,7 @@ export default function EmailOutreach() {
           <div className="space-y-2">
             <Label htmlFor="eo-resume" className="flex items-center gap-2">
               <FileText className="h-4 w-4 text-primary" />
-              Select Resume <span className="text-muted-foreground text-xs font-normal">(AI will use this resume to personalise the email)</span>
+              Select Resume <span className="text-muted-foreground text-xs font-normal">(AI will use this to personalise the email)</span>
             </Label>
             <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
               <SelectTrigger id="eo-resume">
@@ -223,15 +263,28 @@ export default function EmailOutreach() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="eo-recruiter">Recruiter / HR Email <span className="text-muted-foreground text-xs">(optional — you can add it in your mail app)</span></Label>
-          <Input
-            id="eo-recruiter"
-            type="email"
-            placeholder="recruiter@company.com"
-            value={recruiterEmail}
-            onChange={(e) => setRecruiterEmail(e.target.value)}
-          />
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="eo-name">Your Name <span className="text-muted-foreground text-xs">(shown as sender)</span></Label>
+            <Input
+              id="eo-name"
+              placeholder="e.g. Jane Smith"
+              value={fromName}
+              onChange={(e) => setFromName(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="eo-recruiter">
+              Recruiter / HR Email <span className="text-muted-foreground text-xs">(required for direct send)</span>
+            </Label>
+            <Input
+              id="eo-recruiter"
+              type="email"
+              placeholder="recruiter@company.com"
+              value={recruiterEmail}
+              onChange={(e) => setRecruiterEmail(e.target.value)}
+            />
+          </div>
         </div>
 
         {/* AI Generate */}
@@ -275,55 +328,74 @@ export default function EmailOutreach() {
                 onChange={(e) => setBody(e.target.value)}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
-              📎 <strong>Tip:</strong> After your mail app opens, attach your resume PDF before hitting send.
-            </p>
           </CardContent>
         </Card>
 
-        {/* Actions row */}
-        <div className="flex flex-wrap gap-3 justify-between items-center">
-          {/* Copy to clipboard */}
+        {/* Actions */}
+        <div className="space-y-3">
+          {/* Primary: Send directly */}
           <Button
-            variant="outline"
-            disabled={!canSend}
-            onClick={async () => {
-              await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
-              setCopied(true);
-              setTimeout(() => setCopied(false), 2500);
-              toast({ title: "Copied!", description: "Paste the email into any mail app." });
-            }}
+            className="w-full"
+            size="lg"
+            onClick={sendDirectly}
+            disabled={!canSendDirectly || sending}
           >
-            {copied ? <Check className="h-4 w-4 mr-2 text-primary" /> : <Copy className="h-4 w-4 mr-2" />}
-            {copied ? "Copied!" : "Copy Email"}
+            {sending ? (
+              <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sending…</>
+            ) : (
+              <><Send className="h-4 w-4 mr-2" />Send Email Directly</>
+            )}
           </Button>
 
-          <div className="flex gap-2 flex-wrap justify-end">
-            <Button
-              variant="outline"
-              onClick={() => openMailClient("default")}
-              disabled={!canSend || saving}
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Mail App
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => openMailClient("yahoo")}
-              disabled={!canSend || saving}
-            >
-              Yahoo Mail
-            </Button>
-            <Button
-              onClick={() => openMailClient("gmail")}
-              disabled={!canSend || saving}
-            >
-              {saving ? (
-                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</>
-              ) : (
-                <><Mail className="h-4 w-4 mr-2" />Open in Gmail</>
-              )}
-            </Button>
+          <p className="text-xs text-center text-muted-foreground">
+            Sent from our platform · Recipient replies go to <strong>{user?.email}</strong>
+          </p>
+
+          {/* Secondary: open in mail client */}
+          <div className="flex flex-wrap gap-2 justify-between items-center pt-1 border-t">
+            <span className="text-xs text-muted-foreground">Or open in your own inbox:</span>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={!canSend}
+                onClick={async () => {
+                  await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2500);
+                  toast({ title: "Copied!", description: "Paste the email into any mail app." });
+                }}
+              >
+                {copied ? <Check className="h-4 w-4 mr-1 text-primary" /> : <Copy className="h-4 w-4 mr-1" />}
+                {copied ? "Copied!" : "Copy"}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => openMailClient("default")}
+                disabled={!canSend || saving}
+              >
+                <ExternalLink className="h-4 w-4 mr-1" />
+                Mail App
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => openMailClient("yahoo")}
+                disabled={!canSend || saving}
+              >
+                Yahoo Mail
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => openMailClient("gmail")}
+                disabled={!canSend || saving}
+              >
+                {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Mail className="h-4 w-4 mr-1" />}
+                Gmail
+              </Button>
+            </div>
           </div>
         </div>
       </div>
