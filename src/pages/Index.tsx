@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, lazy, Suspense, useTransition, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -40,11 +40,17 @@ const Index = () => {
   const { user } = useAuth();
   const localCurrency = useLocalCurrency();
   const { t } = useLanguage();
+  const [, startTransition] = useTransition();
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (user) {
       navigate("/dashboard", { replace: true });
+    }
+    // User Timing: measure from app-shell-start to first meaningful render
+    if (window.performance && performance.mark) {
+      performance.mark('index-render-start');
+      performance.measure('app-shell-to-render', 'app-shell-start', 'index-render-start');
     }
   }, [user, navigate]);
 
@@ -96,10 +102,14 @@ const Index = () => {
     }
   };
 
-  const openAuth = (tab: string = "login") => {
-    setAuthTab(tab);
-    setAuthOpen(true);
-  };
+  // INP fix: wrap non-urgent state updates in startTransition so they
+  // don't block the next frame (keeps input latency < 200 ms)
+  const openAuth = useCallback((tab: string = "login") => {
+    startTransition(() => {
+      setAuthTab(tab);
+      setAuthOpen(true);
+    });
+  }, [startTransition]);
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
@@ -144,7 +154,7 @@ const Index = () => {
           </div>
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border/60 bg-background px-3 py-2 space-y-0.5 animate-in slide-in-from-top-2 duration-200">
+          <div className="md:hidden border-t border-border/60 bg-background px-3 py-2 space-y-0.5 slide-in-composited">
             <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
@@ -165,7 +175,7 @@ const Index = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-[400px] md:w-[600px] h-[400px] md:h-[600px] rounded-full bg-primary/[0.04] blur-3xl" />
         <div className="mx-auto max-w-3xl px-5 text-center">
           <div className="mb-4 md:mb-7 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-[11px] md:text-xs font-medium text-muted-foreground shadow-sm">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse-dot" />
             {t.landing.heroTagline}
           </div>
           <h1 className="font-serif text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-[2rem] md:text-[3.5rem]">
@@ -208,7 +218,7 @@ const Index = () => {
               { icon: <LayoutTemplate className="h-5 w-5" />, title: t.landing.atsTemplates, desc: t.landing.atsTemplatesDesc },
               { icon: <Briefcase className="h-5 w-5" />, title: t.landing.recruiterPortal, desc: t.landing.recruiterPortalDesc },
             ].map((f) => (
-              <div key={f.title} className="group rounded-xl border border-border/60 bg-card p-4 md:p-5 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 duration-300">
+              <div key={f.title} className="card-lift rounded-xl border border-border/60 bg-card p-4 md:p-5">
                 <div className="mb-2 md:mb-3 flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">{f.icon}</div>
                 <h3 className="mb-1 text-[13px] md:text-sm font-semibold">{f.title}</h3>
                 <p className="text-[11px] md:text-[13px] leading-relaxed text-muted-foreground">{f.desc}</p>
@@ -247,7 +257,7 @@ const Index = () => {
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-xl border border-border/60 shadow-2xl shadow-foreground/5">
-              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" width={1200} height={675} />
+              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="eager" fetchPriority="high" width={1200} height={675} />
             </div>
           </div>
         </div>
@@ -286,7 +296,7 @@ const Index = () => {
               { name: "Emily T.", role: "Product Designer → Figma", text: "Clean templates that actually pass ATS scans. Combined with the cover letter generator — the only tool I recommend.", stars: 5 },
               { name: "Carlos V.", role: "Career Changer → Salesforce", text: "The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.", stars: 5 },
             ].map((review) => (
-              <div key={review.name} className="group rounded-xl border border-border/60 bg-card p-4 md:p-5 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 duration-300">
+              <div key={review.name} className="card-lift rounded-xl border border-border/60 bg-card p-4 md:p-5">
                 <div className="flex gap-0.5 mb-2 md:mb-3">
                   {Array.from({ length: review.stars }).map((_, i) => (
                     <Star key={i} className="h-3 w-3 md:h-3.5 md:w-3.5 fill-warning text-warning" />

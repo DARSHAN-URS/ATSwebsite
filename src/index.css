@@ -115,4 +115,49 @@
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }
+
+  /* ── Composited-only animations (GPU layer — no layout/paint triggered) ── */
+
+  /* Replaces Tailwind's animate-pulse (uses opacity only → composited) */
+  .animate-pulse-dot {
+    animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: opacity;
+  }
+
+  /* Composited float — transform only */
+  .animate-float-composited {
+    animation: float-composited 3s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* Mobile menu slide-in — composited transform+opacity instead of height */
+  .slide-in-composited {
+    animation: slide-in-y 180ms ease-out both;
+    will-change: transform, opacity;
+  }
+
+  /* Card lift on hover — transform only, no box-shadow change */
+  .card-lift {
+    transition: transform 200ms ease, opacity 200ms ease;
+    will-change: transform;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ── Keyframes — all composited (transform / opacity only) ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes float-composited {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes slide-in-y {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0px);  opacity: 1; }
 }
