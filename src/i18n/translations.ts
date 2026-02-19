@@ -38,6 +38,7 @@ const en = {
     pricing: "Pricing",
     atsScanner: "ATS Scanner",
     interviewPrep: "Interview Prep",
+    emailOutreach: "Email Outreach",
   },
   common: {
     save: "Save",
@@ -469,6 +470,7 @@ const ar: TranslationKeys = {
     pricing: "الأسعار",
     atsScanner: "ماسح ATS",
     interviewPrep: "تحضير المقابلة",
+    emailOutreach: "البريد الإلكتروني",
   },
   common: {
     save: "حفظ",
@@ -890,6 +892,7 @@ const es: TranslationKeys = {
     pricing: "Precios",
     atsScanner: "Escáner ATS",
     interviewPrep: "Preparación Entrevista",
+    emailOutreach: "Correo Electrónico",
   },
   common: {
     save: "Guardar",
@@ -1311,6 +1314,7 @@ const fr: TranslationKeys = {
     pricing: "Tarifs",
     atsScanner: "Scan ATS",
     interviewPrep: "Prépa Entretien",
+    emailOutreach: "E-mail Prospection",
   },
   common: {
     save: "Enregistrer",
@@ -1732,6 +1736,7 @@ const hi: TranslationKeys = {
     pricing: "मूल्य निर्धारण",
     atsScanner: "ATS स्कैनर",
     interviewPrep: "साक्षात्कार तैयारी",
+    emailOutreach: "ईमेल आउटरीच",
   },
   common: {
     save: "सहेजें",
@@ -2153,6 +2158,7 @@ const pt: TranslationKeys = {
     pricing: "Preços",
     atsScanner: "Scanner ATS",
     interviewPrep: "Prep. Entrevista",
+    emailOutreach: "E-mail Contato",
   },
   common: {
     save: "Salvar",
@@ -2574,6 +2580,7 @@ const de: TranslationKeys = {
     pricing: "Preise",
     atsScanner: "ATS-Scanner",
     interviewPrep: "Interviewvorbereitung",
+    emailOutreach: "E-Mail Kontakt",
   },
   common: {
     save: "Speichern",
@@ -2995,6 +3002,7 @@ const zh: TranslationKeys = {
     pricing: "定价",
     atsScanner: "ATS扫描",
     interviewPrep: "面试准备",
+    emailOutreach: "邮件联系",
   },
   common: {
     save: "保存",
@@ -3416,6 +3424,7 @@ const ja: TranslationKeys = {
     pricing: "料金",
     atsScanner: "ATSスキャナー",
     interviewPrep: "面接準備",
+    emailOutreach: "メール連絡",
   },
   common: {
     save: "保存",
@@ -3837,6 +3846,7 @@ const ko: TranslationKeys = {
     pricing: "요금제",
     atsScanner: "ATS 스캐너",
     interviewPrep: "면접 준비",
+    emailOutreach: "이메일 연락",
   },
   common: {
     save: "저장",
