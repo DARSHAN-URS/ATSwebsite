@@ -38,7 +38,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   return (
     <>
       <div className="p-6 flex items-center gap-2">
-        <img src={logo} alt="ATS Pro Resume Builder" className="h-[92px] brightness-0 invert" width={383} height={92} />
+        <img src={logo} alt="ATS Pro Resume Builder" className="h-[92px] invert brightness-200" width={92} height={92} />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -112,7 +112,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <img src={logo} alt="ATS Pro Resume Builder" className="h-10 dark:brightness-100 brightness-0" width={167} height={40} />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-12 dark:invert dark:brightness-200" width={48} height={48} />
           </div>
         </header>
       )}
