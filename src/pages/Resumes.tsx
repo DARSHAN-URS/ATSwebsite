@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail, Zap } from "lucide-react";
+import ResumeCompletionScore from "@/components/resume/ResumeCompletionScore";
+import IndustryKeywords from "@/components/resume/IndustryKeywords";
+import PowerWordsHint from "@/components/resume/PowerWordsHint";
 import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
@@ -630,6 +633,9 @@ export default function Resumes() {
         <div className="flex-1 min-h-0 flex flex-col md:flex-row">
           {/* Editor panel */}
           <div className="md:w-1/2 overflow-y-auto p-4 sm:p-6 space-y-5 border-b md:border-b-0 md:border-r">
+          {/* Resume Completion Score */}
+            <ResumeCompletionScore resumeData={resumeData} title={title} />
+
             <div className="space-y-2">
               <Label>{t.resumes.resumeTitle}</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -703,6 +709,15 @@ export default function Resumes() {
                     </span>
                   ))}
                 </div>
+                <IndustryKeywords
+                  jobTitle={resumeData.experience?.[0]?.title || title}
+                  currentSkills={resumeData.skills || []}
+                  onAdd={(skill) => {
+                    if (!(resumeData.skills || []).includes(skill)) {
+                      setResumeData((prev) => ({ ...prev, skills: [...(prev.skills || []), skill] }));
+                    }
+                  }}
+                />
               </CardContent>
             </Card>
 
@@ -782,6 +797,7 @@ export default function Resumes() {
                     ) : (
                       <p className="text-xs text-muted-foreground">{t.resumes.noBullets}</p>
                     )}
+                    {(exp.bullets?.length ?? 0) > 0 && <PowerWordsHint bullets={exp.bullets} />}
                   </div>
                 ))}
                 {(resumeData.experience || []).length === 0 && (
@@ -975,10 +991,19 @@ export default function Resumes() {
                           )}
                         </Button>
                       </div>
-                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                <IndustryKeywords
+                  jobTitle={resumeData.personalInfo?.fullName ? (resumeData.experience?.[0]?.title || title) : title}
+                  currentSkills={resumeData.skills || []}
+                  onAdd={(skill) => {
+                    if (!(resumeData.skills || []).includes(skill)) {
+                      setResumeData((prev) => ({ ...prev, skills: [...(prev.skills || []), skill] }));
+                    }
+                  }}
+                />
+              </CardContent>
+            </Card>
             );
           })}
         </div>

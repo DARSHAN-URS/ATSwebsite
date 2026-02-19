@@ -4,12 +4,13 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Briefcase, Bookmark, Search, Mail, Eye, Users, Building2, TrendingUp, Target, PieChart } from "lucide-react";
+import { FileText, Briefcase, Bookmark, Search, Mail, Eye, Users, Building2, TrendingUp, Target, PieChart, Zap, CheckCircle2, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
 import AIApplyQueueSection from "@/components/resume/AIApplyQueueSection";
+import type { ResumeData } from "@/components/resume/types";
 
 const STATUS_COLORS: Record<string, string> = {
   applied: "hsl(200, 80%, 52%)",
@@ -23,6 +24,82 @@ export default function Dashboard() {
   const { role } = useUserRole();
   if (role === "recruiter") return <RecruiterDashboard />;
   return <JobSeekerDashboard />;
+}
+
+function computeResumeScore(rd: ResumeData, title: string): number {
+  const pi = rd.personalInfo || {};
+  const checks = [
+    !!title && title !== "Untitled Resume",
+    !!pi.fullName?.trim(),
+    !!(pi.email?.trim() && pi.phone?.trim()),
+    !!pi.location?.trim(),
+    !!(rd.summary?.trim() && rd.summary.length > 50),
+    (rd.skills || []).length >= 5,
+    (rd.experience || []).length > 0,
+    (rd.experience || []).some(e => e.bullets && e.bullets.length >= 2),
+    (rd.education || []).length > 0,
+    !!(pi.linkedin?.trim() || pi.portfolio?.trim()),
+  ];
+  return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+}
+
+function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
+  const { user } = useAuth();
+  const [resumes, setResumes] = useState<Array<{ id: string; title: string; score: number }>>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("resumes").select("id, title, resume_data").order("updated_at", { ascending: false }).limit(3)
+      .then(({ data }) => {
+        if (!data) return;
+        setResumes(data.map(r => ({
+          id: r.id,
+          title: r.title,
+          score: computeResumeScore(r.resume_data as unknown as ResumeData, r.title),
+        })));
+      });
+  }, [user]);
+
+  if (resumes.length === 0) return null;
+
+  return (
+    <Card className="border border-border/60 rounded-xl">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Zap className="h-4 w-4 text-primary" /> Resume Health
+        </CardTitle>
+        <CardDescription className="text-xs">Completion scores for your recent resumes</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {resumes.map((r) => {
+          const color = r.score >= 80 ? "text-primary" : r.score >= 50 ? "text-yellow-600 dark:text-yellow-400" : "text-destructive";
+          const barColor = r.score >= 80 ? "bg-primary" : r.score >= 50 ? "bg-yellow-500" : "bg-destructive";
+          return (
+            <div key={r.id} className="space-y-1 cursor-pointer group" onClick={() => navigate("/resumes")}>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium group-hover:text-primary transition-colors truncate max-w-[70%]">{r.title}</span>
+                <div className="flex items-center gap-1.5">
+                  {r.score >= 80
+                    ? <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                    : <AlertCircle className="h-3.5 w-3.5 text-yellow-500" />}
+                  <span className={`text-sm font-bold ${color}`}>{r.score}%</span>
+                </div>
+              </div>
+              <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${r.score}%` }} />
+              </div>
+            </div>
+          );
+        })}
+        <button
+          onClick={() => navigate("/resumes")}
+          className="w-full text-xs text-primary hover:underline text-left pt-1"
+        >
+          View all resumes →
+        </button>
+      </CardContent>
+    </Card>
+  );
 }
 
 function JobSeekerDashboard() {
@@ -183,6 +260,9 @@ function JobSeekerDashboard() {
 
       {/* AI Apply Queue */}
       <AIApplyQueueSection />
+
+      {/* Resume Health */}
+      <ResumeHealthCard navigate={navigate} />
 
       {/* Job Tracker */}
       <JobTrackerSection />
