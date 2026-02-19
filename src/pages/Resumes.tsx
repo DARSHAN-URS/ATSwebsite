@@ -65,6 +65,7 @@ export default function Resumes() {
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinLoading, setLinkedinLoading] = useState(false);
   const [aiApplyingId, setAiApplyingId] = useState<string | null>(null);
+  const [aiApplyStep, setAiApplyStep] = useState(0);
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const fetchResumes = async () => {
@@ -75,9 +76,27 @@ export default function Resumes() {
 
   useEffect(() => { if (user) fetchResumes(); }, [user]);
 
+  const AI_APPLY_STEPS = [
+    { label: "Analyzing your resume", detail: "Reading your skills, experience, and career profile…" },
+    { label: "Searching for matching jobs", detail: "Scanning thousands of live job listings via JSearch…" },
+    { label: "Scoring job matches", detail: "AI evaluating compatibility for each position…" },
+    { label: "Tailoring your resume", detail: "Rewriting summary and skills for each matched role…" },
+    { label: "Writing cover letters", detail: "Crafting personalized cover letters per company…" },
+    { label: "Saving to your queue", detail: "Packaging everything and adding to your dashboard…" },
+  ];
+
   const handleAIApply = async (resume: Resume) => {
     if (!user) return;
     setAiApplyingId(resume.id);
+    setAiApplyStep(0);
+
+    // Animate through steps while the real call runs
+    const stepTimings = [0, 3000, 8000, 13000, 18000, 23000];
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    stepTimings.forEach((delay, i) => {
+      timers.push(setTimeout(() => setAiApplyStep(i), delay));
+    });
+
     try {
       const { data, error } = await supabase.functions.invoke("ai-apply", {
         body: {
@@ -86,6 +105,8 @@ export default function Resumes() {
           resume_data: resume.resume_data,
         },
       });
+      timers.forEach(clearTimeout);
+      setAiApplyStep(AI_APPLY_STEPS.length); // mark complete
       if (error) throw error;
       if (data?.error) {
         toast({ title: "AI Apply failed", description: data.error, variant: "destructive" });
@@ -96,9 +117,13 @@ export default function Resumes() {
         description: `${data.queued} tailored applications are ready on your dashboard.`,
       });
     } catch (err: any) {
+      timers.forEach(clearTimeout);
       toast({ title: "AI Apply failed", description: err.message || "Something went wrong.", variant: "destructive" });
     } finally {
-      setAiApplyingId(null);
+      setTimeout(() => {
+        setAiApplyingId(null);
+        setAiApplyStep(0);
+      }, 800);
     }
   };
 
@@ -950,6 +975,64 @@ export default function Resumes() {
           })}
         </div>
       )}
+
+      {/* AI Apply Progress Dialog */}
+      <Dialog open={!!aiApplyingId} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md [&>button]:hidden">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+              AI Apply in Progress
+            </DialogTitle>
+            <DialogDescription>
+              Sit tight — AI is finding and tailoring jobs for you.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {/* Overall progress bar */}
+            <Progress
+              value={aiApplyStep >= AI_APPLY_STEPS.length
+                ? 100
+                : Math.round((aiApplyStep / AI_APPLY_STEPS.length) * 100)}
+              className="h-2"
+            />
+
+            {/* Step list */}
+            <div className="space-y-2.5">
+              {AI_APPLY_STEPS.map((step, i) => {
+                const isDone = aiApplyStep > i;
+                const isActive = aiApplyStep === i;
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-start gap-3 p-2.5 rounded-lg transition-all duration-300 ${isActive ? "bg-primary/5 border border-primary/20" : ""}`}
+                  >
+                    <div className="mt-0.5 shrink-0">
+                      {isDone ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      ) : isActive ? (
+                        <Loader2 className="h-4 w-4 text-primary animate-spin" />
+                      ) : (
+                        <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/30" />
+                      )}
+                    </div>
+                    <div>
+                      <p className={`text-sm font-medium leading-none ${isDone ? "text-muted-foreground line-through" : isActive ? "text-foreground" : "text-muted-foreground"}`}>
+                        {step.label}
+                      </p>
+                      {isActive && (
+                        <p className="text-xs text-muted-foreground mt-1">{step.detail}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="text-xs text-center text-muted-foreground">This takes about 20–30 seconds. Please don't close this window.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* LinkedIn Import Dialog */}
       <Dialog open={linkedinOpen} onOpenChange={setLinkedinOpen}>
