@@ -235,7 +235,7 @@ const Index = () => {
                 <li key={item.title} className="flex gap-3">
                   <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-destructive/10">{item.icon}</div>
                   <div>
-                    <h4 className="text-sm font-semibold">{item.title}</h4>
+                    <h3 className="text-sm font-semibold">{item.title}</h3>
                     <p className="mt-0.5 text-[13px] text-muted-foreground">{item.desc}</p>
                   </div>
                 </li>
