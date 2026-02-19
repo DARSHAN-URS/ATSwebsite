@@ -5,8 +5,10 @@
       (function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}})();
     </script>
     <meta charset="UTF-8" />
+    <!-- LCP / font resource hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <title>ATS Pro Resume Builder — Free AI Resume Builder for ATS Success</title>
@@ -40,6 +42,8 @@
 
   <body>
     <div id="root"></div>
+    <!-- User Timing: mark app shell start for INP/LCP profiling -->
+    <script>if(window.performance&&performance.mark){performance.mark('app-shell-start');}</script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

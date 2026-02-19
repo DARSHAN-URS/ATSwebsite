@@ -107,7 +107,7 @@ function JobSeekerDashboard() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {cards.map((card) => (
-          <Card key={card.title} className={`${card.action ? "cursor-pointer hover:shadow-md" : ""} transition-shadow`} onClick={card.action}>
+          <Card key={card.title} className={`${card.action ? "cursor-pointer card-lift" : ""} rounded-xl border border-border/60`} onClick={card.action}>
             <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 p-3 md:p-6">
               <CardTitle className="text-[11px] md:text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
               <card.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
@@ -188,7 +188,7 @@ function JobSeekerDashboard() {
       <JobTrackerSection />
 
       {/* Find Jobs CTA */}
-      <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/jobs")}>
+      <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/jobs")}>
         <CardHeader className="p-4 md:p-6">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <Search className="h-4 w-4 md:h-5 md:w-5 text-primary" />
@@ -251,7 +251,7 @@ function RecruiterDashboard() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
         {cards.map((card) => (
-          <Card key={card.title} className="cursor-pointer hover:shadow-md transition-shadow" onClick={card.action}>
+          <Card key={card.title} className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={card.action}>
             <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 p-3 md:p-6">
               <CardTitle className="text-[11px] md:text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
               <card.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
@@ -264,7 +264,7 @@ function RecruiterDashboard() {
         ))}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/recruiter/company")}>
+        <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/recruiter/company")}>
           <CardHeader className="p-4 md:p-6">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Building2 className="h-4 w-4 md:h-5 md:w-5 text-primary" />
@@ -273,7 +273,7 @@ function RecruiterDashboard() {
             <CardDescription className="text-[12px] md:text-sm">{t.recruiterDashboard.companyProfileDesc}</CardDescription>
           </CardHeader>
         </Card>
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/recruiter/jobs")}>
+        <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/recruiter/jobs")}>
           <CardHeader className="p-4 md:p-6">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Briefcase className="h-4 w-4 md:h-5 md:w-5 text-primary" />
