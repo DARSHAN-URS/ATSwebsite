@@ -14,6 +14,12 @@ import type { Tables } from "@/integrations/supabase/types";
 
 type JobApp = Tables<"job_applications">;
 
+export interface EmailAttachment {
+  name: string;
+  base64: string;
+  mimeType: string;
+}
+
 export interface EmailHistoryEntry {
   id: string;
   recruiter_email: string;
@@ -21,6 +27,7 @@ export interface EmailHistoryEntry {
   body: string;
   sent_at: string;
   resume_id: string | null;
+  attachments?: EmailAttachment[] | null;
 }
 
 interface ResendEmailDialogProps {
@@ -136,6 +143,12 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
         }
       }
 
+      // Include saved additional attachments from history
+      const savedAttachments = prefill?.attachments ?? [];
+      const additionalAttachments = savedAttachments.length > 0
+        ? savedAttachments.map((d) => ({ filename: d.name, content: d.base64, type: d.mimeType }))
+        : undefined;
+
       const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
       const res = await fetch(
         `https://${projectId}.supabase.co/functions/v1/send-outreach-email`,
@@ -154,6 +167,7 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
             company: app?.company,
             resumePdfBase64,
             resumeFilename,
+            additionalAttachments,
           }),
         }
       );
@@ -173,12 +187,14 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
           subject: subject.trim(),
           body: body.trim(),
           resume_id: resumeIdToUse,
+          attachments: savedAttachments.length > 0 ? savedAttachments : null,
         });
       }
 
+      const attachCount = (resumePdfBase64 ? 1 : 0) + savedAttachments.length;
       toast({
         title: "✅ Email sent!",
-        description: `Sent to ${recruiterEmail}${resumePdfBase64 ? " with resume attached" : ""}. Replies go to your email.`,
+        description: `Sent to ${recruiterEmail}${attachCount > 0 ? ` with ${attachCount} attachment${attachCount > 1 ? "s" : ""}` : ""}. Replies go to your email.`,
       });
       onSent?.();
       onOpenChange(false);
@@ -275,6 +291,24 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
                   }`}
                 />
               </button>
+            </div>
+          )}
+
+          {/* Show saved additional attachments */}
+          {prefill?.attachments && prefill.attachments.length > 0 && (
+            <div className="rounded-lg border border-border bg-muted/30 px-4 py-3 space-y-2">
+              <p className="text-xs font-medium text-foreground flex items-center gap-1.5">
+                <Paperclip className="h-3.5 w-3.5 text-primary" />
+                Saved attachments — will be re-sent automatically
+              </p>
+              <ul className="space-y-1">
+                {prefill.attachments.map((doc) => (
+                  <li key={doc.name} className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Paperclip className="h-3 w-3 shrink-0" />
+                    <span className="truncate">{doc.name}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
