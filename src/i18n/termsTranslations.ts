@@ -105,4 +105,64 @@ const pt: TermsTranslations = {
   backToHome: "Voltar ao Início",
 };
 
-export const termsTranslations: Record<Locale, TermsTranslations> = { en, ar, es, fr, hi, pt };
+const de: TermsTranslations = {
+  title: "Nutzungsbedingungen",
+  lastUpdated: "Letzte Aktualisierung:",
+  s1Title: "1. Annahme der Bedingungen", s1Content: "Durch die Nutzung von ATS Pro Resume Builder stimmen Sie diesen Nutzungsbedingungen zu. Wenn Sie nicht einverstanden sind, nutzen Sie unsere Plattform bitte nicht.",
+  s2Title: "2. Beschreibung des Dienstes", s2Content: "ATS Pro Resume Builder bietet KI-gestützte Lebenslauf-Erstellung, Bewertung, Bewerbungsverfolgung, Anschreiben-Generierung und Job-Suche-Tools.",
+  s3Title: "3. Benutzerkonten", s3Items: ["Geben Sie genaue und vollständige Informationen bei der Kontoerstellung an", "Sie sind für die Sicherheit Ihrer Zugangsdaten verantwortlich", "Sie müssen mindestens 16 Jahre alt sein", "Eine Person darf nur ein Konto haben", "Sie sind für alle Aktivitäten unter Ihrem Konto verantwortlich"],
+  s4Title: "4. Benutzerinhalte", s4Content: "Sie behalten das Eigentum an allen hochgeladenen Inhalten. Durch die Nutzung unserer KI-Funktionen gewähren Sie uns eine eingeschränkte Lizenz zur Verarbeitung Ihrer Inhalte.",
+  s5Title: "5. Akzeptable Nutzung", s5Content: "Sie verpflichten sich, die Plattform nicht für betrügerische Lebensläufe, Identitätsdiebstahl oder schädliche Inhalte zu nutzen.",
+  s6Title: "6. KI-generierte Inhalte", s6Content: "KI-Tools liefern Vorschläge. KI-generierte Inhalte sollten vor der Verwendung überprüft werden. Wir sind nicht verantwortlich für Einstellungsergebnisse.",
+  s7Title: "7. Haftungsbeschränkung", s7Content: "ATS Pro Resume Builder wird \"wie besehen\" ohne Gewährleistung bereitgestellt. Wir haften nicht für indirekte Schäden.",
+  s8Title: "8. Kündigung", s8Content: "Sie können Ihr Konto jederzeit kündigen. Ihre Daten werden innerhalb von 30 Tagen gelöscht.",
+  s9Title: "9. Kontakt", s9Content: "Bei Fragen zu diesen Nutzungsbedingungen kontaktieren Sie uns unter",
+  backToHome: "Zurück zur Startseite",
+};
+
+const zh: TermsTranslations = {
+  title: "服务条款",
+  lastUpdated: "最后更新：",
+  s1Title: "1. 条款接受", s1Content: "使用ATS Pro简历生成器即表示您同意这些服务条款。如不同意，请勿使用我们的平台。",
+  s2Title: "2. 服务描述", s2Content: "ATS Pro简历生成器提供AI简历创建、评分、求职追踪、求职信生成和职位搜索工具。",
+  s3Title: "3. 用户账户", s3Items: ["创建账户时需提供准确完整的信息", "您有责任维护账户安全", "您必须年满16岁", "每人只能拥有一个账户", "您对账户下的所有活动负责"],
+  s4Title: "4. 用户内容", s4Content: "您保留上传内容的所有权。使用AI功能即授予我们处理内容的有限许可。",
+  s5Title: "5. 可接受的使用", s5Content: "您同意不使用平台创建虚假简历、冒充他人或上传恶意内容。",
+  s6Title: "6. AI生成内容", s6Content: "AI工具提供建议。AI生成的内容应在使用前审查。我们不对招聘结果负责。",
+  s7Title: "7. 责任限制", s7Content: "ATS Pro简历生成器按\"原样\"提供，不作任何担保。我们不对间接损害负责。",
+  s8Title: "8. 终止", s8Content: "您可以随时终止账户。您的数据将在30天内删除。",
+  s9Title: "9. 联系我们", s9Content: "如对服务条款有疑问，请联系我们",
+  backToHome: "返回首页",
+};
+
+const ja: TermsTranslations = {
+  title: "利用規約",
+  lastUpdated: "最終更新日：",
+  s1Title: "1. 規約の承諾", s1Content: "ATS Pro履歴書ビルダーを利用することにより、本利用規約に同意したものとみなされます。同意されない場合は、プラットフォームをご利用にならないでください。",
+  s2Title: "2. サービスの説明", s2Content: "ATS Pro履歴書ビルダーは、AI履歴書作成、評価、応募追跡、カバーレター生成、求人検索ツールを提供します。",
+  s3Title: "3. ユーザーアカウント", s3Items: ["アカウント作成時に正確で完全な情報を提供してください", "アカウント資格情報のセキュリティはお客様の責任です", "16歳以上である必要があります", "1人につき1アカウントのみ", "アカウントで行われるすべての活動はお客様の責任です"],
+  s4Title: "4. ユーザーコンテンツ", s4Content: "アップロードしたすべてのコンテンツの所有権はお客様にあります。AI機能を使用することで、サービス提供のための限定的なライセンスを付与します。",
+  s5Title: "5. 許容される利用", s5Content: "詐欺的な履歴書の作成、なりすまし、悪意のあるコンテンツのアップロードに本プラットフォームを使用しないことに同意するものとします。",
+  s6Title: "6. AI生成コンテンツ", s6Content: "AIツールは提案を提供します。AI生成コンテンツは使用前にご確認ください。採用結果について責任を負いません。",
+  s7Title: "7. 責任の制限", s7Content: "ATS Pro履歴書ビルダーは「現状有姿」で保証なく提供されます。間接的な損害について責任を負いません。",
+  s8Title: "8. 解約", s8Content: "いつでもアカウントを解約できます。データは30日以内に削除されます。",
+  s9Title: "9. お問い合わせ", s9Content: "本利用規約についてご質問がある場合は、こちらまでご連絡ください",
+  backToHome: "ホームに戻る",
+};
+
+const ko: TermsTranslations = {
+  title: "이용약관",
+  lastUpdated: "최종 업데이트:",
+  s1Title: "1. 약관 동의", s1Content: "ATS Pro 이력서 빌더를 사용함으로써 본 이용약관에 동의하는 것으로 간주됩니다. 동의하지 않으시면 플랫폼을 사용하지 마세요.",
+  s2Title: "2. 서비스 설명", s2Content: "ATS Pro 이력서 빌더는 AI 이력서 작성, 평가, 지원 추적, 자기소개서 생성 및 구직 도구를 제공합니다.",
+  s3Title: "3. 사용자 계정", s3Items: ["계정 생성 시 정확하고 완전한 정보를 제공해야 합니다", "계정 보안 유지는 귀하의 책임입니다", "16세 이상이어야 합니다", "1인당 1개의 계정만 허용됩니다", "계정의 모든 활동은 귀하의 책임입니다"],
+  s4Title: "4. 사용자 콘텐츠", s4Content: "업로드한 모든 콘텐츠의 소유권은 귀하에게 있습니다. AI 기능을 사용함으로써 서비스 제공을 위한 제한적 라이선스를 부여합니다.",
+  s5Title: "5. 허용되는 사용", s5Content: "사기성 이력서 작성, 타인 사칭, 악성 콘텐츠 업로드에 플랫폼을 사용하지 않을 것에 동의합니다.",
+  s6Title: "6. AI 생성 콘텐츠", s6Content: "AI 도구는 제안을 제공합니다. AI 생성 콘텐츠는 사용 전 검토해야 합니다. 채용 결과에 대해 책임지지 않습니다.",
+  s7Title: "7. 책임 제한", s7Content: "ATS Pro 이력서 빌더는 어떠한 보증 없이 \"있는 그대로\" 제공됩니다. 간접적인 손해에 대해 책임지지 않습니다.",
+  s8Title: "8. 해지", s8Content: "언제든지 계정을 해지할 수 있습니다. 데이터는 30일 이내에 삭제됩니다.",
+  s9Title: "9. 문의", s9Content: "이용약관에 대한 질문은 다음으로 연락해 주세요",
+  backToHome: "홈으로 돌아가기",
+};
+
+export const termsTranslations: Record<Locale, TermsTranslations> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };
