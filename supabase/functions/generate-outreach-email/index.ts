@@ -70,7 +70,7 @@ Experience: ${experience.slice(0, 3).map((e) => `${e.title} at ${e.company}`).jo
     const systemPrompt = `You are an expert job application coach. Write professional, concise, and personalized outreach emails for job applicants.`;
 
     const userPrompt = coverLetterContext
-      ? `Using the following cover letter content, write a professional email for a job application.
+      ? `Using the following cover letter content, write a professional job application email.
 Position: ${position}
 Company: ${company}
 ${resumeContext ? `Applicant info:\n${resumeContext}` : ""}
@@ -80,9 +80,14 @@ ${coverLetterContext.slice(0, 2000)}
 
 Write:
 1. A compelling subject line (max 80 chars)
-2. A professional email body (3-4 short paragraphs, plain text, no markdown, no asterisks)
-
-The email should feel personal and directly reference the role and company. End with a clear call to action.`
+2. A professional email body structured as follows:
+   - Greeting (e.g. "Dear Hiring Manager," or "Dear [Name],")
+   - Opening paragraph: express interest in the role and company
+   - Middle paragraph(s): highlight 2-3 key strengths or achievements from the resume/cover letter relevant to the role
+   - Closing paragraph: thank them for their time and consideration, express eagerness to discuss further, mention the attached resume
+   - Sign-off: "Thank you," followed by the applicant's name (use the name from the resume if available, otherwise "[Your Name]")
+   
+Rules: plain text only, no markdown, no asterisks, no bullet points in the email body.`
       : `Write a professional job application outreach email.
 Position: ${position}
 Company: ${company}
@@ -90,9 +95,14 @@ ${resumeContext ? `Applicant info:\n${resumeContext}` : ""}
 
 Write:
 1. A compelling subject line (max 80 chars)
-2. A professional email body (3-4 short paragraphs, plain text, no markdown, no asterisks)
+2. A professional email body structured as follows:
+   - Greeting: "Dear Hiring Manager,"
+   - Opening paragraph: express genuine interest in the ${position} role at ${company}
+   - Middle paragraph(s): highlight 2-3 relevant skills or experiences that make the applicant a strong fit
+   - Closing paragraph: thank them for their time and consideration, express eagerness to discuss the opportunity further, and mention the attached resume
+   - Sign-off: "Thank you," followed by the applicant's name (use the name from the resume if available, otherwise "[Your Name]")
 
-The email should feel personal and directly reference the role and company. End with a clear call to action.`;
+Rules: plain text only, no markdown, no asterisks, no bullet points in the email body.`;
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
