@@ -8,8 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Loader2, Mail, ExternalLink, FileText, Copy, Check, Send, Info } from "lucide-react";
+import { Sparkles, Loader2, Mail, ExternalLink, FileText, Copy, Check, Send, Info, Paperclip } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import { buildDoc } from "@/components/resume/pdfTemplates";
+import type { ResumeData } from "@/components/resume/types";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Resume = Tables<"resumes">;
@@ -26,6 +28,7 @@ export default function EmailOutreach() {
   const [fromName, setFromName] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [attachResume, setAttachResume] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -104,14 +107,35 @@ export default function EmailOutreach() {
         url: null,
       });
     } catch {
-      // Non-critical — don't fail the send
+      // Non-critical
+    }
+  };
+
+  /** Generate PDF from selected resume and return base64 string */
+  const generateResumePdfBase64 = async (): Promise<{ base64: string; filename: string } | null> => {
+    if (!selectedResumeId) return null;
+    const resume = resumes.find((r) => r.id === selectedResumeId);
+    if (!resume?.resume_data) return null;
+    try {
+      const resumeData = resume.resume_data as ResumeData;
+      const templateId = (resumeData.templateId as Parameters<typeof buildDoc>[2]) ?? "classic";
+      const doc = await buildDoc(resumeData, resume.title, templateId);
+      // output as base64 string (without the data URI prefix)
+      const dataUri = doc.output("datauristring");
+      const base64 = dataUri.split(",")[1];
+      const pi = resumeData.personalInfo || {};
+      const filename = `${(pi.fullName || resume.title || "Resume").replace(/\s+/g, "_")}_Resume.pdf`;
+      return { base64, filename };
+    } catch (err) {
+      console.error("PDF generation error:", err);
+      return null;
     }
   };
 
   // Send directly from the platform via Resend
   const sendDirectly = async () => {
     if (!recruiterEmail.trim()) {
-      toast({ title: "Recipient required", description: "Please enter the recruiter's email address to send directly.", variant: "destructive" });
+      toast({ title: "Recipient required", description: "Please enter the recruiter's email address.", variant: "destructive" });
       return;
     }
     if (!subject.trim() || !body.trim()) {
@@ -121,6 +145,18 @@ export default function EmailOutreach() {
 
     setSending(true);
     try {
+      let resumePdfBase64: string | undefined;
+      let resumeFilename: string | undefined;
+
+      if (attachResume && selectedResumeId) {
+        toast({ title: "Preparing resume…", description: "Generating PDF attachment." });
+        const pdf = await generateResumePdfBase64();
+        if (pdf) {
+          resumePdfBase64 = pdf.base64;
+          resumeFilename = pdf.filename;
+        }
+      }
+
       const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
       const res = await fetch(
         `https://${projectId}.supabase.co/functions/v1/send-outreach-email`,
@@ -138,6 +174,8 @@ export default function EmailOutreach() {
             replyTo: user?.email,
             position,
             company,
+            resumePdfBase64,
+            resumeFilename,
           }),
         }
       );
@@ -147,7 +185,7 @@ export default function EmailOutreach() {
       await saveToJobTracker();
       toast({
         title: "✅ Email sent!",
-        description: `Your email was sent to ${recruiterEmail}. Replies will come to your email. Application saved to Job Tracker.`,
+        description: `Sent to ${recruiterEmail}${resumePdfBase64 ? " with resume attached" : ""}. Replies go to your email. Application saved to Job Tracker.`,
       });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to send email.";
@@ -208,7 +246,7 @@ export default function EmailOutreach() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Email Outreach</h1>
           <p className="text-muted-foreground mt-1">
-            Compose AI-powered outreach emails and send directly from the platform — or open in your own inbox.
+            Compose AI-powered outreach emails and send directly from the platform — with your resume attached.
           </p>
         </div>
 
@@ -216,7 +254,7 @@ export default function EmailOutreach() {
         <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-foreground">
           <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
           <span>
-            <strong>Send directly</strong> — the email is sent from our platform with your name and reply-to set to your email. The recipient can reply directly to you. Applications are automatically logged in your <strong>Job Tracker</strong>.
+            <strong>Send directly</strong> — your resume is attached as a PDF. The email arrives with your name and replies come straight to your inbox. Applications are logged in your <strong>Job Tracker</strong>.
           </span>
         </div>
 
@@ -225,7 +263,7 @@ export default function EmailOutreach() {
           <div className="space-y-2">
             <Label htmlFor="eo-resume" className="flex items-center gap-2">
               <FileText className="h-4 w-4 text-primary" />
-              Select Resume <span className="text-muted-foreground text-xs font-normal">(AI will use this to personalise the email)</span>
+              Select Resume <span className="text-muted-foreground text-xs font-normal">(AI personalises the email + attaches as PDF)</span>
             </Label>
             <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
               <SelectTrigger id="eo-resume">
@@ -331,6 +369,34 @@ export default function EmailOutreach() {
           </CardContent>
         </Card>
 
+        {/* Attachment toggle */}
+        {selectedResumeId && (
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
+            <Paperclip className="h-4 w-4 text-primary shrink-0" />
+            <div className="flex-1 text-sm">
+              <span className="font-medium">Attach resume as PDF</span>
+              <span className="text-muted-foreground ml-2">
+                ({resumes.find(r => r.id === selectedResumeId)?.title ?? "Selected resume"})
+              </span>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={attachResume}
+              onClick={() => setAttachResume(!attachResume)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                attachResume ? "bg-primary" : "bg-muted-foreground/30"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                  attachResume ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="space-y-3">
           {/* Primary: Send directly */}
@@ -343,7 +409,7 @@ export default function EmailOutreach() {
             {sending ? (
               <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sending…</>
             ) : (
-              <><Send className="h-4 w-4 mr-2" />Send Email Directly</>
+              <><Send className="h-4 w-4 mr-2" />Send Email{attachResume && selectedResumeId ? " with Resume Attached" : ""}</>
             )}
           </Button>
 
