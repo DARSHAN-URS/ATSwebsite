@@ -42,6 +42,7 @@ const BlogArticlePage = lazy(() =>
   import("@/pages/seo/BlogArticles").then((m) => ({ default: m.BlogArticlePage }))
 );
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
+const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 
 const queryClient = new QueryClient();
 
@@ -105,6 +106,7 @@ const App = () => (
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/resumes" element={<Resumes />} />
                   <Route path="/job-tracker" element={<JobTracker />} />
+                  <Route path="/email-outreach" element={<EmailOutreach />} />
                   <Route path="/cover-letters" element={<Navigate to="/resumes" replace />} />
                   <Route path="/jobs" element={<FindJobs />} />
                   <Route path="/companies" element={<Companies />} />

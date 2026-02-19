@@ -17,7 +17,7 @@ const jobSeekerNav = [
   { to: "/resumes", icon: FileText, key: "resumes" as const },
   { to: "/jobs", icon: Search, key: "findJobs" as const },
   { to: "/companies", icon: Building2, key: "companies" as const },
-  { to: "/job-tracker", icon: Mail, key: "emailOutreach" as const },
+  { to: "/email-outreach", icon: Mail, key: "emailOutreach" as const },
   { to: "/interview-prep", icon: Headphones, key: "interviewPrep" as const },
   { to: "/pricing", icon: CreditCard, key: "pricing" as const },
 ];

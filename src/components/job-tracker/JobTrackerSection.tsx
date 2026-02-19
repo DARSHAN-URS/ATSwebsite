@@ -98,11 +98,21 @@ export default function JobTrackerSection() {
             <Card key={app.id}>
               <CardContent className="py-4 flex items-center justify-between">
                 <div className="space-y-1">
-                  <p className="font-medium">{app.position}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{app.position}</p>
+                    {app.notes?.startsWith("📧") && (
+                      <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/5 gap-1 py-0">
+                        <Mail className="h-3 w-3" /> Via Email
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground">{app.company}</p>
                   <p className="text-xs text-muted-foreground">Applied: {new Date(app.date_applied).toLocaleDateString()}</p>
-                  {app.notes && (
+                  {app.notes && !app.notes.startsWith("📧") && (
                     <p className="text-xs text-muted-foreground italic truncate max-w-xs">{app.notes}</p>
+                  )}
+                  {app.notes?.startsWith("📧") && (
+                    <p className="text-xs text-muted-foreground truncate max-w-xs">{app.notes}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-3">
