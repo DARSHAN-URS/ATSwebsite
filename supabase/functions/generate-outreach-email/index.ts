@@ -67,10 +67,24 @@ Experience: ${experience.slice(0, 3).map((e) => `${e.title} at ${e.company}`).jo
       }
     }
 
-    const systemPrompt = `You are an expert job application coach. Write professional, concise, and personalized outreach emails for job applicants.`;
+    const systemPrompt = `You are an expert job application coach. Write professional, concise, and personalized outreach emails for job applicants.
+
+IMPORTANT: Respond in EXACTLY this format with no extra text before or after:
+SUBJECT: <your subject line here>
+BODY:
+<your email body here>`;
+
+    const bodyInstructions = `Structure the email body as:
+- Greeting: "Dear Hiring Manager,"
+- Opening paragraph: express genuine interest in the ${position} role at ${company}
+- Middle paragraph(s): highlight 2-3 relevant skills or experiences that make the applicant a strong fit
+- Closing paragraph: thank them for their time and consideration, express eagerness to discuss the opportunity further, and mention the attached resume
+- Sign-off: "Thank you," followed by the applicant's name (use the name from resume if available, otherwise "Your Name")
+
+Rules: plain text only, no markdown, no asterisks, no bullet points in the email body.`;
 
     const userPrompt = coverLetterContext
-      ? `Using the following cover letter content, write a professional job application email.
+      ? `Write a professional job application email using this cover letter content.
 Position: ${position}
 Company: ${company}
 ${resumeContext ? `Applicant info:\n${resumeContext}` : ""}
@@ -78,31 +92,13 @@ ${resumeContext ? `Applicant info:\n${resumeContext}` : ""}
 Cover letter content:
 ${coverLetterContext.slice(0, 2000)}
 
-Write:
-1. A compelling subject line (max 80 chars)
-2. A professional email body structured as follows:
-   - Greeting (e.g. "Dear Hiring Manager," or "Dear [Name],")
-   - Opening paragraph: express interest in the role and company
-   - Middle paragraph(s): highlight 2-3 key strengths or achievements from the resume/cover letter relevant to the role
-   - Closing paragraph: thank them for their time and consideration, express eagerness to discuss further, mention the attached resume
-   - Sign-off: "Thank you," followed by the applicant's name (use the name from the resume if available, otherwise "[Your Name]")
-   
-Rules: plain text only, no markdown, no asterisks, no bullet points in the email body.`
+${bodyInstructions}`
       : `Write a professional job application outreach email.
 Position: ${position}
 Company: ${company}
 ${resumeContext ? `Applicant info:\n${resumeContext}` : ""}
 
-Write:
-1. A compelling subject line (max 80 chars)
-2. A professional email body structured as follows:
-   - Greeting: "Dear Hiring Manager,"
-   - Opening paragraph: express genuine interest in the ${position} role at ${company}
-   - Middle paragraph(s): highlight 2-3 relevant skills or experiences that make the applicant a strong fit
-   - Closing paragraph: thank them for their time and consideration, express eagerness to discuss the opportunity further, and mention the attached resume
-   - Sign-off: "Thank you," followed by the applicant's name (use the name from the resume if available, otherwise "[Your Name]")
-
-Rules: plain text only, no markdown, no asterisks, no bullet points in the email body.`;
+${bodyInstructions}`;
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -116,45 +112,35 @@ Rules: plain text only, no markdown, no asterisks, no bullet points in the email
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "return_email",
-              description: "Return the generated email subject and body",
-              parameters: {
-                type: "object",
-                properties: {
-                  subject: { type: "string", description: "Email subject line" },
-                  body: { type: "string", description: "Email body in plain text" },
-                },
-                required: ["subject", "body"],
-                additionalProperties: false,
-              },
-            },
-          },
-        ],
-        tool_choice: { type: "function", function: { name: "return_email" } },
       }),
     });
 
     if (!aiRes.ok) {
       const t = await aiRes.text();
       console.error("AI error:", aiRes.status, t);
+      if (aiRes.status === 429) throw new Error("Rate limit exceeded. Please try again in a moment.");
+      if (aiRes.status === 402) throw new Error("AI service credits exhausted.");
       throw new Error("AI generation failed");
     }
 
     const aiData = await aiRes.json();
-    const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
-    if (!toolCall) throw new Error("No AI response");
+    const content = aiData.choices?.[0]?.message?.content as string | undefined;
+    if (!content) throw new Error("No AI response");
 
-    const result = JSON.parse(toolCall.function.arguments);
-    return new Response(JSON.stringify(result), {
+    // Parse SUBJECT: and BODY: from the response
+    const subjectMatch = content.match(/^SUBJECT:\s*(.+)/m);
+    const bodyMatch = content.match(/^BODY:\s*\n([\s\S]+)/m);
+
+    const subject = subjectMatch?.[1]?.trim() ?? `Application for ${position} at ${company}`;
+    const body = bodyMatch?.[1]?.trim() ?? content;
+
+    return new Response(JSON.stringify({ subject, body }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("generate-outreach-email error:", err);
-    return new Response(JSON.stringify({ error: "Failed to generate email. Please try again." }), {
+    const message = err instanceof Error ? err.message : "Failed to generate email. Please try again.";
+    return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
