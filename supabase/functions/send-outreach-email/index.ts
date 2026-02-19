@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json();
-    const { to, subject, body: emailBody, fromName, replyTo, position, company } = body;
+    const { to, subject, body: emailBody, fromName, replyTo, position, company, resumePdfBase64, resumeFilename } = body;
 
     // Validate required fields
     if (!isValidEmail(to)) {
@@ -103,12 +103,15 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Sender identity — always from our domain for deliverability, but with user's name
-    const senderName = fromName?.trim() ? `${fromName.trim()} via ATS Pro` : "ATS Pro Resume Builder";
+    // Use the user's name as sender — no "via" branding to avoid spam filters
+    const senderName = fromName?.trim() || "ATS Pro";
     const SENDER = `${senderName} <no-reply@atsproresumebuilder.com>`;
 
     // Validate replyTo if provided
     const replyToEmail = replyTo && isValidEmail(replyTo) ? replyTo : user.email;
+
+    // Plain text fallback (important for deliverability)
+    const plainText = emailBody;
 
     // Convert plain text body to HTML preserving line breaks
     const htmlBody = emailBody
@@ -119,34 +122,51 @@ Deno.serve(async (req) => {
 
     const positionContext = position && company
       ? `<p style="color:#6b7280;font-size:13px;margin:0 0 16px;padding:8px 12px;background:#f3f4f6;border-radius:6px;border-left:3px solid #6366f1;">
-           📋 Re: <strong>${position}</strong> at <strong>${company}</strong>
+           Re: <strong>${position}</strong> at <strong>${company}</strong>
          </p>`
       : "";
 
-    const html = `
-      <div style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;max-width:640px;margin:0 auto;padding:32px 20px;">
-        <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:32px;">
-          ${positionContext}
-          <div style="color:#1f2937;font-size:15px;line-height:1.7;">
-            ${htmlBody}
-          </div>
-        </div>
-        <p style="color:#9ca3af;font-size:11px;text-align:center;margin-top:24px;">
-          Sent via <a href="https://atsproresumebuilder.com" style="color:#6366f1;text-decoration:none;">ATS Pro Resume Builder</a>
-          ${replyToEmail ? `· Reply to: <a href="mailto:${replyToEmail}" style="color:#6366f1;text-decoration:none;">${replyToEmail}</a>` : ""}
-        </p>
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f9fafb;">
+  <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;padding:24px 16px;">
+    <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;padding:32px;">
+      ${positionContext}
+      <div style="color:#1f2937;font-size:15px;line-height:1.8;">
+        ${htmlBody}
       </div>
-    `;
+    </div>
+    ${replyToEmail ? `<p style="color:#9ca3af;font-size:11px;text-align:center;margin-top:16px;">
+      Reply directly to: <a href="mailto:${replyToEmail}" style="color:#6366f1;text-decoration:none;">${replyToEmail}</a>
+    </p>` : ""}
+  </div>
+</body>
+</html>`;
 
     const resendPayload: Record<string, unknown> = {
       from: SENDER,
       to: [to],
       subject: subject.trim(),
       html,
+      text: plainText,
     };
 
     if (replyToEmail) {
       resendPayload.reply_to = replyToEmail;
+    }
+
+    // Attach resume PDF if provided
+    if (resumePdfBase64 && typeof resumePdfBase64 === "string") {
+      const filename = resumeFilename
+        ? resumeFilename.replace(/[^a-zA-Z0-9_\-. ]/g, "").trim() || "Resume.pdf"
+        : "Resume.pdf";
+      resendPayload.attachments = [
+        {
+          filename: filename.endsWith(".pdf") ? filename : `${filename}.pdf`,
+          content: resumePdfBase64,
+        },
+      ];
     }
 
     const resendRes = await fetch("https://api.resend.com/emails", {

@@ -1475,7 +1475,7 @@ function renderPolished(doc: jsPDF, data: ResumeData, title: string, photoData?:
 }
 
 // ─── Main exports ──────────────────────────────────────
-async function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): Promise<jsPDF> {
+export async function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): Promise<jsPDF> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
 
   // Pre-load photo for templates that support it
