@@ -24,6 +24,8 @@ interface JobListing {
   posted_date: string;
   match_score?: number;
   match_explanation?: string;
+  employer_logo?: string;
+  source?: string;
 }
 
 function getScoreColor(score: number) {
@@ -221,14 +223,27 @@ export default function ExternalJobsSearch() {
         {sortedJobs.map((job, i) => (
           <Card key={i} className="hover:shadow-md transition-shadow">
             <CardHeader className="pb-3 cursor-pointer" onClick={() => setExpandedJob(expandedJob === i ? null : i)}>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <CardTitle className="text-lg">{job.job_title}</CardTitle>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
-                    <span className="flex items-center gap-1"><Building2 className="h-3.5 w-3.5" />{job.company}</span>
-                    {job.location && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{job.location}</span>}
-                    {job.job_type && <Badge variant="outline" className="text-xs">{job.job_type}</Badge>}
-                    {job.posted_date && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{job.posted_date}</span>}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  {job.employer_logo && (
+                    <img
+                      src={job.employer_logo}
+                      alt={job.company}
+                      className="h-10 w-10 rounded-md object-contain border border-border flex-shrink-0 bg-background p-1"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                    />
+                  )}
+                  <div className="space-y-1 min-w-0">
+                    <CardTitle className="text-lg leading-snug">{job.job_title}</CardTitle>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                      <span className="flex items-center gap-1"><Building2 className="h-3.5 w-3.5" />{job.company}</span>
+                      {job.location && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{job.location}</span>}
+                      {job.job_type && <Badge variant="outline" className="text-xs">{job.job_type}</Badge>}
+                      {job.posted_date && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{job.posted_date}</span>}
+                      {job.source && (
+                        <Badge variant="secondary" className="text-xs font-medium">{job.source}</Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
                 {job.match_score !== undefined && (
