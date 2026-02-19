@@ -228,6 +228,91 @@ const Index = () => {
         </div>
       </section>
 
+      {/* AI Apply Feature Section */}
+      <section className="border-t border-border/60 py-14 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="grid gap-10 md:grid-cols-2 items-center">
+            {/* Left: content */}
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary text-xs font-semibold mb-4">
+                <Sparkles className="h-3.5 w-3.5" /> New Feature
+              </div>
+              <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl mb-3">
+                AI Apply — Let AI Apply to Jobs For You
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-md mb-6">
+                Select a resume, hit <strong>AI Apply</strong>, and our AI instantly finds your top 10 job matches, tailors your resume, and generates a custom cover letter — all in one click.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  { label: "Finds your top 10 matching jobs automatically" },
+                  { label: "Tailors your resume for each specific role" },
+                  { label: "Generates a professional cover letter per job" },
+                  { label: "One-click Apply & Track — logs status instantly" },
+                  { label: "Real-time progress with live stage updates" },
+                ].map((item) => (
+                  <li key={item.label} className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    {item.label}
+                  </li>
+                ))}
+              </ul>
+              <Button className="gap-2 rounded-lg font-semibold shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
+                Try AI Apply Free <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Right: visual cards */}
+            <div className="flex flex-col gap-3">
+              {/* Queue preview card */}
+              <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Sparkles className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-semibold">AI Apply Queue</span>
+                  <span className="ml-auto text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">10 matches</span>
+                </div>
+                {[
+                  { title: "Senior Frontend Engineer", company: "Stripe", score: 94, status: "Tailored" },
+                  { title: "React Developer", company: "Vercel", score: 91, status: "Cover Letter Ready" },
+                  { title: "Full Stack Engineer", company: "Linear", score: 88, status: "Ready to Apply" },
+                ].map((job) => (
+                  <div key={job.title} className="flex items-center gap-3 py-2.5 border-b border-border/40 last:border-0">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[12px] font-semibold truncate">{job.title}</p>
+                      <p className="text-[11px] text-muted-foreground">{job.company}</p>
+                    </div>
+                    <span className="text-[11px] font-bold text-primary font-mono">{job.score}%</span>
+                    <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-medium whitespace-nowrap">{job.status}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Progress step card */}
+              <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">Live Progress</p>
+                <div className="space-y-2">
+                  {[
+                    { step: "Searching jobs", done: true },
+                    { step: "Matching to your resume", done: true },
+                    { step: "Tailoring resume for each role", done: true },
+                    { step: "Generating cover letters", done: false },
+                  ].map((s) => (
+                    <div key={s.step} className="flex items-center gap-2.5">
+                      <div className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 ${s.done ? "bg-primary" : "border-2 border-primary animate-pulse"}`}>
+                        {s.done && <CheckCircle className="h-2.5 w-2.5 text-primary-foreground" />}
+                      </div>
+                      <span className={`text-[12px] ${s.done ? "text-foreground" : "text-primary font-medium"}`}>{s.step}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Why Resumes Fail */}
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
