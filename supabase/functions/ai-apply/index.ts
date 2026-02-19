@@ -15,7 +15,7 @@ serve(async (req) => {
   if (errorResponse) return errorResponse;
 
   try {
-    const { resume_id, resume_data, resume_title } = await req.json();
+    const { resume_id, resume_data, resume_title, location } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("Service configuration error");
@@ -35,7 +35,16 @@ serve(async (req) => {
     const searchQuery = latestTitle || skills.slice(0, 3).join(" ") || "software engineer";
 
     // Step 1: Find top 10 matching jobs via JSearch
-    const params = new URLSearchParams({ query: searchQuery, page: "1", num_pages: "2" });
+    const jsearchParams: Record<string, string> = {
+      query: location ? `${searchQuery} in ${location}` : searchQuery,
+      page: "1",
+      num_pages: "2",
+    };
+    if (location) {
+      jsearchParams.location = location;
+      jsearchParams.radius = "50";
+    }
+    const params = new URLSearchParams(jsearchParams);
     const jsearchResponse = await fetch(
       `https://jsearch.p.rapidapi.com/search?${params.toString()}`,
       {

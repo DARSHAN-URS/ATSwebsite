@@ -69,6 +69,9 @@ export default function Resumes() {
   const [linkedinLoading, setLinkedinLoading] = useState(false);
   const [aiApplyingId, setAiApplyingId] = useState<string | null>(null);
   const [aiApplyStep, setAiApplyStep] = useState(0);
+  const [aiApplySetupOpen, setAiApplySetupOpen] = useState(false);
+  const [aiApplyPendingResume, setAiApplyPendingResume] = useState<Resume | null>(null);
+  const [aiApplyLocation, setAiApplyLocation] = useState("");
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const fetchResumes = async () => {
@@ -88,8 +91,15 @@ export default function Resumes() {
     { label: "Saving to your queue", detail: "Packaging everything and adding to your dashboard…" },
   ];
 
-  const handleAIApply = async (resume: Resume) => {
+  const openAIApplySetup = (resume: Resume) => {
+    setAiApplyPendingResume(resume);
+    setAiApplyLocation("");
+    setAiApplySetupOpen(true);
+  };
+
+  const handleAIApply = async (resume: Resume, location?: string) => {
     if (!user) return;
+    setAiApplySetupOpen(false);
     setAiApplyingId(resume.id);
     setAiApplyStep(0);
 
@@ -106,6 +116,7 @@ export default function Resumes() {
           resume_id: resume.id,
           resume_title: resume.title,
           resume_data: resume.resume_data,
+          location: location || undefined,
         },
       });
       timers.forEach(clearTimeout);
@@ -981,7 +992,7 @@ export default function Resumes() {
                           size="sm"
                           variant="outline"
                           className="w-full text-xs gap-1.5 border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground"
-                          onClick={(e) => { e.stopPropagation(); handleAIApply(resume); }}
+                          onClick={(e) => { e.stopPropagation(); openAIApplySetup(resume); }}
                           disabled={aiApplyingId === resume.id}
                         >
                           {aiApplyingId === resume.id ? (
@@ -1008,6 +1019,47 @@ export default function Resumes() {
           })}
         </div>
       )}
+
+      {/* AI Apply Setup Dialog */}
+      <Dialog open={aiApplySetupOpen} onOpenChange={(open) => { if (!open) setAiApplySetupOpen(false); }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              AI Apply Setup
+            </DialogTitle>
+            <DialogDescription>
+              Tell us where you want to work so AI finds the right jobs for you.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="aiApplyLocation">Preferred Location</Label>
+              <Input
+                id="aiApplyLocation"
+                placeholder="e.g. New York, Remote, London, or leave blank for any"
+                value={aiApplyLocation}
+                onChange={(e) => setAiApplyLocation(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && aiApplyPendingResume) {
+                    handleAIApply(aiApplyPendingResume, aiApplyLocation);
+                  }
+                }}
+              />
+              <p className="text-xs text-muted-foreground">Leave blank to search all locations worldwide.</p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                onClick={() => { if (aiApplyPendingResume) handleAIApply(aiApplyPendingResume, aiApplyLocation); }}
+              >
+                <Sparkles className="h-4 w-4 mr-2" /> Start AI Apply
+              </Button>
+              <Button variant="outline" onClick={() => setAiApplySetupOpen(false)}>Cancel</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* AI Apply Progress Dialog */}
       <Dialog open={!!aiApplyingId} onOpenChange={() => {}}>
