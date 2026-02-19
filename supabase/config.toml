@@ -38,3 +38,6 @@ verify_jwt = false
 
 [functions.ai-apply]
 verify_jwt = false
+
+[functions.send-outreach-email]
+verify_jwt = false
