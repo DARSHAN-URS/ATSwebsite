@@ -70,21 +70,38 @@ serve(async (req) => {
     const rawJobs = jsearchData.data || [];
 
     // Map JSearch results to our format
-    const jobs = rawJobs.map((j: any) => ({
-      job_title: j.job_title || "Untitled",
-      company: j.employer_name || "Unknown",
-      location: j.job_city && j.job_state
-        ? `${j.job_city}, ${j.job_state}`
-        : j.job_country || "Not specified",
-      job_type: j.job_is_remote ? "Remote" : "On-site",
-      description: j.job_description?.slice(0, 500) || "",
-      url: j.job_apply_link || j.job_google_link || "#",
-      posted_date: j.job_posted_at_datetime_utc
-        ? j.job_posted_at_datetime_utc.split("T")[0]
-        : null,
-      employer_logo: j.employer_logo || null,
-      job_id: j.job_id || null,
-    }));
+    const jobs = rawJobs.map((j: any) => {
+      // Determine source platform from publisher/apply link
+      let source = "Job Board";
+      const applyLink = j.job_apply_link || j.job_google_link || "";
+      const publisher = (j.job_publisher || "").toLowerCase();
+      if (publisher.includes("linkedin") || applyLink.includes("linkedin.com")) source = "LinkedIn";
+      else if (publisher.includes("indeed") || applyLink.includes("indeed.com")) source = "Indeed";
+      else if (publisher.includes("glassdoor") || applyLink.includes("glassdoor.com")) source = "Glassdoor";
+      else if (publisher.includes("naukri") || applyLink.includes("naukri.com") || applyLink.includes("naukriGulf") || applyLink.includes("naukrigulf.com")) source = "Naukri Gulf";
+      else if (publisher.includes("google") || applyLink.includes("google.com/jobs")) source = "Google Jobs";
+      else if (publisher.includes("ziprecruiter") || applyLink.includes("ziprecruiter.com")) source = "ZipRecruiter";
+      else if (publisher.includes("monster") || applyLink.includes("monster.com")) source = "Monster";
+      else if (publisher.includes("bayt") || applyLink.includes("bayt.com")) source = "Bayt";
+      else if (publisher) source = j.job_publisher;
+
+      return {
+        job_title: j.job_title || "Untitled",
+        company: j.employer_name || "Unknown",
+        location: j.job_city && j.job_state
+          ? `${j.job_city}, ${j.job_state}`
+          : j.job_city || j.job_state || j.job_country || "Not specified",
+        job_type: j.job_is_remote ? "Remote" : "On-site",
+        description: j.job_description?.slice(0, 500) || "",
+        url: j.job_apply_link || j.job_google_link || "#",
+        posted_date: j.job_posted_at_datetime_utc
+          ? j.job_posted_at_datetime_utc.split("T")[0]
+          : null,
+        employer_logo: j.employer_logo || null,
+        job_id: j.job_id || null,
+        source,
+      };
+    });
 
     // Use AI to score matches against resume
     if (jobs.length > 0 && resume_data) {
