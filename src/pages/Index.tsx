@@ -140,7 +140,7 @@ const Index = () => {
             </div>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobTracker}</button>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobBoard}</button>
-            <button onClick={() => openAuth("signup")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.jobBoard.postJobs}</button>
+            <Link to="/blog" className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">Blog</Link>
             <Link to="/about" className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">About</Link>
             <button onClick={() => pricingRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">Pricing</button>
           </div>
@@ -158,7 +158,7 @@ const Index = () => {
             <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
-            <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.jobBoard.postJobs}</button>
+            <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">Blog</Link>
             <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">About</Link>
             <button onClick={() => { pricingRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">Pricing</button>
             <div className="pt-2 border-t border-border/60 flex items-center gap-2">
