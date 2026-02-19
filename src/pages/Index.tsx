@@ -113,7 +113,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img src={logo} alt="ATS Pro Resume Builder" className="h-10 md:h-[56px]" width={233} height={56} />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-10 md:h-[56px] dark:brightness-100 brightness-0" width={233} height={56} />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.landing.resumeTemplates}</button>
@@ -646,7 +646,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src={logo} alt="ATS Pro Resume Builder" className="h-14" width={233} height={56} />
+              <img src={logo} alt="ATS Pro Resume Builder" className="h-14 dark:brightness-100 brightness-0" width={233} height={56} />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>

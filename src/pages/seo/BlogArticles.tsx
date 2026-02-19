@@ -197,7 +197,7 @@ export function BlogArticlePage() {
 
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-10" width={167} height={40} /></Link>
+          <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-10 dark:brightness-100 brightness-0" width={167} height={40} /></Link>
           <div className="flex items-center gap-3">
             <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition">Blog</Link>
             <Button size="sm" asChild><Link to="/">Get Started</Link></Button>
