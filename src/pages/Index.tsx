@@ -21,7 +21,6 @@ import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 
 const Index = () => {
-  const templatesRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -121,9 +120,9 @@ const Index = () => {
                 {t.landing.resumeTemplates} <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180" />
               </button>
               <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
-                <div className="w-[480px] rounded-xl border border-border/60 bg-card shadow-xl shadow-foreground/5 p-4">
+                <div className="w-[560px] max-h-[70vh] overflow-y-auto rounded-xl border border-border/60 bg-card shadow-xl shadow-foreground/5 p-4">
                   <div className="grid grid-cols-3 gap-2">
-                    {RESUME_TEMPLATES.slice(0, 6).map((tmpl) => (
+                    {RESUME_TEMPLATES.map((tmpl) => (
                       <button
                         key={tmpl.id}
                         onClick={() => openAuth("signup")}
@@ -138,12 +137,6 @@ const Index = () => {
                       </button>
                     ))}
                   </div>
-                  <button
-                    onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })}
-                    className="mt-3 w-full text-center text-xs font-medium text-primary hover:text-primary/80 transition-colors"
-                  >
-                    View all {RESUME_TEMPLATES.length} templates →
-                  </button>
                 </div>
               </div>
             </div>
@@ -164,7 +157,7 @@ const Index = () => {
         </div>
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-border/60 bg-background px-3 py-2 space-y-0.5 animate-in slide-in-from-top-2 duration-200">
-            <button onClick={() => { templatesRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
+            <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
             <button onClick={() => { openAuth("login"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
             <button onClick={() => { openAuth("signup"); setMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.jobBoard.postJobs}</button>
@@ -370,41 +363,6 @@ const Index = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Resume Templates */}
-      <section ref={templatesRef} id="templates" className="border-t border-border/60 py-16 md:py-24">
-          <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.templates}</p>
-            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">{t.landing.professionalTemplates}</h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-              {t.landing.templatesCount}
-            </p>
-          </div>
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {RESUME_TEMPLATES.map((tmpl) => (
-              <button
-                key={tmpl.id}
-                onClick={() => openAuth("signup")}
-                className="group relative flex flex-col rounded-xl border border-border/60 bg-card overflow-hidden transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 duration-300"
-              >
-                <div className="p-1.5">
-                  <TemplateThumbnail templateId={tmpl.id} />
-                </div>
-                <div className="px-3 pb-3 pt-1 text-left">
-                  <span className="text-[13px] font-semibold leading-tight">{tmpl.name}</span>
-                  <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2 mt-0.5">{tmpl.description}</p>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center bg-background/85 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <span className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg">
-                    {t.landing.useTemplate}
-                  </span>
-                </div>
-              </button>
-            ))}
           </div>
         </div>
       </section>
