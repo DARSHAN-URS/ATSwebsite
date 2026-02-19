@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Loader2, Mail, ExternalLink, Info, FileText } from "lucide-react";
+import { Sparkles, Loader2, Mail, ExternalLink, Info, FileText, Copy, Check } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -27,6 +27,7 @@ export default function EmailOutreach() {
   const [body, setBody] = useState("");
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Fetch user's resumes on mount
   useEffect(() => {
@@ -116,24 +117,43 @@ export default function EmailOutreach() {
       return;
     }
 
-    // Save to job tracker first
+    // 1. Copy full email to clipboard so nothing is ever lost
+    const fullText = `Subject: ${subject}\n\n${body}`;
+    try {
+      await navigator.clipboard.writeText(fullText);
+    } catch {
+      // clipboard access denied — proceed anyway
+    }
+
+    // Save to job tracker
     await saveToJobTracker();
 
-    const fullBody = body + "\n\n[Please attach your resume before sending]";
-    const encodedTo = encodeURIComponent(recruiterEmail);
-    const encodedSubject = encodeURIComponent(subject);
-    const encodedBody = encodeURIComponent(fullBody);
+    // 2. Build a SHORT URL — only pass subject + a trimmed body (≤500 chars)
+    //    The full content is in clipboard; user pastes the rest if needed
+    const attachNote = "\n\n[Please attach your resume before sending]";
+    const safeBody = body.length > 500
+      ? body.slice(0, 500) + "…\n\n[Full email copied to clipboard — paste to complete]" + attachNote
+      : body + attachNote;
+
+    const to = encodeURIComponent(recruiterEmail);
+    const sub = encodeURIComponent(subject);
+    const bod = encodeURIComponent(safeBody);
 
     let url = "";
     if (provider === "gmail") {
-      url = `https://mail.google.com/mail/?view=cm&fs=1${recruiterEmail ? `&to=${encodedTo}` : ""}&su=${encodedSubject}&body=${encodedBody}`;
+      url = `https://mail.google.com/mail/?view=cm&fs=1${recruiterEmail ? `&to=${to}` : ""}&su=${sub}&body=${bod}`;
     } else if (provider === "yahoo") {
-      url = `https://compose.mail.yahoo.com/?${recruiterEmail ? `to=${encodedTo}&` : ""}subject=${encodedSubject}&body=${encodedBody}`;
+      url = `https://compose.mail.yahoo.com/?${recruiterEmail ? `to=${to}&` : ""}subject=${sub}&body=${bod}`;
     } else {
-      url = `mailto:${recruiterEmail}?subject=${encodedSubject}&body=${encodedBody}`;
+      url = `mailto:${recruiterEmail}?subject=${sub}&body=${bod}`;
     }
 
     window.open(url, "_blank", "noopener,noreferrer");
+
+    toast({
+      title: "✅ Full email copied to clipboard",
+      description: "Your mail app is opening. If the body looks short, just paste (Ctrl+V / Cmd+V) the full email.",
+    });
   };
 
   const canSend = subject.trim() && body.trim() && company.trim() && position.trim();
@@ -261,33 +281,50 @@ export default function EmailOutreach() {
           </CardContent>
         </Card>
 
-        {/* Send buttons */}
-        <div className="flex flex-wrap gap-3 justify-end">
+        {/* Actions row */}
+        <div className="flex flex-wrap gap-3 justify-between items-center">
+          {/* Copy to clipboard */}
           <Button
             variant="outline"
-            onClick={() => openMailClient("default")}
-            disabled={!canSend || saving}
+            disabled={!canSend}
+            onClick={async () => {
+              await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2500);
+              toast({ title: "Copied!", description: "Paste the email into any mail app." });
+            }}
           >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Open Mail App
+            {copied ? <Check className="h-4 w-4 mr-2 text-primary" /> : <Copy className="h-4 w-4 mr-2" />}
+            {copied ? "Copied!" : "Copy Email"}
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => openMailClient("yahoo")}
-            disabled={!canSend || saving}
-          >
-            Yahoo Mail
-          </Button>
-          <Button
-            onClick={() => openMailClient("gmail")}
-            disabled={!canSend || saving}
-          >
-            {saving ? (
-              <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</>
-            ) : (
-              <><Mail className="h-4 w-4 mr-2" />Open in Gmail</>
-            )}
-          </Button>
+
+          <div className="flex gap-2 flex-wrap justify-end">
+            <Button
+              variant="outline"
+              onClick={() => openMailClient("default")}
+              disabled={!canSend || saving}
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Mail App
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => openMailClient("yahoo")}
+              disabled={!canSend || saving}
+            >
+              Yahoo Mail
+            </Button>
+            <Button
+              onClick={() => openMailClient("gmail")}
+              disabled={!canSend || saving}
+            >
+              {saving ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</>
+              ) : (
+                <><Mail className="h-4 w-4 mr-2" />Open in Gmail</>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     </>
