@@ -403,7 +403,7 @@ const Index = () => {
                     ) : (
                       <XIcon className="h-4 w-4 text-muted-foreground/40 shrink-0" />
                     )}
-                    <span className={f.included ? "text-foreground" : "text-muted-foreground/60"}>{f.text}</span>
+                    <span className={f.included ? "text-foreground" : "text-muted-foreground"}>{f.text}</span>
                   </li>
                 ))}
               </ul>
@@ -510,7 +510,7 @@ const Index = () => {
               </div>
             </div>
             <div className="md:col-span-3">
-              <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.platform}</h4>
+              <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/60 font-mono">{t.landing.platform}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
                 <li><Link to="/ats-resume-builder" className="transition hover:text-background">ATS Resume Builder</Link></li>
                 <li><Link to="/resume-templates" className="transition hover:text-background">Resume Templates</Link></li>
@@ -521,7 +521,7 @@ const Index = () => {
               </ul>
             </div>
             <div className="md:col-span-2">
-              <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.company}</h4>
+              <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/60 font-mono">{t.landing.company}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
                 <li><Link to="/about" className="transition hover:text-background">About</Link></li>
                 <li><Link to="/blog" className="transition hover:text-background">Blog</Link></li>
@@ -531,7 +531,7 @@ const Index = () => {
               </ul>
             </div>
             <div className="md:col-span-2">
-              <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/40 font-mono">{t.landing.connect}</h4>
+              <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/60 font-mono">{t.landing.connect}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
                 <li><a href="https://www.facebook.com/share/18EkeUXY8P/" target="_blank" rel="noopener noreferrer" className="transition hover:text-background">Facebook</a></li>
                 <li><a href="https://www.instagram.com/atsproresumebuilder?igsh=eGg2M3FmaTF5NGRw" target="_blank" rel="noopener noreferrer" className="transition hover:text-background">Instagram</a></li>
@@ -543,7 +543,7 @@ const Index = () => {
           </div>
         </div>
         <div className="border-t border-background/10 px-4 py-4 pb-8 md:pb-16">
-          <p className="mx-auto max-w-7xl text-center text-[11px] md:text-xs text-background/40">
+          <p className="mx-auto max-w-7xl text-center text-[11px] md:text-xs text-background/60">
             © {new Date().getFullYear()} ATS Pro Resume Builder. {t.landing.copyright}
           </p>
         </div>
