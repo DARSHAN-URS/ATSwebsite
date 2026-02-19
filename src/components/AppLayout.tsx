@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, ClipboardList } from "lucide-react";
+import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -15,7 +15,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 const jobSeekerNav = [
   { to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
   { to: "/resumes", icon: FileText, key: "resumes" as const },
-  { to: "/job-tracker", icon: ClipboardList, key: "jobTracker" as const },
   { to: "/jobs", icon: Search, key: "findJobs" as const },
   { to: "/companies", icon: Building2, key: "companies" as const },
   { to: "/interview-prep", icon: Headphones, key: "interviewPrep" as const },
