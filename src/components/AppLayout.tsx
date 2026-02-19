@@ -47,7 +47,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === "/dashboard"}
+            end
             onClick={onNavClick}
             className={({ isActive }) =>
               cn(
@@ -58,8 +58,13 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
               )
             }
           >
-            <item.icon className="h-4 w-4" />
-            {t.nav[item.key]}
+            {({ isActive }) => (
+              <>
+                <item.icon className="h-4 w-4" aria-hidden="true" />
+                <span>{t.nav[item.key]}</span>
+                {isActive && <span className="sr-only">(current)</span>}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
