@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -35,19 +35,24 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
   const { user, session } = useAuth();
   const { toast } = useToast();
 
-  const [recruiterEmail, setRecruiterEmail] = useState(prefill?.recruiter_email ?? "");
-  const [subject, setSubject] = useState(prefill?.subject ?? (app ? `Following Up — ${app.position} at ${app.company}` : ""));
-  const [body, setBody] = useState(prefill?.body ?? "");
+  const [recruiterEmail, setRecruiterEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
   const [attachResume, setAttachResume] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
 
-  const handleOpenChange = (val: boolean) => {
-    if (val) {
+  // Reset fields whenever the dialog opens or the prefill/app changes
+  useEffect(() => {
+    if (open) {
       setRecruiterEmail(prefill?.recruiter_email ?? "");
       setSubject(prefill?.subject ?? (app ? `Following Up — ${app.position} at ${app.company}` : ""));
       setBody(prefill?.body ?? "");
+      setAttachResume(true);
     }
+  }, [open, prefill, app]);
+
+  const handleOpenChange = (val: boolean) => {
     onOpenChange(val);
   };
 
