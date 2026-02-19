@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Loader2, Mail, ExternalLink, FileText, Copy, Check, Send, Info, Paperclip } from "lucide-react";
+import { Sparkles, Loader2, Mail, ExternalLink, FileText, Copy, Check, Send, Info, Paperclip, X, Upload } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { buildDoc } from "@/components/resume/pdfTemplates";
 import type { ResumeData } from "@/components/resume/types";
@@ -29,6 +29,7 @@ export default function EmailOutreach() {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [attachResume, setAttachResume] = useState(true);
+  const [additionalDocs, setAdditionalDocs] = useState<{ name: string; base64: string; mimeType: string }[]>([]);
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -132,7 +133,47 @@ export default function EmailOutreach() {
     }
   };
 
-  // Send directly from the platform via Resend
+  /** Handle additional document uploads */
+  const handleAdditionalDocUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    const MAX_SIZE_MB = 5;
+    const ALLOWED_TYPES = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "image/jpeg",
+      "image/png",
+    ];
+
+    files.forEach((file) => {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        toast({ title: "Unsupported file", description: `${file.name} is not a supported format (PDF, DOC, DOCX, JPG, PNG).`, variant: "destructive" });
+        return;
+      }
+      if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+        toast({ title: "File too large", description: `${file.name} exceeds the ${MAX_SIZE_MB}MB limit.`, variant: "destructive" });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        const base64 = dataUrl.split(",")[1];
+        setAdditionalDocs((prev) => {
+          if (prev.some((d) => d.name === file.name)) return prev;
+          return [...prev, { name: file.name, base64, mimeType: file.type }];
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+    // reset input so same file can be re-added after removal
+    e.target.value = "";
+  };
+
+  const removeAdditionalDoc = (name: string) => {
+    setAdditionalDocs((prev) => prev.filter((d) => d.name !== name));
+  };
+
+
   const sendDirectly = async () => {
     if (!recruiterEmail.trim()) {
       toast({ title: "Recipient required", description: "Please enter the recruiter's email address.", variant: "destructive" });
@@ -176,6 +217,9 @@ export default function EmailOutreach() {
             company,
             resumePdfBase64,
             resumeFilename,
+            additionalAttachments: additionalDocs.length > 0
+              ? additionalDocs.map((d) => ({ filename: d.name, content: d.base64, type: d.mimeType }))
+              : undefined,
           }),
         }
       );
@@ -183,9 +227,10 @@ export default function EmailOutreach() {
       if (!res.ok) throw new Error(data.error ?? "Failed to send");
 
       await saveToJobTracker();
+      const attachCount = (resumePdfBase64 ? 1 : 0) + additionalDocs.length;
       toast({
         title: "✅ Email sent!",
-        description: `Sent to ${recruiterEmail}${resumePdfBase64 ? " with resume attached" : ""}. Replies go to your email. Application saved to Job Tracker.`,
+        description: `Sent to ${recruiterEmail}${attachCount > 0 ? ` with ${attachCount} attachment${attachCount > 1 ? "s" : ""}` : ""}. Replies go to your email. Application saved to Job Tracker.`,
       });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to send email.";
@@ -396,6 +441,58 @@ export default function EmailOutreach() {
             </button>
           </div>
         )}
+
+        {/* Additional documents */}
+        <div className="space-y-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2 text-sm font-medium cursor-default">
+              <Upload className="h-4 w-4 text-primary" />
+              Additional Attachments
+              <span className="text-muted-foreground font-normal text-xs">(PDF, DOC, DOCX, JPG, PNG · max 5 MB each)</span>
+            </Label>
+            <label
+              htmlFor="eo-extra-docs"
+              className="cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
+            >
+              <Upload className="h-3.5 w-3.5" />
+              Upload file
+              <input
+                id="eo-extra-docs"
+                type="file"
+                multiple
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                className="sr-only"
+                onChange={handleAdditionalDocUpload}
+              />
+            </label>
+          </div>
+
+          {additionalDocs.length === 0 ? (
+            <p className="text-xs text-muted-foreground">
+              No additional files attached. Upload a cover letter, portfolio, certificate, or any other supporting document.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {additionalDocs.map((doc) => (
+                <li key={doc.name} className="flex items-center gap-2 rounded-md bg-background border border-border px-3 py-2 text-sm">
+                  <Paperclip className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                  <span className="flex-1 truncate text-foreground">{doc.name}</span>
+                  <span className="text-xs text-muted-foreground shrink-0 capitalize">
+                    {doc.mimeType.split("/")[1]?.replace("vnd.openxmlformats-officedocument.wordprocessingml.document", "docx").replace("msword", "doc")}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeAdditionalDoc(doc.name)}
+                    className="ml-1 rounded p-0.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                    aria-label={`Remove ${doc.name}`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         {/* Actions */}
         <div className="space-y-3">
