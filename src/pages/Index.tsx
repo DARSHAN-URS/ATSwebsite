@@ -113,7 +113,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img src={logo} alt="ATS Pro Resume Builder" className="h-10 md:h-[56px]" width={168} height={56} />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-10 md:h-[56px]" width={233} height={56} />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <button onClick={() => templatesRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.landing.resumeTemplates}</button>
@@ -510,7 +510,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <img src={logo} alt="ATS Pro Resume Builder" className="h-12 md:h-[56px] brightness-0 invert mx-auto md:mx-0" width={168} height={56} />
+              <img src={logo} alt="ATS Pro Resume Builder" className="h-12 md:h-[56px] brightness-0 invert mx-auto md:mx-0" width={233} height={56} />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>
@@ -646,7 +646,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src={logo} alt="ATS Pro Resume Builder" className="h-14" width={168} height={56} />
+              <img src={logo} alt="ATS Pro Resume Builder" className="h-14" width={233} height={56} />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>
