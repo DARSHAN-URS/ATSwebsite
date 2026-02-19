@@ -18,4 +18,24 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Core React runtime — always cached
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          // PDF generation — only needed in resume editor
+          "vendor-pdf": ["jspdf", "html2canvas", "pdfjs-dist"],
+          // Charts — only needed in dashboard/analytics
+          "vendor-charts": ["recharts"],
+          // Form & validation utilities
+          "vendor-forms": ["react-hook-form", "@hookform/resolvers", "zod"],
+          // Supabase client
+          "vendor-supabase": ["@supabase/supabase-js"],
+        },
+      },
+    },
+    // Increase chunk size warning threshold (jsPDF is legitimately large)
+    chunkSizeWarningLimit: 600,
+  },
 }));

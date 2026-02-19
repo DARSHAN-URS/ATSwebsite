@@ -1,10 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Quote, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff, ChevronDown } from "lucide-react";
-import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
-import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -19,6 +17,9 @@ import dashboardPreview from "@/assets/dashboard-preview.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
+
+// Lazy-load heavy template components (pulls in jsPDF & canvas only when dropdown is opened)
+const TemplateDropdownContent = lazy(() => import("@/components/landing/TemplateDropdownContent"));
 
 const Index = () => {
   const pricingRef = useRef<HTMLDivElement>(null);
@@ -121,22 +122,9 @@ const Index = () => {
               </button>
               <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
                 <div className="w-[560px] max-h-[70vh] overflow-y-auto rounded-xl border border-border/60 bg-card shadow-xl shadow-foreground/5 p-4">
-                  <div className="grid grid-cols-3 gap-2">
-                    {RESUME_TEMPLATES.map((tmpl) => (
-                      <button
-                        key={tmpl.id}
-                        onClick={() => openAuth("signup")}
-                        className="group/item flex flex-col rounded-lg border border-border/40 bg-background overflow-hidden transition-all hover:border-primary/40 hover:shadow-md"
-                      >
-                        <div className="p-1">
-                          <TemplateThumbnail templateId={tmpl.id} />
-                        </div>
-                        <div className="px-2 pb-2 pt-0.5">
-                          <span className="text-[11px] font-semibold">{tmpl.name}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                  <Suspense fallback={<div className="h-40 flex items-center justify-center text-xs text-muted-foreground">Loading templates…</div>}>
+                    <TemplateDropdownContent onSelect={() => openAuth("signup")} />
+                  </Suspense>
                 </div>
               </div>
             </div>
