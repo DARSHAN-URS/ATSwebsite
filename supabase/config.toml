@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.export-resume]
 verify_jwt = false
+
+[functions.ai-apply]
+verify_jwt = false

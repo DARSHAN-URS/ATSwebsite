@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail, Zap } from "lucide-react";
 import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
@@ -64,6 +64,7 @@ export default function Resumes() {
   const [linkedinOpen, setLinkedinOpen] = useState(false);
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinLoading, setLinkedinLoading] = useState(false);
+  const [aiApplyingId, setAiApplyingId] = useState<string | null>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const fetchResumes = async () => {
@@ -73,6 +74,34 @@ export default function Resumes() {
   };
 
   useEffect(() => { if (user) fetchResumes(); }, [user]);
+
+  const handleAIApply = async (resume: Resume) => {
+    if (!user) return;
+    setAiApplyingId(resume.id);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-apply", {
+        body: {
+          resume_id: resume.id,
+          resume_title: resume.title,
+          resume_data: resume.resume_data,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "AI Apply failed", description: data.error, variant: "destructive" });
+        return;
+      }
+      toast({
+        title: "AI Apply launched! 🚀",
+        description: `${data.queued} tailored applications are ready on your dashboard.`,
+      });
+    } catch (err: any) {
+      toast({ title: "AI Apply failed", description: err.message || "Something went wrong.", variant: "destructive" });
+    } finally {
+      setAiApplyingId(null);
+    }
+  };
+
 
   const resetForm = () => {
     setTitle("");
@@ -897,6 +926,22 @@ export default function Resumes() {
                           )}
                         </div>
                       )}
+                      {/* AI Apply button */}
+                      <div className="mt-3 pt-3 border-t" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="w-full text-xs gap-1.5 border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground"
+                          onClick={(e) => { e.stopPropagation(); handleAIApply(resume); }}
+                          disabled={aiApplyingId === resume.id}
+                        >
+                          {aiApplyingId === resume.id ? (
+                            <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Finding & tailoring jobs...</>
+                          ) : (
+                            <><Zap className="h-3.5 w-3.5" /> AI Apply</>
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

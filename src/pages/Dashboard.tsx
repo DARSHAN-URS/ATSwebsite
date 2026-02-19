@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
+import AIApplyQueueSection from "@/components/resume/AIApplyQueueSection";
 
 const STATUS_COLORS: Record<string, string> = {
   applied: "hsl(200, 80%, 52%)",
@@ -179,6 +180,9 @@ function JobSeekerDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* AI Apply Queue */}
+      <AIApplyQueueSection />
 
       {/* Job Tracker */}
       <JobTrackerSection />

@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_apply_queue: {
+        Row: {
+          company: string
+          cover_letter_data: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          job_title: string
+          job_type: string | null
+          job_url: string | null
+          location: string | null
+          match_explanation: string | null
+          match_score: number | null
+          resume_id: string
+          status: string
+          tailored_resume_data: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company: string
+          cover_letter_data?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          job_title: string
+          job_type?: string | null
+          job_url?: string | null
+          location?: string | null
+          match_explanation?: string | null
+          match_score?: number | null
+          resume_id: string
+          status?: string
+          tailored_resume_data?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string
+          cover_letter_data?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          job_title?: string
+          job_type?: string | null
+          job_url?: string | null
+          location?: string | null
+          match_explanation?: string | null
+          match_score?: number | null
+          resume_id?: string
+          status?: string
+          tailored_resume_data?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cover_letters: {
         Row: {
           cover_letter_data: Json
