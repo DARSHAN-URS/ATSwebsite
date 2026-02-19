@@ -112,10 +112,18 @@ export default function Resumes() {
         toast({ title: "AI Apply failed", description: data.error, variant: "destructive" });
         return;
       }
-      toast({
-        title: "AI Apply launched! 🚀",
-        description: `${data.queued} tailored applications are ready on your dashboard.`,
-      });
+      if (data.queued === 0) {
+        toast({
+          title: "No matching jobs found",
+          description: "We couldn't find strong matches for your resume right now. Try updating your job title or skills and try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: `AI Apply ready! 🚀`,
+          description: `${data.queued} tailored applications are ready on your dashboard.`,
+        });
+      }
     } catch (err: any) {
       timers.forEach(clearTimeout);
       toast({ title: "AI Apply failed", description: err.message || "Something went wrong.", variant: "destructive" });
