@@ -115,16 +115,17 @@ export default function JobTrackerSection() {
       </div>
 
       {/* Status summary */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
         {Object.entries(statusConfig).map(([key, { label, className }]) => {
           const count = apps.filter((a) => a.status === key).length;
           return (
-            <Card key={key}>
-              <CardContent className="py-3 px-4 flex items-center justify-between">
-                <span className="text-sm font-medium">{label}</span>
-                <Badge variant="outline" className={className}>{count}</Badge>
-              </CardContent>
-            </Card>
+            <div
+              key={key}
+              className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2.5 shrink-0"
+            >
+              <span className="text-sm font-medium whitespace-nowrap">{label}</span>
+              <Badge variant="outline" className={className}>{count}</Badge>
+            </div>
           );
         })}
       </div>
