@@ -115,6 +115,45 @@ export type Database = {
           },
         ]
       }
+      email_outreach_history: {
+        Row: {
+          body: string
+          company: string
+          id: string
+          job_application_id: string | null
+          position: string
+          recruiter_email: string
+          resume_id: string | null
+          sent_at: string
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          company: string
+          id?: string
+          job_application_id?: string | null
+          position: string
+          recruiter_email: string
+          resume_id?: string | null
+          sent_at?: string
+          subject: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          company?: string
+          id?: string
+          job_application_id?: string | null
+          position?: string
+          recruiter_email?: string
+          resume_id?: string | null
+          sent_at?: string
+          subject?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           company: string
