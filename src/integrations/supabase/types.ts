@@ -14,8 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_apply_campaigns: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          job_type: string | null
+          jobs_queued: number
+          jobs_scored: number
+          jobs_searched: number
+          location: string | null
+          max_applications: number
+          min_score: number
+          resume_id: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_type?: string | null
+          jobs_queued?: number
+          jobs_scored?: number
+          jobs_searched?: number
+          location?: string | null
+          max_applications?: number
+          min_score?: number
+          resume_id: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_type?: string | null
+          jobs_queued?: number
+          jobs_scored?: number
+          jobs_searched?: number
+          location?: string | null
+          max_applications?: number
+          min_score?: number
+          resume_id?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_apply_queue: {
         Row: {
+          campaign_id: string | null
           company: string
           cover_letter_data: Json | null
           created_at: string
@@ -34,6 +92,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          campaign_id?: string | null
           company: string
           cover_letter_data?: Json | null
           created_at?: string
@@ -52,6 +111,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          campaign_id?: string | null
           company?: string
           cover_letter_data?: Json | null
           created_at?: string
@@ -69,7 +129,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ai_apply_queue_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "ai_apply_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cover_letters: {
         Row: {

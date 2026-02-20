@@ -83,13 +83,18 @@ export default function Resumes() {
   useEffect(() => { if (user) fetchResumes(); }, [user]);
 
   const AI_APPLY_STEPS = [
-    { label: "Analyzing your resume", detail: "Reading your skills, experience, and career profile…" },
-    { label: "Searching for matching jobs", detail: "Scanning thousands of live job listings via JSearch…" },
-    { label: "Scoring job matches", detail: "AI evaluating compatibility for each position…" },
-    { label: "Tailoring your resume", detail: "Rewriting summary and skills for each matched role…" },
-    { label: "Writing cover letters", detail: "Crafting personalized cover letters per company…" },
-    { label: "Saving to your queue", detail: "Packaging everything and adding to your dashboard…" },
+    { label: "Creating campaign", detail: "Setting up your AI Apply campaign record…" },
+    { label: "Searching 50+ job boards", detail: "Scanning JSearch across 5 pages of live listings in parallel…" },
+    { label: "Batch AI scoring", detail: "AI scoring all jobs in batches of 10 for accuracy…" },
+    { label: "Filtering top matches", detail: `Keeping only jobs above your minimum match score…` },
+    { label: "Tailoring resume & cover letter", detail: "Rewriting summary, skills and writing cover letters per role…" },
+    { label: "Saving to campaign queue", detail: "Packaging tailored applications into your dashboard…" },
   ];
+
+  const [aiApplyJobType, setAiApplyJobType] = useState("");
+  const [aiApplyMinScore, setAiApplyMinScore] = useState(60);
+  const [aiApplyMaxApps, setAiApplyMaxApps] = useState(20);
+  const [aiApplyCampaignResult, setAiApplyCampaignResult] = useState<{ queued: number; total_found: number; total_scored: number } | null>(null);
 
   const openAIApplySetup = (resume: Resume) => {
     setAiApplyPendingResume(resume);
@@ -97,14 +102,15 @@ export default function Resumes() {
     setAiApplySetupOpen(true);
   };
 
-  const handleAIApply = async (resume: Resume, location?: string) => {
+  const handleAIApply = async (resume: Resume) => {
     if (!user) return;
     setAiApplySetupOpen(false);
     setAiApplyingId(resume.id);
     setAiApplyStep(0);
+    setAiApplyCampaignResult(null);
 
-    // Animate through steps while the real call runs
-    const stepTimings = [0, 3000, 8000, 13000, 18000, 23000];
+    // Animate through steps — step timings scaled to ~45s total
+    const stepTimings = [0, 3000, 10000, 20000, 28000, 38000];
     const timers: ReturnType<typeof setTimeout>[] = [];
     stepTimings.forEach((delay, i) => {
       timers.push(setTimeout(() => setAiApplyStep(i), delay));
@@ -116,11 +122,14 @@ export default function Resumes() {
           resume_id: resume.id,
           resume_title: resume.title,
           resume_data: resume.resume_data,
-          location: location || undefined,
+          location: aiApplyLocation || undefined,
+          job_type: aiApplyJobType || undefined,
+          min_score: aiApplyMinScore,
+          max_applications: aiApplyMaxApps,
         },
       });
       timers.forEach(clearTimeout);
-      setAiApplyStep(AI_APPLY_STEPS.length); // mark complete
+      setAiApplyStep(AI_APPLY_STEPS.length);
       if (error) throw error;
       if (data?.error) {
         toast({ title: "AI Apply failed", description: data.error, variant: "destructive" });
@@ -129,13 +138,14 @@ export default function Resumes() {
       if (data.queued === 0) {
         toast({
           title: "No matching jobs found",
-          description: "We couldn't find strong matches for your resume right now. Try updating your job title or skills and try again.",
+          description: `Searched ${data.total_found || 0} jobs — none met your ${aiApplyMinScore}% minimum score. Try lowering the threshold or updating your resume skills.`,
           variant: "destructive",
         });
       } else {
+        setAiApplyCampaignResult({ queued: data.queued, total_found: data.total_found, total_scored: data.total_scored });
         toast({
-          title: `AI Apply ready! 🚀`,
-          description: `${data.queued} tailored applications are ready on your dashboard.`,
+          title: `Campaign complete! 🚀`,
+          description: `${data.queued} tailored applications queued from ${data.total_found} jobs found.`,
         });
       }
     } catch (err: any) {
@@ -145,7 +155,7 @@ export default function Resumes() {
       setTimeout(() => {
         setAiApplyingId(null);
         setAiApplyStep(0);
-      }, 800);
+      }, 1500);
     }
   };
 
@@ -1022,38 +1032,103 @@ export default function Resumes() {
 
       {/* AI Apply Setup Dialog */}
       <Dialog open={aiApplySetupOpen} onOpenChange={(open) => { if (!open) setAiApplySetupOpen(false); }}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-primary" />
-              AI Apply Setup
+              AI Apply Campaign Setup
             </DialogTitle>
             <DialogDescription>
-              Tell us where you want to work so AI finds the right jobs for you.
+              Configure your campaign — AI will search 50+ jobs, score them, and prepare tailored applications.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <div className="space-y-2">
+            {/* Location */}
+            <div className="space-y-1.5">
               <Label htmlFor="aiApplyLocation">Preferred Location</Label>
               <Input
                 id="aiApplyLocation"
-                placeholder="e.g. New York, Remote, London, or leave blank for any"
+                placeholder="e.g. New York, Remote, London — or leave blank for any"
                 value={aiApplyLocation}
                 onChange={(e) => setAiApplyLocation(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && aiApplyPendingResume) {
-                    handleAIApply(aiApplyPendingResume, aiApplyLocation);
-                  }
-                }}
               />
-              <p className="text-xs text-muted-foreground">Leave blank to search all locations worldwide.</p>
             </div>
+
+            {/* Job Type */}
+            <div className="space-y-1.5">
+              <Label>Job Type</Label>
+              <div className="flex gap-2 flex-wrap">
+                {["Any", "Remote", "On-site", "Hybrid"].map((type) => {
+                  const val = type === "Any" ? "" : type.toLowerCase();
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => setAiApplyJobType(val)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${aiApplyJobType === val ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    >
+                      {type}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Min Score */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label>Minimum Match Score</Label>
+                <span className="text-sm font-semibold text-primary">{aiApplyMinScore}%</span>
+              </div>
+              <input
+                type="range"
+                min={40}
+                max={85}
+                step={5}
+                value={aiApplyMinScore}
+                onChange={(e) => setAiApplyMinScore(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>40% — More jobs</span>
+                <span>85% — Higher quality</span>
+              </div>
+            </div>
+
+            {/* Max Applications */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label>Max Applications to Queue</Label>
+                <span className="text-sm font-semibold text-primary">{aiApplyMaxApps}</span>
+              </div>
+              <input
+                type="range"
+                min={5}
+                max={50}
+                step={5}
+                value={aiApplyMaxApps}
+                onChange={(e) => setAiApplyMaxApps(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>5</span>
+                <span>50</span>
+              </div>
+            </div>
+
+            {/* Summary badge */}
+            <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 text-xs text-muted-foreground space-y-0.5">
+              <p>🔍 Searching <span className="font-semibold text-foreground">50+ live jobs</span> across multiple pages</p>
+              <p>🤖 AI scoring in <span className="font-semibold text-foreground">batches of 10</span> for precision</p>
+              <p>✂️ Keeping top <span className="font-semibold text-foreground">{aiApplyMaxApps} jobs</span> above <span className="font-semibold text-foreground">{aiApplyMinScore}% match</span></p>
+              <p>✍️ Tailored resume + cover letter <span className="font-semibold text-foreground">per application</span></p>
+            </div>
+
             <div className="flex gap-2">
               <Button
                 className="flex-1"
-                onClick={() => { if (aiApplyPendingResume) handleAIApply(aiApplyPendingResume, aiApplyLocation); }}
+                onClick={() => { if (aiApplyPendingResume) handleAIApply(aiApplyPendingResume); }}
               >
-                <Sparkles className="h-4 w-4 mr-2" /> Start AI Apply
+                <Sparkles className="h-4 w-4 mr-2" /> Launch Campaign
               </Button>
               <Button variant="outline" onClick={() => setAiApplySetupOpen(false)}>Cancel</Button>
             </div>
@@ -1067,14 +1142,13 @@ export default function Resumes() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary animate-pulse" />
-              AI Apply in Progress
+              AI Apply Campaign Running
             </DialogTitle>
             <DialogDescription>
-              Sit tight — AI is finding and tailoring jobs for you.
+              Searching 50+ jobs and preparing tailored applications — this takes ~45 seconds.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            {/* Overall progress bar */}
             <Progress
               value={aiApplyStep >= AI_APPLY_STEPS.length
                 ? 100
@@ -1082,7 +1156,6 @@ export default function Resumes() {
               className="h-2"
             />
 
-            {/* Step list */}
             <div className="space-y-2.5">
               {AI_APPLY_STEPS.map((step, i) => {
                 const isDone = aiApplyStep > i;
@@ -1114,7 +1187,16 @@ export default function Resumes() {
               })}
             </div>
 
-            <p className="text-xs text-center text-muted-foreground">This takes about 20–30 seconds. Please don't close this window.</p>
+            {aiApplyCampaignResult && (
+              <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-sm space-y-1">
+                <p className="font-semibold text-green-700 dark:text-green-400">Campaign Complete! 🚀</p>
+                <p className="text-muted-foreground text-xs">
+                  Found <strong>{aiApplyCampaignResult.total_found}</strong> jobs · Scored <strong>{aiApplyCampaignResult.total_scored}</strong> · Queued <strong>{aiApplyCampaignResult.queued}</strong> tailored applications
+                </p>
+              </div>
+            )}
+
+            <p className="text-xs text-center text-muted-foreground">Please don't close this window while the campaign runs.</p>
           </div>
         </DialogContent>
       </Dialog>
