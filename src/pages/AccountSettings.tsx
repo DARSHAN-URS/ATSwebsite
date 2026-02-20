@@ -5,6 +5,7 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +35,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   User, Mail, Phone, MapPin, Lock, Shield, Trash2, Crown, Zap,
-  Eye, EyeOff, CreditCard, Receipt, CheckCircle, AlertTriangle, Camera, LogOut
+  Eye, EyeOff, CreditCard, Receipt, CheckCircle, AlertTriangle, Camera, Building2
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 
@@ -44,6 +45,7 @@ export default function AccountSettings() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { role } = useUserRole();
 
   // Profile state
   const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
@@ -309,7 +311,8 @@ export default function AccountSettings() {
         </CardContent>
       </Card>
 
-      {/* ── SUBSCRIPTION & BILLING ──────────────────── */}
+      {/* ── SUBSCRIPTION & BILLING (Job Seekers only) ── */}
+      {role !== "recruiter" && (
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -444,6 +447,49 @@ export default function AccountSettings() {
           )}
         </CardContent>
       </Card>
+      )}
+
+      {/* ── RECRUITER ACCOUNT INFO ──────────────────── */}
+      {role === "recruiter" && (
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Building2 className="h-4 w-4 text-primary" /> Recruiter Account
+          </CardTitle>
+          <CardDescription>Your recruiter plan and included features.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-3 p-4 rounded-lg border bg-primary/5">
+            <Building2 className="h-8 w-8 text-primary shrink-0" />
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="font-semibold">Recruiter Plan</p>
+                <Badge variant="default">Free Access</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground mt-0.5">Full access during our launch period, no charge.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              "Post & manage job listings",
+              "Applicant pipeline (Kanban)",
+              "Candidate search & shortlisting",
+              "Company profile management",
+              "Recruiter analytics dashboard",
+              "Private notes on applications",
+            ].map((f) => (
+              <div key={f} className="flex items-center gap-2 text-sm">
+                <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
+                <span>{f}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground border-t pt-3">
+            Recruiter pricing will be introduced when the platform exits beta. You'll receive advance notice before any charges apply.
+          </p>
+        </CardContent>
+      </Card>
+      )}
 
       {/* ── ACCOUNT DELETION ────────────────────────── */}
       <Card className="border-destructive/40">

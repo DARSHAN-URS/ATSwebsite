@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, Crown, Zap } from "lucide-react";
+import { ArrowLeft, CheckCircle, Crown, Zap, Building2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
+import { useUserRole } from "@/hooks/useUserRole";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 
@@ -17,6 +17,7 @@ export default function Pricing() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const localCurrency = useLocalCurrency();
+  const { role } = useUserRole();
 
   const PLANS = [
     {
@@ -31,6 +32,55 @@ export default function Pricing() {
     },
   ];
 
+  // Recruiters don't have subscription plans — show a dedicated recruiter message
+  if (role === "recruiter") {
+    return (
+      <div className="container mx-auto max-w-2xl py-10 px-4">
+        <SEOHead title="Pricing — ATS Pro Resume Builder" description="Recruiter account pricing information." canonical="https://atsproresumebuilder.com/pricing" />
+        <div className="mb-6">
+          <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="gap-1.5">
+            <ArrowLeft className="h-4 w-4" /> Back to Dashboard
+          </Button>
+        </div>
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <Building2 className="h-8 w-8" />
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight">Recruiter Account</h1>
+          <p className="mt-2 text-muted-foreground">Your recruiter access is included at no extra cost during our launch period.</p>
+        </div>
+        <Card className="border-primary/30 shadow-lg shadow-primary/5">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Building2 className="h-5 w-5" />
+            </div>
+            <CardTitle>Recruiter Plan — Free Access</CardTitle>
+            <CardDescription>Full recruiter tools included while we're in launch phase.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3 mb-6">
+              {[
+                "Post and manage job listings",
+                "View and manage applicants",
+                "Kanban applicant pipeline (Applied → Offer)",
+                "Candidate search & shortlisting",
+                "Company profile management",
+                "Recruiter analytics dashboard",
+                "Private notes on applications",
+              ].map((f) => (
+                <li key={f} className="flex items-center gap-2 text-sm">
+                  <CheckCircle className="h-4 w-4 text-primary shrink-0" /> {f}
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-center text-muted-foreground">
+              Recruiter pricing plans will be announced when we launch out of beta. You'll be notified in advance.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto max-w-4xl py-10 px-4">
