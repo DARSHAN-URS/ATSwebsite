@@ -2,10 +2,12 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, Mail } from "lucide-react";
+import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, Mail, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -36,10 +38,45 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   const { role } = useUserRole();
   const navItems = role === "recruiter" ? recruiterNav : jobSeekerNav;
 
+  const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+  const avatarFallback = displayName.charAt(0).toUpperCase();
+
   return (
     <>
-      <div className="p-6 flex items-center gap-2">
-        <img src={logo} alt="ATS Pro Resume Builder" className="h-[92px] invert brightness-200" width={92} height={92} />
+      <div className="p-4 pb-2 flex items-center gap-2">
+        <img src={logo} alt="ATS Pro Resume Builder" className="h-16 invert brightness-200" width={64} height={64} />
+      </div>
+
+      {/* User Account Card */}
+      <div className="px-3 pb-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebar-accent/40 hover:bg-sidebar-accent/70 transition-colors text-left">
+              <Avatar className="h-8 w-8 shrink-0">
+                <AvatarImage src={user?.user_metadata?.avatar_url} alt={displayName} />
+                <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
+                  {avatarFallback}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-sidebar-foreground truncate">{displayName}</p>
+                <p className="text-xs text-sidebar-foreground/50 truncate">{user?.email}</p>
+              </div>
+              <ChevronDown className="h-3.5 w-3.5 text-sidebar-foreground/50 shrink-0" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="start" className="w-52">
+            <div className="px-2 py-1.5">
+              <p className="text-sm font-medium truncate">{displayName}</p>
+              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onSignOut} className="text-destructive focus:text-destructive cursor-pointer">
+              <LogOut className="h-4 w-4 mr-2" />
+              {t.nav.signOut}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -74,18 +111,6 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
           <LanguageSwitcher className="flex-1 h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border [&>svg]:text-sidebar-foreground" />
           <ThemeToggle className="h-8 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50" />
         </div>
-        <div className="px-3 py-2 text-xs text-sidebar-foreground/50 truncate">
-          {user?.email}
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onSignOut}
-          className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-        >
-          <LogOut className="h-4 w-4 mr-2" />
-          {t.nav.signOut}
-        </Button>
       </div>
     </>
   );
