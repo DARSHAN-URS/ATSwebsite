@@ -43,6 +43,7 @@ const BlogArticlePage = lazy(() =>
 );
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
+const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
 
 const queryClient = new QueryClient();
 
@@ -117,6 +118,7 @@ const App = () => (
                   <Route path="/recruiter/jobs/:jobId/applicants" element={<RecruiterApplicants />} />
                   <Route path="/recruiter/candidates" element={<RecruiterCandidates />} />
                   <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
+                  <Route path="/account" element={<AccountSettings />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
