@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Briefcase, ExternalLink, Mail, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock } from "lucide-react";
+import { Briefcase, ExternalLink, Mail, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock, Sparkles, Trophy } from "lucide-react";
 import EmailComposeDialog from "./EmailComposeDialog";
 import ResendEmailDialog, { type EmailHistoryEntry } from "./ResendEmailDialog";
 import type { Tables } from "@/integrations/supabase/types";
@@ -154,8 +154,14 @@ export default function JobTrackerSection() {
                   {/* Main row */}
                   <div className="flex items-center justify-between gap-3 flex-wrap">
                     <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
+                    {/* Source badges */}
+                    <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-medium">{app.position}</p>
+                        {app.notes?.startsWith("AI Apply") && (
+                          <Badge variant="outline" className="text-xs border-purple-300 text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/30 gap-1 py-0">
+                            <Sparkles className="h-3 w-3" /> AI Apply
+                          </Badge>
+                        )}
                         {app.notes?.startsWith("📧") && (
                           <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/5 gap-1 py-0">
                             <Mail className="h-3 w-3" /> Via Email
@@ -169,12 +175,22 @@ export default function JobTrackerSection() {
                       </div>
                       <p className="text-sm text-muted-foreground">{app.company}</p>
                       <p className="text-xs text-muted-foreground">Applied: {new Date(app.date_applied).toLocaleDateString()}</p>
+                      {/* AI Apply match score */}
+                      {app.notes?.startsWith("AI Apply") && (() => {
+                        const match = app.notes.match(/Match score: (\d+)%/);
+                        const score = match ? parseInt(match[1]) : null;
+                        return score != null ? (
+                          <p className="text-xs flex items-center gap-1 text-purple-600 dark:text-purple-400 font-medium">
+                            <Trophy className="h-3 w-3" /> {score}% match score
+                          </p>
+                        ) : null;
+                      })()}
                       {lastSent && (
                         <p className="text-xs text-primary/80">
                           Last emailed: {new Date(lastSent.sent_at).toLocaleDateString()} → {lastSent.recruiter_email}
                         </p>
                       )}
-                      {app.notes && !app.notes.startsWith("📧") && (
+                      {app.notes && !app.notes.startsWith("📧") && !app.notes.startsWith("AI Apply") && (
                         <p className="text-xs text-muted-foreground italic truncate max-w-xs">{app.notes}</p>
                       )}
                     </div>
