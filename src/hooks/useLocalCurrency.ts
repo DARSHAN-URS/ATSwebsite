@@ -1,26 +1,26 @@
 // Maps user locale/timezone to local currency with approximate Pro plan pricing
-const CURRENCY_MAP: Record<string, { code: string; symbol: string; proPrice: number }> = {
-  IN: { code: "INR", symbol: "₹", proPrice: 299 },
-  US: { code: "USD", symbol: "$", proPrice: 3.49 },
-  GB: { code: "GBP", symbol: "£", proPrice: 2.79 },
-  EU: { code: "EUR", symbol: "€", proPrice: 3.19 },
-  CA: { code: "CAD", symbol: "CA$", proPrice: 4.79 },
-  AU: { code: "AUD", symbol: "A$", proPrice: 5.49 },
-  JP: { code: "JPY", symbol: "¥", proPrice: 520 },
-  AE: { code: "AED", symbol: "AED ", proPrice: 12.99 },
-  SA: { code: "SAR", symbol: "SAR ", proPrice: 12.99 },
-  BR: { code: "BRL", symbol: "R$", proPrice: 17.99 },
-  MX: { code: "MXN", symbol: "MX$", proPrice: 59 },
-  NG: { code: "NGN", symbol: "₦", proPrice: 5499 },
-  ZA: { code: "ZAR", symbol: "R", proPrice: 64 },
-  PH: { code: "PHP", symbol: "₱", proPrice: 199 },
-  BD: { code: "BDT", symbol: "৳", proPrice: 399 },
-  PK: { code: "PKR", symbol: "Rs", proPrice: 999 },
-  LK: { code: "LKR", symbol: "Rs", proPrice: 999 },
-  KR: { code: "KRW", symbol: "₩", proPrice: 4690 },
-  SG: { code: "SGD", symbol: "S$", proPrice: 4.69 },
-  MY: { code: "MYR", symbol: "RM", proPrice: 14.99 },
-  ID: { code: "IDR", symbol: "Rp", proPrice: 54900 },
+const CURRENCY_MAP: Record<string, { code: string; symbol: string; proPrices: { weekly: number; biweekly: number; monthly: number } }> = {
+  IN: { code: "INR", symbol: "₹", proPrices: { weekly: 99, biweekly: 179, monthly: 299 } },
+  US: { code: "USD", symbol: "$", proPrices: { weekly: 1.19, biweekly: 2.09, monthly: 3.49 } },
+  GB: { code: "GBP", symbol: "£", proPrices: { weekly: 0.99, biweekly: 1.69, monthly: 2.79 } },
+  EU: { code: "EUR", symbol: "€", proPrices: { weekly: 1.09, biweekly: 1.89, monthly: 3.19 } },
+  CA: { code: "CAD", symbol: "CA$", proPrices: { weekly: 1.59, biweekly: 2.89, monthly: 4.79 } },
+  AU: { code: "AUD", symbol: "A$", proPrices: { weekly: 1.79, biweekly: 3.29, monthly: 5.49 } },
+  JP: { code: "JPY", symbol: "¥", proPrices: { weekly: 179, biweekly: 319, monthly: 520 } },
+  AE: { code: "AED", symbol: "AED ", proPrices: { weekly: 4.49, biweekly: 7.99, monthly: 12.99 } },
+  SA: { code: "SAR", symbol: "SAR ", proPrices: { weekly: 4.49, biweekly: 7.99, monthly: 12.99 } },
+  BR: { code: "BRL", symbol: "R$", proPrices: { weekly: 5.99, biweekly: 10.99, monthly: 17.99 } },
+  MX: { code: "MXN", symbol: "MX$", proPrices: { weekly: 19, biweekly: 35, monthly: 59 } },
+  NG: { code: "NGN", symbol: "₦", proPrices: { weekly: 1799, biweekly: 3299, monthly: 5499 } },
+  ZA: { code: "ZAR", symbol: "R", proPrices: { weekly: 21, biweekly: 39, monthly: 64 } },
+  PH: { code: "PHP", symbol: "₱", proPrices: { weekly: 69, biweekly: 119, monthly: 199 } },
+  BD: { code: "BDT", symbol: "৳", proPrices: { weekly: 129, biweekly: 239, monthly: 399 } },
+  PK: { code: "PKR", symbol: "Rs", proPrices: { weekly: 329, biweekly: 599, monthly: 999 } },
+  LK: { code: "LKR", symbol: "Rs", proPrices: { weekly: 329, biweekly: 599, monthly: 999 } },
+  KR: { code: "KRW", symbol: "₩", proPrices: { weekly: 1549, biweekly: 2799, monthly: 4690 } },
+  SG: { code: "SGD", symbol: "S$", proPrices: { weekly: 1.59, biweekly: 2.79, monthly: 4.69 } },
+  MY: { code: "MYR", symbol: "RM", proPrices: { weekly: 4.99, biweekly: 8.99, monthly: 14.99 } },
+  ID: { code: "IDR", symbol: "Rp", proPrices: { weekly: 17900, biweekly: 32900, monthly: 54900 } },
 };
 
 // Timezone → country code heuristic
@@ -78,7 +78,6 @@ export function useLocalCurrency() {
 
   const formatPrice = (price: number) => {
     if (price === 0) return "Free";
-    // No decimals for large values
     const formatted = price >= 100 ? Math.round(price).toLocaleString() : price.toFixed(2).replace(/\.00$/, "");
     return `${info.symbol}${formatted}`;
   };
@@ -86,8 +85,8 @@ export function useLocalCurrency() {
   return {
     ...info,
     country,
-    proPrice: info.proPrice,
+    proPrices: info.proPrices,
     formatPrice,
-    formatProPrice: () => formatPrice(info.proPrice),
+    formatProPrice: (duration: "weekly" | "biweekly" | "monthly" = "monthly") => formatPrice(info.proPrices[duration]),
   };
 }
