@@ -39,6 +39,8 @@ const en = {
     atsScanner: "ATS Scanner",
     interviewPrep: "Interview Prep",
     emailOutreach: "Email Outreach",
+    blog: "Blog",
+    about: "About",
   },
   common: {
     save: "Save",
@@ -471,6 +473,8 @@ const ar: TranslationKeys = {
     atsScanner: "ماسح ATS",
     interviewPrep: "تحضير المقابلة",
     emailOutreach: "البريد الإلكتروني",
+    blog: "المدونة",
+    about: "حول",
   },
   common: {
     save: "حفظ",
@@ -893,6 +897,8 @@ const es: TranslationKeys = {
     atsScanner: "Escáner ATS",
     interviewPrep: "Preparación Entrevista",
     emailOutreach: "Correo Electrónico",
+    blog: "Blog",
+    about: "Acerca de",
   },
   common: {
     save: "Guardar",
@@ -1315,6 +1321,8 @@ const fr: TranslationKeys = {
     atsScanner: "Scan ATS",
     interviewPrep: "Prépa Entretien",
     emailOutreach: "E-mail Prospection",
+    blog: "Blog",
+    about: "À propos",
   },
   common: {
     save: "Enregistrer",
@@ -1737,6 +1745,8 @@ const hi: TranslationKeys = {
     atsScanner: "ATS स्कैनर",
     interviewPrep: "साक्षात्कार तैयारी",
     emailOutreach: "ईमेल आउटरीच",
+    blog: "ब्लॉग",
+    about: "हमारे बारे में",
   },
   common: {
     save: "सहेजें",
@@ -2159,6 +2169,8 @@ const pt: TranslationKeys = {
     atsScanner: "Scanner ATS",
     interviewPrep: "Prep. Entrevista",
     emailOutreach: "E-mail Contato",
+    blog: "Blog",
+    about: "Sobre",
   },
   common: {
     save: "Salvar",
@@ -2581,6 +2593,8 @@ const de: TranslationKeys = {
     atsScanner: "ATS-Scanner",
     interviewPrep: "Interviewvorbereitung",
     emailOutreach: "E-Mail Kontakt",
+    blog: "Blog",
+    about: "Über uns",
   },
   common: {
     save: "Speichern",
@@ -3003,6 +3017,8 @@ const zh: TranslationKeys = {
     atsScanner: "ATS扫描",
     interviewPrep: "面试准备",
     emailOutreach: "邮件联系",
+    blog: "博客",
+    about: "关于",
   },
   common: {
     save: "保存",
@@ -3425,6 +3441,8 @@ const ja: TranslationKeys = {
     atsScanner: "ATSスキャナー",
     interviewPrep: "面接準備",
     emailOutreach: "メール連絡",
+    blog: "ブログ",
+    about: "概要",
   },
   common: {
     save: "保存",
@@ -3847,6 +3865,8 @@ const ko: TranslationKeys = {
     atsScanner: "ATS 스캐너",
     interviewPrep: "면접 준비",
     emailOutreach: "이메일 연락",
+    blog: "블로그",
+    about: "소개",
   },
   common: {
     save: "저장",
