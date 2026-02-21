@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -30,6 +31,7 @@ import { accountTranslations } from "@/i18n/accountTranslations";
 export default function AccountSettings() {
   const { user, signOut } = useAuth();
   const { subscription, status, isPro } = useSubscription();
+  const { formatPrice, formatProPrice, symbol, proPrices } = useLocalCurrency();
   const { t, locale } = useLanguage();
   const ta = accountTranslations[locale];
   const { toast } = useToast();
@@ -320,15 +322,25 @@ export default function AccountSettings() {
               <div className="rounded-lg border divide-y text-sm">
                 <div className="flex items-center justify-between px-4 py-3">
                   <div>
-                    <p className="font-medium">{subscription.plan_name} Plan</p>
+                    <p className="font-medium">
+                      {subscription.plan_name === "pro_weekly" ? "7-Day Pro" :
+                       subscription.plan_name === "pro_biweekly" ? "14-Day Pro" :
+                       subscription.plan_name === "pro_monthly" ? "Monthly Pro" :
+                       subscription.plan_name} Plan
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {subscription.starts_at ? new Date(subscription.starts_at).toLocaleDateString() : "—"}
                       {subscription.expires_at ? ` → ${new Date(subscription.expires_at).toLocaleDateString()}` : ""}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold">{subscription.currency} {subscription.amount}</p>
-                    <Badge variant="outline" className="text-xs">{subscription.status}</Badge>
+                    <p className="font-semibold">
+                      {subscription.plan_name === "pro_weekly" ? formatProPrice("weekly") :
+                       subscription.plan_name === "pro_biweekly" ? formatProPrice("biweekly") :
+                       subscription.plan_name === "pro_monthly" ? formatProPrice("monthly") :
+                       `${subscription.currency} ${subscription.amount}`}
+                    </p>
+                    <Badge variant="outline" className="text-xs capitalize">{subscription.status}</Badge>
                   </div>
                 </div>
               </div>
