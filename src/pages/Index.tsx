@@ -532,8 +532,20 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
-                <Button size="sm" className="w-full rounded-lg font-semibold" variant={plan.popular ? "default" : "outline"} disabled={true}>
-                  {pricingExtraTranslations[locale].comingSoon}
+                <Button
+                  size="sm"
+                  className="w-full rounded-lg font-semibold"
+                  variant={plan.popular ? "default" : "outline"}
+                  onClick={() => {
+                    const links: Record<string, string> = {
+                      weekly: "https://nas.io/muzamils-business-2/zerolink/7day-pro",
+                      biweekly: "https://nas.io/muzamils-business-2/zerolink/14day-pro",
+                      monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro",
+                    };
+                    window.open(links[plan.duration], "_blank");
+                  }}
+                >
+                  Subscribe Now
                 </Button>
               </div>
             ))}
