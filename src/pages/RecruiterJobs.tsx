@@ -315,10 +315,43 @@ export default function RecruiterJobs() {
                 <Select value={form.salary_currency} onValueChange={(v) => setForm({ ...form, salary_currency: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="USD">USD</SelectItem>
-                    <SelectItem value="EUR">EUR</SelectItem>
-                    <SelectItem value="GBP">GBP</SelectItem>
-                    <SelectItem value="INR">INR</SelectItem>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR (€)</SelectItem>
+                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                    <SelectItem value="INR">INR (₹)</SelectItem>
+                    <SelectItem value="AED">AED (د.إ)</SelectItem>
+                    <SelectItem value="SAR">SAR (﷼)</SelectItem>
+                    <SelectItem value="QAR">QAR (﷼)</SelectItem>
+                    <SelectItem value="KWD">KWD (د.ك)</SelectItem>
+                    <SelectItem value="BHD">BHD (د.ب)</SelectItem>
+                    <SelectItem value="OMR">OMR (﷼)</SelectItem>
+                    <SelectItem value="EGP">EGP (£)</SelectItem>
+                    <SelectItem value="PKR">PKR (₨)</SelectItem>
+                    <SelectItem value="BDT">BDT (৳)</SelectItem>
+                    <SelectItem value="LKR">LKR (₨)</SelectItem>
+                    <SelectItem value="NPR">NPR (₨)</SelectItem>
+                    <SelectItem value="CAD">CAD ($)</SelectItem>
+                    <SelectItem value="AUD">AUD ($)</SelectItem>
+                    <SelectItem value="SGD">SGD ($)</SelectItem>
+                    <SelectItem value="MYR">MYR (RM)</SelectItem>
+                    <SelectItem value="JPY">JPY (¥)</SelectItem>
+                    <SelectItem value="CNY">CNY (¥)</SelectItem>
+                    <SelectItem value="KRW">KRW (₩)</SelectItem>
+                    <SelectItem value="BRL">BRL (R$)</SelectItem>
+                    <SelectItem value="ZAR">ZAR (R)</SelectItem>
+                    <SelectItem value="NGN">NGN (₦)</SelectItem>
+                    <SelectItem value="KES">KES (KSh)</SelectItem>
+                    <SelectItem value="CHF">CHF (Fr)</SelectItem>
+                    <SelectItem value="SEK">SEK (kr)</SelectItem>
+                    <SelectItem value="NOK">NOK (kr)</SelectItem>
+                    <SelectItem value="DKK">DKK (kr)</SelectItem>
+                    <SelectItem value="PLN">PLN (zł)</SelectItem>
+                    <SelectItem value="TRY">TRY (₺)</SelectItem>
+                    <SelectItem value="MXN">MXN ($)</SelectItem>
+                    <SelectItem value="PHP">PHP (₱)</SelectItem>
+                    <SelectItem value="IDR">IDR (Rp)</SelectItem>
+                    <SelectItem value="THB">THB (฿)</SelectItem>
+                    <SelectItem value="VND">VND (₫)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
