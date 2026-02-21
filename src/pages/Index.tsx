@@ -18,6 +18,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { landingExtraTranslations } from "@/i18n/landingExtraTranslations";
+import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
 
 // Lazy-load heavy template components (pulls in jsPDF & canvas only when dropdown is opened)
 const TemplateDropdownContent = lazy(() => import("@/components/landing/TemplateDropdownContent"));
@@ -455,23 +456,23 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
             {/* Free Plan */}
-            <div className="rounded-xl border border-border/60 bg-card p-6 md:p-8 flex flex-col">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Zap className="h-5 w-5" />
+            <div className="rounded-xl border border-border/60 bg-card p-5 flex flex-col">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Zap className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">{lx.freePlan}</h3>
-                  <p className="text-xs text-muted-foreground">{lx.freeDesc}</p>
+                  <h3 className="text-base font-bold">{lx.freePlan}</h3>
+                  <p className="text-[11px] text-muted-foreground">{lx.freeDesc}</p>
                 </div>
               </div>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
-                <span className="text-sm text-muted-foreground ml-1">{lx.forever}</span>
+              <div className="mb-4">
+                <span className="text-3xl font-extrabold">{localCurrency.formatPrice(0)}</span>
+                <span className="text-xs text-muted-foreground ml-1">{lx.forever}</span>
               </div>
-              <ul className="space-y-3 flex-1 mb-6">
+              <ul className="space-y-2 flex-1 mb-5">
                 {[
                   { text: lx.createEditResumes, included: true },
                   { text: lx.allTemplates, included: true },
@@ -479,72 +480,63 @@ const Index = () => {
                   { text: lx.jobTrackerLimit, included: true },
                   { text: lx.browseJobBoard, included: true },
                   { text: lx.coverLetterGen, included: true },
-                  { text: lx.aiGrading, included: false },
-                  { text: lx.aiTailoring, included: false },
-                  { text: lx.aiJobSearch, included: false },
-                  { text: lx.pinTrack, included: false },
-                  { text: lx.linkedinImport, included: false },
-                  { text: lx.unlimitedTracking, included: false },
                 ].map((f) => (
-                  <li key={f.text} className="flex items-center gap-2 text-[13px]">
-                    {f.included ? (
-                      <CheckCircle className="h-4 w-4 text-primary shrink-0" />
-                    ) : (
-                      <XIcon className="h-4 w-4 text-muted-foreground/40 shrink-0" />
-                    )}
-                    <span className={f.included ? "text-foreground" : "text-muted-foreground"}>{f.text}</span>
+                  <li key={f.text} className="flex items-center gap-2 text-[12px]">
+                    <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span className="text-foreground">{f.text}</span>
                   </li>
                 ))}
               </ul>
-              <Button variant="outline" className="w-full rounded-lg font-semibold" onClick={() => openAuth("signup")}>
+              <Button variant="outline" size="sm" className="w-full rounded-lg font-semibold" onClick={() => openAuth("signup")}>
                 {lx.getStartedFree}
               </Button>
             </div>
 
-            {/* Pro Plan */}
-            <div className="relative rounded-xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col shadow-lg shadow-primary/10">
-              <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-bl-lg rounded-tr-[10px]">
-                {lx.mostPopular}
-              </div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Crown className="h-5 w-5" />
+            {/* Pro Plans */}
+            {([
+              { duration: "weekly" as const, name: pricingExtraTranslations[locale].weeklyPlan, desc: pricingExtraTranslations[locale].weeklyDesc, period: pricingExtraTranslations[locale].per7Days, popular: false },
+              { duration: "biweekly" as const, name: pricingExtraTranslations[locale].biweeklyPlan, desc: pricingExtraTranslations[locale].biweeklyDesc, period: pricingExtraTranslations[locale].per14Days, popular: false },
+              { duration: "monthly" as const, name: lx.proPlan, desc: lx.proDesc, period: lx.perMonth, popular: true },
+            ]).map((plan) => (
+              <div key={plan.duration} className={`relative rounded-xl bg-card p-5 flex flex-col ${plan.popular ? "border-2 border-primary shadow-lg shadow-primary/10" : "border border-border/60"}`}>
+                {plan.popular && (
+                  <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-2.5 py-0.5 text-[10px] font-semibold rounded-bl-lg rounded-tr-[10px]">
+                    {pricingExtraTranslations[locale].bestValue}
+                  </div>
+                )}
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Crown className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold">{plan.name}</h3>
+                    <p className="text-[11px] text-muted-foreground">{plan.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold">{lx.proPlan}</h3>
-                  <p className="text-xs text-muted-foreground">{lx.proDesc}</p>
+                <div className="mb-4">
+                  <span className="text-3xl font-extrabold">{localCurrency.formatProPrice(plan.duration)}</span>
+                  <span className="text-xs text-muted-foreground ml-1">{plan.period}</span>
                 </div>
+                <ul className="space-y-2 flex-1 mb-5">
+                  {[
+                    lx.unlimitedResumes,
+                    lx.allPremiumTemplates,
+                    lx.aiGradingScoring,
+                    lx.aiOneClickTailoring,
+                    lx.aiCoverLetter,
+                    ...(plan.popular ? [lx.prioritySupport] : []),
+                  ].map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-[12px]">
+                      <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
+                      <span className="text-foreground">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button size="sm" className="w-full rounded-lg font-semibold" variant={plan.popular ? "default" : "outline"} disabled={true}>
+                  {pricingExtraTranslations[locale].comingSoon}
+                </Button>
               </div>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold">{localCurrency.formatProPrice()}</span>
-                <span className="text-sm text-muted-foreground ml-1">{lx.perMonth}</span>
-              </div>
-              <ul className="space-y-3 flex-1 mb-6">
-                {[
-                  lx.unlimitedResumes,
-                  lx.allPremiumTemplates,
-                  lx.pdfDownloadUpload,
-                  lx.aiGradingScoring,
-                  lx.aiOneClickTailoring,
-                  lx.aiBulletSummary,
-                  lx.aiCoverLetter,
-                  lx.aiJobSearchMatching,
-                  lx.pinTrackCompanies,
-                  lx.linkedinProfileImport,
-                  lx.unlimitedJobTracking,
-                  lx.prioritySupport,
-                  lx.earlyAccess,
-                ].map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-[13px]">
-                    <CheckCircle className="h-4 w-4 text-primary shrink-0" />
-                    <span className="text-foreground">{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button className="w-full rounded-lg font-semibold shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
-                {lx.startProTrial} <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
