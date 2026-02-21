@@ -17,6 +17,7 @@ import dashboardPreview from "@/assets/dashboard-preview.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
+import { landingExtraTranslations } from "@/i18n/landingExtraTranslations";
 
 // Lazy-load heavy template components (pulls in jsPDF & canvas only when dropdown is opened)
 const TemplateDropdownContent = lazy(() => import("@/components/landing/TemplateDropdownContent"));
@@ -39,7 +40,8 @@ const Index = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const localCurrency = useLocalCurrency();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const lx = landingExtraTranslations[locale];
   const [, startTransition] = useTransition();
 
   // Redirect to dashboard if already authenticated
@@ -235,30 +237,22 @@ const Index = () => {
             {/* Left: content */}
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary text-xs font-semibold mb-4">
-                <Sparkles className="h-3.5 w-3.5" /> New Feature
+                <Sparkles className="h-3.5 w-3.5" /> {lx.newFeature}
               </div>
               <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl mb-3">
-                AI Apply — Let AI Apply to Jobs For You
+                {lx.aiApplyTitle}
               </h2>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-md mb-6">
-                Select a resume, hit <strong>AI Apply</strong>, and our AI instantly finds your top 10 job matches, tailors your resume, and generates a custom cover letter — all in one click.
-              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-md mb-6" dangerouslySetInnerHTML={{ __html: lx.aiApplyDesc }} />
               <ul className="space-y-3 mb-8">
-                {[
-                  { label: "Finds your top 10 matching jobs automatically" },
-                  { label: "Tailors your resume for each specific role" },
-                  { label: "Generates a professional cover letter per job" },
-                  { label: "One-click Apply & Track — logs status instantly" },
-                  { label: "Real-time progress with live stage updates" },
-                ].map((item) => (
-                  <li key={item.label} className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
+                {[lx.aiApplyF1, lx.aiApplyF2, lx.aiApplyF3, lx.aiApplyF4, lx.aiApplyF5].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
                     <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    {item.label}
+                    {item}
                   </li>
                 ))}
               </ul>
               <Button className="gap-2 rounded-lg font-semibold shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
-                Try AI Apply Free <ArrowRight className="h-4 w-4" />
+                {lx.tryAiApply} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
 
@@ -270,13 +264,13 @@ const Index = () => {
                   <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <Sparkles className="h-4 w-4" />
                   </div>
-                  <span className="text-sm font-semibold">AI Apply Queue</span>
-                  <span className="ml-auto text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">10 matches</span>
+                   <span className="text-sm font-semibold">{lx.aiApplyQueue}</span>
+                   <span className="ml-auto text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">{lx.matches}</span>
                 </div>
                 {[
-                  { title: "Senior Frontend Engineer", company: "Stripe", score: 94, status: "Tailored" },
-                  { title: "React Developer", company: "Vercel", score: 91, status: "Cover Letter Ready" },
-                  { title: "Full Stack Engineer", company: "Linear", score: 88, status: "Ready to Apply" },
+                  { title: "Senior Frontend Engineer", company: "Stripe", score: 94, status: lx.tailored },
+                  { title: "React Developer", company: "Vercel", score: 91, status: lx.coverLetterReady },
+                  { title: "Full Stack Engineer", company: "Linear", score: 88, status: lx.readyToApply },
                 ].map((job) => (
                   <div key={job.title} className="flex items-center gap-3 py-2.5 border-b border-border/40 last:border-0">
                     <div className="flex-1 min-w-0">
@@ -291,13 +285,13 @@ const Index = () => {
 
               {/* Progress step card */}
               <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">Live Progress</p>
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">{lx.liveProgress}</p>
                 <div className="space-y-2">
                   {[
-                    { step: "Searching jobs", done: true },
-                    { step: "Matching to your resume", done: true },
-                    { step: "Tailoring resume for each role", done: true },
-                    { step: "Generating cover letters", done: false },
+                    { step: lx.searchingJobs, done: true },
+                    { step: lx.matchingResume, done: true },
+                    { step: lx.tailoringResume, done: true },
+                    { step: lx.generatingCoverLetters, done: false },
                   ].map((s) => (
                     <div key={s.step} className="flex items-center gap-2.5">
                       <div className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 ${s.done ? "bg-primary" : "border-2 border-primary animate-pulse"}`}>
@@ -454,10 +448,10 @@ const Index = () => {
       <section ref={pricingRef} className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">Pricing</p>
-            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">Simple, Transparent Pricing</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{lx.pricingTag}</p>
+            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">{lx.pricingTitle}</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-              Build and download resumes for free. Upgrade to Pro to unlock AI-powered features and supercharge your job search.
+              {lx.pricingDesc}
             </p>
           </div>
 
@@ -469,28 +463,28 @@ const Index = () => {
                   <Zap className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">Free</h3>
-                  <p className="text-xs text-muted-foreground">Forever free, no card required</p>
+                  <h3 className="text-lg font-bold">{lx.freePlan}</h3>
+                  <p className="text-xs text-muted-foreground">{lx.freeDesc}</p>
                 </div>
               </div>
               <div className="mb-6">
                 <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
-                <span className="text-sm text-muted-foreground ml-1">forever</span>
+                <span className="text-sm text-muted-foreground ml-1">{lx.forever}</span>
               </div>
               <ul className="space-y-3 flex-1 mb-6">
                 {[
-                  { text: "Create & edit resumes", included: true },
-                  { text: "All 8+ professional templates", included: true },
-                  { text: "PDF download & upload", included: true },
-                  { text: "Job tracker (up to 10 jobs)", included: true },
-                  { text: "Browse job board", included: true },
-                  { text: "Cover letter generator", included: true },
-                  { text: "AI resume grading", included: false },
-                  { text: "AI one-click tailoring", included: false },
-                  { text: "AI-powered job search", included: false },
-                  { text: "Pin & track companies", included: false },
-                  { text: "LinkedIn import", included: false },
-                  { text: "Unlimited job tracking", included: false },
+                  { text: lx.createEditResumes, included: true },
+                  { text: lx.allTemplates, included: true },
+                  { text: lx.pdfDownloadUpload, included: true },
+                  { text: lx.jobTrackerLimit, included: true },
+                  { text: lx.browseJobBoard, included: true },
+                  { text: lx.coverLetterGen, included: true },
+                  { text: lx.aiGrading, included: false },
+                  { text: lx.aiTailoring, included: false },
+                  { text: lx.aiJobSearch, included: false },
+                  { text: lx.pinTrack, included: false },
+                  { text: lx.linkedinImport, included: false },
+                  { text: lx.unlimitedTracking, included: false },
                 ].map((f) => (
                   <li key={f.text} className="flex items-center gap-2 text-[13px]">
                     {f.included ? (
@@ -503,43 +497,43 @@ const Index = () => {
                 ))}
               </ul>
               <Button variant="outline" className="w-full rounded-lg font-semibold" onClick={() => openAuth("signup")}>
-                Get Started Free
+                {lx.getStartedFree}
               </Button>
             </div>
 
             {/* Pro Plan */}
             <div className="relative rounded-xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col shadow-lg shadow-primary/10">
               <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-bl-lg rounded-tr-[10px]">
-                Most Popular
+                {lx.mostPopular}
               </div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Crown className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">Pro</h3>
-                  <p className="text-xs text-muted-foreground">Unlock all premium features</p>
+                  <h3 className="text-lg font-bold">{lx.proPlan}</h3>
+                  <p className="text-xs text-muted-foreground">{lx.proDesc}</p>
                 </div>
               </div>
               <div className="mb-6">
                 <span className="text-4xl font-extrabold">{localCurrency.formatProPrice()}</span>
-                <span className="text-sm text-muted-foreground ml-1">/month</span>
+                <span className="text-sm text-muted-foreground ml-1">{lx.perMonth}</span>
               </div>
               <ul className="space-y-3 flex-1 mb-6">
                 {[
-                  "Unlimited resumes",
-                  "All premium templates",
-                  "PDF download & upload",
-                  "AI resume grading & scoring",
-                  "AI one-click resume tailoring",
-                  "AI bullet point & summary generation",
-                  "AI cover letter generator (with AI)",
-                  "AI-powered job search & matching",
-                  "Pin & track companies",
-                  "LinkedIn profile import",
-                  "Unlimited job tracking",
-                  "Priority support",
-                  "Early access to new features",
+                  lx.unlimitedResumes,
+                  lx.allPremiumTemplates,
+                  lx.pdfDownloadUpload,
+                  lx.aiGradingScoring,
+                  lx.aiOneClickTailoring,
+                  lx.aiBulletSummary,
+                  lx.aiCoverLetter,
+                  lx.aiJobSearchMatching,
+                  lx.pinTrackCompanies,
+                  lx.linkedinProfileImport,
+                  lx.unlimitedJobTracking,
+                  lx.prioritySupport,
+                  lx.earlyAccess,
                 ].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-[13px]">
                     <CheckCircle className="h-4 w-4 text-primary shrink-0" />
@@ -548,7 +542,7 @@ const Index = () => {
                 ))}
               </ul>
               <Button className="w-full rounded-lg font-semibold shadow-md shadow-primary/20" onClick={() => openAuth("signup")}>
-                Start Pro Trial <ArrowRight className="h-4 w-4 ml-1" />
+                {lx.startProTrial} <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
           </div>
@@ -607,20 +601,20 @@ const Index = () => {
             <div className="md:col-span-3">
               <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/60 font-mono">{t.landing.platform}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
-                <li><Link to="/ats-resume-builder" className="transition hover:text-background">ATS Resume Builder</Link></li>
-                <li><Link to="/resume-templates" className="transition hover:text-background">Resume Templates</Link></li>
-                <li><Link to="/resume-builder-for-freshers" className="transition hover:text-background">Fresher Resume Builder</Link></li>
-                <li><Link to="/software-engineer-resume" className="transition hover:text-background">Engineer Resume</Link></li>
-                <li><Link to="/interview-preparation" className="transition hover:text-background">Interview Preparation</Link></li>
-                <li><Link to="/resume-download" className="transition hover:text-background">Resume Download</Link></li>
+                <li><Link to="/ats-resume-builder" className="transition hover:text-background">{lx.atsResumeBuilder}</Link></li>
+                <li><Link to="/resume-templates" className="transition hover:text-background">{lx.resumeTemplatesLink}</Link></li>
+                <li><Link to="/resume-builder-for-freshers" className="transition hover:text-background">{lx.fresherResumeBuilder}</Link></li>
+                <li><Link to="/software-engineer-resume" className="transition hover:text-background">{lx.engineerResume}</Link></li>
+                <li><Link to="/interview-preparation" className="transition hover:text-background">{lx.interviewPreparation}</Link></li>
+                <li><Link to="/resume-download" className="transition hover:text-background">{lx.resumeDownload}</Link></li>
               </ul>
             </div>
             <div className="md:col-span-2">
               <h4 className="mb-2.5 md:mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-background/60 font-mono">{t.landing.company}</h4>
               <ul className="space-y-2 md:space-y-2.5 text-[13px] text-background/70">
-                <li><Link to="/about" className="transition hover:text-background">About</Link></li>
-                <li><Link to="/blog" className="transition hover:text-background">Blog</Link></li>
-                <li><Link to="/pricing" className="transition hover:text-background">Pricing</Link></li>
+                <li><Link to="/about" className="transition hover:text-background">{t.nav.about}</Link></li>
+                <li><Link to="/blog" className="transition hover:text-background">{t.nav.blog}</Link></li>
+                <li><Link to="/pricing" className="transition hover:text-background">{t.nav.pricing}</Link></li>
                 <li><Link to="/privacy" className="transition hover:text-background">{t.landing.privacyPolicy}</Link></li>
                 <li><Link to="/terms" className="transition hover:text-background">{t.landing.termsOfService}</Link></li>
               </ul>
