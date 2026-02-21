@@ -407,38 +407,6 @@ export default function AccountSettings() {
       </Card>
       )}
 
-      {/* RECRUITER ACCOUNT INFO */}
-      {role === "recruiter" && (
-      <Card className="border-primary/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Building2 className="h-4 w-4 text-primary" /> {ta.recruiterAccount}
-          </CardTitle>
-          <CardDescription>{ta.recruiterAccountDesc}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-3 p-4 rounded-lg border bg-primary/5">
-            <Building2 className="h-8 w-8 text-primary shrink-0" />
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="font-semibold">{ta.recruiterPlan}</p>
-                <Badge variant="default">{ta.freeAccess}</Badge>
-              </div>
-              <p className="text-sm text-muted-foreground mt-0.5">{ta.recruiterFullAccess}</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {[ta.recruiterFeature1, ta.recruiterFeature2, ta.recruiterFeature3, ta.recruiterFeature4, ta.recruiterFeature5, ta.recruiterFeature6].map((f) => (
-              <div key={f} className="flex items-center gap-2 text-sm">
-                <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-                <span>{f}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground border-t pt-3">{ta.recruiterPricingNote}</p>
-        </CardContent>
-      </Card>
-      )}
 
       {/* ACCOUNT DELETION */}
       <Card className="border-destructive/40">
