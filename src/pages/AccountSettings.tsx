@@ -323,10 +323,10 @@ export default function AccountSettings() {
                 <div className="flex items-center justify-between px-4 py-3">
                   <div>
                     <p className="font-medium">
-                      {subscription.plan_name === "pro_weekly" ? "7-Day Pro" :
-                       subscription.plan_name === "pro_biweekly" ? "14-Day Pro" :
-                       subscription.plan_name === "pro_monthly" ? "Monthly Pro" :
-                       subscription.plan_name} Plan
+                      {subscription.plan_name === "pro_weekly" ? ta.plan7Day :
+                       subscription.plan_name === "pro_biweekly" ? ta.plan14Day :
+                       subscription.plan_name === "pro_monthly" ? ta.planMonthly :
+                       subscription.plan_name} {ta.planSuffix}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {subscription.starts_at ? new Date(subscription.starts_at).toLocaleDateString() : "—"}

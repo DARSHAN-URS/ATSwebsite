@@ -107,6 +107,15 @@ const en = {
   proFeature5: "Cover letter generation",
   proFeature6: "Unlimited job tracking",
   proFeature7: "Priority support",
+  proFeatureTitle: "Pro Feature",
+  proFeaturePageDesc: "This page is available exclusively for Pro subscribers. Upgrade your plan to unlock full access.",
+  upgradeToProBtn: "Upgrade to Pro",
+  unlockFeature: "Upgrade to unlock this feature",
+  loading: "Loading...",
+  plan7Day: "7-Day Pro",
+  plan14Day: "14-Day Pro",
+  planMonthly: "Monthly Pro",
+  planSuffix: "Plan",
 };
 
 type AccountTranslation = typeof en;
@@ -218,6 +227,15 @@ const ar: AccountTranslation = {
   proFeature5: "إنشاء خطابات التقديم",
   proFeature6: "تتبع وظائف غير محدود",
   proFeature7: "دعم ذو أولوية",
+  proFeatureTitle: "ميزة برو",
+  proFeaturePageDesc: "هذه الصفحة متاحة حصريًا لمشتركي برو. قم بترقية خطتك لفتح الوصول الكامل.",
+  upgradeToProBtn: "الترقية إلى برو",
+  unlockFeature: "قم بالترقية لفتح هذه الميزة",
+  loading: "جارٍ التحميل...",
+  plan7Day: "برو 7 أيام",
+  plan14Day: "برو 14 يومًا",
+  planMonthly: "برو شهري",
+  planSuffix: "خطة",
 };
 
 const es: AccountTranslation = {
@@ -327,6 +345,15 @@ const es: AccountTranslation = {
   proFeature5: "Generación de cartas de presentación",
   proFeature6: "Seguimiento ilimitado de empleos",
   proFeature7: "Soporte prioritario",
+  proFeatureTitle: "Función Pro",
+  proFeaturePageDesc: "Esta página está disponible exclusivamente para suscriptores Pro. Mejora tu plan para desbloquear el acceso completo.",
+  upgradeToProBtn: "Mejorar a Pro",
+  unlockFeature: "Mejora para desbloquear esta función",
+  loading: "Cargando...",
+  plan7Day: "Pro 7 días",
+  plan14Day: "Pro 14 días",
+  planMonthly: "Pro mensual",
+  planSuffix: "Plan",
 };
 
 const fr: AccountTranslation = {
@@ -436,6 +463,15 @@ const fr: AccountTranslation = {
   proFeature5: "Génération de lettres de motivation",
   proFeature6: "Suivi d'emplois illimité",
   proFeature7: "Support prioritaire",
+  proFeatureTitle: "Fonctionnalité Pro",
+  proFeaturePageDesc: "Cette page est réservée aux abonnés Pro. Passez au niveau supérieur pour débloquer l'accès complet.",
+  upgradeToProBtn: "Passer au Pro",
+  unlockFeature: "Passez au niveau supérieur pour débloquer cette fonctionnalité",
+  loading: "Chargement...",
+  plan7Day: "Pro 7 jours",
+  plan14Day: "Pro 14 jours",
+  planMonthly: "Pro mensuel",
+  planSuffix: "Plan",
 };
 
 const hi: AccountTranslation = {
@@ -545,6 +581,15 @@ const hi: AccountTranslation = {
   proFeature5: "कवर लेटर जनरेशन",
   proFeature6: "असीमित जॉब ट्रैकिंग",
   proFeature7: "प्राथमिकता सहायता",
+  proFeatureTitle: "प्रो फ़ीचर",
+  proFeaturePageDesc: "यह पृष्ठ विशेष रूप से प्रो सदस्यों के लिए उपलब्ध है। पूर्ण पहुँच अनलॉक करने के लिए अपनी योजना अपग्रेड करें।",
+  upgradeToProBtn: "प्रो में अपग्रेड करें",
+  unlockFeature: "इस सुविधा को अनलॉक करने के लिए अपग्रेड करें",
+  loading: "लोड हो रहा है...",
+  plan7Day: "7 दिन प्रो",
+  plan14Day: "14 दिन प्रो",
+  planMonthly: "मासिक प्रो",
+  planSuffix: "प्लान",
 };
 
 const pt: AccountTranslation = {
@@ -654,6 +699,15 @@ const pt: AccountTranslation = {
   proFeature5: "Geração de cartas de apresentação",
   proFeature6: "Rastreamento ilimitado de empregos",
   proFeature7: "Suporte prioritário",
+  proFeatureTitle: "Recurso Pro",
+  proFeaturePageDesc: "Esta página está disponível exclusivamente para assinantes Pro. Faça upgrade do seu plano para desbloquear acesso completo.",
+  upgradeToProBtn: "Fazer upgrade para Pro",
+  unlockFeature: "Faça upgrade para desbloquear este recurso",
+  loading: "Carregando...",
+  plan7Day: "Pro 7 dias",
+  plan14Day: "Pro 14 dias",
+  planMonthly: "Pro mensal",
+  planSuffix: "Plano",
 };
 
 const de: AccountTranslation = {
@@ -763,6 +817,15 @@ const de: AccountTranslation = {
   proFeature5: "Anschreiben-Erstellung",
   proFeature6: "Unbegrenztes Job-Tracking",
   proFeature7: "Prioritäts-Support",
+  proFeatureTitle: "Pro-Funktion",
+  proFeaturePageDesc: "Diese Seite ist ausschließlich für Pro-Abonnenten verfügbar. Upgraden Sie Ihren Plan, um vollen Zugang freizuschalten.",
+  upgradeToProBtn: "Auf Pro upgraden",
+  unlockFeature: "Upgraden Sie, um diese Funktion freizuschalten",
+  loading: "Laden...",
+  plan7Day: "7-Tage Pro",
+  plan14Day: "14-Tage Pro",
+  planMonthly: "Monatlich Pro",
+  planSuffix: "Plan",
 };
 
 const zh: AccountTranslation = {
@@ -872,6 +935,15 @@ const zh: AccountTranslation = {
   proFeature5: "求职信生成",
   proFeature6: "无限职位跟踪",
   proFeature7: "优先支持",
+  proFeatureTitle: "专业版功能",
+  proFeaturePageDesc: "此页面仅供专业版订阅者使用。升级您的计划以解锁完全访问权限。",
+  upgradeToProBtn: "升级到专业版",
+  unlockFeature: "升级以解锁此功能",
+  loading: "加载中...",
+  plan7Day: "7天专业版",
+  plan14Day: "14天专业版",
+  planMonthly: "月度专业版",
+  planSuffix: "计划",
 };
 
 const ja: AccountTranslation = {
@@ -981,6 +1053,15 @@ const ja: AccountTranslation = {
   proFeature5: "カバーレター生成",
   proFeature6: "無制限のジョブトラッキング",
   proFeature7: "優先サポート",
+  proFeatureTitle: "プロ機能",
+  proFeaturePageDesc: "このページはプロ会員限定です。フルアクセスのためにプランをアップグレードしてください。",
+  upgradeToProBtn: "プロにアップグレード",
+  unlockFeature: "この機能を解除するにはアップグレードしてください",
+  loading: "読み込み中...",
+  plan7Day: "7日間プロ",
+  plan14Day: "14日間プロ",
+  planMonthly: "月額プロ",
+  planSuffix: "プラン",
 };
 
 const ko: AccountTranslation = {
@@ -1090,6 +1171,15 @@ const ko: AccountTranslation = {
   proFeature5: "자기소개서 생성",
   proFeature6: "무제한 채용 추적",
   proFeature7: "우선 지원",
+  proFeatureTitle: "프로 기능",
+  proFeaturePageDesc: "이 페이지는 프로 구독자 전용입니다. 전체 액세스를 잠금 해제하려면 요금제를 업그레이드하세요.",
+  upgradeToProBtn: "프로로 업그레이드",
+  unlockFeature: "이 기능을 잠금 해제하려면 업그레이드하세요",
+  loading: "로딩 중...",
+  plan7Day: "7일 프로",
+  plan14Day: "14일 프로",
+  planMonthly: "월간 프로",
+  planSuffix: "플랜",
 };
 
 export const accountTranslations: Record<Locale, AccountTranslation> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };
