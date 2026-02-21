@@ -16,6 +16,13 @@ const en = {
   recruiterPricingNote: "Recruiter pricing plans will be announced when we launch out of beta. You'll be notified in advance.",
   back: "Back",
   comingSoon: "Coming Soon",
+  per7Days: "/ 7 days",
+  per14Days: "/ 14 days",
+  weeklyPlan: "7-Day Access",
+  biweeklyPlan: "14-Day Access",
+  weeklyDesc: "Try Pro for a week",
+  biweeklyDesc: "Two weeks of Pro power",
+  bestValue: "Best Value",
 };
 
 type PricingExtra = typeof en;
@@ -36,6 +43,13 @@ const ar: PricingExtra = {
   recruiterPricingNote: "سيتم الإعلان عن خطط أسعار المُوظِّف عند إطلاقنا من مرحلة بيتا. سيتم إخطارك مسبقًا.",
   back: "رجوع",
   comingSoon: "قريبًا",
+  per7Days: "/ ٧ أيام",
+  per14Days: "/ ١٤ يومًا",
+  weeklyPlan: "وصول ٧ أيام",
+  biweeklyPlan: "وصول ١٤ يومًا",
+  weeklyDesc: "جرّب Pro لمدة أسبوع",
+  biweeklyDesc: "أسبوعان من قوة Pro",
+  bestValue: "أفضل قيمة",
 };
 
 const es: PricingExtra = {
@@ -54,6 +68,13 @@ const es: PricingExtra = {
   recruiterPricingNote: "Los planes de precios para reclutadores se anunciarán cuando salgamos de beta. Se te notificará con anticipación.",
   back: "Volver",
   comingSoon: "Próximamente",
+  per7Days: "/ 7 días",
+  per14Days: "/ 14 días",
+  weeklyPlan: "Acceso 7 días",
+  biweeklyPlan: "Acceso 14 días",
+  weeklyDesc: "Prueba Pro por una semana",
+  biweeklyDesc: "Dos semanas de poder Pro",
+  bestValue: "Mejor valor",
 };
 
 const fr: PricingExtra = {
@@ -72,6 +93,13 @@ const fr: PricingExtra = {
   recruiterPricingNote: "Les plans tarifaires recruteur seront annoncés à notre sortie de bêta. Vous serez prévenu à l'avance.",
   back: "Retour",
   comingSoon: "Bientôt disponible",
+  per7Days: "/ 7 jours",
+  per14Days: "/ 14 jours",
+  weeklyPlan: "Accès 7 jours",
+  biweeklyPlan: "Accès 14 jours",
+  weeklyDesc: "Essayez Pro pendant une semaine",
+  biweeklyDesc: "Deux semaines de puissance Pro",
+  bestValue: "Meilleure offre",
 };
 
 const hi: PricingExtra = {
@@ -90,6 +118,13 @@ const hi: PricingExtra = {
   recruiterPricingNote: "रिक्रूटर मूल्य निर्धारण योजनाएं बीटा से बाहर लॉन्च होने पर घोषित की जाएंगी। आपको पहले से सूचित किया जाएगा।",
   back: "वापस",
   comingSoon: "जल्द आ रहा है",
+  per7Days: "/ 7 दिन",
+  per14Days: "/ 14 दिन",
+  weeklyPlan: "7 दिन एक्सेस",
+  biweeklyPlan: "14 दिन एक्सेस",
+  weeklyDesc: "एक हफ्ते के लिए Pro आज़माएं",
+  biweeklyDesc: "दो हफ्ते Pro की शक्ति",
+  bestValue: "सबसे अच्छी कीमत",
 };
 
 const pt: PricingExtra = {
@@ -108,6 +143,13 @@ const pt: PricingExtra = {
   recruiterPricingNote: "Os planos de preços para recrutadores serão anunciados quando sairmos do beta. Você será notificado com antecedência.",
   back: "Voltar",
   comingSoon: "Em breve",
+  per7Days: "/ 7 dias",
+  per14Days: "/ 14 dias",
+  weeklyPlan: "Acesso 7 dias",
+  biweeklyPlan: "Acesso 14 dias",
+  weeklyDesc: "Experimente Pro por uma semana",
+  biweeklyDesc: "Duas semanas de poder Pro",
+  bestValue: "Melhor valor",
 };
 
 const de: PricingExtra = {
@@ -126,6 +168,13 @@ const de: PricingExtra = {
   recruiterPricingNote: "Recruiter-Preispläne werden beim Verlassen der Beta-Phase angekündigt. Sie werden vorab benachrichtigt.",
   back: "Zurück",
   comingSoon: "Demnächst",
+  per7Days: "/ 7 Tage",
+  per14Days: "/ 14 Tage",
+  weeklyPlan: "7-Tage-Zugang",
+  biweeklyPlan: "14-Tage-Zugang",
+  weeklyDesc: "Testen Sie Pro für eine Woche",
+  biweeklyDesc: "Zwei Wochen Pro-Power",
+  bestValue: "Bester Wert",
 };
 
 const zh: PricingExtra = {
@@ -144,6 +193,13 @@ const zh: PricingExtra = {
   recruiterPricingNote: "招聘者定价计划将在我们退出测试版时公布。您将提前收到通知。",
   back: "返回",
   comingSoon: "即将推出",
+  per7Days: "/ 7 天",
+  per14Days: "/ 14 天",
+  weeklyPlan: "7天访问",
+  biweeklyPlan: "14天访问",
+  weeklyDesc: "体验一周Pro",
+  biweeklyDesc: "两周Pro强力功能",
+  bestValue: "最超值",
 };
 
 const ja: PricingExtra = {
@@ -162,6 +218,13 @@ const ja: PricingExtra = {
   recruiterPricingNote: "リクルーター料金プランはベータ版終了時に発表されます。事前に通知されます。",
   back: "戻る",
   comingSoon: "近日公開",
+  per7Days: "/ 7日間",
+  per14Days: "/ 14日間",
+  weeklyPlan: "7日間アクセス",
+  biweeklyPlan: "14日間アクセス",
+  weeklyDesc: "1週間Proをお試し",
+  biweeklyDesc: "2週間のProパワー",
+  bestValue: "一番お得",
 };
 
 const ko: PricingExtra = {
@@ -180,6 +243,13 @@ const ko: PricingExtra = {
   recruiterPricingNote: "채용 담당자 요금 플랜은 베타를 종료할 때 발표됩니다. 사전에 통보해 드립니다.",
   back: "뒤로",
   comingSoon: "곧 출시",
+  per7Days: "/ 7일",
+  per14Days: "/ 14일",
+  weeklyPlan: "7일 이용권",
+  biweeklyPlan: "14일 이용권",
+  weeklyDesc: "일주일간 Pro 체험",
+  biweeklyDesc: "2주간 Pro 파워",
+  bestValue: "최고 가치",
 };
 
 export const pricingExtraTranslations: Record<Locale, PricingExtra> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };
