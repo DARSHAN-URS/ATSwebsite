@@ -97,7 +97,29 @@ export default function PaymentSuccess() {
     );
   }
 
-  if (authLoading || activating) {
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-muted-foreground">
+        Loading…
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-4">
+        <SEOHead title="Payment — ATS Pro Resume Builder" description="Payment confirmation page." />
+        <p className="text-muted-foreground text-center max-w-md">
+          Please sign in to activate your <strong>{plan.name}</strong> plan. Your payment has been received — once you log in, your plan will be activated automatically.
+        </p>
+        <Button onClick={() => navigate("/?login=true&redirect=" + encodeURIComponent("/payment-success?plan=" + planId))}>
+          Sign In to Activate
+        </Button>
+      </div>
+    );
+  }
+
+  if (activating) {
     return (
       <div className="flex items-center justify-center min-h-screen text-muted-foreground">
         Activating your plan…
