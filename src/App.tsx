@@ -44,6 +44,7 @@ const BlogArticlePage = lazy(() =>
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
+const ProRoute = lazy(() => import("@/components/ProRoute"));
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 
 const queryClient = new QueryClient();
@@ -108,12 +109,12 @@ const App = () => (
                 >
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/resumes" element={<Resumes />} />
-                  <Route path="/job-tracker" element={<JobTracker />} />
-                  <Route path="/email-outreach" element={<EmailOutreach />} />
+                  <Route path="/job-tracker" element={<ProRoute><JobTracker /></ProRoute>} />
+                  <Route path="/email-outreach" element={<ProRoute><EmailOutreach /></ProRoute>} />
                   <Route path="/cover-letters" element={<Navigate to="/resumes" replace />} />
-                  <Route path="/jobs" element={<FindJobs />} />
-                  <Route path="/companies" element={<Companies />} />
-                  <Route path="/interview-prep" element={<InterviewPrep />} />
+                  <Route path="/jobs" element={<ProRoute><FindJobs /></ProRoute>} />
+                  <Route path="/companies" element={<ProRoute><Companies /></ProRoute>} />
+                  <Route path="/interview-prep" element={<ProRoute><InterviewPrep /></ProRoute>} />
 
                   <Route path="/recruiter/company" element={<RecruiterCompany />} />
                   <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
