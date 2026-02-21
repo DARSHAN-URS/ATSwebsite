@@ -6,18 +6,22 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Briefcase, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { miscTranslations } from "@/i18n/miscTranslations";
 
 export default function RoleSelection() {
   const { setUserRole } = useUserRole();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
+  const { locale } = useLanguage();
+  const mt = miscTranslations[locale].role;
 
   const handleSelect = async (role: AppRole) => {
     setSubmitting(true);
     const error = await setUserRole(role);
     if (error) {
-      toast({ title: "Error", description: "Failed to set role. Please try again.", variant: "destructive" });
+      toast({ title: mt.errorTitle, description: mt.errorDesc, variant: "destructive" });
       setSubmitting(false);
       return;
     }
@@ -29,38 +33,28 @@ export default function RoleSelection() {
       <SEOHead title="Select Your Role — ATS Pro Resume Builder" description="Choose your role to get started." noindex />
       <div className="max-w-2xl w-full space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">Welcome! How will you use the platform?</h1>
-          <p className="text-muted-foreground">Choose your role to get started. This determines your experience.</p>
+          <h1 className="text-3xl font-bold text-foreground">{mt.title}</h1>
+          <p className="text-muted-foreground">{mt.subtitle}</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Card
-            className="cursor-pointer border-2 hover:border-primary transition-colors"
-            onClick={() => !submitting && handleSelect("job_seeker")}
-          >
+          <Card className="cursor-pointer border-2 hover:border-primary transition-colors" onClick={() => !submitting && handleSelect("job_seeker")}>
             <CardHeader className="text-center">
               <Search className="h-12 w-12 mx-auto text-primary" />
-              <CardTitle>Job Seeker</CardTitle>
-              <CardDescription>Browse jobs, build resumes, and track applications</CardDescription>
+              <CardTitle>{mt.jobSeekerTitle}</CardTitle>
+              <CardDescription>{mt.jobSeekerDesc}</CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-              <Button disabled={submitting} variant="outline" className="w-full">
-                I'm looking for a job
-              </Button>
+              <Button disabled={submitting} variant="outline" className="w-full">{mt.jobSeekerBtn}</Button>
             </CardContent>
           </Card>
-          <Card
-            className="cursor-pointer border-2 hover:border-primary transition-colors"
-            onClick={() => !submitting && handleSelect("recruiter")}
-          >
+          <Card className="cursor-pointer border-2 hover:border-primary transition-colors" onClick={() => !submitting && handleSelect("recruiter")}>
             <CardHeader className="text-center">
               <Briefcase className="h-12 w-12 mx-auto text-primary" />
-              <CardTitle>Recruiter</CardTitle>
-              <CardDescription>Post job openings and find candidates</CardDescription>
+              <CardTitle>{mt.recruiterTitle}</CardTitle>
+              <CardDescription>{mt.recruiterDesc}</CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-              <Button disabled={submitting} variant="outline" className="w-full">
-                I'm hiring talent
-              </Button>
+              <Button disabled={submitting} variant="outline" className="w-full">{mt.recruiterBtn}</Button>
             </CardContent>
           </Card>
         </div>

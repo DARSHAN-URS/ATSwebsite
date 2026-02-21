@@ -4,6 +4,8 @@ import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import logo from "@/assets/logo.png";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { miscTranslations } from "@/i18n/miscTranslations";
 
 export interface BlogArticle {
   slug: string;
@@ -2296,6 +2298,9 @@ export function BlogArticlePage() {
     );
   }
 
+  const { locale } = useLanguage();
+  const ba = miscTranslations[locale].blogArticle;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
@@ -2310,15 +2315,15 @@ export function BlogArticlePage() {
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-12 dark:invert dark:brightness-200" width={48} height={48} /></Link>
           <div className="flex items-center gap-3">
-            <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition">Blog</Link>
-            <Button size="sm" asChild><Link to="/">Get Started</Link></Button>
+            <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition">{ba.blog}</Link>
+            <Button size="sm" asChild><Link to="/">{ba.getStarted}</Link></Button>
           </div>
         </div>
       </nav>
 
       <main className="mx-auto max-w-3xl px-4 py-12">
         <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-8 transition">
-          <ArrowLeft className="h-4 w-4" /> Back to Blog
+          <ArrowLeft className="h-4 w-4" /> {ba.backToBlog}
         </Link>
 
         <header className="mb-8">
@@ -2342,7 +2347,6 @@ export function BlogArticlePage() {
             if (block.startsWith("## ")) {
               return <h2 key={i} className="text-xl font-bold mt-8 mb-3 text-foreground">{block.replace("## ", "")}</h2>;
             }
-            // Render inline markdown-style links and bold
             const rendered = block
               .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
               .replace(/\*(.*?)\*/g, "<em>$1</em>")
@@ -2352,13 +2356,13 @@ export function BlogArticlePage() {
         </article>
 
         <div className="mt-12 border-t border-border/60 pt-8">
-          <h2 className="text-lg font-bold mb-4">Explore Related Resources</h2>
+          <h2 className="text-lg font-bold mb-4">{ba.relatedH2}</h2>
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" size="sm" asChild><Link to="/ats-resume-builder">ATS Resume Builder</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/resume-templates">Resume Templates</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/interview-preparation">Interview Prep</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/resume-builder-for-freshers">Fresher Resume</Link></Button>
-            <Button variant="outline" size="sm" asChild><Link to="/blog">More Articles</Link></Button>
+            <Button variant="outline" size="sm" asChild><Link to="/blog">{ba.moreArticles}</Link></Button>
           </div>
         </div>
       </main>
