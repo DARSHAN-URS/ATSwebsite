@@ -655,9 +655,11 @@ const Index = () => {
             url: "https://atsproresumebuilder.com",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            description: "AI-powered ATS resume builder that helps job seekers create optimized resumes, track applications, and land more interviews.",
-            offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "2400", bestRating: "5" },
+            description: "Free AI-powered ATS resume builder with keyword scanner, one-click tailoring, and 8+ professional templates. Trusted by 10,000+ job seekers to beat applicant tracking systems and land 3× more interviews.",
+            offers: { "@type": "Offer", price: "0", priceCurrency: "USD", availability: "https://schema.org/InStock" },
+            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "2400", bestRating: "5", worstRating: "1" },
+            screenshot: "https://atsproresumebuilder.com/og-image.png",
+            featureList: "ATS Resume Builder, AI Resume Grader, Keyword Scanner, One-Click Tailoring, Cover Letter Generator, Job Tracker, Recruiter Job Board",
           }),
         }}
       />
@@ -672,6 +674,8 @@ const Index = () => {
               { "@type": "Question", name: "Is this AI resume builder really free?", acceptedAnswer: { "@type": "Answer", text: "Yes! You can create, edit, and download ATS-optimized resumes for free. Our AI-powered grading and tailoring features are also available at no cost." } },
               { "@type": "Question", name: "How does the AI resume grader work?", acceptedAnswer: { "@type": "Answer", text: "Our AI analyzes your resume against industry standards and specific job descriptions. It checks for keyword optimization, formatting, readability, and ATS compatibility, then provides an actionable score and suggestions." } },
               { "@type": "Question", name: "Can I import my existing LinkedIn or resume?", acceptedAnswer: { "@type": "Answer", text: "Absolutely. You can upload an existing PDF resume and our AI will parse it into an editable format, preserving your content while optimizing the structure for ATS compatibility." } },
+              { "@type": "Question", name: "What resume formats can I download?", acceptedAnswer: { "@type": "Answer", text: "You can download your resume in PDF, DOCX, and TXT formats. All formats are optimized for ATS compatibility." } },
+              { "@type": "Question", name: "How many resume templates are available?", acceptedAnswer: { "@type": "Answer", text: "We offer 8+ professionally designed, ATS-tested resume templates suitable for all industries and experience levels." } },
             ],
           }),
         }}
@@ -685,6 +689,8 @@ const Index = () => {
             name: "ATS Pro Resume Builder",
             url: "https://atsproresumebuilder.com",
             logo: "https://atsproresumebuilder.com/favicon.png",
+            description: "Free AI-powered ATS resume builder trusted by 10,000+ job seekers worldwide.",
+            foundingDate: "2025",
             sameAs: [
               "https://www.facebook.com/share/18EkeUXY8P/",
               "https://www.instagram.com/atsproresumebuilder",
@@ -692,6 +698,11 @@ const Index = () => {
               "https://www.linkedin.com/company/ats-pro-resume-builder/",
               "https://www.tiktok.com/@atsproresumebuilder"
             ],
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              availableLanguage: ["English", "Hindi", "Spanish", "French"],
+            },
           }),
         }}
       />
@@ -703,11 +714,29 @@ const Index = () => {
             "@type": "WebSite",
             name: "ATS Pro Resume Builder",
             url: "https://atsproresumebuilder.com",
+            description: "Free AI-powered ATS resume builder with keyword scanner, grading, and tailoring.",
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://atsproresumebuilder.com/?q={search_term_string}",
+              target: "https://atsproresumebuilder.com/blog/{search_term_string}",
               "query-input": "required name=search_term_string",
             },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://atsproresumebuilder.com/" },
+              { "@type": "ListItem", position: 2, name: "ATS Resume Builder", item: "https://atsproresumebuilder.com/ats-resume-builder" },
+              { "@type": "ListItem", position: 3, name: "Resume Templates", item: "https://atsproresumebuilder.com/resume-templates" },
+              { "@type": "ListItem", position: 4, name: "Blog", item: "https://atsproresumebuilder.com/blog" },
+              { "@type": "ListItem", position: 5, name: "Pricing", item: "https://atsproresumebuilder.com/pricing" },
+              { "@type": "ListItem", position: 6, name: "About", item: "https://atsproresumebuilder.com/about" },
+            ],
           }),
         }}
       />
