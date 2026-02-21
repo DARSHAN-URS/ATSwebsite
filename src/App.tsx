@@ -44,6 +44,7 @@ const BlogArticlePage = lazy(() =>
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
+const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 
 const queryClient = new QueryClient();
 
@@ -88,6 +89,7 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogArticlePage />} />
                 <Route path="/ats-resume-builder" element={<ATSResumeBuilderSEO />} />

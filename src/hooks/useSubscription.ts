@@ -58,6 +58,6 @@ export function useSubscription() {
     return "free";
   };
 
-  // Temporarily unlock all Pro features until Stripe is connected
-  return { subscription, loading, status: getStatus(), isPro: true };
+  const currentStatus = getStatus();
+  return { subscription, loading, status: currentStatus, isPro: currentStatus === "active" };
 }

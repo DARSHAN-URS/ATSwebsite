@@ -21,6 +21,23 @@ export default function Pricing() {
   const localCurrency = useLocalCurrency();
   const { role } = useUserRole();
 
+  const PAYMENT_LINKS: Record<string, string> = {
+    pro_weekly: "https://nas.io/muzamils-business-2/zerolink/7day-pro",
+    pro_biweekly: "https://nas.io/muzamils-business-2/zerolink/14day-pro",
+    pro_monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro",
+  };
+
+  const handleSelectPlan = (planId: string) => {
+    if (planId === "free") return;
+    if (!user) {
+      toast({ title: "Please sign in first", description: "You need an account to subscribe.", variant: "destructive" });
+      navigate("/");
+      return;
+    }
+    const link = PAYMENT_LINKS[planId];
+    if (link) window.open(link, "_blank");
+  };
+
   const PLANS = [
     {
       id: "free", name: t.pricingPage.freeName, period: "", description: t.pricingPage.freeDesc,
@@ -116,8 +133,14 @@ export default function Pricing() {
                   <li key={feature} className="flex items-center gap-2 text-xs"><CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />{feature}</li>
                 ))}
               </ul>
-              <Button className="w-full" size="sm" variant={plan.popular ? "default" : "outline"} disabled={true}>
-                {isPro && plan.id !== "free" ? t.pricingPage.currentPlan : plan.id === "free" ? t.pricingPage.currentPlan : tp.comingSoon}
+              <Button
+                className="w-full"
+                size="sm"
+                variant={plan.popular ? "default" : "outline"}
+                disabled={plan.id === "free" || (isPro && plan.id !== "free")}
+                onClick={() => handleSelectPlan(plan.id)}
+              >
+                {isPro && plan.id !== "free" ? t.pricingPage.currentPlan : plan.id === "free" ? t.pricingPage.currentPlan : "Subscribe Now"}
               </Button>
             </CardContent>
           </Card>
