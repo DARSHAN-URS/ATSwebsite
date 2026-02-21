@@ -11,6 +11,7 @@ import { PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, Toolti
 import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
 import AIApplyQueueSection from "@/components/resume/AIApplyQueueSection";
 import type { ResumeData } from "@/components/resume/types";
+import { dashboardExtraTranslations } from "@/i18n/dashboardExtraTranslations";
 
 const STATUS_COLORS: Record<string, string> = {
   applied: "hsl(200, 80%, 52%)",
@@ -45,6 +46,8 @@ function computeResumeScore(rd: ResumeData, title: string): number {
 
 function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
   const { user } = useAuth();
+  const { locale } = useLanguage();
+  const td = dashboardExtraTranslations[locale];
   const [resumes, setResumes] = useState<Array<{ id: string; title: string; score: number }>>([]);
 
   useEffect(() => {
@@ -66,9 +69,9 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
     <Card className="border border-border/60 rounded-xl">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <Zap className="h-4 w-4 text-primary" /> Resume Health
+          <Zap className="h-4 w-4 text-primary" /> {td.resumeHealth}
         </CardTitle>
-        <CardDescription className="text-xs">Completion scores for your recent resumes</CardDescription>
+        <CardDescription className="text-xs">{td.resumeHealthDesc}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         {resumes.map((r) => {
@@ -95,7 +98,7 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
           onClick={() => navigate("/resumes")}
           className="w-full text-xs text-primary hover:underline text-left pt-1"
         >
-          View all resumes →
+          {td.viewAllResumes}
         </button>
       </CardContent>
     </Card>
@@ -104,7 +107,8 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
 
 function JobSeekerDashboard() {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const td = dashboardExtraTranslations[locale];
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     resumes: 0, applications: 0, savedJobs: 0, coverLetters: 0,
@@ -126,7 +130,6 @@ function JobSeekerDashboard() {
       const apps = appsRes.data || [];
       const totalApps = apps.length;
 
-      // Status breakdown
       const statusMap: Record<string, number> = {};
       apps.forEach((app) => {
         const s = app.status || "applied";
@@ -134,11 +137,9 @@ function JobSeekerDashboard() {
       });
       const statusBreakdown = Object.entries(statusMap).map(([name, value]) => ({ name, value }));
 
-      // Response rate
       const responded = apps.filter((a) => a.status && a.status !== "applied").length;
       const responseRate = totalApps > 0 ? Math.round((responded / totalApps) * 100) : 0;
 
-      // Weekly activity (last 8 weeks)
       const weeklyMap: Record<string, number> = {};
       const now = new Date();
       for (let i = 7; i >= 0; i--) {
@@ -170,7 +171,7 @@ function JobSeekerDashboard() {
     { title: t.dashboard.resumes, value: stats.resumes, icon: FileText, description: t.dashboard.createdResumes, action: () => navigate("/resumes") },
     { title: t.dashboard.coverLetters, value: stats.coverLetters, icon: Mail, description: t.dashboard.generatedLetters, action: () => navigate("/cover-letters") },
     { title: t.dashboard.applications, value: stats.applications, icon: Briefcase, description: t.dashboard.trackedApps, action: () => navigate("/jobs") },
-    { title: "Response Rate", value: `${stats.responseRate}%`, icon: TrendingUp, description: "From tracked apps" },
+    { title: td.responseRate, value: `${stats.responseRate}%`, icon: TrendingUp, description: td.fromTrackedApps },
   ];
 
   return (
@@ -181,7 +182,6 @@ function JobSeekerDashboard() {
         <p className="text-muted-foreground mt-1 text-sm">{t.dashboard.welcome}</p>
       </div>
 
-      {/* Summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {cards.map((card) => (
           <Card key={card.title} className={`${card.action ? "cursor-pointer card-lift" : ""} rounded-xl border border-border/60`} onClick={card.action}>
@@ -197,14 +197,13 @@ function JobSeekerDashboard() {
         ))}
       </div>
 
-      {/* Analytics charts */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <PieChart className="h-4 w-4 text-primary" /> Application Status
+              <PieChart className="h-4 w-4 text-primary" /> {td.applicationStatus}
             </CardTitle>
-            <CardDescription className="text-xs">Breakdown by current status</CardDescription>
+            <CardDescription className="text-xs">{td.statusBreakdown}</CardDescription>
           </CardHeader>
           <CardContent>
             {stats.statusBreakdown.length > 0 ? (
@@ -228,7 +227,7 @@ function JobSeekerDashboard() {
                 </RechartsPie>
               </ResponsiveContainer>
             ) : (
-              <p className="text-center text-sm text-muted-foreground py-8">No applications yet. Start tracking to see stats.</p>
+              <p className="text-center text-sm text-muted-foreground py-8">{td.noAppsYet}</p>
             )}
           </CardContent>
         </Card>
@@ -236,9 +235,9 @@ function JobSeekerDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" /> Weekly Activity
+              <Target className="h-4 w-4 text-primary" /> {td.weeklyActivity}
             </CardTitle>
-            <CardDescription className="text-xs">Applications over the last 8 weeks</CardDescription>
+            <CardDescription className="text-xs">{td.weeklyActivityDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             {stats.applications > 0 ? (
@@ -252,22 +251,16 @@ function JobSeekerDashboard() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-center text-sm text-muted-foreground py-8">No activity to display yet.</p>
+              <p className="text-center text-sm text-muted-foreground py-8">{td.noActivityYet}</p>
             )}
           </CardContent>
         </Card>
       </div>
 
-      {/* AI Apply Queue */}
       <AIApplyQueueSection />
-
-      {/* Resume Health */}
       <ResumeHealthCard navigate={navigate} />
-
-      {/* Job Tracker */}
       <JobTrackerSection />
 
-      {/* Find Jobs CTA */}
       <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/jobs")}>
         <CardHeader className="p-4 md:p-6">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
