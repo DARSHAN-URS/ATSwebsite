@@ -106,8 +106,17 @@ export default function Pricing() {
                   <li key={feature} className="flex items-center gap-2 text-sm"><CheckCircle className="h-4 w-4 text-primary shrink-0" />{feature}</li>
                 ))}
               </ul>
-              <Button className="w-full" variant={plan.popular ? "default" : "outline"} disabled={true}>
-                {isPro && plan.id === "pro_monthly" ? t.pricingPage.currentPlan : plan.id === "free" ? t.pricingPage.currentPlan : tp.comingSoon}
+              <Button
+                className="w-full"
+                variant={plan.popular ? "default" : "outline"}
+                disabled={plan.id === "free"}
+                onClick={() => {
+                  if (plan.id === "pro_monthly") {
+                    window.open("https://nas.io/muzamils-business-2/zerolink/5342832", "_blank");
+                  }
+                }}
+              >
+                {isPro && plan.id === "pro_monthly" ? t.pricingPage.currentPlan : plan.id === "free" ? t.pricingPage.currentPlan : t.pricingPage.proName}
               </Button>
             </CardContent>
           </Card>
