@@ -30,7 +30,6 @@ const recruiterNav = [
   { to: "/recruiter/jobs", icon: Briefcase, key: "myJobPosts" as const },
   { to: "/recruiter/candidates", icon: Users, key: "candidates" as const },
   { to: "/recruiter/analytics", icon: BarChart3, key: "analytics" as const },
-  { to: "/pricing", icon: CreditCard, key: "pricing" as const },
 ];
 
 function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut: () => void; onNavClick?: () => void }) {
