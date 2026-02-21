@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase, Sparkles } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { miscTranslations } from "@/i18n/miscTranslations";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export default function Auth() {
@@ -21,7 +22,8 @@ export default function Auth() {
   const [forgotLoading, setForgotLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const mt = miscTranslations[locale].authExtra;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,7 +94,7 @@ export default function Auth() {
                       className="text-sm text-primary hover:underline"
                       onClick={() => { setForgotEmail(email); setForgotOpen(true); }}
                     >
-                      Forgot password?
+                      {mt.forgotPassword}
                     </button>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
@@ -129,8 +131,8 @@ export default function Auth() {
         <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Reset Password</DialogTitle>
-              <DialogDescription>Enter your email and we'll send you a reset link.</DialogDescription>
+              <DialogTitle>{mt.resetTitle}</DialogTitle>
+              <DialogDescription>{mt.resetDesc}</DialogDescription>
             </DialogHeader>
             <form
               onSubmit={async (e) => {
@@ -145,10 +147,10 @@ export default function Auth() {
                     },
                   });
                   if (res.error) throw res.error;
-                  toast({ title: "Check your email", description: "We sent you a password reset link." });
+                  toast({ title: mt.checkEmail, description: mt.checkEmailDesc });
                   setForgotOpen(false);
                 } catch (err: any) {
-                  toast({ title: "Error", description: err.message || "Failed to send reset email", variant: "destructive" });
+                  toast({ title: t.common.loginFailed, description: err.message || "Failed to send reset email", variant: "destructive" });
                 }
                 setForgotLoading(false);
               }}
@@ -156,16 +158,10 @@ export default function Auth() {
             >
               <div className="space-y-2">
                 <Label htmlFor="forgot-email">{t.common.email}</Label>
-                <Input
-                  id="forgot-email"
-                  type="email"
-                  value={forgotEmail}
-                  onChange={(e) => setForgotEmail(e.target.value)}
-                  required
-                />
+                <Input id="forgot-email" type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} required />
               </div>
               <Button type="submit" className="w-full" disabled={forgotLoading}>
-                {forgotLoading ? "Sending..." : "Send Reset Link"}
+                {forgotLoading ? mt.sending : mt.sendReset}
               </Button>
             </form>
           </DialogContent>

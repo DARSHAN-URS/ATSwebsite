@@ -1,9 +1,13 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import SEOHead from "@/components/SEOHead";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { miscTranslations } from "@/i18n/miscTranslations";
 
 const NotFound = () => {
   const location = useLocation();
+  const { locale } = useLanguage();
+  const mt = miscTranslations[locale].notFound;
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
@@ -13,14 +17,14 @@ const NotFound = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <SEOHead
         title="Page Not Found — ATS Pro Resume Builder"
-        description="The page you're looking for doesn't exist. Return to ATS Pro Resume Builder to build your ATS-optimized resume."
+        description="The page you're looking for doesn't exist."
         noindex
       />
       <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
+        <h1 className="mb-4 text-4xl font-bold">{mt.title}</h1>
+        <p className="mb-4 text-xl text-muted-foreground">{mt.subtitle}</p>
         <Link to="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
+          {mt.returnHome}
         </Link>
       </div>
     </div>
