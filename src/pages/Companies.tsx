@@ -188,51 +188,59 @@ export default function Companies() {
     const pinned = isPinned(name);
 
     return (
-      <Card key={name} className="hover:shadow-md transition-shadow">
+      <Card key={name} className="hover:shadow-md transition-shadow overflow-hidden">
         <CardHeader
           className="pb-3 cursor-pointer"
           onClick={() => !isPinnedSection && toggleExpand(name)}
         >
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-4">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-3">
               {logo ? (
                 <img
                   src={logo}
                   alt={name}
-                  className="h-12 w-12 rounded-lg object-contain bg-muted p-1"
+                  className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-contain bg-muted p-1 shrink-0"
                   onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
               ) : (
-                <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
-                  <Building2 className="h-6 w-6 text-muted-foreground" />
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                  <Building2 className="h-5 w-5 text-muted-foreground" />
                 </div>
               )}
-              <div className="space-y-1">
-                <CardTitle className="text-lg">{name}</CardTitle>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+              <div className="space-y-1 min-w-0 flex-1">
+                <CardTitle className="text-base sm:text-lg truncate">{name}</CardTitle>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground flex-wrap">
                   {(city || country) && (
                     <span className="flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5" />
-                      {[city, state, country].filter(Boolean).join(", ")}
+                      <MapPin className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{[city, state, country].filter(Boolean).join(", ")}</span>
                     </span>
                   )}
                   {companyType && (
-                    <Badge variant="outline" className="text-xs">{companyType}</Badge>
+                    <Badge variant="outline" className="text-[10px] sm:text-xs">{companyType}</Badge>
                   )}
                   {pinned && (
-                    <Badge variant="secondary" className="text-xs">
-                      <Pin className="h-3 w-3 mr-1" />
+                    <Badge variant="secondary" className="text-[10px] sm:text-xs">
+                      <Pin className="h-2.5 w-2.5 mr-0.5" />
                       {t.companies.pinned}
                     </Badge>
                   )}
                 </div>
               </div>
+              {!isPinnedSection && openJobs.length > 0 && (
+                expandedCompany === name ? (
+                  <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
+                )
+              )}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {user && (
                 <Button
                   variant={pinned ? "secondary" : "outline"}
                   size="sm"
+                  className="text-xs h-7 px-2"
                   onClick={(e) => {
                     e.stopPropagation();
                     if (isPinnedSection) {
@@ -244,19 +252,19 @@ export default function Companies() {
                   disabled={pinLoading === name}
                 >
                   {pinLoading === name ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <Loader2 className="h-3 w-3 animate-spin" />
                   ) : pinned ? (
-                    <PinOff className="h-3.5 w-3.5 mr-1" />
+                    <PinOff className="h-3 w-3 mr-1" />
                   ) : (
-                    <Pin className="h-3.5 w-3.5 mr-1" />
+                    <Pin className="h-3 w-3 mr-1" />
                   )}
                   {pinned ? t.companies.unpin : t.companies.pin}
                 </Button>
               )}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
-                    <Share2 className="h-3.5 w-3.5 mr-1" /> Share
+                  <Button variant="outline" size="sm" className="text-xs h-7 px-2" onClick={(e) => e.stopPropagation()}>
+                    <Share2 className="h-3 w-3 mr-1" /> Share
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
@@ -282,22 +290,15 @@ export default function Companies() {
                 </DropdownMenuContent>
               </DropdownMenu>
               {!isPinnedSection && openJobs.length > 0 && (
-                <>
-                  <Badge className="bg-primary/10 text-primary border-primary/20">
-                    <Briefcase className="h-3 w-3 mr-1" />
-                    {openJobs.length} {t.companies.openRoles}
-                  </Badge>
-                  {expandedCompany === name ? (
-                    <ChevronUp className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                  )}
-                </>
+                <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] sm:text-xs">
+                  <Briefcase className="h-3 w-3 mr-1" />
+                  {openJobs.length} {t.companies.openRoles}
+                </Badge>
               )}
               {isPinnedSection && website && (
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="sm" className="text-xs h-7 px-2" asChild>
                   <a href={website} target="_blank" rel="noopener noreferrer">
-                    <Globe className="h-3.5 w-3.5 mr-1" />
+                    <Globe className="h-3 w-3 mr-1" />
                     Website
                   </a>
                 </Button>
@@ -352,11 +353,11 @@ export default function Companies() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6">
       <SEOHead title="Companies — ATS Pro Resume Builder" description="Discover companies and open positions." noindex />
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t.companies.title}</h1>
-        <p className="text-muted-foreground mt-1">{t.companies.subtitle}</p>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t.companies.title}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{t.companies.subtitle}</p>
       </div>
 
       {/* Pinned Companies */}
