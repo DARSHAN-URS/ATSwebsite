@@ -501,9 +501,9 @@ export default function InterviewPrep() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-3 w-full">
-          <TabsTrigger value="mock" className="gap-2"><Headphones className="h-4 w-4 hidden sm:block" />Mock Interview</TabsTrigger>
-          <TabsTrigger value="questions" className="gap-2"><BookOpen className="h-4 w-4 hidden sm:block" />Question Bank</TabsTrigger>
-          <TabsTrigger value="analysis" className="gap-2"><Shield className="h-4 w-4 hidden sm:block" />Strengths Analysis</TabsTrigger>
+          <TabsTrigger value="mock" className="gap-1 sm:gap-2 text-[11px] sm:text-sm px-1 sm:px-3"><Headphones className="h-3 w-3 sm:h-4 sm:w-4 hidden sm:block" /><span className="truncate">Mock Interview</span></TabsTrigger>
+          <TabsTrigger value="questions" className="gap-1 sm:gap-2 text-[11px] sm:text-sm px-1 sm:px-3"><BookOpen className="h-3 w-3 sm:h-4 sm:w-4 hidden sm:block" /><span className="truncate">Question Bank</span></TabsTrigger>
+          <TabsTrigger value="analysis" className="gap-1 sm:gap-2 text-[11px] sm:text-sm px-1 sm:px-3"><Shield className="h-3 w-3 sm:h-4 sm:w-4 hidden sm:block" /><span className="truncate">Strengths Analysis</span></TabsTrigger>
         </TabsList>
 
         {/* ── Mock Interview Tab ── */}
