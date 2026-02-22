@@ -213,11 +213,11 @@ export default function FindJobs() {
       </div>
 
       <Tabs defaultValue="search">
-        <TabsList className="w-full justify-start overflow-x-auto overflow-y-hidden scrollbar-none">
-          <TabsTrigger value="search" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Search className="h-3.5 w-3.5" />AI Search</TabsTrigger>
-          <TabsTrigger value="recruiter" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Briefcase className="h-3.5 w-3.5" />{t.jobBoard.recruiterPosts}</TabsTrigger>
-          <TabsTrigger value="external" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Globe className="h-3.5 w-3.5" />{t.jobBoard.externalJobs}</TabsTrigger>
-          <TabsTrigger value="saved" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Bookmark className="h-3.5 w-3.5" />Saved ({savedJobs.length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="search" className="gap-1 text-[10px] sm:text-sm px-1 sm:px-3"><Search className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" /><span className="truncate">AI Search</span></TabsTrigger>
+          <TabsTrigger value="recruiter" className="gap-1 text-[10px] sm:text-sm px-1 sm:px-3"><Briefcase className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" /><span className="truncate">{t.jobBoard.recruiterPosts}</span></TabsTrigger>
+          <TabsTrigger value="external" className="gap-1 text-[10px] sm:text-sm px-1 sm:px-3"><Globe className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" /><span className="truncate">{t.jobBoard.externalJobs}</span></TabsTrigger>
+          <TabsTrigger value="saved" className="gap-1 text-[10px] sm:text-sm px-1 sm:px-3"><Bookmark className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" /><span className="truncate">Saved ({savedJobs.length})</span></TabsTrigger>
         </TabsList>
 
         {/* AI Search Tab */}
