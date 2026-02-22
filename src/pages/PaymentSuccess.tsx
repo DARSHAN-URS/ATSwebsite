@@ -11,21 +11,21 @@ const PLAN_CONFIG: Record<string, { name: string; days: number; amount: number; 
   pro_weekly: {
     name: "7-Day Pro",
     days: 7,
-    amount: 99,
+    amount: 198,
     message:
       "Your 7-Day Pro plan is now active. You have full access to all premium features — unlimited resumes, AI grading & tailoring, cover letter generator, and more — for the next 7 days. Make the most of your week — start building your dream resume now!",
   },
   pro_biweekly: {
     name: "14-Day Pro",
     days: 14,
-    amount: 179,
+    amount: 358,
     message:
       "Your 14-Day Pro plan is now active. Enjoy two full weeks of unlimited access to all Pro features — AI-powered resume optimization, job matching, LinkedIn import, and priority support. You've got 14 days to supercharge your job search!",
   },
   pro_monthly: {
     name: "Monthly Pro",
     days: 30,
-    amount: 299,
+    amount: 598,
     message:
       "Your Monthly Pro plan is now active. You now have 30 days of complete access to every premium feature — unlimited resumes, AI grading, one-click tailoring, cover letters, email outreach, and priority support. This is your month to land your dream job — let's make it happen!",
   },
