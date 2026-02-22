@@ -156,7 +156,7 @@ export default function AppLayout() {
         </aside>
       )}
 
-      <main className={cn("flex-1 overflow-auto", isMobile && "pt-12")}>
+      <main className={cn("flex-1 overflow-x-hidden overflow-y-auto", isMobile && "pt-12")}>
         <Outlet />
       </main>
     </div>

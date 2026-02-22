@@ -217,7 +217,7 @@ function JobSeekerDashboard() {
                     outerRadius={75}
                     paddingAngle={3}
                     dataKey="value"
-                    label={({ name, value }) => `${name} (${value})`}
+                    label={({ name, value }) => `${name.length > 8 ? name.slice(0, 8) + '…' : name} (${value})`}
                   >
                     {stats.statusBreakdown.map((entry) => (
                       <Cell key={entry.name} fill={STATUS_COLORS[entry.name] || "hsl(220, 10%, 50%)"} />
