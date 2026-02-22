@@ -213,11 +213,11 @@ export default function FindJobs() {
       </div>
 
       <Tabs defaultValue="search">
-        <TabsList className="flex-wrap">
-          <TabsTrigger value="search" className="gap-1.5"><Search className="h-4 w-4" />AI Search</TabsTrigger>
-          <TabsTrigger value="recruiter" className="gap-1.5"><Briefcase className="h-4 w-4" />{t.jobBoard.recruiterPosts}</TabsTrigger>
-          <TabsTrigger value="external" className="gap-1.5"><Globe className="h-4 w-4" />{t.jobBoard.externalJobs}</TabsTrigger>
-          <TabsTrigger value="saved" className="gap-1.5"><Bookmark className="h-4 w-4" />Saved ({savedJobs.length})</TabsTrigger>
+        <TabsList className="w-full justify-start overflow-x-auto overflow-y-hidden scrollbar-none">
+          <TabsTrigger value="search" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Search className="h-3.5 w-3.5" />AI Search</TabsTrigger>
+          <TabsTrigger value="recruiter" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Briefcase className="h-3.5 w-3.5" />{t.jobBoard.recruiterPosts}</TabsTrigger>
+          <TabsTrigger value="external" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Globe className="h-3.5 w-3.5" />{t.jobBoard.externalJobs}</TabsTrigger>
+          <TabsTrigger value="saved" className="gap-1.5 shrink-0 text-xs sm:text-sm"><Bookmark className="h-3.5 w-3.5" />Saved ({savedJobs.length})</TabsTrigger>
         </TabsList>
 
         {/* AI Search Tab */}
