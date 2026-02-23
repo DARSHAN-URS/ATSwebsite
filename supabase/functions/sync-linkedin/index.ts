@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
 
     console.log("Fetching LinkedIn profile:", linkedinUrl);
 
-    const host = "fresh-linkedin-profile-data.p.rapidapi.com";
+    const host = "fresh-linkedin-profile-data-include-e-mail1.p.rapidapi.com";
     const response = await fetch(
       `https://${host}/get-linkedin-profile?linkedin_url=${encodeURIComponent(linkedinUrl)}&include_skills=true`,
       {
