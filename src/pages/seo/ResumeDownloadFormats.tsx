@@ -102,6 +102,16 @@ export default function ResumeDownloadFormats() {
       <footer className="border-t border-border/60 py-8 text-center">
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ATS Pro Resume Builder. <Link to="/privacy" className="underline">{t.nav.privacy}</Link> · <Link to="/terms" className="underline">{t.nav.terms}</Link></p>
       </footer>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": t.download.whichItems.map((item, i) => ({
+          "@type": "Question",
+          "name": i === 0 ? "Which resume format should I use for ATS?" : i === 1 ? "Can I download my resume as DOCX?" : "Is PDF a good format for resumes?",
+          "acceptedAnswer": { "@type": "Answer", "text": item }
+        }))
+      }) }} />
     </div>
   );
 }
