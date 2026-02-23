@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, lazy, Suspense, useTransition, useCallback
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff, ChevronDown } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff, ChevronDown, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -449,6 +449,10 @@ const Index = () => {
       <section ref={pricingRef} className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">{pricingExtraTranslations[locale].launchOffer}</span>
+            </div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{lx.pricingTag}</p>
             <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">{lx.pricingTitle}</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
@@ -504,6 +508,9 @@ const Index = () => {
                     {pricingExtraTranslations[locale].bestValue}
                   </div>
                 )}
+                <div className="absolute top-0 left-0 bg-destructive text-destructive-foreground px-2 py-0.5 text-[10px] font-bold rounded-br-lg rounded-tl-[10px]">
+                  {pricingExtraTranslations[locale].launchBadge}
+                </div>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Crown className="h-4 w-4" />
@@ -514,6 +521,7 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="mb-4">
+                  <span className="text-base font-medium text-muted-foreground line-through mr-2">{localCurrency.formatOriginalPrice(plan.duration)}</span>
                   <span className="text-3xl font-extrabold">{localCurrency.formatProPrice(plan.duration)}</span>
                   <span className="text-xs text-muted-foreground ml-1">{plan.period}</span>
                 </div>
@@ -532,6 +540,13 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
+                <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-2.5 mb-4">
+                  <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[11px] font-semibold text-foreground">{pricingExtraTranslations[locale].bonusFeatures}</p>
+                    <p className="text-[10px] text-muted-foreground">{pricingExtraTranslations[locale].bonusDesc}</p>
+                  </div>
+                </div>
                 <Button
                   size="sm"
                   className="w-full rounded-lg font-semibold"
