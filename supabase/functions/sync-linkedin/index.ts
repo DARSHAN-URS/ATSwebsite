@@ -79,6 +79,8 @@ Deno.serve(async (req) => {
 
     let profile: any = null;
     let last404: string | null = null;
+    let lastNon404Error: { status: number; details: string } | null = null;
+    const forbiddenByHost: Record<string, string> = {};
 
     hostLoop: for (const host of hosts) {
       for (const candidate of endpointCandidates) {
@@ -100,13 +102,18 @@ Deno.serve(async (req) => {
           continue;
         }
 
+        if (response.status === 403) {
+          const errorText = await response.text();
+          forbiddenByHost[host] = errorText;
+          console.warn("Subscription/plan access denied for host:", host, errorText);
+          break; // 403 is host-level access in RapidAPI; move to next host
+        }
+
         if (!response.ok) {
           const errorText = await response.text();
-          console.error("API error:", response.status, errorText);
-          return new Response(
-            JSON.stringify({ error: `LinkedIn API error (${response.status}): ${errorText}` }),
-            { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
+          lastNon404Error = { status: response.status, details: `${host}${candidate.path} -> ${errorText}` };
+          console.warn("Endpoint attempt failed:", response.status, `${host}${candidate.path}`, errorText);
+          continue;
         }
 
         const raw = await response.json();
@@ -116,6 +123,30 @@ Deno.serve(async (req) => {
     }
 
     if (!profile) {
+      if (Object.keys(forbiddenByHost).length > 0) {
+        return new Response(
+          JSON.stringify({
+            error:
+              "LinkedIn API access denied (403). Your RapidAPI key is valid but not subscribed to the required LinkedIn API host.",
+            requiredHosts: hosts,
+            details: forbiddenByHost,
+            fix:
+              "Subscribe your RapidAPI key to one of the required hosts in RapidAPI, then retry the import.",
+          }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      if (lastNon404Error) {
+        return new Response(
+          JSON.stringify({
+            error: `LinkedIn API error (${lastNon404Error.status})`,
+            details: lastNon404Error.details,
+          }),
+          { status: lastNon404Error.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       return new Response(
         JSON.stringify({
           error: "LinkedIn API endpoint not found for configured hosts. Please verify endpoint in RapidAPI playground.",
