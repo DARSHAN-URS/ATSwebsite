@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, Crown, Zap, Building2 } from "lucide-react";
+import { ArrowLeft, CheckCircle, Crown, Zap, Building2, Sparkles, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserRole } from "@/hooks/useUserRole";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
+import { Badge } from "@/components/ui/badge";
 
 export default function Pricing() {
   const { user } = useAuth();
@@ -70,6 +71,10 @@ export default function Pricing() {
         </Button>
       </div>
       <div className="text-center mb-10">
+        <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <span className="text-sm font-semibold text-primary">{tp.launchOffer}</span>
+        </div>
         <h1 className="text-3xl font-bold tracking-tight">{t.pricingPage.title}</h1>
         <p className="mt-2 text-muted-foreground">{t.pricingPage.subtitle}</p>
       </div>
@@ -77,21 +82,36 @@ export default function Pricing() {
         {PLANS.map((plan) => (
           <Card key={plan.id} className={`relative overflow-hidden transition-all ${plan.popular ? "border-primary shadow-lg shadow-primary/10 scale-[1.02]" : "border-border"}`}>
             {plan.popular && <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-bl-lg">{tp.bestValue}</div>}
+            {plan.id !== "free" && <div className="absolute top-0 left-0 bg-destructive text-destructive-foreground px-2.5 py-1 text-xs font-bold rounded-br-lg">{tp.launchBadge}</div>}
             <CardHeader className="text-center pb-2">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">{plan.icon}</div>
               <CardTitle className="text-lg">{plan.name}</CardTitle>
               <CardDescription className="text-xs">{plan.description}</CardDescription>
               <div className="mt-4">
+                {plan.id !== "free" && (
+                  <span className="text-base font-medium text-muted-foreground line-through mr-2">
+                    {localCurrency.formatOriginalPrice(plan.duration)}
+                  </span>
+                )}
                 <span className="text-3xl font-extrabold">{plan.id === "free" ? localCurrency.formatPrice(0) : localCurrency.formatProPrice(plan.duration)}</span>
                 {plan.period && <span className="text-muted-foreground text-xs">{plan.period}</span>}
               </div>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-4">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2 text-xs"><CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />{feature}</li>
                 ))}
               </ul>
+              {plan.id !== "free" && (
+                <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-2.5 mb-4">
+                  <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-semibold text-foreground">{tp.bonusFeatures}</p>
+                    <p className="text-[11px] text-muted-foreground">{tp.bonusDesc}</p>
+                  </div>
+                </div>
+              )}
               <Button
                 className="w-full"
                 size="sm"

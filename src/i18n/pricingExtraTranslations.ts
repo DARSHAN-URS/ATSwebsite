@@ -23,6 +23,10 @@ const en = {
   weeklyDesc: "Try Pro for a week",
   biweeklyDesc: "Two weeks of Pro power",
   bestValue: "Best Value",
+  launchOffer: "🚀 Launch Offer — 50% Off!",
+  launchBadge: "50% OFF",
+  bonusFeatures: "Early Adopter Bonus",
+  bonusDesc: "Lock in this price forever + priority feature requests",
 };
 
 type PricingExtra = typeof en;
@@ -50,6 +54,10 @@ const ar: PricingExtra = {
   weeklyDesc: "جرّب Pro لمدة أسبوع",
   biweeklyDesc: "أسبوعان من قوة Pro",
   bestValue: "أفضل قيمة",
+  launchOffer: "🚀 عرض الإطلاق — خصم 50%!",
+  launchBadge: "خصم 50%",
+  bonusFeatures: "مكافأة المتبنين الأوائل",
+  bonusDesc: "احجز هذا السعر للأبد + طلبات ميزات ذات أولوية",
 };
 
 const es: PricingExtra = {
@@ -75,6 +83,10 @@ const es: PricingExtra = {
   weeklyDesc: "Prueba Pro por una semana",
   biweeklyDesc: "Dos semanas de poder Pro",
   bestValue: "Mejor valor",
+  launchOffer: "🚀 Oferta de lanzamiento — ¡50% de descuento!",
+  launchBadge: "50% OFF",
+  bonusFeatures: "Bonus para early adopters",
+  bonusDesc: "Fija este precio para siempre + solicitudes de funciones prioritarias",
 };
 
 const fr: PricingExtra = {
@@ -100,6 +112,10 @@ const fr: PricingExtra = {
   weeklyDesc: "Essayez Pro pendant une semaine",
   biweeklyDesc: "Deux semaines de puissance Pro",
   bestValue: "Meilleure offre",
+  launchOffer: "🚀 Offre de lancement — 50% de réduction !",
+  launchBadge: "50% OFF",
+  bonusFeatures: "Bonus early adopter",
+  bonusDesc: "Verrouillez ce prix pour toujours + demandes de fonctionnalités prioritaires",
 };
 
 const hi: PricingExtra = {
@@ -125,6 +141,10 @@ const hi: PricingExtra = {
   weeklyDesc: "एक हफ्ते के लिए Pro आज़माएं",
   biweeklyDesc: "दो हफ्ते Pro की शक्ति",
   bestValue: "सबसे अच्छी कीमत",
+  launchOffer: "🚀 लॉन्च ऑफर — 50% छूट!",
+  launchBadge: "50% छूट",
+  bonusFeatures: "अर्ली एडॉप्टर बोनस",
+  bonusDesc: "यह कीमत हमेशा के लिए लॉक करें + प्राथमिकता फीचर अनुरोध",
 };
 
 const pt: PricingExtra = {
@@ -150,6 +170,10 @@ const pt: PricingExtra = {
   weeklyDesc: "Experimente Pro por uma semana",
   biweeklyDesc: "Duas semanas de poder Pro",
   bestValue: "Melhor valor",
+  launchOffer: "🚀 Oferta de lançamento — 50% de desconto!",
+  launchBadge: "50% OFF",
+  bonusFeatures: "Bônus para early adopters",
+  bonusDesc: "Garanta esse preço para sempre + solicitações de funcionalidades prioritárias",
 };
 
 const de: PricingExtra = {
@@ -175,6 +199,10 @@ const de: PricingExtra = {
   weeklyDesc: "Testen Sie Pro für eine Woche",
   biweeklyDesc: "Zwei Wochen Pro-Power",
   bestValue: "Bester Wert",
+  launchOffer: "🚀 Launch-Angebot — 50% Rabatt!",
+  launchBadge: "50% RABATT",
+  bonusFeatures: "Early-Adopter-Bonus",
+  bonusDesc: "Sichern Sie sich diesen Preis für immer + bevorzugte Feature-Anfragen",
 };
 
 const zh: PricingExtra = {
@@ -200,6 +228,10 @@ const zh: PricingExtra = {
   weeklyDesc: "体验一周Pro",
   biweeklyDesc: "两周Pro强力功能",
   bestValue: "最超值",
+  launchOffer: "🚀 上线特惠 — 五折优惠！",
+  launchBadge: "五折",
+  bonusFeatures: "早期用户奖励",
+  bonusDesc: "永久锁定此价格 + 优先功能请求",
 };
 
 const ja: PricingExtra = {
@@ -225,6 +257,10 @@ const ja: PricingExtra = {
   weeklyDesc: "1週間Proをお試し",
   biweeklyDesc: "2週間のProパワー",
   bestValue: "一番お得",
+  launchOffer: "🚀 ローンチオファー — 50%オフ！",
+  launchBadge: "50%オフ",
+  bonusFeatures: "アーリーアダプターボーナス",
+  bonusDesc: "この価格を永久にロック + 優先機能リクエスト",
 };
 
 const ko: PricingExtra = {
@@ -250,6 +286,10 @@ const ko: PricingExtra = {
   weeklyDesc: "일주일간 Pro 체험",
   biweeklyDesc: "2주간 Pro 파워",
   bestValue: "최고 가치",
+  launchOffer: "🚀 런칭 특가 — 50% 할인!",
+  launchBadge: "50% 할인",
+  bonusFeatures: "얼리어답터 보너스",
+  bonusDesc: "이 가격을 영구적으로 고정 + 우선 기능 요청",
 };
 
 export const pricingExtraTranslations: Record<Locale, PricingExtra> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };
