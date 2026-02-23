@@ -63,29 +63,69 @@ Deno.serve(async (req) => {
 
     console.log("Fetching LinkedIn profile:", linkedinUrl);
 
-    const host = "fresh-linkedin-profile-data-include-e-mail1.p.rapidapi.com";
-    const response = await fetch(
-      `https://${host}/get-personal-profile?linkedin_url=${encodeURIComponent(linkedinUrl)}&include_skills=true`,
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": host,
-          "x-rapidapi-key": apiKey,
-        },
-      }
-    );
+    const hosts = [
+      "fresh-linkedin-profile-data-include-e-mail1.p.rapidapi.com",
+      "fresh-linkedin-profile-data.p.rapidapi.com",
+    ] as const;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("API error:", response.status, errorText);
+    const endpointCandidates = [
+      { path: "/get-personal-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-linkedin-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-personal-profile", params: { profile_url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-linkedin-profile", params: { profile_url: linkedinUrl, include_skills: "true" } },
+      { path: "/profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+      { path: "/linkedin-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+    ] as const;
+
+    let profile: any = null;
+    let last404: string | null = null;
+
+    hostLoop: for (const host of hosts) {
+      for (const candidate of endpointCandidates) {
+        const query = new URLSearchParams(candidate.params).toString();
+        const url = `https://${host}${candidate.path}?${query}`;
+        console.log("Trying LinkedIn endpoint:", `${host}${candidate.path}?${query}`);
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "x-rapidapi-host": host,
+            "x-rapidapi-key": apiKey,
+          },
+        });
+
+        if (response.status === 404) {
+          const body = await response.text();
+          last404 = `${host}${candidate.path} -> ${body}`;
+          continue;
+        }
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("API error:", response.status, errorText);
+          return new Response(
+            JSON.stringify({ error: `LinkedIn API error (${response.status}): ${errorText}` }),
+            { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        const raw = await response.json();
+        profile = raw?.data ?? raw?.result ?? raw;
+        break hostLoop;
+      }
+    }
+
+    if (!profile) {
       return new Response(
-        JSON.stringify({ error: `LinkedIn API error (${response.status}). Check your RapidAPI subscription.` }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          error: "LinkedIn API endpoint not found for configured hosts. Please verify endpoint in RapidAPI playground.",
+          details: last404,
+        }),
+        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const profile = await response.json();
-    console.log("Profile keys:", JSON.stringify(Object.keys(profile)));
+    console.log("Profile keys:", JSON.stringify(Object.keys(profile || {})));
     console.log("Profile preview:", JSON.stringify(profile).substring(0, 1500));
 
     // Map to ResumeData (Fresh LinkedIn Profile Data format)
