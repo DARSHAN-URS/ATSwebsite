@@ -6,31 +6,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const API_HOST = "fresh-linkedin-profile-data-api.p.rapidapi.com";
-const API_BASE = `https://${API_HOST}/api`;
+const API_HOST = "linkedin-data-api.p.rapidapi.com";
 
 function extractUsername(url: string): string | null {
   const match = url.match(/linkedin\.com\/in\/([^\/\?#]+)/);
   return match ? match[1] : null;
-}
-
-async function apiFetch(path: string, apiKey: string) {
-  const url = `${API_BASE}${path}`;
-  console.log("Calling LinkedIn API:", url);
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "x-rapidapi-host": API_HOST,
-      "x-rapidapi-key": apiKey,
-    },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    console.warn(`API ${path} returned ${res.status}:`, text);
-    return null;
-  }
-  const json = await res.json();
-  return json?.data ?? json;
 }
 
 Deno.serve(async (req) => {
@@ -88,51 +68,63 @@ Deno.serve(async (req) => {
 
     console.log("Fetching LinkedIn profile for username:", username);
 
-    // Fetch profile, skills, education, and experience in parallel
-    const [profile, skills, education, experience] = await Promise.all([
-      apiFetch(`/profile/${username}`, apiKey),
-      apiFetch(`/profile/${username}/skills`, apiKey),
-      apiFetch(`/profile/${username}/education`, apiKey),
-      apiFetch(`/profile/${username}/experience`, apiKey),
-    ]);
+    // Single API call - gets all profile data at once (no rate limit issues)
+    const url = `https://${API_HOST}/?username=${encodeURIComponent(username)}`;
+    console.log("Calling LinkedIn API:", url);
 
-    if (!profile) {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": API_HOST,
+        "x-rapidapi-key": apiKey,
+      },
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(`API returned ${res.status}:`, text);
       return new Response(
-        JSON.stringify({ error: "Failed to fetch LinkedIn profile. Check your RapidAPI subscription and the profile URL." }),
-        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: `Failed to fetch LinkedIn profile (${res.status}). Check your RapidAPI subscription and the profile URL.` }),
+        { status: res.status === 429 ? 429 : 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
+    const profile = await res.json();
     console.log("Profile keys:", JSON.stringify(Object.keys(profile)));
 
-    // Map to ResumeData
+    // Map the single response to ResumeData
+    const experience = profile.position || profile.experiences || [];
+    const education = profile.educations || profile.education || [];
+    const skills = profile.skills || [];
+
     const resumeData = {
       personalInfo: {
-        fullName: profile.fullName || "",
+        fullName: profile.full_name || profile.fullName || "",
         email: profile.email || "",
-        location: profile.location || "",
+        location: [profile.city, profile.state, profile.country].filter(Boolean).join(", ") || profile.location || "",
         linkedin: linkedinUrl,
       },
-      summary: profile.about || profile.headline || "",
+      summary: profile.about || profile.summary || profile.headline || "",
       skills: Array.isArray(skills)
         ? skills.map((s: any) => (typeof s === "string" ? s : s.name || s.title || "")).filter(Boolean)
         : [],
       experience: Array.isArray(experience)
         ? experience.map((pos: any) => ({
             title: pos.title || pos.position || "",
-            company: pos.company || pos.companyName || "",
+            company: pos.company || pos.companyName || pos.company_name || "",
             description: pos.description || "",
-            startDate: pos.startDate || pos.start || "",
-            endDate: pos.endDate || pos.end || "Present",
+            startDate: pos.start || pos.startDate || pos.start_date || "",
+            endDate: pos.end || pos.endDate || pos.end_date || "Present",
             bullets: [],
           }))
         : [],
       education: Array.isArray(education)
         ? education.map((edu: any) => ({
-            degree: edu.degree || edu.degreeName || [edu.degree_name, edu.field_of_study || edu.fieldOfStudy].filter(Boolean).join(" in ") || "",
-            school: edu.school || edu.schoolName || "",
-            startDate: edu.startDate || edu.start || "",
-            endDate: edu.endDate || edu.end || "",
+            degree: edu.degree || edu.degreeName || edu.degree_name ||
+              [edu.degree_name, edu.field_of_study || edu.fieldOfStudy].filter(Boolean).join(" in ") || "",
+            school: edu.school || edu.schoolName || edu.school_name || "",
+            startDate: edu.start || edu.startDate || edu.start_date || "",
+            endDate: edu.end || edu.endDate || edu.end_date || "",
           }))
         : [],
       languages: [],
