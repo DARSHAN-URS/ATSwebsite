@@ -579,6 +579,10 @@ const Index = () => {
               { q: t.landing.faq2q, a: t.landing.faq2a },
               { q: t.landing.faq3q, a: t.landing.faq3a },
               { q: t.landing.faq4q, a: t.landing.faq4a },
+              { q: t.landing.faq5q, a: t.landing.faq5a },
+              { q: t.landing.faq6q, a: t.landing.faq6a },
+              { q: t.landing.faq7q, a: t.landing.faq7a },
+              { q: t.landing.faq8q, a: t.landing.faq8a },
             ].map((item, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
                 <AccordionTrigger className="text-left text-sm font-medium">{item.q}</AccordionTrigger>
@@ -687,8 +691,10 @@ const Index = () => {
               { "@type": "Question", name: "Is this AI resume builder really free?", acceptedAnswer: { "@type": "Answer", text: "Yes! You can create, edit, and download ATS-optimized resumes for free. Our AI-powered grading and tailoring features are also available at no cost." } },
               { "@type": "Question", name: "How does the AI resume grader work?", acceptedAnswer: { "@type": "Answer", text: "Our AI analyzes your resume against industry standards and specific job descriptions. It checks for keyword optimization, formatting, readability, and ATS compatibility, then provides an actionable score and suggestions." } },
               { "@type": "Question", name: "Can I import my existing LinkedIn or resume?", acceptedAnswer: { "@type": "Answer", text: "Absolutely. You can upload an existing PDF resume and our AI will parse it into an editable format, preserving your content while optimizing the structure for ATS compatibility." } },
-              { "@type": "Question", name: "What resume formats can I download?", acceptedAnswer: { "@type": "Answer", text: "You can download your resume in PDF, DOCX, and TXT formats. All formats are optimized for ATS compatibility." } },
-              { "@type": "Question", name: "How many resume templates are available?", acceptedAnswer: { "@type": "Answer", text: "We offer 8+ professionally designed, ATS-tested resume templates suitable for all industries and experience levels." } },
+              { "@type": "Question", name: "What resume formats can I download?", acceptedAnswer: { "@type": "Answer", text: "You can export your resume in PDF, DOCX, or plain text (TXT). PDF is recommended for most job applications, DOCX for editable copies, and TXT for pasting into online application forms." } },
+              { "@type": "Question", name: "How does the one-click resume tailoring work?", acceptedAnswer: { "@type": "Answer", text: "Simply paste any job description and our AI instantly adjusts your resume — optimizing keywords, rewriting bullet points, and reordering skills to maximize your ATS match score for that specific role." } },
+              { "@type": "Question", name: "Is my data safe and private?", acceptedAnswer: { "@type": "Answer", text: "Yes. Your resume data is encrypted and stored securely. We never share your personal information with third parties. You can delete your account and all data at any time." } },
+              { "@type": "Question", name: "Can I create multiple resumes for different roles?", acceptedAnswer: { "@type": "Answer", text: "Yes! You can create unlimited resumes tailored to different job roles. Each resume can have its own template, content, and keyword optimization." } },
             ],
           }),
         }}
