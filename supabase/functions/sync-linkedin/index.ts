@@ -70,12 +70,12 @@ Deno.serve(async (req) => {
     ] as const;
 
     const endpointCandidates = [
-      { path: "/get-personal-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-profile-by-url", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-profile-by-url", params: { url: linkedinUrl, include_skills: "true" } },
       { path: "/get-linkedin-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-linkedin-profile", params: { url: linkedinUrl, include_skills: "true" } },
+      { path: "/get-personal-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
       { path: "/get-personal-profile", params: { profile_url: linkedinUrl, include_skills: "true" } },
-      { path: "/get-linkedin-profile", params: { profile_url: linkedinUrl, include_skills: "true" } },
-      { path: "/profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
-      { path: "/linkedin-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
     ] as const;
 
     let profile: any = null;
