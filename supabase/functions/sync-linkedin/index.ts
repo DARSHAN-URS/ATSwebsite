@@ -6,13 +6,31 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-function formatDate(dateObj: any): string {
-  if (!dateObj) return "";
-  const { month, year } = dateObj;
-  if (!year) return "";
-  if (!month) return `${year}`;
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return `${monthNames[month - 1] || month} ${year}`;
+const API_HOST = "fresh-linkedin-profile-data-api.p.rapidapi.com";
+const API_BASE = `https://${API_HOST}/api`;
+
+function extractUsername(url: string): string | null {
+  const match = url.match(/linkedin\.com\/in\/([^\/\?#]+)/);
+  return match ? match[1] : null;
+}
+
+async function apiFetch(path: string, apiKey: string) {
+  const url = `${API_BASE}${path}`;
+  console.log("Calling LinkedIn API:", url);
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "x-rapidapi-host": API_HOST,
+      "x-rapidapi-key": apiKey,
+    },
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    console.warn(`API ${path} returned ${res.status}:`, text);
+    return null;
+  }
+  const json = await res.json();
+  return json?.data ?? json;
 }
 
 Deno.serve(async (req) => {
@@ -21,7 +39,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Authenticate
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -61,141 +78,64 @@ Deno.serve(async (req) => {
       });
     }
 
-    console.log("Fetching LinkedIn profile:", linkedinUrl);
-
-    const hosts = [
-      "fresh-linkedin-profile-data-api.p.rapidapi.com",
-      "fresh-linkedin-profile-data-include-e-mail1.p.rapidapi.com",
-      "fresh-linkedin-profile-data.p.rapidapi.com",
-    ] as const;
-
-    const endpointCandidates = [
-      { path: "/get-profile-by-url", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
-      { path: "/get-profile-by-url", params: { url: linkedinUrl, include_skills: "true" } },
-      { path: "/get-linkedin-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
-      { path: "/get-linkedin-profile", params: { url: linkedinUrl, include_skills: "true" } },
-      { path: "/get-personal-profile", params: { linkedin_url: linkedinUrl, include_skills: "true" } },
-      { path: "/get-personal-profile", params: { profile_url: linkedinUrl, include_skills: "true" } },
-    ] as const;
-
-    let profile: any = null;
-    let last404: string | null = null;
-    let lastNon404Error: { status: number; details: string } | null = null;
-    const forbiddenByHost: Record<string, string> = {};
-
-    hostLoop: for (const host of hosts) {
-      for (const candidate of endpointCandidates) {
-        const query = new URLSearchParams(candidate.params).toString();
-        const url = `https://${host}${candidate.path}?${query}`;
-        console.log("Trying LinkedIn endpoint:", `${host}${candidate.path}?${query}`);
-
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "x-rapidapi-host": host,
-            "x-rapidapi-key": apiKey,
-          },
-        });
-
-        if (response.status === 404) {
-          const body = await response.text();
-          last404 = `${host}${candidate.path} -> ${body}`;
-          continue;
-        }
-
-        if (response.status === 403) {
-          const errorText = await response.text();
-          forbiddenByHost[host] = errorText;
-          console.warn("Subscription/plan access denied for host:", host, errorText);
-          break; // 403 is host-level access in RapidAPI; move to next host
-        }
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          lastNon404Error = { status: response.status, details: `${host}${candidate.path} -> ${errorText}` };
-          console.warn("Endpoint attempt failed:", response.status, `${host}${candidate.path}`, errorText);
-          continue;
-        }
-
-        const raw = await response.json();
-        profile = raw?.data ?? raw?.result ?? raw;
-        break hostLoop;
-      }
+    const username = extractUsername(linkedinUrl);
+    if (!username) {
+      return new Response(JSON.stringify({ error: "Could not extract username from LinkedIn URL" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
+    console.log("Fetching LinkedIn profile for username:", username);
+
+    // Fetch profile, skills, education, and experience in parallel
+    const [profile, skills, education, experience] = await Promise.all([
+      apiFetch(`/profile/${username}`, apiKey),
+      apiFetch(`/profile/${username}/skills`, apiKey),
+      apiFetch(`/profile/${username}/education`, apiKey),
+      apiFetch(`/profile/${username}/experience`, apiKey),
+    ]);
+
     if (!profile) {
-      if (Object.keys(forbiddenByHost).length > 0) {
-        return new Response(
-          JSON.stringify({
-            error:
-              "LinkedIn API access denied (403). Your RapidAPI key is valid but not subscribed to the required LinkedIn API host.",
-            requiredHosts: hosts,
-            details: forbiddenByHost,
-            fix:
-              "Subscribe your RapidAPI key to one of the required hosts in RapidAPI, then retry the import.",
-          }),
-          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      if (lastNon404Error) {
-        return new Response(
-          JSON.stringify({
-            error: `LinkedIn API error (${lastNon404Error.status})`,
-            details: lastNon404Error.details,
-          }),
-          { status: lastNon404Error.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
       return new Response(
-        JSON.stringify({
-          error: "LinkedIn API endpoint not found for configured hosts. Please verify endpoint in RapidAPI playground.",
-          details: last404,
-        }),
+        JSON.stringify({ error: "Failed to fetch LinkedIn profile. Check your RapidAPI subscription and the profile URL." }),
         { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    console.log("Profile keys:", JSON.stringify(Object.keys(profile || {})));
-    console.log("Profile preview:", JSON.stringify(profile).substring(0, 1500));
+    console.log("Profile keys:", JSON.stringify(Object.keys(profile)));
 
-    // Map to ResumeData (Fresh LinkedIn Profile Data format)
+    // Map to ResumeData
     const resumeData = {
       personalInfo: {
-        fullName: [profile.first_name, profile.last_name].filter(Boolean).join(" ") || profile.full_name || "",
+        fullName: profile.fullName || "",
         email: profile.email || "",
-        location: profile.location || profile.city || "",
+        location: profile.location || "",
         linkedin: linkedinUrl,
       },
-      summary: profile.about || profile.summary || "",
-      skills: Array.isArray(profile.skills)
-        ? profile.skills.map((s: any) => (typeof s === "string" ? s : s.name || s.title || "")).filter(Boolean)
+      summary: profile.about || profile.headline || "",
+      skills: Array.isArray(skills)
+        ? skills.map((s: any) => (typeof s === "string" ? s : s.name || s.title || "")).filter(Boolean)
         : [],
-      experience: Array.isArray(profile.experiences)
-        ? profile.experiences.map((pos: any) => ({
+      experience: Array.isArray(experience)
+        ? experience.map((pos: any) => ({
             title: pos.title || pos.position || "",
-            company: pos.company || pos.company_name || "",
+            company: pos.company || pos.companyName || "",
             description: pos.description || "",
-            startDate: pos.start_date || formatDate(pos.start),
-            endDate: pos.end_date || (pos.end ? formatDate(pos.end) : "Present"),
+            startDate: pos.startDate || pos.start || "",
+            endDate: pos.endDate || pos.end || "Present",
             bullets: [],
           }))
         : [],
-      education: Array.isArray(profile.educations)
-        ? profile.educations.map((edu: any) => ({
-            degree: edu.degree || [edu.degree_name, edu.field_of_study].filter(Boolean).join(" in ") || "",
-            school: edu.school || edu.school_name || "",
-            startDate: edu.start_date || formatDate(edu.start),
-            endDate: edu.end_date || formatDate(edu.end),
+      education: Array.isArray(education)
+        ? education.map((edu: any) => ({
+            degree: edu.degree || edu.degreeName || [edu.degree_name, edu.field_of_study || edu.fieldOfStudy].filter(Boolean).join(" in ") || "",
+            school: edu.school || edu.schoolName || "",
+            startDate: edu.startDate || edu.start || "",
+            endDate: edu.endDate || edu.end || "",
           }))
         : [],
-      languages: Array.isArray(profile.languages)
-        ? profile.languages.map((lang: any) => ({
-            name: typeof lang === "string" ? lang : lang.name || lang.title || "",
-            proficiency: typeof lang === "string" ? "" : lang.proficiency || "",
-          }))
-        : [],
+      languages: [],
       customSections: [],
     };
 
