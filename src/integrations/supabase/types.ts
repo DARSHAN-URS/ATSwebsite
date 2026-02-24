@@ -73,6 +73,8 @@ export type Database = {
       }
       ai_apply_queue: {
         Row: {
+          apply_error: string | null
+          apply_method: string | null
           campaign_id: string | null
           company: string
           cover_letter_data: Json | null
@@ -92,6 +94,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          apply_error?: string | null
+          apply_method?: string | null
           campaign_id?: string | null
           company: string
           cover_letter_data?: Json | null
@@ -111,6 +115,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          apply_error?: string | null
+          apply_method?: string | null
           campaign_id?: string | null
           company?: string
           cover_letter_data?: Json | null
