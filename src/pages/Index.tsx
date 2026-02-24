@@ -337,7 +337,7 @@ const Index = () => {
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-xl border border-border/60 shadow-2xl shadow-foreground/5">
-              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="eager" fetchPriority="high" width={1200} height={675} />
+              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" width={1200} height={675} />
             </div>
           </div>
         </div>
