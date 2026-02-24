@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import logo from "@/assets/logo.webp";
+const logo = "/logo.webp";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { termsTranslations } from "@/i18n/termsTranslations";
