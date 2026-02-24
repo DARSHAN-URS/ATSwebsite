@@ -6,7 +6,7 @@ import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle,
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import logo from "@/assets/logo.webp";
+const logo = "/logo.webp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -337,7 +337,7 @@ const Index = () => {
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-xl border border-border/60 shadow-2xl shadow-foreground/5">
-              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" width={1200} height={675} />
+              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" decoding="async" width={1200} height={675} />
             </div>
           </div>
         </div>

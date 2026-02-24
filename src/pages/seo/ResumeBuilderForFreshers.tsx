@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle, GraduationCap, Lightbulb, BookOpen } from "luc
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import SEOHead from "@/components/SEOHead";
-import logo from "@/assets/logo.webp";
+const logo = "/logo.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { seoTranslations } from "@/i18n/seoTranslations";
 
