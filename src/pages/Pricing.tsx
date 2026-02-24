@@ -47,17 +47,17 @@ export default function Pricing() {
     },
     {
       id: "pro_weekly", name: tp.weeklyPlan, period: tp.per7Days, description: tp.weeklyDesc,
-      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking],
+      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.emailOutreach, t.pricingPage.interviewPrep, t.pricingPage.companyDirectory, t.pricingPage.aiApply, t.pricingPage.smartJobSearch],
       icon: <Crown className="h-6 w-6" />, duration: "weekly" as const,
     },
     {
       id: "pro_biweekly", name: tp.biweeklyPlan, period: tp.per14Days, description: tp.biweeklyDesc,
-      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking],
+      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.emailOutreach, t.pricingPage.interviewPrep, t.pricingPage.companyDirectory, t.pricingPage.aiApply, t.pricingPage.smartJobSearch],
       icon: <Crown className="h-6 w-6" />, duration: "biweekly" as const,
     },
     {
       id: "pro_monthly", name: t.pricingPage.proName, period: t.pricingPage.perMonth, description: t.pricingPage.proDesc,
-      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.prioritySupport],
+      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.emailOutreach, t.pricingPage.interviewPrep, t.pricingPage.companyDirectory, t.pricingPage.aiApply, t.pricingPage.smartJobSearch, t.pricingPage.prioritySupport],
       icon: <Crown className="h-6 w-6" />, popular: true, duration: "monthly" as const,
     },
   ];
