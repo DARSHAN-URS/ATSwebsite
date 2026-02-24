@@ -273,6 +273,31 @@ function JobSeekerDashboard() {
           <p className="text-[12px] md:text-sm text-muted-foreground">{t.dashboard.findJobsDetail}</p>
         </CardContent>
       </Card>
+
+      {/* Trustpilot Review CTA */}
+      <a
+        href="https://www.trustpilot.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+      >
+        <Card className="card-lift rounded-xl border border-[#00b67a]/30 bg-[#00b67a]/5 hover:bg-[#00b67a]/10 transition-colors cursor-pointer">
+          <CardContent className="flex items-center gap-4 p-4 md:p-6">
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-[#00b67a]/10 flex items-center justify-center shrink-0">
+              <svg className="h-5 w-5 md:h-6 md:w-6 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 8.41H23.42L16.41 13.59L19 22L12 16.82L5 22L7.59 13.59L0.58 8.41H9.41L12 0Z"/></svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-sm md:text-base">Enjoying ATS Pro? Leave us a review!</p>
+              <p className="text-xs md:text-sm text-muted-foreground">Share your experience on Trustpilot — it helps others discover us ⭐</p>
+            </div>
+            <div className="flex gap-0.5 shrink-0">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="h-4 w-4 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </a>
     </div>
   );
 }
