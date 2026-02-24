@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import dashboardPreview from "@/assets/dashboard-preview.png";
+import trustpilotLogo from "@/assets/trustpilot-logo.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
@@ -610,10 +611,7 @@ const Index = () => {
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M12 0L14.59 8.41H23.42L16.41 13.59L19 22L12 16.82L5 22L7.59 13.59L0.58 8.41H9.41L12 0Z" fill="#00b67a"/></svg>
-              <span className="text-lg font-bold text-foreground">Trustpilot</span>
-            </div>
+            <img src={trustpilotLogo} alt="Trustpilot" className="h-8 md:h-10" />
             <p className="text-sm text-muted-foreground group-hover:text-foreground transition">Rated Excellent — Read our reviews on Trustpilot</p>
           </a>
         </div>
