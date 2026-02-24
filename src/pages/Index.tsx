@@ -603,7 +603,7 @@ const Index = () => {
       {/* Trustpilot Trust Section */}
       <section className="py-12 md:py-16 bg-accent/30">
         <div className="mx-auto max-w-3xl px-5 text-center">
-          <a href="https://www.trustpilot.com/evaluate/atsproresumebuilder.com" target="_blank" rel="noopener noreferrer" className="inline-flex flex-col items-center gap-3 group">
+          <a href="https://www.trustpilot.com/review/atsproresumebuilder.com" target="_blank" rel="noopener noreferrer" className="inline-flex flex-col items-center gap-3 group">
             <div className="flex items-center gap-2">
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
@@ -612,7 +612,7 @@ const Index = () => {
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             </div>
             <img src={trustpilotLogo} alt="Trustpilot" className="h-8 md:h-10" />
-            <p className="text-sm text-muted-foreground group-hover:text-foreground transition">Rated Excellent — Read our reviews on Trustpilot</p>
+            <p className="text-sm text-muted-foreground group-hover:text-foreground transition">Rated Excellent — <span className="underline">Read our reviews on Trustpilot</span></p>
           </a>
         </div>
       </section>
