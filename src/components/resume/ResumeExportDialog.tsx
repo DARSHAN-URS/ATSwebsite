@@ -210,7 +210,7 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
         {/* Trustpilot review nudge after successful export */}
         {exportSuccess && (
           <a
-            href="https://www.trustpilot.com"
+            href="https://www.trustpilot.com/evaluate/atsproresumebuilder.com"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 p-3 rounded-lg border border-[#00b67a]/30 bg-[#00b67a]/5 hover:bg-[#00b67a]/10 transition-colors"

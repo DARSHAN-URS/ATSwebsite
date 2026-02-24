@@ -276,7 +276,7 @@ function JobSeekerDashboard() {
 
       {/* Trustpilot Review CTA */}
       <a
-        href="https://www.trustpilot.com"
+        href="https://www.trustpilot.com/evaluate/atsproresumebuilder.com"
         target="_blank"
         rel="noopener noreferrer"
         className="block"
