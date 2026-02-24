@@ -343,11 +343,6 @@ const Index = () => {
               {t.landing.fixResume} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
-          <div className="relative">
-            <div className="overflow-hidden rounded-xl border border-border/60 shadow-2xl shadow-foreground/5">
-              <img src="/lovable-uploads/ddb04219-2bf9-456b-b8b2-3eb3093b16e5.png" alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" decoding="async" width={1200} height={675} />
-            </div>
-          </div>
         </div>
       </section>
 
