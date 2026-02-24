@@ -528,12 +528,17 @@ const Index = () => {
                 </div>
                 <ul className="space-y-2 flex-1 mb-5">
                   {[
-                lx.unlimitedResumes,
-                lx.allPremiumTemplates,
-                lx.aiGradingScoring,
-                lx.aiOneClickTailoring,
-                lx.aiCoverLetter,
-                ...(plan.popular ? [lx.prioritySupport] : [])].
+                    lx.unlimitedResumes,
+                    lx.allPremiumTemplates,
+                    lx.aiGradingScoring,
+                    lx.aiOneClickTailoring,
+                    lx.aiCoverLetter,
+                    lx.unlimitedJobTracking,
+                    lx.emailOutreach,
+                    lx.interviewPrepFeature,
+                    lx.pinTrackCompanies,
+                    lx.aiJobSearchMatching,
+                    ...(plan.popular ? [lx.prioritySupport] : [])].
                 map((f) =>
                 <li key={f} className="flex items-center gap-2 text-[12px]">
                       <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
