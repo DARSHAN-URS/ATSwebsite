@@ -66,6 +66,7 @@ function cleanFilename(name: string): string {
 export default function ResumeExportDialog({ resumeData, title, templateId }: ResumeExportDialogProps) {
   const [open, setOpen] = useState(false);
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
+  const [exportSuccess, setExportSuccess] = useState(false);
   const { toast } = useToast();
 
   const validationErrors = validateResume(resumeData);
@@ -80,6 +81,7 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
       if (format === "pdf") {
         await generateResumePDF(resumeData, title, templateId);
         toast({ title: "PDF downloaded successfully" });
+        setExportSuccess(true);
       } else {
         const atsConfig = isATSTemplateId(templateId) ? getATSConfig(templateId) : undefined;
         const sectionOrder = atsConfig?.sectionOrder;
@@ -118,6 +120,7 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
         URL.revokeObjectURL(url);
 
         toast({ title: `${format.toUpperCase()} downloaded successfully` });
+        setExportSuccess(true);
       }
     } catch (err: any) {
       console.error("Export error:", err);
@@ -132,7 +135,7 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setExportSuccess(false); }}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Download className="h-4 w-4 mr-1 sm:mr-2" />
@@ -203,6 +206,26 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
             );
           })}
         </div>
+
+        {/* Trustpilot review nudge after successful export */}
+        {exportSuccess && (
+          <a
+            href="https://www.trustpilot.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 p-3 rounded-lg border border-[#00b67a]/30 bg-[#00b67a]/5 hover:bg-[#00b67a]/10 transition-colors"
+          >
+            <div className="flex gap-0.5 shrink-0">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="h-3.5 w-3.5 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              ))}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium">Enjoying ATS Pro?</p>
+              <p className="text-xs text-muted-foreground">Leave a review on Trustpilot ⭐</p>
+            </div>
+          </a>
+        )}
 
         <p className="text-xs text-muted-foreground text-center">
           File will be saved as <span className="font-mono">{filename}.[format]</span>
