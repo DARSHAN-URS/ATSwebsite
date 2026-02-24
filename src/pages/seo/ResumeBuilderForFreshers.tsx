@@ -34,8 +34,8 @@ export default function ResumeBuilderForFreshers() {
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 font-mono">{t.fresher.tag}</p>
-          <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight">{t.fresher.h1}</h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.fresher.tag}</p>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">{t.fresher.h1}</h1>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{t.fresher.subtitle}</p>
           <Button size="lg" className="gap-2 mt-8" asChild><Link to="/">{t.fresher.ctaBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>
@@ -43,15 +43,15 @@ export default function ResumeBuilderForFreshers() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.fresher.whyH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.fresher.whyH2}</h2>
           <p className="text-muted-foreground mb-4">{t.fresher.whyP1}</p>
           <p className="text-muted-foreground mb-4">{t.fresher.whyP2}</p>
-          <h3 className="text-lg font-semibold mt-8 mb-4">{t.fresher.whatIncludeH3}</h3>
+          <h3 className="text-lg font-bold mt-8 mb-4">{t.fresher.whatIncludeH3}</h3>
           <div className="grid md:grid-cols-3 gap-4">
             {t.fresher.includeCards.map((card, i) => (
-              <div key={i} className="rounded-xl border border-border/60 bg-card p-5">
-                <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">{cardIcons[i]}</div>
-                <h4 className="text-sm font-semibold mb-1">{card.title}</h4>
+              <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 bounce-hover">
+                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{cardIcons[i]}</div>
+                <h4 className="text-sm font-bold mb-1">{card.title}</h4>
                 <p className="text-xs text-muted-foreground">{card.desc}</p>
               </div>
             ))}
@@ -61,7 +61,7 @@ export default function ResumeBuilderForFreshers() {
 
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.fresher.tipsH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.fresher.tipsH2}</h2>
           <ul className="space-y-3">
             {t.fresher.tips.map((tip, i) => (
               <li key={i} className="flex gap-3 text-sm text-muted-foreground">
@@ -75,7 +75,7 @@ export default function ResumeBuilderForFreshers() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-3xl px-4">
-          <h2 className="font-serif text-2xl font-bold text-center mb-8">{t.fresher.faqH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold text-center mb-8">{t.fresher.faqH2}</h2>
           <Accordion type="single" collapsible className="w-full">
             {t.fresher.faqs.map((item, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
@@ -89,7 +89,7 @@ export default function ResumeBuilderForFreshers() {
 
       <section className="py-12">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="font-serif text-xl font-bold mb-6">{t.fresher.linksH2}</h2>
+          <h2 className="font-display text-xl font-extrabold mb-6">{t.fresher.linksH2}</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {["/ats-resume-builder", "/resume-templates", "/interview-preparation", "/blog"].map((href, i) => (
               <Button key={href} variant="outline" size="sm" asChild><Link to={href}>{t.fresher.linkLabels[i]}</Link></Button>
@@ -100,7 +100,7 @@ export default function ResumeBuilderForFreshers() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-12">
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="font-serif text-2xl font-bold mb-4">{t.fresher.finalH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-4">{t.fresher.finalH2}</h2>
           <p className="text-muted-foreground mb-6">{t.fresher.finalSub}</p>
           <Button size="lg" className="gap-2" asChild><Link to="/">{t.fresher.finalBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>

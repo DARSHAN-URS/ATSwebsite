@@ -32,18 +32,18 @@ export default function ResumeTemplates() {
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 font-mono">{t.tpl.tag}</p>
-          <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight">{t.tpl.h1}</h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.tpl.tag}</p>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">{t.tpl.h1}</h1>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{t.tpl.subtitle}</p>
         </div>
       </section>
 
       <section className="border-t border-border/60 py-16">
         <div className="mx-auto max-w-5xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-8 text-center">{t.tpl.browseH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-8 text-center">{t.tpl.browseH2}</h2>
           <div className="grid md:grid-cols-2 gap-5">
             {t.tpl.templates.map((tp) => (
-              <div key={tp.name} className="rounded-xl border border-border/60 bg-card p-5">
+              <div key={tp.name} className="rounded-2xl border border-border/60 bg-card p-5 bounce-hover">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold">{tp.name}</h3>
                   <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{tp.best}</span>
@@ -57,7 +57,7 @@ export default function ResumeTemplates() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.tpl.whatMakesH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.tpl.whatMakesH2}</h2>
           <p className="text-muted-foreground mb-4">{t.tpl.whatMakesIntro}</p>
           <ul className="space-y-3">
             {t.tpl.whatMakesList.map((item, i) => (
@@ -72,7 +72,7 @@ export default function ResumeTemplates() {
 
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.tpl.chooseH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.tpl.chooseH2}</h2>
           <div className="space-y-4 text-sm text-muted-foreground">
             {t.tpl.chooseItems.map((item, i) => (
               <p key={i}>{item}</p>
@@ -83,7 +83,7 @@ export default function ResumeTemplates() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-12">
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="font-serif text-2xl font-bold mb-4">{t.tpl.ctaH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-4">{t.tpl.ctaH2}</h2>
           <p className="text-muted-foreground mb-6">{t.tpl.ctaSub}</p>
           <Button size="lg" className="gap-2" asChild><Link to="/">{t.tpl.ctaBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>

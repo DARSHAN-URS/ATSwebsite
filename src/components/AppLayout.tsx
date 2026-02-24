@@ -56,9 +56,9 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
           onClick={onNavClick}
           className={({ isActive }) =>
           cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+            "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
             isActive ?
-            "bg-sidebar-accent text-sidebar-accent-foreground" :
+            "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm" :
             "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
           )
           }>

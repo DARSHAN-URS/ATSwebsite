@@ -172,58 +172,59 @@ const Index = () => {
         }
       </nav>
 
-      {/* Hero — geometric accent line */}
-      <section className="relative overflow-hidden py-12 md:py-36">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,hsl(36_15%_88%/0.4)_1px,transparent_1px),linear-gradient(to_bottom,hsl(36_15%_88%/0.4)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-[400px] md:w-[600px] h-[400px] md:h-[600px] rounded-full bg-primary/[0.04] blur-3xl" />
+      {/* Hero — playful gradient bg */}
+      <section className="relative overflow-hidden py-14 md:py-40">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+        <div className="absolute top-10 left-1/4 -z-10 w-72 h-72 rounded-full bg-primary/10 blur-[100px]" />
+        <div className="absolute bottom-10 right-1/4 -z-10 w-60 h-60 rounded-full bg-accent/10 blur-[100px]" />
         <div className="mx-auto max-w-3xl px-5 text-center">
-          <div className="mb-4 md:mb-7 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-[11px] md:text-xs font-medium text-muted-foreground shadow-sm">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse-dot" />
+          <div className="mb-5 md:mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-[11px] md:text-xs font-semibold text-primary shadow-sm">
+            <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse-dot" />
             {t.landing.heroTagline}
           </div>
-          <h1 className="font-serif text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-[2rem] md:text-[3.5rem]">
+          <h1 className="font-display text-[1.85rem] font-extrabold leading-[1.1] tracking-tight sm:text-[2.25rem] md:text-[3.75rem]">
             {t.landing.heroTitle}{" "}
-            <span className="italic">{t.landing.heroHighlight}</span>
+            <span className="bg-gradient-to-r from-primary to-info bg-clip-text text-transparent">{t.landing.heroHighlight}</span>
           </h1>
-          <p className="mx-auto mt-4 md:mt-6 max-w-xl text-[13px] leading-relaxed text-muted-foreground md:text-base px-2 sm:px-0">
+          <p className="mx-auto mt-5 md:mt-7 max-w-xl text-[13px] leading-relaxed text-muted-foreground md:text-base px-2 sm:px-0">
             {t.landing.heroDesc}
           </p>
-          <div className="mt-6 md:mt-10 flex flex-col items-center justify-center gap-2.5 sm:flex-row px-1">
-            <Button size="lg" className="gap-2 rounded-lg px-6 md:px-8 font-semibold w-full sm:w-auto shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-shadow text-sm md:text-base h-11 md:h-12" onClick={() => openAuth("signup")}>
+          <div className="mt-7 md:mt-11 flex flex-col items-center justify-center gap-3 sm:flex-row px-1">
+            <Button size="lg" className="gap-2 rounded-full px-7 md:px-9 font-bold w-full sm:w-auto shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-all text-sm md:text-base h-12 md:h-13" onClick={() => openAuth("signup")}>
               {t.landing.buildFreeResume} <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg" className="gap-2 rounded-lg px-6 md:px-8 font-semibold w-full sm:w-auto text-sm md:text-base h-11 md:h-12" onClick={() => openAuth("signup")}>
+            <Button variant="outline" size="lg" className="gap-2 rounded-full px-7 md:px-9 font-bold w-full sm:w-auto text-sm md:text-base h-12 md:h-13 border-2" onClick={() => openAuth("signup")}>
               <Upload className="h-4 w-4" /> {t.landing.uploadResume}
             </Button>
           </div>
-          <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-3 md:gap-8 text-[11px] md:text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3 w-3 md:h-3.5 md:w-3.5 text-success" /> {t.landing.atsFriendly}</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3 w-3 md:h-3.5 md:w-3.5 text-success" /> {t.landing.reviews}</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="h-3 w-3 md:h-3.5 md:w-3.5 text-success" /> {t.landing.resumesBuilt}</span>
+          <div className="mt-7 md:mt-10 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[11px] md:text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-success" /> {t.landing.atsFriendly}</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-success" /> {t.landing.reviews}</span>
+            <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-success" /> {t.landing.resumesBuilt}</span>
           </div>
         </div>
       </section>
 
-      {/* Features — clean cards with subtle left accent */}
-      <section className="border-t border-border/60 py-12 md:py-24">
+      {/* Features — playful colorful cards */}
+      <section className="py-14 md:py-28">
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.features}</p>
-            <h2 className="font-serif text-lg font-bold tracking-tight md:text-3xl">{t.landing.featuresTitle}</h2>
-            <p className="mx-auto mt-2 md:mt-3 max-w-lg text-[13px] md:text-sm text-muted-foreground">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2 md:mb-3">{t.landing.features}</p>
+            <h2 className="font-display text-xl font-extrabold tracking-tight md:text-4xl">{t.landing.featuresTitle}</h2>
+            <p className="mx-auto mt-3 md:mt-4 max-w-lg text-[13px] md:text-sm text-muted-foreground">
               {t.landing.featuresDesc}
             </p>
           </div>
-          <div className="mt-8 md:mt-12 grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 md:mt-14 grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
-            { icon: <BarChart3 className="h-5 w-5" />, title: t.landing.aiGrader, desc: t.landing.aiGraderDesc },
-            { icon: <Sparkles className="h-5 w-5" />, title: t.landing.oneClickTailor, desc: t.landing.oneClickTailorDesc },
-            { icon: <LayoutTemplate className="h-5 w-5" />, title: t.landing.atsTemplates, desc: t.landing.atsTemplatesDesc },
-            { icon: <Briefcase className="h-5 w-5" />, title: t.landing.recruiterPortal, desc: t.landing.recruiterPortalDesc }].
+            { icon: <BarChart3 className="h-5 w-5" />, title: t.landing.aiGrader, desc: t.landing.aiGraderDesc, color: "bg-primary/10 text-primary" },
+            { icon: <Sparkles className="h-5 w-5" />, title: t.landing.oneClickTailor, desc: t.landing.oneClickTailorDesc, color: "bg-accent/20 text-accent-foreground" },
+            { icon: <LayoutTemplate className="h-5 w-5" />, title: t.landing.atsTemplates, desc: t.landing.atsTemplatesDesc, color: "bg-info/10 text-info" },
+            { icon: <Briefcase className="h-5 w-5" />, title: t.landing.recruiterPortal, desc: t.landing.recruiterPortalDesc, color: "bg-success/10 text-success" }].
             map((f) =>
-            <div key={f.title} className="card-lift rounded-xl border border-border/60 bg-card p-4 md:p-5">
-                <div className="mb-2 md:mb-3 flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">{f.icon}</div>
-                <h3 className="mb-1 text-[13px] md:text-sm font-semibold">{f.title}</h3>
+            <div key={f.title} className="bounce-hover rounded-2xl border border-border/60 bg-card p-5 md:p-6 shadow-sm">
+                <div className={`mb-3 md:mb-4 flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-xl ${f.color}`}>{f.icon}</div>
+                <h3 className="mb-1.5 text-sm md:text-base font-bold">{f.title}</h3>
                 <p className="text-[11px] md:text-[13px] leading-relaxed text-muted-foreground">{f.desc}</p>
               </div>
             )}
@@ -240,7 +241,7 @@ const Index = () => {
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary text-xs font-semibold mb-4">
                 <Sparkles className="h-3.5 w-3.5" /> {lx.newFeature}
               </div>
-              <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl mb-3">
+              <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl mb-3">
                 {lx.aiApplyTitle}
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-md mb-6" dangerouslySetInnerHTML={{ __html: lx.aiApplyDesc }} />
@@ -313,7 +314,7 @@ const Index = () => {
         <div className="mx-auto grid max-w-7xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.theProblem}</p>
-            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">
+            <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">
               {t.landing.whyFailTitle}
             </h2>
             <ul className="mt-8 space-y-5">
@@ -348,7 +349,7 @@ const Index = () => {
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.testimonials}</p>
-            <h2 className="font-serif text-lg font-bold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
+            <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
           </div>
 
           {/* Stats */}
@@ -404,7 +405,7 @@ const Index = () => {
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.forRecruiters}</p>
-              <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">
+              <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">
                 {t.landing.postJobsTitle}
               </h2>
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-md">
@@ -454,7 +455,7 @@ const Index = () => {
               <span className="text-sm font-semibold text-primary">{pricingExtraTranslations[locale].launchOffer}</span>
             </div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{lx.pricingTag}</p>
-            <h2 className="font-serif text-xl font-bold tracking-tight md:text-3xl">{lx.pricingTitle}</h2>
+            <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">{lx.pricingTitle}</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
               {lx.pricingDesc}
             </p>
@@ -572,7 +573,7 @@ const Index = () => {
       <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto max-w-2xl px-4">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono text-center">{t.landing.faq}</p>
-          <h2 className="font-serif mb-8 md:mb-10 text-center text-xl font-bold tracking-tight md:text-3xl">{t.landing.faqTitle}</h2>
+          <h2 className="font-display mb-8 md:mb-10 text-center text-xl font-extrabold tracking-tight md:text-3xl">{t.landing.faqTitle}</h2>
           <Accordion type="single" collapsible className="w-full">
             {[
             { q: t.landing.faq1q, a: t.landing.faq1a },

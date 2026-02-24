@@ -79,7 +79,7 @@ export default function About() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.05)_1px,transparent_1px)] bg-[size:32px_32px]" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary mb-6">{ta.tagline}</span>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">{ta.heroTitle}<span className="block text-primary mt-1">{ta.heroHighlight}</span></h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight font-display">{ta.heroTitle}<span className="block text-primary mt-1">{ta.heroHighlight}</span></h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">{ta.heroDesc1}</p>
           <p className="mt-4 text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">{ta.heroDesc2}</p>
         </div>
