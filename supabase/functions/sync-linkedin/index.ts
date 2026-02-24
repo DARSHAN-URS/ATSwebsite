@@ -6,7 +6,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const API_HOST = "linkedin-data-api.p.rapidapi.com";
+const API_HOST = "fresh-linkedin-scraper-api.p.rapidapi.com";
 
 function extractUsername(url: string): string | null {
   const match = url.match(/linkedin\.com\/in\/([^\/\?#]+)/);
@@ -68,8 +68,7 @@ Deno.serve(async (req) => {
 
     console.log("Fetching LinkedIn profile for username:", username);
 
-    // Single API call - gets all profile data at once (no rate limit issues)
-    const url = `https://${API_HOST}/?username=${encodeURIComponent(username)}`;
+    const url = `https://${API_HOST}/api/v1/user/profile?username=${encodeURIComponent(username)}`;
     console.log("Calling LinkedIn API:", url);
 
     const res = await fetch(url, {
