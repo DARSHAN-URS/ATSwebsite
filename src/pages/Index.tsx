@@ -6,7 +6,7 @@ import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle,
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
