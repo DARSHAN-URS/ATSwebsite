@@ -13,6 +13,63 @@ function extractUsername(url: string): string | null {
   return match ? match[1] : null;
 }
 
+function parseDateCandidate(value: any): string {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+
+  // Handle epoch timestamps
+  if (typeof value === "number") {
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
+  }
+
+  if (typeof value === "object") {
+    // Common textual keys
+    const direct = value.text || value.label || value.value || value.date;
+    if (typeof direct === "string") return direct;
+
+    // Handle structures like { month: 2, year: 2024 }
+    const month = value.month || value.monthValue;
+    const year = value.year || value.yearValue;
+    if (year) {
+      const monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+      ];
+      if (typeof month === "number" && month >= 1 && month <= 12) {
+        return `${monthNames[month - 1]} ${year}`;
+      }
+      return String(year);
+    }
+  }
+
+  return "";
+}
+
+function getNormalizedDate(item: any, prefix: "start" | "end", fallback = ""): string {
+  const nestedDate = item?.date;
+  const candidates = [
+    item?.[`${prefix}Date`],
+    item?.[`${prefix}_date`],
+    item?.[`${prefix}Time`],
+    item?.[`${prefix}_time`],
+    item?.[prefix],
+    nestedDate?.[prefix],
+    nestedDate?.[`${prefix}Date`],
+    nestedDate?.[`${prefix}_date`],
+    nestedDate?.[`${prefix}Time`],
+    nestedDate?.[`${prefix}_time`],
+    nestedDate?.range?.[prefix],
+  ];
+
+  for (const candidate of candidates) {
+    const parsed = parseDateCandidate(candidate);
+    if (parsed) return parsed;
+  }
+
+  return fallback;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -153,13 +210,8 @@ Deno.serve(async (req) => {
         : [],
       experience: Array.isArray(experience)
         ? experience.map((pos: any) => {
-            // Date can be { start: "Feb 2025", end: "Present" } or nested object
-            const startDate =
-              typeof pos.date?.start === "string" ? pos.date.start :
-              pos.start || pos.startDate || pos.start_date || "";
-            const endDate =
-              typeof pos.date?.end === "string" ? pos.date.end :
-              pos.end || pos.endDate || pos.end_date || "Present";
+            const startDate = getNormalizedDate(pos, "start", "");
+            const endDate = getNormalizedDate(pos, "end", "Present");
             const companyRaw = pos.company;
             const companyName =
               typeof companyRaw === "string"
@@ -177,12 +229,8 @@ Deno.serve(async (req) => {
         : [],
       education: Array.isArray(education)
         ? education.map((edu: any) => {
-            const startDate =
-              typeof edu.date?.start === "string" ? edu.date.start :
-              edu.start || edu.startDate || edu.start_date || "";
-            const endDate =
-              typeof edu.date?.end === "string" ? edu.date.end :
-              edu.end || edu.endDate || edu.end_date || "";
+            const startDate = getNormalizedDate(edu, "start", "");
+            const endDate = getNormalizedDate(edu, "end", "");
             return {
               degree:
                 edu.degree ||
