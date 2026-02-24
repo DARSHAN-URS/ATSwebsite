@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
-  Sparkles, ExternalLink, CheckCircle2, X, Briefcase, MapPin, Trophy, FileText, Mail, ChevronDown, ChevronUp, Loader2
+  Sparkles, ExternalLink, CheckCircle2, X, MapPin, Trophy, FileText, Mail,
+  ChevronDown, ChevronUp, Loader2, Zap, AlertCircle, Globe, Building2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -22,6 +23,8 @@ interface QueuedJob {
   tailored_resume_data: any;
   cover_letter_data: any;
   status: string;
+  apply_method: string | null;
+  apply_error: string | null;
   created_at: string;
 }
 
@@ -37,6 +40,27 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
+function ApplyMethodBadge({ method, url }: { method: string | null; url: string | null }) {
+  if (!method || method === "manual") {
+    // Detect what method would be used
+    const detected = detectMethodFromUrl(url);
+    if (detected === "greenhouse") return <Badge variant="outline" className="text-[10px] gap-1"><Building2 className="h-2.5 w-2.5" />Greenhouse</Badge>;
+    if (detected === "lever") return <Badge variant="outline" className="text-[10px] gap-1"><Building2 className="h-2.5 w-2.5" />Lever</Badge>;
+    return <Badge variant="outline" className="text-[10px] gap-1"><Globe className="h-2.5 w-2.5" />Manual</Badge>;
+  }
+  if (method === "greenhouse") return <Badge variant="secondary" className="text-[10px] gap-1 bg-green-100 text-green-700"><Building2 className="h-2.5 w-2.5" />Greenhouse API</Badge>;
+  if (method === "lever") return <Badge variant="secondary" className="text-[10px] gap-1 bg-blue-100 text-blue-700"><Building2 className="h-2.5 w-2.5" />Lever API</Badge>;
+  if (method === "email") return <Badge variant="secondary" className="text-[10px] gap-1 bg-purple-100 text-purple-700"><Mail className="h-2.5 w-2.5" />Email</Badge>;
+  return <Badge variant="outline" className="text-[10px]">{method}</Badge>;
+}
+
+function detectMethodFromUrl(url: string | null): string {
+  if (!url) return "manual";
+  if (url.includes("greenhouse.io")) return "greenhouse";
+  if (url.includes("lever.co")) return "lever";
+  return "manual";
+}
+
 export default function AIApplyQueueSection() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -45,6 +69,7 @@ export default function AIApplyQueueSection() {
   const [selected, setSelected] = useState<QueuedJob | null>(null);
   const [previewTab, setPreviewTab] = useState<"resume" | "cover-letter">("cover-letter");
   const [applying, setApplying] = useState<string | null>(null);
+  const [autoApplying, setAutoApplying] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   const fetchQueue = async () => {
@@ -62,32 +87,76 @@ export default function AIApplyQueueSection() {
 
   useEffect(() => { fetchQueue(); }, [user]);
 
+  const handleAutoApplyAll = async () => {
+    if (queue.length === 0) return;
+    setAutoApplying(true);
+
+    try {
+      const ids = queue.map((j) => j.id);
+      const { data, error } = await supabase.functions.invoke("auto-apply", {
+        body: { queue_ids: ids },
+      });
+
+      if (error) throw error;
+
+      const applied = data?.applied || 0;
+      const failed = data?.failed || 0;
+      const manual = data?.manual || 0;
+
+      toast({
+        title: `Auto-Apply Complete`,
+        description: `✅ ${applied} applied via API/email${failed > 0 ? ` · ❌ ${failed} failed` : ""}${manual > 0 ? ` · 📋 ${manual} need manual apply` : ""}`,
+      });
+
+      // Refresh queue
+      await fetchQueue();
+    } catch (err) {
+      console.error("Auto-apply error:", err);
+      toast({ title: "Error", description: "Auto-apply failed. Please try again.", variant: "destructive" });
+    } finally {
+      setAutoApplying(false);
+    }
+  };
+
   const handleApply = async (job: QueuedJob) => {
     setApplying(job.id);
     try {
-      // Mark as applied in ai_apply_queue
-      await supabase.from("ai_apply_queue" as any).update({ status: "applied" }).eq("id", job.id);
-
-      // Also track in job_applications
-      await supabase.from("job_applications").insert({
-        user_id: user!.id,
-        company: job.company,
-        position: job.job_title,
-        url: job.job_url,
-        status: "applied",
-        notes: `AI Apply — Match score: ${job.match_score}%`,
+      // Try auto-apply first
+      const { data, error } = await supabase.functions.invoke("auto-apply", {
+        body: { queue_ids: [job.id] },
       });
 
-      // Open job URL
-      if (job.job_url && job.job_url !== "#") {
-        window.open(job.job_url, "_blank", "noopener,noreferrer");
+      const result = data?.results?.[0];
+
+      if (!error && result?.success) {
+        toast({
+          title: "Applied automatically!",
+          description: `${job.job_title} at ${job.company} — applied via ${result.method}`,
+        });
+      } else {
+        // Fallback: mark as applied manually + open URL
+        await supabase.from("ai_apply_queue" as any).update({ status: "applied", apply_method: "manual" }).eq("id", job.id);
+
+        await supabase.from("job_applications").insert({
+          user_id: user!.id,
+          company: job.company,
+          position: job.job_title,
+          url: job.job_url,
+          status: "applied",
+          notes: `AI Apply (manual) — Match score: ${job.match_score}%`,
+        });
+
+        if (job.job_url && job.job_url !== "#") {
+          window.open(job.job_url, "_blank", "noopener,noreferrer");
+        }
+
+        toast({ title: "Application tracked!", description: `${job.job_title} at ${job.company} — apply on the opened page.` });
       }
 
-      toast({ title: "Application tracked!", description: `${job.job_title} at ${job.company} added to your tracker.` });
       setSelected(null);
       setQueue((prev) => prev.filter((j) => j.id !== job.id));
     } catch {
-      toast({ title: "Error", description: "Failed to track application.", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to process application.", variant: "destructive" });
     } finally {
       setApplying(null);
     }
@@ -103,6 +172,12 @@ export default function AIApplyQueueSection() {
   if (queue.length === 0) return null;
 
   const visibleQueue = expanded ? queue : queue.slice(0, 3);
+
+  // Count auto-applicable jobs
+  const autoApplicable = queue.filter((j) => {
+    const m = detectMethodFromUrl(j.job_url);
+    return m === "greenhouse" || m === "lever";
+  }).length;
 
   return (
     <>
@@ -121,7 +196,22 @@ export default function AIApplyQueueSection() {
                 <CardDescription className="text-xs">AI-tailored applications ready to send</CardDescription>
               </div>
             </div>
+            <Button
+              size="sm"
+              className="text-xs h-8 gap-1.5"
+              onClick={handleAutoApplyAll}
+              disabled={autoApplying}
+            >
+              {autoApplying
+                ? <><Loader2 className="h-3 w-3 animate-spin" /> Applying...</>
+                : <><Zap className="h-3 w-3" /> Auto-Apply All</>}
+            </Button>
           </div>
+          {autoApplicable > 0 && (
+            <p className="text-xs text-muted-foreground mt-1 ml-10">
+              {autoApplicable} job{autoApplicable > 1 ? "s" : ""} can be auto-submitted via ATS API
+            </p>
+          )}
         </CardHeader>
         <CardContent className="space-y-2">
           {visibleQueue.map((job) => (
@@ -133,7 +223,10 @@ export default function AIApplyQueueSection() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-medium text-sm truncate">{job.job_title}</p>
-                    <p className="text-xs text-muted-foreground truncate">{job.company}</p>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <p className="text-xs text-muted-foreground truncate">{job.company}</p>
+                      <ApplyMethodBadge method={job.apply_method} url={job.job_url} />
+                    </div>
                   </div>
                   {job.match_score != null && <ScoreBadge score={job.match_score} />}
                 </div>
@@ -162,7 +255,7 @@ export default function AIApplyQueueSection() {
                   onClick={() => handleApply(job)}
                   disabled={applying === job.id}
                 >
-                  {applying === job.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <><ExternalLink className="h-3 w-3 mr-1" /> Apply</>}
+                  {applying === job.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <><Zap className="h-3 w-3 mr-1" /> Apply</>}
                 </Button>
                 <Button
                   size="icon"
@@ -197,9 +290,10 @@ export default function AIApplyQueueSection() {
               <Sparkles className="h-4 w-4 text-primary" />
               {selected?.job_title} at {selected?.company}
             </DialogTitle>
-            <DialogDescription className="flex items-center gap-2 text-xs">
+            <DialogDescription className="flex items-center gap-2 text-xs flex-wrap">
               {selected?.location && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{selected.location}</span>}
               {selected?.match_score != null && <ScoreBadge score={selected.match_score} />}
+              {selected && <ApplyMethodBadge method={selected.apply_method} url={selected.job_url} />}
             </DialogDescription>
           </DialogHeader>
 
@@ -207,6 +301,14 @@ export default function AIApplyQueueSection() {
             <div className="space-y-4">
               {selected.match_explanation && (
                 <p className="text-sm text-muted-foreground italic border-l-2 border-primary/30 pl-3">{selected.match_explanation}</p>
+              )}
+
+              {/* Apply method info */}
+              {detectMethodFromUrl(selected.job_url) !== "manual" && (
+                <div className="flex items-center gap-2 p-2 rounded-md bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 text-xs">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  This job can be auto-submitted via {detectMethodFromUrl(selected.job_url) === "greenhouse" ? "Greenhouse" : "Lever"} API
+                </div>
               )}
 
               {/* Tab switcher */}
@@ -264,7 +366,7 @@ export default function AIApplyQueueSection() {
                 >
                   {applying === selected.id
                     ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Processing...</>
-                    : <><CheckCircle2 className="h-4 w-4 mr-2" />Apply & Track</>}
+                    : <><Zap className="h-4 w-4 mr-2" />Auto-Apply & Track</>}
                 </Button>
                 <Button
                   variant="outline"
