@@ -88,30 +88,68 @@ Deno.serve(async (req) => {
       );
     }
 
-    const profile = await res.json();
-    console.log("Profile keys:", JSON.stringify(Object.keys(profile)));
+    const rawProfile = await res.json();
+    console.log("Profile keys:", JSON.stringify(Object.keys(rawProfile || {})));
 
-    // Map the single response to ResumeData
-    const experience = profile.position || profile.experiences || [];
+    const profile =
+      rawProfile &&
+      typeof rawProfile === "object" &&
+      "data" in rawProfile &&
+      rawProfile.data &&
+      typeof rawProfile.data === "object"
+        ? (rawProfile.data as Record<string, any>)
+        : (rawProfile as Record<string, any>);
+
+    console.log("Mapped profile data keys:", JSON.stringify(Object.keys(profile || {})));
+
+    const experience =
+      profile.position ||
+      profile.positions ||
+      profile.experiences ||
+      profile.experience ||
+      [];
     const education = profile.educations || profile.education || [];
-    const skills = profile.skills || [];
+    const skills = profile.skills || profile.skill || [];
+
+    const fullName =
+      profile.full_name ||
+      profile.fullName ||
+      profile.name ||
+      [profile.first_name || profile.firstName, profile.last_name || profile.lastName]
+        .filter(Boolean)
+        .join(" ")
+        .trim() ||
+      "";
 
     const resumeData = {
       personalInfo: {
-        fullName: profile.full_name || profile.fullName || "",
-        email: profile.email || "",
-        location: [profile.city, profile.state, profile.country].filter(Boolean).join(", ") || profile.location || "",
+        fullName,
+        email: profile.email || profile.email_address || "",
+        location:
+          [profile.city, profile.state, profile.country].filter(Boolean).join(", ") ||
+          (typeof profile.location === "string"
+            ? profile.location
+            : [
+                profile.location?.city,
+                profile.location?.state,
+                profile.location?.country,
+              ]
+                .filter(Boolean)
+                .join(", ")) ||
+          "",
         linkedin: linkedinUrl,
       },
-      summary: profile.about || profile.summary || profile.headline || "",
+      summary: profile.about || profile.summary || profile.headline || profile.bio || "",
       skills: Array.isArray(skills)
-        ? skills.map((s: any) => (typeof s === "string" ? s : s.name || s.title || "")).filter(Boolean)
+        ? skills
+            .map((s: any) => (typeof s === "string" ? s : s.name || s.title || s.skill || ""))
+            .filter(Boolean)
         : [],
       experience: Array.isArray(experience)
         ? experience.map((pos: any) => ({
-            title: pos.title || pos.position || "",
+            title: pos.title || pos.position || pos.role || "",
             company: pos.company || pos.companyName || pos.company_name || "",
-            description: pos.description || "",
+            description: pos.description || pos.summary || "",
             startDate: pos.start || pos.startDate || pos.start_date || "",
             endDate: pos.end || pos.endDate || pos.end_date || "Present",
             bullets: [],
@@ -119,8 +157,14 @@ Deno.serve(async (req) => {
         : [],
       education: Array.isArray(education)
         ? education.map((edu: any) => ({
-            degree: edu.degree || edu.degreeName || edu.degree_name ||
-              [edu.degree_name, edu.field_of_study || edu.fieldOfStudy].filter(Boolean).join(" in ") || "",
+            degree:
+              edu.degree ||
+              edu.degreeName ||
+              edu.degree_name ||
+              [edu.degree_name, edu.field_of_study || edu.fieldOfStudy]
+                .filter(Boolean)
+                .join(" in ") ||
+              "",
             school: edu.school || edu.schoolName || edu.school_name || "",
             startDate: edu.start || edu.startDate || edu.start_date || "",
             endDate: edu.end || edu.endDate || edu.end_date || "",
