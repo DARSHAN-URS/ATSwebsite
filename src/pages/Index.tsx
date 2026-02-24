@@ -2,24 +2,30 @@ import { useState, useEffect, useRef, lazy, Suspense, useTransition, useCallback
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Briefcase, Users, Menu, X, Crown, Zap, XIcon, Eye, EyeOff, ChevronDown, Gift } from "lucide-react";
+import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Briefcase, Users, Menu, X, Crown, Zap, Eye, EyeOff, ChevronDown, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import logo from "@/assets/logo.png";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import dashboardPreview from "@/assets/dashboard-preview.png";
-import trustpilotLogo from "@/assets/trustpilot-logo.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { landingExtraTranslations } from "@/i18n/landingExtraTranslations";
 import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
+
+// Lazy-load heavy components only when needed
+const Dialog = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.Dialog })));
+const DialogContent = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.DialogContent })));
+const DialogHeader = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.DialogHeader })));
+const DialogTitle = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.DialogTitle })));
+const Tabs = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.Tabs })));
+const TabsContent = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.TabsContent })));
+const TabsList = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.TabsList })));
+const TabsTrigger = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.TabsTrigger })));
 
 // Lazy-load heavy template components (pulls in jsPDF & canvas only when dropdown is opened)
 const TemplateDropdownContent = lazy(() => import("@/components/landing/TemplateDropdownContent"));
@@ -127,7 +133,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:invert dark:brightness-200" width={64} height={64} src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" />
+            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:invert dark:brightness-200" width={64} height={64} src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" fetchPriority="high" />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <div className="relative group">
@@ -339,7 +345,7 @@ const Index = () => {
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-xl border border-border/60 shadow-2xl shadow-foreground/5">
-              <img src={dashboardPreview} alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" width={1200} height={675} />
+              <img src="/lovable-uploads/ddb04219-2bf9-456b-b8b2-3eb3093b16e5.png" alt="ATS Pro Resume Builder dashboard" className="w-full" loading="lazy" decoding="async" width={1200} height={675} />
             </div>
           </div>
         </div>
@@ -611,7 +617,7 @@ const Index = () => {
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             </div>
-            <img src={trustpilotLogo} alt="Trustpilot" className="h-8 md:h-10" />
+            <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="Trustpilot" className="h-8 md:h-10" loading="lazy" />
             <p className="text-sm text-muted-foreground group-hover:text-foreground transition">Rated Excellent — <span className="underline">Read our reviews on Trustpilot</span></p>
           </a>
         </div>
@@ -622,7 +628,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <img src={logo} alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} />
+              <img src={logo} alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} loading="lazy" />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>
@@ -787,7 +793,8 @@ const Index = () => {
         }} />
 
 
-      {/* Auth Dialog */}
+      {/* Auth Dialog — only mount when opened to reduce DOM nodes */}
+      {(authOpen || forgotOpen) && <Suspense fallback={null}>
       <Dialog open={authOpen} onOpenChange={setAuthOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -936,6 +943,7 @@ const Index = () => {
           </form>
         </DialogContent>
       </Dialog>
+      </Suspense>}
     </div>);
 
 };
