@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle, FileText, BarChart3, Sparkles, Target } from "
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import SEOHead from "@/components/SEOHead";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { seoTranslations } from "@/i18n/seoTranslations";
 
