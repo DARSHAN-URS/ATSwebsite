@@ -84,11 +84,10 @@ export default function Resumes() {
 
   const AI_APPLY_STEPS = [
     { label: "Creating campaign", detail: "Setting up your AI Apply campaign record…" },
-    { label: "Searching 50+ job boards", detail: "Scanning JSearch across 5 pages of live listings in parallel…" },
-    { label: "Batch AI scoring", detail: "AI scoring all jobs in batches of 10 for accuracy…" },
-    { label: "Filtering top matches", detail: `Keeping only jobs above your minimum match score…` },
-    { label: "Tailoring resume & cover letter", detail: "Rewriting summary, skills and writing cover letters per role…" },
-    { label: "Saving to campaign queue", detail: "Packaging tailored applications into your dashboard…" },
+    { label: "Searching job boards", detail: "Scanning live listings for matching roles…" },
+    { label: "AI scoring matches", detail: "AI is scoring and ranking jobs for your profile…" },
+    { label: "Tailoring applications", detail: "Rewriting summary, skills and writing cover letters…" },
+    { label: "Saving to queue", detail: "Packaging tailored applications into your dashboard…" },
   ];
 
   const [aiApplyJobType, setAiApplyJobType] = useState("");
@@ -109,8 +108,8 @@ export default function Resumes() {
     setAiApplyStep(0);
     setAiApplyCampaignResult(null);
 
-    // Animate through steps — step timings scaled to ~45s total
-    const stepTimings = [0, 3000, 10000, 20000, 28000, 38000];
+    // Animate through steps — scaled to ~25s total
+    const stepTimings = [0, 2000, 6000, 14000, 20000];
     const timers: ReturnType<typeof setTimeout>[] = [];
     stepTimings.forEach((delay, i) => {
       timers.push(setTimeout(() => setAiApplyStep(i), delay));
@@ -143,9 +142,10 @@ export default function Resumes() {
         });
       } else {
         setAiApplyCampaignResult({ queued: data.queued, total_found: data.total_found, total_scored: data.total_scored });
+        const partialMsg = data.partial ? ` (${data.total_scored} of ${data.total_found} scored before timeout)` : "";
         toast({
           title: `Campaign complete! 🚀`,
-          description: `${data.queued} tailored applications queued from ${data.total_found} jobs found.`,
+          description: `${data.queued} tailored applications queued from ${data.total_found} jobs found.${partialMsg}`,
         });
       }
     } catch (err: any) {

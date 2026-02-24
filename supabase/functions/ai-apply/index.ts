@@ -32,6 +32,13 @@ interface AIScoreResult {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+const FUNCTION_START = Date.now();
+const TIMEOUT_MS = 45_000; // 45s guard — stop before edge function hard limit
+
+function isTimedOut(): boolean {
+  return Date.now() - FUNCTION_START > TIMEOUT_MS;
+}
+
 function normalizeJob(j: any): NormalizedJob {
   return {
     job_title: j.job_title || "Untitled",
@@ -40,7 +47,7 @@ function normalizeJob(j: any): NormalizedJob {
       ? `${j.job_city}, ${j.job_state}`
       : j.job_country || "Not specified",
     job_type: j.job_is_remote ? "Remote" : "On-site",
-    description: (j.job_description || "").slice(0, 800),
+    description: (j.job_description || "").slice(0, 600),
     url: j.job_apply_link || j.job_google_link || "#",
   };
 }
@@ -63,18 +70,28 @@ async function searchJobs(
   }
   if (jobType === "remote") params.work_from_home = "true";
 
-  const res = await fetch(
-    `https://jsearch.p.rapidapi.com/search?${new URLSearchParams(params)}`,
-    {
-      headers: {
-        "x-rapidapi-host": "jsearch.p.rapidapi.com",
-        "x-rapidapi-key": apiKey,
-      },
-    }
-  );
-  if (!res.ok) return [];
-  const data = await res.json();
-  return (data.data || []).map(normalizeJob);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
+
+  try {
+    const res = await fetch(
+      `https://jsearch.p.rapidapi.com/search?${new URLSearchParams(params)}`,
+      {
+        headers: {
+          "x-rapidapi-host": "jsearch.p.rapidapi.com",
+          "x-rapidapi-key": apiKey,
+        },
+        signal: controller.signal,
+      }
+    );
+    clearTimeout(timeout);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.data || []).map(normalizeJob);
+  } catch {
+    clearTimeout(timeout);
+    return [];
+  }
 }
 
 async function scoreBatch(
@@ -101,69 +118,84 @@ Resume:
 - Experience: ${experience.slice(0, 2).map((e: any) => `${e.title} at ${e.company}`).join("; ")}
 
 Jobs:
-${jobs.map((j, i) => `[${i}] ${j.job_title} at ${j.company} (${j.location})\n${j.description.slice(0, 300)}`).join("\n\n")}`;
+${jobs.map((j, i) => `[${i}] ${j.job_title} at ${j.company} (${j.location})\n${j.description.slice(0, 200)}`).join("\n\n")}`;
 
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${lovableKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "google/gemini-3-flash-preview",
-      messages: [
-        { role: "system", content: "You are a career coach. Return structured data only." },
-        { role: "user", content: prompt },
-      ],
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: "return_ai_apply_results",
-            description: "Return AI apply results for all jobs",
-            parameters: {
-              type: "object",
-              properties: {
-                results: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      index: { type: "number" },
-                      match_score: { type: "number" },
-                      match_explanation: { type: "string" },
-                      tailored_summary: { type: "string" },
-                      tailored_skills: { type: "array", items: { type: "string" } },
-                      cover_letter_opening: { type: "string" },
-                      cover_letter_body: { type: "string" },
-                      cover_letter_closing: { type: "string" },
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30_000); // 30s per batch max
+
+  try {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "Content-Type": "application/json",
+      },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        messages: [
+          { role: "system", content: "You are a career coach. Return structured data only." },
+          { role: "user", content: prompt },
+        ],
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "return_ai_apply_results",
+              description: "Return AI apply results for all jobs",
+              parameters: {
+                type: "object",
+                properties: {
+                  results: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        index: { type: "number" },
+                        match_score: { type: "number" },
+                        match_explanation: { type: "string" },
+                        tailored_summary: { type: "string" },
+                        tailored_skills: { type: "array", items: { type: "string" } },
+                        cover_letter_opening: { type: "string" },
+                        cover_letter_body: { type: "string" },
+                        cover_letter_closing: { type: "string" },
+                      },
+                      required: ["index", "match_score", "match_explanation", "tailored_summary", "tailored_skills", "cover_letter_opening", "cover_letter_body", "cover_letter_closing"],
+                      additionalProperties: false,
                     },
-                    required: ["index", "match_score", "match_explanation", "tailored_summary", "tailored_skills", "cover_letter_opening", "cover_letter_body", "cover_letter_closing"],
-                    additionalProperties: false,
                   },
                 },
+                required: ["results"],
+                additionalProperties: false,
               },
-              required: ["results"],
-              additionalProperties: false,
             },
           },
-        },
-      ],
-      tool_choice: { type: "function", function: { name: "return_ai_apply_results" } },
-    }),
-  });
+        ],
+        tool_choice: { type: "function", function: { name: "return_ai_apply_results" } },
+      }),
+    });
 
-  if (!res.ok) {
-    if (res.status === 429) throw new Error("rate_limit");
-    if (res.status === 402) throw new Error("credits_exhausted");
-    throw new Error(`ai_error_${res.status}`);
+    clearTimeout(timeout);
+
+    if (!res.ok) {
+      if (res.status === 429) throw new Error("rate_limit");
+      if (res.status === 402) throw new Error("credits_exhausted");
+      throw new Error(`ai_error_${res.status}`);
+    }
+
+    const aiData = await res.json();
+    const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
+    if (!toolCall) return [];
+    const { results } = JSON.parse(toolCall.function.arguments);
+    return results || [];
+  } catch (e: any) {
+    clearTimeout(timeout);
+    if (e.name === "AbortError") {
+      console.error("AI batch timed out after 30s");
+      return [];
+    }
+    throw e;
   }
-
-  const aiData = await res.json();
-  const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
-  if (!toolCall) return [];
-  const { results } = JSON.parse(toolCall.function.arguments);
-  return results || [];
 }
 
 // ─── Main handler ─────────────────────────────────────────────────────────────
@@ -227,8 +259,8 @@ serve(async (req) => {
     const latestTitle = experience[0]?.title || resume_title || "";
     const searchQuery = latestTitle || skills.slice(0, 3).join(" ") || "software engineer";
 
-    // ── 3. Search multiple pages in parallel (up to 50 jobs) ──────────────
-    const pagePromises = [1, 2, 3, 4, 5].map((page) =>
+    // ── 3. Search 2 pages in parallel (max ~20 unique jobs) ────────────────
+    const pagePromises = [1, 2].map((page) =>
       searchJobs(searchQuery, location, job_type, JSEARCH_API_KEY, page).catch(() => [])
     );
     const pageResults = await Promise.all(pagePromises);
@@ -260,13 +292,20 @@ serve(async (req) => {
       jobs_searched: allJobs.length,
     }).eq("id", campaignId);
 
-    // ── 4. AI score in batches of 10 ──────────────────────────────────────
+    // ── 4. AI score in batches of 10, with timeout guard ──────────────────
     const BATCH_SIZE = 10;
     const allScored: AIScoreResult[] = [];
+    let timedOut = false;
 
     for (let i = 0; i < allJobs.length; i += BATCH_SIZE) {
+      // Check timeout before starting a new batch
+      if (isTimedOut()) {
+        console.log(`Timeout guard triggered after scoring ${allScored.length} jobs. Returning partial results.`);
+        timedOut = true;
+        break;
+      }
+
       const batch = allJobs.slice(i, i + BATCH_SIZE);
-      // Re-index batch for AI (0-based within batch)
       try {
         const batchResults = await scoreBatch(batch, resume_title, resume_data, LOVABLE_API_KEY);
         // Map batch indices back to global indices
@@ -350,6 +389,7 @@ serve(async (req) => {
       total_found: allJobs.length,
       total_scored: allScored.length,
       campaign_id: campaignId,
+      partial: timedOut,
     });
 
   } catch (e: any) {
