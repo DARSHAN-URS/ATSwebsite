@@ -178,7 +178,7 @@ function JobSeekerDashboard() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8">
       <SEOHead title="Dashboard — ATS Pro Resume Builder" description="Manage your resumes, cover letters, and job applications." noindex />
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t.dashboard.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight font-display">{t.dashboard.title}</h1>
         <p className="text-muted-foreground mt-1 text-sm">{t.dashboard.welcome}</p>
       </div>
 
@@ -319,7 +319,7 @@ function RecruiterDashboard() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8">
       <SEOHead title="Recruiter Dashboard — ATS Pro" description="Manage your job posts and candidates." noindex />
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t.recruiterDashboard.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight font-display">{t.recruiterDashboard.title}</h1>
         <p className="text-muted-foreground mt-1 text-sm">{t.recruiterDashboard.welcome}</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">

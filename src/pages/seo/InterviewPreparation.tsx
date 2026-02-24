@@ -34,8 +34,8 @@ export default function InterviewPreparation() {
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 font-mono">{t.interview.tag}</p>
-          <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight">{t.interview.h1}</h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.interview.tag}</p>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">{t.interview.h1}</h1>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{t.interview.subtitle}</p>
           <Button size="lg" className="gap-2 mt-8" asChild><Link to="/">{t.interview.ctaBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>
@@ -43,12 +43,12 @@ export default function InterviewPreparation() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-5xl px-4">
-          <h2 className="font-serif text-2xl font-bold text-center mb-10">{t.interview.featuresH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold text-center mb-10">{t.interview.featuresH2}</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {t.interview.features.map((f, i) => (
-              <div key={i} className="rounded-xl border border-border/60 bg-card p-6">
-                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">{featIcons[i]}</div>
-                <h3 className="text-sm font-semibold mb-1">{f.title}</h3>
+              <div key={i} className="rounded-2xl border border-border/60 bg-card p-6 bounce-hover">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{featIcons[i]}</div>
+                <h3 className="text-sm font-bold mb-1">{f.title}</h3>
                 <p className="text-sm text-muted-foreground">{f.desc}</p>
               </div>
             ))}
@@ -58,11 +58,11 @@ export default function InterviewPreparation() {
 
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.interview.howH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.interview.howH2}</h2>
           <div className="space-y-4 text-sm text-muted-foreground">
             {t.interview.howSections.map((s, i) => (
               <div key={i}>
-                <h3 className="text-lg font-semibold text-foreground">{s.heading}</h3>
+                <h3 className="text-lg font-bold text-foreground">{s.heading}</h3>
                 {s.text && <p>{s.text}</p>}
                 {i === 3 && (
                   <ul className="space-y-2 mt-2">
@@ -79,7 +79,7 @@ export default function InterviewPreparation() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-3xl px-4">
-          <h2 className="font-serif text-2xl font-bold text-center mb-8">{t.interview.faqH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold text-center mb-8">{t.interview.faqH2}</h2>
           <Accordion type="single" collapsible className="w-full">
             {t.interview.faqs.map((item, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
@@ -93,7 +93,7 @@ export default function InterviewPreparation() {
 
       <section className="py-12">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="font-serif text-xl font-bold mb-6">{t.interview.linksH2}</h2>
+          <h2 className="font-display text-xl font-extrabold mb-6">{t.interview.linksH2}</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {["/ats-resume-builder", "/resume-templates", "/software-engineer-resume", "/blog"].map((href, i) => (
               <Button key={href} variant="outline" size="sm" asChild><Link to={href}>{t.interview.linkLabels[i]}</Link></Button>
@@ -104,7 +104,7 @@ export default function InterviewPreparation() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-12">
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="font-serif text-2xl font-bold mb-4">{t.interview.finalH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-4">{t.interview.finalH2}</h2>
           <p className="text-muted-foreground mb-6">{t.interview.finalSub}</p>
           <Button size="lg" className="gap-2" asChild><Link to="/">{t.interview.finalBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>

@@ -33,19 +33,19 @@ export default function ResumeDownloadFormats() {
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 font-mono">{t.download.tag}</p>
-          <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight">{t.download.h1}</h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.download.tag}</p>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">{t.download.h1}</h1>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{t.download.subtitle}</p>
         </div>
       </section>
 
       <section className="border-t border-border/60 py-16">
         <div className="mx-auto max-w-5xl px-4">
-          <h2 className="font-serif text-2xl font-bold text-center mb-10">{t.download.formatsH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold text-center mb-10">{t.download.formatsH2}</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {t.download.formats.map((f, i) => (
-              <div key={i} className="rounded-xl border border-border/60 bg-card p-6 text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">{fmtIcons[i]}</div>
+              <div key={i} className="rounded-2xl border border-border/60 bg-card p-6 text-center bounce-hover">
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">{fmtIcons[i]}</div>
                 <h3 className="text-base font-bold mb-1">{f.title}</h3>
                 <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{f.best}</span>
                 <p className="text-sm text-muted-foreground mt-3">{f.desc}</p>
@@ -57,7 +57,7 @@ export default function ResumeDownloadFormats() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.download.whichH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.download.whichH2}</h2>
           <div className="space-y-4 text-sm text-muted-foreground">
             {t.download.whichItems.map((item, i) => (
               <p key={i}>{item}</p>
@@ -68,7 +68,7 @@ export default function ResumeDownloadFormats() {
 
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="font-serif text-2xl font-bold mb-6">{t.download.compatH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-6">{t.download.compatH2}</h2>
           <ul className="space-y-3">
             {t.download.compatList.map((item, i) => (
               <li key={i} className="flex gap-3 text-sm text-muted-foreground">
@@ -82,7 +82,7 @@ export default function ResumeDownloadFormats() {
 
       <section className="border-t border-border/60 py-12">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="font-serif text-xl font-bold mb-6">{t.download.linksH2}</h2>
+          <h2 className="font-display text-xl font-extrabold mb-6">{t.download.linksH2}</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {["/ats-resume-builder", "/resume-templates", "/interview-preparation", "/blog"].map((href, i) => (
               <Button key={href} variant="outline" size="sm" asChild><Link to={href}>{t.download.linkLabels[i]}</Link></Button>
@@ -93,7 +93,7 @@ export default function ResumeDownloadFormats() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-12">
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="font-serif text-2xl font-bold mb-4">{t.download.finalH2}</h2>
+          <h2 className="font-display text-2xl font-extrabold mb-4">{t.download.finalH2}</h2>
           <p className="text-muted-foreground mb-6">{t.download.finalSub}</p>
           <Button size="lg" className="gap-2" asChild><Link to="/">{t.download.finalBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>
