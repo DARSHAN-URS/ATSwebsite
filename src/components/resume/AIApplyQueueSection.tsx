@@ -217,30 +217,28 @@ export default function AIApplyQueueSection() {
           {visibleQueue.map((job) => (
             <div
               key={job.id}
-              className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:shadow-sm transition-shadow"
+              className="flex flex-col gap-2 p-3 rounded-lg border bg-card hover:shadow-sm transition-shadow"
             >
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="font-medium text-sm truncate">{job.job_title}</p>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <p className="text-xs text-muted-foreground truncate">{job.company}</p>
-                      <ApplyMethodBadge method={job.apply_method} url={job.job_url} />
-                    </div>
-                  </div>
+                  <p className="font-medium text-sm">{job.job_title}</p>
                   {job.match_score != null && <ScoreBadge score={job.match_score} />}
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                  <p className="text-xs text-muted-foreground">{job.company}</p>
+                  <ApplyMethodBadge method={job.apply_method} url={job.job_url} />
                 </div>
                 {job.location && (
                   <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                    <MapPin className="h-3 w-3" /> {job.location}
+                    <MapPin className="h-3 w-3 shrink-0" /> {job.location}
                     {job.job_type && <span className="ml-2">· {job.job_type}</span>}
                   </p>
                 )}
                 {job.match_explanation && (
-                  <p className="text-xs text-muted-foreground mt-1 line-clamp-1 italic">{job.match_explanation}</p>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2 italic">{job.match_explanation}</p>
                 )}
               </div>
-              <div className="flex items-center gap-1 shrink-0">
+              <div className="flex items-center gap-1.5">
                 <Button
                   size="sm"
                   variant="outline"
@@ -260,7 +258,7 @@ export default function AIApplyQueueSection() {
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                  className="h-7 w-7 text-muted-foreground hover:text-destructive ml-auto"
                   onClick={() => handleDismiss(job.id)}
                 >
                   <X className="h-3.5 w-3.5" />
