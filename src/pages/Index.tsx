@@ -17,15 +17,8 @@ import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { landingExtraTranslations } from "@/i18n/landingExtraTranslations";
 import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
 
-// Lazy-load heavy components only when needed
-const Dialog = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.Dialog })));
-const DialogContent = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.DialogContent })));
-const DialogHeader = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.DialogHeader })));
-const DialogTitle = lazy(() => import("@/components/ui/dialog").then(m => ({ default: m.DialogTitle })));
-const Tabs = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.Tabs })));
-const TabsContent = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.TabsContent })));
-const TabsList = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.TabsList })));
-const TabsTrigger = lazy(() => import("@/components/ui/tabs").then(m => ({ default: m.TabsTrigger })));
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Lazy-load heavy template components (pulls in jsPDF & canvas only when dropdown is opened)
 const TemplateDropdownContent = lazy(() => import("@/components/landing/TemplateDropdownContent"));
@@ -789,7 +782,7 @@ const Index = () => {
 
 
       {/* Auth Dialog — only mount when opened to reduce DOM nodes */}
-      {(authOpen || forgotOpen) && <Suspense fallback={null}>
+      {(authOpen || forgotOpen) && <>
       <Dialog open={authOpen} onOpenChange={setAuthOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -938,7 +931,7 @@ const Index = () => {
           </form>
         </DialogContent>
       </Dialog>
-      </Suspense>}
+      </>}
     </div>);
 
 };
