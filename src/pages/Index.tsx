@@ -5,7 +5,6 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { ArrowRight, Upload, BarChart3, Sparkles, LayoutTemplate, AlertTriangle, XCircle, FileWarning, CheckCircle, Star, Briefcase, Users, Menu, X, Crown, Zap, Eye, EyeOff, ChevronDown, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import logo from "@/assets/logo.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
@@ -605,7 +604,7 @@ const Index = () => {
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               <svg className="h-8 w-8 text-[#00b67a]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             </div>
-            <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="Trustpilot" className="h-8 md:h-10" loading="lazy" />
+            <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="Trustpilot" className="h-8 md:h-10" width={120} height={40} loading="lazy" decoding="async" />
             <p className="text-sm text-muted-foreground group-hover:text-foreground transition">Rated Excellent — <span className="underline">Read our reviews on Trustpilot</span></p>
           </a>
         </div>
@@ -616,7 +615,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <img src={logo} alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} loading="lazy" />
+              <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} loading="lazy" decoding="async" />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>
@@ -787,7 +786,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src={logo} alt="ATS Pro Resume Builder" className="h-16 dark:invert dark:brightness-200" width={64} height={64} />
+              <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="ATS Pro Resume Builder" className="h-16 dark:invert dark:brightness-200" width={64} height={64} />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>

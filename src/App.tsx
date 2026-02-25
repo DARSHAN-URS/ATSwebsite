@@ -44,7 +44,7 @@ const BlogArticlePage = lazy(() =>
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
-const ProRoute = lazy(() => import("@/components/ProRoute"));
+import ProRoute from "@/components/ProRoute";
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 
 const queryClient = new QueryClient();
