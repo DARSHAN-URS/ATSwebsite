@@ -10,19 +10,14 @@ import { SEED_ARTICLES } from "@/pages/seo/BlogArticles";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
 
-import blogHero from "@/assets/blog-hero.jpg";
-import blogResumeTips from "@/assets/blog-resume-tips.jpg";
-import blogInterviewPrep from "@/assets/blog-interview-prep.jpg";
-import blogCareerGrowth from "@/assets/blog-career-growth.jpg";
-import blogJobSearch from "@/assets/blog-job-search.jpg";
-import blogSalary from "@/assets/blog-salary.jpg";
+const blogHero = "/images/blog-hero.jpg";
 
 const CATEGORY_IMAGES: Record<string, string> = {
-  "Resume Tips": blogResumeTips,
-  "Interview Prep": blogInterviewPrep,
-  "Career Growth": blogCareerGrowth,
-  "Job Search": blogJobSearch,
-  "Salary": blogSalary,
+  "Resume Tips": "/images/blog-resume-tips.jpg",
+  "Interview Prep": "/images/blog-interview-prep.jpg",
+  "Career Growth": "/images/blog-career-growth.jpg",
+  "Job Search": "/images/blog-job-search.jpg",
+  "Salary": "/images/blog-salary.jpg",
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -34,7 +29,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 function getCategoryImage(category: string): string {
-  return CATEGORY_IMAGES[category] || blogResumeTips;
+  return CATEGORY_IMAGES[category] || "/images/blog-resume-tips.jpg";
 }
 
 const ALL_CATEGORIES = ["All", ...Array.from(new Set(SEED_ARTICLES.map((a) => a.category)))];
