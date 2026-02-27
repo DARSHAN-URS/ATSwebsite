@@ -1,49 +1,37 @@
 project_id = "hkgevmagiqcbndvkbekk"
 
-[functions.generate-cover-letter]
-verify_jwt = false
-
-[functions.resume-assist]
-verify_jwt = false
-
-[functions.search-jobs]
-verify_jwt = false
-
-[functions.tailor-resume]
-verify_jwt = false
-
-[functions.grade-resume]
-verify_jwt = false
-
-[functions.parse-resume]
-verify_jwt = false
-
-[functions.sync-linkedin]
-verify_jwt = false
-
-[functions.razorpay-order]
-verify_jwt = false
-
-[functions.razorpay-verify]
-verify_jwt = false
-
-[functions.send-email]
-verify_jwt = false
-
-[functions.interview-prep]
-verify_jwt = false
-
-[functions.export-resume]
-verify_jwt = false
-
-[functions.ai-apply]
-verify_jwt = false
-
-[functions.send-outreach-email]
-verify_jwt = false
-
-[functions.generate-outreach-email]
-verify_jwt = false
-
-[functions.auto-apply]
-verify_jwt = false
+[functions]
+  [functions.ai-apply]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.auto-apply]
+    verify_jwt = false
+  [functions.export-resume]
+    verify_jwt = false
+  [functions.generate-cover-letter]
+    verify_jwt = false
+  [functions.generate-outreach-email]
+    verify_jwt = false
+  [functions.grade-resume]
+    verify_jwt = false
+  [functions.interview-prep]
+    verify_jwt = false
+  [functions.parse-resume]
+    verify_jwt = false
+  [functions.razorpay-order]
+    verify_jwt = false
+  [functions.razorpay-verify]
+    verify_jwt = false
+  [functions.resume-assist]
+    verify_jwt = false
+  [functions.search-jobs]
+    verify_jwt = false
+  [functions.send-email]
+    verify_jwt = false
+  [functions.send-outreach-email]
+    verify_jwt = false
+  [functions.sync-linkedin]
+    verify_jwt = false
+  [functions.tailor-resume]
+    verify_jwt = false
