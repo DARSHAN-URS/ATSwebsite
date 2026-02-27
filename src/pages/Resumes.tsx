@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,10 +39,11 @@ export default function Resumes() {
   const { toast } = useToast();
   const { t } = useLanguage();
   const { isPro } = useSubscription();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(searchParams.get("edit"));
 
   // Form state
   const [title, setTitle] = useState("");
@@ -81,6 +83,54 @@ export default function Resumes() {
   };
 
   useEffect(() => { if (user) fetchResumes(); }, [user]);
+
+  // Sync editingId to URL search params
+  useEffect(() => {
+    const currentEdit = searchParams.get("edit");
+    if (editingId && currentEdit !== editingId) {
+      setSearchParams({ edit: editingId }, { replace: true });
+    } else if (!editingId && currentEdit) {
+      setSearchParams({}, { replace: true });
+    }
+  }, [editingId]);
+
+  // Restore editor state when navigating back with ?edit=id
+  useEffect(() => {
+    const editId = searchParams.get("edit");
+    if (editId && !editingId && resumes.length > 0) {
+      const resume = resumes.find((r) => r.id === editId);
+      if (resume) openEditor(resume);
+    }
+  }, [resumes]);
+
+  // Auto-save with debounce
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSavedRef = useRef<string>("");
+
+  const autoSave = useCallback(async () => {
+    if (!editingId) return;
+    const dataToSave = { ...resumeData, templateId: selectedTemplate };
+    const serialized = JSON.stringify({ title, data: dataToSave });
+    if (serialized === lastSavedRef.current) return; // No changes
+    lastSavedRef.current = serialized;
+    try {
+      await supabase.from("resumes").update({
+        title,
+        resume_data: dataToSave as any,
+      }).eq("id", editingId);
+    } catch (err) {
+      console.error("Auto-save failed:", err);
+    }
+  }, [editingId, title, resumeData, selectedTemplate]);
+
+  useEffect(() => {
+    if (!editingId) return;
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(autoSave, 2000);
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    };
+  }, [autoSave, editingId]);
 
   const AI_APPLY_STEPS = [
     { label: "Creating campaign", detail: "Setting up your AI Apply campaign record…" },
@@ -263,8 +313,9 @@ export default function Resumes() {
     setEditingId(resume.id);
     setTitle(resume.title);
     const data = resume.resume_data as any as ResumeData;
-    setSelectedTemplate((data?.templateId as TemplateId) || "classic");
-    setResumeData({
+    const template = (data?.templateId as TemplateId) || "classic";
+    setSelectedTemplate(template);
+    const rd: ResumeData = {
       personalInfo: data?.personalInfo || {},
       summary: data?.summary || "",
       skills: data?.skills || [],
@@ -278,7 +329,10 @@ export default function Resumes() {
       customSections: data?.customSections || [],
       languages: data?.languages || [],
       templateId: data?.templateId,
-    });
+    };
+    setResumeData(rd);
+    // Initialize last saved ref so auto-save doesn't trigger immediately
+    lastSavedRef.current = JSON.stringify({ title: resume.title, data: { ...rd, templateId: template } });
   };
 
   // AI helpers
@@ -532,7 +586,7 @@ export default function Resumes() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 gap-2">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => { setEditingId(null); resetForm(); }}>{t.common.back}</Button>
+            <Button variant="ghost" size="sm" onClick={() => { autoSave(); setEditingId(null); resetForm(); fetchResumes(); }}>{t.common.back}</Button>
             <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
           </div>
           <div className="flex flex-wrap gap-2">
