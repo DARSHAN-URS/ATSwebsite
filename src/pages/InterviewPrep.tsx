@@ -125,6 +125,8 @@ export default function InterviewPrep() {
     const decoder = new TextDecoder();
     let full = "";
     let buffer = "";
+    let lastUpdate = 0;
+    const UPDATE_INTERVAL = 120; // Throttle DOM updates to ~8fps to prevent shaking
 
     while (true) {
       const { done, value } = await reader.read();
@@ -144,18 +146,24 @@ export default function InterviewPrep() {
           const content = parsed.choices?.[0]?.delta?.content;
           if (content) {
             full += content;
-            setCurrentCoachText(full);
-            setMessages(prev => {
-              const last = prev[prev.length - 1];
-              if (last?.role === "assistant") {
-                return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: full } : m);
-              }
-              return [...prev, { role: "assistant", content: full }];
-            });
+            const now = Date.now();
+            if (now - lastUpdate >= UPDATE_INTERVAL) {
+              lastUpdate = now;
+              setCurrentCoachText(full);
+            }
           }
         } catch { /* partial */ }
       }
     }
+    // Final update with complete text
+    setCurrentCoachText(full);
+    setMessages(prev => {
+      const last = prev[prev.length - 1];
+      if (last?.role === "assistant") {
+        return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: full } : m);
+      }
+      return [...prev, { role: "assistant", content: full }];
+    });
     return full;
   }, [session]);
 
@@ -393,9 +401,21 @@ export default function InterviewPrep() {
           </div>
         </div>
         <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0 overflow-auto">
-          <Avatar className={cn("w-20 h-20 mb-4 transition-all duration-300", phase === "speaking" && "ring-4 ring-primary/30 animate-pulse", phase === "thinking" && "animate-pulse")}>
-            <AvatarFallback className={cn("text-xl font-bold transition-colors", phase === "speaking" ? "bg-primary/20 text-primary" : "bg-primary/10 text-muted-foreground")}>AC</AvatarFallback>
-          </Avatar>
+          <div className="relative flex items-center justify-center mb-4">
+            {/* Speaking rings — absolutely positioned, won't affect layout */}
+            {phase === "speaking" && (
+              <>
+                <span className="absolute w-24 h-24 rounded-full border-2 border-primary/30 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
+                <span className="absolute w-28 h-28 rounded-full border border-primary/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.5s_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
+              </>
+            )}
+            {phase === "thinking" && (
+              <span className="absolute w-24 h-24 rounded-full border-2 border-muted-foreground/20 animate-[spin_3s_linear_infinite] pointer-events-none border-t-transparent" style={{ willChange: "transform" }} />
+            )}
+            <Avatar className="w-20 h-20 relative z-10">
+              <AvatarFallback className={cn("text-xl font-bold transition-colors duration-300", phase === "speaking" ? "bg-primary/20 text-primary" : "bg-primary/10 text-muted-foreground")}>AC</AvatarFallback>
+            </Avatar>
+          </div>
           <p className="text-sm font-medium text-muted-foreground mb-3">{phaseLabel}</p>
           {questionCount > 0 && phase !== "summary" && <p className="text-xs text-muted-foreground/60 mb-4">Question {questionCount}</p>}
           {currentCoachText && (
@@ -422,15 +442,15 @@ export default function InterviewPrep() {
               <div className="relative flex items-center justify-center">
                 {isListening && (
                   <>
-                    <span className="absolute w-24 h-24 rounded-full border-2 border-destructive/40 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                    <span className="absolute w-20 h-20 rounded-full border-2 border-destructive/30 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_0.3s_infinite]" />
-                    <span className="absolute w-28 h-28 rounded-full border border-destructive/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.6s_infinite]" />
+                    <span className="absolute w-24 h-24 rounded-full border-2 border-destructive/40 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
+                    <span className="absolute w-20 h-20 rounded-full border-2 border-destructive/30 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_0.3s_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
+                    <span className="absolute w-28 h-28 rounded-full border border-destructive/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.6s_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
                   </>
                 )}
                 {phase === "speaking" && (
                   <>
-                    <span className="absolute w-24 h-24 rounded-full border-2 border-primary/30 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                    <span className="absolute w-28 h-28 rounded-full border border-primary/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.5s_infinite]" />
+                    <span className="absolute w-24 h-24 rounded-full border-2 border-primary/30 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
+                    <span className="absolute w-28 h-28 rounded-full border border-primary/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_0.5s_infinite] pointer-events-none" style={{ willChange: "transform, opacity" }} />
                   </>
                 )}
                 <button onClick={toggleListening} disabled={phase === "thinking"} className={cn("relative z-10 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg", isListening ? "bg-destructive text-destructive-foreground scale-110" : "bg-primary text-primary-foreground hover:scale-105 hover:shadow-xl", phase === "thinking" && "opacity-50 cursor-not-allowed")}>
