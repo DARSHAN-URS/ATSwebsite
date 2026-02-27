@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
@@ -43,7 +43,8 @@ export default function AccountSettings() {
   const [phone, setPhone] = useState(user?.user_metadata?.phone || "");
   const [location, setLocation] = useState(user?.user_metadata?.location || "");
   const [savingProfile, setSavingProfile] = useState(false);
-
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const photoInputRef = useRef<HTMLInputElement>(null);
   const [passwordDialog, setPasswordDialog] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -57,6 +58,30 @@ export default function AccountSettings() {
   const [cancelDialog, setCancelDialog] = useState(false);
 
   const avatarFallback = (name || displayName).charAt(0).toUpperCase();
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (photoInputRef.current) photoInputRef.current.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Please select an image file", variant: "destructive" });
+      return;
+    }
+    setUploadingPhoto(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user!.id}/avatar-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("resume-photos").upload(path, file, { upsert: true });
+      if (error) throw error;
+      const { data: urlData } = supabase.storage.from("resume-photos").getPublicUrl(path);
+      await supabase.auth.updateUser({ data: { avatar_url: urlData.publicUrl } });
+      toast({ title: "Photo updated!" });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
 
   const handleSaveProfile = async () => {
     setSavingProfile(true);
@@ -157,9 +182,11 @@ export default function AccountSettings() {
                 <AvatarImage src={user?.user_metadata?.avatar_url} alt={name} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-xl font-semibold">{avatarFallback}</AvatarFallback>
               </Avatar>
+              <input ref={photoInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
               <button
-                className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors"
-                onClick={() => toast({ title: ta.comingSoon, description: ta.photoComingSoon })}
+                className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors disabled:opacity-50"
+                onClick={() => photoInputRef.current?.click()}
+                disabled={uploadingPhoto}
               >
                 <Camera className="h-3 w-3" />
               </button>
