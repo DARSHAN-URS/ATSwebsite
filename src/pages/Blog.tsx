@@ -6,7 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar, Search, BookOpen, ArrowRight, Clock, ChevronRight } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import { SEED_ARTICLES } from "@/pages/seo/BlogArticles";
+import { SEED_ARTICLES as RAW_ARTICLES } from "@/pages/seo/BlogArticles";
+
+// Deduplicate by slug — keep first occurrence
+const SEED_ARTICLES = RAW_ARTICLES.filter(
+  (a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i
+);
 import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
 
@@ -206,8 +211,8 @@ export default function Blog() {
               </p>
             )}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {(showFeatured ? regularArticles : filteredArticles).map((article) => (
-                <Link key={article.slug} to={`/blog/${article.slug}`} className="group block">
+              {(showFeatured ? regularArticles : filteredArticles).map((article, idx) => (
+                <Link key={`${article.slug}-${idx}`} to={`/blog/${article.slug}`} className="group block">
                   <Card className="h-full overflow-hidden border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-card">
                     <div className="relative overflow-hidden h-44">
                       <img src={getCategoryImage(article.category)} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
