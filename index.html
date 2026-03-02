@@ -55,9 +55,6 @@
       fbq('init', '2089703951442961');
       fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=2089703951442961&ev=PageView&noscript=1"
-    /></noscript>
     <!-- End Meta Pixel Code -->
 
     <!-- Google Analytics (deferred to not block rendering) -->
@@ -77,8 +74,11 @@
   </head>
 
   <body>
+    <!-- Meta Pixel noscript fallback -->
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2089703951442961&ev=PageView&noscript=1"
+    /></noscript>
     <div id="root"></div>
-    <!-- User Timing: mark app shell start for INP/LCP profiling -->
     <script>if(window.performance&&performance.mark){performance.mark('app-shell-start');}</script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
