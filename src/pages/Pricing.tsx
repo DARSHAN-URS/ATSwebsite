@@ -1,26 +1,27 @@
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, Crown, Zap, Building2, Sparkles, Gift } from "lucide-react";
+import { ArrowLeft, Check, X, Crown, Sparkles, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useUserRole } from "@/hooks/useUserRole";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
+type Duration = "weekly" | "biweekly" | "monthly";
 
 export default function Pricing() {
   const { user } = useAuth();
   const { t, locale } = useLanguage();
   const tp = pricingExtraTranslations[locale];
-  const { isPro, loading: subLoading } = useSubscription();
+  const { isPro } = useSubscription();
   const navigate = useNavigate();
   const { toast } = useToast();
   const localCurrency = useLocalCurrency();
-  const { role } = useUserRole();
+  const [duration, setDuration] = useState<Duration>("monthly");
 
   const PAYMENT_LINKS: Record<string, string> = {
     pro_weekly: "https://nas.io/muzamils-business-2/zerolink/7day-pro",
@@ -28,102 +29,170 @@ export default function Pricing() {
     pro_monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro",
   };
 
-  const handleSelectPlan = (planId: string) => {
-    if (planId === "free") return;
+  const handleSelectPlan = () => {
     if (!user) {
       toast({ title: "Please sign in first", description: "You need an account to subscribe.", variant: "destructive" });
       navigate("/");
       return;
     }
-    const link = PAYMENT_LINKS[planId];
+    const link = PAYMENT_LINKS[`pro_${duration}`];
     if (link) window.open(link, "_blank");
   };
 
-  const PLANS = [
-    {
-      id: "free", name: t.pricingPage.freeName, period: "", description: t.pricingPage.freeDesc,
-      features: [t.pricingPage.oneResume, t.pricingPage.basicTemplates, t.pricingPage.pdfDownload, t.pricingPage.jobTrackerLimit],
-      icon: <Zap className="h-6 w-6" />, duration: "monthly" as const,
-    },
-    {
-      id: "pro_weekly", name: tp.weeklyPlan, period: tp.per7Days, description: tp.weeklyDesc,
-      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.emailOutreach, t.pricingPage.interviewPrep, t.pricingPage.companyDirectory, t.pricingPage.aiApply, t.pricingPage.smartJobSearch],
-      icon: <Crown className="h-6 w-6" />, duration: "weekly" as const,
-    },
-    {
-      id: "pro_biweekly", name: tp.biweeklyPlan, period: tp.per14Days, description: tp.biweeklyDesc,
-      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.emailOutreach, t.pricingPage.interviewPrep, t.pricingPage.companyDirectory, t.pricingPage.aiApply, t.pricingPage.smartJobSearch],
-      icon: <Crown className="h-6 w-6" />, duration: "biweekly" as const,
-    },
-    {
-      id: "pro_monthly", name: t.pricingPage.proName, period: t.pricingPage.perMonth, description: t.pricingPage.proDesc,
-      features: [t.pricingPage.unlimitedResumes, t.pricingPage.allPremiumTemplates, t.pricingPage.aiResumeGrading, t.pricingPage.aiResumeTailoring, t.pricingPage.coverLetterGen, t.pricingPage.unlimitedJobTracking, t.pricingPage.emailOutreach, t.pricingPage.interviewPrep, t.pricingPage.companyDirectory, t.pricingPage.aiApply, t.pricingPage.smartJobSearch, t.pricingPage.prioritySupport],
-      icon: <Crown className="h-6 w-6" />, popular: true, duration: "monthly" as const,
-    },
+  const durationTabs: { key: Duration; label: string }[] = [
+    { key: "weekly", label: tp.weeklyPlan },
+    { key: "biweekly", label: tp.biweeklyPlan },
+    { key: "monthly", label: t.pricingPage.proName },
+  ];
+
+  const savingsLabel = localCurrency.formatOriginalPrice(duration);
+
+  const freeFeatures = [
+    { text: t.pricingPage.oneResume, included: true },
+    { text: t.pricingPage.basicTemplates, included: true },
+    { text: t.pricingPage.pdfDownload, included: true },
+    { text: t.pricingPage.jobTrackerLimit, included: true },
+    { text: t.pricingPage.aiResumeGrading, included: false },
+    { text: t.pricingPage.aiResumeTailoring, included: false },
+    { text: t.pricingPage.coverLetterGen, included: false },
+    { text: t.pricingPage.emailOutreach, included: false },
+  ];
+
+  const proFeatures = [
+    { text: t.pricingPage.unlimitedResumes, included: true },
+    { text: t.pricingPage.allPremiumTemplates, included: true },
+    { text: t.pricingPage.aiResumeGrading, included: true },
+    { text: t.pricingPage.aiResumeTailoring, included: true },
+    { text: t.pricingPage.coverLetterGen, included: true },
+    { text: t.pricingPage.unlimitedJobTracking, included: true },
+    { text: t.pricingPage.emailOutreach, included: true },
+    { text: t.pricingPage.interviewPrep, included: true },
+    { text: t.pricingPage.companyDirectory, included: true },
+    { text: t.pricingPage.aiApply, included: true },
+    { text: t.pricingPage.smartJobSearch, included: true },
+    ...(duration === "monthly" ? [{ text: t.pricingPage.prioritySupport, included: true }] : []),
   ];
 
   return (
-    <div className="container mx-auto max-w-6xl py-10 px-4">
-      <SEOHead title="Pricing — ATS Pro Resume Builder" description="Compare free and pro plans for ATS Pro Resume Builder. AI resume grading, tailoring, cover letters, and unlimited resumes starting at ₹299/month." canonical="https://atsproresumebuilder.com/pricing" keywords="resume builder pricing, ATS pro plans, AI resume subscription" />
+    <div className="container mx-auto max-w-5xl py-10 px-4">
+      <SEOHead title="Pricing — ATS Pro Resume Builder" description="Compare free and pro plans for ATS Pro Resume Builder." canonical="https://atsproresumebuilder.com/pricing" keywords="resume builder pricing, ATS pro plans" />
+
       <div className="mb-6">
         <Button variant="ghost" size="sm" onClick={() => user ? navigate("/dashboard") : navigate("/")} className="gap-1.5">
           <ArrowLeft className="h-4 w-4" /> {tp.back}
         </Button>
       </div>
+
+      {/* Header */}
       <div className="text-center mb-10">
         <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
           <Sparkles className="h-4 w-4 text-primary" />
           <span className="text-sm font-semibold text-primary">{tp.launchOffer}</span>
         </div>
-        <h1 className="text-3xl font-extrabold tracking-tight font-display">{t.pricingPage.title}</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight font-display">{t.pricingPage.title}</h1>
         <p className="mt-2 text-muted-foreground">{t.pricingPage.subtitle}</p>
       </div>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
-        {PLANS.map((plan) => (
-          <Card key={plan.id} className={`relative overflow-hidden transition-all ${plan.popular ? "border-primary shadow-lg shadow-primary/10 scale-[1.02]" : "border-border"}`}>
-            {plan.popular && <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-bl-lg">{tp.bestValue}</div>}
-            {plan.id !== "free" && <div className="absolute top-0 left-0 bg-destructive text-destructive-foreground px-2.5 py-1 text-xs font-bold rounded-br-lg">{tp.launchBadge}</div>}
-            <CardHeader className="text-center pb-2">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">{plan.icon}</div>
-              <CardTitle className="text-lg">{plan.name}</CardTitle>
-              <CardDescription className="text-xs">{plan.description}</CardDescription>
-              <div className="mt-4">
-                {plan.id !== "free" && (
-                  <span className="text-base font-medium text-muted-foreground line-through mr-2">
-                    {localCurrency.formatOriginalPrice(plan.duration)}
-                  </span>
+
+      {/* Two-column pricing cards */}
+      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
+        {/* FREE PLAN */}
+        <div className="rounded-2xl border bg-card p-6 md:p-8 flex flex-col h-full">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Free Plan</p>
+          <div className="mb-1">
+            <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
+          </div>
+          <p className="text-xs text-muted-foreground mb-6">{t.pricingPage.freeDesc}</p>
+
+          <ul className="space-y-3 mb-8 flex-1">
+            {freeFeatures.map((f) => (
+              <li key={f.text} className="flex items-start gap-2.5 text-sm">
+                {f.included ? (
+                  <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                ) : (
+                  <X className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-0.5" />
                 )}
-                <span className="text-3xl font-extrabold">{plan.id === "free" ? localCurrency.formatPrice(0) : localCurrency.formatProPrice(plan.duration)}</span>
-                {plan.period && <span className="text-muted-foreground text-xs">{plan.period}</span>}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 mb-4">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2 text-xs"><CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />{feature}</li>
-                ))}
-              </ul>
-              {plan.id !== "free" && (
-                <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-2.5 mb-4">
-                  <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-xs font-semibold text-foreground">{tp.bonusFeatures}</p>
-                    <p className="text-[11px] text-muted-foreground">{tp.bonusDesc}</p>
-                  </div>
-                </div>
-              )}
-              <Button
-                className="w-full"
-                size="sm"
-                variant={plan.popular ? "default" : "outline"}
-                disabled={plan.id === "free" || (isPro && plan.id !== "free")}
-                onClick={() => handleSelectPlan(plan.id)}
+                <span className={cn(!f.included && "text-muted-foreground/50 line-through")}>{f.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Button variant="outline" className="w-full" disabled>
+            {t.pricingPage.currentPlan}
+          </Button>
+        </div>
+
+        {/* PRO PLAN */}
+        <div className="rounded-2xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col relative shadow-lg shadow-primary/10 h-full">
+          {/* Save badge */}
+          <div className="absolute -top-3 right-4 bg-destructive text-destructive-foreground px-3 py-1 text-xs font-bold rounded-full">
+            {tp.launchBadge}
+          </div>
+
+          <div className="flex items-center gap-2 mb-1">
+            <Crown className="h-5 w-5 text-primary" />
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">Pro Plan</p>
+          </div>
+
+          {/* Price */}
+          <div className="mb-1 flex items-baseline gap-2">
+            <span className="text-4xl font-extrabold">{localCurrency.formatProPrice(duration)}</span>
+            <span className="text-base text-muted-foreground line-through">{savingsLabel}</span>
+          </div>
+          <p className="text-xs text-muted-foreground mb-4">
+            {duration === "weekly" ? tp.per7Days : duration === "biweekly" ? tp.per14Days : t.pricingPage.perMonth}
+          </p>
+
+          {/* Duration tabs */}
+          <div className="flex rounded-lg bg-muted p-1 mb-6">
+            {durationTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setDuration(tab.key)}
+                className={cn(
+                  "flex-1 text-xs font-semibold py-2 px-2 rounded-md transition-all",
+                  duration === tab.key
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
               >
-                {isPro && plan.id !== "free" ? t.pricingPage.currentPlan : plan.id === "free" ? t.pricingPage.currentPlan : "Subscribe Now"}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Features */}
+          <ul className="space-y-3 mb-6 flex-1">
+            {proFeatures.map((f) => (
+              <li key={f.text} className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <span>{f.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Early adopter bonus */}
+          <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-3 mb-4">
+            <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs font-semibold text-foreground">{tp.bonusFeatures}</p>
+              <p className="text-[11px] text-muted-foreground">{tp.bonusDesc}</p>
+            </div>
+          </div>
+
+          <Button
+            className="w-full"
+            size="lg"
+            disabled={isPro}
+            onClick={handleSelectPlan}
+          >
+            {isPro ? t.pricingPage.currentPlan : "Subscribe Now"}
+          </Button>
+        </div>
+      </div>
+
+      {/* Payment methods */}
+      <div className="text-center mt-8">
+        <p className="text-xs text-muted-foreground">We accept: Visa, Mastercard, UPI, PayPal & more</p>
       </div>
     </div>
   );
