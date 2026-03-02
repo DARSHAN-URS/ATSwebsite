@@ -43,6 +43,7 @@ const Index = () => {
   const { t, locale } = useLanguage();
   const lx = landingExtraTranslations[locale];
   const [, startTransition] = useTransition();
+  const [pricingDuration, setPricingDuration] = useState<"weekly" | "biweekly" | "monthly">("monthly");
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -442,7 +443,7 @@ const Index = () => {
 
       {/* Pricing Section */}
       <section ref={pricingRef} className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
-          <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
               <Sparkles className="h-4 w-4 text-primary" />
@@ -450,120 +451,133 @@ const Index = () => {
             </div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{lx.pricingTag}</p>
             <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">{lx.pricingTitle}</h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-              {lx.pricingDesc}
-            </p>
+            <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">{lx.pricingDesc}</p>
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
-            {/* Free Plan */}
-            <div className="rounded-xl border border-border/60 bg-card p-5 flex flex-col">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Zap className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold">{lx.freePlan}</h3>
-                  <p className="text-[11px] text-muted-foreground">{lx.freeDesc}</p>
-                </div>
+          <div className="mt-12 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
+            {/* FREE PLAN */}
+            <div className="rounded-2xl border bg-card p-6 md:p-8 flex flex-col h-full">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lx.freePlan}</p>
+              <div className="mb-1">
+                <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
               </div>
-              <div className="mb-4">
-                <span className="text-3xl font-extrabold">{localCurrency.formatPrice(0)}</span>
-                <span className="text-xs text-muted-foreground ml-1">{lx.forever}</span>
-              </div>
-              <ul className="space-y-2 flex-1 mb-5">
+              <p className="text-xs text-muted-foreground mb-6">{lx.freeDesc}</p>
+
+              <ul className="space-y-3 mb-8 flex-1">
                 {[
-                { text: lx.createEditResumes, included: true },
-                { text: lx.allTemplates, included: true },
-                { text: lx.pdfDownloadUpload, included: true },
-                { text: lx.jobTrackerLimit, included: true },
-                { text: lx.browseJobBoard, included: true },
-                { text: lx.coverLetterGen, included: true }].
-                map((f) =>
-                <li key={f.text} className="flex items-center gap-2 text-[12px]">
-                    <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span className="text-foreground">{f.text}</span>
+                  { text: lx.createEditResumes, included: true },
+                  { text: lx.allTemplates, included: true },
+                  { text: lx.pdfDownloadUpload, included: true },
+                  { text: lx.jobTrackerLimit, included: true },
+                  { text: lx.coverLetterGen, included: false },
+                  { text: lx.emailOutreach, included: false },
+                  { text: lx.aiGradingScoring, included: false },
+                  { text: lx.aiOneClickTailoring, included: false },
+                ].map((f) => (
+                  <li key={f.text} className="flex items-start gap-2.5 text-sm">
+                    {f.included ? (
+                      <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    ) : (
+                      <X className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-0.5" />
+                    )}
+                    <span className={!f.included ? "text-muted-foreground/50 line-through" : ""}>{f.text}</span>
                   </li>
-                )}
+                ))}
               </ul>
-              <Button variant="outline" size="sm" className="w-full rounded-lg font-semibold" onClick={() => openAuth("signup")}>
+
+              <Button variant="outline" className="w-full" onClick={() => openAuth("signup")}>
                 {lx.getStartedFree}
               </Button>
             </div>
 
-            {/* Pro Plans */}
-            {[
-            { duration: "weekly" as const, name: pricingExtraTranslations[locale].weeklyPlan, desc: pricingExtraTranslations[locale].weeklyDesc, period: pricingExtraTranslations[locale].per7Days, popular: false },
-            { duration: "biweekly" as const, name: pricingExtraTranslations[locale].biweeklyPlan, desc: pricingExtraTranslations[locale].biweeklyDesc, period: pricingExtraTranslations[locale].per14Days, popular: false },
-            { duration: "monthly" as const, name: lx.proPlan, desc: lx.proDesc, period: lx.perMonth, popular: true }].
-            map((plan) =>
-            <div key={plan.duration} className={`relative rounded-xl bg-card p-5 flex flex-col ${plan.popular ? "border-2 border-primary shadow-lg shadow-primary/10" : "border border-border/60"}`}>
-                {plan.popular &&
-              <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-2.5 py-0.5 text-[10px] font-semibold rounded-bl-lg rounded-tr-[10px]">
-                    {pricingExtraTranslations[locale].bestValue}
-                  </div>
-              }
-                <div className="absolute top-0 left-0 bg-destructive text-destructive-foreground px-2 py-0.5 text-[10px] font-bold rounded-br-lg rounded-tl-[10px]">
-                  {pricingExtraTranslations[locale].launchBadge}
+            {/* PRO PLAN */}
+            <div className="rounded-2xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col relative shadow-lg shadow-primary/10 h-full">
+              <div className="absolute -top-3 right-4 bg-destructive text-destructive-foreground px-3 py-1 text-xs font-bold rounded-full">
+                {pricingExtraTranslations[locale].launchBadge}
+              </div>
+
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className="h-5 w-5 text-primary" />
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">{lx.proPlan}</p>
+              </div>
+
+              <div className="mb-1 flex items-baseline gap-2">
+                <span className="text-4xl font-extrabold">{localCurrency.formatProPrice(pricingDuration)}</span>
+                <span className="text-base text-muted-foreground line-through">{localCurrency.formatOriginalPrice(pricingDuration)}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mb-4">
+                {pricingDuration === "weekly" ? pricingExtraTranslations[locale].per7Days : pricingDuration === "biweekly" ? pricingExtraTranslations[locale].per14Days : lx.perMonth}
+              </p>
+
+              {/* Duration tabs */}
+              <div className="flex rounded-lg bg-muted p-1 mb-6">
+                {([
+                  { key: "weekly" as const, label: pricingExtraTranslations[locale].weeklyPlan },
+                  { key: "biweekly" as const, label: pricingExtraTranslations[locale].biweeklyPlan },
+                  { key: "monthly" as const, label: lx.proPlan },
+                ]).map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setPricingDuration(tab.key)}
+                    className={`flex-1 text-xs font-semibold py-2 px-2 rounded-md transition-all ${
+                      pricingDuration === tab.key
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <ul className="space-y-3 mb-6 flex-1">
+                {[
+                  lx.unlimitedResumes,
+                  lx.allPremiumTemplates,
+                  lx.aiGradingScoring,
+                  lx.aiOneClickTailoring,
+                  lx.aiCoverLetter,
+                  lx.unlimitedJobTracking,
+                  lx.emailOutreach,
+                  lx.interviewPrepFeature,
+                  lx.pinTrackCompanies,
+                  lx.aiJobSearchMatching,
+                  ...(pricingDuration === "monthly" ? [lx.prioritySupport] : []),
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2.5 text-sm">
+                    <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-3 mb-4">
+                <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-semibold text-foreground">{pricingExtraTranslations[locale].bonusFeatures}</p>
+                  <p className="text-[11px] text-muted-foreground">{pricingExtraTranslations[locale].bonusDesc}</p>
                 </div>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Crown className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold">{plan.name}</h3>
-                    <p className="text-[11px] text-muted-foreground">{plan.desc}</p>
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <span className="text-base font-medium text-muted-foreground line-through mr-2">{localCurrency.formatOriginalPrice(plan.duration)}</span>
-                  <span className="text-3xl font-extrabold">{localCurrency.formatProPrice(plan.duration)}</span>
-                  <span className="text-xs text-muted-foreground ml-1">{plan.period}</span>
-                </div>
-                <ul className="space-y-2 flex-1 mb-5">
-                  {[
-                    lx.unlimitedResumes,
-                    lx.allPremiumTemplates,
-                    lx.aiGradingScoring,
-                    lx.aiOneClickTailoring,
-                    lx.aiCoverLetter,
-                    lx.unlimitedJobTracking,
-                    lx.emailOutreach,
-                    lx.interviewPrepFeature,
-                    lx.pinTrackCompanies,
-                    lx.aiJobSearchMatching,
-                    ...(plan.popular ? [lx.prioritySupport] : [])].
-                map((f) =>
-                <li key={f} className="flex items-center gap-2 text-[12px]">
-                      <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-                      <span className="text-foreground">{f}</span>
-                    </li>
-                )}
-                </ul>
-                <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-2.5 mb-4">
-                  <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-[11px] font-semibold text-foreground">{pricingExtraTranslations[locale].bonusFeatures}</p>
-                    <p className="text-[10px] text-muted-foreground">{pricingExtraTranslations[locale].bonusDesc}</p>
-                  </div>
-                </div>
-                <Button
-                size="sm"
-                className="w-full rounded-lg font-semibold"
-                variant={plan.popular ? "default" : "outline"}
+              </div>
+
+              <Button
+                className="w-full"
+                size="lg"
                 onClick={() => {
                   const links: Record<string, string> = {
                     weekly: "https://nas.io/muzamils-business-2/zerolink/7day-pro",
                     biweekly: "https://nas.io/muzamils-business-2/zerolink/14day-pro",
-                    monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro"
+                    monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro",
                   };
-                  window.open(links[plan.duration], "_blank");
-                }}>
+                  window.open(links[pricingDuration], "_blank");
+                }}
+              >
+                Subscribe Now
+              </Button>
+            </div>
+          </div>
 
-                  Subscribe Now
-                </Button>
-              </div>
-            )}
+          <div className="text-center mt-8">
+            <p className="text-xs text-muted-foreground">We accept: Visa, Mastercard, UPI, PayPal & more</p>
           </div>
         </div>
       </section>
