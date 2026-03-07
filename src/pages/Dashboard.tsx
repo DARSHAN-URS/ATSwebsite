@@ -115,6 +115,7 @@ function JobSeekerDashboard() {
     responseRate: 0,
     statusBreakdown: [] as { name: string; value: number }[],
     weeklyActivity: [] as { week: string; count: number }[],
+    recentApps: [] as { id: string; position: string; company: string; status: string; date_applied: string }[],
   });
 
   useEffect(() => {
@@ -155,6 +156,10 @@ function JobSeekerDashboard() {
       });
       const weeklyActivity = Object.entries(weeklyMap).map(([week, count]) => ({ week, count }));
 
+      const recentApps = apps.slice(-5).reverse().map(a => ({
+        id: a.id, position: a.position, company: a.company, status: a.status, date_applied: a.date_applied,
+      }));
+
       setStats({
         resumes: resumesRes.count ?? 0,
         applications: totalApps,
@@ -163,6 +168,7 @@ function JobSeekerDashboard() {
         responseRate,
         statusBreakdown,
         weeklyActivity,
+        recentApps,
       });
     })();
   }, [user]);
@@ -196,6 +202,44 @@ function JobSeekerDashboard() {
           </Card>
         ))}
       </div>
+
+      {/* Recent Applications */}
+      {stats.recentApps.length > 0 && (
+        <Card className="rounded-xl border border-border/60">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Briefcase className="h-4 w-4 text-primary" /> Recent Applications
+            </CardTitle>
+            <CardDescription className="text-xs">Where you've applied recently</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {stats.recentApps.map((app) => (
+              <div
+                key={app.id}
+                className="flex items-center justify-between p-2.5 rounded-lg bg-muted/40 hover:bg-muted/70 cursor-pointer transition-colors"
+                onClick={() => navigate("/job-tracker")}
+              >
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{app.position}</p>
+                  <p className="text-xs text-muted-foreground truncate">{app.company}</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-[10px] text-muted-foreground">{new Date(app.date_applied).toLocaleDateString()}</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium capitalize ${
+                    app.status === "offer" ? "bg-primary/10 text-primary" :
+                    app.status === "rejected" ? "bg-destructive/10 text-destructive" :
+                    app.status === "interview" ? "bg-accent text-accent-foreground" :
+                    "bg-muted text-muted-foreground"
+                  }`}>{app.status}</span>
+                </div>
+              </div>
+            ))}
+            <button onClick={() => navigate("/job-tracker")} className="w-full text-xs text-primary hover:underline text-left pt-1">
+              View all applications →
+            </button>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
