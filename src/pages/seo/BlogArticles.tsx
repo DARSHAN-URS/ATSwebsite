@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Tag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 const logo = "/logo.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
+import { useBlogTranslation } from "@/hooks/useBlogTranslation";
 
 export interface BlogArticle {
   slug: string;
