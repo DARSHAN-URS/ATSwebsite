@@ -115,6 +115,7 @@ function JobSeekerDashboard() {
     responseRate: 0,
     statusBreakdown: [] as { name: string; value: number }[],
     weeklyActivity: [] as { week: string; count: number }[],
+    recentApps: [] as { id: string; position: string; company: string; status: string; date_applied: string }[],
   });
 
   useEffect(() => {
