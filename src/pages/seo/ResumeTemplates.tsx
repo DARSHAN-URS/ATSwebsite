@@ -11,7 +11,7 @@ export default function ResumeTemplates() {
   const t = seoTranslations[locale];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground scan-line">
       <SEOHead
         title="ATS-Friendly Resume Templates — Free Professional Layouts"
         description="Browse 8+ free ATS-friendly resume templates designed to pass applicant tracking systems. Professional layouts for engineers, freshers, seniors, and career changers."
@@ -19,7 +19,7 @@ export default function ResumeTemplates() {
         keywords="ATS resume templates, free resume templates, ATS-friendly resume templates, professional resume layouts, resume templates for freshers"
       />
 
-      <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-12 dark:invert dark:brightness-200" width={48} height={48} /></Link>
           <div className="flex items-center gap-3">
@@ -30,20 +30,20 @@ export default function ResumeTemplates() {
         </div>
       </nav>
 
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 grid-bg">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.tpl.tag}</p>
-          <h1 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">{t.tpl.h1}</h1>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight neon-text">{t.tpl.h1}</h1>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{t.tpl.subtitle}</p>
         </div>
       </section>
 
-      <section className="border-t border-border/60 py-16">
+      <section className="border-t border-primary/20 py-16">
         <div className="mx-auto max-w-5xl px-4">
           <h2 className="font-display text-2xl font-extrabold mb-8 text-center">{t.tpl.browseH2}</h2>
           <div className="grid md:grid-cols-2 gap-5">
             {t.tpl.templates.map((tp) => (
-              <div key={tp.name} className="rounded-2xl border border-border/60 bg-card p-5 bounce-hover">
+              <div key={tp.name} className="border border-primary/20 bg-card p-5 sci-fi-clip glow-border sci-fi-hover corner-brackets">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold">{tp.name}</h3>
                   <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{tp.best}</span>
@@ -55,7 +55,7 @@ export default function ResumeTemplates() {
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-secondary/30 py-16">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 grid-bg">
         <div className="mx-auto max-w-4xl px-4">
           <h2 className="font-display text-2xl font-extrabold mb-6">{t.tpl.whatMakesH2}</h2>
           <p className="text-muted-foreground mb-4">{t.tpl.whatMakesIntro}</p>
@@ -81,7 +81,7 @@ export default function ResumeTemplates() {
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-secondary/30 py-12">
+      <section className="border-t border-primary/20 bg-secondary/30 py-12 grid-bg">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="font-display text-2xl font-extrabold mb-4">{t.tpl.ctaH2}</h2>
           <p className="text-muted-foreground mb-6">{t.tpl.ctaSub}</p>
@@ -89,7 +89,7 @@ export default function ResumeTemplates() {
         </div>
       </section>
 
-      <footer className="border-t border-border/60 py-8 text-center">
+      <footer className="border-t border-primary/30 py-8 text-center">
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ATS Pro Resume Builder. <Link to="/privacy" className="underline">{t.nav.privacy}</Link> · <Link to="/terms" className="underline">{t.nav.terms}</Link></p>
       </footer>
     </div>
