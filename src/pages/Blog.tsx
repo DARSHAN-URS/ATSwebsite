@@ -24,6 +24,9 @@ const CATEGORY_IMAGES: Record<string, string> = {
   "Job Search": "/images/blog-job-search.jpg",
   "Salary": "/images/blog-salary.jpg",
   "Product Guide": "/images/blog-resume-tips.jpg",
+  "AI & Tech": "/images/blog-ai-tech.jpg",
+  "Networking": "/images/blog-networking.jpg",
+  "Industry Guide": "/images/blog-industry.jpg",
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -33,6 +36,9 @@ const CATEGORY_COLORS: Record<string, string> = {
   "Job Search": "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400",
   "Salary": "bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400",
   "Product Guide": "bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-400",
+  "AI & Tech": "bg-indigo-100 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-400",
+  "Networking": "bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-400",
+  "Industry Guide": "bg-cyan-100 text-cyan-700 dark:bg-cyan-950/50 dark:text-cyan-400",
 };
 
 function getCategoryImage(category: string): string {
