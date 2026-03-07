@@ -156,6 +156,10 @@ function JobSeekerDashboard() {
       });
       const weeklyActivity = Object.entries(weeklyMap).map(([week, count]) => ({ week, count }));
 
+      const recentApps = apps.slice(-5).reverse().map(a => ({
+        id: a.id, position: a.position, company: a.company, status: a.status, date_applied: a.date_applied,
+      }));
+
       setStats({
         resumes: resumesRes.count ?? 0,
         applications: totalApps,
@@ -164,6 +168,7 @@ function JobSeekerDashboard() {
         responseRate,
         statusBreakdown,
         weeklyActivity,
+        recentApps,
       });
     })();
   }, [user]);
