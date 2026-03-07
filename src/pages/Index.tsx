@@ -114,7 +114,7 @@ const Index = () => {
     });
   }, [startTransition]);
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground scan-line">
       <SEOHead
         title="ATS Pro Resume Builder — Free AI Resume Builder for ATS Success"
         description="Build ATS-optimized resumes in minutes with ATS Pro Resume Builder. Free AI resume grader, recruiter job board, one-click tailoring, and 8+ professional templates. Land 3× more interviews."
@@ -123,7 +123,7 @@ const Index = () => {
 
 
       {/* Navbar — clean minimal */}
-      <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:invert dark:brightness-200" width={64} height={64} src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" fetchPriority="high" />
@@ -172,17 +172,19 @@ const Index = () => {
         }
       </nav>
 
-      {/* Hero — playful gradient bg */}
-      <section className="relative overflow-hidden py-14 md:py-40">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-        <div className="absolute top-10 left-1/4 -z-10 w-72 h-72 rounded-full bg-primary/10 blur-[100px]" />
-        <div className="absolute bottom-10 right-1/4 -z-10 w-60 h-60 rounded-full bg-accent/10 blur-[100px]" />
+      {/* Hero — sci-fi grid bg */}
+      <section className="relative overflow-hidden py-14 md:py-40 grid-bg">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
+        {/* Geometric hex decorations */}
+        <div className="absolute top-20 left-10 -z-10 w-32 h-32 border border-primary/10 rotate-45 animate-hud-flicker" />
+        <div className="absolute bottom-20 right-10 -z-10 w-24 h-24 border border-primary/10 rotate-12 animate-hud-flicker" />
+        <div className="absolute top-1/2 left-1/4 -z-10 w-60 h-60 rounded-full bg-primary/5 blur-[80px]" />
         <div className="mx-auto max-w-3xl px-5 text-center">
-          <div className="mb-5 md:mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-[11px] md:text-xs font-semibold text-primary shadow-sm">
+          <div className="mb-5 md:mb-8 inline-flex items-center gap-2 border border-primary/30 bg-primary/5 px-4 py-2 text-[11px] md:text-xs font-semibold text-primary glow-border font-mono uppercase tracking-widest">
             <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse-dot" />
             {t.landing.heroTagline}
           </div>
-          <h1 className="font-display text-[1.85rem] font-extrabold leading-[1.1] tracking-tight sm:text-[2.25rem] md:text-[3.75rem]">
+          <h1 className="font-display text-[1.85rem] font-extrabold leading-[1.1] tracking-tight sm:text-[2.25rem] md:text-[3.75rem] neon-text">
             {t.landing.heroTitle}{" "}
             <span className="bg-gradient-to-r from-primary to-info bg-clip-text text-transparent">{t.landing.heroHighlight}</span>
           </h1>
@@ -190,10 +192,10 @@ const Index = () => {
             {t.landing.heroDesc}
           </p>
           <div className="mt-7 md:mt-11 flex flex-col items-center justify-center gap-3 sm:flex-row px-1">
-            <Button size="lg" className="gap-2 rounded-full px-7 md:px-9 font-bold w-full sm:w-auto shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-all text-sm md:text-base h-12 md:h-13" onClick={() => openAuth("signup")}>
+            <Button size="lg" className="gap-2 px-7 md:px-9 font-bold w-full sm:w-auto text-sm md:text-base h-12 md:h-13 sci-fi-clip" onClick={() => openAuth("signup")}>
               {t.landing.buildFreeResume} <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg" className="gap-2 rounded-full px-7 md:px-9 font-bold w-full sm:w-auto text-sm md:text-base h-12 md:h-13 border-2" onClick={() => openAuth("signup")}>
+            <Button variant="outline" size="lg" className="gap-2 px-7 md:px-9 font-bold w-full sm:w-auto text-sm md:text-base h-12 md:h-13 sci-fi-clip" onClick={() => openAuth("signup")}>
               <Upload className="h-4 w-4" /> {t.landing.uploadResume}
             </Button>
           </div>
@@ -205,8 +207,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features — playful colorful cards */}
-      <section className="py-14 md:py-28">
+      {/* Features — sci-fi cards */}
+      <section className="py-14 md:py-28 grid-bg">
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2 md:mb-3">{t.landing.features}</p>
@@ -222,9 +224,9 @@ const Index = () => {
             { icon: <LayoutTemplate className="h-5 w-5" />, title: t.landing.atsTemplates, desc: t.landing.atsTemplatesDesc, color: "bg-info/10 text-info" },
             { icon: <Briefcase className="h-5 w-5" />, title: t.landing.recruiterPortal, desc: t.landing.recruiterPortalDesc, color: "bg-success/10 text-success" }].
             map((f) =>
-            <div key={f.title} className="bounce-hover rounded-2xl border border-border/60 bg-card p-5 md:p-6 shadow-sm">
-                <div className={`mb-3 md:mb-4 flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-xl ${f.color}`}>{f.icon}</div>
-                <h3 className="mb-1.5 text-sm md:text-base font-bold">{f.title}</h3>
+            <div key={f.title} className="sci-fi-hover border border-primary/20 bg-card p-5 md:p-6 sci-fi-clip glow-border corner-brackets">
+                <div className={`mb-3 md:mb-4 flex h-10 w-10 md:h-11 md:w-11 items-center justify-center ${f.color}`}>{f.icon}</div>
+                <h3 className="mb-1.5 text-sm md:text-base font-bold font-display tracking-wide">{f.title}</h3>
                 <p className="text-[11px] md:text-[13px] leading-relaxed text-muted-foreground">{f.desc}</p>
               </div>
             )}
@@ -233,12 +235,12 @@ const Index = () => {
       </section>
 
       {/* AI Apply Feature Section */}
-      <section className="border-t border-border/60 py-14 md:py-24">
+      <section className="border-t border-primary/20 py-14 md:py-24 grid-bg">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             {/* Left: content */}
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary text-xs font-semibold mb-4">
+              <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary text-xs font-semibold mb-4 font-mono uppercase tracking-wider glow-border">
                 <Sparkles className="h-3.5 w-3.5" /> {lx.newFeature}
               </div>
               <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl mb-3">
@@ -261,9 +263,9 @@ const Index = () => {
             {/* Right: visual cards */}
             <div className="flex flex-col gap-3">
               {/* Queue preview card */}
-              <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+              <div className="border border-primary/20 bg-card p-4 sci-fi-clip glow-border">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <div className="flex h-7 w-7 items-center justify-center bg-primary/10 text-primary">
                     <Sparkles className="h-4 w-4" />
                   </div>
                    <span className="text-sm font-semibold">{lx.aiApplyQueue}</span>
@@ -286,8 +288,8 @@ const Index = () => {
               </div>
 
               {/* Progress step card */}
-              <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">{lx.liveProgress}</p>
+              <div className="border border-primary/20 bg-card p-4 sci-fi-clip glow-border">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2 font-mono">{lx.liveProgress}</p>
                 <div className="space-y-2">
                   {[
                   { step: lx.searchingJobs, done: true },
@@ -310,10 +312,10 @@ const Index = () => {
       </section>
 
       {/* Why Resumes Fail */}
-      <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
         <div className="mx-auto grid max-w-7xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.theProblem}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono neon-text">{t.landing.theProblem}</p>
             <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">
               {t.landing.whyFailTitle}
             </h2>
@@ -340,10 +342,10 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="border-t border-border/60 py-12 md:py-24">
+      <section className="border-t border-primary/20 py-12 md:py-24">
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono">{t.landing.testimonials}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-2 md:mb-3 font-mono neon-text">{t.landing.testimonials}</p>
             <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">{t.landing.lovedBy}</h2>
           </div>
 
@@ -355,8 +357,8 @@ const Index = () => {
             { value: "3×", label: t.landing.moreInterviews },
             { value: "1M+", label: t.landing.resumesBuiltStat }].
             map((s) =>
-            <div key={s.label} className="rounded-xl border border-border/60 bg-card p-3 md:p-4 text-center">
-                <p className="text-lg md:text-xl font-extrabold text-primary font-mono">{s.value}</p>
+            <div key={s.label} className="border border-primary/20 bg-card p-3 md:p-4 text-center sci-fi-clip glow-border corner-brackets">
+                <p className="text-lg md:text-xl font-extrabold text-primary font-mono neon-text">{s.value}</p>
                 <p className="mt-0.5 md:mt-1 text-[10px] md:text-[11px] text-muted-foreground uppercase tracking-wider">{s.label}</p>
               </div>
             )}
@@ -372,7 +374,7 @@ const Index = () => {
             { name: "Emily T.", role: "Product Designer → Figma", text: "Clean templates that actually pass ATS scans. Combined with the cover letter generator — the only tool I recommend.", stars: 5 },
             { name: "Carlos V.", role: "Career Changer → Salesforce", text: "The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.", stars: 5 }].
             map((review) =>
-            <div key={review.name} className="card-lift rounded-xl border border-border/60 bg-card p-4 md:p-5">
+            <div key={review.name} className="sci-fi-hover border border-primary/20 bg-card p-4 md:p-5 sci-fi-clip glow-border">
                 <div className="flex gap-0.5 mb-2 md:mb-3">
                   {Array.from({ length: review.stars }).map((_, i) =>
                 <Star key={i} className="h-3 w-3 md:h-3.5 md:w-3.5 fill-warning text-warning" />
@@ -395,11 +397,11 @@ const Index = () => {
       </section>
 
       {/* For Recruiters CTA */}
-      <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono">{t.landing.forRecruiters}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono neon-text">{t.landing.forRecruiters}</p>
               <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">
                 {t.landing.postJobsTitle}
               </h2>
@@ -430,7 +432,7 @@ const Index = () => {
               { value: t.landing.instant, label: t.landing.instantVisibility, icon: <Sparkles className="h-5 w-5" /> },
               { value: t.landing.easy, label: t.landing.easyManagement, icon: <LayoutTemplate className="h-5 w-5" /> }].
               map((s) =>
-              <div key={s.label} className="rounded-xl border border-border/60 bg-card p-5 text-center">
+              <div key={s.label} className="border border-primary/20 bg-card p-5 text-center sci-fi-clip glow-border corner-brackets">
                   <div className="flex justify-center mb-2 text-primary">{s.icon}</div>
                   <p className="text-lg font-extrabold text-primary font-mono">{s.value}</p>
                   <p className="mt-1 text-[11px] text-muted-foreground">{s.label}</p>
@@ -442,7 +444,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section ref={pricingRef} className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
+      <section ref={pricingRef} className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
@@ -456,7 +458,7 @@ const Index = () => {
 
           <div className="mt-12 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
             {/* FREE PLAN */}
-            <div className="rounded-2xl border bg-card p-6 md:p-8 flex flex-col h-full">
+            <div className="border border-primary/20 bg-card p-6 md:p-8 flex flex-col h-full sci-fi-clip glow-border">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{lx.freePlan}</p>
               <div className="mb-1">
                 <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
@@ -491,7 +493,7 @@ const Index = () => {
             </div>
 
             {/* PRO PLAN */}
-            <div className="rounded-2xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col relative shadow-lg shadow-primary/10 h-full">
+            <div className="border-2 border-primary bg-card p-6 md:p-8 flex flex-col relative h-full sci-fi-clip glow-border-strong corner-brackets">
               <div className="absolute -top-3 right-4 bg-destructive text-destructive-foreground px-3 py-1 text-xs font-bold rounded-full">
                 {pricingExtraTranslations[locale].launchBadge}
               </div>
@@ -583,9 +585,9 @@ const Index = () => {
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-border/60 bg-secondary/30 py-16 md:py-24">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24">
         <div className="mx-auto max-w-2xl px-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono text-center">{t.landing.faq}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono text-center neon-text">{t.landing.faq}</p>
           <h2 className="font-display mb-8 md:mb-10 text-center text-xl font-extrabold tracking-tight md:text-3xl">{t.landing.faqTitle}</h2>
           <Accordion type="single" collapsible className="w-full">
             {[
@@ -625,7 +627,7 @@ const Index = () => {
       </section>
 
       {/* Footer with social media */}
-      <footer className="border-t border-border/60 bg-foreground text-background">
+      <footer className="border-t border-primary/30 bg-foreground text-background grid-bg">
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
