@@ -122,48 +122,169 @@
   }
 
   .font-display {
-    font-family: 'Nunito', system-ui, sans-serif;
+    font-family: 'Rajdhani', system-ui, sans-serif;
   }
 
-  /* ── Composited-only animations (GPU layer — no layout/paint triggered) ── */
+  /* ── Sci-Fi Utilities ── */
 
-  /* Replaces Tailwind's animate-pulse (uses opacity only → composited) */
+  /* Clipped-corner card style */
+  .sci-fi-clip {
+    clip-path: polygon(
+      0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+      100% calc(100% - 10px), calc(100% - 10px) 100%,
+      10px 100%, 0 calc(100% - 10px)
+    );
+  }
+
+  /* Glow border effect */
+  .glow-border {
+    box-shadow:
+      0 0 10px hsl(var(--primary) / 0.15),
+      0 0 30px hsl(var(--primary) / 0.05),
+      inset 0 0 10px hsl(var(--primary) / 0.03);
+  }
+
+  .glow-border-strong {
+    box-shadow:
+      0 0 15px hsl(var(--primary) / 0.25),
+      0 0 40px hsl(var(--primary) / 0.1),
+      inset 0 0 15px hsl(var(--primary) / 0.05);
+  }
+
+  /* Neon text glow */
+  .neon-text {
+    text-shadow:
+      0 0 10px hsl(var(--primary) / 0.5),
+      0 0 30px hsl(var(--primary) / 0.2);
+  }
+
+  /* Scan-line overlay */
+  .scan-line {
+    position: relative;
+  }
+  .scan-line::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(var(--primary) / 0.02) 2px,
+      hsl(var(--primary) / 0.02) 4px
+    );
+  }
+
+  /* Grid background */
+  .grid-bg {
+    background-image:
+      linear-gradient(hsl(var(--primary) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Corner bracket decorations */
+  .corner-brackets {
+    position: relative;
+  }
+  .corner-brackets::before,
+  .corner-brackets::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-color: hsl(var(--primary) / 0.4);
+    pointer-events: none;
+  }
+  .corner-brackets::before {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+  }
+  .corner-brackets::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+  }
+
+  /* Sci-fi hover effect — glow intensify */
+  .sci-fi-hover {
+    transition: box-shadow 200ms ease, transform 200ms ease;
+    will-change: transform;
+  }
+  .sci-fi-hover:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 20px hsl(var(--primary) / 0.2),
+      0 0 40px hsl(var(--primary) / 0.08);
+  }
+
+  /* Card lift with glow */
+  .card-lift {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    will-change: transform;
+  }
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 0 15px hsl(var(--primary) / 0.15),
+      0 4px 20px hsl(var(--primary) / 0.1);
+  }
+
+  /* Bounce hover replaced with sci-fi glow */
+  .bounce-hover {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    will-change: transform;
+  }
+  .bounce-hover:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 0 15px hsl(var(--primary) / 0.15),
+      0 0 30px hsl(var(--primary) / 0.05);
+  }
+
+  /* Composited-only animations */
   .animate-pulse-dot {
     animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     will-change: opacity;
   }
 
-  /* Composited float — transform only */
   .animate-float-composited {
     animation: float-composited 3s ease-in-out infinite;
     will-change: transform;
   }
 
-  /* Mobile menu slide-in — composited transform+opacity instead of height */
   .slide-in-composited {
     animation: slide-in-y 180ms ease-out both;
     will-change: transform, opacity;
   }
 
-  /* Card lift on hover — transform only, no box-shadow change */
-  .card-lift {
-    transition: transform 200ms ease, opacity 200ms ease;
-    will-change: transform;
-  }
-  .card-lift:hover {
-    transform: translateY(-4px);
+  /* Scan line animation */
+  .animate-scan {
+    animation: scan-sweep 4s linear infinite;
   }
 
-  /* Playful bounce on hover */
-  .bounce-hover {
-    transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Glow pulse animation */
+  .animate-glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
   }
-  .bounce-hover:hover {
-    transform: scale(1.05);
+
+  /* Data stream effect */
+  .animate-data-stream {
+    animation: data-stream 2s linear infinite;
+  }
+
+  /* HUD flicker */
+  .animate-hud-flicker {
+    animation: hud-flicker 4s ease-in-out infinite;
   }
 }
 
-/* ── Keyframes — all composited (transform / opacity only) ── */
+/* ── Keyframes ── */
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.35; }
@@ -177,4 +298,26 @@
 @keyframes slide-in-y {
   from { transform: translateY(-8px); opacity: 0; }
   to   { transform: translateY(0px);  opacity: 1; }
+}
+
+@keyframes scan-sweep {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px hsl(var(--primary) / 0.15); }
+  50%      { box-shadow: 0 0 20px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary) / 0.1); }
+}
+
+@keyframes data-stream {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+
+@keyframes hud-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%           { opacity: 0.8; }
+  97%           { opacity: 1; }
+  98%           { opacity: 0.85; }
 }
