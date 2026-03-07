@@ -173,7 +173,7 @@ const Index = () => {
       </nav>
 
       {/* Hero — sci-fi grid bg */}
-      <section className="relative overflow-hidden py-14 md:py-40 grid-bg">
+      <section className="relative overflow-hidden py-10 md:py-20 grid-bg">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
         {/* Geometric hex decorations */}
         <div className="absolute top-20 left-10 -z-10 w-32 h-32 border border-primary/10 rotate-45 animate-hud-flicker" />
