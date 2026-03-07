@@ -56,10 +56,10 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
           onClick={onNavClick}
           className={({ isActive }) =>
           cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
+            "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all font-display tracking-wide uppercase",
             isActive ?
-            "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm" :
-            "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+            "bg-sidebar-primary/20 text-sidebar-primary-foreground border-l-2 border-sidebar-primary glow-border" :
+            "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground border-l-2 border-transparent"
           )
           }>
 
@@ -74,7 +74,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
         )}
       </nav>
 
-      <div className="p-3 space-y-2 border-t border-sidebar-border">
+      <div className="p-3 space-y-2 border-t border-sidebar-primary/20">
         <div className="px-3 flex gap-2">
           <LanguageSwitcher className="flex-1 h-8 text-xs bg-sidebar-accent text-sidebar-foreground border-sidebar-border [&>svg]:text-sidebar-foreground" />
           <ThemeToggle className="h-8 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50" />
@@ -82,32 +82,32 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
         {/* User Account Card */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebar-accent/40 hover:bg-sidebar-accent/70 transition-colors text-left">
+            <button className="w-full flex items-center gap-3 px-3 py-2.5 bg-sidebar-primary/10 hover:bg-sidebar-primary/20 transition-colors text-left border border-sidebar-primary/20 glow-border">
               <Avatar className="h-8 w-8 shrink-0">
                 <AvatarImage src={user?.user_metadata?.avatar_url} alt={displayName} />
-                <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
+                <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold font-display">
                   {avatarFallback}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-sidebar-foreground truncate">{displayName}</p>
-                <p className="text-xs text-sidebar-foreground/50 truncate">{user?.email}</p>
+                <p className="text-sm font-medium text-sidebar-foreground truncate font-display tracking-wide">{displayName}</p>
+                <p className="text-xs text-sidebar-foreground/50 truncate font-mono">{user?.email}</p>
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-sidebar-foreground/50 shrink-0" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" align="end" className="w-52">
             <div className="px-2 py-1.5">
-              <p className="text-sm font-medium truncate">{displayName}</p>
-              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+              <p className="text-sm font-medium truncate font-display">{displayName}</p>
+              <p className="text-xs text-muted-foreground truncate font-mono">{user?.email}</p>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => {navigate("/account");onNavClick?.();}} className="cursor-pointer gap-2">
+            <DropdownMenuItem onClick={() => {navigate("/account");onNavClick?.();}} className="cursor-pointer gap-2 font-display tracking-wide uppercase text-xs">
               <Settings className="h-4 w-4" />
               Account Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onSignOut} className="text-destructive focus:text-destructive cursor-pointer">
+            <DropdownMenuItem onClick={onSignOut} className="text-destructive focus:text-destructive cursor-pointer font-display tracking-wide uppercase text-xs">
               <LogOut className="h-4 w-4 mr-2" />
               {t.nav.signOut}
             </DropdownMenuItem>
@@ -132,14 +132,14 @@ export default function AppLayout() {
   return (
     <div className="flex h-screen overflow-hidden">
       {isMobile &&
-      <header className="fixed top-0 left-0 right-0 z-40 h-12 flex items-center px-3 border-b bg-background">
+      <header className="fixed top-0 left-0 right-0 z-40 h-12 flex items-center px-3 border-b border-primary/20 bg-background glow-border">
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
                 <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground flex flex-col">
+            <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground flex flex-col scan-line">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
               <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setSheetOpen(false)} />
             </SheetContent>
@@ -151,7 +151,7 @@ export default function AppLayout() {
       }
 
       {!isMobile &&
-      <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border shrink-0">
+      <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-primary/20 shrink-0 scan-line glow-border">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       }
