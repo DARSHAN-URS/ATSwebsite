@@ -2413,6 +2413,8 @@ const BASE_ARTICLES: BlogArticle[] = [
   },
 ];
 
+export const SEED_ARTICLES: BlogArticle[] = [...BASE_ARTICLES, ...EXTRA_ARTICLES];
+
 
 export function BlogArticlePage() {
   const { slug } = useParams();
