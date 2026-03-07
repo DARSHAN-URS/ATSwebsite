@@ -19,7 +19,9 @@ export interface BlogArticle {
   content: string[];
 }
 
-export const SEED_ARTICLES: BlogArticle[] = [
+import { EXTRA_ARTICLES } from "./BlogArticlesExtra";
+
+const BASE_ARTICLES: BlogArticle[] = [
   {
     slug: "what-is-ats-resume",
     title: "What Is an ATS Resume and How It Works",
@@ -2410,6 +2412,8 @@ export const SEED_ARTICLES: BlogArticle[] = [
     ],
   },
 ];
+
+export const SEED_ARTICLES: BlogArticle[] = [...BASE_ARTICLES, ...EXTRA_ARTICLES];
 
 
 export function BlogArticlePage() {
