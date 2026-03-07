@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Tag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 const logo = "/logo.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
+import { useBlogTranslation } from "@/hooks/useBlogTranslation";
 
 export interface BlogArticle {
   slug: string;
@@ -2434,6 +2435,17 @@ export function BlogArticlePage() {
   const { locale } = useLanguage();
   const ba = miscTranslations[locale].blogArticle;
 
+  // Translate title, description, category, and all content blocks
+  const textsToTranslate = [article.title, article.description, article.category, ...article.content];
+  const { translated, isTranslating } = useBlogTranslation(textsToTranslate, locale, "article-content");
+
+  const tTitle = translated[0] || article.title;
+  const tDescription = translated[1] || article.description;
+  const tCategory = translated[2] || article.category;
+  const tContent = translated.slice(3).length === article.content.length
+    ? translated.slice(3)
+    : article.content;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
@@ -2459,10 +2471,17 @@ export function BlogArticlePage() {
           <ArrowLeft className="h-4 w-4" /> {ba.backToBlog}
         </Link>
 
+        {isTranslating && locale !== "en" && (
+          <div className="flex items-center gap-2 mb-6 py-2 px-4 rounded-lg bg-primary/5 border border-primary/10 text-sm text-primary">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Translating article...
+          </div>
+        )}
+
         <header className="mb-8">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              <Tag className="h-3 w-3" />{article.category}
+              <Tag className="h-3 w-3" />{tCategory}
             </span>
             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <Calendar className="h-3 w-3" />{new Date(article.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
@@ -2471,12 +2490,12 @@ export function BlogArticlePage() {
               <Clock className="h-3 w-3" />{article.readTime}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-4">{article.title}</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed">{article.description}</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-4">{tTitle}</h1>
+          <p className="text-lg text-muted-foreground leading-relaxed">{tDescription}</p>
         </header>
 
         <article className="prose prose-neutral dark:prose-invert max-w-none">
-          {article.content.map((block, i) => {
+          {tContent.map((block, i) => {
             if (block.startsWith("## ")) {
               return <h2 key={i} className="text-xl font-bold mt-8 mb-3 text-foreground">{block.replace("## ", "")}</h2>;
             }

@@ -1,19 +1,20 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar, Search, BookOpen, ArrowRight, Clock, ChevronRight } from "lucide-react";
+import { Calendar, Search, BookOpen, ArrowRight, Clock, ChevronRight, Loader2 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { SEED_ARTICLES as RAW_ARTICLES } from "@/pages/seo/BlogArticles";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { miscTranslations } from "@/i18n/miscTranslations";
+import { useBlogTranslation } from "@/hooks/useBlogTranslation";
 
 // Deduplicate by slug — keep first occurrence
 const SEED_ARTICLES = RAW_ARTICLES.filter(
   (a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i
 );
-import { useLanguage } from "@/i18n/LanguageContext";
-import { miscTranslations } from "@/i18n/miscTranslations";
 
 const blogHero = "/images/blog-hero.jpg";
 
@@ -59,6 +60,7 @@ export default function Blog() {
     setSearch(searchInput);
   };
 
+  // Search still works on original English text
   const filteredArticles = SEED_ARTICLES.filter((a) => {
     const matchesSearch =
       !search ||
@@ -72,6 +74,38 @@ export default function Blog() {
   const featuredArticle = SEED_ARTICLES[0];
   const regularArticles = filteredArticles.filter((a) => a.slug !== featuredArticle.slug || search || activeCategory !== "All");
   const showFeatured = !search && activeCategory === "All";
+
+  // Prepare texts for translation
+  const allTitles = useMemo(() => SEED_ARTICLES.map(a => a.title), []);
+  const allDescriptions = useMemo(() => SEED_ARTICLES.map(a => a.description), []);
+  const categoryNames = useMemo(() => ALL_CATEGORIES, []);
+
+  const { translated: translatedTitles, isTranslating: titlesLoading } = useBlogTranslation(allTitles, locale, "titles");
+  const { translated: translatedDescs } = useBlogTranslation(allDescriptions, locale, "descriptions");
+  const { translated: translatedCategories } = useBlogTranslation(categoryNames, locale, "categories");
+
+  // Build lookup maps
+  const titleMap = useMemo(() => {
+    const m = new Map<string, string>();
+    SEED_ARTICLES.forEach((a, i) => m.set(a.slug, translatedTitles[i] || a.title));
+    return m;
+  }, [translatedTitles]);
+
+  const descMap = useMemo(() => {
+    const m = new Map<string, string>();
+    SEED_ARTICLES.forEach((a, i) => m.set(a.slug, translatedDescs[i] || a.description));
+    return m;
+  }, [translatedDescs]);
+
+  const catMap = useMemo(() => {
+    const m = new Map<string, string>();
+    ALL_CATEGORIES.forEach((c, i) => m.set(c, translatedCategories[i] || c));
+    return m;
+  }, [translatedCategories]);
+
+  const t = (slug: string) => titleMap.get(slug) || slug;
+  const d = (slug: string) => descMap.get(slug) || slug;
+  const c = (cat: string) => catMap.get(cat) || cat;
 
   const blogSchema = {
     "@context": "https://schema.org",
@@ -144,6 +178,14 @@ export default function Blog() {
           </div>
         </section>
 
+        {/* Translation loading indicator */}
+        {titlesLoading && locale !== "en" && (
+          <div className="flex items-center justify-center gap-2 py-2 bg-primary/5 border-b border-primary/10 text-sm text-primary">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Translating articles...
+          </div>
+        )}
+
         <section className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border/60 shadow-sm">
           <div className="max-w-6xl mx-auto px-4 py-3">
             <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
@@ -157,7 +199,7 @@ export default function Blog() {
                       : "bg-muted/50 text-muted-foreground border-border/60 hover:border-primary/40 hover:text-foreground"
                   }`}
                 >
-                  {cat}
+                  {c(cat)}
                   {cat !== "All" && (
                     <span className="ml-1.5 text-xs opacity-60">
                       {SEED_ARTICLES.filter((a) => a.category === cat).length}
@@ -180,15 +222,15 @@ export default function Blog() {
               <Card className="overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="grid md:grid-cols-2">
                   <div className="relative overflow-hidden h-56 md:h-full min-h-[240px]">
-                    <img src={getCategoryImage(featuredArticle.category)} alt={featuredArticle.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="eager" width={800} height={512} />
+                    <img src={getCategoryImage(featuredArticle.category)} alt={t(featuredArticle.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="eager" width={800} height={512} />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/10" />
                   </div>
                   <div className="p-6 md:p-8 flex flex-col justify-center">
                     <Badge className={`w-fit mb-3 text-xs font-semibold border-0 ${CATEGORY_COLORS[featuredArticle.category] || "bg-primary/10 text-primary"}`}>
-                      {featuredArticle.category}
+                      {c(featuredArticle.category)}
                     </Badge>
-                    <h2 className="text-xl md:text-2xl font-bold leading-snug text-foreground group-hover:text-primary transition-colors mb-3">{featuredArticle.title}</h2>
-                    <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{featuredArticle.description}</p>
+                    <h2 className="text-xl md:text-2xl font-bold leading-snug text-foreground group-hover:text-primary transition-colors mb-3">{t(featuredArticle.slug)}</h2>
+                    <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{d(featuredArticle.slug)}</p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                       <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{new Date(featuredArticle.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</span>
                       <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{featuredArticle.readTime}</span>
@@ -214,7 +256,7 @@ export default function Blog() {
             {!showFeatured && (
               <p className="text-sm text-muted-foreground mb-6">
                 {filteredArticles.length} {filteredArticles.length !== 1 ? mt.articles : mt.articleSingle}
-                {activeCategory !== "All" ? ` ${mt.inCategory} "${activeCategory}"` : ""}
+                {activeCategory !== "All" ? ` ${mt.inCategory} "${c(activeCategory)}"` : ""}
                 {search ? ` ${mt.matching} "${search}"` : ""}
               </p>
             )}
@@ -223,15 +265,15 @@ export default function Blog() {
                 <Link key={`${article.slug}-${idx}`} to={`/blog/${article.slug}`} className="group block">
                   <Card className="h-full overflow-hidden border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-card">
                     <div className="relative overflow-hidden h-44">
-                      <img src={getCategoryImage(article.category)} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
+                      <img src={getCategoryImage(article.category)} alt={t(article.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2">
-                        <Badge className={`text-xs font-semibold border-0 ${CATEGORY_COLORS[article.category] || "bg-primary/10 text-primary"}`}>{article.category}</Badge>
+                        <Badge className={`text-xs font-semibold border-0 ${CATEGORY_COLORS[article.category] || "bg-primary/10 text-primary"}`}>{c(article.category)}</Badge>
                       </div>
                     </div>
                     <CardContent className="pt-4 pb-2 px-4">
-                      <h3 className="text-sm font-bold leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">{article.title}</h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{article.description}</p>
+                      <h3 className="text-sm font-bold leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">{t(article.slug)}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{d(article.slug)}</p>
                     </CardContent>
                     <CardFooter className="px-4 pb-4 pt-2 flex items-center justify-between">
                       <div className="flex items-center gap-3 text-xs text-muted-foreground">
