@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import {
   Sparkles, ExternalLink, CheckCircle2, X, MapPin, Trophy, FileText, Mail,
   ChevronDown, ChevronUp, Loader2, Zap, AlertCircle, Globe, Building2
@@ -46,7 +47,16 @@ function ApplyMethodBadge({ method, url }: { method: string | null; url: string 
     const detected = detectMethodFromUrl(url);
     if (detected === "greenhouse") return <Badge variant="outline" className="text-[10px] gap-1"><Building2 className="h-2.5 w-2.5" />Greenhouse</Badge>;
     if (detected === "lever") return <Badge variant="outline" className="text-[10px] gap-1"><Building2 className="h-2.5 w-2.5" />Lever</Badge>;
-    return <Badge variant="outline" className="text-[10px] gap-1"><Globe className="h-2.5 w-2.5" />Manual</Badge>;
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge variant="outline" className="text-[10px] gap-1 cursor-help"><Globe className="h-2.5 w-2.5" />Manual</Badge>
+        </TooltipTrigger>
+        <TooltipContent side="top" className="max-w-[250px] text-xs">
+          This company's career page doesn't support auto-apply. Only jobs on Greenhouse or Lever ATS can be submitted automatically. Click "Apply" to open the job page and apply directly.
+        </TooltipContent>
+      </Tooltip>
+    );
   }
   if (method === "greenhouse") return <Badge variant="secondary" className="text-[10px] gap-1 bg-green-100 text-green-700"><Building2 className="h-2.5 w-2.5" />Greenhouse API</Badge>;
   if (method === "lever") return <Badge variant="secondary" className="text-[10px] gap-1 bg-blue-100 text-blue-700"><Building2 className="h-2.5 w-2.5" />Lever API</Badge>;
