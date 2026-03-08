@@ -749,14 +749,10 @@ export default function Resumes() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{t.resumes.skills}</CardTitle>
-                  {isPro ? (
-                    <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
+                  <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
                       {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
                       {t.resumes.aiSuggest}
                     </Button>
-                  ) : (
-                    <ProFeatureGate inline message="AI Suggest"><span /></ProFeatureGate>
-                  )}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
