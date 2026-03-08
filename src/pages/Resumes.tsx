@@ -590,7 +590,6 @@ export default function Resumes() {
             <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
           </div>
           <div className="flex flex-wrap gap-2">
-            {isPro ? (
             <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.tailorToJob}</span><span className="sm:hidden">{t.resumes.tailorToJob}</span></Button>
@@ -612,10 +611,6 @@ export default function Resumes() {
                 </Button>
               </DialogContent>
             </Dialog>
-            ) : (
-              <ProFeatureGate inline message="AI Tailor"><span /></ProFeatureGate>
-            )}
-            {isPro ? (
             <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.gradeResume}</span><span className="sm:hidden">{t.resumes.gradeResume}</span></Button>
@@ -695,9 +690,6 @@ export default function Resumes() {
                 )}
               </DialogContent>
             </Dialog>
-            ) : (
-              <ProFeatureGate inline message="AI Grade"><span /></ProFeatureGate>
-            )}
             <ATSScannerDialog resumeData={resumeData} />
             <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} />
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
