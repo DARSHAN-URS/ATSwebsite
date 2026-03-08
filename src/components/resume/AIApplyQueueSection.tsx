@@ -402,7 +402,7 @@ export default function AIApplyQueueSection() {
                 >
                   {applying === selected.id
                     ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Processing...</>
-                    : <><Zap className="h-4 w-4 mr-2" />Auto-Apply & Track</>}
+                    : <><Zap className="h-4 w-4 mr-2" />{detectMethodFromUrl(selected.job_url) === "manual" ? "Open & Track Manual Apply" : "Auto-Apply & Track"}</>}
                 </Button>
                 <Button
                   variant="outline"
