@@ -142,8 +142,8 @@ const Index = () => {
                 </div>
               </div>
             </div>
-            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobTracker}</button>
-            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.jobBoard}</button>
+            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.coverLetters}</button>
+            <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.findJobs}</button>
             <Link to="/blog" className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.blog}</Link>
             <Link to="/about" className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.about}</Link>
             <button onClick={() => pricingRef.current?.scrollIntoView({ behavior: "smooth" })} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.pricing}</button>
