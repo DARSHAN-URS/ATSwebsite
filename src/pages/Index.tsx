@@ -126,7 +126,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:brightness-0 dark:invert" width={64} height={64} fetchPriority="high" src="/lovable-uploads/168f7123-ea46-470e-9d0c-76fb745d52f0.png" />
+            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px]" width={64} height={64} fetchPriority="high" src="/images/logo-white.png" />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <div className="relative group">
@@ -614,7 +614,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <img src="/logo.webp" alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} loading="lazy" decoding="async" />
+              <img src="/images/logo-white.png" alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] mx-auto md:mx-0" width={64} height={64} loading="lazy" decoding="async" />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>

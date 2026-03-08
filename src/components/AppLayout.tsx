@@ -44,7 +44,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
   return (
     <>
       <div className="p-4 pb-2 flex items-center justify-center">
-        <img alt="ATS Pro Resume Builder" className="h-32 w-auto object-contain dark:brightness-0 dark:invert" width={128} height={128} decoding="async" src="/lovable-uploads/5915efbe-e4c7-42be-ba1b-f3eb8a705409.png" />
+        <img alt="ATS Pro Resume Builder" className="h-32 w-auto object-contain" width={128} height={128} decoding="async" src="/images/logo-white.png" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -145,7 +145,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <img src={logoUrl} alt="ATS Pro Resume Builder" className="h-10 w-auto object-contain dark:brightness-0 dark:invert" width={40} height={40} decoding="async" />
+            <img src="/images/logo-white.png" alt="ATS Pro Resume Builder" className="h-10 w-auto object-contain" width={40} height={40} decoding="async" />
           </div>
         </header>
       }
