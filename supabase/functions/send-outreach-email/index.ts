@@ -103,14 +103,14 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Use the user's name as sender — no "via" branding to avoid spam filters
+    // Use the user's name as sender display name
     const senderName = fromName?.trim() || "ATS Pro";
     const SENDER = `${senderName} <no-reply@atsproresumebuilder.com>`;
 
     // Validate replyTo if provided
     const replyToEmail = replyTo && isValidEmail(replyTo) ? replyTo : user.email;
 
-    // Plain text fallback (important for deliverability)
+    // Plain text version (critical for deliverability — emails without plain text are flagged)
     const plainText = emailBody;
 
     // Convert plain text body to HTML preserving line breaks
@@ -121,26 +121,46 @@ Deno.serve(async (req) => {
       .replace(/\n/g, "<br>");
 
     const positionContext = position && company
-      ? `<p style="color:#6b7280;font-size:13px;margin:0 0 16px;padding:8px 12px;background:#f3f4f6;border-radius:6px;border-left:3px solid #6366f1;">
-           Re: <strong>${position}</strong> at <strong>${company}</strong>
+      ? `<p style="color:#6b7280;font-size:13px;margin:0 0 16px;padding:8px 12px;background:#f3f4f6;border-radius:6px;border-left:3px solid #3b82f6;">
+           Re: <strong>${position.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</strong> at <strong>${company.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</strong>
          </p>`
       : "";
 
+    // Properly structured HTML email with all required elements for deliverability
     const html = `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;">
-  <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;padding:24px 16px;">
-    <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;padding:32px;">
-      ${positionContext}
-      <div style="color:#1f2937;font-size:15px;line-height:1.8;">
-        ${htmlBody}
-      </div>
-    </div>
-    ${replyToEmail ? `<p style="color:#9ca3af;font-size:11px;text-align:center;margin-top:16px;">
-      Reply directly to: <a href="mailto:${replyToEmail}" style="color:#6366f1;text-decoration:none;">${replyToEmail}</a>
-    </p>` : ""}
-  </div>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+  <title>${subject.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f9fafb;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9fafb;">
+    <tr>
+      <td align="center" style="padding:24px 16px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+          <tr>
+            <td style="background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;padding:32px;">
+              ${positionContext}
+              <div style="color:#1f2937;font-size:15px;line-height:1.8;font-family:Arial,Helvetica,sans-serif;">
+                ${htmlBody}
+              </div>
+            </td>
+          </tr>
+          ${replyToEmail ? `<tr>
+            <td style="padding-top:16px;text-align:center;">
+              <p style="color:#9ca3af;font-size:11px;margin:0;font-family:Arial,Helvetica,sans-serif;">
+                Reply directly to: <a href="mailto:${replyToEmail}" style="color:#3b82f6;text-decoration:none;">${replyToEmail}</a>
+              </p>
+            </td>
+          </tr>` : ""}
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 
@@ -150,11 +170,12 @@ Deno.serve(async (req) => {
       subject: subject.trim(),
       html,
       text: plainText,
+      reply_to: replyToEmail || undefined,
+      headers: {
+        // Unique message ID prevents threading/grouping that triggers spam
+        "X-Entity-Ref-ID": crypto.randomUUID(),
+      },
     };
-
-    if (replyToEmail) {
-      resendPayload.reply_to = replyToEmail;
-    }
 
     // Attach resume PDF if provided
     if (resumePdfBase64 && typeof resumePdfBase64 === "string") {
@@ -174,7 +195,7 @@ Deno.serve(async (req) => {
       const existingAttachments = (resendPayload.attachments as unknown[] | undefined) ?? [];
       const extraAttachments = additionalAttachments
         .filter((a: { filename?: string; content?: string }) => a && typeof a.content === "string" && a.content.length > 0)
-        .slice(0, 5) // max 5 extra docs
+        .slice(0, 5)
         .map((a: { filename?: string; content?: string; type?: string }) => ({
           filename: String(a.filename ?? "document").replace(/[^a-zA-Z0-9_\-. ]/g, "").trim() || "document",
           content: a.content,
@@ -212,7 +233,7 @@ Deno.serve(async (req) => {
         updated_at: new Date().toISOString(),
       }).eq("user_id", user.id).eq("company", company ?? "").eq("position", position ?? "");
     } catch {
-      // Non-critical — don't fail the request
+      // Non-critical
     }
 
     return new Response(JSON.stringify({ success: true, messageId: resendData.id }), {
