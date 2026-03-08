@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, Mail, ChevronDown, Settings } from "lucide-react";
-import logoUrl from "@/assets/logo.png";
+import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -44,7 +44,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
   return (
     <>
       <div className="p-4 pb-2 flex items-center justify-center">
-        <img alt="ATS Pro Resume Builder" className="h-32 w-auto object-contain" width={128} height={128} decoding="async" src="/images/logo-white.png" />
+        <Logo className="h-32 w-auto object-contain" width={128} height={128} />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -145,7 +145,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <img src="/images/logo-white.png" alt="ATS Pro Resume Builder" className="h-10 w-auto object-contain" width={40} height={40} decoding="async" />
+            <Logo className="h-10 w-auto object-contain" width={40} height={40} />
           </div>
         </header>
       }

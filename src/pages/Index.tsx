@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
+import Logo from "@/components/Logo";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { landingExtraTranslations } from "@/i18n/landingExtraTranslations";
 import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
@@ -126,7 +127,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px]" width={64} height={64} fetchPriority="high" src="/images/logo-white.png" />
+            <Logo className="h-12 md:h-[64px]" width={64} height={64} fetchPriority="high" />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <div className="relative group">
@@ -614,7 +615,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <img src="/images/logo-white.png" alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] mx-auto md:mx-0" width={64} height={64} loading="lazy" decoding="async" />
+              <Logo className="h-14 md:h-[64px] mx-auto md:mx-0" width={64} height={64} loading="lazy" />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>
@@ -687,7 +688,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src="/logo.webp" alt="ATS Pro Resume Builder" className="h-16 dark:invert dark:brightness-200" width={64} height={64} />
+              <Logo className="h-16" width={64} height={64} />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>

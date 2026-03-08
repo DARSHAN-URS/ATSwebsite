@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, FileText, Sparkles, BarChart3, Upload, Mail, Search, Briefcase, Building2, Users, Kanban, Star, Globe, Shield, Zap, Target, CheckCircle, TrendingUp, Clock, Award, Heart, Layers, MonitorSmartphone, Lock, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
-const logo = "/logo.webp";
+const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { aboutTranslations } from "@/i18n/aboutTranslations";
@@ -69,7 +70,7 @@ export default function About() {
 
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-[72px] dark:invert dark:brightness-200" width={72} height={72} /></Link>
+          <Link to="/" className="flex items-center gap-2"><Logo className="h-[72px]" width={72} height={72} /></Link>
           <Link to="/" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"><ArrowLeft className="h-4 w-4" /> {ta.backToHome}</Link>
         </div>
       </nav>

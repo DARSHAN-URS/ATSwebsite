@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
-const logo = "/logo.webp";
+const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { seoTranslations } from "@/i18n/seoTranslations";
 
@@ -21,7 +22,7 @@ export default function ResumeTemplates() {
 
       <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-12 dark:invert dark:brightness-200" width={48} height={48} /></Link>
+          <Link to="/" className="flex items-center gap-2"><Logo className="h-12" /></Link>
           <div className="flex items-center gap-3">
             <Link to="/ats-resume-builder" className="text-sm text-muted-foreground hover:text-foreground transition">{t.nav.atsBuilder}</Link>
             <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition">{t.nav.blog}</Link>
