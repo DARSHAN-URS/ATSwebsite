@@ -282,7 +282,7 @@ export default function Blog() {
                 <Link key={`${article.slug}-${idx}`} to={`/blog/${article.slug}`} className="group block">
                   <Card className="h-full overflow-hidden border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-card">
                     <div className="relative overflow-hidden h-44">
-                      <img src={getCategoryImage(article.category)} alt={t(article.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
+                      <BlogImage src={getCategoryImage(article.category)} alt={t(article.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2">
                         <Badge className={`text-xs font-semibold border-0 ${CATEGORY_COLORS[article.category] || "bg-primary/10 text-primary"}`}>{c(article.category)}</Badge>
