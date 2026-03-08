@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import SEOHead from "@/components/SEOHead";
 import RESUME_EXAMPLES from "@/data/resumeExamples";
 const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 
 const CATEGORIES = [...new Set(RESUME_EXAMPLES.map((r) => r.category))];
 
