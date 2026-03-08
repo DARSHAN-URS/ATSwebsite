@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
+import Logo from "@/components/Logo";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
 import { landingExtraTranslations } from "@/i18n/landingExtraTranslations";
 import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
