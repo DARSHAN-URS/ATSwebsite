@@ -126,7 +126,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:invert dark:brightness-200" width={64} height={64} src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" fetchPriority="high" />
+            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:invert dark:brightness-200" width={64} height={64} src="/logo.webp" fetchPriority="high" />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <div className="relative group">
