@@ -429,7 +429,7 @@ export default function EmailOutreach() {
               <Label htmlFor="eo-body">Message</Label>
               <Textarea
                 id="eo-body"
-                rows={14}
+                rows={8}
                 value={body}
                 placeholder="Click 'Generate Email with AI' to draft your message, or write it yourself…"
                 onChange={(e) => setBody(e.target.value)}
