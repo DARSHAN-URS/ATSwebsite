@@ -615,7 +615,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <Logo className="h-28 md:h-[128px] mx-auto md:mx-0" width={128} height={128} loading="lazy" variant="light" />
+              <Logo className="h-10 md:h-12 mx-auto md:mx-0" width={160} height={48} loading="lazy" variant="light" />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>
