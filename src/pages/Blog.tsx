@@ -239,7 +239,7 @@ export default function Blog() {
               <Card className="overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="grid md:grid-cols-2">
                   <div className="relative overflow-hidden h-56 md:h-full min-h-[240px]">
-                    <img src={getCategoryImage(featuredArticle.category)} alt={t(featuredArticle.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="eager" width={800} height={512} />
+                    <BlogImage src={getCategoryImage(featuredArticle.category)} alt={t(featuredArticle.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="eager" width={800} height={512} />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/10" />
                   </div>
                   <div className="p-6 md:p-8 flex flex-col justify-center">
