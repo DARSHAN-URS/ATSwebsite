@@ -687,7 +687,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="ATS Pro Resume Builder" className="h-16 dark:invert dark:brightness-200" width={64} height={64} />
+              <img src="/logo.webp" alt="ATS Pro Resume Builder" className="h-16 dark:invert dark:brightness-200" width={64} height={64} />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>
