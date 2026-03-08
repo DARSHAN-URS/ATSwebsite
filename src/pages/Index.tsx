@@ -614,7 +614,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
-              <img src="/lovable-uploads/3547645a-93de-4a6f-b9b2-bea04540248d.png" alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} loading="lazy" decoding="async" />
+              <img src="/logo.webp" alt="ATS Pro Resume Builder" className="h-14 md:h-[64px] invert brightness-200 mx-auto md:mx-0" width={64} height={64} loading="lazy" decoding="async" />
               <p className="mt-3 md:mt-4 max-w-xs text-[12px] md:text-[13px] leading-relaxed text-background/60 mx-auto md:mx-0">
                 {t.landing.footerDesc}
               </p>
