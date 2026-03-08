@@ -4,7 +4,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check, X, Crown, Sparkles, Gift } from "lucide-react";
+import { ArrowLeft, Check, X, Crown, Sparkles, Gift, Zap, Shield, Rocket } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
@@ -74,125 +74,178 @@ export default function Pricing() {
   ];
 
   return (
-    <div className="container mx-auto max-w-5xl py-10 px-4">
+    <div className="min-h-screen bg-background text-foreground scan-line">
       <SEOHead title="Pricing — ATS Pro Resume Builder" description="Compare free and pro plans for ATS Pro Resume Builder." canonical="https://atsproresumebuilder.com/pricing" keywords="resume builder pricing, ATS pro plans" />
 
-      <div className="mb-6">
-        <Button variant="ghost" size="sm" onClick={() => user ? navigate("/dashboard") : navigate("/")} className="gap-1.5">
-          <ArrowLeft className="h-4 w-4" /> {tp.back}
-        </Button>
-      </div>
+      {/* Grid background overlay */}
+      <div className="fixed inset-0 grid-bg pointer-events-none opacity-50" />
 
-      {/* Header */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <span className="text-sm font-semibold text-primary">{tp.launchOffer}</span>
-        </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight font-display">{t.pricingPage.title}</h1>
-        <p className="mt-2 text-muted-foreground">{t.pricingPage.subtitle}</p>
-      </div>
-
-      {/* Two-column pricing cards */}
-      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
-        {/* FREE PLAN */}
-        <div className="rounded-2xl border bg-card p-6 md:p-8 flex flex-col h-full">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Free Plan</p>
-          <div className="mb-1">
-            <span className="text-4xl font-extrabold">{localCurrency.formatPrice(0)}</span>
-          </div>
-          <p className="text-xs text-muted-foreground mb-6">{t.pricingPage.freeDesc}</p>
-
-          <ul className="space-y-3 mb-8 flex-1">
-            {freeFeatures.map((f) => (
-              <li key={f.text} className="flex items-start gap-2.5 text-sm">
-                {f.included ? (
-                  <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                ) : (
-                  <X className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-0.5" />
-                )}
-                <span className={cn(!f.included && "text-muted-foreground/50 line-through")}>{f.text}</span>
-              </li>
-            ))}
-          </ul>
-
-          <Button variant="outline" className="w-full" disabled>
-            {t.pricingPage.currentPlan}
+      <div className="relative z-10 container mx-auto max-w-5xl py-10 px-4">
+        <div className="mb-6">
+          <Button variant="ghost" size="sm" onClick={() => user ? navigate("/dashboard") : navigate("/")} className="gap-1.5">
+            <ArrowLeft className="h-4 w-4" /> {tp.back}
           </Button>
         </div>
 
-        {/* PRO PLAN */}
-        <div className="rounded-2xl border-2 border-primary bg-card p-6 md:p-8 flex flex-col relative shadow-lg shadow-primary/10 h-full">
-          {/* Save badge */}
-          <div className="absolute -top-3 right-4 bg-destructive text-destructive-foreground px-3 py-1 text-xs font-bold rounded-full">
-            {tp.launchBadge}
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/10 px-4 py-1.5 mb-5 glow-border animate-glow-pulse">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm font-bold text-primary font-display uppercase tracking-wider">{tp.launchOffer}</span>
           </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight font-display neon-text">{t.pricingPage.title}</h1>
+          <p className="mt-3 text-muted-foreground max-w-lg mx-auto">{t.pricingPage.subtitle}</p>
 
-          <div className="flex items-center gap-2 mb-1">
-            <Crown className="h-5 w-5 text-primary" />
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary">Pro Plan</p>
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center gap-6 mt-6 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" /> Secure Payment</span>
+            <span className="flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-primary" /> Instant Access</span>
+            <span className="flex items-center gap-1.5"><Rocket className="h-3.5 w-3.5 text-primary" /> Cancel Anytime</span>
           </div>
+        </div>
 
-          {/* Price */}
-          <div className="mb-1 flex items-baseline gap-2">
-            <span className="text-4xl font-extrabold">{localCurrency.formatProPrice(duration)}</span>
-            <span className="text-base text-muted-foreground line-through">{savingsLabel}</span>
-          </div>
-          <p className="text-xs text-muted-foreground mb-4">
-            {duration === "weekly" ? tp.per7Days : duration === "biweekly" ? tp.per14Days : t.pricingPage.perMonth}
-          </p>
+        {/* Two-column pricing cards */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
 
-          {/* Duration tabs */}
-          <div className="flex rounded-lg bg-muted p-1 mb-6">
-            {durationTabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setDuration(tab.key)}
-                className={cn(
-                  "flex-1 text-xs font-semibold py-2 px-2 rounded-md transition-all",
-                  duration === tab.key
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          {/* FREE PLAN */}
+          <div className="rounded-sm border border-border bg-card p-6 md:p-8 flex flex-col h-full sci-fi-clip glow-border relative overflow-hidden">
+            {/* Subtle scan line inside card */}
+            <div className="absolute inset-0 pointer-events-none opacity-30">
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+            </div>
 
-          {/* Features */}
-          <ul className="space-y-3 mb-6 flex-1">
-            {proFeatures.map((f) => (
-              <li key={f.text} className="flex items-start gap-2.5 text-sm">
-                <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <span>{f.text}</span>
-              </li>
-            ))}
-          </ul>
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-8 w-8 rounded-sm bg-muted flex items-center justify-center">
+                  <Zap className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground font-display">Free Plan</p>
+              </div>
 
-          {/* Early adopter bonus */}
-          <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-3 mb-4">
-            <Gift className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-            <div>
-              <p className="text-xs font-semibold text-foreground">{tp.bonusFeatures}</p>
-              <p className="text-[11px] text-muted-foreground">{tp.bonusDesc}</p>
+              <div className="mb-1">
+                <span className="text-5xl font-extrabold font-display">{localCurrency.formatPrice(0)}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mb-6">{t.pricingPage.freeDesc}</p>
+
+              <div className="h-px bg-border mb-5" />
+
+              <ul className="space-y-3 mb-8 flex-1">
+                {freeFeatures.map((f) => (
+                  <li key={f.text} className="flex items-start gap-2.5 text-sm">
+                    {f.included ? (
+                      <div className="h-5 w-5 rounded-sm bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                    ) : (
+                      <div className="h-5 w-5 rounded-sm bg-muted flex items-center justify-center shrink-0 mt-0.5">
+                        <X className="h-3 w-3 text-muted-foreground/40" />
+                      </div>
+                    )}
+                    <span className={cn(!f.included && "text-muted-foreground/50 line-through")}>{f.text}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button variant="outline" className="w-full" disabled>
+                {t.pricingPage.currentPlan}
+              </Button>
             </div>
           </div>
 
-          <Button
-            className="w-full"
-            size="lg"
-            disabled={isPro}
-            onClick={handleSelectPlan}
-          >
-            {isPro ? t.pricingPage.currentPlan : "Subscribe Now"}
-          </Button>
-        </div>
-      </div>
+          {/* PRO PLAN */}
+          <div className="rounded-sm border-2 border-primary bg-card p-6 md:p-8 flex flex-col relative overflow-hidden h-full glow-border-strong corner-brackets">
+            {/* Animated glow background */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5" />
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+            </div>
 
-      {/* Payment methods */}
-      <div className="text-center mt-8">
-        <p className="text-xs text-muted-foreground">We accept: Visa, Mastercard, UPI, PayPal & more</p>
+            {/* Save badge */}
+            <div className="absolute -top-px right-8 z-20">
+              <div className="bg-destructive text-destructive-foreground px-4 py-1.5 text-xs font-bold rounded-b-md shadow-lg shadow-destructive/20 font-display uppercase tracking-wider">
+                {tp.launchBadge}
+              </div>
+            </div>
+
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-8 w-8 rounded-sm bg-primary/20 flex items-center justify-center animate-glow-pulse">
+                  <Crown className="h-4 w-4 text-primary" />
+                </div>
+                <p className="text-xs font-bold uppercase tracking-widest text-primary font-display">Pro Plan</p>
+              </div>
+
+              {/* Price */}
+              <div className="mb-1 flex items-baseline gap-3">
+                <span className="text-5xl font-extrabold font-display neon-text">{localCurrency.formatProPrice(duration)}</span>
+                <span className="text-lg text-muted-foreground line-through font-display">{savingsLabel}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mb-5">
+                {duration === "weekly" ? tp.per7Days : duration === "biweekly" ? tp.per14Days : t.pricingPage.perMonth}
+              </p>
+
+              {/* Duration tabs */}
+              <div className="flex rounded-sm border border-border bg-muted/50 p-1 mb-6">
+                {durationTabs.map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setDuration(tab.key)}
+                    className={cn(
+                      "flex-1 text-xs font-bold py-2.5 px-2 rounded-sm transition-all font-display uppercase tracking-wider",
+                      duration === tab.key
+                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 glow-border"
+                        : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
+                    )}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="h-px bg-primary/20 mb-5" />
+
+              {/* Features */}
+              <ul className="space-y-3 mb-6 flex-1">
+                {proFeatures.map((f) => (
+                  <li key={f.text} className="flex items-start gap-2.5 text-sm">
+                    <div className="h-5 w-5 rounded-sm bg-primary/15 flex items-center justify-center shrink-0 mt-0.5">
+                      <Check className="h-3 w-3 text-primary" />
+                    </div>
+                    <span>{f.text}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Early adopter bonus */}
+              <div className="flex items-start gap-3 rounded-sm border border-primary/20 bg-primary/5 p-3 mb-5 glow-border">
+                <div className="h-8 w-8 rounded-sm bg-primary/15 flex items-center justify-center shrink-0">
+                  <Gift className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-foreground font-display uppercase tracking-wide">{tp.bonusFeatures}</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{tp.bonusDesc}</p>
+                </div>
+              </div>
+
+              <Button
+                className="w-full"
+                size="lg"
+                disabled={isPro}
+                onClick={handleSelectPlan}
+              >
+                {isPro ? t.pricingPage.currentPlan : "Subscribe Now"}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Payment methods */}
+        <div className="text-center mt-10">
+          <div className="inline-flex items-center gap-2 rounded-sm border border-border bg-card/50 px-5 py-2.5 glow-border">
+            <Shield className="h-4 w-4 text-primary" />
+            <p className="text-xs text-muted-foreground">We accept: Visa, Mastercard, UPI, PayPal & more</p>
+          </div>
+        </div>
       </div>
     </div>
   );
