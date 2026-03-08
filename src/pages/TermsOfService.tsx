@@ -14,7 +14,7 @@ const TermsOfService = () => {
       <SEOHead title="Terms of Service — ATS Pro Resume Builder" description="Read the Terms of Service for ATS Pro Resume Builder." canonical="https://atsproresumebuilder.com/terms" keywords="terms of service, user agreement" />
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-[72px] dark:invert dark:brightness-200" width={72} height={72} /></Link>
+          <Link to="/" className="flex items-center gap-2"><img src={logo} alt="ATS Pro Resume Builder" className="h-[72px] dark:brightness-0 dark:invert" width={72} height={72} /></Link>
           <Link to="/" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"><ArrowLeft className="h-4 w-4" /> {tt.backToHome}</Link>
         </div>
       </nav>
