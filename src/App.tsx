@@ -43,6 +43,9 @@ const BlogArticlePage = lazy(() =>
 );
 const ResumeExamplesIndex = lazy(() => import("@/pages/seo/ResumeExamplesIndex"));
 const ResumeExamplePage = lazy(() => import("@/pages/seo/ResumeExamplePage"));
+const ResumeKeywordsPage = lazy(() => import("@/pages/seo/ResumeKeywordsPage"));
+const ResumeTemplatePage = lazy(() => import("@/pages/seo/ResumeTemplatePage"));
+const ResumeGuidePage = lazy(() => import("@/pages/seo/ResumeGuidePage"));
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
@@ -103,6 +106,9 @@ const App = () => (
                 <Route path="/resume-download" element={<ResumeDownloadFormats />} />
                 <Route path="/resume-examples" element={<ResumeExamplesIndex />} />
                 <Route path="/resume-examples/:jobTitle" element={<ResumeExamplePage />} />
+                <Route path="/resume-keywords/:jobTitle" element={<ResumeKeywordsPage />} />
+                <Route path="/resume-template/:jobTitle" element={<ResumeTemplatePage />} />
+                <Route path="/resume-guide/:topic" element={<ResumeGuidePage />} />
                 <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
                 <Route
                   element={
