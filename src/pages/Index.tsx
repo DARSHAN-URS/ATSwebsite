@@ -126,7 +126,7 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-primary/20 bg-background/95 backdrop-blur-xl glow-border">
         <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:brightness-0 dark:invert" width={64} height={64} src="/logo.webp" fetchPriority="high" />
+            <img alt="ATS Pro Resume Builder" className="h-12 md:h-[64px] dark:brightness-0 dark:invert" width={64} height={64} fetchPriority="high" src="/lovable-uploads/168f7123-ea46-470e-9d0c-76fb745d52f0.png" />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <div className="relative group">
@@ -467,24 +467,24 @@ const Index = () => {
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
-                  { text: lx.createEditResumes, included: true },
-                  { text: lx.allTemplates, included: true },
-                  { text: lx.pdfDownloadUpload, included: true },
-                  { text: lx.jobTrackerLimit, included: true },
-                  { text: lx.coverLetterGen, included: false },
-                  { text: lx.emailOutreach, included: false },
-                  { text: lx.aiGradingScoring, included: false },
-                  { text: lx.aiOneClickTailoring, included: false },
-                ].map((f) => (
-                  <li key={f.text} className="flex items-start gap-2.5 text-sm">
-                    {f.included ? (
-                      <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    ) : (
-                      <X className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-0.5" />
-                    )}
+                { text: lx.createEditResumes, included: true },
+                { text: lx.allTemplates, included: true },
+                { text: lx.pdfDownloadUpload, included: true },
+                { text: lx.jobTrackerLimit, included: true },
+                { text: lx.coverLetterGen, included: false },
+                { text: lx.emailOutreach, included: false },
+                { text: lx.aiGradingScoring, included: false },
+                { text: lx.aiOneClickTailoring, included: false }].
+                map((f) =>
+                <li key={f.text} className="flex items-start gap-2.5 text-sm">
+                    {f.included ?
+                  <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" /> :
+
+                  <X className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-0.5" />
+                  }
                     <span className={!f.included ? "text-muted-foreground/50 line-through" : ""}>{f.text}</span>
                   </li>
-                ))}
+                )}
               </ul>
 
               <Button variant="outline" className="w-full" onClick={() => openAuth("signup")}>
@@ -513,44 +513,44 @@ const Index = () => {
 
               {/* Duration tabs */}
               <div className="flex rounded-lg bg-muted p-1 mb-6">
-                {([
-                  { key: "weekly" as const, label: pricingExtraTranslations[locale].weeklyPlan },
-                  { key: "biweekly" as const, label: pricingExtraTranslations[locale].biweeklyPlan },
-                  { key: "monthly" as const, label: lx.proPlan },
-                ]).map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setPricingDuration(tab.key)}
-                    className={`flex-1 text-xs font-semibold py-2 px-2 rounded-md transition-all ${
-                      pricingDuration === tab.key
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
+                {[
+                { key: "weekly" as const, label: pricingExtraTranslations[locale].weeklyPlan },
+                { key: "biweekly" as const, label: pricingExtraTranslations[locale].biweeklyPlan },
+                { key: "monthly" as const, label: lx.proPlan }].
+                map((tab) =>
+                <button
+                  key={tab.key}
+                  onClick={() => setPricingDuration(tab.key)}
+                  className={`flex-1 text-xs font-semibold py-2 px-2 rounded-md transition-all ${
+                  pricingDuration === tab.key ?
+                  "bg-primary text-primary-foreground shadow-sm" :
+                  "text-muted-foreground hover:text-foreground"}`
+                  }>
+                  
                     {tab.label}
                   </button>
-                ))}
+                )}
               </div>
 
               <ul className="space-y-3 mb-6 flex-1">
                 {[
-                  lx.unlimitedResumes,
-                  lx.allPremiumTemplates,
-                  lx.aiGradingScoring,
-                  lx.aiOneClickTailoring,
-                  lx.aiCoverLetter,
-                  lx.unlimitedJobTracking,
-                  lx.emailOutreach,
-                  lx.interviewPrepFeature,
-                  lx.pinTrackCompanies,
-                  lx.aiJobSearchMatching,
-                  ...(pricingDuration === "monthly" ? [lx.prioritySupport] : []),
-                ].map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm">
+                lx.unlimitedResumes,
+                lx.allPremiumTemplates,
+                lx.aiGradingScoring,
+                lx.aiOneClickTailoring,
+                lx.aiCoverLetter,
+                lx.unlimitedJobTracking,
+                lx.emailOutreach,
+                lx.interviewPrepFeature,
+                lx.pinTrackCompanies,
+                lx.aiJobSearchMatching,
+                ...(pricingDuration === "monthly" ? [lx.prioritySupport] : [])].
+                map((f) =>
+                <li key={f} className="flex items-start gap-2.5 text-sm">
                     <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <span>{f}</span>
                   </li>
-                ))}
+                )}
               </ul>
 
               <div className="flex items-start gap-2 rounded-lg bg-accent/50 border border-accent p-3 mb-4">
@@ -568,11 +568,11 @@ const Index = () => {
                   const links: Record<string, string> = {
                     weekly: "https://nas.io/muzamils-business-2/zerolink/7day-pro",
                     biweekly: "https://nas.io/muzamils-business-2/zerolink/14day-pro",
-                    monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro",
+                    monthly: "https://nas.io/muzamils-business-2/zerolink/monthly-pro"
                   };
                   window.open(links[pricingDuration], "_blank");
-                }}
-              >
+                }}>
+                
                 Subscribe Now
               </Button>
             </div>
@@ -636,7 +636,7 @@ const Index = () => {
                   <svg className="h-3.5 w-3.5 md:h-4 md:w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" /></svg>
                 </a>
                 <a href="https://www.trustpilot.com/evaluate/atsproresumebuilder.com" target="_blank" rel="noopener noreferrer" aria-label="Trustpilot" className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center bg-background/10 text-background/60 transition hover:bg-[#00b67a] hover:text-white">
-                  <svg className="h-3.5 w-3.5 md:h-4 md:w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 8.41H23.42L16.41 13.59L19 22L12 16.82L5 22L7.59 13.59L0.58 8.41H9.41L12 0Z"/></svg>
+                  <svg className="h-3.5 w-3.5 md:h-4 md:w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 8.41H23.42L16.41 13.59L19 22L12 16.82L5 22L7.59 13.59L0.58 8.41H9.41L12 0Z" /></svg>
                 </a>
               </div>
             </div>
@@ -712,9 +712,9 @@ const Index = () => {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    type="button"
-                    className="text-sm text-primary hover:underline"
-                    onClick={() => {setForgotEmail(email);setForgotOpen(true);}}>
+                      type="button"
+                      className="text-sm text-primary hover:underline"
+                      onClick={() => {setForgotEmail(email);setForgotOpen(true);}}>
 
                     Forgot password?
                   </button>
@@ -794,35 +794,35 @@ const Index = () => {
           </DialogHeader>
           <p className="text-sm text-muted-foreground">Enter your email and we'll send you a reset link.</p>
           <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setForgotLoading(true);
-              try {
-                const res = await supabase.functions.invoke("send-email", {
-                  body: {
-                    type: "password_reset",
-                    email: forgotEmail,
-                    redirectTo: `${window.location.origin}/reset-password`
-                  }
-                });
-                if (res.error) throw res.error;
-                toast({ title: "Check your email", description: "We sent you a password reset link." });
-                setForgotOpen(false);
-              } catch (err: any) {
-                toast({ title: "Error", description: err.message || "Failed to send reset email", variant: "destructive" });
-              }
-              setForgotLoading(false);
-            }}
-            className="space-y-4">
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setForgotLoading(true);
+                try {
+                  const res = await supabase.functions.invoke("send-email", {
+                    body: {
+                      type: "password_reset",
+                      email: forgotEmail,
+                      redirectTo: `${window.location.origin}/reset-password`
+                    }
+                  });
+                  if (res.error) throw res.error;
+                  toast({ title: "Check your email", description: "We sent you a password reset link." });
+                  setForgotOpen(false);
+                } catch (err: any) {
+                  toast({ title: "Error", description: err.message || "Failed to send reset email", variant: "destructive" });
+                }
+                setForgotLoading(false);
+              }}
+              className="space-y-4">
 
             <div className="space-y-2">
               <Label htmlFor="forgot-email">{t.common.email}</Label>
               <Input
-                id="forgot-email"
-                type="email"
-                value={forgotEmail}
-                onChange={(e) => setForgotEmail(e.target.value)}
-                required />
+                  id="forgot-email"
+                  type="email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  required />
 
             </div>
             <Button type="submit" className="w-full" disabled={forgotLoading}>
