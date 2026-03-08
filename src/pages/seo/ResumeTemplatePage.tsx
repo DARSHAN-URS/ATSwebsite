@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { getResumeExampleBySlug, getRelatedExamples } from "@/data/resumeExamples";
 const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 
 export default function ResumeTemplatePage() {
   const { jobTitle } = useParams<{ jobTitle: string }>();
