@@ -6,11 +6,11 @@ interface LogoProps {
   fetchPriority?: "high" | "low" | "auto";
 }
 
-export default function Logo({ className = "h-12", width = 48, height = 48, loading, fetchPriority }: LogoProps) {
+export default function Logo({ className = "h-10 w-auto", width = 160, height = 48, loading, fetchPriority }: LogoProps) {
   return (
     <img
       alt="ATS Pro Resume Builder"
-      className={`${className} dark:brightness-0 dark:invert`}
+      className={`${className} object-contain dark:brightness-0 dark:invert`}
       width={width}
       height={height}
       loading={loading}
