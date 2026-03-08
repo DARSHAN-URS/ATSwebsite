@@ -162,7 +162,10 @@ export default function Blog() {
       <div className="min-h-screen bg-background">
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0">
-            <img src={blogHero} alt="Career Blog" className="w-full h-full object-cover" loading="eager" width={1920} height={1080} />
+            <picture>
+              <source srcSet={blogHero} type="image/webp" />
+              <img src={blogHeroFallback} alt="Career Blog" className="w-full h-full object-cover" loading="eager" width={1920} height={1080} decoding="async" />
+            </picture>
             <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
           </div>
           <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-28">
