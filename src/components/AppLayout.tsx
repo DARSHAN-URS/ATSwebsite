@@ -145,7 +145,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <Logo className="h-20 w-auto" width={80} height={80} variant="light" />
+            <Logo className="h-8 w-auto" width={120} height={36} variant="light" />
           </div>
         </header>
       }

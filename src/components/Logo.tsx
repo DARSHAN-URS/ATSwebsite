@@ -8,7 +8,7 @@ interface LogoProps {
   variant?: "auto" | "light";
 }
 
-export default function Logo({ className = "h-20 w-auto", width = 320, height = 96, loading, fetchPriority, variant = "auto" }: LogoProps) {
+export default function Logo({ className = "h-10 w-auto", width = 160, height = 48, loading, fetchPriority, variant = "auto" }: LogoProps) {
   const filterClass = variant === "light"
     ? "brightness-0 invert"
     : "dark:brightness-0 dark:invert";

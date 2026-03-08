@@ -695,7 +695,7 @@ const Index = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Logo className="h-32" width={128} height={128} />
+              <Logo className="h-10" width={160} height={48} />
             </DialogTitle>
           </DialogHeader>
           <Tabs value={authTab} onValueChange={setAuthTab}>
