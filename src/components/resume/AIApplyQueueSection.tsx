@@ -41,6 +41,23 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
+function getManualApplyReason(url: string | null): string {
+  if (!url || url === "#") return "No direct apply API is available for this listing.";
+
+  const normalized = url.toLowerCase();
+  if (
+    normalized.includes("indeed.com") ||
+    normalized.includes("linkedin.com") ||
+    normalized.includes("naukri") ||
+    normalized.includes("bayt.com") ||
+    normalized.includes("dubizzle")
+  ) {
+    return "This listing is on a job board and requires form steps on the employer page.";
+  }
+
+  return "This career site does not expose a public auto-apply API, so you need to submit manually.";
+}
+
 function ApplyMethodBadge({ method, url }: { method: string | null; url: string | null }) {
   if (!method || method === "manual") {
     // Detect what method would be used
@@ -53,7 +70,7 @@ function ApplyMethodBadge({ method, url }: { method: string | null; url: string 
           <Badge variant="outline" className="text-[10px] gap-1 cursor-help"><Globe className="h-2.5 w-2.5" />Manual</Badge>
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-[250px] text-xs">
-          This company's career page doesn't support auto-apply. Only jobs on Greenhouse or Lever ATS can be submitted automatically. Click "Apply" to open the job page and apply directly.
+          {getManualApplyReason(url)} Click "Apply" to open the job page and submit directly.
         </TooltipContent>
       </Tooltip>
     );
@@ -115,7 +132,7 @@ export default function AIApplyQueueSection() {
 
       toast({
         title: `Auto-Apply Complete`,
-        description: `✅ ${applied} applied via API/email${failed > 0 ? ` · ❌ ${failed} failed` : ""}${manual > 0 ? ` · 📋 ${manual} need manual apply` : ""}`,
+        description: `✅ ${applied} applied via API/email${failed > 0 ? ` · ❌ ${failed} failed` : ""}${manual > 0 ? ` · 📋 ${manual} manual (site requires direct form submission)` : ""}`,
       });
 
       // Refresh queue
@@ -160,7 +177,7 @@ export default function AIApplyQueueSection() {
           window.open(job.job_url, "_blank", "noopener,noreferrer");
         }
 
-        toast({ title: "Application tracked!", description: `${job.job_title} at ${job.company} — apply on the opened page.` });
+        toast({ title: "Application tracked!", description: `${job.job_title} at ${job.company} — apply on the opened page. ${getManualApplyReason(job.job_url)}` });
       }
 
       setSelected(null);
@@ -244,6 +261,12 @@ export default function AIApplyQueueSection() {
                     {job.job_type && <span className="ml-2">· {job.job_type}</span>}
                   </p>
                 )}
+                {detectMethodFromUrl(job.job_url) === "manual" && (
+                  <p className="text-xs text-muted-foreground mt-1 flex items-start gap-1.5">
+                    <AlertCircle className="h-3 w-3 mt-0.5 shrink-0" />
+                    <span>{getManualApplyReason(job.job_url)}</span>
+                  </p>
+                )}
                 {job.match_explanation && (
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2 italic">{job.match_explanation}</p>
                 )}
@@ -312,10 +335,15 @@ export default function AIApplyQueueSection() {
               )}
 
               {/* Apply method info */}
-              {detectMethodFromUrl(selected.job_url) !== "manual" && (
+              {detectMethodFromUrl(selected.job_url) !== "manual" ? (
                 <div className="flex items-center gap-2 p-2 rounded-md bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 text-xs">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   This job can be auto-submitted via {detectMethodFromUrl(selected.job_url) === "greenhouse" ? "Greenhouse" : "Lever"} API
+                </div>
+              ) : (
+                <div className="flex items-start gap-2 p-2 rounded-md bg-muted text-muted-foreground text-xs">
+                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                  <span>{getManualApplyReason(selected.job_url)} Click "Auto-Apply & Track" to open the page and track this application.</span>
                 </div>
               )}
 
@@ -374,7 +402,7 @@ export default function AIApplyQueueSection() {
                 >
                   {applying === selected.id
                     ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Processing...</>
-                    : <><Zap className="h-4 w-4 mr-2" />Auto-Apply & Track</>}
+                    : <><Zap className="h-4 w-4 mr-2" />{detectMethodFromUrl(selected.job_url) === "manual" ? "Open & Track Manual Apply" : "Auto-Apply & Track"}</>}
                 </Button>
                 <Button
                   variant="outline"
