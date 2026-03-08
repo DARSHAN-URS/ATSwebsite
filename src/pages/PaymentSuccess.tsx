@@ -47,37 +47,19 @@ export default function PaymentSuccess() {
 
     const activate = async () => {
       setActivating(true);
-      const now = new Date();
-      const expires = new Date(now.getTime() + plan.days * 24 * 60 * 60 * 1000);
-      setExpiresAt(expires.toLocaleDateString());
 
-      // Check if user already has an active subscription for this window
-      const { data: existing } = await supabase
-        .from("user_subscriptions")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("status", "active")
-        .gte("expires_at", now.toISOString())
-        .maybeSingle();
+      const { data, error } = await supabase.functions.invoke("activate-subscription", {
+        body: { plan_id: planId },
+      });
 
-      if (!existing) {
-        await supabase.from("user_subscriptions").insert({
-          user_id: user.id,
-          plan_name: planId,
-          status: "active",
-          amount: plan.amount,
-          currency: "INR",
-          starts_at: now.toISOString(),
-          expires_at: expires.toISOString(),
-        });
-      } else {
-        // Already active — just show confirmation
-        const { data: sub } = await supabase
-          .from("user_subscriptions")
-          .select("expires_at")
-          .eq("id", existing.id)
-          .single();
-        if (sub?.expires_at) setExpiresAt(new Date(sub.expires_at).toLocaleDateString());
+      if (error || data?.error) {
+        console.error("Activation error:", error || data?.error);
+        setActivating(false);
+        return;
+      }
+
+      if (data?.expires_at) {
+        setExpiresAt(new Date(data.expires_at).toLocaleDateString());
       }
 
       setActivating(false);
