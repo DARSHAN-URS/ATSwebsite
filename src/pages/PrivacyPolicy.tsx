@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { privacyTranslations } from "@/i18n/privacyTranslations";
