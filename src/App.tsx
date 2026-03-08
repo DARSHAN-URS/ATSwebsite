@@ -43,6 +43,9 @@ const BlogArticlePage = lazy(() =>
 );
 const ResumeExamplesIndex = lazy(() => import("@/pages/seo/ResumeExamplesIndex"));
 const ResumeExamplePage = lazy(() => import("@/pages/seo/ResumeExamplePage"));
+const ResumeKeywordsPage = lazy(() => import("@/pages/seo/ResumeKeywordsPage"));
+const ResumeTemplatePage = lazy(() => import("@/pages/seo/ResumeTemplatePage"));
+const ResumeGuidePage = lazy(() => import("@/pages/seo/ResumeGuidePage"));
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
