@@ -335,10 +335,15 @@ export default function AIApplyQueueSection() {
               )}
 
               {/* Apply method info */}
-              {detectMethodFromUrl(selected.job_url) !== "manual" && (
+              {detectMethodFromUrl(selected.job_url) !== "manual" ? (
                 <div className="flex items-center gap-2 p-2 rounded-md bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 text-xs">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   This job can be auto-submitted via {detectMethodFromUrl(selected.job_url) === "greenhouse" ? "Greenhouse" : "Lever"} API
+                </div>
+              ) : (
+                <div className="flex items-start gap-2 p-2 rounded-md bg-muted text-muted-foreground text-xs">
+                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                  <span>{getManualApplyReason(selected.job_url)} Click "Auto-Apply & Track" to open the page and track this application.</span>
                 </div>
               )}
 
