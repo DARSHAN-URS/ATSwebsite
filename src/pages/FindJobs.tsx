@@ -222,12 +222,7 @@ export default function FindJobs() {
 
         {/* AI Search Tab */}
         <TabsContent value="search" className="space-y-6 mt-4">
-          {!isPro ? (
-            <ProFeatureGate message="AI Job Search">
-              <Card><CardContent className="pt-6"><div className="h-32" /></CardContent></Card>
-            </ProFeatureGate>
-          ) : (
-            <>
+          <>
               <Card>
                 <CardContent className="pt-6">
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -339,7 +334,7 @@ export default function FindJobs() {
                 </div>
               )}
             </>
-          )}
+
         </TabsContent>
 
         {/* Recruiter Posts Tab */}

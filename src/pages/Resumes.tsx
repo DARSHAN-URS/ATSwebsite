@@ -590,7 +590,6 @@ export default function Resumes() {
             <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
           </div>
           <div className="flex flex-wrap gap-2">
-            {isPro ? (
             <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.tailorToJob}</span><span className="sm:hidden">{t.resumes.tailorToJob}</span></Button>
@@ -612,10 +611,6 @@ export default function Resumes() {
                 </Button>
               </DialogContent>
             </Dialog>
-            ) : (
-              <ProFeatureGate inline message="AI Tailor"><span /></ProFeatureGate>
-            )}
-            {isPro ? (
             <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.gradeResume}</span><span className="sm:hidden">{t.resumes.gradeResume}</span></Button>
@@ -695,9 +690,6 @@ export default function Resumes() {
                 )}
               </DialogContent>
             </Dialog>
-            ) : (
-              <ProFeatureGate inline message="AI Grade"><span /></ProFeatureGate>
-            )}
             <ATSScannerDialog resumeData={resumeData} />
             <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} />
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
@@ -741,14 +733,10 @@ export default function Resumes() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{t.resumes.professionalSummary}</CardTitle>
-                  {isPro ? (
-                    <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
+                  <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
                       {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
                       {t.resumes.aiGenerate}
                     </Button>
-                  ) : (
-                    <ProFeatureGate inline message="AI Generate"><span /></ProFeatureGate>
-                  )}
                 </div>
               </CardHeader>
               <CardContent>
@@ -761,14 +749,10 @@ export default function Resumes() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{t.resumes.skills}</CardTitle>
-                  {isPro ? (
-                    <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
+                  <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
                       {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
                       {t.resumes.aiSuggest}
                     </Button>
-                  ) : (
-                    <ProFeatureGate inline message="AI Suggest"><span /></ProFeatureGate>
-                  )}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -836,14 +820,10 @@ export default function Resumes() {
                     </div>
                     <div className="flex items-center justify-between">
                       <Label className="text-xs">{t.resumes.bullets}</Label>
-                      {isPro ? (
-                        <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
+                      <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
                           {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
                           {t.resumes.aiGenerateBullets}
                         </Button>
-                      ) : (
-                        <ProFeatureGate inline message="AI Bullets"><span /></ProFeatureGate>
-                      )}
                     </div>
                     {exp.bullets && exp.bullets.length > 0 ? (
                       <ul className="space-y-1">
