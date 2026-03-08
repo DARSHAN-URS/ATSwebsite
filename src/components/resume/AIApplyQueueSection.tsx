@@ -132,7 +132,7 @@ export default function AIApplyQueueSection() {
 
       toast({
         title: `Auto-Apply Complete`,
-        description: `✅ ${applied} applied via API/email${failed > 0 ? ` · ❌ ${failed} failed` : ""}${manual > 0 ? ` · 📋 ${manual} need manual apply` : ""}`,
+        description: `✅ ${applied} applied via API/email${failed > 0 ? ` · ❌ ${failed} failed` : ""}${manual > 0 ? ` · 📋 ${manual} manual (site requires direct form submission)` : ""}`,
       });
 
       // Refresh queue
