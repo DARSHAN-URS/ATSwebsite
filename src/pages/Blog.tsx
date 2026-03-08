@@ -16,18 +16,19 @@ const SEED_ARTICLES = RAW_ARTICLES.filter(
   (a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i
 );
 
-const blogHero = "/images/blog-hero.jpg";
+const blogHero = "/images/blog-hero.webp";
+const blogHeroFallback = "/images/blog-hero.jpg";
 
-const CATEGORY_IMAGES: Record<string, string> = {
-  "Resume Tips": "/images/blog-resume-tips.jpg",
-  "Interview Prep": "/images/blog-interview-prep.jpg",
-  "Career Growth": "/images/blog-career-growth.jpg",
-  "Job Search": "/images/blog-job-search.jpg",
-  "Salary": "/images/blog-salary.jpg",
-  "Product Guide": "/images/blog-resume-tips.jpg",
-  "AI & Tech": "/images/blog-ai-tech.jpg",
-  "Networking": "/images/blog-networking.jpg",
-  "Industry Guide": "/images/blog-industry.jpg",
+const CATEGORY_IMAGES: Record<string, { webp: string; fallback: string }> = {
+  "Resume Tips": { webp: "/images/blog-resume-tips.webp", fallback: "/images/blog-resume-tips.jpg" },
+  "Interview Prep": { webp: "/images/blog-interview-prep.webp", fallback: "/images/blog-interview-prep.jpg" },
+  "Career Growth": { webp: "/images/blog-career-growth.webp", fallback: "/images/blog-career-growth.jpg" },
+  "Job Search": { webp: "/images/blog-job-search.webp", fallback: "/images/blog-job-search.jpg" },
+  "Salary": { webp: "/images/blog-salary.webp", fallback: "/images/blog-salary.jpg" },
+  "Product Guide": { webp: "/images/blog-resume-tips.webp", fallback: "/images/blog-resume-tips.jpg" },
+  "AI & Tech": { webp: "/images/blog-ai-tech.webp", fallback: "/images/blog-ai-tech.jpg" },
+  "Networking": { webp: "/images/blog-networking.webp", fallback: "/images/blog-networking.jpg" },
+  "Industry Guide": { webp: "/images/blog-industry.webp", fallback: "/images/blog-industry.jpg" },
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -42,8 +43,21 @@ const CATEGORY_COLORS: Record<string, string> = {
   "Industry Guide": "bg-cyan-100 text-cyan-700 dark:bg-cyan-950/50 dark:text-cyan-400",
 };
 
-function getCategoryImage(category: string): string {
-  return CATEGORY_IMAGES[category] || "/images/blog-resume-tips.jpg";
+const defaultImg = { webp: "/images/blog-resume-tips.webp", fallback: "/images/blog-resume-tips.jpg" };
+function getCategoryImage(category: string): { webp: string; fallback: string } {
+  return CATEGORY_IMAGES[category] || defaultImg;
+}
+
+function BlogImage({ src, alt, className, loading, width, height }: {
+  src: { webp: string; fallback: string }; alt: string; className?: string;
+  loading?: "lazy" | "eager"; width?: number; height?: number;
+}) {
+  return (
+    <picture>
+      <source srcSet={src.webp} type="image/webp" />
+      <img src={src.fallback} alt={alt} className={className} loading={loading} width={width} height={height} decoding="async" />
+    </picture>
+  );
 }
 
 const ALL_CATEGORIES = ["All", ...Array.from(new Set(SEED_ARTICLES.map((a) => a.category)))];
@@ -148,7 +162,10 @@ export default function Blog() {
       <div className="min-h-screen bg-background">
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0">
-            <img src={blogHero} alt="Career Blog" className="w-full h-full object-cover" loading="eager" width={1920} height={1080} />
+            <picture>
+              <source srcSet={blogHero} type="image/webp" />
+              <img src={blogHeroFallback} alt="Career Blog" className="w-full h-full object-cover" loading="eager" width={1920} height={1080} decoding="async" />
+            </picture>
             <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
           </div>
           <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-28">
@@ -222,7 +239,7 @@ export default function Blog() {
               <Card className="overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="grid md:grid-cols-2">
                   <div className="relative overflow-hidden h-56 md:h-full min-h-[240px]">
-                    <img src={getCategoryImage(featuredArticle.category)} alt={t(featuredArticle.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="eager" width={800} height={512} />
+                    <BlogImage src={getCategoryImage(featuredArticle.category)} alt={t(featuredArticle.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="eager" width={800} height={512} />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/10" />
                   </div>
                   <div className="p-6 md:p-8 flex flex-col justify-center">
@@ -265,7 +282,7 @@ export default function Blog() {
                 <Link key={`${article.slug}-${idx}`} to={`/blog/${article.slug}`} className="group block">
                   <Card className="h-full overflow-hidden border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-card">
                     <div className="relative overflow-hidden h-44">
-                      <img src={getCategoryImage(article.category)} alt={t(article.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
+                      <BlogImage src={getCategoryImage(article.category)} alt={t(article.slug)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width={800} height={512} />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2">
                         <Badge className={`text-xs font-semibold border-0 ${CATEGORY_COLORS[article.category] || "bg-primary/10 text-primary"}`}>{c(article.category)}</Badge>

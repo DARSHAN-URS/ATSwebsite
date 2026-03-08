@@ -20,6 +20,8 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
   build: {
+    target: "es2020",
+    cssMinify: "lightningcss",
     rollupOptions: {
       output: {
         manualChunks: {
@@ -32,5 +34,6 @@ export default defineConfig(({ mode }) => ({
       },
     },
     chunkSizeWarningLimit: 600,
+    sourcemap: false,
   },
 }));
