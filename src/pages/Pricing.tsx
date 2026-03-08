@@ -4,7 +4,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check, X, Crown, Sparkles, Gift, Zap, Shield, Rocket } from "lucide-react";
+import { ArrowLeft, Check, X, Crown, Sparkles, Gift, Zap, Shield, Rocket, Star, TrendingUp, FileText, Users, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
@@ -12,6 +12,20 @@ import { pricingExtraTranslations } from "@/i18n/pricingExtraTranslations";
 import { cn } from "@/lib/utils";
 
 type Duration = "weekly" | "biweekly" | "monthly";
+
+const STATS = [
+  { icon: Users, value: "10,000+", label: "Job Seekers" },
+  { icon: FileText, value: "1M+", label: "Resumes Built" },
+  { icon: Star, value: "4.8★", label: "Avg Rating" },
+  { icon: TrendingUp, value: "3×", label: "More Interviews" },
+];
+
+const FAQS = [
+  { q: "Can I cancel anytime?", a: "Yes! There are no long-term contracts. You can cancel your subscription at any time and continue to use Pro features until your current period ends." },
+  { q: "What payment methods do you accept?", a: "We accept Visa, Mastercard, UPI, PayPal, and many more regional payment methods. All payments are processed securely." },
+  { q: "Is my data safe?", a: "Absolutely. We use bank-grade encryption and never share your personal data with third parties. Your resumes are stored securely in the cloud." },
+  { q: "What happens after my plan expires?", a: "You'll still have access to the free tier features. Your Pro resumes and data remain saved — simply resubscribe to access them again." },
+];
 
 export default function Pricing() {
   const { user } = useAuth();
@@ -22,6 +36,7 @@ export default function Pricing() {
   const { toast } = useToast();
   const localCurrency = useLocalCurrency();
   const [duration, setDuration] = useState<Duration>("monthly");
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const PAYMENT_LINKS: Record<string, string> = {
     pro_weekly: "https://nas.io/muzamils-business-2/zerolink/7day-pro",
@@ -104,12 +119,22 @@ export default function Pricing() {
           </div>
         </div>
 
+        {/* Stats row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 max-w-4xl mx-auto">
+          {STATS.map((s) => (
+            <div key={s.label} className="flex flex-col items-center gap-2 rounded-sm border border-primary/20 bg-card p-4 sci-fi-clip glow-border text-center">
+              <s.icon className="h-5 w-5 text-primary" />
+              <span className="text-xl font-extrabold font-display neon-text">{s.value}</span>
+              <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-display">{s.label}</span>
+            </div>
+          ))}
+        </div>
+
         {/* Two-column pricing cards */}
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
 
           {/* FREE PLAN */}
           <div className="rounded-sm border border-border bg-card p-6 md:p-8 flex flex-col h-full sci-fi-clip glow-border relative overflow-hidden">
-            {/* Subtle scan line inside card */}
             <div className="absolute inset-0 pointer-events-none opacity-30">
               <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
             </div>
@@ -160,7 +185,7 @@ export default function Pricing() {
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
             </div>
 
-            {/* Save badge */}
+            {/* Popular badge */}
             <div className="absolute -top-px right-8 z-20">
               <div className="bg-destructive text-destructive-foreground px-4 py-1.5 text-xs font-bold rounded-b-md shadow-lg shadow-destructive/20 font-display uppercase tracking-wider">
                 {tp.launchBadge}
@@ -239,11 +264,49 @@ export default function Pricing() {
           </div>
         </div>
 
+        {/* Money-back guarantee banner */}
+        <div className="max-w-4xl mx-auto mt-8 rounded-sm border border-primary/20 bg-card p-5 flex items-center gap-4 sci-fi-clip glow-border">
+          <div className="h-12 w-12 rounded-sm bg-primary/10 flex items-center justify-center shrink-0 animate-glow-pulse">
+            <Shield className="h-6 w-6 text-primary" />
+          </div>
+          <div>
+            <p className="text-sm font-bold font-display uppercase tracking-wide">100% Satisfaction Guaranteed</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Not happy with Pro? Contact us within 7 days for a full refund — no questions asked.</p>
+          </div>
+        </div>
+
         {/* Payment methods */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-8">
           <div className="inline-flex items-center gap-2 rounded-sm border border-border bg-card/50 px-5 py-2.5 glow-border">
             <Shield className="h-4 w-4 text-primary" />
             <p className="text-xs text-muted-foreground">We accept: Visa, Mastercard, UPI, PayPal & more</p>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="max-w-3xl mx-auto mt-16 mb-8">
+          <h2 className="text-2xl md:text-3xl font-extrabold font-display text-center mb-8 neon-text">Frequently Asked Questions</h2>
+          <div className="space-y-3">
+            {FAQS.map((faq, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "rounded-sm border bg-card overflow-hidden transition-all sci-fi-clip",
+                  openFaq === i ? "border-primary/40 glow-border" : "border-border"
+                )}
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between p-4 text-left"
+                >
+                  <span className="text-sm font-bold font-display">{faq.q}</span>
+                  <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform shrink-0 ml-2", openFaq === i && "rotate-180 text-primary")} />
+                </button>
+                <div className={cn("overflow-hidden transition-all", openFaq === i ? "max-h-40 pb-4 px-4" : "max-h-0")}>
+                  <p className="text-sm text-muted-foreground">{faq.a}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
