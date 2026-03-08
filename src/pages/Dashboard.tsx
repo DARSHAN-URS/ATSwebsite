@@ -175,7 +175,7 @@ function JobSeekerDashboard() {
 
   const cards = [
     { title: t.dashboard.resumes, value: stats.resumes, icon: FileText, description: t.dashboard.createdResumes, action: () => navigate("/resumes") },
-    { title: t.dashboard.coverLetters, value: stats.coverLetters, icon: Mail, description: t.dashboard.generatedLetters, action: () => navigate("/cover-letters") },
+    { title: t.dashboard.coverLetters, value: stats.coverLetters, icon: Mail, description: t.dashboard.generatedLetters, action: () => navigate("/resumes?tab=cover-letters") },
     { title: t.dashboard.applications, value: stats.applications, icon: Briefcase, description: t.dashboard.trackedApps, action: () => navigate("/jobs") },
     { title: td.responseRate, value: `${stats.responseRate}%`, icon: TrendingUp, description: td.fromTrackedApps },
   ];
