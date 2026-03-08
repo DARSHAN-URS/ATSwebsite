@@ -171,8 +171,8 @@ export default function CoverLetterEditor({ title, editData, setEditData, onBack
         {/* Preview */}
         <Card className="sticky top-4 self-start">
           <CardHeader><CardTitle className="text-base">Preview</CardTitle></CardHeader>
-          <CardContent>
-            <div ref={printRef}>
+          <CardContent className="overflow-x-auto">
+            <div ref={printRef} className="mx-auto" style={{ width: "fit-content" }}>
               <CoverLetterPreview data={editData} isLegacy={!!isLegacy} />
             </div>
           </CardContent>
