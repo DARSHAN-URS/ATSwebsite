@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +7,7 @@ import { Download } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import type { CoverLetterData } from "@/pages/CoverLetters";
 import CoverLetterPreview from "./CoverLetterPreview";
+import { generateCoverLetterPDF } from "./generateCoverLetterPDF";
 
 interface Props {
   title: string;
@@ -18,36 +18,20 @@ interface Props {
 }
 
 export default function CoverLetterEditor({ title, editData, setEditData, onBack, onSave }: Props) {
-  const printRef = useRef<HTMLDivElement>(null);
-
   const update = (field: keyof CoverLetterData, value: string) => {
     setEditData({ ...editData, [field]: value });
   };
 
-  const handleExportPDF = () => {
-    if (!printRef.current) return;
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
-    printWindow.document.write(`
-      <html><head><title>${title}</title>
-      <style>
-        body { font-family: 'Georgia', serif; max-width: 700px; margin: 40px auto; line-height: 1.7; color: #222; padding: 20px; }
-        .header-block { margin-bottom: 8px; line-height: 1.5; }
-        .header-block strong { font-size: 16px; }
-        .separator { border-top: 1px solid #ccc; margin: 16px 0; }
-        .subject { font-weight: bold; margin: 8px 0 16px; }
-        p { margin-bottom: 1em; }
-        .sign-off { margin-top: 24px; }
-      </style></head><body>
-      ${printRef.current.innerHTML}
-      </body></html>
-    `);
-    printWindow.document.close();
-    setTimeout(() => printWindow.print(), 300);
-  };
-
   // Check if it's a legacy cover letter (only has greeting/opening/body/closing)
   const isLegacy = !editData.applicant_name && !editData.value_experience && !editData.why_company && editData.body;
+
+  const handleExportPDF = () => {
+    generateCoverLetterPDF({
+      title,
+      data: editData,
+      isLegacy: !!isLegacy,
+    });
+  };
 
   return (
     <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
@@ -172,7 +156,7 @@ export default function CoverLetterEditor({ title, editData, setEditData, onBack
         <Card className="sticky top-4 self-start overflow-hidden">
           <CardHeader><CardTitle className="text-base">Preview</CardTitle></CardHeader>
           <CardContent>
-            <div ref={printRef}>
+            <div>
               <CoverLetterPreview data={editData} isLegacy={!!isLegacy} />
             </div>
           </CardContent>
