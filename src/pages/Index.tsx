@@ -314,7 +314,7 @@ const Index = () => {
 
       {/* Why Resumes Fail */}
       <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 md:gap-16 px-4 md:px-6 md:grid-cols-2">
+        <div className="mx-auto max-w-3xl px-4 md:px-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono neon-text">{t.landing.theProblem}</p>
             <h2 className="font-display text-xl font-extrabold tracking-tight md:text-3xl">
