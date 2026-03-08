@@ -7,29 +7,37 @@ interface Props {
 }
 
 const A4_W = 595;
-const A4_H = 842;
+const A4_MIN_H = 842;
 
 function A4Page({ children }: { children: React.ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [contentHeight, setContentHeight] = useState(A4_MIN_H);
 
   useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([entry]) => {
-      const availableWidth = entry.contentRect.width;
-      setScale(Math.min(1, availableWidth / A4_W));
+    const wrapper = wrapperRef.current;
+    const content = contentRef.current;
+    if (!wrapper || !content) return;
+
+    const ro = new ResizeObserver(() => {
+      const availableWidth = wrapper.getBoundingClientRect().width;
+      const newScale = Math.min(1, availableWidth / A4_W);
+      setScale(newScale);
+      setContentHeight(Math.max(A4_MIN_H, content.scrollHeight));
     });
-    ro.observe(el);
+    ro.observe(wrapper);
+    ro.observe(content);
     return () => ro.disconnect();
   }, []);
 
   return (
-    <div ref={wrapperRef} className="w-full" style={{ height: A4_H * scale }}>
+    <div ref={wrapperRef} className="w-full overflow-hidden" style={{ height: contentHeight * scale }}>
       <div
+        ref={contentRef}
         style={{
           width: A4_W,
-          minHeight: A4_H,
+          minHeight: A4_MIN_H,
           padding: "60px 50px",
           fontFamily: "Georgia, serif",
           fontSize: "11pt",
