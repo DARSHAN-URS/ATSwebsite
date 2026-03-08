@@ -162,6 +162,7 @@ export default function CoverLetters() {
     setJobDescription("");
     setTone("professional");
     setTitle("");
+    clearDraft();
   };
 
   const handleSaveEdit = async () => {
