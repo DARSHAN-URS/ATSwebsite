@@ -62,7 +62,7 @@ export default function ResumeKeywordsPage() {
       <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="ATS Pro Resume Builder" className="h-12 dark:invert dark:brightness-200" width={48} height={48} />
+            <img src={logo} alt="ATS Pro Resume Builder" className="h-12 dark:brightness-0 dark:invert" width={48} height={48} />
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/resume-examples" className="text-sm text-muted-foreground hover:text-foreground transition">Examples</Link>
