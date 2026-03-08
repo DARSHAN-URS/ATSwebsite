@@ -24,7 +24,6 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT_MAX;
 }
 
-// Clean up old entries periodically
 setInterval(() => {
   const now = Date.now();
   for (const [key, val] of rateLimitMap) {
@@ -44,6 +43,47 @@ function isValidRedirectTo(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+function buildEmailHtml(title: string, bodyContent: string): string {
+  return `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+  <title>${title}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f9fafb;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9fafb;">
+    <tr>
+      <td align="center" style="padding:40px 20px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <h1 style="color:#1a1a2e;font-size:24px;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">ATS Pro Resume Builder</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:32px;">
+              ${bodyContent}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top:32px;text-align:center;">
+              <p style="color:#9ca3af;font-size:12px;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+                &copy; ${new Date().getFullYear()} ATS Pro Resume Builder. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 }
 
 Deno.serve(async (req) => {
@@ -67,7 +107,6 @@ Deno.serve(async (req) => {
     const email = body?.email;
     const redirectTo = body?.redirectTo;
 
-    // Validate type
     if (type !== "password_reset" && type !== "signup_confirmation") {
       return new Response(JSON.stringify({ error: "Invalid request" }), {
         status: 400,
@@ -75,7 +114,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Validate email
     if (!isValidEmail(email)) {
       return new Response(JSON.stringify({ error: "Invalid request" }), {
         status: 400,
@@ -83,7 +121,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Validate redirectTo
     if (!redirectTo || !isValidRedirectTo(redirectTo)) {
       return new Response(JSON.stringify({ error: "Invalid request" }), {
         status: 400,
@@ -123,7 +160,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Use service role to generate magic links / password reset links
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -131,9 +167,9 @@ Deno.serve(async (req) => {
 
     let subject = "";
     let html = "";
+    let plainText = "";
 
     if (type === "password_reset") {
-      // Generate a password reset link via admin API
       const { data, error } = await supabaseAdmin.auth.admin.generateLink({
         type: "recovery",
         email,
@@ -142,7 +178,7 @@ Deno.serve(async (req) => {
 
       if (error || !data) {
         console.error("Generate link error:", error);
-        // Don't reveal whether user exists - return success silently
+        // Don't reveal whether user exists
         return new Response(JSON.stringify({ success: true }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -151,30 +187,27 @@ Deno.serve(async (req) => {
       const resetLink = `${redirectTo}#access_token=${data.properties.access_token}&refresh_token=${data.properties.refresh_token}&type=recovery`;
 
       subject = "Reset Your Password — ATS Pro Resume Builder";
-      html = `
-        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-          <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #1a1a2e; font-size: 24px; margin: 0;">ATS Pro Resume Builder</h1>
-          </div>
-          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 32px;">
-            <h2 style="color: #1a1a2e; font-size: 20px; margin: 0 0 16px;">Reset Your Password</h2>
-            <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">
-              We received a request to reset your password. Click the button below to set a new password. This link expires in 1 hour.
-            </p>
-            <div style="text-align: center; margin: 32px 0;">
-              <a href="${resetLink}" style="background: #6366f1; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; display: inline-block;">
+      plainText = `Reset Your Password\n\nWe received a request to reset your password. Visit this link to set a new password (expires in 1 hour):\n\n${resetLink}\n\nIf you didn't request this, you can safely ignore this email.\n\n© ${new Date().getFullYear()} ATS Pro Resume Builder`;
+
+      html = buildEmailHtml(subject, `
+        <h2 style="color:#1a1a2e;font-size:20px;margin:0 0 16px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">Reset Your Password</h2>
+        <p style="color:#4b5563;font-size:15px;line-height:1.6;margin:0 0 24px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+          We received a request to reset your password. Click the button below to set a new password. This link expires in 1 hour.
+        </p>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:32px auto;text-align:center;">
+          <tr>
+            <td style="background:#3b82f6;border-radius:8px;">
+              <a href="${resetLink}" style="background:#3b82f6;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:600;display:inline-block;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
                 Reset Password
               </a>
-            </div>
-            <p style="color: #9ca3af; font-size: 13px; line-height: 1.5; margin: 0;">
-              If you didn't request this, you can safely ignore this email. Your password won't change.
-            </p>
-          </div>
-          <p style="color: #9ca3af; font-size: 12px; text-align: center; margin-top: 32px;">
-            © ${new Date().getFullYear()} ATS Pro Resume Builder. All rights reserved.
-          </p>
-        </div>
-      `;
+            </td>
+          </tr>
+        </table>
+        <p style="color:#9ca3af;font-size:13px;line-height:1.5;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+          If you didn't request this, you can safely ignore this email. Your password won't change.
+        </p>
+      `);
+
     } else if (type === "signup_confirmation") {
       const { data, error } = await supabaseAdmin.auth.admin.generateLink({
         type: "signup",
@@ -193,33 +226,29 @@ Deno.serve(async (req) => {
       const confirmLink = `${redirectTo}#access_token=${data.properties.access_token}&refresh_token=${data.properties.refresh_token}&type=signup`;
 
       subject = "Confirm Your Email — ATS Pro Resume Builder";
-      html = `
-        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-          <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #1a1a2e; font-size: 24px; margin: 0;">ATS Pro Resume Builder</h1>
-          </div>
-          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 32px;">
-            <h2 style="color: #1a1a2e; font-size: 20px; margin: 0 0 16px;">Welcome! Confirm Your Email</h2>
-            <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">
-              Thanks for signing up! Click the button below to confirm your email address and get started.
-            </p>
-            <div style="text-align: center; margin: 32px 0;">
-              <a href="${confirmLink}" style="background: #6366f1; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; display: inline-block;">
+      plainText = `Welcome! Confirm Your Email\n\nThanks for signing up! Visit this link to confirm your email address:\n\n${confirmLink}\n\nIf you didn't create this account, you can safely ignore this email.\n\n© ${new Date().getFullYear()} ATS Pro Resume Builder`;
+
+      html = buildEmailHtml(subject, `
+        <h2 style="color:#1a1a2e;font-size:20px;margin:0 0 16px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">Welcome! Confirm Your Email</h2>
+        <p style="color:#4b5563;font-size:15px;line-height:1.6;margin:0 0 24px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+          Thanks for signing up! Click the button below to confirm your email address and get started.
+        </p>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:32px auto;text-align:center;">
+          <tr>
+            <td style="background:#3b82f6;border-radius:8px;">
+              <a href="${confirmLink}" style="background:#3b82f6;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:600;display:inline-block;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
                 Confirm Email
               </a>
-            </div>
-            <p style="color: #9ca3af; font-size: 13px; line-height: 1.5; margin: 0;">
-              If you didn't create this account, you can safely ignore this email.
-            </p>
-          </div>
-          <p style="color: #9ca3af; font-size: 12px; text-align: center; margin-top: 32px;">
-            © ${new Date().getFullYear()} ATS Pro Resume Builder. All rights reserved.
-          </p>
-        </div>
-      `;
+            </td>
+          </tr>
+        </table>
+        <p style="color:#9ca3af;font-size:13px;line-height:1.5;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+          If you didn't create this account, you can safely ignore this email.
+        </p>
+      `);
     }
 
-    // Send via Resend
+    // Send via Resend with deliverability improvements
     const resendRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -231,6 +260,10 @@ Deno.serve(async (req) => {
         to: [email],
         subject,
         html,
+        text: plainText,
+        headers: {
+          "X-Entity-Ref-ID": crypto.randomUUID(),
+        },
       }),
     });
 
