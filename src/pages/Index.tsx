@@ -160,8 +160,8 @@ const Index = () => {
         {mobileMenuOpen &&
         <div className="md:hidden border-t border-border/60 bg-background px-3 py-2 space-y-0.5 slide-in-composited">
             <button onClick={() => {openAuth("signup");setMobileMenuOpen(false);}} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.landing.resumeTemplates}</button>
-            <button onClick={() => {openAuth("login");setMobileMenuOpen(false);}} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobTracker}</button>
-            <button onClick={() => {openAuth("login");setMobileMenuOpen(false);}} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.jobBoard}</button>
+            <button onClick={() => {openAuth("login");setMobileMenuOpen(false);}} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.coverLetters}</button>
+            <button onClick={() => {openAuth("login");setMobileMenuOpen(false);}} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.findJobs}</button>
             <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.blog}</Link>
             <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.about}</Link>
             <button onClick={() => {pricingRef.current?.scrollIntoView({ behavior: "smooth" });setMobileMenuOpen(false);}} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition">{t.nav.pricing}</button>
