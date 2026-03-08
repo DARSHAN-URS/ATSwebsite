@@ -37,3 +37,5 @@ project_id = "hkgevmagiqcbndvkbekk"
     verify_jwt = false
   [functions.assign-role]
     verify_jwt = false
+  [functions.activate-subscription]
+    verify_jwt = false
