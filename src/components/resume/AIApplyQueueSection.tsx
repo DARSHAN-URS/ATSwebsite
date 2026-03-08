@@ -41,6 +41,23 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
+function getManualApplyReason(url: string | null): string {
+  if (!url || url === "#") return "No direct apply API is available for this listing.";
+
+  const normalized = url.toLowerCase();
+  if (
+    normalized.includes("indeed.com") ||
+    normalized.includes("linkedin.com") ||
+    normalized.includes("naukri") ||
+    normalized.includes("bayt.com") ||
+    normalized.includes("dubizzle")
+  ) {
+    return "This listing is on a job board and requires form steps on the employer page.";
+  }
+
+  return "This career site does not expose a public auto-apply API, so you need to submit manually.";
+}
+
 function ApplyMethodBadge({ method, url }: { method: string | null; url: string | null }) {
   if (!method || method === "manual") {
     // Detect what method would be used
@@ -53,7 +70,7 @@ function ApplyMethodBadge({ method, url }: { method: string | null; url: string 
           <Badge variant="outline" className="text-[10px] gap-1 cursor-help"><Globe className="h-2.5 w-2.5" />Manual</Badge>
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-[250px] text-xs">
-          This company's career page doesn't support auto-apply. Only jobs on Greenhouse or Lever ATS can be submitted automatically. Click "Apply" to open the job page and apply directly.
+          {getManualApplyReason(url)} Click "Apply" to open the job page and submit directly.
         </TooltipContent>
       </Tooltip>
     );
