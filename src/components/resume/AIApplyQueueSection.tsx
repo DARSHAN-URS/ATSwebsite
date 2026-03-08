@@ -177,7 +177,7 @@ export default function AIApplyQueueSection() {
           window.open(job.job_url, "_blank", "noopener,noreferrer");
         }
 
-        toast({ title: "Application tracked!", description: `${job.job_title} at ${job.company} — apply on the opened page.` });
+        toast({ title: "Application tracked!", description: `${job.job_title} at ${job.company} — apply on the opened page. ${getManualApplyReason(job.job_url)}` });
       }
 
       setSelected(null);
