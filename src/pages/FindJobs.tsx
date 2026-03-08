@@ -334,7 +334,7 @@ export default function FindJobs() {
                 </div>
               )}
             </>
-          )}
+
         </TabsContent>
 
         {/* Recruiter Posts Tab */}
