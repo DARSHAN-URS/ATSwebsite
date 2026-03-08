@@ -122,7 +122,7 @@ const App = () => (
                   <Route path="/job-tracker" element={<ProRoute><JobTracker /></ProRoute>} />
                   <Route path="/email-outreach" element={<ProRoute><EmailOutreach /></ProRoute>} />
                   <Route path="/cover-letters" element={<Navigate to="/resumes" replace />} />
-                  <Route path="/jobs" element={<ProRoute><FindJobs /></ProRoute>} />
+                  <Route path="/jobs" element={<FindJobs />} />
                   <Route path="/companies" element={<ProRoute><Companies /></ProRoute>} />
                   <Route path="/interview-prep" element={<ProRoute><InterviewPrep /></ProRoute>} />
 

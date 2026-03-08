@@ -820,14 +820,10 @@ export default function Resumes() {
                     </div>
                     <div className="flex items-center justify-between">
                       <Label className="text-xs">{t.resumes.bullets}</Label>
-                      {isPro ? (
-                        <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
+                      <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
                           {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
                           {t.resumes.aiGenerateBullets}
                         </Button>
-                      ) : (
-                        <ProFeatureGate inline message="AI Bullets"><span /></ProFeatureGate>
-                      )}
                     </div>
                     {exp.bullets && exp.bullets.length > 0 ? (
                       <ul className="space-y-1">
