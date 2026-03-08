@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, FileText, FileType, FileCode } from "lucide-re
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { seoTranslations } from "@/i18n/seoTranslations";
 
