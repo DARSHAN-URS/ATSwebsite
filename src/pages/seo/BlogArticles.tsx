@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, Clock, Tag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
 import { useBlogTranslation } from "@/hooks/useBlogTranslation";
