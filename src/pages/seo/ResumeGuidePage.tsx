@@ -5,6 +5,7 @@ import SEOHead from "@/components/SEOHead";
 import { getGuideBySlug, getAllGuideSlugs } from "@/data/resumeGuides";
 import RESUME_GUIDES from "@/data/resumeGuides";
 const logo = "/images/logo-main.png";
+import Logo from "@/components/Logo";
 
 export default function ResumeGuidePage() {
   const { topic } = useParams<{ topic: string }>();
