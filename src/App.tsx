@@ -41,6 +41,8 @@ const ResumeDownloadFormats = lazy(() => import("@/pages/seo/ResumeDownloadForma
 const BlogArticlePage = lazy(() =>
   import("@/pages/seo/BlogArticles").then((m) => ({ default: m.BlogArticlePage }))
 );
+const ResumeExamplesIndex = lazy(() => import("@/pages/seo/ResumeExamplesIndex"));
+const ResumeExamplePage = lazy(() => import("@/pages/seo/ResumeExamplePage"));
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
