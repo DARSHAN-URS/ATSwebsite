@@ -43,8 +43,21 @@ const CATEGORY_COLORS: Record<string, string> = {
   "Industry Guide": "bg-cyan-100 text-cyan-700 dark:bg-cyan-950/50 dark:text-cyan-400",
 };
 
-function getCategoryImage(category: string): string {
-  return CATEGORY_IMAGES[category] || "/images/blog-resume-tips.jpg";
+const defaultImg = { webp: "/images/blog-resume-tips.webp", fallback: "/images/blog-resume-tips.jpg" };
+function getCategoryImage(category: string): { webp: string; fallback: string } {
+  return CATEGORY_IMAGES[category] || defaultImg;
+}
+
+function BlogImage({ src, alt, className, loading, width, height }: {
+  src: { webp: string; fallback: string }; alt: string; className?: string;
+  loading?: "lazy" | "eager"; width?: number; height?: number;
+}) {
+  return (
+    <picture>
+      <source srcSet={src.webp} type="image/webp" />
+      <img src={src.fallback} alt={alt} className={className} loading={loading} width={width} height={height} decoding="async" />
+    </picture>
+  );
 }
 
 const ALL_CATEGORIES = ["All", ...Array.from(new Set(SEED_ARTICLES.map((a) => a.category)))];
