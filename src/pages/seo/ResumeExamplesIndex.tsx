@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SEOHead from "@/components/SEOHead";
 import RESUME_EXAMPLES from "@/data/resumeExamples";
-const logo = "/logo.webp";
+const logo = "/images/logo-main.png";
 
 const CATEGORIES = [...new Set(RESUME_EXAMPLES.map((r) => r.category))];
 

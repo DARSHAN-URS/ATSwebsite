@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
-const logo = "/logo.webp";
+const logo = "/images/logo-main.png";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { seoTranslations } from "@/i18n/seoTranslations";
 

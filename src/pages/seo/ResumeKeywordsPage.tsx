@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle, ChevronRight, Search, Target, Zap, AlertTriang
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { getResumeExampleBySlug, getRelatedExamples } from "@/data/resumeExamples";
-const logo = "/logo.webp";
+const logo = "/images/logo-main.png";
 
 export default function ResumeKeywordsPage() {
   const { jobTitle } = useParams<{ jobTitle: string }>();

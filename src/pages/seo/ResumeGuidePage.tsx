@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { getGuideBySlug, getAllGuideSlugs } from "@/data/resumeGuides";
 import RESUME_GUIDES from "@/data/resumeGuides";
-const logo = "/logo.webp";
+const logo = "/images/logo-main.png";
 
 export default function ResumeGuidePage() {
   const { topic } = useParams<{ topic: string }>();
