@@ -44,7 +44,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
   return (
     <>
       <div className="p-4 pb-2 flex items-center justify-center">
-        <Logo className="h-32 w-auto object-contain" width={128} height={128} />
+        <Logo className="h-32 w-auto" width={128} height={128} variant="light" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -145,7 +145,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <Logo className="h-10 w-auto object-contain" width={40} height={40} />
+            <Logo className="h-10 w-auto" width={40} height={40} variant="light" />
           </div>
         </header>
       }
