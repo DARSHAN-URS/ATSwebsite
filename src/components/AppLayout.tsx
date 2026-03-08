@@ -44,7 +44,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
   return (
     <>
       <div className="p-4 pb-2 flex items-center justify-center">
-        <img alt="ATS Pro Resume Builder" className="h-32 w-auto object-contain" width={128} height={128} decoding="async" src="/images/logo-white.png" />
+        <img alt="ATS Pro Resume Builder" className="h-32 w-auto object-contain brightness-0 invert" width={128} height={128} decoding="async" src="/logo.webp" />
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
