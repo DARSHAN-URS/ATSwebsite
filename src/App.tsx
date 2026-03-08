@@ -101,6 +101,8 @@ const App = () => (
                 <Route path="/software-engineer-resume" element={<SoftwareEngineerResume />} />
                 <Route path="/interview-preparation" element={<InterviewPreparationSEO />} />
                 <Route path="/resume-download" element={<ResumeDownloadFormats />} />
+                <Route path="/resume-examples" element={<ResumeExamplesIndex />} />
+                <Route path="/resume-examples/:jobTitle" element={<ResumeExamplePage />} />
                 <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
                 <Route
                   element={
