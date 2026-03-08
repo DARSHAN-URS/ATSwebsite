@@ -261,6 +261,12 @@ export default function AIApplyQueueSection() {
                     {job.job_type && <span className="ml-2">· {job.job_type}</span>}
                   </p>
                 )}
+                {detectMethodFromUrl(job.job_url) === "manual" && (
+                  <p className="text-xs text-muted-foreground mt-1 flex items-start gap-1.5">
+                    <AlertCircle className="h-3 w-3 mt-0.5 shrink-0" />
+                    <span>{getManualApplyReason(job.job_url)}</span>
+                  </p>
+                )}
                 {job.match_explanation && (
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2 italic">{job.match_explanation}</p>
                 )}
