@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { authenticateRequest } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -409,6 +410,9 @@ serve(async (req) => {
   }
 
   try {
+    const { user, errorResponse } = await authenticateRequest(req, corsHeaders);
+    if (errorResponse) return errorResponse;
+
     const { resumeData, format, sectionOrder } = await req.json();
     const order: SectionId[] = Array.isArray(sectionOrder) ? sectionOrder : DEFAULT_SECTION_ORDER;
 
