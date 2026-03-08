@@ -20,9 +20,24 @@ serve(async (req) => {
       throw new Error("Service configuration error");
     }
 
-    const systemPrompt = `You are an expert cover letter writer. Generate a tailored cover letter based on the provided resume and job description. The tone should be: ${tone || "professional"}.`;
+    const personalInfo = resumeData?.personalInfo || {};
+    const applicantName = personalInfo.fullName || "Applicant";
+    const applicantEmail = personalInfo.email || "";
+    const applicantPhone = personalInfo.phone || "";
+    const applicantLocation = personalInfo.location || "";
+    const applicantLinkedin = personalInfo.linkedin || personalInfo.portfolio || "";
 
-    const userPrompt = `Resume:\n${JSON.stringify(resumeData)}\n\nJob Description:\n${jobDescription}\n\nGenerate a cover letter with sections: greeting, opening paragraph, body paragraphs, and closing.`;
+    const systemPrompt = `You are an expert cover letter writer. Generate a professionally formatted cover letter based on the provided resume and job description. The tone should be: ${tone || "professional"}.
+
+IMPORTANT RULES:
+- Extract the job title, company name, and hiring manager name (if available) from the job description
+- The opening paragraph should NOT start with "I am writing to apply..." — use a compelling hook
+- Include 2-3 key achievements with numbers/metrics in the value paragraph
+- Show genuine research about the company in the "why this company" paragraph
+- The closing should include a call to action and availability for interview
+- Keep each paragraph focused and concise`;
+
+    const userPrompt = `Resume:\n${JSON.stringify(resumeData)}\n\nJob Description:\n${jobDescription}\n\nApplicant Info:\nName: ${applicantName}\nEmail: ${applicantEmail}\nPhone: ${applicantPhone}\nLocation: ${applicantLocation}\nLinkedIn/Portfolio: ${applicantLinkedin}\n\nGenerate a formal cover letter with all sections.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -41,17 +56,30 @@ serve(async (req) => {
             type: "function",
             function: {
               name: "generate_cover_letter",
-              description: "Generate a structured cover letter with sections",
+              description: "Generate a structured formal cover letter",
               parameters: {
                 type: "object",
                 properties: {
-                  greeting: { type: "string", description: "The greeting line, e.g. 'Dear Hiring Manager,'" },
-                  opening: { type: "string", description: "Opening paragraph introducing yourself and the position" },
-                  body: { type: "string", description: "Body paragraphs highlighting relevant experience and skills" },
-                  closing: { type: "string", description: "Closing paragraph with call to action and sign-off" },
+                  applicant_name: { type: "string", description: "Full name of the applicant" },
+                  applicant_address: { type: "string", description: "Applicant address or city/location" },
+                  applicant_phone: { type: "string", description: "Applicant phone number" },
+                  applicant_email: { type: "string", description: "Applicant email address" },
+                  applicant_linkedin: { type: "string", description: "LinkedIn or portfolio URL" },
+                  date: { type: "string", description: "Current date formatted nicely, e.g. March 8, 2026" },
+                  recipient_name: { type: "string", description: "Hiring manager name if known, otherwise 'Hiring Manager'" },
+                  recipient_title: { type: "string", description: "Hiring manager title if known, otherwise empty" },
+                  company_name: { type: "string", description: "Company name from job description" },
+                  company_address: { type: "string", description: "Company address if known, otherwise empty" },
+                  subject_line: { type: "string", description: "Subject line like 'Application for [Job Title] – [Name]'" },
+                  greeting: { type: "string", description: "The greeting line, e.g. 'Dear Mr. Smith,' or 'Dear Hiring Manager,'" },
+                  opening: { type: "string", description: "Opening/hook paragraph (3-4 lines). State job title, where you found it, why you're a great fit." },
+                  value_experience: { type: "string", description: "Your value/experience paragraph (4-6 lines). 2-3 key achievements with metrics, matched to job description." },
+                  why_company: { type: "string", description: "Why this company paragraph (3-4 lines). Show research about company, align your goals with theirs." },
+                  closing: { type: "string", description: "Call to action/closing paragraph (2-3 lines). Express enthusiasm, mention availability, thank them." },
+                  sign_off: { type: "string", description: "Sign-off like 'Sincerely,' or 'Best Regards,'" },
                   suggested_title: { type: "string", description: "A suggested title for this cover letter" },
                 },
-                required: ["greeting", "opening", "body", "closing", "suggested_title"],
+                required: ["applicant_name", "date", "company_name", "subject_line", "greeting", "opening", "value_experience", "why_company", "closing", "sign_off", "suggested_title"],
                 additionalProperties: false,
               },
             },

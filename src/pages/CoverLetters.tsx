@@ -11,15 +11,32 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Trash2, Edit, Download, Sparkles, Loader2 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import CoverLetterEditor from "@/components/cover-letter/CoverLetterEditor";
 
-interface CoverLetterData {
+export interface CoverLetterData {
+  // Header info
+  applicant_name?: string;
+  applicant_address?: string;
+  applicant_phone?: string;
+  applicant_email?: string;
+  applicant_linkedin?: string;
+  date?: string;
+  recipient_name?: string;
+  recipient_title?: string;
+  company_name?: string;
+  company_address?: string;
+  subject_line?: string;
+  // Letter body
   greeting: string;
   opening: string;
-  body: string;
+  value_experience?: string;
+  why_company?: string;
+  body?: string; // legacy field
   closing: string;
+  sign_off?: string;
 }
 
-interface CoverLetter {
+export interface CoverLetter {
   id: string;
   title: string;
   resume_id: string | null;
@@ -66,17 +83,13 @@ export default function CoverLetters() {
   const [createOpen, setCreateOpen] = useState(draft?.createOpen ?? false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Create form state — restored from draft
   const [selectedResumeId, setSelectedResumeId] = useState(draft?.selectedResumeId ?? "");
   const [jobDescription, setJobDescription] = useState(draft?.jobDescription ?? "");
   const [tone, setTone] = useState(draft?.tone ?? "professional");
   const [title, setTitle] = useState(draft?.title ?? "");
 
-  // Editor state
-  const [editData, setEditData] = useState<CoverLetterData>({ greeting: "", opening: "", body: "", closing: "" });
-  const printRef = useRef<HTMLDivElement>(null);
+  const [editData, setEditData] = useState<CoverLetterData>({ greeting: "", opening: "", closing: "" });
 
-  // Auto-save draft whenever form fields change
   useEffect(() => {
     if (createOpen || jobDescription || selectedResumeId || title) {
       saveDraft({ selectedResumeId, jobDescription, tone, title, createOpen });
@@ -121,10 +134,23 @@ export default function CoverLetters() {
       }
 
       const coverLetterData: CoverLetterData = {
-        greeting: data.greeting,
-        opening: data.opening,
-        body: data.body,
-        closing: data.closing,
+        applicant_name: data.applicant_name || "",
+        applicant_address: data.applicant_address || "",
+        applicant_phone: data.applicant_phone || "",
+        applicant_email: data.applicant_email || "",
+        applicant_linkedin: data.applicant_linkedin || "",
+        date: data.date || "",
+        recipient_name: data.recipient_name || "",
+        recipient_title: data.recipient_title || "",
+        company_name: data.company_name || "",
+        company_address: data.company_address || "",
+        subject_line: data.subject_line || "",
+        greeting: data.greeting || "",
+        opening: data.opening || "",
+        value_experience: data.value_experience || "",
+        why_company: data.why_company || "",
+        closing: data.closing || "",
+        sign_off: data.sign_off || "Sincerely,",
       };
       const finalTitle = title.trim() || data.suggested_title || "Untitled Cover Letter";
 
@@ -185,22 +211,6 @@ export default function CoverLetters() {
     fetchData();
   };
 
-  const handleExportPDF = () => {
-    if (!printRef.current) return;
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
-    const cl = coverLetters.find((c) => c.id === editingId);
-    printWindow.document.write(`
-      <html><head><title>${cl?.title || "Cover Letter"}</title>
-      <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;line-height:1.7;color:#222;padding:20px}
-      p{margin-bottom:1em}</style></head><body>
-      <p>${editData.greeting}</p><p>${editData.opening}</p><p>${editData.body}</p><p>${editData.closing}</p>
-      </body></html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
-  };
-
   const openEditor = (cl: CoverLetter) => {
     setEditingId(cl.id);
     setEditData(cl.cover_letter_data);
@@ -208,64 +218,21 @@ export default function CoverLetters() {
 
   if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading...</div>;
 
-  // Editor view
   if (editingId) {
     const cl = coverLetters.find((c) => c.id === editingId);
     return (
-      <div className="p-8 max-w-6xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <Button variant="ghost" onClick={() => setEditingId(null)} className="mb-2">← Back</Button>
-            <h1 className="text-2xl font-bold">{cl?.title}</h1>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExportPDF}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
-            <Button onClick={handleSaveEdit}>Save Changes</Button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Editor */}
-          <div className="space-y-4">
-            <div>
-              <Label>Greeting</Label>
-              <Input value={editData.greeting} onChange={(e) => setEditData({ ...editData, greeting: e.target.value })} />
-            </div>
-            <div>
-              <Label>Opening Paragraph</Label>
-              <Textarea rows={4} value={editData.opening} onChange={(e) => setEditData({ ...editData, opening: e.target.value })} />
-            </div>
-            <div>
-              <Label>Body</Label>
-              <Textarea rows={8} value={editData.body} onChange={(e) => setEditData({ ...editData, body: e.target.value })} />
-            </div>
-            <div>
-              <Label>Closing</Label>
-              <Textarea rows={4} value={editData.closing} onChange={(e) => setEditData({ ...editData, closing: e.target.value })} />
-            </div>
-          </div>
-
-          {/* Preview */}
-          <Card>
-            <CardHeader><CardTitle className="text-base">Preview</CardTitle></CardHeader>
-            <CardContent>
-              <div ref={printRef} className="prose prose-sm max-w-none space-y-4 font-serif text-foreground">
-                <p>{editData.greeting}</p>
-                <p>{editData.opening}</p>
-                <p>{editData.body}</p>
-                <p>{editData.closing}</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <CoverLetterEditor
+        title={cl?.title || "Cover Letter"}
+        editData={editData}
+        setEditData={setEditData}
+        onBack={() => setEditingId(null)}
+        onSave={handleSaveEdit}
+      />
     );
   }
 
-  // List view
   return (
     <div className="space-y-6">
-      <>
       <div className="flex justify-end">
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
@@ -342,7 +309,6 @@ export default function CoverLetters() {
           ))}
         </div>
       )}
-      </>
     </div>
   );
 }
