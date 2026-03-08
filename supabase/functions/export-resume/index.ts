@@ -410,6 +410,9 @@ serve(async (req) => {
   }
 
   try {
+    const { user, errorResponse } = await authenticateRequest(req, corsHeaders);
+    if (errorResponse) return errorResponse;
+
     const { resumeData, format, sectionOrder } = await req.json();
     const order: SectionId[] = Array.isArray(sectionOrder) ? sectionOrder : DEFAULT_SECTION_ORDER;
 
