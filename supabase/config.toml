@@ -35,3 +35,5 @@ project_id = "hkgevmagiqcbndvkbekk"
     verify_jwt = false
   [functions.tailor-resume]
     verify_jwt = false
+  [functions.assign-role]
+    verify_jwt = false

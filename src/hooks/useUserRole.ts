@@ -36,14 +36,16 @@ export function useUserRole() {
 
   const setUserRole = async (newRole: AppRole) => {
     if (!user) return;
-    const { error } = await supabase
-      .from("user_roles")
-      .upsert({ user_id: user.id, role: newRole } as any, { onConflict: "user_id" });
+    const { data, error } = await supabase.functions.invoke("assign-role", {
+      body: { role: newRole },
+    });
 
-    if (!error) {
-      setRole(newRole);
+    if (error || data?.error) {
+      const msg = data?.error || error?.message || "Failed to assign role";
+      return { message: msg };
     }
-    return error;
+    setRole(newRole);
+    return null;
   };
 
   return { role, loading, setUserRole };
