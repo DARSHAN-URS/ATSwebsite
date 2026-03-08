@@ -21,13 +21,10 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     target: "es2020",
-    cssMinify: "lightningcss",
     rollupOptions: {
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom", "react-router-dom"],
-          "vendor-pdf": ["jspdf", "html2canvas", "pdfjs-dist"],
-          "vendor-charts": ["recharts"],
           "vendor-forms": ["react-hook-form", "@hookform/resolvers", "zod"],
           "vendor-supabase": ["@supabase/supabase-js"],
         },
