@@ -36,26 +36,52 @@ interface Resume {
   resume_data: any;
 }
 
+const STORAGE_KEY = "ats-cover-letter-draft";
+
+function saveDraft(data: { selectedResumeId: string; jobDescription: string; tone: string; title: string; createOpen: boolean }) {
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+
+function loadDraft(): { selectedResumeId: string; jobDescription: string; tone: string; title: string; createOpen: boolean } | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function clearDraft() {
+  try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+}
+
 export default function CoverLetters() {
   const { user } = useAuth();
   const { toast } = useToast();
+
+  const draft = loadDraft();
   
   const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const [createOpen, setCreateOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(draft?.createOpen ?? false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Create form state
-  const [selectedResumeId, setSelectedResumeId] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [tone, setTone] = useState("professional");
-  const [title, setTitle] = useState("");
+  // Create form state — restored from draft
+  const [selectedResumeId, setSelectedResumeId] = useState(draft?.selectedResumeId ?? "");
+  const [jobDescription, setJobDescription] = useState(draft?.jobDescription ?? "");
+  const [tone, setTone] = useState(draft?.tone ?? "professional");
+  const [title, setTitle] = useState(draft?.title ?? "");
 
   // Editor state
   const [editData, setEditData] = useState<CoverLetterData>({ greeting: "", opening: "", body: "", closing: "" });
   const printRef = useRef<HTMLDivElement>(null);
+
+  // Auto-save draft whenever form fields change
+  useEffect(() => {
+    if (createOpen || jobDescription || selectedResumeId || title) {
+      saveDraft({ selectedResumeId, jobDescription, tone, title, createOpen });
+    }
+  }, [createOpen, selectedResumeId, jobDescription, tone, title]);
 
   const fetchData = async () => {
     if (!user) return;
@@ -136,6 +162,7 @@ export default function CoverLetters() {
     setJobDescription("");
     setTone("professional");
     setTitle("");
+    clearDraft();
   };
 
   const handleSaveEdit = async () => {
