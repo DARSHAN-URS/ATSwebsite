@@ -145,7 +145,7 @@ export default function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 ml-2">
-            <img src="/images/logo-main.png" alt="ATS Pro Resume Builder" className="h-10 w-auto object-contain dark:brightness-0 dark:invert" width={40} height={40} decoding="async" />
+            <Logo className="h-10 w-auto object-contain" width={40} height={40} />
           </div>
         </header>
       }
