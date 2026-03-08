@@ -954,7 +954,7 @@ export default function Resumes() {
         <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
       </div>
 
-      <Tabs defaultValue="resumes" className="space-y-6">
+      <Tabs value={searchParams.get("tab") || "resumes"} onValueChange={(v) => setSearchParams(v === "resumes" ? {} : { tab: v }, { replace: true })} className="space-y-6">
         <TabsList>
           <TabsTrigger value="resumes" className="gap-2"><FileText className="h-4 w-4" />Resumes</TabsTrigger>
           <TabsTrigger value="cover-letters" className="gap-2"><Mail className="h-4 w-4" />Cover Letters</TabsTrigger>
