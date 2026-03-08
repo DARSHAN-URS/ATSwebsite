@@ -210,13 +210,13 @@ export default function Pricing() {
               </p>
 
               {/* Duration tabs */}
-              <div className="flex rounded-sm border border-border bg-muted/50 p-1 mb-6">
+              <div className="flex rounded-sm border border-border bg-muted/50 p-1 mb-6 overflow-hidden w-full">
                 {durationTabs.map((tab) => (
                   <button
                     key={tab.key}
                     onClick={() => setDuration(tab.key)}
                     className={cn(
-                      "flex-1 text-xs font-bold py-2.5 px-2 rounded-sm transition-all font-display uppercase tracking-wider",
+                      "flex-1 min-w-0 text-[10px] sm:text-xs font-bold py-2.5 px-1 sm:px-2 rounded-sm transition-all font-display uppercase tracking-wider truncate",
                       duration === tab.key
                         ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 glow-border"
                         : "text-muted-foreground hover:text-foreground hover:bg-primary/5"

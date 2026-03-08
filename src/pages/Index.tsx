@@ -513,7 +513,7 @@ const Index = () => {
               </p>
 
               {/* Duration tabs */}
-              <div className="flex rounded-lg bg-muted p-1 mb-6">
+              <div className="flex rounded-lg bg-muted p-1 mb-6 overflow-hidden w-full">
                 {[
                 { key: "weekly" as const, label: pricingExtraTranslations[locale].weeklyPlan },
                 { key: "biweekly" as const, label: pricingExtraTranslations[locale].biweeklyPlan },
@@ -522,12 +522,11 @@ const Index = () => {
                 <button
                   key={tab.key}
                   onClick={() => setPricingDuration(tab.key)}
-                  className={`flex-1 text-xs font-semibold py-2 px-2 rounded-md transition-all ${
+                  className={`flex-1 min-w-0 text-[10px] sm:text-xs font-semibold py-2 px-1 sm:px-2 rounded-md transition-all truncate ${
                   pricingDuration === tab.key ?
                   "bg-primary text-primary-foreground shadow-sm" :
                   "text-muted-foreground hover:text-foreground"}`
                   }>
-                  
                     {tab.label}
                   </button>
                 )}
