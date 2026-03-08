@@ -16,18 +16,19 @@ const SEED_ARTICLES = RAW_ARTICLES.filter(
   (a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i
 );
 
-const blogHero = "/images/blog-hero.jpg";
+const blogHero = "/images/blog-hero.webp";
+const blogHeroFallback = "/images/blog-hero.jpg";
 
-const CATEGORY_IMAGES: Record<string, string> = {
-  "Resume Tips": "/images/blog-resume-tips.jpg",
-  "Interview Prep": "/images/blog-interview-prep.jpg",
-  "Career Growth": "/images/blog-career-growth.jpg",
-  "Job Search": "/images/blog-job-search.jpg",
-  "Salary": "/images/blog-salary.jpg",
-  "Product Guide": "/images/blog-resume-tips.jpg",
-  "AI & Tech": "/images/blog-ai-tech.jpg",
-  "Networking": "/images/blog-networking.jpg",
-  "Industry Guide": "/images/blog-industry.jpg",
+const CATEGORY_IMAGES: Record<string, { webp: string; fallback: string }> = {
+  "Resume Tips": { webp: "/images/blog-resume-tips.webp", fallback: "/images/blog-resume-tips.jpg" },
+  "Interview Prep": { webp: "/images/blog-interview-prep.webp", fallback: "/images/blog-interview-prep.jpg" },
+  "Career Growth": { webp: "/images/blog-career-growth.webp", fallback: "/images/blog-career-growth.jpg" },
+  "Job Search": { webp: "/images/blog-job-search.webp", fallback: "/images/blog-job-search.jpg" },
+  "Salary": { webp: "/images/blog-salary.webp", fallback: "/images/blog-salary.jpg" },
+  "Product Guide": { webp: "/images/blog-resume-tips.webp", fallback: "/images/blog-resume-tips.jpg" },
+  "AI & Tech": { webp: "/images/blog-ai-tech.webp", fallback: "/images/blog-ai-tech.jpg" },
+  "Networking": { webp: "/images/blog-networking.webp", fallback: "/images/blog-networking.jpg" },
+  "Industry Guide": { webp: "/images/blog-industry.webp", fallback: "/images/blog-industry.jpg" },
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
