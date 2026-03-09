@@ -13,6 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, StarOff, FileText, Loader2, Users, Calendar, Video } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import ScheduledInterviewsList from "@/components/ScheduledInterviewsList";
 
 const PIPELINE_STAGES = ["applied", "screening", "interview", "offer", "rejected"] as const;
 type Stage = typeof PIPELINE_STAGES[number];
