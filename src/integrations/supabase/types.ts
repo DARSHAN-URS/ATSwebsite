@@ -610,6 +610,75 @@ export type Database = {
           },
         ]
       }
+      scheduled_interviews: {
+        Row: {
+          applicant_id: string
+          application_id: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          job_post_id: string
+          notes: string | null
+          recruiter_id: string
+          scheduled_at: string
+          status: string
+          updated_at: string
+          zoom_join_url: string | null
+          zoom_meeting_id: string | null
+          zoom_password: string | null
+          zoom_start_url: string | null
+        }
+        Insert: {
+          applicant_id: string
+          application_id: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          job_post_id: string
+          notes?: string | null
+          recruiter_id: string
+          scheduled_at: string
+          status?: string
+          updated_at?: string
+          zoom_join_url?: string | null
+          zoom_meeting_id?: string | null
+          zoom_password?: string | null
+          zoom_start_url?: string | null
+        }
+        Update: {
+          applicant_id?: string
+          application_id?: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          job_post_id?: string
+          notes?: string | null
+          recruiter_id?: string
+          scheduled_at?: string
+          status?: string
+          updated_at?: string
+          zoom_join_url?: string | null
+          zoom_meeting_id?: string | null
+          zoom_password?: string | null
+          zoom_start_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_interviews_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "job_post_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduled_interviews_job_post_id_fkey"
+            columns: ["job_post_id"]
+            isOneToOne: false
+            referencedRelation: "job_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
