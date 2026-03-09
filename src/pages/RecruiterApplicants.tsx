@@ -48,6 +48,11 @@ export default function RecruiterApplicants() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notes, setNotes] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [schedulingInterview, setSchedulingInterview] = useState(false);
+  const [interviewDate, setInterviewDate] = useState("");
+  const [interviewTime, setInterviewTime] = useState("");
+  const [interviewDuration, setInterviewDuration] = useState("30");
+  const [interviewNotes, setInterviewNotes] = useState("");
 
   const fetchData = async () => {
     if (!user || !jobId) return;
