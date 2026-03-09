@@ -17,6 +17,7 @@ import ProFeatureGate from "@/components/ProFeatureGate";
 import { useLanguage } from "@/i18n/LanguageContext";
 import RecruiterJobsList from "@/components/job-board/RecruiterJobsList";
 import ExternalJobsSearch from "@/components/job-board/ExternalJobsSearch";
+import ApplyWithResumeDialog from "@/components/job-board/ApplyWithResumeDialog";
 
 type Resume = Tables<"resumes">;
 type SavedJob = Tables<"saved_jobs">;
@@ -79,6 +80,8 @@ export default function FindJobs() {
   const [boardTypeFilter, setBoardTypeFilter] = useState("all");
   const [boardExpandedId, setBoardExpandedId] = useState<string | null>(null);
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
+  const [applyDialogOpen, setApplyDialogOpen] = useState(false);
+  const [applyingJob, setApplyingJob] = useState<JobPost | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -185,15 +188,29 @@ export default function FindJobs() {
     }
   };
 
-  const handleApply = async (e: React.MouseEvent, jobId: string) => {
+  const handleApplyClick = (e: React.MouseEvent, jobId: string) => {
     e.stopPropagation();
     if (!user) return;
-    const { error } = await supabase.from("job_post_applications").insert({ job_post_id: jobId, applicant_id: user.id } as any);
+    const job = boardJobs.find((j) => j.id === jobId);
+    if (job) {
+      setApplyingJob(job);
+      setApplyDialogOpen(true);
+    }
+  };
+
+  const handleApplySubmit = async (resumeId: string | null, coverNote: string) => {
+    if (!user || !applyingJob) return;
+    const { error } = await supabase.from("job_post_applications").insert({
+      job_post_id: applyingJob.id,
+      applicant_id: user.id,
+      resume_id: resumeId,
+    } as any);
     if (error) {
       if (error.code === "23505") toast({ title: t.jobBoard.alreadyApplied });
       else toast({ title: t.common.error, description: error.message, variant: "destructive" });
+      throw error;
     } else {
-      setAppliedIds((prev) => new Set(prev).add(jobId));
+      setAppliedIds((prev) => new Set(prev).add(applyingJob.id));
       toast({ title: t.jobBoard.applicationSubmitted });
     }
   };
@@ -355,7 +372,7 @@ export default function FindJobs() {
               </SelectContent>
             </Select>
           </div>
-          <RecruiterJobsList jobs={filteredBoard} loading={boardLoading} appliedIds={appliedIds} expandedId={boardExpandedId} onExpand={handleBoardExpand} onApply={handleApply} />
+          <RecruiterJobsList jobs={filteredBoard} loading={boardLoading} appliedIds={appliedIds} expandedId={boardExpandedId} onExpand={handleBoardExpand} onApply={handleApplyClick} />
         </TabsContent>
 
         {/* External Jobs Tab */}
@@ -406,6 +423,14 @@ export default function FindJobs() {
           )}
         </TabsContent>
       </Tabs>
+
+      <ApplyWithResumeDialog
+        open={applyDialogOpen}
+        onOpenChange={setApplyDialogOpen}
+        jobTitle={applyingJob?.title ?? ""}
+        companyName={applyingJob?.company_name ?? ""}
+        onSubmit={handleApplySubmit}
+      />
     </div>
   );
 }
