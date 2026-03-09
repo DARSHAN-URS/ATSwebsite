@@ -8,9 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Star, StarOff, FileText, Loader2, Users } from "lucide-react";
+import { ArrowLeft, Star, StarOff, FileText, Loader2, Users, Calendar, Video } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 
 const PIPELINE_STAGES = ["applied", "screening", "interview", "offer", "rejected"] as const;
