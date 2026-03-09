@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/i18n/LanguageContext";
 import RecruiterJobsList from "@/components/job-board/RecruiterJobsList";
 import ExternalJobsSearch from "@/components/job-board/ExternalJobsSearch";
+import ApplyWithResumeDialog from "@/components/job-board/ApplyWithResumeDialog";
 
 interface JobPost {
   id: string;
