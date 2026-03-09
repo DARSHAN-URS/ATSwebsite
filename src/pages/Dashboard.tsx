@@ -304,6 +304,7 @@ function JobSeekerDashboard() {
 
       <AIApplyQueueSection />
       <ResumeHealthCard navigate={navigate} />
+      <ScheduledInterviewsList />
       <JobTrackerSection />
 
       <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/jobs")}>
