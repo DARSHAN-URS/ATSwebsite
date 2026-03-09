@@ -169,7 +169,7 @@ export default function JobBoard() {
             appliedIds={appliedIds}
             expandedId={expandedId}
             onExpand={handleExpand}
-            onApply={handleApply}
+            onApply={handleApplyClick}
           />
         </TabsContent>
 
