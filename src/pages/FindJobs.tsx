@@ -17,6 +17,7 @@ import ProFeatureGate from "@/components/ProFeatureGate";
 import { useLanguage } from "@/i18n/LanguageContext";
 import RecruiterJobsList from "@/components/job-board/RecruiterJobsList";
 import ExternalJobsSearch from "@/components/job-board/ExternalJobsSearch";
+import ApplyWithResumeDialog from "@/components/job-board/ApplyWithResumeDialog";
 
 type Resume = Tables<"resumes">;
 type SavedJob = Tables<"saved_jobs">;
