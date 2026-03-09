@@ -177,6 +177,14 @@ export default function JobBoard() {
           <ExternalJobsSearch />
         </TabsContent>
       </Tabs>
+
+      <ApplyWithResumeDialog
+        open={applyDialogOpen}
+        onOpenChange={setApplyDialogOpen}
+        jobTitle={applyingJob?.title ?? ""}
+        companyName={applyingJob?.company_name ?? ""}
+        onSubmit={handleApplySubmit}
+      />
     </div>
   );
 }
