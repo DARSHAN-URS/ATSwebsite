@@ -36,6 +36,8 @@ export default function JobBoard() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
+  const [applyDialogOpen, setApplyDialogOpen] = useState(false);
+  const [applyingJob, setApplyingJob] = useState<JobPost | null>(null);
 
   useEffect(() => {
     const fetchJobs = async () => {
