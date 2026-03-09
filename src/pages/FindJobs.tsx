@@ -80,6 +80,8 @@ export default function FindJobs() {
   const [boardTypeFilter, setBoardTypeFilter] = useState("all");
   const [boardExpandedId, setBoardExpandedId] = useState<string | null>(null);
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
+  const [applyDialogOpen, setApplyDialogOpen] = useState(false);
+  const [applyingJob, setApplyingJob] = useState<JobPost | null>(null);
 
   useEffect(() => {
     if (!user) return;
