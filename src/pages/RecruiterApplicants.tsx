@@ -108,6 +108,44 @@ export default function RecruiterApplicants() {
     toast({ title: "Notes saved" });
   };
 
+  const scheduleInterview = async () => {
+    if (!selectedApp || !interviewDate || !interviewTime) {
+      toast({ title: "Please fill in all required fields", variant: "destructive" });
+      return;
+    }
+
+    setSchedulingInterview(true);
+    try {
+      const scheduledAt = new Date(`${interviewDate}T${interviewTime}:00.000Z`).toISOString();
+      
+      const { data, error } = await supabase.functions.invoke('schedule-zoom-interview', {
+        body: {
+          applicationId: selectedApp.id,
+          scheduledAt,
+          durationMinutes: parseInt(interviewDuration),
+          notes: interviewNotes,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({ title: "Interview scheduled successfully!" });
+      setInterviewDate("");
+      setInterviewTime("");
+      setInterviewDuration("30");
+      setInterviewNotes("");
+    } catch (error: any) {
+      console.error('Error scheduling interview:', error);
+      toast({ 
+        title: "Failed to schedule interview", 
+        description: error.message,
+        variant: "destructive" 
+      });
+    } finally {
+      setSchedulingInterview(false);
+    }
+  };
+
   const openDrawer = (app: Applicant) => {
     setSelectedApp(app);
     setNotes(app.recruiter_notes || "");
