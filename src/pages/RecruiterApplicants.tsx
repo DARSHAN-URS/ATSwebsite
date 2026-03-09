@@ -327,6 +327,11 @@ export default function RecruiterApplicants() {
                   </Button>
                 </div>
               </div>
+
+              {/* Scheduled Interviews for this Applicant */}
+              <div className="pt-4 border-t">
+                <ScheduledInterviewsList applicationId={selectedApp.id} />
+              </div>
             </div>
           )}
         </SheetContent>
