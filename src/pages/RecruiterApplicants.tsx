@@ -263,6 +263,69 @@ export default function RecruiterApplicants() {
                 <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={5} placeholder="Add private notes about this candidate..." />
                 <Button size="sm" className="mt-2" onClick={saveNotes}>Save Notes</Button>
               </div>
+
+              <div className="pt-4 border-t space-y-4">
+                <div className="flex items-center gap-2">
+                  <Video className="h-5 w-5 text-primary" />
+                  <h3 className="font-semibold">Schedule Zoom Interview</h3>
+                </div>
+                
+                <div className="space-y-3">
+                  <div>
+                    <Label>Date *</Label>
+                    <Input 
+                      type="date" 
+                      value={interviewDate} 
+                      onChange={(e) => setInterviewDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label>Time (UTC) *</Label>
+                    <Input 
+                      type="time" 
+                      value={interviewTime} 
+                      onChange={(e) => setInterviewTime(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label>Duration</Label>
+                    <Select value={interviewDuration} onValueChange={setInterviewDuration}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="15">15 minutes</SelectItem>
+                        <SelectItem value="30">30 minutes</SelectItem>
+                        <SelectItem value="45">45 minutes</SelectItem>
+                        <SelectItem value="60">1 hour</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label>Meeting Notes (Optional)</Label>
+                    <Textarea 
+                      value={interviewNotes} 
+                      onChange={(e) => setInterviewNotes(e.target.value)}
+                      rows={3}
+                      placeholder="Add agenda or notes for the interview..."
+                    />
+                  </div>
+                  
+                  <Button 
+                    onClick={scheduleInterview} 
+                    disabled={schedulingInterview}
+                    className="w-full"
+                  >
+                    {schedulingInterview ? (
+                      <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Scheduling...</>
+                    ) : (
+                      <><Calendar className="h-4 w-4 mr-2" /> Schedule Interview</>
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
           )}
         </SheetContent>
