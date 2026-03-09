@@ -75,20 +75,30 @@ export default function JobBoard() {
     }
   };
 
-  const handleApply = async (e: React.MouseEvent, jobId: string) => {
+  const handleApplyClick = (e: React.MouseEvent, jobId: string) => {
     e.stopPropagation();
     if (!user) return;
+    const job = jobs.find((j) => j.id === jobId);
+    if (job) {
+      setApplyingJob(job);
+      setApplyDialogOpen(true);
+    }
+  };
+
+  const handleApplySubmit = async (resumeId: string | null, coverNote: string) => {
+    if (!user || !applyingJob) return;
     const { error } = await supabase
       .from("job_post_applications")
-      .insert({ job_post_id: jobId, applicant_id: user.id } as any);
+      .insert({ job_post_id: applyingJob.id, applicant_id: user.id, resume_id: resumeId } as any);
     if (error) {
       if (error.code === "23505") {
-        toast({ title: t.jobBoard.alreadyApplied, description: t.jobBoard.alreadyApplied });
+        toast({ title: t.jobBoard.alreadyApplied });
       } else {
         toast({ title: t.common.error, description: error.message, variant: "destructive" });
       }
+      throw error;
     } else {
-      setAppliedIds((prev) => new Set(prev).add(jobId));
+      setAppliedIds((prev) => new Set(prev).add(applyingJob.id));
       toast({ title: t.jobBoard.applicationSubmitted });
     }
   };
