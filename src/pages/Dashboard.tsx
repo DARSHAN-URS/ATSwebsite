@@ -12,6 +12,7 @@ import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
 import AIApplyQueueSection from "@/components/resume/AIApplyQueueSection";
 import type { ResumeData } from "@/components/resume/types";
 import { dashboardExtraTranslations } from "@/i18n/dashboardExtraTranslations";
+import ScheduledInterviewsList from "@/components/ScheduledInterviewsList";
 
 const STATUS_COLORS: Record<string, string> = {
   applied: "hsl(200, 80%, 52%)",
@@ -303,6 +304,7 @@ function JobSeekerDashboard() {
 
       <AIApplyQueueSection />
       <ResumeHealthCard navigate={navigate} />
+      <ScheduledInterviewsList />
       <JobTrackerSection />
 
       <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/jobs")}>
