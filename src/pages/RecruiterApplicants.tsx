@@ -8,9 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Star, StarOff, FileText, Loader2, Users } from "lucide-react";
+import { ArrowLeft, Star, StarOff, FileText, Loader2, Users, Calendar, Video } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 
 const PIPELINE_STAGES = ["applied", "screening", "interview", "offer", "rejected"] as const;
@@ -47,6 +48,11 @@ export default function RecruiterApplicants() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notes, setNotes] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [schedulingInterview, setSchedulingInterview] = useState(false);
+  const [interviewDate, setInterviewDate] = useState("");
+  const [interviewTime, setInterviewTime] = useState("");
+  const [interviewDuration, setInterviewDuration] = useState("30");
+  const [interviewNotes, setInterviewNotes] = useState("");
 
   const fetchData = async () => {
     if (!user || !jobId) return;
@@ -100,6 +106,44 @@ export default function RecruiterApplicants() {
     await supabase.from("job_post_applications" as any).update({ recruiter_notes: notes } as any).eq("id", selectedApp.id);
     setApplicants((prev) => prev.map((a) => a.id === selectedApp.id ? { ...a, recruiter_notes: notes } : a));
     toast({ title: "Notes saved" });
+  };
+
+  const scheduleInterview = async () => {
+    if (!selectedApp || !interviewDate || !interviewTime) {
+      toast({ title: "Please fill in all required fields", variant: "destructive" });
+      return;
+    }
+
+    setSchedulingInterview(true);
+    try {
+      const scheduledAt = new Date(`${interviewDate}T${interviewTime}:00.000Z`).toISOString();
+      
+      const { data, error } = await supabase.functions.invoke('schedule-zoom-interview', {
+        body: {
+          applicationId: selectedApp.id,
+          scheduledAt,
+          durationMinutes: parseInt(interviewDuration),
+          notes: interviewNotes,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({ title: "Interview scheduled successfully!" });
+      setInterviewDate("");
+      setInterviewTime("");
+      setInterviewDuration("30");
+      setInterviewNotes("");
+    } catch (error: any) {
+      console.error('Error scheduling interview:', error);
+      toast({ 
+        title: "Failed to schedule interview", 
+        description: error.message,
+        variant: "destructive" 
+      });
+    } finally {
+      setSchedulingInterview(false);
+    }
   };
 
   const openDrawer = (app: Applicant) => {
@@ -218,6 +262,69 @@ export default function RecruiterApplicants() {
                 <Label>Private Notes</Label>
                 <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={5} placeholder="Add private notes about this candidate..." />
                 <Button size="sm" className="mt-2" onClick={saveNotes}>Save Notes</Button>
+              </div>
+
+              <div className="pt-4 border-t space-y-4">
+                <div className="flex items-center gap-2">
+                  <Video className="h-5 w-5 text-primary" />
+                  <h3 className="font-semibold">Schedule Zoom Interview</h3>
+                </div>
+                
+                <div className="space-y-3">
+                  <div>
+                    <Label>Date *</Label>
+                    <Input 
+                      type="date" 
+                      value={interviewDate} 
+                      onChange={(e) => setInterviewDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label>Time (UTC) *</Label>
+                    <Input 
+                      type="time" 
+                      value={interviewTime} 
+                      onChange={(e) => setInterviewTime(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label>Duration</Label>
+                    <Select value={interviewDuration} onValueChange={setInterviewDuration}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="15">15 minutes</SelectItem>
+                        <SelectItem value="30">30 minutes</SelectItem>
+                        <SelectItem value="45">45 minutes</SelectItem>
+                        <SelectItem value="60">1 hour</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label>Meeting Notes (Optional)</Label>
+                    <Textarea 
+                      value={interviewNotes} 
+                      onChange={(e) => setInterviewNotes(e.target.value)}
+                      rows={3}
+                      placeholder="Add agenda or notes for the interview..."
+                    />
+                  </div>
+                  
+                  <Button 
+                    onClick={scheduleInterview} 
+                    disabled={schedulingInterview}
+                    className="w-full"
+                  >
+                    {schedulingInterview ? (
+                      <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Scheduling...</>
+                    ) : (
+                      <><Calendar className="h-4 w-4 mr-2" /> Schedule Interview</>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           )}

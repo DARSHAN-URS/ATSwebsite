@@ -39,3 +39,5 @@ project_id = "hkgevmagiqcbndvkbekk"
     verify_jwt = false
   [functions.activate-subscription]
     verify_jwt = false
+  [functions.schedule-zoom-interview]
+    verify_jwt = false
