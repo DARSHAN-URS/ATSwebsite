@@ -372,7 +372,7 @@ export default function FindJobs() {
               </SelectContent>
             </Select>
           </div>
-          <RecruiterJobsList jobs={filteredBoard} loading={boardLoading} appliedIds={appliedIds} expandedId={boardExpandedId} onExpand={handleBoardExpand} onApply={handleApply} />
+          <RecruiterJobsList jobs={filteredBoard} loading={boardLoading} appliedIds={appliedIds} expandedId={boardExpandedId} onExpand={handleBoardExpand} onApply={handleApplyClick} />
         </TabsContent>
 
         {/* External Jobs Tab */}
