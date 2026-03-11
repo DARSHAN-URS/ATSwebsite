@@ -20,12 +20,35 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const measureRef = useRef<HTMLDivElement>(null);
 
+  // Resolve photoUrl from storage path to signed URL
+  const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const rawUrl = resumeData.personalInfo?.photoUrl;
+    if (rawUrl) {
+      resolvePhotoUrl(rawUrl).then((url) => {
+        if (!cancelled) setResolvedPhotoUrl(url);
+      });
+    } else {
+      setResolvedPhotoUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [resumeData.personalInfo?.photoUrl]);
+
   useEffect(() => {
     setLoading(true);
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       try {
-        const htmlPages = buildHTMLPreview(resumeData, title, templateId);
+        // Use resolved photo URL in preview
+        const dataWithResolvedPhoto = {
+          ...resumeData,
+          personalInfo: {
+            ...resumeData.personalInfo,
+            photoUrl: resolvedPhotoUrl || undefined,
+          },
+        };
+        const htmlPages = buildHTMLPreview(dataWithResolvedPhoto, title, templateId);
         setPages(htmlPages);
       } catch {
         // silently handle
