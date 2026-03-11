@@ -90,8 +90,8 @@ export default function AccountSettings() {
       const path = `${user!.id}/avatar-${Date.now()}.${ext}`;
       const { error } = await supabase.storage.from("resume-photos").upload(path, file, { upsert: true });
       if (error) throw error;
-      const { data: urlData } = supabase.storage.from("resume-photos").getPublicUrl(path);
-      await supabase.auth.updateUser({ data: { avatar_url: urlData.publicUrl } });
+      // Store the storage path (not a public URL) for security
+      await supabase.auth.updateUser({ data: { avatar_url: path } });
       toast({ title: "Photo updated!" });
     } catch (err: any) {
       toast({ title: "Upload failed", description: err.message, variant: "destructive" });
