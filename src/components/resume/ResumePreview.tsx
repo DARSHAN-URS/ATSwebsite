@@ -3,6 +3,7 @@ import { type TemplateId } from "./pdfTemplates";
 import type { ResumeData } from "./types";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 import { Loader2 } from "lucide-react";
+import { resolvePhotoUrl } from "@/lib/storageUtils";
 
 const PAGE_HEIGHT = 842; // A4 proportional height at 595px width
 
@@ -19,12 +20,35 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const measureRef = useRef<HTMLDivElement>(null);
 
+  // Resolve photoUrl from storage path to signed URL
+  const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const rawUrl = resumeData.personalInfo?.photoUrl;
+    if (rawUrl) {
+      resolvePhotoUrl(rawUrl).then((url) => {
+        if (!cancelled) setResolvedPhotoUrl(url);
+      });
+    } else {
+      setResolvedPhotoUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [resumeData.personalInfo?.photoUrl]);
+
   useEffect(() => {
     setLoading(true);
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       try {
-        const htmlPages = buildHTMLPreview(resumeData, title, templateId);
+        // Use resolved photo URL in preview
+        const dataWithResolvedPhoto = {
+          ...resumeData,
+          personalInfo: {
+            ...resumeData.personalInfo,
+            photoUrl: resolvedPhotoUrl || undefined,
+          },
+        };
+        const htmlPages = buildHTMLPreview(dataWithResolvedPhoto, title, templateId);
         setPages(htmlPages);
       } catch {
         // silently handle
@@ -33,7 +57,7 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
     }, 400);
 
     return () => clearTimeout(debounceRef.current);
-  }, [resumeData, title, templateId]);
+  }, [resumeData, title, templateId, resolvedPhotoUrl]);
 
   // Measure content height and calculate page count
   const updatePageCount = useCallback(() => {

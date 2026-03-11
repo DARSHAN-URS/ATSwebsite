@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -40,6 +40,23 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
 
   const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
   const avatarFallback = displayName.charAt(0).toUpperCase();
+
+  // Resolve avatar storage path to signed URL
+  const [resolvedAvatarUrl, setResolvedAvatarUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const avatarPath = user?.user_metadata?.avatar_url;
+    if (avatarPath) {
+      import("@/lib/storageUtils").then(({ resolvePhotoUrl }) => {
+        resolvePhotoUrl(avatarPath).then((url) => {
+          if (!cancelled) setResolvedAvatarUrl(url);
+        });
+      });
+    } else {
+      setResolvedAvatarUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [user?.user_metadata?.avatar_url]);
 
   return (
     <>
@@ -84,7 +101,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
           <DropdownMenuTrigger asChild>
             <button className="w-full flex items-center gap-3 px-3 py-2.5 bg-sidebar-primary/10 hover:bg-sidebar-primary/20 transition-colors text-left border border-sidebar-primary/20 glow-border">
               <Avatar className="h-8 w-8 shrink-0">
-                <AvatarImage src={user?.user_metadata?.avatar_url} alt={displayName} />
+                <AvatarImage src={resolvedAvatarUrl || undefined} alt={displayName} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold font-display">
                   {avatarFallback}
                 </AvatarFallback>

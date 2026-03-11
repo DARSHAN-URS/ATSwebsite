@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { resolvePhotoUrl } from "@/lib/storageUtils";
 import type { PersonalInfo } from "./types";
 
 interface Props {
@@ -18,7 +19,20 @@ interface Props {
 export default function PersonalInfoSection({ personalInfo, onChange, userId }: Props) {
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
+  const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (personalInfo.photoUrl) {
+      resolvePhotoUrl(personalInfo.photoUrl).then((url) => {
+        if (!cancelled) setResolvedPhotoUrl(url);
+      });
+    } else {
+      setResolvedPhotoUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [personalInfo.photoUrl]);
 
   const update = (field: keyof PersonalInfo, value: string) => {
     onChange({ ...personalInfo, [field]: value });
@@ -39,8 +53,8 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
       const path = `${userId}/${Date.now()}.${ext}`;
       const { error } = await supabase.storage.from("resume-photos").upload(path, file, { upsert: true });
       if (error) throw error;
-      const { data: urlData } = supabase.storage.from("resume-photos").getPublicUrl(path);
-      onChange({ ...personalInfo, photoUrl: urlData.publicUrl });
+      // Store the storage path (not a public URL) for security
+      onChange({ ...personalInfo, photoUrl: path });
       toast({ title: "Photo uploaded!" });
     } catch (err: any) {
       console.error("Photo upload error:", err);
@@ -64,8 +78,8 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
         <div className="flex items-start gap-4">
           <div className="flex flex-col items-center gap-2">
             <Avatar className="h-20 w-20">
-              {personalInfo.photoUrl ? (
-                <AvatarImage src={personalInfo.photoUrl} alt="Profile" />
+              {resolvedPhotoUrl ? (
+                <AvatarImage src={resolvedPhotoUrl} alt="Profile" />
               ) : null}
               <AvatarFallback><User className="h-8 w-8" /></AvatarFallback>
             </Avatar>

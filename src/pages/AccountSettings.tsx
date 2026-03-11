@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useLocalCurrency } from "@/hooks/useLocalCurrency";
@@ -59,6 +59,23 @@ export default function AccountSettings() {
 
   const avatarFallback = (name || displayName).charAt(0).toUpperCase();
 
+  // Resolve avatar storage path to signed URL
+  const [resolvedAvatarUrl, setResolvedAvatarUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const avatarPath = user?.user_metadata?.avatar_url;
+    if (avatarPath) {
+      import("@/lib/storageUtils").then(({ resolvePhotoUrl }) => {
+        resolvePhotoUrl(avatarPath).then((url) => {
+          if (!cancelled) setResolvedAvatarUrl(url);
+        });
+      });
+    } else {
+      setResolvedAvatarUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [user?.user_metadata?.avatar_url]);
+
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (photoInputRef.current) photoInputRef.current.value = "";
@@ -73,8 +90,8 @@ export default function AccountSettings() {
       const path = `${user!.id}/avatar-${Date.now()}.${ext}`;
       const { error } = await supabase.storage.from("resume-photos").upload(path, file, { upsert: true });
       if (error) throw error;
-      const { data: urlData } = supabase.storage.from("resume-photos").getPublicUrl(path);
-      await supabase.auth.updateUser({ data: { avatar_url: urlData.publicUrl } });
+      // Store the storage path (not a public URL) for security
+      await supabase.auth.updateUser({ data: { avatar_url: path } });
       toast({ title: "Photo updated!" });
     } catch (err: any) {
       toast({ title: "Upload failed", description: err.message, variant: "destructive" });
@@ -179,7 +196,7 @@ export default function AccountSettings() {
           <div className="flex items-center gap-4">
             <div className="relative">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={user?.user_metadata?.avatar_url} alt={name} />
+                <AvatarImage src={resolvedAvatarUrl || undefined} alt={name} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-xl font-semibold">{avatarFallback}</AvatarFallback>
               </Avatar>
               <input ref={photoInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />

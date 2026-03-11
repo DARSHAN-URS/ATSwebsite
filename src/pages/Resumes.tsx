@@ -464,7 +464,17 @@ export default function Resumes() {
 
   const handleExportPDF = async () => {
     const { generateResumePDF } = await import("@/components/resume/pdfTemplates");
-    await generateResumePDF(resumeData, title, selectedTemplate);
+    const { resolvePhotoUrl } = await import("@/lib/storageUtils");
+    // Resolve storage path to signed URL for PDF rendering
+    const resolvedUrl = await resolvePhotoUrl(resumeData.personalInfo?.photoUrl);
+    const exportData = {
+      ...resumeData,
+      personalInfo: {
+        ...resumeData.personalInfo,
+        photoUrl: resolvedUrl || undefined,
+      },
+    };
+    await generateResumePDF(exportData, title, selectedTemplate);
     toast({ title: t.resumes.pdfDownloaded });
   };
 
