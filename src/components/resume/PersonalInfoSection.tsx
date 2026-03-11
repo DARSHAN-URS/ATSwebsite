@@ -78,8 +78,8 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
         <div className="flex items-start gap-4">
           <div className="flex flex-col items-center gap-2">
             <Avatar className="h-20 w-20">
-              {personalInfo.photoUrl ? (
-                <AvatarImage src={personalInfo.photoUrl} alt="Profile" />
+              {resolvedPhotoUrl ? (
+                <AvatarImage src={resolvedPhotoUrl} alt="Profile" />
               ) : null}
               <AvatarFallback><User className="h-8 w-8" /></AvatarFallback>
             </Avatar>
