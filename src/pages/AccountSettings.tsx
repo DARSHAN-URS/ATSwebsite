@@ -196,7 +196,7 @@ export default function AccountSettings() {
           <div className="flex items-center gap-4">
             <div className="relative">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={user?.user_metadata?.avatar_url} alt={name} />
+                <AvatarImage src={resolvedAvatarUrl || undefined} alt={name} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-xl font-semibold">{avatarFallback}</AvatarFallback>
               </Avatar>
               <input ref={photoInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
