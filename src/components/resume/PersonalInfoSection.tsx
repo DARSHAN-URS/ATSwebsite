@@ -19,7 +19,20 @@ interface Props {
 export default function PersonalInfoSection({ personalInfo, onChange, userId }: Props) {
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
+  const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (personalInfo.photoUrl) {
+      resolvePhotoUrl(personalInfo.photoUrl).then((url) => {
+        if (!cancelled) setResolvedPhotoUrl(url);
+      });
+    } else {
+      setResolvedPhotoUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [personalInfo.photoUrl]);
 
   const update = (field: keyof PersonalInfo, value: string) => {
     onChange({ ...personalInfo, [field]: value });
