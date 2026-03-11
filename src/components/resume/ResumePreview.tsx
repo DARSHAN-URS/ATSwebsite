@@ -57,7 +57,7 @@ export default function ResumePreview({ resumeData, title, templateId }: ResumeP
     }, 400);
 
     return () => clearTimeout(debounceRef.current);
-  }, [resumeData, title, templateId]);
+  }, [resumeData, title, templateId, resolvedPhotoUrl]);
 
   // Measure content height and calculate page count
   const updatePageCount = useCallback(() => {
