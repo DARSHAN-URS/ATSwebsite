@@ -53,8 +53,8 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
       const path = `${userId}/${Date.now()}.${ext}`;
       const { error } = await supabase.storage.from("resume-photos").upload(path, file, { upsert: true });
       if (error) throw error;
-      const { data: urlData } = supabase.storage.from("resume-photos").getPublicUrl(path);
-      onChange({ ...personalInfo, photoUrl: urlData.publicUrl });
+      // Store the storage path (not a public URL) for security
+      onChange({ ...personalInfo, photoUrl: path });
       toast({ title: "Photo uploaded!" });
     } catch (err: any) {
       console.error("Photo upload error:", err);
