@@ -3,6 +3,7 @@ import { type TemplateId } from "./pdfTemplates";
 import type { ResumeData } from "./types";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 import { Loader2 } from "lucide-react";
+import { resolvePhotoUrl } from "@/lib/storageUtils";
 
 const PAGE_HEIGHT = 842; // A4 proportional height at 595px width
 
