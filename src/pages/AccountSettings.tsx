@@ -59,6 +59,23 @@ export default function AccountSettings() {
 
   const avatarFallback = (name || displayName).charAt(0).toUpperCase();
 
+  // Resolve avatar storage path to signed URL
+  const [resolvedAvatarUrl, setResolvedAvatarUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const avatarPath = user?.user_metadata?.avatar_url;
+    if (avatarPath) {
+      import("@/lib/storageUtils").then(({ resolvePhotoUrl }) => {
+        resolvePhotoUrl(avatarPath).then((url) => {
+          if (!cancelled) setResolvedAvatarUrl(url);
+        });
+      });
+    } else {
+      setResolvedAvatarUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [user?.user_metadata?.avatar_url]);
+
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (photoInputRef.current) photoInputRef.current.value = "";
