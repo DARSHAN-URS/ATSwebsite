@@ -41,6 +41,23 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
   const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
   const avatarFallback = displayName.charAt(0).toUpperCase();
 
+  // Resolve avatar storage path to signed URL
+  const [resolvedAvatarUrl, setResolvedAvatarUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const avatarPath = user?.user_metadata?.avatar_url;
+    if (avatarPath) {
+      import("@/lib/storageUtils").then(({ resolvePhotoUrl }) => {
+        resolvePhotoUrl(avatarPath).then((url) => {
+          if (!cancelled) setResolvedAvatarUrl(url);
+        });
+      });
+    } else {
+      setResolvedAvatarUrl(null);
+    }
+    return () => { cancelled = true; };
+  }, [user?.user_metadata?.avatar_url]);
+
   return (
     <>
       <div className="p-4 pb-2 flex items-center justify-center">
