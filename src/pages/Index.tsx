@@ -181,17 +181,19 @@ const Index = () => {
             <Logo className="h-10 md:h-12" width={160} height={48} fetchPriority="high" />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
-            <div className="relative group">
+            <div className="relative group" onMouseEnter={() => setTemplateDropdownMounted(true)}>
               <button className="flex items-center gap-1 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">
                 {t.landing.resumeTemplates} <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180" />
               </button>
-              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
-                <div className="w-[560px] max-h-[70vh] overflow-y-auto rounded-xl border border-border/60 bg-card shadow-xl shadow-foreground/5 p-4">
-                  <Suspense fallback={<div className="h-40 flex items-center justify-center text-xs text-muted-foreground">Loading templates…</div>}>
-                    <TemplateDropdownContent onSelect={() => openAuth("signup")} />
-                  </Suspense>
+              {templateDropdownMounted && (
+                <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
+                  <div className="w-[560px] max-h-[70vh] overflow-y-auto rounded-xl border border-border/60 bg-card shadow-xl shadow-foreground/5 p-4">
+                    <Suspense fallback={<div className="h-40 flex items-center justify-center text-xs text-muted-foreground">Loading templates…</div>}>
+                      <TemplateDropdownContent onSelect={() => openAuth("signup")} />
+                    </Suspense>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.coverLetters}</button>
             <button onClick={() => openAuth("login")} className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground">{t.nav.findJobs}</button>
