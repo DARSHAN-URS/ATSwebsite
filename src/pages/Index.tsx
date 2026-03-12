@@ -117,10 +117,61 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground scan-line">
       <SEOHead
-        title="ATS Pro Resume Builder — Free AI Resume Builder for ATS Success"
-        description="Build ATS-optimized resumes in minutes with ATS Pro Resume Builder. Free AI resume grader, recruiter job board, one-click tailoring, and 8+ professional templates. Land 3× more interviews."
+        title="ATS Pro Resume Builder — #1 Free AI Resume Builder & ATS Checker"
+        description="Build ATS-optimized resumes that beat applicant tracking systems. Free AI resume grader, keyword scanner, one-click tailoring, 8+ templates. Trusted by 10,000+ job seekers. Land 3× more interviews."
         canonical="https://atsproresumebuilder.com/"
-        keywords="ATS resume builder, AI resume grader, free resume builder, ATS-friendly resume, resume templates, job application tracker, recruiter job board, cover letter generator" />
+        ogImage="https://atsproresumebuilder.com/og-image.png"
+        keywords="ATS resume builder, free ATS resume builder, AI resume builder, ATS resume checker, ATS resume scanner, resume keyword optimizer, ATS-friendly resume, ATS resume templates, applicant tracking system resume, professional resume builder" />
+
+      {/* Organization + WebSite + SoftwareApplication JSON-LD */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "ATS Pro Resume Builder",
+          "url": "https://atsproresumebuilder.com",
+          "logo": "https://atsproresumebuilder.com/images/logo-main.png",
+          "sameAs": [
+            "https://www.facebook.com/share/18EkeUXY8P/",
+            "https://www.instagram.com/atsproresumebuilder",
+            "https://x.com/Atspro_official",
+            "https://www.linkedin.com/company/ats-pro-resume-builder/",
+            "https://www.tiktok.com/@atsproresumebuilder"
+          ],
+          "contactPoint": { "@type": "ContactPoint", "email": "support@atsproresumebuilder.com", "contactType": "customer support" }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "ATS Pro Resume Builder",
+          "url": "https://atsproresumebuilder.com",
+          "potentialAction": { "@type": "SearchAction", "target": "https://atsproresumebuilder.com/blog?q={search_term_string}", "query-input": "required name=search_term_string" }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "ATS Pro Resume Builder",
+          "operatingSystem": "Web",
+          "applicationCategory": "BusinessApplication",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "10000" },
+          "description": "Free AI-powered resume builder that helps job seekers create ATS-optimized resumes with keyword scanning, one-click tailoring, and 8+ professional templates."
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": t.landing.faq1q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq1a } },
+            { "@type": "Question", "name": t.landing.faq2q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq2a } },
+            { "@type": "Question", "name": t.landing.faq3q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq3a } },
+            { "@type": "Question", "name": t.landing.faq4q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq4a } },
+            { "@type": "Question", "name": t.landing.faq5q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq5a } },
+            { "@type": "Question", "name": t.landing.faq6q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq6a } },
+            { "@type": "Question", "name": t.landing.faq7q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq7a } },
+            { "@type": "Question", "name": t.landing.faq8q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq8a } }
+          ]
+        }
+      ]) }} />
 
 
       {/* Navbar — clean minimal */}
