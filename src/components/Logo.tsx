@@ -13,16 +13,23 @@ export default function Logo({ className = "h-10 w-auto", width = 160, height = 
     ? "brightness-0 invert"
     : "dark:brightness-0 dark:invert";
 
+  // React 18 doesn't recognise fetchPriority on <img>; spread conditionally
+  const extraProps: Record<string, string> = {};
+  if (fetchPriority) extraProps.fetchpriority = fetchPriority;
+
   return (
-    <img
-      alt="ATS Pro Resume Builder"
-      className={`${className} object-contain ${filterClass}`}
-      width={width}
-      height={height}
-      loading={loading}
-      fetchPriority={fetchPriority}
-      decoding="async"
-      src="/images/logo-main.png"
-    />
+    <picture>
+      <source srcSet="/images/logo-main.webp" type="image/webp" />
+      <img
+        alt="ATS Pro Resume Builder"
+        className={`${className} object-contain ${filterClass}`}
+        width={width}
+        height={height}
+        loading={loading}
+        decoding="async"
+        src="/images/logo-main.png"
+        {...extraProps}
+      />
+    </picture>
   );
 }
