@@ -14,15 +14,18 @@ export default function Logo({ className = "h-10 w-auto", width = 160, height = 
     : "dark:brightness-0 dark:invert";
 
   return (
-    <img
-      alt="ATS Pro Resume Builder"
-      className={`${className} object-contain ${filterClass}`}
-      width={width}
-      height={height}
-      loading={loading}
-      fetchPriority={fetchPriority}
-      decoding="async"
-      src="/images/logo-main.png"
-    />
+    <picture>
+      <source srcSet="/images/logo-main.webp" type="image/webp" />
+      <img
+        alt="ATS Pro Resume Builder"
+        className={`${className} object-contain ${filterClass}`}
+        width={width}
+        height={height}
+        loading={loading}
+        fetchPriority={fetchPriority}
+        decoding="async"
+        src="/images/logo-main.png"
+      />
+    </picture>
   );
 }
