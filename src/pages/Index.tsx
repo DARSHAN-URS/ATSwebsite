@@ -45,6 +45,7 @@ const Index = () => {
   const lx = landingExtraTranslations[locale];
   const [, startTransition] = useTransition();
   const [pricingDuration, setPricingDuration] = useState<"weekly" | "biweekly" | "monthly">("monthly");
+  const [templateDropdownMounted, setTemplateDropdownMounted] = useState(false);
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
