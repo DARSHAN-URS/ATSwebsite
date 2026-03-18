@@ -495,7 +495,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section ref={pricingRef} className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
+      <section ref={pricingRef} className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 700px' }}>
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
