@@ -85,7 +85,8 @@ Deno.serve(async (req) => {
       });
 
     if (insertError) {
-      return new Response(JSON.stringify({ error: insertError.message }), {
+      console.error('Subscription activation failed:', insertError);
+      return new Response(JSON.stringify({ error: "Failed to activate subscription. Please try again." }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

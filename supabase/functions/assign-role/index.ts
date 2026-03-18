@@ -70,7 +70,8 @@ Deno.serve(async (req) => {
       .insert({ user_id: user.id, role });
 
     if (insertError) {
-      return new Response(JSON.stringify({ error: insertError.message }), {
+      console.error('Role assignment failed:', insertError);
+      return new Response(JSON.stringify({ error: "Failed to assign role. Please try again." }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
