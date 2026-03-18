@@ -116,7 +116,7 @@ const Index = () => {
     });
   }, [startTransition]);
   return (
-    <div className="min-h-screen bg-background text-foreground scan-line">
+    <div className="min-h-screen bg-background text-foreground">
       <SEOHead
         title="ATS Pro Resume Builder — #1 Free AI Resume Builder & ATS Checker"
         description="Build ATS-optimized resumes that beat applicant tracking systems. Free AI resume grader, keyword scanner, one-click tailoring, 8+ templates. Trusted by 10,000+ job seekers. Land 3× more interviews."
