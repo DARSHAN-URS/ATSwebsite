@@ -259,7 +259,7 @@ const Index = () => {
       </section>
 
       {/* Features — sci-fi cards */}
-      <section className="py-14 md:py-28 grid-bg">
+      <section className="py-14 md:py-28" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }}>
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2 md:mb-3">{t.landing.features}</p>
