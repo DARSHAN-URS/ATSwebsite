@@ -19,7 +19,11 @@ export default function Logo({ className = "h-10 w-auto", width = 160, height = 
 
   return (
     <picture>
-      <source srcSet="/images/logo-main.webp" type="image/webp" />
+      <source
+        srcSet="/images/logo-main-sm.webp"
+        type="image/webp"
+        sizes="(max-width: 768px) 160px, 192px"
+      />
       <img
         alt="ATS Pro Resume Builder"
         className={`${className} object-contain ${filterClass}`}

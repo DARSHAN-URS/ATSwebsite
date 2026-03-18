@@ -116,7 +116,7 @@ const Index = () => {
     });
   }, [startTransition]);
   return (
-    <div className="min-h-screen bg-background text-foreground scan-line">
+    <div className="min-h-screen bg-background text-foreground">
       <SEOHead
         title="ATS Pro Resume Builder — #1 Free AI Resume Builder & ATS Checker"
         description="Build ATS-optimized resumes that beat applicant tracking systems. Free AI resume grader, keyword scanner, one-click tailoring, 8+ templates. Trusted by 10,000+ job seekers. Land 3× more interviews."
@@ -228,12 +228,8 @@ const Index = () => {
       </nav>
 
       {/* Hero — sci-fi grid bg */}
-      <section className="relative overflow-hidden py-10 md:py-20 grid-bg">
+      <section className="relative overflow-hidden py-10 md:py-20">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
-        {/* Geometric hex decorations */}
-        <div className="absolute top-20 left-10 -z-10 w-32 h-32 border border-primary/10 rotate-45 animate-hud-flicker" />
-        <div className="absolute bottom-20 right-10 -z-10 w-24 h-24 border border-primary/10 rotate-12 animate-hud-flicker" />
-        <div className="absolute top-1/2 left-1/4 -z-10 w-60 h-60 rounded-full bg-primary/5 blur-[80px]" />
         <div className="mx-auto max-w-3xl px-5 text-center">
           <div className="mb-5 md:mb-8 inline-flex items-center gap-2 border border-primary/30 bg-primary/5 px-4 py-2 text-[11px] md:text-xs font-semibold text-primary glow-border font-mono uppercase tracking-widest">
             <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse-dot" />
@@ -263,7 +259,7 @@ const Index = () => {
       </section>
 
       {/* Features — sci-fi cards */}
-      <section className="py-14 md:py-28 grid-bg">
+      <section className="py-14 md:py-28" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }}>
           <div className="mx-auto max-w-7xl px-5 md:px-6">
           <div className="text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2 md:mb-3">{t.landing.features}</p>
@@ -290,7 +286,7 @@ const Index = () => {
       </section>
 
       {/* AI Apply Feature Section */}
-      <section className="border-t border-primary/20 py-14 md:py-24 grid-bg">
+      <section className="border-t border-primary/20 py-14 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             {/* Left: content */}
@@ -367,7 +363,7 @@ const Index = () => {
       </section>
 
       {/* Why Resumes Fail */}
-      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}>
         <div className="mx-auto max-w-3xl px-4 md:px-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-3 font-mono neon-text">{t.landing.theProblem}</p>
@@ -452,7 +448,7 @@ const Index = () => {
       </section>
 
       {/* For Recruiters CTA */}
-      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
@@ -499,7 +495,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section ref={pricingRef} className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
+      <section ref={pricingRef} className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 700px' }}>
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-4">
@@ -664,7 +660,7 @@ const Index = () => {
       </section>
 
       {/* Footer with social media */}
-      <footer className="border-t border-primary/30 bg-foreground text-background grid-bg">
+      <footer className="border-t border-primary/30 bg-foreground text-background">
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">

@@ -9,8 +9,10 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { lazy, Suspense } from "react";
 
 // Eagerly loaded — small, needed immediately
-import Index from "@/pages/Index";
 import AppLayout from "@/components/AppLayout";
+
+// Index page lazy-loaded to keep initial bundle small
+const Index = lazy(() => import("@/pages/Index"));
 
 // Lazy-loaded — only pulled in when the user navigates there
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
