@@ -448,7 +448,7 @@ const Index = () => {
       </section>
 
       {/* For Recruiters CTA */}
-      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24 grid-bg">
+      <section className="border-t border-primary/20 bg-secondary/30 py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
           <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <div>
