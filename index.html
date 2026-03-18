@@ -18,15 +18,11 @@
     <meta name="theme-color" content="#3b82f6" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
-    <!-- Meta Pixel Code (deferred until idle) -->
+    <!-- Analytics & Pixel — load 5s after page becomes interactive -->
     <script>
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(function() { loadTrackers(); });
-      } else {
-        window.addEventListener('load', function() { setTimeout(loadTrackers, 2000); });
-      }
       function loadTrackers() {
-        // Facebook Pixel
+        if (window.__trackersLoaded) return;
+        window.__trackersLoaded = true;
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -37,12 +33,12 @@
         'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2089703951442961');
         fbq('track', 'PageView');
-        // Google Analytics
         var s = document.createElement('script');
         s.src = 'https://www.googletagmanager.com/gtag/js?id=G-13HTG0PLYS';
         s.async = true;
         document.head.appendChild(s);
       }
+      window.addEventListener('load', function() { setTimeout(loadTrackers, 5000); });
     </script>
 
     <!-- Google Analytics (dataLayer ready, script deferred via loadTrackers) -->

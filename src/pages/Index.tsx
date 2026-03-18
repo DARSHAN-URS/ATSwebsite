@@ -660,7 +660,7 @@ const Index = () => {
       </section>
 
       {/* Footer with social media */}
-      <footer className="border-t border-primary/30 bg-foreground text-background grid-bg">
+      <footer className="border-t border-primary/30 bg-foreground text-background">
         <div className="mx-auto max-w-7xl px-5 md:px-6 py-10 md:py-14">
           <div className="grid gap-8 md:gap-10 md:grid-cols-12">
             <div className="md:col-span-5 text-center md:text-left">
