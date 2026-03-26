@@ -1,26 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Briefcase, Bookmark, Search, Mail, Eye, Users, Building2, TrendingUp, Target, PieChart, Zap, CheckCircle2, AlertCircle } from "lucide-react";
+import { FileText, Briefcase, Search, Mail, Eye, Users, Building2, TrendingUp, PieChart, Zap, CheckCircle2, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import { PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
-import AIApplyQueueSection from "@/components/resume/AIApplyQueueSection";
 import type { ResumeData } from "@/components/resume/types";
 import { dashboardExtraTranslations } from "@/i18n/dashboardExtraTranslations";
-import ScheduledInterviewsList from "@/components/ScheduledInterviewsList";
 
-const STATUS_COLORS: Record<string, string> = {
-  applied: "hsl(200, 80%, 52%)",
-  screening: "hsl(38, 92%, 55%)",
-  interview: "hsl(252, 68%, 55%)",
-  offer: "hsl(152, 60%, 44%)",
-  rejected: "hsl(0, 72%, 56%)",
-};
+// Lazy-load heavy chart + section components
+const DashboardCharts = lazy(() => import("@/components/dashboard/DashboardCharts"));
+const JobTrackerSection = lazy(() => import("@/components/job-tracker/JobTrackerSection"));
+const AIApplyQueueSection = lazy(() => import("@/components/resume/AIApplyQueueSection"));
+const ScheduledInterviewsList = lazy(() => import("@/components/ScheduledInterviewsList"));
 
 export default function Dashboard() {
   const { role } = useUserRole();
@@ -251,61 +245,28 @@ function JobSeekerDashboard() {
             <CardDescription className="text-xs">{td.statusBreakdown}</CardDescription>
           </CardHeader>
           <CardContent>
-            {stats.statusBreakdown.length > 0 ? (
-              <ResponsiveContainer width="100%" height={200}>
-                <RechartsPie>
-                  <Pie
-                    data={stats.statusBreakdown}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={45}
-                    outerRadius={75}
-                    paddingAngle={3}
-                    dataKey="value"
-                    label={({ name, value }) => `${name.length > 8 ? name.slice(0, 8) + '…' : name} (${value})`}
-                  >
-                    {stats.statusBreakdown.map((entry) => (
-                      <Cell key={entry.name} fill={STATUS_COLORS[entry.name] || "hsl(220, 10%, 50%)"} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </RechartsPie>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-center text-sm text-muted-foreground py-8">{td.noAppsYet}</p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" /> {td.weeklyActivity}
-            </CardTitle>
-            <CardDescription className="text-xs">{td.weeklyActivityDesc}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {stats.applications > 0 ? (
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={stats.weeklyActivity}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="week" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius)", color: "hsl(var(--foreground))" }} />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-center text-sm text-muted-foreground py-8">{td.noActivityYet}</p>
-            )}
+            <Suspense fallback={<div className="h-[200px]" />}>
+              <DashboardCharts
+                statusBreakdown={stats.statusBreakdown}
+                weeklyActivity={stats.weeklyActivity}
+                applications={stats.applications}
+                labels={{ applicationStatus: td.applicationStatus, statusBreakdown: td.statusBreakdown, weeklyActivity: td.weeklyActivity, weeklyActivityDesc: td.weeklyActivityDesc, noAppsYet: td.noAppsYet, noActivityYet: td.noActivityYet }}
+              />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
 
-      <AIApplyQueueSection />
+      <Suspense fallback={null}>
+        <AIApplyQueueSection />
+      </Suspense>
       <ResumeHealthCard navigate={navigate} />
-      <ScheduledInterviewsList />
-      <JobTrackerSection />
+      <Suspense fallback={null}>
+        <ScheduledInterviewsList />
+      </Suspense>
+      <Suspense fallback={null}>
+        <JobTrackerSection />
+      </Suspense>
 
       <Card className="cursor-pointer card-lift rounded-xl border border-border/60" onClick={() => navigate("/jobs")}>
         <CardHeader className="p-4 md:p-6">

@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/i18n/LanguageContext";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useUserRole, UserRoleProvider } from "@/hooks/useUserRole";
 import { lazy, Suspense } from "react";
 
 // Eagerly loaded — small, needed immediately
@@ -88,6 +88,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+           <UserRoleProvider>
             <Suspense fallback={<PageFallback />}>
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -138,6 +139,7 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
+           </UserRoleProvider>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

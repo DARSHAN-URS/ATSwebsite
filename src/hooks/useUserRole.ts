@@ -1,10 +1,23 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import React from "react";
 
 export type AppRole = "job_seeker" | "recruiter";
 
-export function useUserRole() {
+interface UserRoleContextType {
+  role: AppRole | null;
+  loading: boolean;
+  setUserRole: (newRole: AppRole) => Promise<{ message: string } | null>;
+}
+
+const UserRoleContext = createContext<UserRoleContextType>({
+  role: null,
+  loading: true,
+  setUserRole: async () => null,
+});
+
+export function UserRoleProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [role, setRole] = useState<AppRole | null>(null);
   const [loading, setLoading] = useState(true);
@@ -16,6 +29,7 @@ export function useUserRole() {
       return;
     }
 
+    let cancelled = false;
     const fetchRole = async () => {
       setLoading(true);
       const { data, error } = await supabase
@@ -27,15 +41,18 @@ export function useUserRole() {
       if (error) {
         console.error("Error fetching role:", error);
       }
-      setRole((data?.role as AppRole) ?? null);
-      setLoading(false);
+      if (!cancelled) {
+        setRole((data?.role as AppRole) ?? null);
+        setLoading(false);
+      }
     };
 
     fetchRole();
+    return () => { cancelled = true; };
   }, [user]);
 
   const setUserRole = async (newRole: AppRole) => {
-    if (!user) return;
+    if (!user) return null;
     const { data, error } = await supabase.functions.invoke("assign-role", {
       body: { role: newRole },
     });
@@ -48,5 +65,13 @@ export function useUserRole() {
     return null;
   };
 
-  return { role, loading, setUserRole };
+  return React.createElement(
+    UserRoleContext.Provider,
+    { value: { role, loading, setUserRole } },
+    children
+  );
+}
+
+export function useUserRole() {
+  return useContext(UserRoleContext);
 }
