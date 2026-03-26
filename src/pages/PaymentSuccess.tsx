@@ -74,11 +74,13 @@ export default function PaymentSuccess() {
     activate();
   }, [authLoading, user, plan, done, token]);
 
-  if (!plan) {
+  if (!plan || !token) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
         <SEOHead title="Payment — ATS Pro Resume Builder" description="Payment confirmation page." />
-        <p className="text-muted-foreground mb-4">Invalid or missing plan information.</p>
+        <p className="text-muted-foreground mb-4">
+          {!token ? "Missing payment verification token. If you completed payment, please contact support." : "Invalid or missing plan information."}
+        </p>
         <Button onClick={() => navigate("/pricing")}>Back to Pricing</Button>
       </div>
     );
