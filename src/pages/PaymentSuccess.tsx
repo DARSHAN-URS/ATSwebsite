@@ -40,6 +40,7 @@ export default function PaymentSuccess() {
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
 
   const planId = searchParams.get("plan") || "";
+  const token = searchParams.get("token") || "";
   const plan = PLAN_CONFIG[planId];
 
   useEffect(() => {
