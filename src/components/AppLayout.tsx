@@ -168,7 +168,7 @@ export default function AppLayout() {
       }
 
       {!isMobile &&
-      <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-primary/20 shrink-0 scan-line glow-border">
+      <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-primary/20 shrink-0">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       }
