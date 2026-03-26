@@ -11,7 +11,7 @@ import type { ResumeData } from "@/components/resume/types";
 import { dashboardExtraTranslations } from "@/i18n/dashboardExtraTranslations";
 
 // Lazy-load heavy chart + section components
-const LazyCharts = lazy(() => import("recharts").then(m => ({ default: () => null })));
+const DashboardCharts = lazy(() => import("@/components/dashboard/DashboardCharts"));
 const JobTrackerSection = lazy(() => import("@/components/job-tracker/JobTrackerSection"));
 const AIApplyQueueSection = lazy(() => import("@/components/resume/AIApplyQueueSection"));
 const ScheduledInterviewsList = lazy(() => import("@/components/ScheduledInterviewsList"));
