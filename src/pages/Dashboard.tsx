@@ -16,14 +16,6 @@ const JobTrackerSection = lazy(() => import("@/components/job-tracker/JobTracker
 const AIApplyQueueSection = lazy(() => import("@/components/resume/AIApplyQueueSection"));
 const ScheduledInterviewsList = lazy(() => import("@/components/ScheduledInterviewsList"));
 
-const STATUS_COLORS: Record<string, string> = {
-  applied: "hsl(200, 80%, 52%)",
-  screening: "hsl(38, 92%, 55%)",
-  interview: "hsl(252, 68%, 55%)",
-  offer: "hsl(152, 60%, 44%)",
-  rejected: "hsl(0, 72%, 56%)",
-};
-
 export default function Dashboard() {
   const { role } = useUserRole();
   if (role === "recruiter") return <RecruiterDashboard />;
