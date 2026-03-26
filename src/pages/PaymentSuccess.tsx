@@ -40,20 +40,25 @@ export default function PaymentSuccess() {
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
 
   const planId = searchParams.get("plan") || "";
+  const token = searchParams.get("token") || "";
   const plan = PLAN_CONFIG[planId];
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    if (authLoading || !user || !plan || done) return;
+    if (authLoading || !user || !plan || done || !token) return;
 
     const activate = async () => {
       setActivating(true);
+      setError(null);
 
-      const { data, error } = await supabase.functions.invoke("activate-subscription", {
-        body: { plan_id: planId },
+      const { data, error: invokeError } = await supabase.functions.invoke("activate-subscription", {
+        body: { plan_id: planId, token },
       });
 
-      if (error || data?.error) {
-        console.error("Activation error:", error || data?.error);
+      if (invokeError || data?.error) {
+        console.error("Activation error:", invokeError || data?.error);
+        setError(data?.error || "Activation failed. Please contact support.");
         setActivating(false);
         return;
       }
@@ -67,13 +72,15 @@ export default function PaymentSuccess() {
     };
 
     activate();
-  }, [authLoading, user, plan, done]);
+  }, [authLoading, user, plan, done, token]);
 
-  if (!plan) {
+  if (!plan || !token) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
         <SEOHead title="Payment — ATS Pro Resume Builder" description="Payment confirmation page." />
-        <p className="text-muted-foreground mb-4">Invalid or missing plan information.</p>
+        <p className="text-muted-foreground mb-4">
+          {!token ? "Missing payment verification token. If you completed payment, please contact support." : "Invalid or missing plan information."}
+        </p>
         <Button onClick={() => navigate("/pricing")}>Back to Pricing</Button>
       </div>
     );
@@ -101,10 +108,20 @@ export default function PaymentSuccess() {
     );
   }
 
-  if (activating) {
+  if (activating && !error) {
     return (
       <div className="flex items-center justify-center min-h-screen text-muted-foreground">
         Activating your plan…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-4">
+        <SEOHead title="Activation Error — ATS Pro Resume Builder" description="Payment activation error." />
+        <p className="text-destructive text-center max-w-md">{error}</p>
+        <Button onClick={() => navigate("/pricing")}>Back to Pricing</Button>
       </div>
     );
   }

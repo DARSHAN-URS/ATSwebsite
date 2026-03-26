@@ -422,6 +422,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_tokens: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          plan_id: string
+          token: string
+          used: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          plan_id: string
+          token: string
+          used?: boolean
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          plan_id?: string
+          token?: string
+          used?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
       pinned_companies: {
         Row: {
           city: string | null

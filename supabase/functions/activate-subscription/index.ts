@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { plan_id } = await req.json();
+    const { plan_id, token } = await req.json();
     const plan = PLAN_CONFIG[plan_id];
     if (!plan) {
       return new Response(JSON.stringify({ error: "Invalid plan" }), {
@@ -51,8 +51,40 @@ Deno.serve(async (req) => {
       });
     }
 
+    // SECURITY: Require a valid one-time payment token
+    if (!token) {
+      return new Response(JSON.stringify({ error: "Missing payment verification token" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const adminClient = createClient(supabaseUrl, serviceRoleKey);
     const now = new Date();
+
+    // Validate the payment token
+    const { data: tokenData, error: tokenError } = await adminClient
+      .from("payment_tokens")
+      .select("*")
+      .eq("token", token)
+      .eq("user_id", user.id)
+      .eq("plan_id", plan_id)
+      .eq("used", false)
+      .gte("expires_at", now.toISOString())
+      .maybeSingle();
+
+    if (tokenError || !tokenData) {
+      return new Response(JSON.stringify({ error: "Invalid or expired payment token. Please contact support if you completed payment." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Mark token as used immediately to prevent replay
+    await adminClient
+      .from("payment_tokens")
+      .update({ used: true })
+      .eq("id", tokenData.id);
 
     // Check for existing active subscription
     const { data: existing } = await adminClient
