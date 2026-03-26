@@ -108,10 +108,20 @@ export default function PaymentSuccess() {
     );
   }
 
-  if (activating) {
+  if (activating && !error) {
     return (
       <div className="flex items-center justify-center min-h-screen text-muted-foreground">
         Activating your plan…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-4">
+        <SEOHead title="Activation Error — ATS Pro Resume Builder" description="Payment activation error." />
+        <p className="text-destructive text-center max-w-md">{error}</p>
+        <Button onClick={() => navigate("/pricing")}>Back to Pricing</Button>
       </div>
     );
   }
