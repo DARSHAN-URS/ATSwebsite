@@ -43,18 +43,22 @@ export default function PaymentSuccess() {
   const token = searchParams.get("token") || "";
   const plan = PLAN_CONFIG[planId];
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    if (authLoading || !user || !plan || done) return;
+    if (authLoading || !user || !plan || done || !token) return;
 
     const activate = async () => {
       setActivating(true);
+      setError(null);
 
-      const { data, error } = await supabase.functions.invoke("activate-subscription", {
-        body: { plan_id: planId },
+      const { data, error: invokeError } = await supabase.functions.invoke("activate-subscription", {
+        body: { plan_id: planId, token },
       });
 
-      if (error || data?.error) {
-        console.error("Activation error:", error || data?.error);
+      if (invokeError || data?.error) {
+        console.error("Activation error:", invokeError || data?.error);
+        setError(data?.error || "Activation failed. Please contact support.");
         setActivating(false);
         return;
       }
@@ -68,7 +72,7 @@ export default function PaymentSuccess() {
     };
 
     activate();
-  }, [authLoading, user, plan, done]);
+  }, [authLoading, user, plan, done, token]);
 
   if (!plan) {
     return (
