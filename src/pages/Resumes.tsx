@@ -300,8 +300,9 @@ export default function Resumes() {
       resume_data: dataToSave as any,
     }).eq("id", editingId);
     if (error) {
-      toast({ title: t.resumes.errorSaving, variant: "destructive" });
+      toast({ title: t.resumes.errorSaving, description: error.message, variant: "destructive" });
     } else {
+      lastSavedRef.current = JSON.stringify({ title, data: dataToSave });
       toast({ title: t.resumes.saved });
       fetchResumes();
     }
