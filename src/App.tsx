@@ -88,6 +88,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+           <UserRoleProvider>
             <Suspense fallback={<PageFallback />}>
               <Routes>
                 <Route path="/" element={<Index />} />
