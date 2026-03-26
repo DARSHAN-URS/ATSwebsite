@@ -156,7 +156,7 @@ export default function AppLayout() {
                 <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground flex flex-col scan-line">
+            <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground flex flex-col">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
               <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setSheetOpen(false)} />
             </SheetContent>
