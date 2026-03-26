@@ -112,12 +112,16 @@ export default function Resumes() {
     const dataToSave = { ...resumeData, templateId: selectedTemplate };
     const serialized = JSON.stringify({ title, data: dataToSave });
     if (serialized === lastSavedRef.current) return; // No changes
-    lastSavedRef.current = serialized;
     try {
-      await supabase.from("resumes").update({
+      const { error } = await supabase.from("resumes").update({
         title,
         resume_data: dataToSave as any,
       }).eq("id", editingId);
+      if (error) {
+        console.error("Auto-save error:", error.message);
+      } else {
+        lastSavedRef.current = serialized;
+      }
     } catch (err) {
       console.error("Auto-save failed:", err);
     }
