@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -7,12 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { FileText, Briefcase, Bookmark, Search, Mail, Eye, Users, Building2, TrendingUp, Target, PieChart, Zap, CheckCircle2, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import { PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import JobTrackerSection from "@/components/job-tracker/JobTrackerSection";
-import AIApplyQueueSection from "@/components/resume/AIApplyQueueSection";
 import type { ResumeData } from "@/components/resume/types";
 import { dashboardExtraTranslations } from "@/i18n/dashboardExtraTranslations";
-import ScheduledInterviewsList from "@/components/ScheduledInterviewsList";
+
+// Lazy-load heavy chart + section components
+const LazyCharts = lazy(() => import("recharts").then(m => ({ default: () => null })));
+const JobTrackerSection = lazy(() => import("@/components/job-tracker/JobTrackerSection"));
+const AIApplyQueueSection = lazy(() => import("@/components/resume/AIApplyQueueSection"));
+const ScheduledInterviewsList = lazy(() => import("@/components/ScheduledInterviewsList"));
 
 const STATUS_COLORS: Record<string, string> = {
   applied: "hsl(200, 80%, 52%)",
