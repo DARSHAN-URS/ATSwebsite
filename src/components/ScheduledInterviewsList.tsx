@@ -41,9 +41,13 @@ export default function ScheduledInterviewsList({ applicationId }: { application
     const fetchInterviews = async () => {
       setLoading(true);
       
+      const selectColumns = role === "recruiter"
+        ? "id,scheduled_at,duration_minutes,zoom_join_url,zoom_start_url,zoom_password,zoom_meeting_id,status,notes,job_post_id,application_id,applicant_id,recruiter_id"
+        : "id,scheduled_at,duration_minutes,zoom_join_url,zoom_meeting_id,status,notes,job_post_id,application_id,applicant_id,recruiter_id";
+
       let query = supabase
         .from("scheduled_interviews")
-        .select("*")
+        .select(selectColumns)
         .order("scheduled_at", { ascending: true });
 
       if (applicationId) {
