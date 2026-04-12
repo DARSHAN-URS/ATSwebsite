@@ -57,8 +57,13 @@ export default function ScheduledInterviewsList({ applicationId }: { application
       const { data: interviewsData } = await query;
 
       if (interviewsData) {
+        // Strip sensitive Zoom host credentials for non-recruiters
+        const sanitized = role === "recruiter" 
+          ? interviewsData 
+          : interviewsData.map(i => ({ ...i, zoom_start_url: null, zoom_password: null }));
+        
         const enriched = await Promise.all(
-          interviewsData.map(async (interview) => {
+          sanitized.map(async (interview) => {
             const enrichedInterview: InterviewWithDetails = { ...interview };
 
             const { data: jobData } = await supabase
