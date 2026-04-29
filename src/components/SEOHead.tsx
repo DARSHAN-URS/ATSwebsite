@@ -19,7 +19,7 @@ const SEOHead = ({
   description,
   canonical,
   ogType = "website",
-  ogImage = "https://atsproresumebuilder.com/favicon.png",
+  ogImage = "https://atsproresumebuilder.com/og-image.jpg",
   noindex = false,
   keywords,
 }: SEOHeadProps) => {
