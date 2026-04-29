@@ -709,7 +709,7 @@ export default function Resumes() {
               </DialogContent>
             </Dialog>
             <ATSScannerDialog resumeData={resumeData} />
-            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} />
+            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
           </div>
         </div>
