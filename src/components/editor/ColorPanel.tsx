@@ -1,30 +1,31 @@
 import { useState } from "react";
 import { ChevronDown, Palette, Check, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import {
-  useResumeColors,
+  COLOR_PRESETS,
   type ResumeColors,
   type ColorPreset,
 } from "@/hooks/useResumeColors";
 
 interface Props {
-  /** Optional: receive the live colors so parent can pass them to the preview */
-  onChange?: (colors: ResumeColors) => void;
+  colors: ResumeColors;
+  activePresetId: string | null;
+  onApplyPreset: (preset: ColorPreset) => void;
+  onSetColor: (key: keyof ResumeColors, value: string) => void;
+  onReset: () => void;
 }
 
-export default function ColorPanel({ onChange }: Props) {
-  const { colors, activePresetId, applyPreset, setColor, reset, presets } = useResumeColors();
+export default function ColorPanel({
+  colors,
+  activePresetId,
+  onApplyPreset,
+  onSetColor,
+  onReset,
+}: Props) {
   const [open, setOpen] = useState(true);
-
-  // Notify parent on every change
-  if (onChange) {
-    // call inside render is fine because parent stores via setState only on diff
-    onChange(colors);
-  }
 
   return (
     <Card>
@@ -46,12 +47,12 @@ export default function ColorPanel({ onChange }: Props) {
             <div className="space-y-2">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground font-mono">Presets</Label>
               <div className="flex flex-wrap gap-3">
-                {presets.map((p) => (
+                {COLOR_PRESETS.map((p) => (
                   <PresetSwatch
                     key={p.id}
                     preset={p}
                     active={activePresetId === p.id}
-                    onClick={() => applyPreset(p)}
+                    onClick={() => onApplyPreset(p)}
                   />
                 ))}
               </div>
@@ -60,15 +61,15 @@ export default function ColorPanel({ onChange }: Props) {
             {/* Individual color inputs */}
             <div className="space-y-3">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground font-mono">Custom</Label>
-              <ColorRow label="Primary Color" hint="Buttons, sidebar, borders" value={colors.primary} onChange={(v) => setColor("primary", v)} />
-              <ColorRow label="Accent Color" hint="Icons, highlights, tags" value={colors.accent} onChange={(v) => setColor("accent", v)} />
-              <ColorRow label="Heading Color" hint="Name, section titles" value={colors.heading} onChange={(v) => setColor("heading", v)} />
+              <ColorRow label="Primary Color" hint="Buttons, sidebar, borders" value={colors.primary} onChange={(v) => onSetColor("primary", v)} />
+              <ColorRow label="Accent Color" hint="Icons, highlights, tags" value={colors.accent} onChange={(v) => onSetColor("accent", v)} />
+              <ColorRow label="Heading Color" hint="Name, section titles" value={colors.heading} onChange={(v) => onSetColor("heading", v)} />
             </div>
 
             {/* Reset */}
             <button
               type="button"
-              onClick={reset}
+              onClick={onReset}
               className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
             >
               <RotateCcw className="h-3 w-3" />
