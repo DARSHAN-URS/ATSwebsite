@@ -939,7 +939,7 @@ export default function Resumes() {
 
           {/* Preview panel - hidden on mobile, shown on md+ */}
           <div className="hidden md:block md:w-1/2 p-4">
-            <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} />
+            <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
           </div>
         </div>
       </div>
