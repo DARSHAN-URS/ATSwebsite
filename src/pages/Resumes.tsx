@@ -738,7 +738,13 @@ export default function Resumes() {
             </Card>
 
             {/* Resume Color Customization */}
-            <ColorPanel />
+            <ColorPanel
+              colors={resumeColors}
+              activePresetId={activePresetId}
+              onApplyPreset={applyPreset}
+              onSetColor={setColor}
+              onReset={resetColors}
+            />
 
             {/* Personal Information */}
             {user && (
