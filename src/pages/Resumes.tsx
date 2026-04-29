@@ -737,6 +737,9 @@ export default function Resumes() {
               </CardContent>
             </Card>
 
+            {/* Resume Color Customization */}
+            <ColorPanel />
+
             {/* Personal Information */}
             {user && (
               <PersonalInfoSection
