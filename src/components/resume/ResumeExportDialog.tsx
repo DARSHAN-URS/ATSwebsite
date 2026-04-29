@@ -66,7 +66,7 @@ function cleanFilename(name: string): string {
   return (name || "resume").replace(/[^a-zA-Z0-9\s_-]/g, "").replace(/\s+/g, "_").substring(0, 60);
 }
 
-export default function ResumeExportDialog({ resumeData, title, templateId }: ResumeExportDialogProps) {
+export default function ResumeExportDialog({ resumeData, title, templateId, colors = DEFAULT_COLORS }: ResumeExportDialogProps) {
   const [open, setOpen] = useState(false);
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
   const [exportSuccess, setExportSuccess] = useState(false);
@@ -82,7 +82,8 @@ export default function ResumeExportDialog({ resumeData, title, templateId }: Re
 
     try {
       if (format === "pdf") {
-        await generateResumePDF(resumeData, title, templateId);
+        const rgbMap = buildPdfRgbMap(templateId, colors);
+        await generateResumePDF(resumeData, title, templateId, { rgbMap });
         toast({ title: "PDF downloaded successfully" });
         setExportSuccess(true);
       } else {
