@@ -25,6 +25,8 @@ import TemplateSelector from "@/components/resume/TemplateSelector";
 import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
+import ColorPanel from "@/components/editor/ColorPanel";
+import { useResumeColors } from "@/hooks/useResumeColors";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -58,6 +60,7 @@ export default function Resumes() {
   const [skillInput, setSkillInput] = useState("");
   const [aiLoading, setAiLoading] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
+  const { colors: resumeColors, activePresetId, applyPreset, setColor, reset: resetColors } = useResumeColors();
   const [tailorOpen, setTailorOpen] = useState(false);
   const [tailorJD, setTailorJD] = useState("");
   const [tailoring, setTailoring] = useState(false);
@@ -470,6 +473,7 @@ export default function Resumes() {
   const handleExportPDF = async () => {
     const { generateResumePDF } = await import("@/components/resume/pdfTemplates");
     const { resolvePhotoUrl } = await import("@/lib/storageUtils");
+    const { buildPdfRgbMap } = await import("@/components/resume/resumeColorMap");
     // Resolve storage path to signed URL for PDF rendering
     const resolvedUrl = await resolvePhotoUrl(resumeData.personalInfo?.photoUrl);
     const exportData = {
@@ -479,7 +483,8 @@ export default function Resumes() {
         photoUrl: resolvedUrl || undefined,
       },
     };
-    await generateResumePDF(exportData, title, selectedTemplate);
+    const rgbMap = buildPdfRgbMap(selectedTemplate, resumeColors);
+    await generateResumePDF(exportData, title, selectedTemplate, { rgbMap });
     toast({ title: t.resumes.pdfDownloaded });
   };
 
@@ -706,7 +711,7 @@ export default function Resumes() {
               </DialogContent>
             </Dialog>
             <ATSScannerDialog resumeData={resumeData} />
-            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} />
+            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
             <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
           </div>
         </div>
@@ -733,6 +738,15 @@ export default function Resumes() {
                 <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} jobTitle={title} />
               </CardContent>
             </Card>
+
+            {/* Resume Color Customization */}
+            <ColorPanel
+              colors={resumeColors}
+              activePresetId={activePresetId}
+              onApplyPreset={applyPreset}
+              onSetColor={setColor}
+              onReset={resetColors}
+            />
 
             {/* Personal Information */}
             {user && (
@@ -933,7 +947,7 @@ export default function Resumes() {
 
           {/* Preview panel - hidden on mobile, shown on md+ */}
           <div className="hidden md:block md:w-1/2 p-4">
-            <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} />
+            <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
           </div>
         </div>
       </div>

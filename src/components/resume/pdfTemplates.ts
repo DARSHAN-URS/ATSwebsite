@@ -1475,8 +1475,59 @@ function renderPolished(doc: jsPDF, data: ResumeData, title: string, photoData?:
 }
 
 // ─── Main exports ──────────────────────────────────────
-export async function buildDoc(data: ResumeData, title: string, templateId: TemplateId = "classic"): Promise<jsPDF> {
+
+export interface PdfColorOverrides {
+  /** Map of "r,g,b" (each 0-255 int, no spaces) -> [r,g,b] replacement */
+  rgbMap: Record<string, [number, number, number]>;
+}
+
+/** Wrap doc.setTextColor / setFillColor / setDrawColor to remap brand RGBs. */
+function applyColorOverrides(doc: jsPDF, overrides?: PdfColorOverrides) {
+  if (!overrides || Object.keys(overrides.rgbMap).length === 0) return;
+  const map = overrides.rgbMap;
+
+  const wrap = (methodName: "setTextColor" | "setFillColor" | "setDrawColor") => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const orig = (doc as any)[methodName].bind(doc);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (doc as any)[methodName] = (...args: any[]) => {
+      // jsPDF accepts (gray) | (r,g,b) | (hex) | (CMYK)
+      let r: number | null = null, g: number | null = null, b: number | null = null;
+      if (args.length === 3 && args.every((a) => typeof a === "number")) {
+        [r, g, b] = args as number[];
+      } else if (args.length === 1 && typeof args[0] === "string" && args[0].startsWith("#")) {
+        const hex = args[0].replace("#", "");
+        const full = hex.length === 3 ? hex.split("").map((c) => c + c).join("") : hex;
+        const num = parseInt(full, 16);
+        if (!Number.isNaN(num)) {
+          r = (num >> 16) & 255; g = (num >> 8) & 255; b = num & 255;
+        }
+      }
+      if (r !== null && g !== null && b !== null) {
+        const key = `${r},${g},${b}`;
+        const replacement = map[key];
+        if (replacement) {
+          return orig(replacement[0], replacement[1], replacement[2]);
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return orig(...(args as any[]));
+    };
+  };
+
+  wrap("setTextColor");
+  wrap("setFillColor");
+  wrap("setDrawColor");
+}
+
+export async function buildDoc(
+  data: ResumeData,
+  title: string,
+  templateId: TemplateId = "classic",
+  colorOverrides?: PdfColorOverrides,
+): Promise<jsPDF> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  applyColorOverrides(doc, colorOverrides);
 
   // Pre-load photo for templates that support it
   const pi = data.personalInfo || {};
@@ -1516,15 +1567,25 @@ export async function buildDoc(data: ResumeData, title: string, templateId: Temp
   return doc;
 }
 
-export async function generateResumePDF(data: ResumeData, title: string, templateId: TemplateId = "classic") {
-  const doc = await buildDoc(data, title, templateId);
+export async function generateResumePDF(
+  data: ResumeData,
+  title: string,
+  templateId: TemplateId = "classic",
+  colorOverrides?: PdfColorOverrides,
+) {
+  const doc = await buildDoc(data, title, templateId, colorOverrides);
   const pi = data.personalInfo || {};
   const filename = `${(pi.fullName || title || "resume").replace(/\s+/g, "_")}.pdf`;
   doc.save(filename);
 }
 
-export async function generateResumePDFDataUrls(data: ResumeData, title: string, templateId: TemplateId = "classic"): Promise<string[]> {
-  const doc = await buildDoc(data, title, templateId);
+export async function generateResumePDFDataUrls(
+  data: ResumeData,
+  title: string,
+  templateId: TemplateId = "classic",
+  colorOverrides?: PdfColorOverrides,
+): Promise<string[]> {
+  const doc = await buildDoc(data, title, templateId, colorOverrides);
   const pageCount = doc.getNumberOfPages();
   const urls: string[] = [];
   for (let i = 1; i <= pageCount; i++) {
@@ -1533,3 +1594,4 @@ export async function generateResumePDFDataUrls(data: ResumeData, title: string,
   }
   return urls;
 }
+
