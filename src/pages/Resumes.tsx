@@ -60,6 +60,7 @@ export default function Resumes() {
   const [skillInput, setSkillInput] = useState("");
   const [aiLoading, setAiLoading] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
+  const { colors: resumeColors } = useResumeColors();
   const [tailorOpen, setTailorOpen] = useState(false);
   const [tailorJD, setTailorJD] = useState("");
   const [tailoring, setTailoring] = useState(false);
