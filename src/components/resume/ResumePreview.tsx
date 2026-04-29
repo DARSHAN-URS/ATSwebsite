@@ -52,7 +52,9 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
           },
         };
         const htmlPages = buildHTMLPreview(dataWithResolvedPhoto, title, templateId);
-        setPages(htmlPages);
+        // Apply user-selected colors by remapping each template's brand hexes
+        const recolored = htmlPages.map((h) => applyColorsToHTML(h, templateId, colors));
+        setPages(recolored);
       } catch {
         // silently handle
       }
@@ -60,7 +62,7 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
     }, 400);
 
     return () => clearTimeout(debounceRef.current);
-  }, [resumeData, title, templateId, resolvedPhotoUrl]);
+  }, [resumeData, title, templateId, resolvedPhotoUrl, colors]);
 
   // Measure content height and calculate page count
   const updatePageCount = useCallback(() => {
