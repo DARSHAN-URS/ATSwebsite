@@ -4,6 +4,8 @@ import type { ResumeData } from "./types";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 import { Loader2 } from "lucide-react";
 import { resolvePhotoUrl } from "@/lib/storageUtils";
+import { applyColorsToHTML } from "./resumeColorMap";
+import { DEFAULT_COLORS, type ResumeColors } from "@/hooks/useResumeColors";
 
 const PAGE_HEIGHT = 842; // A4 proportional height at 595px width
 
@@ -11,9 +13,10 @@ interface ResumePreviewProps {
   resumeData: ResumeData;
   title: string;
   templateId: TemplateId;
+  colors?: ResumeColors;
 }
 
-export default function ResumePreview({ resumeData, title, templateId }: ResumePreviewProps) {
+export default function ResumePreview({ resumeData, title, templateId, colors = DEFAULT_COLORS }: ResumePreviewProps) {
   const [pages, setPages] = useState<string[]>([]);
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
