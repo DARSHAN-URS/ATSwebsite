@@ -473,6 +473,7 @@ export default function Resumes() {
   const handleExportPDF = async () => {
     const { generateResumePDF } = await import("@/components/resume/pdfTemplates");
     const { resolvePhotoUrl } = await import("@/lib/storageUtils");
+    const { buildPdfRgbMap } = await import("@/components/resume/resumeColorMap");
     // Resolve storage path to signed URL for PDF rendering
     const resolvedUrl = await resolvePhotoUrl(resumeData.personalInfo?.photoUrl);
     const exportData = {
@@ -482,7 +483,8 @@ export default function Resumes() {
         photoUrl: resolvedUrl || undefined,
       },
     };
-    await generateResumePDF(exportData, title, selectedTemplate);
+    const rgbMap = buildPdfRgbMap(selectedTemplate, resumeColors);
+    await generateResumePDF(exportData, title, selectedTemplate, { rgbMap });
     toast({ title: t.resumes.pdfDownloaded });
   };
 
