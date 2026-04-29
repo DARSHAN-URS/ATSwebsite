@@ -72,16 +72,19 @@ export function hexToRgb(hex: string): [number, number, number] {
 }
 
 /**
- * Build a hex -> hex map (lowercase keys) for use by the PDF renderer
- * to remap brand colors to user-chosen colors.
+ * Build an RGB-tuple map (key "r,g,b") for use by the PDF renderer
+ * to remap brand RGB calls to the user-chosen colors.
  */
-export function buildPdfColorMap(templateId: TemplateId, colors: ResumeColors): Record<string, string> {
+export function buildPdfRgbMap(templateId: TemplateId, colors: ResumeColors): Record<string, [number, number, number]> {
   const palette = getPalette(templateId);
-  const map: Record<string, string> = {};
+  const map: Record<string, [number, number, number]> = {};
   (Object.keys(palette) as Slot[]).forEach((slot) => {
+    const [nr, ng, nb] = hexToRgb(colors[slot]);
     palette[slot].forEach((hex) => {
-      map[hex.toLowerCase()] = colors[slot];
+      const [r, g, b] = hexToRgb(hex);
+      map[`${r},${g},${b}`] = [nr, ng, nb];
     });
   });
   return map;
 }
+
