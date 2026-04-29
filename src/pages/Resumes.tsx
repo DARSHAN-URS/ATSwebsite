@@ -25,6 +25,8 @@ import TemplateSelector from "@/components/resume/TemplateSelector";
 import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
+import ColorPanel from "@/components/editor/ColorPanel";
+import { useResumeColors } from "@/hooks/useResumeColors";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useSubscription } from "@/hooks/useSubscription";
