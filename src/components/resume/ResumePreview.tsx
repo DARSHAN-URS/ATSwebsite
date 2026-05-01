@@ -7,6 +7,8 @@ import { resolvePhotoUrl } from "@/lib/storageUtils";
 import { applyColorsToHTML } from "./resumeColorMap";
 import { DEFAULT_COLORS, type ResumeColors } from "@/hooks/useResumeColors";
 
+// Design canvas (matches existing template HTML authored sizes)
+const PAGE_WIDTH = 595;
 const PAGE_HEIGHT = 842; // A4 proportional height at 595px width
 
 interface ResumePreviewProps {
