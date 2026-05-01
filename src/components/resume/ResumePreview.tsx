@@ -24,6 +24,8 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
   const [loading, setLoading] = useState(true);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const measureRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
 
   // Resolve photoUrl from storage path to signed URL
   const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState<string | null>(null);
@@ -45,7 +47,6 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       try {
-        // Use resolved photo URL in preview
         const dataWithResolvedPhoto = {
           ...resumeData,
           personalInfo: {
@@ -54,7 +55,6 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
           },
         };
         const htmlPages = buildHTMLPreview(dataWithResolvedPhoto, title, templateId);
-        // Apply user-selected colors by remapping each template's brand hexes
         const recolored = htmlPages.map((h) => applyColorsToHTML(h, templateId, colors));
         setPages(recolored);
       } catch {
@@ -75,10 +75,26 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
   }, []);
 
   useEffect(() => {
-    // Re-measure after HTML updates
     const timer = setTimeout(updatePageCount, 100);
     return () => clearTimeout(timer);
   }, [pages, updatePageCount]);
+
+  // Dynamic scale based on container width (true A4 ResizeObserver scaling)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      // Account for inner padding (p-4 = 16px each side)
+      const available = Math.max(0, w - 32);
+      setScale(Math.min(1, available / PAGE_WIDTH));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const scaledW = PAGE_WIDTH * scale;
+  const scaledH = PAGE_HEIGHT * scale;
 
   return (
     <div className="h-full w-full flex flex-col rounded-lg border bg-muted/30 overflow-hidden">
@@ -91,27 +107,30 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
           {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
         </div>
       </div>
-      <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-8 bg-muted/50">
+      <div
+        ref={containerRef}
+        className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col items-center gap-6 bg-muted/50"
+      >
         {pages.length > 0 ? (
           <>
-            {/* Hidden measurement container - must match visible page width */}
+            {/* Hidden measurement container at design width */}
             <div
               ref={measureRef}
               className="pointer-events-none"
-              style={{ position: "fixed", visibility: "hidden", width: 595, left: -9999, top: 0 }}
+              style={{ position: "fixed", visibility: "hidden", width: PAGE_WIDTH, left: -9999, top: 0 }}
               dangerouslySetInnerHTML={{ __html: pages[0] }}
             />
-            {/* Visible page slices */}
+            {/* Visible scaled page slices */}
             {Array.from({ length: pageCount }, (_, i) => (
-              <div key={i} className="w-full flex flex-col items-center">
-                <div className="w-full max-w-[595px] text-[10px] text-muted-foreground mb-1 text-right">
+              <div key={i} className="flex flex-col items-center" style={{ width: scaledW }}>
+                <div className="w-full text-[10px] text-muted-foreground mb-1 text-right">
                   Page {i + 1} of {pageCount}
                 </div>
                 <div
                   className="bg-white rounded border"
                   style={{
-                    width: 595,
-                    height: PAGE_HEIGHT,
+                    width: scaledW,
+                    height: scaledH,
                     overflow: "hidden",
                     position: "relative",
                     boxShadow: "0 4px 20px -4px rgba(0,0,0,0.15)",
@@ -119,10 +138,12 @@ export default function ResumePreview({ resumeData, title, templateId, colors = 
                 >
                   <div
                     style={{
+                      width: PAGE_WIDTH,
+                      transform: `scale(${scale})`,
+                      transformOrigin: "top left",
                       position: "absolute",
-                      top: -(i * PAGE_HEIGHT),
+                      top: -(i * PAGE_HEIGHT) * scale,
                       left: 0,
-                      width: 595,
                     }}
                     dangerouslySetInnerHTML={{ __html: pages[0] }}
                   />
