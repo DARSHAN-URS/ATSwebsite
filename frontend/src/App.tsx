@@ -74,13 +74,23 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function RoleGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole: AppRole }) {
+  const { role, loading } = useUserRole();
+  
+  if (loading) return <PageFallback />;
+  if (role !== requiredRole) {
+    return <Navigate to={role === "recruiter" ? "/recruiter/jobs" : "/dashboard"} replace />;
+  }
+  return <>{children}</>;
+}
+
 function RoleRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const { role, loading: roleLoading } = useUserRole();
 
   if (loading || roleLoading) return <PageFallback />;
   if (!user) return <Navigate to="/" replace />;
-  if (role) return <Navigate to="/dashboard" replace />;
+  if (role) return <Navigate to={role === "recruiter" ? "/recruiter/jobs" : "/dashboard"} replace />;
   return <>{children}</>;
 }
 
@@ -125,20 +135,20 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 >
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/resumes" element={<Resumes />} />
-                  <Route path="/job-tracker" element={<ProRoute><JobTracker /></ProRoute>} />
-                  <Route path="/email-outreach" element={<ProRoute><EmailOutreach /></ProRoute>} />
+                  <Route path="/dashboard" element={<RoleGuard requiredRole="job_seeker"><Dashboard /></RoleGuard>} />
+                  <Route path="/resumes" element={<RoleGuard requiredRole="job_seeker"><Resumes /></RoleGuard>} />
+                  <Route path="/job-tracker" element={<RoleGuard requiredRole="job_seeker"><ProRoute><JobTracker /></ProRoute></RoleGuard>} />
+                  <Route path="/email-outreach" element={<RoleGuard requiredRole="job_seeker"><ProRoute><EmailOutreach /></ProRoute></RoleGuard>} />
                   <Route path="/cover-letters" element={<Navigate to="/resumes" replace />} />
-                  <Route path="/jobs" element={<FindJobs />} />
-                  <Route path="/companies" element={<ProRoute><Companies /></ProRoute>} />
-                  <Route path="/interview-prep" element={<ProRoute><InterviewPrep /></ProRoute>} />
+                  <Route path="/jobs" element={<RoleGuard requiredRole="job_seeker"><FindJobs /></RoleGuard>} />
+                  <Route path="/companies" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Companies /></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
 
-                  <Route path="/recruiter/company" element={<RecruiterCompany />} />
-                  <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
-                  <Route path="/recruiter/jobs/:jobId/applicants" element={<RecruiterApplicants />} />
-                  <Route path="/recruiter/candidates" element={<RecruiterCandidates />} />
-                  <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
+                  <Route path="/recruiter/company" element={<RoleGuard requiredRole="recruiter"><RecruiterCompany /></RoleGuard>} />
+                  <Route path="/recruiter/jobs" element={<RoleGuard requiredRole="recruiter"><RecruiterJobs /></RoleGuard>} />
+                  <Route path="/recruiter/jobs/:jobId/applicants" element={<RoleGuard requiredRole="recruiter"><RecruiterApplicants /></RoleGuard>} />
+                  <Route path="/recruiter/candidates" element={<RoleGuard requiredRole="recruiter"><RecruiterCandidates /></RoleGuard>} />
+                  <Route path="/recruiter/analytics" element={<RoleGuard requiredRole="recruiter"><RecruiterAnalytics /></RoleGuard>} />
                   <Route path="/account" element={<AccountSettings />} />
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboard />} />
