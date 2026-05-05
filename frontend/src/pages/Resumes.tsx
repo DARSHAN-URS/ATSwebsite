@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -173,7 +174,7 @@ export default function Resumes() {
     });
 
     try {
-      const { data, error } = await supabase.functions.invoke("ai-apply", {
+      const { data, error } = await invokeFunction("ai-apply", {
         body: {
           resume_id: resume.id,
           resume_title: resume.title,
@@ -249,7 +250,7 @@ export default function Resumes() {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("parse-resume", {
+      const { data, error } = await invokeFunction("parse-resume", {
         body: { text: fullText },
       });
       if (error) throw error;
@@ -347,7 +348,7 @@ export default function Resumes() {
   const aiAssist = async (type: string, context: any) => {
     setAiLoading(type);
     try {
-      const { data, error } = await supabase.functions.invoke("resume-assist", {
+      const { data, error } = await invokeFunction("resume-assist", {
         body: { type, context },
       });
       if (error) throw error;
@@ -497,7 +498,7 @@ export default function Resumes() {
     }
     setLinkedinLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("sync-linkedin", {
+      const { data, error } = await invokeFunction("sync-linkedin", {
         body: { linkedinUrl: linkedinUrl.trim() },
       });
       if (error) throw error;
@@ -535,7 +536,7 @@ export default function Resumes() {
     if (!tailorJD.trim()) return;
     setTailoring(true);
     try {
-      const { data, error } = await supabase.functions.invoke("tailor-resume", {
+      const { data, error } = await invokeFunction("tailor-resume", {
         body: { resumeData, jobDescription: tailorJD },
       });
       if (error) throw error;
@@ -569,7 +570,7 @@ export default function Resumes() {
     setGrading(true);
     setGradeResult(null);
     try {
-      const { data, error } = await supabase.functions.invoke("grade-resume", {
+      const { data, error } = await invokeFunction("grade-resume", {
         body: { resumeData, jobDescription: gradeJD },
       });
       if (error) throw error;
