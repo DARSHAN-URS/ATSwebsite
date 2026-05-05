@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const CACHE_PREFIX = "blog_tr_";
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -82,8 +84,8 @@ export function useBlogTranslation(
 
     Promise.all(
       chunks.map(async (chunk) => {
-        const { data, error } = await supabase.functions.invoke("translate-blog", {
-          body: { texts: chunk, targetLang: locale, context },
+        const { data, error } = await invokeFunction("translate-blog", {
+          body: { content: chunk, targetLanguage: locale },
         });
         if (error) {
           console.error("Translation error:", error);

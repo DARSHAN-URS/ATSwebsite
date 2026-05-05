@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -120,7 +122,7 @@ export default function AIApplyQueueSection() {
 
     try {
       const ids = queue.map((j) => j.id);
-      const { data, error } = await supabase.functions.invoke("auto-apply", {
+      const { data, error } = await invokeFunction("auto-apply", {
         body: { queue_ids: ids },
       });
 
@@ -149,7 +151,7 @@ export default function AIApplyQueueSection() {
     setApplying(job.id);
     try {
       // Try auto-apply first
-      const { data, error } = await supabase.functions.invoke("auto-apply", {
+      const { data, error } = await invokeFunction("auto-apply", {
         body: { queue_ids: [job.id] },
       });
 

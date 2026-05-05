@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -123,7 +124,7 @@ export default function CoverLetters() {
 
     setGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-cover-letter", {
+      const { data, error } = await invokeFunction("generate-cover-letter", {
         body: { resumeData: resume.resume_data, jobDescription, tone },
       });
 

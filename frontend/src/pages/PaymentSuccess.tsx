@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Crown, Calendar, IndianRupee } from "lucide-react";
@@ -52,7 +54,7 @@ export default function PaymentSuccess() {
       setActivating(true);
       setError(null);
 
-      const { data, error: invokeError } = await supabase.functions.invoke("activate-subscription", {
+      const { data, error: invokeError } = await invokeFunction("activate-subscription", {
         body: { plan_id: planId, token },
       });
 

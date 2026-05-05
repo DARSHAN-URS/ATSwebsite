@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import Logo from "@/components/Logo";
@@ -851,7 +852,7 @@ const Index = () => {
                 e.preventDefault();
                 setForgotLoading(true);
                 try {
-                  const res = await supabase.functions.invoke("send-email", {
+                  const res = await invokeFunction("send-email", {
                     body: {
                       type: "password_reset",
                       email: forgotEmail,

@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { ResumeData } from "@/components/resume/types";
@@ -43,7 +44,10 @@ interface AnalysisResult {
   summary: string;
 }
 
-const FUNC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/interview-prep`;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const FUNC_URL = BACKEND_URL 
+  ? `${BACKEND_URL}/api/ai/interview-prep`
+  : `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/interview-prep`;
 
 export default function InterviewPrep() {
   const { session, user } = useAuth();
@@ -106,13 +110,18 @@ export default function InterviewPrep() {
   }, [voiceEnabled]);
 
   const streamResponse = useCallback(async (body: any): Promise<string> => {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session?.access_token}`,
+    };
+    
+    if (!BACKEND_URL) {
+      headers["apikey"] = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    }
+
     const resp = await fetch(FUNC_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.access_token}`,
-        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      },
+      headers,
       body: JSON.stringify(body),
     });
 
@@ -291,24 +300,14 @@ export default function InterviewPrep() {
     setQuestionsLoading(true);
     setGeneratedQuestions([]);
     try {
-      const resp = await fetch(FUNC_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-        },
-        body: JSON.stringify({
+      const { data, error } = await invokeFunction("interview-prep", {
+        body: {
           action: "generate-questions",
           position, industry, questionType, experienceLevel,
           resumeData: getSelectedResumeData(),
-        }),
+        },
       });
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({ error: "Request failed" }));
-        throw new Error(err.error || "Request failed");
-      }
-      const data = await resp.json();
+      if (error) throw error;
       setGeneratedQuestions(data.questions || []);
     } catch (e: any) {
       toast({ title: e.message, variant: "destructive" });
@@ -330,24 +329,14 @@ export default function InterviewPrep() {
     setAnalysisLoading(true);
     setAnalysis(null);
     try {
-      const resp = await fetch(FUNC_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-        },
-        body: JSON.stringify({
+      const { data, error } = await invokeFunction("interview-prep", {
+        body: {
           action: "analyze-strengths",
           position, industry,
           resumeData: getSelectedResumeData(),
-        }),
+        },
       });
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({ error: "Request failed" }));
-        throw new Error(err.error || "Request failed");
-      }
-      const data = await resp.json();
+      if (error) throw error;
       setAnalysis(data);
     } catch (e: any) {
       toast({ title: e.message, variant: "destructive" });

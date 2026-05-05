@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -131,7 +132,7 @@ export default function Companies() {
     setSearching(true);
     setCompanies([]);
     try {
-      const { data, error } = await supabase.functions.invoke("search-companies", {
+      const { data, error } = await invokeFunction("search-companies", {
         body: { query, location: location || undefined, industry: industry || undefined },
       });
       if (error) throw error;

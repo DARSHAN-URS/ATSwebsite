@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Download, FileText, FileType, FileCode, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { generateResumePDF, type TemplateId } from "./pdfTemplates";
 import { getATSConfig, isATSTemplateId } from "./atsTemplateConfig";
 import { buildPdfRgbMap } from "./resumeColorMap";
@@ -89,7 +90,7 @@ export default function ResumeExportDialog({ resumeData, title, templateId, colo
       } else {
         const atsConfig = isATSTemplateId(templateId) ? getATSConfig(templateId) : undefined;
         const sectionOrder = atsConfig?.sectionOrder;
-        const { data, error } = await supabase.functions.invoke("export-resume", {
+        const { data, error } = await invokeFunction("export-resume", {
           body: { resumeData, format, sectionOrder },
         });
 

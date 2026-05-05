@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -139,12 +140,12 @@ export default function Auth() {
                 e.preventDefault();
                 setForgotLoading(true);
                 try {
-                  const res = await supabase.functions.invoke("send-email", {
+                  const res = await invokeFunction("send-email", {
                     body: {
                       type: "password_reset",
                       email: forgotEmail,
-                      redirectTo: `${window.location.origin}/reset-password`,
-                    },
+                      redirectTo: `${window.location.origin}/reset-password`
+                    }
                   });
                   if (res.error) throw res.error;
                   toast({ title: mt.checkEmail, description: mt.checkEmailDesc });
