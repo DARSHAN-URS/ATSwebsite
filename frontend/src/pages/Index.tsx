@@ -123,6 +123,9 @@ const Index = () => {
   }, [startTransition]);
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="ATS Pro Resume Builder — Free AI-Powered Resume Builder"
+        description="Free AI-powered resume builder that helps job seekers create ATS-optimized resumes with keyword scanning, one-click tailoring, and 8+ professional templates."
         keywords="ATS resume builder, free ATS resume builder, AI resume builder, ATS resume checker, ATS resume scanner, resume keyword optimizer, ATS-friendly resume, ATS resume templates, applicant tracking system resume, professional resume builder"
         jsonLd={[
           {
