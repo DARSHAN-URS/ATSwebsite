@@ -6,66 +6,61 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  * Custom invoker that routes migrated functions to Railway
  * and falls back to Supabase Edge Functions for others.
  */
-export const invokeFunction = async (name: string, options: { body: any }) => {
-  // List of functions that have been moved to Railway
-  const migratedFunctions = [
-    "ai-apply", 
-    "parse-resume", 
-    "resume-assist", 
-    "grade-resume", 
-    "tailor-resume", 
-    "interview-prep", 
-    "sync-linkedin", 
-    "send-outreach",
-    "generate-cover-letter",
-    "send-email",
-    "assign-role",
-    "search-jobs"
-  ];
-  
-  if (migratedFunctions.includes(name)) {
+export const invokeFunction = async (name: string, options: any) => {
+  // Extract body from options if it's in { body: ... } format, else use options as body
+  const body = options?.body !== undefined ? options.body : options;
+  console.log(`[API Client] Calling ${name}. Backend URL: ${BACKEND_URL || "NOT SET (Falling back to Supabase)"}`);
+
+  if (BACKEND_URL) {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
-      // Map names to their new Railway endpoints if different
-      const endpointMap: Record<string, string> = {
-        "ai-apply": "/api/ai/ai-apply",
-        "parse-resume": "/api/ai/parse-resume",
-        "resume-assist": "/api/ai/resume-assist",
-        "grade-resume": "/api/ai/grade-resume",
-        "tailor-resume": "/api/ai/tailor-resume",
-        "interview-prep": "/api/ai/interview-prep",
-        "sync-linkedin": "/api/ai/sync-linkedin",
-        "generate-cover-letter": "/api/ai/generate-cover-letter",
-        "send-outreach": "/api/emails/send-outreach",
-        "send-email": "/api/emails/send-outreach", // Reuse outreach for now
-        "assign-role": "/api/auth/assign-role"
-      };
-
-      const path = endpointMap[name] || `/api/ai/${name}`;
+      // Determine the correct Railway endpoint path
+      let path = `/api/ai/${name}`;
       
+      // Special mappings for non-AI routes
+      if (name === "assign-role") {
+        path = "/api/auth/assign-role";
+      } else if (name === "send-outreach" || name === "send-email" || name === "send-outreach-email") {
+        path = "/api/emails/send-outreach";
+      } else if (name === "contact") {
+        path = "/api/emails/contact";
+      } else if (name === "activate-subscription") {
+        path = "/api/payments/activate-subscription";
+      }
+
       const response = await fetch(`${BACKEND_URL}${path}`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${session?.access_token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(options.body),
+        body: JSON.stringify(body),
       });
-      
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({ error: response.statusText }));
-        return { data: null, error: errData };
+
+      if (response.ok) {
+        const data = await response.json();
+        return { data, error: null };
       }
-      
-      const data = await response.json();
-      return { data, error: null };
+
+      // If Railway returns 404, it means this specific function isn't implemented in Node.js yet.
+      // Fallback to Supabase Edge Function to ensure service continuity.
+      if (response.status === 404) {
+        console.warn(`[API Client] Function "${name}" not found on Railway (${path}). Falling back to Supabase.`);
+        return await supabase.functions.invoke(name, { body });
+      }
+
+      const errData = await response.json().catch(() => ({ error: response.statusText }));
+      console.error(`[API Client] Railway API Error (${name}):`, errData);
+      return { data: null, error: errData };
     } catch (err: any) {
-      console.error(`Railway API Error (${name}):`, err);
-      return { data: null, error: err };
+      console.error(`[API Client] Railway Critical Error (${name}):`, err);
+      // Fallback to Supabase on network/unexpected errors to avoid blocking the user
+      console.warn(`[API Client] Falling back to Supabase for "${name}" due to network error.`);
+      return await supabase.functions.invoke(name, { body });
     }
   }
-  
-  // Fallback to standard Supabase functions
-  return await supabase.functions.invoke(name, options);
+
+  // Default to Supabase if BACKEND_URL is not configured
+  return await supabase.functions.invoke(name, { body });
 };

@@ -128,7 +128,7 @@ export default function FindJobs() {
     setSearching(true);
     setJobs([]);
     try {
-      const data = await invokeFunction("search-jobs", {
+      const { data, error } = await invokeFunction("search-jobs", {
         resume_data: resume.resume_data,
         resume_title: resume.title,
         location: location || undefined,
@@ -136,10 +136,12 @@ export default function FindJobs() {
         query: searchQuery || undefined
       });
       
+      if (error) throw error;
+      
       setJobs(data?.jobs ?? []);
       if (data?.jobs?.length === 0) toast({ title: "No jobs found", description: "Try adjusting your filters." });
     } catch (e: any) {
-      toast({ title: "Search failed", description: e.message, variant: "destructive" });
+      toast({ title: "Search failed", description: e.message || "Please check your network connection.", variant: "destructive" });
     } finally {
       setSearching(false);
     }

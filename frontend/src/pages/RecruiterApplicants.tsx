@@ -99,7 +99,7 @@ export default function RecruiterApplicants() {
       const { data: resumes } = await supabase.from("resumes").select("id, resume_data").in("id", resumeIds);
       const resumeMap = new Map(resumes?.map(r => [r.id, r.resume_data]) || []);
 
-      const result = await invokeFunction("recruiter-analyze", {
+      const { data, error } = await invokeFunction("recruiter-analyze", {
         jobDescription: (job as any)?.description || "",
         applicants: applicants.map(a => ({
           id: a.id,
@@ -108,8 +108,10 @@ export default function RecruiterApplicants() {
         }))
       });
 
-      if (result.rankings) {
-        for (const rank of result.rankings) {
+      if (error) throw error;
+
+      if (data?.rankings) {
+        for (const rank of data.rankings) {
           const note = `[AI Score: ${rank.score}%] ${rank.fitReason}\nRec: ${rank.recommendation}`;
           await supabase.from("job_post_applications" as any).update({ recruiter_notes: note } as any).eq("id", rank.applicantId);
         }
@@ -155,13 +157,11 @@ export default function RecruiterApplicants() {
     try {
       const scheduledAt = new Date(`${interviewDate}T${interviewTime}:00.000Z`).toISOString();
       
-      const { data, error } = await supabase.functions.invoke('schedule-zoom-interview', {
-        body: {
-          applicationId: selectedApp.id,
-          scheduledAt,
-          durationMinutes: parseInt(interviewDuration),
-          notes: interviewNotes,
-        },
+      const { data, error } = await invokeFunction('schedule-zoom-interview', {
+        applicationId: selectedApp.id,
+        scheduledAt,
+        durationMinutes: parseInt(interviewDuration),
+        notes: interviewNotes,
       });
 
       if (error) throw error;
