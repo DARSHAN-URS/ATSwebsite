@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, Mail, ChevronDown, Settings } from "lucide-react";
+import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, Mail, ChevronDown, Settings, ShieldAlert } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -123,7 +123,14 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
               <Settings className="h-4 w-4" />
               Account Settings
             </DropdownMenuItem>
+            {role === "admin" && (
+              <DropdownMenuItem onClick={() => {navigate("/admin");onNavClick?.();}} className="cursor-pointer gap-2 font-display tracking-wide uppercase text-xs text-primary">
+                <ShieldAlert className="h-4 w-4" />
+                Admin Dashboard
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
+
             <DropdownMenuItem onClick={onSignOut} className="text-destructive focus:text-destructive cursor-pointer font-display tracking-wide uppercase text-xs">
               <LogOut className="h-4 w-4 mr-2" />
               {t.nav.signOut}

@@ -53,6 +53,9 @@ const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
 import ProRoute from "@/components/ProRoute";
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
+const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+import AdminRoute from "@/components/auth/AdminRoute";
+
 
 const queryClient = new QueryClient();
 
@@ -135,6 +138,10 @@ const App = () => (
                   <Route path="/recruiter/candidates" element={<RecruiterCandidates />} />
                   <Route path="/recruiter/analytics" element={<RecruiterAnalytics />} />
                   <Route path="/account" element={<AccountSettings />} />
+                  <Route element={<AdminRoute />}>
+                    <Route path="/admin" element={<AdminDashboard />} />
+                  </Route>
+
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
