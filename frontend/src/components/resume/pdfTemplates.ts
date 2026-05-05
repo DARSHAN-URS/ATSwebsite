@@ -616,10 +616,10 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     const lines = doc.splitTextToSize(data.summary, ctx.maxWidth);
-    const h = lines.length * 5;
+    const h = lines.length * 6; // Increased from 5 for better readability
     checkPageBreak(ctx, h);
     doc.text(lines, ctx.margin, ctx.y);
-    ctx.y += h;
+    ctx.y += h + 4; // Extra padding
   }
 
   if ((data.skills || []).length > 0) {
@@ -627,10 +627,10 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     const lines = doc.splitTextToSize((data.skills || []).join("  •  "), ctx.maxWidth);
-    const h = lines.length * 5;
+    const h = lines.length * 6;
     checkPageBreak(ctx, h);
     doc.text(lines, ctx.margin, ctx.y);
-    ctx.y += h;
+    ctx.y += h + 4;
   }
 
   if ((data.experience || []).length > 0) {
@@ -667,17 +667,17 @@ function renderBody(ctx: PdfContext, data: ResumeData, addSection: (t: string) =
       if (exp.bullets?.length) {
         exp.bullets.forEach((bullet) => {
           const lines = doc.splitTextToSize(`•  ${bullet}`, ctx.maxWidth - 4);
-          checkPageBreak(ctx, lines.length * 5);
+          checkPageBreak(ctx, lines.length * 6);
           doc.text(lines, ctx.margin + 2, ctx.y);
-          ctx.y += lines.length * 5;
+          ctx.y += lines.length * 6;
         });
       } else if (exp.description) {
         const lines = doc.splitTextToSize(exp.description, ctx.maxWidth);
-        checkPageBreak(ctx, lines.length * 5);
+        checkPageBreak(ctx, lines.length * 6);
         doc.text(lines, ctx.margin, ctx.y);
-        ctx.y += lines.length * 5;
+        ctx.y += lines.length * 6;
       }
-      ctx.y += 3;
+      ctx.y += 5; // Added extra padding between entries
     });
   }
 

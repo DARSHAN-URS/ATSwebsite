@@ -210,10 +210,13 @@ export default function Resumes() {
       timers.forEach(clearTimeout);
       toast({ title: "AI Apply failed", description: err.message || "Something went wrong.", variant: "destructive" });
     } finally {
+      // Keep result summary visible for a bit longer
       setTimeout(() => {
-        setAiApplyingId(null);
-        setAiApplyStep(0);
-      }, 1500);
+        if (!aiApplyCampaignResult) {
+          setAiApplyingId(null);
+          setAiApplyStep(0);
+        }
+      }, 5000);
     }
   };
 
@@ -1252,11 +1255,20 @@ export default function Resumes() {
             </div>
 
             {aiApplyCampaignResult && (
-              <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-sm space-y-1">
-                <p className="font-semibold text-green-700 dark:text-green-400">Campaign Complete! 🚀</p>
-                <p className="text-muted-foreground text-xs">
-                  Found <strong>{aiApplyCampaignResult.total_found}</strong> jobs · Scored <strong>{aiApplyCampaignResult.total_scored}</strong> · Queued <strong>{aiApplyCampaignResult.queued}</strong> tailored applications
-                </p>
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-sm space-y-1">
+                  <p className="font-semibold text-green-700 dark:text-green-400">Campaign Complete! 🚀</p>
+                  <p className="text-muted-foreground text-xs">
+                    Found <strong>{aiApplyCampaignResult.total_found}</strong> jobs · Scored <strong>{aiApplyCampaignResult.total_scored}</strong> · Queued <strong>{aiApplyCampaignResult.queued}</strong> tailored applications
+                  </p>
+                </div>
+                <Button 
+                  className="w-full" 
+                  variant="outline" 
+                  onClick={() => { setAiApplyingId(null); setAiApplyCampaignResult(null); }}
+                >
+                  Dismiss & View Applications
+                </Button>
               </div>
             )}
 

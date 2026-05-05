@@ -1,72 +1,81 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-require('dotenv').config();
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-/**
- * Generate AI content with optional system prompt
- */
-async function generateContent(message, systemPrompt = "") {
-  try {
-    const fullPrompt = systemPrompt ? `${systemPrompt}\n\nUser: ${message}` : message;
-    const result = await model.generateContent(fullPrompt);
-    const response = await result.response;
-    return response.text();
-  } catch (error) {
-    console.error("Gemini generateContent error:", error);
-    throw error;
-  }
-}
+const MODEL_NAMES = [
+  "gemini-flash-lite-latest",
+  "gemini-pro-latest",
+  "gemini-1.5-flash",
+  "gemini-1.5-pro"
+];
 
 /**
- * Generate structured JSON output using Gemini
- * Note: We use a prompt-based approach for stability across all Gemini models
+ * Generate structured JSON output using Direct Fetch with Fallback Loop
  */
 async function generateStructuredContent(prompt, systemPrompt = "", schemaDescription = "") {
-  try {
-    const fullPrompt = `
-      ${systemPrompt}
+  const apiKey = process.env.GEMINI_API_KEY;
+  let lastError;
+
+  for (const modelName of MODEL_NAMES) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+      const body = {
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nTASK: ${prompt}\n\nIMPORTANT: Return ONLY valid JSON: ${schemaDescription}` }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json();
       
-      TASK: ${prompt}
-      
-      IMPORTANT: Return ONLY a valid JSON object matching this description: ${schemaDescription}
-      Do not include any markdown formatting like \`\`\`json or extra text.
-    `;
-    
-    const result = await model.generateContent(fullPrompt);
-    const response = await result.response;
-    const text = response.text().trim();
-    
-    // Clean potential markdown formatting
-    const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
-    return JSON.parse(jsonStr);
-  } catch (error) {
-    console.error("Gemini generateStructuredContent error:", error);
-    throw error;
+      if (!response.ok) {
+        lastError = data.error?.message || response.statusText;
+        continue;
+      }
+
+      return JSON.parse(data.candidates[0].content.parts[0].text);
+    } catch (error) {
+      lastError = error.message;
+      continue;
+    }
   }
+
+  throw new Error(`AI_ERROR: All models failed. Last error: ${lastError}`);
 }
 
 /**
- * Handle streaming AI response
+ * Basic Content Generation
+ */
+async function generateContent(message, systemPrompt = "") {
+  const apiKey = process.env.GEMINI_API_KEY;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAMES[0]}:generateContent?key=${apiKey}`;
+
+  const body = {
+    contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${message}` : message }] }]
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error?.message || "API Error");
+  return data.candidates[0].content.parts[0].text;
+}
+
+/**
+ * Stream Content Shim
  */
 async function streamContent(messages) {
-  try {
-    // Porting streaming logic to Gemini SDK format
-    const chat = model.startChat({
-      history: messages.slice(0, -1).map(m => ({
-        role: m.role === 'system' ? 'user' : m.role, // Gemini uses user/model
-        parts: [{ text: m.content }],
-      })),
-    });
-
-    const lastMessage = messages[messages.length - 1].content;
-    const result = await model.generateContentStream(lastMessage);
-    return result.stream;
-  } catch (error) {
-    console.error("Gemini streamContent error:", error);
-    throw error;
-  }
+  const content = await generateContent(messages[messages.length-1].content);
+  return {
+    async *[Symbol.asyncIterator]() {
+      yield { text: () => content };
+    }
+  };
 }
 
 module.exports = { generateContent, generateStructuredContent, streamContent };

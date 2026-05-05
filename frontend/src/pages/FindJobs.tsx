@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { invokeFunction } from "@/lib/api-client";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -127,18 +128,16 @@ export default function FindJobs() {
     setSearching(true);
     setJobs([]);
     try {
-      const { data, error } = await supabase.functions.invoke("search-jobs", {
-        body: { resume_data: resume.resume_data, resume_title: resume.title, location: location || undefined, job_type: jobType === "all" ? undefined : jobType, query: searchQuery || undefined },
+      const data = await invokeFunction("search-jobs", {
+        resume_data: resume.resume_data,
+        resume_title: resume.title,
+        location: location || undefined,
+        job_type: jobType === "all" ? undefined : jobType,
+        query: searchQuery || undefined
       });
-      if (error) throw error;
-      if (data?.error) {
-        if (data.error.includes("Rate limit")) toast({ title: "Rate limited", description: "Please wait a moment and try again.", variant: "destructive" });
-        else if (data.error.includes("Payment required")) toast({ title: "Credits needed", description: "Please add credits to continue.", variant: "destructive" });
-        else throw new Error(data.error);
-      } else {
-        setJobs(data?.jobs ?? []);
-        if (data?.jobs?.length === 0) toast({ title: "No jobs found", description: "Try adjusting your filters." });
-      }
+      
+      setJobs(data?.jobs ?? []);
+      if (data?.jobs?.length === 0) toast({ title: "No jobs found", description: "Try adjusting your filters." });
     } catch (e: any) {
       toast({ title: "Search failed", description: e.message, variant: "destructive" });
     } finally {

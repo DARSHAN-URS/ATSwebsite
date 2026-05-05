@@ -22,7 +22,8 @@ const SEOHead = ({
   ogImage = "https://atsproresumebuilder.com/og-image.jpg",
   noindex = false,
   keywords,
-}: SEOHeadProps) => {
+  jsonLd,
+}: SEOHeadProps & { jsonLd?: object }) => {
   useEffect(() => {
     document.title = title;
 
@@ -73,7 +74,20 @@ const SEOHead = ({
     } else if (link) {
       link.remove();
     }
-  }, [title, description, canonical, ogType, ogImage, noindex, keywords]);
+
+    // JSON-LD
+    let script: HTMLScriptElement | null = null;
+    if (jsonLd) {
+      script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.text = JSON.stringify(jsonLd);
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      if (script) script.remove();
+    };
+  }, [title, description, canonical, ogType, ogImage, noindex, keywords, jsonLd]);
 
   return null;
 };

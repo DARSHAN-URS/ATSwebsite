@@ -34,6 +34,11 @@ export function extractStoragePath(photoUrl: string): string {
 export async function resolvePhotoUrl(photoUrl: string | undefined): Promise<string | null> {
   if (!photoUrl) return null;
 
+  // If it's a full external URL (Google/Apple), return it as-is
+  if (photoUrl.startsWith('http') && !photoUrl.includes('supabase.co')) {
+    return photoUrl;
+  }
+
   const path = extractStoragePath(photoUrl);
 
   const { data, error } = await supabase.storage

@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SEOHead from "@/components/SEOHead";
 import Logo from "@/components/Logo";
@@ -90,20 +89,26 @@ const Index = () => {
   };
 
   const handleGoogleSignIn = async () => {
-    const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin
+      }
     });
     if (error) {
-      toast({ title: t.common.loginFailed, description: String(error), variant: "destructive" });
+      toast({ title: t.common.loginFailed, description: error.message, variant: "destructive" });
     }
   };
 
   const handleAppleSignIn = async () => {
-    const { error } = await lovable.auth.signInWithOAuth("apple", {
-      redirect_uri: window.location.origin
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "apple",
+      options: {
+        redirectTo: window.location.origin
+      }
     });
     if (error) {
-      toast({ title: t.common.loginFailed, description: String(error), variant: "destructive" });
+      toast({ title: t.common.loginFailed, description: error.message, variant: "destructive" });
     }
   };
 
@@ -117,62 +122,64 @@ const Index = () => {
   }, [startTransition]);
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SEOHead
-        title="ATS Pro Resume Builder — #1 Free AI Resume Builder & ATS Checker"
-        description="Build ATS-optimized resumes that beat applicant tracking systems. Free AI resume grader, keyword scanner, one-click tailoring, 8+ templates. Trusted by 10,000+ job seekers. Land 3× more interviews."
-        canonical="https://atsproresumebuilder.com/"
-        ogImage="https://atsproresumebuilder.com/og-image.png"
-        keywords="ATS resume builder, free ATS resume builder, AI resume builder, ATS resume checker, ATS resume scanner, resume keyword optimizer, ATS-friendly resume, ATS resume templates, applicant tracking system resume, professional resume builder" />
-
-      {/* Organization + WebSite + SoftwareApplication JSON-LD */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "ATS Pro Resume Builder",
-          "url": "https://atsproresumebuilder.com",
-          "logo": "https://atsproresumebuilder.com/images/logo-main.png",
-          "sameAs": [
-            "https://www.facebook.com/share/18EkeUXY8P/",
-            "https://www.instagram.com/atsproresumebuilder",
-            "https://x.com/Atspro_official",
-            "https://www.linkedin.com/company/ats-pro-resume-builder/",
-            "https://www.tiktok.com/@atsproresumebuilder"
-          ],
-          "contactPoint": { "@type": "ContactPoint", "email": "support@atsproresumebuilder.com", "contactType": "customer support" }
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": "ATS Pro Resume Builder",
-          "url": "https://atsproresumebuilder.com",
-          "potentialAction": { "@type": "SearchAction", "target": "https://atsproresumebuilder.com/blog?q={search_term_string}", "query-input": "required name=search_term_string" }
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "ATS Pro Resume Builder",
-          "operatingSystem": "Web",
-          "applicationCategory": "BusinessApplication",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "10000" },
-          "description": "Free AI-powered resume builder that helps job seekers create ATS-optimized resumes with keyword scanning, one-click tailoring, and 8+ professional templates."
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": [
-            { "@type": "Question", "name": t.landing.faq1q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq1a } },
-            { "@type": "Question", "name": t.landing.faq2q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq2a } },
-            { "@type": "Question", "name": t.landing.faq3q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq3a } },
-            { "@type": "Question", "name": t.landing.faq4q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq4a } },
-            { "@type": "Question", "name": t.landing.faq5q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq5a } },
-            { "@type": "Question", "name": t.landing.faq6q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq6a } },
-            { "@type": "Question", "name": t.landing.faq7q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq7a } },
-            { "@type": "Question", "name": t.landing.faq8q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq8a } }
-          ]
-        }
-      ]) }} />
+        keywords="ATS resume builder, free ATS resume builder, AI resume builder, ATS resume checker, ATS resume scanner, resume keyword optimizer, ATS-friendly resume, ATS resume templates, applicant tracking system resume, professional resume builder"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "ATS Pro Resume Builder",
+            "url": "https://atsproresumebuilder.com",
+            "logo": "https://atsproresumebuilder.com/images/logo-main.png",
+            "sameAs": [
+              "https://www.facebook.com/share/18EkeUXY8P/",
+              "https://www.instagram.com/atsproresumebuilder",
+              "https://x.com/Atspro_official",
+              "https://www.linkedin.com/company/ats-pro-resume-builder/",
+              "https://www.tiktok.com/@atsproresumebuilder"
+            ],
+            "contactPoint": { "@type": "ContactPoint", "email": "support@atsproresumebuilder.com", "contactType": "customer support" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "ATS Pro Resume Builder",
+            "url": "https://atsproresumebuilder.com",
+            "potentialAction": { "@type": "SearchAction", "target": "https://atsproresumebuilder.com/blog?q={search_term_string}", "query-input": "required name=search_term_string" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "ATS Pro Resume Builder",
+            "operatingSystem": "Web",
+            "applicationCategory": "BusinessApplication",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "10000" },
+            "description": "Free AI-powered resume builder that helps job seekers create ATS-optimized resumes with keyword scanning, one-click tailoring, and 8+ professional templates."
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": t.landing.faq1q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq1a } },
+              { "@type": "Question", "name": t.landing.faq2q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq2a } },
+              { "@type": "Question", "name": t.landing.faq3q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq3a } },
+              { "@type": "Question", "name": t.landing.faq4q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq4a } },
+              { "@type": "Question", "name": t.landing.faq5q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq5a } },
+              { "@type": "Question", "name": t.landing.faq6q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq6a } },
+              { "@type": "Question", "name": t.landing.faq7q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq7a } },
+              { "@type": "Question", "name": t.landing.faq8q, "acceptedAnswer": { "@type": "Answer", "text": t.landing.faq8a } }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://atsproresumebuilder.com/" },
+              { "@type": "ListItem", "position": 2, "name": "ATS Resume Builder", "item": "https://atsproresumebuilder.com/ats-resume-builder" }
+            ]
+          }
+        ]}
+      />
 
 
       {/* Navbar — clean minimal */}
@@ -686,6 +693,7 @@ const Index = () => {
                 <li><Link to="/about" className="transition hover:text-background">{t.nav.about}</Link></li>
                 <li><Link to="/blog" className="transition hover:text-background">{t.nav.blog}</Link></li>
                 <li><Link to="/pricing" className="transition hover:text-background">{t.nav.pricing}</Link></li>
+                <li><Link to="/contact" className="transition hover:text-background">Contact Us</Link></li>
                 <li><Link to="/privacy" className="transition hover:text-background">{t.landing.privacyPolicy}</Link></li>
                 <li><Link to="/terms" className="transition hover:text-background">{t.landing.termsOfService}</Link></li>
               </ul>

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import React from "react";
+import { invokeFunction } from "@/lib/api-client";
 
 export type AppRole = "job_seeker" | "recruiter";
 
@@ -53,7 +54,7 @@ export function UserRoleProvider({ children }: { children: ReactNode }) {
 
   const setUserRole = async (newRole: AppRole) => {
     if (!user) return null;
-    const { data, error } = await supabase.functions.invoke("assign-role", {
+    const { data, error } = await invokeFunction("assign-role", {
       body: { role: newRole },
     });
 

@@ -54,6 +54,7 @@ const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
 import ProRoute from "@/components/ProRoute";
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+const Contact = lazy(() => import("@/pages/Contact"));
 import AdminRoute from "@/components/auth/AdminRoute";
 
 
@@ -115,6 +116,7 @@ const App = () => (
                 <Route path="/resume-keywords/:jobTitle" element={<ResumeKeywordsPage />} />
                 <Route path="/resume-template/:jobTitle" element={<ResumeTemplatePage />} />
                 <Route path="/resume-guide/:topic" element={<ResumeGuidePage />} />
+                <Route path="/contact" element={<Contact />} />
                 <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
                 <Route
                   element={

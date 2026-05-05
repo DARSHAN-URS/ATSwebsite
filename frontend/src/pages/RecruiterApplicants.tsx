@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Star, StarOff, FileText, Loader2, Users, Calendar, Video } from "lucide-react";
+import { ArrowLeft, Star, StarOff, FileText, Loader2, Users, Calendar, Video, Sparkles } from "lucide-react";
+import { invokeFunction } from "@/lib/api-client";
 import SEOHead from "@/components/SEOHead";
 import ScheduledInterviewsList from "@/components/ScheduledInterviewsList";
 
@@ -87,6 +88,41 @@ export default function RecruiterApplicants() {
 
   useEffect(() => { fetchData(); }, [user, jobId]);
 
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const handleAIAnalyze = async () => {
+    if (applicants.length === 0) return;
+    setAnalyzing(true);
+    try {
+      const { data: job } = await supabase.from("job_posts").select("description").eq("id", jobId).single();
+      const resumeIds = applicants.filter(a => a.resume_id).map(a => a.resume_id);
+      const { data: resumes } = await supabase.from("resumes").select("id, resume_data").in("id", resumeIds);
+      const resumeMap = new Map(resumes?.map(r => [r.id, r.resume_data]) || []);
+
+      const result = await invokeFunction("recruiter-analyze", {
+        jobDescription: (job as any)?.description || "",
+        applicants: applicants.map(a => ({
+          id: a.id,
+          name: a.profile?.display_name || "Unknown",
+          resume_data: a.resume_id ? resumeMap.get(a.resume_id) : {}
+        }))
+      });
+
+      if (result.rankings) {
+        for (const rank of result.rankings) {
+          const note = `[AI Score: ${rank.score}%] ${rank.fitReason}\nRec: ${rank.recommendation}`;
+          await supabase.from("job_post_applications" as any).update({ recruiter_notes: note } as any).eq("id", rank.applicantId);
+        }
+        toast({ title: "AI Analysis complete!", description: "Check private notes for rankings." });
+        fetchData();
+      }
+    } catch (e: any) {
+      toast({ title: "Analysis failed", description: e.message, variant: "destructive" });
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
   const updateStatus = async (appId: string, newStatus: string) => {
     setUpdatingId(appId);
     await supabase.from("job_post_applications" as any).update({ status: newStatus } as any).eq("id", appId);
@@ -161,15 +197,23 @@ export default function RecruiterApplicants() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <SEOHead title={`Applicants — ${jobTitle}`} description="Manage applicants" noindex />
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => navigate("/recruiter/jobs")}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Applicants</h1>
-          <p className="text-muted-foreground">{jobTitle}</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/recruiter/jobs")}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Applicants</h1>
+            <p className="text-muted-foreground">{jobTitle}</p>
+          </div>
         </div>
-        <Badge variant="secondary" className="ml-auto">{applicants.length} total</Badge>
+        <div className="flex items-center gap-2 ml-auto">
+          <Button variant="outline" size="sm" onClick={handleAIAnalyze} disabled={analyzing || applicants.length === 0}>
+            {analyzing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2 text-primary" />}
+            AI Rank
+          </Button>
+          <Badge variant="secondary">{applicants.length} total</Badge>
+        </div>
       </div>
 
       {loading ? (

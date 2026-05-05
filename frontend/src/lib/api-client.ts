@@ -18,7 +18,9 @@ export const invokeFunction = async (name: string, options: { body: any }) => {
     "sync-linkedin", 
     "send-outreach",
     "generate-cover-letter",
-    "send-email"
+    "send-email",
+    "assign-role",
+    "search-jobs"
   ];
   
   if (migratedFunctions.includes(name)) {
@@ -36,7 +38,8 @@ export const invokeFunction = async (name: string, options: { body: any }) => {
         "sync-linkedin": "/api/ai/sync-linkedin",
         "generate-cover-letter": "/api/ai/generate-cover-letter",
         "send-outreach": "/api/emails/send-outreach",
-        "send-email": "/api/emails/send-outreach" // Reuse outreach for now
+        "send-email": "/api/emails/send-outreach", // Reuse outreach for now
+        "assign-role": "/api/auth/assign-role"
       };
 
       const path = endpointMap[name] || `/api/ai/${name}`;

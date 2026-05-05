@@ -118,6 +118,7 @@ router.post('/ai-apply', authenticateRequest, async (req, res) => {
     if (!JSEARCH_API_KEY) return res.status(503).json({ error: 'Search service unavailable' });
 
     // 1. Create campaign record
+    console.log(`Starting AI Apply for user ${user.id}...`);
     const { data: campaign, error: campErr } = await supabaseAdmin
       .from('ai_apply_campaigns')
       .insert({
@@ -133,9 +134,13 @@ router.post('/ai-apply', authenticateRequest, async (req, res) => {
       .select()
       .single();
 
-    if (campErr) throw campErr;
+    if (campErr) {
+      console.error("Campaign creation error:", campErr);
+      throw campErr;
+    }
 
-    // 2. Search Jobs (Simplified for now, calling JSearch)
+    // 2. Search Jobs
+    console.log(`Searching jobs for query: ${resume_title}...`);
     const searchQuery = resume_title || 'software engineer';
     const searchRes = await fetch(`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery)}&location=${encodeURIComponent(location || '')}`, {
       headers: {
@@ -143,20 +148,35 @@ router.post('/ai-apply', authenticateRequest, async (req, res) => {
         'x-rapidapi-key': JSEARCH_API_KEY
       }
     });
+    
+    if (!searchRes.ok) {
+      const errText = await searchRes.text();
+      console.error("JSearch API error:", errText);
+      throw new Error(`Job search failed: ${searchRes.statusText}`);
+    }
+
     const searchData = await searchRes.json();
-    const jobs = (searchData.data || []).slice(0, 10); // Batch of 10
+    const fetchLimit = Math.min(30, Math.max(10, max_applications * 2)); // Fetch more than needed to ensure quality
+    const jobs = (searchData.data || []).slice(0, fetchLimit);
+    console.log(`Found ${jobs.length} jobs to process (Limit: ${fetchLimit}).`);
 
     if (jobs.length === 0) {
       await supabaseAdmin.from('ai_apply_campaigns').update({ status: 'completed', jobs_searched: 0 }).eq('id', campaign.id);
       return res.json({ queued: 0, total_found: 0 });
     }
 
-    // 3. AI Scoring (Using Gemini)
+    // 3. AI Scoring
+    console.log("Scoring jobs with Gemini...");
     const prompt = `Score these ${jobs.length} jobs for this candidate. Resume: ${JSON.stringify(resume_data).slice(0, 2000)}. Jobs: ${JSON.stringify(jobs.map(j => ({ title: j.job_title, desc: j.job_description.slice(0, 500) })))}}`;
     const schema = `{ results: [{ index: number, match_score: number, match_explanation: string, tailored_summary: string, tailored_skills: [string], cover_letter_opening: string, cover_letter_body: string, cover_letter_closing: string }] }`;
     
     const scoringResult = await generateStructuredContent(prompt, "You are a career coach.", schema);
+    if (!scoringResult || !scoringResult.results) {
+      throw new Error("AI Scoring returned invalid data");
+    }
+
     const qualified = scoringResult.results.filter(r => r.match_score >= min_score).slice(0, max_applications);
+    console.log(`${qualified.length} jobs qualified.`);
 
     // 4. Queue them
     const inserts = qualified.map(r => {
@@ -179,7 +199,9 @@ router.post('/ai-apply', authenticateRequest, async (req, res) => {
     }).filter(Boolean);
 
     if (inserts.length > 0) {
-      await supabaseAdmin.from('ai_apply_queue').insert(inserts);
+      console.log(`Inserting ${inserts.length} jobs into queue...`);
+      const { error: insErr } = await supabaseAdmin.from('ai_apply_queue').insert(inserts);
+      if (insErr) console.error("Queue insertion error:", insErr);
     }
 
     // 5. Finalize campaign
@@ -196,6 +218,137 @@ router.post('/ai-apply', authenticateRequest, async (req, res) => {
   } catch (error) {
     console.error('AI apply error:', error);
     res.status(500).json({ error: 'Campaign failed' });
+  }
+});
+
+/**
+ * Search Jobs Logic (Standalone for Find Jobs page)
+ */
+router.post('/search-jobs', authenticateRequest, async (req, res) => {
+  const { resume_data, resume_title, location, job_type, query } = req.body;
+
+  try {
+    const JSEARCH_API_KEY = process.env.RAPIDAPI_KEY;
+    if (!JSEARCH_API_KEY) return res.status(503).json({ error: 'Search service unavailable' });
+
+    const searchQuery = query || resume_title || 'software engineer';
+    const searchRes = await fetch(`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery)}&location=${encodeURIComponent(location || '')}`, {
+      headers: {
+        'x-rapidapi-host': 'jsearch.p.rapidapi.com',
+        'x-rapidapi-key': JSEARCH_API_KEY
+      }
+    });
+    
+    if (!searchRes.ok) throw new Error('Job search API failed');
+
+    const searchData = await searchRes.json();
+    const rawJobs = (searchData.data || []).slice(0, 15);
+
+    // AI Match Scoring
+    const prompt = `Score these jobs for this candidate. Resume: ${JSON.stringify(resume_data).slice(0, 2000)}. Jobs: ${JSON.stringify(rawJobs.map(j => ({ title: j.job_title, company: j.employer_name, desc: j.job_description.slice(0, 500) })))}}`;
+    const schema = `{ results: [{ index: number, match_score: number, match_explanation: string }] }`;
+    
+    const scoringResult = await generateStructuredContent(prompt, "You are a career matching expert.", schema);
+    
+    const jobs = rawJobs.map((job, i) => {
+      const match = scoringResult.results.find(r => r.index === i);
+      return {
+        job_title: job.job_title,
+        company: job.employer_name,
+        location: `${job.job_city || ''}, ${job.job_state || ''}`,
+        job_type: job.job_is_remote ? 'Remote' : 'On-site',
+        description: job.job_description,
+        url: job.job_apply_link,
+        posted_date: new Date(job.job_posted_at_datetime_utc).toLocaleDateString(),
+        match_score: match?.match_score || 0,
+        match_explanation: match?.match_explanation || "No explanation provided.",
+        employer_logo: job.employer_logo,
+        source: "JSearch"
+      };
+    });
+
+    res.json({ jobs });
+  } catch (error) {
+    console.error('Search jobs error:', error);
+    res.status(500).json({ error: 'Failed to search jobs' });
+  }
+});
+
+/**
+ * LinkedIn Sync Logic
+ */
+router.post('/sync-linkedin', authenticateRequest, async (req, res) => {
+  const { linkedinUrl } = req.body;
+
+  try {
+    // Note: Deep scraping LinkedIn usually requires a specialized proxy or API.
+    // For now, we provide a robust extraction interface.
+    console.log(`Syncing LinkedIn for ${linkedinUrl}...`);
+    
+    // MOCK/STUB: In production, you'd use a service like Proxycurl or a custom scraper here.
+    // For this implementation, we simulate the extraction to let the AI build the resume.
+    const prompt = `Based on the LinkedIn profile URL ${linkedinUrl}, generate a high-quality resume structure. Since you don't have real-time access to this specific profile, provide a professional "Skeleton" or "Template" based on common patterns for high-end roles, OR if the URL contains keywords, use them.`;
+    const schema = `{ personalInfo: {fullName, email, phone, location, linkedin}, summary: string, skills: [], experience: [{title, company, description, bullets: []}], education: [{degree, school, year}] }`;
+    
+    const result = await generateStructuredContent(prompt, "You are a professional resume architect.", schema);
+    res.json(result);
+  } catch (error) {
+    console.error('LinkedIn sync error:', error);
+    res.status(500).json({ error: 'Failed to sync LinkedIn profile' });
+  }
+});
+
+/**
+ * Recruiter Applicant Analysis
+ */
+router.post('/recruiter-analyze', authenticateRequest, async (req, res) => {
+  const { jobDescription, applicants } = req.body;
+
+  try {
+    const prompt = `Analyze these ${applicants.length} applicants for this job description: ${jobDescription.slice(0, 2000)}. Applicants: ${JSON.stringify(applicants.map(a => ({ id: a.id, name: a.name, resume: JSON.stringify(a.resume_data).slice(0, 1000) })))}}`;
+    const schema = `{ rankings: [{ applicantId: string, score: number, fitReason: string, recommendation: string }] }`;
+    
+    const result = await generateStructuredContent(prompt, "You are an expert HR recruitment specialist.", schema);
+    res.json(result);
+  } catch (error) {
+    console.error('Recruiter analyze error:', error);
+    res.status(500).json({ error: 'Analysis failed' });
+  }
+});
+
+/**
+ * Generate Cover Letter Logic
+ */
+router.post('/generate-cover-letter', authenticateRequest, async (req, res) => {
+  const { resumeData, jobDescription, tone } = req.body;
+
+  try {
+    const personalInfo = resumeData?.personalInfo || {};
+    const prompt = `Generate a professionally formatted cover letter.
+      Tone: ${tone || "professional"}
+      Applicant: ${personalInfo.fullName || "Applicant"}
+      Email: ${personalInfo.email || ""}
+      Job Description: ${jobDescription}`;
+
+    const schema = `{ 
+      applicant_name: string, 
+      date: string, 
+      company_name: string, 
+      subject_line: string, 
+      greeting: string, 
+      opening: string, 
+      value_experience: string, 
+      why_company: string, 
+      closing: string, 
+      sign_off: string, 
+      suggested_title: string 
+    }`;
+
+    const result = await generateStructuredContent(prompt, "You are an expert cover letter writer.", schema);
+    res.json(result);
+  } catch (error) {
+    console.error('Generate cover letter route error:', error);
+    res.status(500).json({ error: 'AI processing failed' });
   }
 });
 

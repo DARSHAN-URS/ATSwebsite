@@ -1,264 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Core Pages -->
   <url>
     <loc>https://atsproresumebuilder.com/</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-05-05</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://atsproresumebuilder.com/about</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/pricing</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/blog</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/privacy</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/terms</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <!-- SEO Landing Pages -->
-  <url>
     <loc>https://atsproresumebuilder.com/ats-resume-builder</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-05-05</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://atsproresumebuilder.com/resume-templates</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-05-05</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://atsproresumebuilder.com/resume-builder-for-freshers</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/software-engineer-resume</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/interview-preparation</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/resume-download</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://atsproresumebuilder.com/blog</loc>
+    <lastmod>2026-05-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://atsproresumebuilder.com/resume-examples</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Resume Guides -->
-  <url>
-    <loc>https://atsproresumebuilder.com/resume-guide/how-to-make-ats-friendly-resume</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-05-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://atsproresumebuilder.com/resume-guide/resume-summary-examples</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://atsproresumebuilder.com/interview-preparation</loc>
+    <lastmod>2026-05-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://atsproresumebuilder.com/resume-guide/resume-action-verbs</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://atsproresumebuilder.com/pricing</loc>
+    <lastmod>2026-05-05</lastmod>
+    <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/resume-guide/how-to-write-resume-with-no-experience</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/resume-guide/resume-length-guide</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atsproresumebuilder.com/resume-guide/resume-formatting-tips</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Resume Examples (75+) -->
-  <url><loc>https://atsproresumebuilder.com/resume-examples/software-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/data-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/product-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/devops-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/cybersecurity-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/frontend-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/backend-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/full-stack-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/data-scientist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/cloud-architect</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/mobile-app-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/qa-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/machine-learning-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/systems-administrator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/database-administrator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/site-reliability-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/technical-writer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/it-support-specialist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/network-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/marketing-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/digital-marketing-specialist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/content-marketing-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/social-media-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/seo-specialist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/copywriter</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/email-marketing-specialist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/brand-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/financial-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/accountant</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/investment-banker</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/financial-controller</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/tax-specialist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/risk-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/registered-nurse</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/medical-assistant</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/pharmacist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/physical-therapist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/healthcare-administrator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/dental-hygienist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/mechanical-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/civil-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/electrical-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/chemical-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/industrial-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/teacher</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/school-counselor</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/instructional-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/sales-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/account-executive</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/business-development-representative</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/customer-service-representative</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/retail-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/business-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/project-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/operations-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/management-consultant</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/human-resources-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/human-resources-coordinator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/supply-chain-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/graphic-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/ui-ux-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/interior-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/product-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/data-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/blockchain-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/ai-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/actuary</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/compliance-officer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/occupational-therapist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/speech-language-pathologist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/real-estate-agent</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/insurance-agent</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/university-professor</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/education-administrator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/event-planner</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/paralegal</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/executive-assistant</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/logistics-coordinator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/public-relations-specialist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/video-editor</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/photographer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/content-creator</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/construction-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/environmental-scientist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/biomedical-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/ux-researcher</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/scrum-master</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/solutions-architect</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-examples/technical-program-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-
-  <!-- Resume Keywords Pages (mirrors resume-examples slugs) -->
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/software-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/data-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/product-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/devops-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/cybersecurity-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/frontend-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/backend-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/full-stack-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/data-scientist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/cloud-architect</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/marketing-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/financial-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/registered-nurse</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/mechanical-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/teacher</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/sales-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/project-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/graphic-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/business-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/ai-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/ui-ux-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/accountant</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/human-resources-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/civil-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-keywords/pharmacist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-
-  <!-- Resume Template Pages (top roles) -->
-  <url><loc>https://atsproresumebuilder.com/resume-template/software-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/data-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/product-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/devops-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/marketing-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/financial-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/registered-nurse</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/mechanical-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/teacher</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/project-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/graphic-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/sales-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/business-analyst</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/data-scientist</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/ai-engineer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/ui-ux-designer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/accountant</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/human-resources-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/full-stack-developer</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://atsproresumebuilder.com/resume-template/operations-manager</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-
 </urlset>
