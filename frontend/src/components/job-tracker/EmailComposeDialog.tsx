@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Send, Loader2, Sparkles, Mail } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import { invokeFunction } from "@/lib/api-client";
 
 type JobApp = Tables<"job_applications">;
 
@@ -33,25 +34,14 @@ export default function EmailComposeDialog({ open, onOpenChange, app }: EmailCom
     if (!app || !session?.access_token) return;
     setGenerating(true);
     try {
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-      const res = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/generate-outreach-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({
-            position: app.position,
-            company: app.company,
-            resumeId: app.resume_id,
-            coverLetterId: app.cover_letter_id,
-          }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to generate");
+      const { data, error } = await invokeFunction("generate-outreach-email", {
+        position: app.position,
+        company: app.company,
+        resumeId: app.resume_id,
+        coverLetterId: app.cover_letter_id,
+      });
+
+      if (error) throw new Error(error.message || "Failed to generate");
       setEmailSubject(data.subject);
       setEmailBody(data.body);
       toast({ title: "Email drafted!", description: "AI has written your email. Review and personalise before sending." });

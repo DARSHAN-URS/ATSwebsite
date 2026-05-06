@@ -11,6 +11,7 @@ import { Send, Loader2, Sparkles, Mail, Paperclip } from "lucide-react";
 import { buildDoc } from "@/components/resume/pdfTemplates";
 import type { ResumeData } from "@/components/resume/types";
 import type { Tables } from "@/integrations/supabase/types";
+import { invokeFunction } from "@/lib/api-client";
 
 type JobApp = Tables<"job_applications">;
 
@@ -67,25 +68,14 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
     if (!app || !session?.access_token) return;
     setGenerating(true);
     try {
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-      const res = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/generate-outreach-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({
-            position: app.position,
-            company: app.company,
-            resumeId: app.resume_id ?? undefined,
-            coverLetterId: app.cover_letter_id ?? undefined,
-          }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to generate");
+      const { data, error } = await invokeFunction("generate-outreach-email", {
+        position: app.position,
+        company: app.company,
+        resumeId: app.resume_id ?? undefined,
+        coverLetterId: app.cover_letter_id ?? undefined,
+      });
+
+      if (error) throw new Error(error.message || "Failed to generate");
       setSubject(data.subject);
       setBody(data.body);
       toast({ title: "Email drafted!", description: "Review and personalise before sending." });
@@ -149,30 +139,19 @@ export default function ResendEmailDialog({ open, onOpenChange, app, prefill, on
         ? savedAttachments.map((d) => ({ filename: d.name, content: d.base64, type: d.mimeType }))
         : undefined;
 
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-      const res = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/send-outreach-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({
-            to: recruiterEmail.trim(),
-            subject: subject.trim(),
-            body: body.trim(),
-            replyTo: user?.email,
-            position: app?.position,
-            company: app?.company,
-            resumePdfBase64,
-            resumeFilename,
-            additionalAttachments,
-          }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to send");
+      const { data, error } = await invokeFunction("send-outreach-email", {
+        to: recruiterEmail.trim(),
+        subject: subject.trim(),
+        body: body.trim(),
+        replyTo: user?.email,
+        position: app?.position,
+        company: app?.company,
+        resumePdfBase64,
+        resumeFilename,
+        additionalAttachments,
+      });
+
+      if (error) throw new Error(error.message || "Failed to send");
 
       // Save to email history
       if (user && app) {

@@ -13,6 +13,7 @@ import SEOHead from "@/components/SEOHead";
 import { buildDoc } from "@/components/resume/pdfTemplates";
 import type { ResumeData } from "@/components/resume/types";
 import type { Tables } from "@/integrations/supabase/types";
+import { invokeFunction } from "@/lib/api-client";
 
 type Resume = Tables<"resumes">;
 
@@ -70,20 +71,14 @@ export default function EmailOutreach() {
     }
     setGenerating(true);
     try {
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-      const res = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/generate-outreach-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({ position, company, resumeId: selectedResumeId || undefined }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to generate");
+      const { data, error } = await invokeFunction("generate-outreach-email", {
+        position,
+        company,
+        resumeId: selectedResumeId || undefined,
+      });
+
+      if (error) throw new Error(error.message || "Failed to generate");
+      
       setSubject(data.subject);
       setBody(data.body);
       toast({ title: "Email drafted!", description: "Review and personalise before sending." });
@@ -222,33 +217,22 @@ export default function EmailOutreach() {
         }
       }
 
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-      const res = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/send-outreach-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({
-            to: recruiterEmail.trim(),
-            subject: subject.trim(),
-            body: body.trim(),
-            fromName: fromName.trim() || undefined,
-            replyTo: user?.email,
-            position,
-            company,
-            resumePdfBase64,
-            resumeFilename,
-            additionalAttachments: additionalDocs.length > 0
-              ? additionalDocs.map((d) => ({ filename: d.name, content: d.base64, type: d.mimeType }))
-              : undefined,
-          }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to send");
+      const { data, error } = await invokeFunction("send-outreach-email", {
+        to: recruiterEmail.trim(),
+        subject: subject.trim(),
+        body: body.trim(),
+        fromName: fromName.trim() || undefined,
+        replyTo: user?.email,
+        position,
+        company,
+        resumePdfBase64,
+        resumeFilename,
+        additionalAttachments: additionalDocs.length > 0
+          ? additionalDocs.map((d) => ({ filename: d.name, content: d.base64, type: d.mimeType }))
+          : undefined,
+      });
+
+      if (error) throw new Error(error.message || "Failed to send");
 
       await saveToJobTracker(additionalDocs);
       const attachCount = (resumePdfBase64 ? 1 : 0) + additionalDocs.length;
