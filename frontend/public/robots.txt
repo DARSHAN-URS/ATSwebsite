@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /dashboard
-Disallow: /account
-Disallow: /admin
-Disallow: /recruiter
-Disallow: /select-role
-
-Sitemap: https://atsproresumebuilder.com/sitemap.xml
