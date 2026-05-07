@@ -1,0 +1,1310 @@
+import { useEffect, useState, useRef, useCallback } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail, Zap } from "lucide-react";
+import ResumeCompletionScore from "@/components/resume/ResumeCompletionScore";
+import IndustryKeywords from "@/components/resume/IndustryKeywords";
+import PowerWordsHint from "@/components/resume/PowerWordsHint";
+import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
+import { Progress } from "@/components/ui/progress";
+import type { Tables } from "@/integrations/supabase/types";
+import type { ResumeData, PersonalInfo, CustomSection, LanguageItem } from "@/components/resume/types";
+import { type TemplateId } from "@/components/resume/pdfTemplates";
+import ResumeExportDialog from "@/components/resume/ResumeExportDialog";
+import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
+import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
+import TemplateSelector from "@/components/resume/TemplateSelector";
+import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
+import ResumePreview from "@/components/resume/ResumePreview";
+import LanguagesEditor from "@/components/resume/LanguagesEditor";
+import ColorPanel from "@/components/editor/ColorPanel";
+import { useResumeColors } from "@/hooks/useResumeColors";
+import SEOHead from "@/components/SEOHead";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { useSubscription } from "@/hooks/useSubscription";
+import ProFeatureGate from "@/components/ProFeatureGate";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CoverLetters from "@/pages/CoverLetters";
+
+type Resume = Tables<"resumes">;
+
+export default function Resumes() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { t } = useLanguage();
+  const { isPro } = useSubscription();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(searchParams.get("edit"));
+
+  // Form state
+  const [title, setTitle] = useState("");
+  const [resumeData, setResumeData] = useState<ResumeData>({
+    personalInfo: {},
+    summary: "",
+    skills: [],
+    experience: [],
+    education: [],
+    customSections: [],
+  });
+  const [skillInput, setSkillInput] = useState("");
+  const [aiLoading, setAiLoading] = useState<string | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
+  const { colors: resumeColors, activePresetId, applyPreset, setColor, reset: resetColors } = useResumeColors();
+  const [tailorOpen, setTailorOpen] = useState(false);
+  const [tailorJD, setTailorJD] = useState("");
+  const [tailoring, setTailoring] = useState(false);
+  const [gradeOpen, setGradeOpen] = useState(false);
+  const [gradeJD, setGradeJD] = useState("");
+  const [grading, setGrading] = useState(false);
+  const [gradeResult, setGradeResult] = useState<any>(null);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const [linkedinOpen, setLinkedinOpen] = useState(false);
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [linkedinLoading, setLinkedinLoading] = useState(false);
+  const [aiApplyingId, setAiApplyingId] = useState<string | null>(null);
+  const [aiApplyStep, setAiApplyStep] = useState(0);
+  const [aiApplySetupOpen, setAiApplySetupOpen] = useState(false);
+  const [aiApplyPendingResume, setAiApplyPendingResume] = useState<Resume | null>(null);
+  const [aiApplyLocation, setAiApplyLocation] = useState("");
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchResumes = async () => {
+    const { data } = await supabase.from("resumes").select("*").order("updated_at", { ascending: false });
+    setResumes(data ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => { if (user) fetchResumes(); }, [user]);
+
+  // Sync editingId to URL search params
+  useEffect(() => {
+    const currentEdit = searchParams.get("edit");
+    if (editingId && currentEdit !== editingId) {
+      setSearchParams({ edit: editingId }, { replace: true });
+    } else if (!editingId && currentEdit) {
+      setSearchParams({}, { replace: true });
+    }
+  }, [editingId]);
+
+  // Restore editor state when navigating back with ?edit=id
+  useEffect(() => {
+    const editId = searchParams.get("edit");
+    if (editId && !editingId && resumes.length > 0) {
+      const resume = resumes.find((r) => r.id === editId);
+      if (resume) openEditor(resume);
+    }
+  }, [resumes]);
+
+  // Auto-save with debounce
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSavedRef = useRef<string>("");
+
+  const autoSave = useCallback(async () => {
+    if (!editingId) return;
+    const dataToSave = { ...resumeData, templateId: selectedTemplate };
+    const serialized = JSON.stringify({ title, data: dataToSave });
+    if (serialized === lastSavedRef.current) return; // No changes
+    try {
+      const { error } = await supabase.from("resumes").update({
+        title,
+        resume_data: dataToSave as any,
+      }).eq("id", editingId);
+      if (error) {
+        console.error("Auto-save error:", error.message);
+      } else {
+        lastSavedRef.current = serialized;
+      }
+    } catch (err) {
+      console.error("Auto-save failed:", err);
+    }
+  }, [editingId, title, resumeData, selectedTemplate]);
+
+  useEffect(() => {
+    if (!editingId) return;
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(autoSave, 2000);
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    };
+  }, [autoSave, editingId]);
+
+  const AI_APPLY_STEPS = [
+    { label: "Creating campaign", detail: "Setting up your AI Apply campaign record…" },
+    { label: "Searching job boards", detail: "Scanning live listings for matching roles…" },
+    { label: "AI scoring matches", detail: "AI is scoring and ranking jobs for your profile…" },
+    { label: "Tailoring applications", detail: "Rewriting summary, skills and writing cover letters…" },
+    { label: "Saving to queue", detail: "Packaging tailored applications into your dashboard…" },
+  ];
+
+  const [aiApplyJobType, setAiApplyJobType] = useState("");
+  const [aiApplyMinScore, setAiApplyMinScore] = useState(60);
+  const [aiApplyMaxApps, setAiApplyMaxApps] = useState(20);
+  const [aiApplyCampaignResult, setAiApplyCampaignResult] = useState<{ queued: number; total_found: number; total_scored: number } | null>(null);
+
+  const openAIApplySetup = (resume: Resume) => {
+    setAiApplyPendingResume(resume);
+    setAiApplyLocation("");
+    setAiApplySetupOpen(true);
+  };
+
+  const handleAIApply = async (resume: Resume) => {
+    if (!user) return;
+    setAiApplySetupOpen(false);
+    setAiApplyingId(resume.id);
+    setAiApplyStep(0);
+    setAiApplyCampaignResult(null);
+
+    // Animate through steps — scaled to ~25s total
+    const stepTimings = [0, 2000, 6000, 14000, 20000];
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    stepTimings.forEach((delay, i) => {
+      timers.push(setTimeout(() => setAiApplyStep(i), delay));
+    });
+
+    try {
+      const { data, error } = await invokeFunction("ai-apply", {
+        body: {
+          resume_id: resume.id,
+          resume_title: resume.title,
+          resume_data: resume.resume_data,
+          location: aiApplyLocation || undefined,
+          job_type: aiApplyJobType || undefined,
+          min_score: aiApplyMinScore,
+          max_applications: aiApplyMaxApps,
+        },
+      });
+      timers.forEach(clearTimeout);
+      setAiApplyStep(AI_APPLY_STEPS.length);
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "AI Apply failed", description: data.error, variant: "destructive" });
+        return;
+      }
+      if (data.queued === 0) {
+        toast({
+          title: "No matching jobs found",
+          description: `Searched ${data.total_found || 0} jobs — none met your ${aiApplyMinScore}% minimum score. Try lowering the threshold or updating your resume skills.`,
+          variant: "destructive",
+        });
+      } else {
+        setAiApplyCampaignResult({ queued: data.queued, total_found: data.total_found, total_scored: data.total_scored });
+        const partialMsg = data.partial ? ` (${data.total_scored} of ${data.total_found} scored before timeout)` : "";
+        toast({
+          title: `Campaign complete! 🚀`,
+          description: `${data.queued} tailored applications queued from ${data.total_found} jobs found.${partialMsg}`,
+        });
+      }
+    } catch (err: any) {
+      timers.forEach(clearTimeout);
+      toast({ title: "AI Apply failed", description: err.message || "Something went wrong.", variant: "destructive" });
+    } finally {
+      // Keep result summary visible for a bit longer
+      setTimeout(() => {
+        if (!aiApplyCampaignResult) {
+          setAiApplyingId(null);
+          setAiApplyStep(0);
+        }
+      }, 5000);
+    }
+  };
+
+
+  const resetForm = () => {
+    setTitle("");
+    setResumeData({ personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [], languages: [] });
+    setSkillInput("");
+  };
+
+  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (pdfInputRef.current) pdfInputRef.current.value = "";
+    if (!file || !user) return;
+    if (file.type !== "application/pdf") {
+      toast({ title: t.resumes.selectPdf, variant: "destructive" });
+      return;
+    }
+    setUploadingPdf(true);
+    try {
+      const pdfjsLib = await import("pdfjs-dist");
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        fullText += content.items.map((item: any) => item.str).join(" ") + "\n";
+      }
+
+      if (fullText.trim().length < 20) {
+        toast({ title: t.resumes.couldNotExtract, description: t.resumes.couldNotExtractDesc, variant: "destructive" });
+        return;
+      }
+
+      const { data, error } = await invokeFunction("parse-resume", {
+        body: { text: fullText },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
+        return;
+      }
+
+      const resumeTitle = data.personalInfo?.fullName
+        ? `${data.personalInfo.fullName}'s Resume`
+        : file.name.replace(/\.pdf$/i, "");
+
+      const parsedData: ResumeData = {
+        personalInfo: data.personalInfo || {},
+        summary: data.summary || "",
+        skills: data.skills || [],
+        experience: (data.experience || []).map((exp: any) => ({
+          title: exp.title || "",
+          company: exp.company || "",
+          description: exp.description || "",
+          bullets: exp.bullets || [],
+        })),
+        education: data.education || [],
+        customSections: data.customSections || [],
+      };
+
+      const { data: created, error: createError } = await supabase.from("resumes").insert({
+        user_id: user.id,
+        title: resumeTitle,
+        resume_data: parsedData as any,
+      }).select().single();
+
+      if (createError) throw createError;
+
+      toast({ title: t.resumes.resumeImported, description: t.resumes.resumeImportedDesc });
+      fetchResumes();
+      if (created) openEditor(created);
+    } catch (err: any) {
+      console.error("PDF upload error:", err);
+      toast({ title: t.resumes.uploadFailed, description: err.message || t.resumes.unexpectedError, variant: "destructive" });
+    } finally {
+      setUploadingPdf(false);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingId) return;
+    const dataToSave = { ...resumeData, templateId: selectedTemplate };
+    const { error } = await supabase.from("resumes").update({
+      title,
+      resume_data: dataToSave as any,
+    }).eq("id", editingId);
+    if (error) {
+      toast({ title: t.resumes.errorSaving, description: error.message, variant: "destructive" });
+    } else {
+      lastSavedRef.current = JSON.stringify({ title, data: dataToSave });
+      toast({ title: t.resumes.saved });
+      fetchResumes();
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    await supabase.from("resumes").delete().eq("id", id);
+    if (editingId === id) setEditingId(null);
+    fetchResumes();
+  };
+
+  const openEditor = (resume: Resume) => {
+    setEditingId(resume.id);
+    setTitle(resume.title);
+    const data = resume.resume_data as any as ResumeData;
+    const template = (data?.templateId as TemplateId) || "classic";
+    setSelectedTemplate(template);
+    const rd: ResumeData = {
+      personalInfo: data?.personalInfo || {},
+      summary: data?.summary || "",
+      skills: data?.skills || [],
+      experience: (data?.experience || []).map((e: any) => ({
+        title: e.title || "",
+        company: e.company || "",
+        description: e.description || "",
+        bullets: e.bullets || [],
+      })),
+      education: data?.education || [],
+      customSections: data?.customSections || [],
+      languages: data?.languages || [],
+      templateId: data?.templateId,
+    };
+    setResumeData(rd);
+    // Initialize last saved ref so auto-save doesn't trigger immediately
+    lastSavedRef.current = JSON.stringify({ title: resume.title, data: { ...rd, templateId: template } });
+  };
+
+  // AI helpers
+  const aiAssist = async (type: string, context: any) => {
+    setAiLoading(type);
+    try {
+      const { data, error } = await invokeFunction("resume-assist", {
+        body: { type, context },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
+        return null;
+      }
+      return data;
+    } catch (e: any) {
+      toast({ title: t.common.error, description: e.message, variant: "destructive" });
+      return null;
+    } finally {
+      setAiLoading(null);
+    }
+  };
+
+  const generateSummary = async () => {
+    const result = await aiAssist("summary", {
+      jobTitle: title,
+      skills: resumeData.skills,
+      experience: resumeData.experience,
+    });
+    if (result?.summary) {
+      setResumeData((prev) => ({ ...prev, summary: result.summary }));
+      toast({ title: t.resumes.summaryGenerated });
+    }
+  };
+
+  const generateBullets = async (expIndex: number) => {
+    const exp = resumeData.experience?.[expIndex];
+    if (!exp) return;
+    const result = await aiAssist("bullets", {
+      title: exp.title,
+      company: exp.company,
+      description: exp.description,
+      skills: resumeData.skills,
+    });
+    if (result?.bullets) {
+      setResumeData((prev) => {
+        const experience = [...(prev.experience || [])];
+        experience[expIndex] = { ...experience[expIndex], bullets: result.bullets };
+        return { ...prev, experience };
+      });
+      toast({ title: t.resumes.bulletsGenerated });
+    }
+  };
+
+  const suggestSkills = async () => {
+    const result = await aiAssist("skills", {
+      jobTitle: title,
+      experience: resumeData.experience,
+      existingSkills: resumeData.skills,
+    });
+    if (result?.skills) {
+      setResumeData((prev) => ({
+        ...prev,
+        skills: [...new Set([...(prev.skills || []), ...result.skills])],
+      }));
+      toast({ title: t.resumes.skillsSuggested });
+    }
+  };
+
+  const addSkill = () => {
+    if (!skillInput.trim()) return;
+    setResumeData((prev) => ({
+      ...prev,
+      skills: [...(prev.skills || []), skillInput.trim()],
+    }));
+    setSkillInput("");
+  };
+
+  const removeSkill = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      skills: (prev.skills || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const addExperience = () => {
+    setResumeData((prev) => ({
+      ...prev,
+      experience: [...(prev.experience || []), { title: "", company: "", startDate: "", endDate: "", description: "", bullets: [] }],
+    }));
+  };
+
+  const updateExperience = (index: number, field: string, value: string) => {
+    setResumeData((prev) => {
+      const experience = [...(prev.experience || [])];
+      experience[index] = { ...experience[index], [field]: value };
+      return { ...prev, experience };
+    });
+  };
+
+  const removeExperience = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      experience: (prev.experience || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const addEducation = () => {
+    setResumeData((prev) => ({
+      ...prev,
+      education: [...(prev.education || []), { degree: "", school: "", startDate: "", endDate: "", year: "" }],
+    }));
+  };
+
+  const updateEducation = (index: number, field: string, value: string) => {
+    setResumeData((prev) => {
+      const education = [...(prev.education || [])];
+      education[index] = { ...education[index], [field]: value };
+      return { ...prev, education };
+    });
+  };
+
+  const removeEducation = (index: number) => {
+    setResumeData((prev) => ({
+      ...prev,
+      education: (prev.education || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleExportPDF = async () => {
+    const { generateResumePDF } = await import("@/components/resume/pdfTemplates");
+    const { resolvePhotoUrl } = await import("@/lib/storageUtils");
+    const { buildPdfRgbMap } = await import("@/components/resume/resumeColorMap");
+    // Resolve storage path to signed URL for PDF rendering
+    const resolvedUrl = await resolvePhotoUrl(resumeData.personalInfo?.photoUrl);
+    const exportData = {
+      ...resumeData,
+      personalInfo: {
+        ...resumeData.personalInfo,
+        photoUrl: resolvedUrl || undefined,
+      },
+    };
+    const rgbMap = buildPdfRgbMap(selectedTemplate, resumeColors);
+    await generateResumePDF(exportData, title, selectedTemplate, { rgbMap });
+    toast({ title: t.resumes.pdfDownloaded });
+  };
+
+  const handleLinkedInImport = async () => {
+    if (!linkedinUrl.trim() || !user) return;
+    const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]{3,100}\/?$/i;
+    if (!linkedinRegex.test(linkedinUrl.trim())) {
+      toast({ title: t.resumes.invalidLinkedinUrl, description: t.resumes.invalidLinkedinUrlDesc, variant: "destructive" });
+      return;
+    }
+    setLinkedinLoading(true);
+    try {
+      const { data, error } = await invokeFunction("sync-linkedin", {
+        body: { linkedinUrl: linkedinUrl.trim() },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: t.resumes.importFailed, description: data.error, variant: "destructive" });
+        return;
+      }
+
+      const resumeTitle = data.personalInfo?.fullName
+        ? `${data.personalInfo.fullName}'s Resume`
+        : "LinkedIn Resume";
+
+      const { data: created, error: createError } = await supabase.from("resumes").insert({
+        user_id: user.id,
+        title: resumeTitle,
+        resume_data: data as any,
+      }).select().single();
+
+      if (createError) throw createError;
+
+      toast({ title: t.resumes.linkedinImported, description: t.resumes.linkedinImportedDesc });
+      setLinkedinOpen(false);
+      setLinkedinUrl("");
+      fetchResumes();
+      if (created) openEditor(created);
+    } catch (err: any) {
+      console.error("LinkedIn import error:", err);
+      toast({ title: t.resumes.importFailed, description: err.message || t.resumes.unexpectedError, variant: "destructive" });
+    } finally {
+      setLinkedinLoading(false);
+    }
+  };
+
+  const handleTailor = async () => {
+    if (!tailorJD.trim()) return;
+    setTailoring(true);
+    try {
+      const { data, error } = await invokeFunction("tailor-resume", {
+        body: { resumeData, jobDescription: tailorJD },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
+        return;
+      }
+      setResumeData((prev) => {
+        const updated = { ...prev };
+        if (data.summary) updated.summary = data.summary;
+        if (data.skills) updated.skills = data.skills;
+        if (data.experience && prev.experience) {
+          updated.experience = prev.experience.map((exp, i) => ({
+            ...exp,
+            bullets: data.experience[i]?.bullets || exp.bullets,
+          }));
+        }
+        return updated;
+      });
+      toast({ title: t.resumes.resumeTailored });
+      setTailorOpen(false);
+      setTailorJD("");
+    } catch (e: any) {
+      toast({ title: t.resumes.tailoringFailed, description: t.resumes.unexpectedError, variant: "destructive" });
+    } finally {
+      setTailoring(false);
+    }
+  };
+
+  const handleGrade = async () => {
+    setGrading(true);
+    setGradeResult(null);
+    try {
+      const { data, error } = await invokeFunction("grade-resume", {
+        body: { resumeData, jobDescription: gradeJD },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: t.common.error, description: data.error, variant: "destructive" });
+        return;
+      }
+      setGradeResult(data);
+    } catch (e: any) {
+      toast({ title: t.resumes.gradingFailed, description: t.resumes.unexpectedError, variant: "destructive" });
+    } finally {
+      setGrading(false);
+    }
+  };
+
+  const scoreColor = (score: number) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
+  };
+
+  const progressColor = (score: number) => {
+    if (score >= 80) return "[&>div]:bg-green-500";
+    if (score >= 60) return "[&>div]:bg-yellow-500";
+    return "[&>div]:bg-red-500";
+  };
+
+  if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">{t.common.loading}</div>;
+
+  // Editor view
+  if (editingId) {
+    return (
+      <div className="h-[calc(100vh-4rem)] md:h-screen flex flex-col">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 gap-2">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => { autoSave(); setEditingId(null); resetForm(); fetchResumes(); }}>{t.common.back}</Button>
+            <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.tailorToJob}</span><span className="sm:hidden">{t.resumes.tailorToJob}</span></Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{t.resumes.tailorTitle}</DialogTitle>
+                  <DialogDescription>{t.resumes.tailorDesc}</DialogDescription>
+                </DialogHeader>
+                <Textarea
+                  rows={8}
+                  value={tailorJD}
+                  onChange={(e) => setTailorJD(e.target.value)}
+                  placeholder={t.resumes.tailorPlaceholder}
+                  className="min-h-[200px]"
+                />
+                <Button onClick={handleTailor} disabled={tailoring || !tailorJD.trim()} className="w-full">
+                  {tailoring ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.tailoring}</> : <><Sparkles className="h-4 w-4 mr-2" />{t.resumes.tailorMyResume}</>}
+                </Button>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.gradeResume}</span><span className="sm:hidden">{t.resumes.gradeResume}</span></Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{t.resumes.gradeTitle}</DialogTitle>
+                  <DialogDescription>{t.resumes.gradeDesc}</DialogDescription>
+                </DialogHeader>
+                {!gradeResult ? (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>{t.resumes.gradeJdLabel}</Label>
+                      <Textarea
+                        rows={6}
+                        value={gradeJD}
+                        onChange={(e) => setGradeJD(e.target.value)}
+                        placeholder={t.resumes.gradeJdPlaceholder}
+                        className="min-h-[150px]"
+                      />
+                    </div>
+                    <Button onClick={handleGrade} disabled={grading} className="w-full">
+                      {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.grading}</> : <><ClipboardCheck className="h-4 w-4 mr-2" />{t.resumes.gradeMyResume}</>}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="text-center p-6 rounded-lg border bg-muted/30">
+                      <div className={`text-5xl font-bold ${scoreColor(gradeResult.overallScore)}`}>{gradeResult.overallScore}</div>
+                      <div className="text-sm text-muted-foreground mt-1">{t.resumes.overallScore}</div>
+                      <Progress value={gradeResult.overallScore} className={`mt-3 h-3 ${progressColor(gradeResult.overallScore)}`} />
+                      <p className="text-sm mt-4 text-left">{gradeResult.overallAssessment}</p>
+                    </div>
+
+                    {[
+                      { key: "ats", label: t.resumes.atsCompatibility, data: gradeResult.ats },
+                      { key: "fit", label: gradeResult.fit?.label || t.resumes.jobFit, data: gradeResult.fit },
+                      { key: "writing", label: t.resumes.writingQuality, data: gradeResult.writing },
+                    ].map(({ key, label, data }) => (
+                      <div key={key} className="p-4 rounded-lg border space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold">{label}</h3>
+                          <span className={`text-2xl font-bold ${scoreColor(data.score)}`}>{data.score}</span>
+                        </div>
+                        <Progress value={data.score} className={`h-2 ${progressColor(data.score)}`} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                          <div>
+                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t.resumes.strengths}</h4>
+                            <ul className="space-y-1.5">
+                              {data.strengths.map((s: string, i: number) => (
+                                <li key={i} className="text-sm flex gap-2 items-start">
+                                  <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                                  {s}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t.resumes.improvements}</h4>
+                            <ul className="space-y-1.5">
+                              {data.improvements.map((s: string, i: number) => (
+                                <li key={i} className="text-sm flex gap-2 items-start">
+                                  <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
+                                  {s}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    <Button variant="outline" onClick={() => { setGradeResult(null); }} className="w-full">
+                      {t.resumes.gradeAgain}
+                    </Button>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
+            <ATSScannerDialog resumeData={resumeData} />
+            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
+            <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
+          </div>
+        </div>
+
+        {/* Side-by-side layout (stacked on mobile) */}
+        <div className="flex-1 min-h-0 flex flex-col md:flex-row">
+          {/* Editor panel */}
+          <div className="md:w-1/2 overflow-y-auto p-4 sm:p-6 space-y-5 border-b md:border-b-0 md:border-r">
+          {/* Resume Completion Score */}
+            <ResumeCompletionScore resumeData={resumeData} title={title} />
+
+            <div className="space-y-2">
+              <Label>{t.resumes.resumeTitle}</Label>
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+            </div>
+
+            {/* Template Selection */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">{t.resumes.pdfTemplate}</CardTitle>
+                <CardDescription>{t.resumes.choosePdfStyle}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} jobTitle={title} />
+              </CardContent>
+            </Card>
+
+            {/* Resume Color Customization */}
+            <ColorPanel
+              colors={resumeColors}
+              activePresetId={activePresetId}
+              onApplyPreset={applyPreset}
+              onSetColor={setColor}
+              onReset={resetColors}
+            />
+
+            {/* Personal Information */}
+            {user && (
+              <PersonalInfoSection
+                personalInfo={resumeData.personalInfo || {}}
+                onChange={(info) => setResumeData((prev) => ({ ...prev, personalInfo: info }))}
+                userId={user.id}
+              />
+            )}
+
+            {/* Summary */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{t.resumes.professionalSummary}</CardTitle>
+                  <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>
+                      {aiLoading === "summary" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                      {t.resumes.aiGenerate}
+                    </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Textarea rows={3} value={resumeData.summary || ""} onChange={(e) => setResumeData((prev) => ({ ...prev, summary: e.target.value }))} placeholder={t.resumes.writeSummaryPlaceholder} />
+              </CardContent>
+            </Card>
+
+            {/* Skills */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{t.resumes.skills}</CardTitle>
+                  <Button size="sm" variant="outline" onClick={suggestSkills} disabled={aiLoading === "skills"}>
+                      {aiLoading === "skills" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                      {t.resumes.aiSuggest}
+                    </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex gap-2">
+                  <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder={t.resumes.addSkillPlaceholder} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())} />
+                  <Button variant="outline" onClick={addSkill}>{t.common.add}</Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(resumeData.skills || []).map((skill, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-secondary text-secondary-foreground rounded-full text-xs">
+                      {skill}
+                      <button onClick={() => removeSkill(i)} className="hover:text-destructive"><X className="h-3 w-3" /></button>
+                    </span>
+                  ))}
+                </div>
+                <IndustryKeywords
+                  jobTitle={resumeData.experience?.[0]?.title || title}
+                  currentSkills={resumeData.skills || []}
+                  onAdd={(skill) => {
+                    if (!(resumeData.skills || []).includes(skill)) {
+                      setResumeData((prev) => ({ ...prev, skills: [...(prev.skills || []), skill] }));
+                    }
+                  }}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Experience */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{t.resumes.experience}</CardTitle>
+                  <Button size="sm" variant="outline" onClick={addExperience}><Plus className="h-3 w-3 mr-1" />{t.common.add}</Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {(resumeData.experience || []).map((exp, i) => (
+                  <div key={i} className="space-y-3 p-4 rounded-lg border bg-muted/30">
+                    <div className="flex justify-between items-start">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+                        <div>
+                          <Label className="text-xs">{t.resumes.jobTitle}</Label>
+                          <Input value={exp.title} onChange={(e) => updateExperience(i, "title", e.target.value)} placeholder="Senior Developer" />
+                        </div>
+                        <div>
+                          <Label className="text-xs">{t.resumes.company}</Label>
+                          <Input value={exp.company} onChange={(e) => updateExperience(i, "company", e.target.value)} placeholder="Acme Inc." />
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon" className="shrink-0 ml-2" onClick={() => removeExperience(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs">{t.resumes.startDate}</Label>
+                        <Input value={exp.startDate || ""} onChange={(e) => updateExperience(i, "startDate", e.target.value)} placeholder="e.g. Jan 2020" />
+                      </div>
+                      <div>
+                        <Label className="text-xs">{t.resumes.endDate}</Label>
+                        <Input value={exp.endDate || ""} onChange={(e) => updateExperience(i, "endDate", e.target.value)} placeholder="e.g. Present" />
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs">{t.resumes.briefDesc}</Label>
+                      <Input value={exp.description} onChange={(e) => updateExperience(i, "description", e.target.value)} placeholder={t.resumes.whatDidYouDo} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label className="text-xs">{t.resumes.bullets}</Label>
+                      <Button size="sm" variant="outline" onClick={() => generateBullets(i)} disabled={aiLoading === "bullets"}>
+                          {aiLoading === "bullets" ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                          {t.resumes.aiGenerateBullets}
+                        </Button>
+                    </div>
+                    {exp.bullets && exp.bullets.length > 0 ? (
+                      <ul className="space-y-1">
+                        {exp.bullets.map((bullet, bi) => (
+                          <li key={bi} className="flex gap-2 items-start">
+                            <span className="text-muted-foreground mt-1">•</span>
+                            <Input
+                              value={bullet}
+                              className="h-8 text-sm"
+                              onChange={(e) => {
+                                const experience = [...(resumeData.experience || [])];
+                                const bullets = [...experience[i].bullets];
+                                bullets[bi] = e.target.value;
+                                experience[i] = { ...experience[i], bullets };
+                                setResumeData((prev) => ({ ...prev, experience }));
+                              }}
+                            />
+                            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => {
+                              const experience = [...(resumeData.experience || [])];
+                              experience[i] = { ...experience[i], bullets: experience[i].bullets.filter((_, j) => j !== bi) };
+                              setResumeData((prev) => ({ ...prev, experience }));
+                            }}><X className="h-3 w-3" /></Button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">{t.resumes.noBullets}</p>
+                    )}
+                    {(exp.bullets?.length ?? 0) > 0 && <PowerWordsHint bullets={exp.bullets} />}
+                  </div>
+                ))}
+                {(resumeData.experience || []).length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">{t.resumes.noExperience}</p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Education */}
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{t.resumes.education}</CardTitle>
+                  <Button size="sm" variant="outline" onClick={addEducation}><Plus className="h-3 w-3 mr-1" />{t.common.add}</Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {(resumeData.education || []).map((edu, i) => (
+                  <div key={i} className="space-y-2 p-3 rounded-lg border bg-muted/30">
+                    <div className="flex gap-3 items-start">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1">
+                        <div>
+                          <Label className="text-xs">{t.resumes.degree}</Label>
+                          <Input value={edu.degree} onChange={(e) => updateEducation(i, "degree", e.target.value)} placeholder={t.resumes.degree} />
+                        </div>
+                        <div>
+                          <Label className="text-xs">{t.resumes.school}</Label>
+                          <Input value={edu.school} onChange={(e) => updateEducation(i, "school", e.target.value)} placeholder={t.resumes.school} />
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon" className="shrink-0 mt-4" onClick={() => removeEducation(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs">{t.resumes.startDate}</Label>
+                        <Input value={edu.startDate || ""} onChange={(e) => updateEducation(i, "startDate", e.target.value)} placeholder="e.g. Sep 2016" />
+                      </div>
+                      <div>
+                        <Label className="text-xs">{t.resumes.endDate}</Label>
+                        <Input value={edu.endDate || ""} onChange={(e) => updateEducation(i, "endDate", e.target.value)} placeholder="e.g. Jun 2020" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Languages */}
+            <LanguagesEditor
+              languages={resumeData.languages || []}
+              onChange={(languages) => setResumeData((prev) => ({ ...prev, languages }))}
+            />
+
+            {/* Custom Sections */}
+            <div>
+              <h2 className="text-base font-semibold mb-3">{t.resumes.customSections}</h2>
+              <CustomSectionsEditor
+                sections={resumeData.customSections || []}
+                onChange={(sections) => setResumeData((prev) => ({ ...prev, customSections: sections }))}
+              />
+            </div>
+          </div>
+
+          {/* Preview panel - hidden on mobile, shown on md+ */}
+          <div className="hidden md:block md:w-1/2 p-4">
+            <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // List view
+  return (
+    <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
+      <SEOHead title="Resumes — ATS Pro Resume Builder" description="Create and manage ATS-optimized resumes." noindex />
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{t.resumes.title}</h1>
+        <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
+      </div>
+
+      <Tabs value={searchParams.get("tab") || "resumes"} onValueChange={(v) => setSearchParams(v === "resumes" ? {} : { tab: v }, { replace: true })} className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="resumes" className="gap-2"><FileText className="h-4 w-4" />Resumes</TabsTrigger>
+          <TabsTrigger value="cover-letters" className="gap-2"><Mail className="h-4 w-4" />Cover Letters</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="resumes" className="space-y-6">
+      <div className="flex flex-wrap gap-2 justify-end shrink-0">
+          <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
+          {isPro ? (
+            <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
+              <Linkedin className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.importLinkedin}</span><span className="sm:hidden">LinkedIn</span>
+            </Button>
+          ) : (
+            <ProFeatureGate inline message="LinkedIn Import"><span /></ProFeatureGate>
+          )}
+          <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
+            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /><span className="hidden sm:inline">{t.resumes.parsing}</span></> : <><Upload className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.uploadResume}</span><span className="sm:hidden">Upload</span></>}
+          </Button>
+          <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm"><Plus className="h-4 w-4 mr-2" />{t.resumes.newResume}</Button>
+            </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t.resumes.createResume}</DialogTitle>
+              <DialogDescription>{t.resumes.createResumeDesc}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>{t.resumes.resumeTitle}</Label>
+                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Full Stack Developer Resume" />
+              </div>
+              <Button onClick={async () => {
+                if (!user || !title) return;
+                const { data, error } = await supabase.from("resumes").insert({
+                  user_id: user.id,
+                  title,
+                  resume_data: { personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] } as any,
+                }).select().single();
+                if (error) {
+                  toast({ title: t.common.error, description: error.message, variant: "destructive" });
+                } else {
+                  toast({ title: t.resumes.resumeCreated });
+                  setCreateOpen(false);
+                  setTitle("");
+                  fetchResumes();
+                  if (data) openEditor(data);
+                }
+              }} className="w-full">{t.resumes.createAndOpen}</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {resumes.length === 0 ? (
+        <Card className="border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
+            <h3 className="text-lg font-semibold">{t.resumes.noResumes}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t.resumes.noResumesDesc}</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {resumes.map((resume) => {
+            const data = resume.resume_data as any as ResumeData;
+            const tplId = (data?.templateId as TemplateId) || "classic";
+            return (
+              <Card key={resume.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => openEditor(resume)}>
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    {/* Mini template thumbnail */}
+                    <div className="w-20 shrink-0">
+                      <TemplateThumbnail templateId={tplId} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-base truncate">{resume.title}</CardTitle>
+                          <CardDescription>{new Date(resume.updated_at).toLocaleDateString()}</CardDescription>
+                        </div>
+                        <Button variant="ghost" size="icon" className="shrink-0" onClick={(e) => { e.stopPropagation(); handleDelete(resume.id); }}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                      {data?.skills && data.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {data.skills.slice(0, 4).map((skill, i) => (
+                            <span key={i} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">{skill}</span>
+                          ))}
+                          {data.skills.length > 4 && (
+                            <span className="px-2 py-0.5 text-muted-foreground text-xs">+{data.skills.length - 4}</span>
+                          )}
+                        </div>
+                      )}
+                      {/* AI Apply button */}
+                      <div className="mt-3 pt-3 border-t" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="w-full text-xs gap-1.5 border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground"
+                          onClick={(e) => { e.stopPropagation(); openAIApplySetup(resume); }}
+                          disabled={aiApplyingId === resume.id}
+                        >
+                          {aiApplyingId === resume.id ? (
+                            <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Finding & tailoring jobs...</>
+                          ) : (
+                            <><Zap className="h-3.5 w-3.5" /> AI Apply</>
+                          )}
+                        </Button>
+                      </div>
+                  </div>
+                </div>
+                <IndustryKeywords
+                  jobTitle={resumeData.personalInfo?.fullName ? (resumeData.experience?.[0]?.title || title) : title}
+                  currentSkills={resumeData.skills || []}
+                  onAdd={(skill) => {
+                    if (!(resumeData.skills || []).includes(skill)) {
+                      setResumeData((prev) => ({ ...prev, skills: [...(prev.skills || []), skill] }));
+                    }
+                  }}
+                />
+              </CardContent>
+            </Card>
+            );
+          })}
+        </div>
+      )}
+
+      {/* AI Apply Setup Dialog */}
+      <Dialog open={aiApplySetupOpen} onOpenChange={(open) => { if (!open) setAiApplySetupOpen(false); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              AI Apply Campaign Setup
+            </DialogTitle>
+            <DialogDescription>
+              Configure your campaign — AI will search 50+ jobs, score them, and prepare tailored applications.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {/* Location */}
+            <div className="space-y-1.5">
+              <Label htmlFor="aiApplyLocation">Preferred Location</Label>
+              <Input
+                id="aiApplyLocation"
+                placeholder="e.g. New York, Remote, London — or leave blank for any"
+                value={aiApplyLocation}
+                onChange={(e) => setAiApplyLocation(e.target.value)}
+              />
+            </div>
+
+            {/* Job Type */}
+            <div className="space-y-1.5">
+              <Label>Job Type</Label>
+              <div className="flex gap-2 flex-wrap">
+                {["Any", "Remote", "On-site", "Hybrid"].map((type) => {
+                  const val = type === "Any" ? "" : type.toLowerCase();
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => setAiApplyJobType(val)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${aiApplyJobType === val ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    >
+                      {type}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Min Score */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label>Minimum Match Score</Label>
+                <span className="text-sm font-semibold text-primary">{aiApplyMinScore}%</span>
+              </div>
+              <input
+                type="range"
+                min={40}
+                max={85}
+                step={5}
+                value={aiApplyMinScore}
+                onChange={(e) => setAiApplyMinScore(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>40% — More jobs</span>
+                <span>85% — Higher quality</span>
+              </div>
+            </div>
+
+            {/* Max Applications */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label>Max Applications to Queue</Label>
+                <span className="text-sm font-semibold text-primary">{aiApplyMaxApps}</span>
+              </div>
+              <input
+                type="range"
+                min={5}
+                max={50}
+                step={5}
+                value={aiApplyMaxApps}
+                onChange={(e) => setAiApplyMaxApps(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>5</span>
+                <span>50</span>
+              </div>
+            </div>
+
+            {/* Summary badge */}
+            <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 text-xs text-muted-foreground space-y-0.5">
+              <p>🔍 Searching <span className="font-semibold text-foreground">50+ live jobs</span> across multiple pages</p>
+              <p>🤖 AI scoring in <span className="font-semibold text-foreground">batches of 10</span> for precision</p>
+              <p>✂️ Keeping top <span className="font-semibold text-foreground">{aiApplyMaxApps} jobs</span> above <span className="font-semibold text-foreground">{aiApplyMinScore}% match</span></p>
+              <p>✍️ Tailored resume + cover letter <span className="font-semibold text-foreground">per application</span></p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                onClick={() => { if (aiApplyPendingResume) handleAIApply(aiApplyPendingResume); }}
+              >
+                <Sparkles className="h-4 w-4 mr-2" /> Launch Campaign
+              </Button>
+              <Button variant="outline" onClick={() => setAiApplySetupOpen(false)}>Cancel</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* AI Apply Progress Dialog */}
+      <Dialog open={!!aiApplyingId} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md [&>button]:hidden">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+              AI Apply Campaign Running
+            </DialogTitle>
+            <DialogDescription>
+              Searching 50+ jobs and preparing tailored applications — this takes ~45 seconds.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <Progress
+              value={aiApplyStep >= AI_APPLY_STEPS.length
+                ? 100
+                : Math.round((aiApplyStep / AI_APPLY_STEPS.length) * 100)}
+              className="h-2"
+            />
+
+            <div className="space-y-2.5">
+              {AI_APPLY_STEPS.map((step, i) => {
+                const isDone = aiApplyStep > i;
+                const isActive = aiApplyStep === i;
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-start gap-3 p-2.5 rounded-lg transition-all duration-300 ${isActive ? "bg-primary/5 border border-primary/20" : ""}`}
+                  >
+                    <div className="mt-0.5 shrink-0">
+                      {isDone ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      ) : isActive ? (
+                        <Loader2 className="h-4 w-4 text-primary animate-spin" />
+                      ) : (
+                        <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/30" />
+                      )}
+                    </div>
+                    <div>
+                      <p className={`text-sm font-medium leading-none ${isDone ? "text-muted-foreground line-through" : isActive ? "text-foreground" : "text-muted-foreground"}`}>
+                        {step.label}
+                      </p>
+                      {isActive && (
+                        <p className="text-xs text-muted-foreground mt-1">{step.detail}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {aiApplyCampaignResult && (
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-sm space-y-1">
+                  <p className="font-semibold text-green-700 dark:text-green-400">Campaign Complete! 🚀</p>
+                  <p className="text-muted-foreground text-xs">
+                    Found <strong>{aiApplyCampaignResult.total_found}</strong> jobs · Scored <strong>{aiApplyCampaignResult.total_scored}</strong> · Queued <strong>{aiApplyCampaignResult.queued}</strong> tailored applications
+                  </p>
+                </div>
+                <Button 
+                  className="w-full" 
+                  variant="outline" 
+                  onClick={() => { setAiApplyingId(null); setAiApplyCampaignResult(null); }}
+                >
+                  Dismiss & View Applications
+                </Button>
+              </div>
+            )}
+
+            <p className="text-xs text-center text-muted-foreground">Please don't close this window while the campaign runs.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* LinkedIn Import Dialog */}
+      <Dialog open={linkedinOpen} onOpenChange={setLinkedinOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t.resumes.importFromLinkedin}</DialogTitle>
+            <DialogDescription>{t.resumes.importLinkedinDesc}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>{t.resumes.linkedinUrl}</Label>
+              <Input
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                placeholder="https://www.linkedin.com/in/your-profile"
+              />
+            </div>
+            <Button onClick={handleLinkedInImport} disabled={linkedinLoading || !linkedinUrl.trim()} className="w-full">
+              {linkedinLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.importing}</> : <><Linkedin className="h-4 w-4 mr-2" />{t.resumes.importProfile}</>}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+        </TabsContent>
+
+        <TabsContent value="cover-letters">
+          <CoverLetters />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
