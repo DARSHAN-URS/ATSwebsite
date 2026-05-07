@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}})();
+    </script>
+    <meta charset="UTF-8" />
+    <!-- LCP / font resource hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <title>ResumePro — The World's Most Advanced Resume Builder</title>
+    <meta name="description" content="Create a premium, ATS-optimized resume in minutes. Built for ambitious professionals by elite designers." />
+    <meta name="theme-color" content="#3b82f6" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="canonical" href="https://atsproresumebuilder.com/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ATS Pro Resume Builder" />
+    <meta property="og:title" content="ATS Pro Resume Builder — Free AI-Powered ATS Resume Builder" />
+    <meta property="og:description" content="Build ATS-optimized resumes with AI. Free templates, instant ATS scoring, cover letters, and job tracking — all in one place." />
+    <meta property="og:url" content="https://atsproresumebuilder.com/" />
+    <meta property="og:image" content="https://atsproresumebuilder.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ATS Pro Resume Builder — AI-powered, ATS-optimized resume builder" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ATS Pro Resume Builder — Free AI-Powered ATS Resume Builder" />
+    <meta name="twitter:description" content="Build ATS-optimized resumes with AI. Free templates, instant ATS scoring, cover letters, and job tracking — all in one place." />
+    <meta name="twitter:image" content="https://atsproresumebuilder.com/og-image.jpg" />
+
+    <!-- Analytics & Pixel — load 5s after page becomes interactive -->
+    <script>
+      function loadTrackers() {
+        if (window.__trackersLoaded) return;
+        window.__trackersLoaded = true;
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2089703951442961');
+        fbq('track', 'PageView');
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-13HTG0PLYS';
+        s.async = true;
+        document.head.appendChild(s);
+      }
+      window.addEventListener('load', function() { setTimeout(loadTrackers, 5000); });
+    </script>
+
+    <!-- Google Analytics (dataLayer ready, script deferred via loadTrackers) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-13HTG0PLYS');
+      gtag('config', 'AW-17970115760');
+    </script>
+  </head>
+
+  <body>
+    <!-- Meta Pixel noscript fallback -->
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2089703951442961&ev=PageView&noscript=1"
+    /></noscript>
+    <div id="root"><div style="min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:14px;color:#94a3b8;background:transparent">Loading…</div></div>
+    <script>if(window.performance&&performance.mark){performance.mark('app-shell-start');}</script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
