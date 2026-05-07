@@ -41,11 +41,11 @@ export const Navbar = () => {
           )}
         >
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/20 group-hover:scale-110 transition-transform duration-500">
+            <div className="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-600/20 group-hover:rotate-12 transition-transform duration-500">
               <Sparkles className="text-white w-5 h-5" />
             </div>
             <span className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">
-              RESUME<span className="text-primary">PRO</span>
+              RESUME<span className="text-blue-600">PRO</span>
             </span>
           </Link>
 
@@ -55,7 +55,7 @@ export const Navbar = () => {
               <Link 
                 key={link.name}
                 to={link.path} 
-                className="text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
+                className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-blue-600 transition-colors"
               >
                 {link.name}
               </Link>
@@ -64,12 +64,12 @@ export const Navbar = () => {
 
           <div className="hidden lg:flex items-center gap-6">
             <Link to="/auth">
-              <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-primary">
+              <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-600">
                 Log in
               </Button>
             </Link>
             <Link to="/auth">
-              <Button className="bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl px-8 h-12 shadow-xl shadow-primary/20 group">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl px-8 h-12 shadow-xl shadow-blue-600/20 group">
                 Join Now
                 <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
