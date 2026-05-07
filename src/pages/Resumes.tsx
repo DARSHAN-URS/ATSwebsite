@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail, Zap } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail, Zap, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import ResumeCompletionScore from "@/components/resume/ResumeCompletionScore";
 import IndustryKeywords from "@/components/resume/IndustryKeywords";
 import PowerWordsHint from "@/components/resume/PowerWordsHint";
@@ -589,6 +590,39 @@ export default function Resumes() {
     }
   };
 
+  const computeResumeScore = (data: ResumeData, title: string) => {
+    let score = 20; 
+    if (data?.personalInfo?.fullName) score += 10;
+    if (data?.personalInfo?.email) score += 5;
+    if (data?.summary) score += 15;
+    if (data?.skills && data.skills.length > 5) score += 15;
+    if (data?.experience && data.experience.length > 0) score += 20;
+    if (data?.education && data.education.length > 0) score += 15;
+    return Math.min(score, 100);
+  };
+
+  const handleEdit = (resume: Resume) => {
+    openEditor(resume);
+  };
+
+  const handleCreate = async () => {
+    if (!user || !title.trim()) return;
+    const { data, error } = await supabase.from("resumes").insert({
+      user_id: user.id,
+      title: title.trim(),
+      resume_data: { personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] } as any,
+    }).select().single();
+    if (error) {
+      toast({ title: t.common.error, description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: t.resumes.resumeCreated });
+      setCreateOpen(false);
+      setTitle("");
+      fetchResumes();
+      if (data) openEditor(data);
+    }
+  };
+
   const scoreColor = (score: number) => {
     if (score >= 80) return "text-green-600";
     if (score >= 60) return "text-yellow-600";
@@ -958,347 +992,6 @@ export default function Resumes() {
     );
   }
 
-  // List view
-  return (
-    <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
-      <SEOHead title="Resumes — ATS Pro Resume Builder" description="Create and manage ATS-optimized resumes." noindex />
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t.resumes.title}</h1>
-        <p className="text-muted-foreground mt-1">{t.resumes.buildWithAI}</p>
-      </div>
-
-      <Tabs value={searchParams.get("tab") || "resumes"} onValueChange={(v) => setSearchParams(v === "resumes" ? {} : { tab: v }, { replace: true })} className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="resumes" className="gap-2"><FileText className="h-4 w-4" />Resumes</TabsTrigger>
-          <TabsTrigger value="cover-letters" className="gap-2"><Mail className="h-4 w-4" />Cover Letters</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="resumes" className="space-y-6">
-      <div className="flex flex-wrap gap-2 justify-end shrink-0">
-          <input ref={pdfInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
-          {isPro ? (
-            <Button variant="outline" size="sm" onClick={() => setLinkedinOpen(true)} disabled={linkedinLoading}>
-              <Linkedin className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.importLinkedin}</span><span className="sm:hidden">LinkedIn</span>
-            </Button>
-          ) : (
-            <ProFeatureGate inline message="LinkedIn Import"><span /></ProFeatureGate>
-          )}
-          <Button variant="outline" size="sm" onClick={() => pdfInputRef.current?.click()} disabled={uploadingPdf}>
-            {uploadingPdf ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /><span className="hidden sm:inline">{t.resumes.parsing}</span></> : <><Upload className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.uploadResume}</span><span className="sm:hidden">Upload</span></>}
-          </Button>
-          <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm"><Plus className="h-4 w-4 mr-2" />{t.resumes.newResume}</Button>
-            </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{t.resumes.createResume}</DialogTitle>
-              <DialogDescription>{t.resumes.createResumeDesc}</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>{t.resumes.resumeTitle}</Label>
-                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Full Stack Developer Resume" />
-              </div>
-              <Button onClick={async () => {
-                if (!user || !title) return;
-                const { data, error } = await supabase.from("resumes").insert({
-                  user_id: user.id,
-                  title,
-                  resume_data: { personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] } as any,
-                }).select().single();
-                if (error) {
-                  toast({ title: t.common.error, description: error.message, variant: "destructive" });
-                } else {
-                  toast({ title: t.resumes.resumeCreated });
-                  setCreateOpen(false);
-                  setTitle("");
-                  fetchResumes();
-                  if (data) openEditor(data);
-                }
-              }} className="w-full">{t.resumes.createAndOpen}</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {resumes.length === 0 ? (
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-            <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-semibold">{t.resumes.noResumes}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{t.resumes.noResumesDesc}</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {resumes.map((resume) => {
-            const data = resume.resume_data as any as ResumeData;
-            const tplId = (data?.templateId as TemplateId) || "classic";
-            return (
-              <Card key={resume.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => openEditor(resume)}>
-                <CardContent className="p-4">
-                  <div className="flex gap-4">
-                    {/* Mini template thumbnail */}
-                    <div className="w-20 shrink-0">
-                      <TemplateThumbnail templateId={tplId} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-base truncate">{resume.title}</CardTitle>
-                          <CardDescription>{new Date(resume.updated_at).toLocaleDateString()}</CardDescription>
-                        </div>
-                        <Button variant="ghost" size="icon" className="shrink-0" onClick={(e) => { e.stopPropagation(); handleDelete(resume.id); }}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                      {data?.skills && data.skills.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {data.skills.slice(0, 4).map((skill, i) => (
-                            <span key={i} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">{skill}</span>
-                          ))}
-                          {data.skills.length > 4 && (
-                            <span className="px-2 py-0.5 text-muted-foreground text-xs">+{data.skills.length - 4}</span>
-                          )}
-                        </div>
-                      )}
-                      {/* AI Apply button */}
-                      <div className="mt-3 pt-3 border-t" onClick={(e) => e.stopPropagation()}>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="w-full text-xs gap-1.5 border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground"
-                          onClick={(e) => { e.stopPropagation(); openAIApplySetup(resume); }}
-                          disabled={aiApplyingId === resume.id}
-                        >
-                          {aiApplyingId === resume.id ? (
-                            <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Finding & tailoring jobs...</>
-                          ) : (
-                            <><Zap className="h-3.5 w-3.5" /> AI Apply</>
-                          )}
-                        </Button>
-                      </div>
-                  </div>
-                </div>
-                <IndustryKeywords
-                  jobTitle={resumeData.personalInfo?.fullName ? (resumeData.experience?.[0]?.title || title) : title}
-                  currentSkills={resumeData.skills || []}
-                  onAdd={(skill) => {
-                    if (!(resumeData.skills || []).includes(skill)) {
-                      setResumeData((prev) => ({ ...prev, skills: [...(prev.skills || []), skill] }));
-                    }
-                  }}
-                />
-              </CardContent>
-            </Card>
-            );
-          })}
-        </div>
-      )}
-
-      {/* AI Apply Setup Dialog */}
-      <Dialog open={aiApplySetupOpen} onOpenChange={(open) => { if (!open) setAiApplySetupOpen(false); }}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-primary" />
-              AI Apply Campaign Setup
-            </DialogTitle>
-            <DialogDescription>
-              Configure your campaign — AI will search 50+ jobs, score them, and prepare tailored applications.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            {/* Location */}
-            <div className="space-y-1.5">
-              <Label htmlFor="aiApplyLocation">Preferred Location</Label>
-              <Input
-                id="aiApplyLocation"
-                placeholder="e.g. New York, Remote, London — or leave blank for any"
-                value={aiApplyLocation}
-                onChange={(e) => setAiApplyLocation(e.target.value)}
-              />
-            </div>
-
-            {/* Job Type */}
-            <div className="space-y-1.5">
-              <Label>Job Type</Label>
-              <div className="flex gap-2 flex-wrap">
-                {["Any", "Remote", "On-site", "Hybrid"].map((type) => {
-                  const val = type === "Any" ? "" : type.toLowerCase();
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setAiApplyJobType(val)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${aiApplyJobType === val ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
-                    >
-                      {type}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Min Score */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label>Minimum Match Score</Label>
-                <span className="text-sm font-semibold text-primary">{aiApplyMinScore}%</span>
-              </div>
-              <input
-                type="range"
-                min={40}
-                max={85}
-                step={5}
-                value={aiApplyMinScore}
-                onChange={(e) => setAiApplyMinScore(Number(e.target.value))}
-                className="w-full accent-primary"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>40% — More jobs</span>
-                <span>85% — Higher quality</span>
-              </div>
-            </div>
-
-            {/* Max Applications */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label>Max Applications to Queue</Label>
-                <span className="text-sm font-semibold text-primary">{aiApplyMaxApps}</span>
-              </div>
-              <input
-                type="range"
-                min={5}
-                max={50}
-                step={5}
-                value={aiApplyMaxApps}
-                onChange={(e) => setAiApplyMaxApps(Number(e.target.value))}
-                className="w-full accent-primary"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>5</span>
-                <span>50</span>
-              </div>
-            </div>
-
-            {/* Summary badge */}
-            <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 text-xs text-muted-foreground space-y-0.5">
-              <p>🔍 Searching <span className="font-semibold text-foreground">50+ live jobs</span> across multiple pages</p>
-              <p>🤖 AI scoring in <span className="font-semibold text-foreground">batches of 10</span> for precision</p>
-              <p>✂️ Keeping top <span className="font-semibold text-foreground">{aiApplyMaxApps} jobs</span> above <span className="font-semibold text-foreground">{aiApplyMinScore}% match</span></p>
-              <p>✍️ Tailored resume + cover letter <span className="font-semibold text-foreground">per application</span></p>
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                className="flex-1"
-                onClick={() => { if (aiApplyPendingResume) handleAIApply(aiApplyPendingResume); }}
-              >
-                <Sparkles className="h-4 w-4 mr-2" /> Launch Campaign
-              </Button>
-              <Button variant="outline" onClick={() => setAiApplySetupOpen(false)}>Cancel</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* AI Apply Progress Dialog */}
-      <Dialog open={!!aiApplyingId} onOpenChange={() => {}}>
-        <DialogContent className="sm:max-w-md [&>button]:hidden">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary animate-pulse" />
-              AI Apply Campaign Running
-            </DialogTitle>
-            <DialogDescription>
-              Searching 50+ jobs and preparing tailored applications — this takes ~45 seconds.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <Progress
-              value={aiApplyStep >= AI_APPLY_STEPS.length
-                ? 100
-                : Math.round((aiApplyStep / AI_APPLY_STEPS.length) * 100)}
-              className="h-2"
-            />
-
-            <div className="space-y-2.5">
-              {AI_APPLY_STEPS.map((step, i) => {
-                const isDone = aiApplyStep > i;
-                const isActive = aiApplyStep === i;
-                return (
-                  <div
-                    key={i}
-                    className={`flex items-start gap-3 p-2.5 rounded-lg transition-all duration-300 ${isActive ? "bg-primary/5 border border-primary/20" : ""}`}
-                  >
-                    <div className="mt-0.5 shrink-0">
-                      {isDone ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500" />
-                      ) : isActive ? (
-                        <Loader2 className="h-4 w-4 text-primary animate-spin" />
-                      ) : (
-                        <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/30" />
-                      )}
-                    </div>
-                    <div>
-                      <p className={`text-sm font-medium leading-none ${isDone ? "text-muted-foreground line-through" : isActive ? "text-foreground" : "text-muted-foreground"}`}>
-                        {step.label}
-                      </p>
-                      {isActive && (
-                        <p className="text-xs text-muted-foreground mt-1">{step.detail}</p>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {aiApplyCampaignResult && (
-              <div className="space-y-3">
-                <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-sm space-y-1">
-                  <p className="font-semibold text-green-700 dark:text-green-400">Campaign Complete! 🚀</p>
-                  <p className="text-muted-foreground text-xs">
-                    Found <strong>{aiApplyCampaignResult.total_found}</strong> jobs · Scored <strong>{aiApplyCampaignResult.total_scored}</strong> · Queued <strong>{aiApplyCampaignResult.queued}</strong> tailored applications
-                  </p>
-                </div>
-                <Button 
-                  className="w-full" 
-                  variant="outline" 
-                  onClick={() => { setAiApplyingId(null); setAiApplyCampaignResult(null); }}
-                >
-                  Dismiss & View Applications
-                </Button>
-              </div>
-            )}
-
-            <p className="text-xs text-center text-muted-foreground">Please don't close this window while the campaign runs.</p>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* LinkedIn Import Dialog */}
-      <Dialog open={linkedinOpen} onOpenChange={setLinkedinOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t.resumes.importFromLinkedin}</DialogTitle>
-            <DialogDescription>{t.resumes.importLinkedinDesc}</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>{t.resumes.linkedinUrl}</Label>
-              <Input
-                value={linkedinUrl}
-                onChange={(e) => setLinkedinUrl(e.target.value)}
-                placeholder="https://www.linkedin.com/in/your-profile"
-              />
-            </div>
-            <Button onClick={handleLinkedInImport} disabled={linkedinLoading || !linkedinUrl.trim()} className="w-full">
-              {linkedinLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.importing}</> : <><Linkedin className="h-4 w-4 mr-2" />{t.resumes.importProfile}</>}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
   // List view
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-12">
