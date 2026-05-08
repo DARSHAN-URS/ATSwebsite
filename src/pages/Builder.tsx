@@ -284,7 +284,7 @@ export default function Builder() {
                }}
                className="shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)]"
             >
-              <ResumePreview data={resumeData} templateId={selectedTemplate} colors={colors} />
+              <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} colors={colors} />
             </motion.div>
           </div>
         </section>
