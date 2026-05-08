@@ -1,42 +1,37 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
 import { 
-  Briefcase, 
-  Mail, 
-  Trash2, 
-  Send, 
-  Loader2, 
-  Plus,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  MapPin,
-  Search,
-  ChevronRight
+  Briefcase, Search, Mail, MapPin, Trash2, CheckCircle2, 
+  Clock, XCircle, Loader2, Send, ArrowUpRight
 } from "lucide-react";
-import type { Tables } from "@/integrations/supabase/types";
 import SEOHead from "@/components/SEOHead";
-import { motion, AnimatePresence } from "framer-motion";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-type JobApp = Tables<"job_applications">;
+type JobApp = {
+  id: string;
+  company: string;
+  position: string;
+  status: string;
+  location?: string;
+  created_at: string;
+};
 
-const statusConfig: Record<string, { label: string; className: string; icon: any; color: string }> = {
-  applied: { label: "Applied", className: "bg-blue-600/10 text-blue-600", color: "#2563EB", icon: Clock },
-  screening: { label: "Screening", className: "bg-amber-600/10 text-amber-600", color: "#D97706", icon: Search },
-  interview: { label: "Interview", className: "bg-indigo-600/10 text-indigo-600", color: "#4F46E5", icon: Send },
-  offer: { label: "Offer", className: "bg-emerald-600/10 text-emerald-600", color: "#059669", icon: CheckCircle2 },
-  rejected: { label: "Rejected", className: "bg-rose-600/10 text-rose-600", color: "#E11D48", icon: AlertCircle },
+const statusConfig: Record<string, { label: string; icon: any; className: string }> = {
+  applied: { label: "Applied", icon: Send, className: "bg-blue-100 text-blue-600" },
+  interviewing: { label: "Interviewing", icon: Clock, className: "bg-amber-100 text-amber-600" },
+  offered: { label: "Offered", icon: CheckCircle2, className: "bg-green-100 text-green-600" },
+  rejected: { label: "Rejected", icon: XCircle, className: "bg-rose-100 text-rose-600" },
 };
 
 export default function JobTracker() {
@@ -54,7 +49,7 @@ export default function JobTracker() {
   const [sending, setSending] = useState(false);
 
   const fetchApps = async () => {
-    const { data } = await supabase.from("job_applications").select("*").order("created_at", { ascending: false });
+    const { data } = await supabase.from("job_tracker").select("*").eq("user_id", user?.id).order("created_at", { ascending: false });
     setApps(data ?? []);
     setLoading(false);
   };
@@ -62,12 +57,12 @@ export default function JobTracker() {
   useEffect(() => { if (user) fetchApps(); }, [user]);
 
   const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("job_applications").update({ status }).eq("id", id);
+    const { error } = await supabase.from("job_tracker").update({ status }).eq("id", id);
     if (!error) fetchApps();
   };
 
   const deleteApp = async (id: string) => {
-    const { error } = await supabase.from("job_applications").delete().eq("id", id);
+    const { error } = await supabase.from("job_tracker").delete().eq("id", id);
     if (!error) fetchApps();
   };
 
@@ -85,13 +80,10 @@ export default function JobTracker() {
     if (!emailTo || !session?.access_token) return;
     setSending(true);
     try {
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-      const res = await fetch(`https://${projectId}.supabase.co/functions/v1/send-outreach-email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ to: emailTo, subject: emailSubject, body: emailBody, fromName: emailFromName, replyTo: emailReplyTo, position: selectedApp?.position, company: selectedApp?.company }),
+      const { error } = await supabase.functions.invoke("send-outreach-email", {
+        body: { to: emailTo, subject: emailSubject, body: emailBody, fromName: emailFromName, replyTo: emailReplyTo, position: selectedApp?.position, company: selectedApp?.company }
       });
-      if (!res.ok) throw new Error("Failed to send");
+      if (error) throw error;
       toast({ title: "Email sent!" });
       setEmailOpen(false);
     } catch (err: any) {
@@ -101,9 +93,9 @@ export default function JobTracker() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 p-6 md:p-10 space-y-12 font-sans">
-      <SEOHead title="Pipeline — ResumePro" description="Track your high-impact job applications." />
+      <SEOHead title="Tracking Engine — ResumePro" description="Monitor your operational pipeline in real-time." />
 
-      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10">
+      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10 text-left">
         <div className="space-y-4">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
              <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
@@ -111,10 +103,9 @@ export default function JobTracker() {
              </div>
              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Pipeline</span>
           </motion.div>
-          <h1 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+          <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
              Tracking <br /> <span className="text-blue-600">Engine.</span>
           </h1>
-          <p className="text-slate-400 font-medium max-w-lg text-lg">Monitor every stage of your career trajectory with real-time operational intelligence.</p>
         </div>
 
         <div className="flex items-center gap-8">
@@ -130,7 +121,7 @@ export default function JobTracker() {
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 text-left">
         {loading ? (
           <div className="space-y-6">
              {[1, 2, 3].map(i => <div key={i} className="h-32 rounded-[2.5rem] bg-white animate-pulse shadow-sm" />)}
@@ -147,12 +138,7 @@ export default function JobTracker() {
         ) : (
           <div className="space-y-6">
              {apps.map((app, i) => (
-               <motion.div
-                 key={app.id}
-                 initial={{ opacity: 0, x: -20 }}
-                 animate={{ opacity: 1, x: 0 }}
-                 transition={{ delay: i * 0.05 }}
-               >
+               <motion.div key={app.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
                  <Card className="group relative rounded-[3rem] border-none bg-white dark:bg-slate-900 shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 overflow-hidden">
                     <div className="p-8 flex flex-col xl:flex-row items-center gap-10">
                        <div className="flex items-center gap-8 flex-1">
@@ -204,7 +190,7 @@ export default function JobTracker() {
                           </div>
                        </div>
                     </div>
-                    <div className={`absolute bottom-0 left-0 h-1 transition-all duration-500 ${statusConfig[app.status || "applied"].className}`} style={{ width: "100%" }} />
+                    <div className={cn("absolute bottom-0 left-0 h-1 transition-all duration-500 bg-blue-600")} style={{ width: "100%" }} />
                  </Card>
                </motion.div>
              ))}
@@ -213,7 +199,7 @@ export default function JobTracker() {
       </div>
 
       <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
-        <DialogContent className="rounded-[4rem] p-0 overflow-hidden border-none shadow-2xl max-w-2xl">
+        <DialogContent className="rounded-[4rem] p-0 overflow-hidden border-none shadow-2xl max-w-2xl text-left">
            <div className="bg-slate-900 p-12 text-white relative">
               <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2" />
               <div className="relative z-10">
@@ -247,5 +233,4 @@ export default function JobTracker() {
       </Dialog>
     </div>
   );
-}
 }
