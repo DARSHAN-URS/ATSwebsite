@@ -24,7 +24,7 @@ import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData } from "@/components/resume/types";
 import SEOHead from "@/components/SEOHead";
-import CoverLetters from "@/components/CoverLetters";
+import CoverLetters from "@/pages/CoverLetters";
 import { useSearchParams } from "react-router-dom";
 
 type Resume = Tables<"resumes">;
