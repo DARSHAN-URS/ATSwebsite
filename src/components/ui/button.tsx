@@ -47,9 +47,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref} 
         {...props} 
       >
-        {props.children}
-        {variant === 'default' && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none" />
+        {asChild ? props.children : (
+          <>
+            {props.children}
+            {variant === 'default' && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none" />
+            )}
+          </>
         )}
       </Comp>
     );
