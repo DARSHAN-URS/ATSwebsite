@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
+  Search,
+  Building2,
   CheckCircle2, 
   Sparkles, 
   Zap, 
@@ -55,24 +57,34 @@ const Index = () => {
 
   const features = [
     {
-      title: "AI-Powered Optimization",
-      description: "Our smart engine analyzes your resume and suggests improvements in real-time.",
+      title: "AI Resume Architect",
+      description: "Engineer high-impact, ATS-optimized resumes with our intelligent real-time optimization engine.",
       icon: <Sparkles className="w-8 h-8 text-blue-600" />,
     },
     {
-      title: "ATS-Friendly Templates",
-      description: "Every template is rigorously tested to ensure it passes through all major ATS systems.",
-      icon: <ShieldCheck className="w-8 h-8 text-blue-600" />,
+      title: "Global Job Discovery",
+      description: "Search and filter through millions of live job postings from world-class organizations.",
+      icon: <Search className="w-8 h-8 text-blue-600" />,
     },
     {
-      title: "Instant Live Preview",
-      description: "See your changes as you type with our lightning-fast live rendering engine.",
+      title: "Company Intelligence",
+      description: "Access deep insights into company hiring patterns, culture, and industry ranking.",
+      icon: <Building2 className="w-8 h-8 text-blue-600" />,
+    },
+    {
+      title: "AI Auto-Apply Engine",
+      description: "Automate your applications. Our AI finds and applies to the best-matching roles for you.",
       icon: <Zap className="w-8 h-8 text-blue-600" />,
     },
     {
-      title: "Modern Design Layouts",
-      description: "Handcrafted by elite designers to make you stand out from the competition.",
-      icon: <Layout className="w-8 h-8 text-blue-600" />,
+      title: "Strategic Outreach",
+      description: "High-conversion email outreach to recruiters, ensuring your profile lands in the right inbox.",
+      icon: <Mail className="w-8 h-8 text-blue-600" />,
+    },
+    {
+      title: "Interview Mastery",
+      description: "Train with AI-driven mock sessions and HR experts tailored to your specific industry.",
+      icon: <CheckCircle2 className="w-8 h-8 text-blue-600" />,
     },
   ];
 
@@ -86,8 +98,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white selection:bg-blue-100 overflow-x-hidden font-sans">
       <SEOHead
-        title="ResumePro — The Premium Resume Builder for Professionals"
-        description="Build a high-end, ATS-optimized resume in minutes. Trusted by ambitious professionals worldwide."
+        title="ResumePro — The Premium Career Growth Ecosystem"
+        description="Build ATS-optimized resumes, automate job applications, and master interviews with professional HR experts."
       />
       
       <Navbar />
@@ -120,20 +132,20 @@ const Index = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[4rem] md:text-[8rem] lg:text-[10rem] font-black text-slate-900 leading-[0.9] tracking-tighter"
+                  className="text-[4rem] md:text-[7rem] lg:text-[9rem] font-black text-slate-900 leading-[0.85] tracking-tighter"
                 >
-                  ENGINEER <br />
-                  <span className="text-blue-600">VICTORY.</span>
+                  CRAFT YOUR <br />
+                  <span className="text-blue-600">LEGACY.</span>
                 </motion.h1>
 
                 <motion.p 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.8 }}
-                  className="text-lg md:text-2xl text-slate-500 font-medium max-w-3xl leading-relaxed"
+                  className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl leading-relaxed"
                 >
-                  The world's most sophisticated AI resume engine. 
-                  Architected for design excellence, optimized for high-frequency hiring.
+                  The premier AI resume engine for elite professionals. 
+                  Architected for impact, engineered for the modern workforce.
                 </motion.p>
 
                 <motion.div 
@@ -143,47 +155,15 @@ const Index = () => {
                   className="flex flex-col items-center gap-8 pt-6 w-full max-w-xl"
                 >
                   <div className="flex flex-col sm:flex-row gap-4 w-full">
-                    <Button asChild className="flex-[2] h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-sm font-black uppercase tracking-widest shadow-2xl shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-95">
-                      <Link to="/auth">Build My Resume</Link>
+                    <Button asChild className="flex-[2] h-16 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-sm font-black uppercase tracking-widest shadow-2xl shadow-slate-900/20 transition-all hover:scale-[1.02] active:scale-95 group">
+                      <Link to="/auth" className="flex items-center justify-center gap-2">
+                        Build My Resume
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
                     </Button>
-                    <Button variant="outline" className="flex-1 h-16 rounded-2xl border-slate-200 text-slate-900 font-black uppercase tracking-widest text-xs hover:bg-slate-50">
-                      View Samples
+                    <Button variant="outline" asChild className="flex-1 h-16 rounded-2xl border-slate-200 text-slate-900 font-black uppercase tracking-widest text-xs hover:bg-slate-50">
+                      <Link to="/resume-examples">View Samples</Link>
                     </Button>
-                  </div>
-
-                  <div className="w-full flex flex-col gap-4">
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-slate-100" />
-                      </div>
-                      <div className="relative flex justify-center text-[10px] uppercase tracking-[0.3em] font-black text-slate-300">
-                        <span className="bg-white px-6">Instant Access</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                       <Button 
-                        variant="outline" 
-                        onClick={() => handleSocialLogin("google")}
-                        className="h-14 rounded-2xl border-slate-200 gap-3 font-bold text-slate-600 hover:bg-blue-50 transition-all"
-                       >
-                         <svg className="w-5 h-5" viewBox="0 0 24 24">
-                           <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-                           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                         </svg>
-                         Sign in with Google
-                       </Button>
-                       <Button 
-                        variant="outline" 
-                        onClick={() => handleSocialLogin("apple")}
-                        className="h-14 rounded-2xl border-slate-200 gap-3 font-bold text-slate-600 hover:bg-blue-50 transition-all"
-                       >
-                         <Apple className="w-5 h-5 fill-slate-900" />
-                         Sign in with Apple
-                       </Button>
-                    </div>
                   </div>
                 </motion.div>
 
@@ -208,22 +188,27 @@ const Index = () => {
         {/* Feature Grid - Geometric Clarity */}
         <section className="py-40 bg-slate-50 relative overflow-hidden">
           <div className="container mx-auto px-8 relative z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center mb-24 space-y-4">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">The Complete Career Loop</h2>
+              <h3 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter">Beyond Resume Building.</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((f, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="p-12 bg-white rounded-[3rem] border border-slate-100 hover:shadow-2xl hover:shadow-blue-600/5 transition-all group"
-                >
-                  <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500">
-                    {f.icon}
-                  </div>
-                  <h3 className="text-2xl font-black text-slate-900 mb-4">{f.title}</h3>
-                  <p className="text-slate-500 font-medium leading-relaxed">{f.description}</p>
-                </motion.div>
+                <Link to="/auth" key={i}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    viewport={{ once: true }}
+                    className="p-10 bg-white rounded-[2.5rem] border border-slate-100 hover:shadow-2xl hover:shadow-blue-600/5 transition-all group h-full"
+                  >
+                    <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                      {f.icon}
+                    </div>
+                    <h3 className="text-xl font-black text-slate-900 mb-3">{f.title}</h3>
+                    <p className="text-sm text-slate-500 font-medium leading-relaxed">{f.description}</p>
+                  </motion.div>
+                </Link>
               ))}
             </div>
           </div>
@@ -236,11 +221,11 @@ const Index = () => {
                <div className="flex-1 space-y-10">
                   <div className="w-16 h-1 bg-blue-600" />
                   <h2 className="text-5xl md:text-8xl font-black text-slate-900 leading-none tracking-tighter">
-                    Built for <br /> <span className="text-blue-600 italic underline decoration-blue-100 underline-offset-8">Distinction.</span>
+                    More than <br /> <span className="text-blue-600 italic underline decoration-blue-100 underline-offset-8">Resumes.</span>
                   </h2>
                   <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-xl">
-                    Every resume generated on ResumePro is a masterwork of typography, hierarchy, and semantic engineering. 
-                    We don't just build lists; we build narratives that convert.
+                    We've architected a full-cycle career engine. From AI Auto-Apply to HR Mock Interviews and Recruiter Outreach, 
+                    we provide the high-performance tools you need to secure your next legacy role.
                   </p>
                   <div className="pt-6">
                     <Button asChild className="h-14 px-10 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-colors">
@@ -303,16 +288,38 @@ const Index = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-32">
               {[
-                { title: "Platform", links: ["Editor", "AI Engine", "Templates", "ATS Sync"] },
-                { title: "Company", links: ["Our Ethos", "Manifesto", "Careers", "Contact"] },
-                { title: "Resources", links: ["Knowledge", "Resume Lab", "Salary Guide", "Prep"] },
-                { title: "Legal", links: ["Privacy", "Terms", "Guidelines", "Cookies"] }
+                { title: "Platform", links: [
+                  { name: "AI Editor", path: "/auth" },
+                  { name: "Auto-Apply", path: "/auth" },
+                  { name: "Mock Interviews", path: "/interview-preparation" },
+                  { name: "Email Outreach", path: "/auth" }
+                ]},
+                { title: "Company", links: [
+                  { name: "Our Ethos", path: "/about" },
+                  { name: "Manifesto", path: "/about" },
+                  { name: "Careers", path: "/about" },
+                  { name: "Contact", path: "/contact" }
+                ]},
+                { title: "Resources", links: [
+                  { name: "Knowledge", path: "/blog" },
+                  { name: "Resume Lab", path: "/resume-templates" },
+                  { name: "Salary Guide", path: "/blog" },
+                  { name: "Prep", path: "/interview-preparation" }
+                ]},
+                { title: "Legal", links: [
+                  { name: "Privacy", path: "/privacy" },
+                  { name: "Terms", path: "/terms" },
+                  { name: "Guidelines", path: "/terms" },
+                  { name: "Cookies", path: "/privacy" }
+                ]}
               ].map((group, i) => (
                 <div key={i}>
                   <h4 className="font-black text-slate-900 mb-8 uppercase text-[10px] tracking-[0.3em]">{group.title}</h4>
                   <ul className="space-y-4 text-slate-400 text-xs font-black uppercase tracking-widest">
                     {group.links.map(l => (
-                      <li key={l} className="hover:text-blue-600 cursor-pointer transition-colors">{l}</li>
+                      <li key={l.name}>
+                        <Link to={l.path} className="hover:text-blue-600 transition-colors">{l.name}</Link>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -326,7 +333,15 @@ const Index = () => {
             </p>
             <div className="flex gap-10">
               {["Twitter", "LinkedIn", "Dribbble"].map(s => (
-                <span key={s} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 cursor-pointer transition-colors">{s}</span>
+                <a 
+                  key={s} 
+                  href={`https://${s.toLowerCase()}.com`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors"
+                >
+                  {s}
+                </a>
               ))}
             </div>
           </div>

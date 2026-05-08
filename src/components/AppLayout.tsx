@@ -126,9 +126,9 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
               <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{displayName}</p>
               <p className="text-xs text-slate-500 truncate">{user?.email}</p>
             </div>
-            <DropdownMenuItem onClick={() => {navigate("/account");onNavClick?.();}} className="rounded-xl cursor-pointer gap-3 py-3 px-3 focus:bg-slate-50 dark:focus:bg-slate-800">
+            <DropdownMenuItem onClick={() => {navigate("/profile");onNavClick?.();}} className="rounded-xl cursor-pointer gap-3 py-3 px-3 focus:bg-slate-50 dark:focus:bg-slate-800">
               <Settings className="h-4 w-4 text-slate-400" />
-              <span className="font-bold text-xs text-slate-700 dark:text-slate-200">Account Settings</span>
+              <span className="font-bold text-xs text-slate-700 dark:text-slate-200">My Profile</span>
             </DropdownMenuItem>
             {role === "admin" && (
               <DropdownMenuItem onClick={() => {navigate("/admin");onNavClick?.();}} className="rounded-xl cursor-pointer gap-3 py-3 px-3 focus:bg-primary/5 text-primary">

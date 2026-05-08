@@ -1,85 +1,31 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { invokeFunction } from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, X, Download, Target, ClipboardCheck, CheckCircle2, AlertTriangle, Upload, Linkedin, Mail, Zap, CheckCircle } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, Download, MoreVertical, Sparkles, Layout } from "lucide-react";
 import { motion } from "framer-motion";
-import ResumeCompletionScore from "@/components/resume/ResumeCompletionScore";
-import IndustryKeywords from "@/components/resume/IndustryKeywords";
-import PowerWordsHint from "@/components/resume/PowerWordsHint";
-import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
-import type { ResumeData, PersonalInfo, CustomSection, LanguageItem } from "@/components/resume/types";
-import { type TemplateId } from "@/components/resume/pdfTemplates";
-import ResumeExportDialog from "@/components/resume/ResumeExportDialog";
-import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
-import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
-import TemplateSelector from "@/components/resume/TemplateSelector";
-import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
-import ResumePreview from "@/components/resume/ResumePreview";
-import LanguagesEditor from "@/components/resume/LanguagesEditor";
-import ColorPanel from "@/components/editor/ColorPanel";
-import { useResumeColors } from "@/hooks/useResumeColors";
+import type { ResumeData } from "@/components/resume/types";
 import SEOHead from "@/components/SEOHead";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useSubscription } from "@/hooks/useSubscription";
-import ProFeatureGate from "@/components/ProFeatureGate";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CoverLetters from "@/pages/CoverLetters";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Resume = Tables<"resumes">;
 
 export default function Resumes() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { t } = useLanguage();
-  const { isPro } = useSubscription();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
-  const [createOpen, setCreateOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(searchParams.get("edit"));
-
-  // Form state
-  const [title, setTitle] = useState("");
-  const [resumeData, setResumeData] = useState<ResumeData>({
-    personalInfo: {},
-    summary: "",
-    skills: [],
-    experience: [],
-    education: [],
-    customSections: [],
-  });
-  const [skillInput, setSkillInput] = useState("");
-  const [aiLoading, setAiLoading] = useState<string | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
-  const { colors: resumeColors, activePresetId, applyPreset, setColor, reset: resetColors } = useResumeColors();
-  const [tailorOpen, setTailorOpen] = useState(false);
-  const [tailorJD, setTailorJD] = useState("");
-  const [tailoring, setTailoring] = useState(false);
-  const [gradeOpen, setGradeOpen] = useState(false);
-  const [gradeJD, setGradeJD] = useState("");
-  const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState<any>(null);
-  const [uploadingPdf, setUploadingPdf] = useState(false);
-  const [linkedinOpen, setLinkedinOpen] = useState(false);
-  const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [linkedinLoading, setLinkedinLoading] = useState(false);
-  const [aiApplyingId, setAiApplyingId] = useState<string | null>(null);
-  const [aiApplyStep, setAiApplyStep] = useState(0);
-  const [aiApplySetupOpen, setAiApplySetupOpen] = useState(false);
-  const [aiApplyPendingResume, setAiApplyPendingResume] = useState<Resume | null>(null);
-  const [aiApplyLocation, setAiApplyLocation] = useState("");
-  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("updated_at", { ascending: false });
@@ -89,508 +35,17 @@ export default function Resumes() {
 
   useEffect(() => { if (user) fetchResumes(); }, [user]);
 
-  // Sync editingId to URL search params
-  useEffect(() => {
-    const currentEdit = searchParams.get("edit");
-    if (editingId && currentEdit !== editingId) {
-      setSearchParams({ edit: editingId }, { replace: true });
-    } else if (!editingId && currentEdit) {
-      setSearchParams({}, { replace: true });
-    }
-  }, [editingId]);
-
-  // Restore editor state when navigating back with ?edit=id
-  useEffect(() => {
-    const editId = searchParams.get("edit");
-    if (editId && !editingId && resumes.length > 0) {
-      const resume = resumes.find((r) => r.id === editId);
-      if (resume) openEditor(resume);
-    }
-  }, [resumes]);
-
-  // Auto-save with debounce
-  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastSavedRef = useRef<string>("");
-
-  const autoSave = useCallback(async () => {
-    if (!editingId) return;
-    const dataToSave = { ...resumeData, templateId: selectedTemplate };
-    const serialized = JSON.stringify({ title, data: dataToSave });
-    if (serialized === lastSavedRef.current) return; // No changes
-    try {
-      const { error } = await supabase.from("resumes").update({
-        title,
-        resume_data: dataToSave as any,
-      }).eq("id", editingId);
-      if (error) {
-        console.error("Auto-save error:", error.message);
-      } else {
-        lastSavedRef.current = serialized;
-      }
-    } catch (err) {
-      console.error("Auto-save failed:", err);
-    }
-  }, [editingId, title, resumeData, selectedTemplate]);
-
-  useEffect(() => {
-    if (!editingId) return;
-    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
-    autoSaveTimerRef.current = setTimeout(autoSave, 2000);
-    return () => {
-      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
-    };
-  }, [autoSave, editingId]);
-
-  const AI_APPLY_STEPS = [
-    { label: "Creating campaign", detail: "Setting up your AI Apply campaign record…" },
-    { label: "Searching job boards", detail: "Scanning live listings for matching roles…" },
-    { label: "AI scoring matches", detail: "AI is scoring and ranking jobs for your profile…" },
-    { label: "Tailoring applications", detail: "Rewriting summary, skills and writing cover letters…" },
-    { label: "Saving to queue", detail: "Packaging tailored applications into your dashboard…" },
-  ];
-
-  const [aiApplyJobType, setAiApplyJobType] = useState("");
-  const [aiApplyMinScore, setAiApplyMinScore] = useState(60);
-  const [aiApplyMaxApps, setAiApplyMaxApps] = useState(20);
-  const [aiApplyCampaignResult, setAiApplyCampaignResult] = useState<{ queued: number; total_found: number; total_scored: number } | null>(null);
-
-  const openAIApplySetup = (resume: Resume) => {
-    setAiApplyPendingResume(resume);
-    setAiApplyLocation("");
-    setAiApplySetupOpen(true);
-  };
-
-  const handleAIApply = async (resume: Resume) => {
-    if (!user) return;
-    setAiApplySetupOpen(false);
-    setAiApplyingId(resume.id);
-    setAiApplyStep(0);
-    setAiApplyCampaignResult(null);
-
-    // Animate through steps — scaled to ~25s total
-    const stepTimings = [0, 2000, 6000, 14000, 20000];
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    stepTimings.forEach((delay, i) => {
-      timers.push(setTimeout(() => setAiApplyStep(i), delay));
-    });
-
-    try {
-      const { data, error } = await invokeFunction("ai-apply", {
-        body: {
-          resume_id: resume.id,
-          resume_title: resume.title,
-          resume_data: resume.resume_data,
-          location: aiApplyLocation || undefined,
-          job_type: aiApplyJobType || undefined,
-          min_score: aiApplyMinScore,
-          max_applications: aiApplyMaxApps,
-        },
-      });
-      timers.forEach(clearTimeout);
-      setAiApplyStep(AI_APPLY_STEPS.length);
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: "AI Apply failed", description: data.error, variant: "destructive" });
-        return;
-      }
-      if (data.queued === 0) {
-        toast({
-          title: "No matching jobs found",
-          description: `Searched ${data.total_found || 0} jobs — none met your ${aiApplyMinScore}% minimum score. Try lowering the threshold or updating your resume skills.`,
-          variant: "destructive",
-        });
-      } else {
-        setAiApplyCampaignResult({ queued: data.queued, total_found: data.total_found, total_scored: data.total_scored });
-        const partialMsg = data.partial ? ` (${data.total_scored} of ${data.total_found} scored before timeout)` : "";
-        toast({
-          title: `Campaign complete! 🚀`,
-          description: `${data.queued} tailored applications queued from ${data.total_found} jobs found.${partialMsg}`,
-        });
-      }
-    } catch (err: any) {
-      timers.forEach(clearTimeout);
-      toast({ title: "AI Apply failed", description: err.message || "Something went wrong.", variant: "destructive" });
-    } finally {
-      // Keep result summary visible for a bit longer
-      setTimeout(() => {
-        if (!aiApplyCampaignResult) {
-          setAiApplyingId(null);
-          setAiApplyStep(0);
-        }
-      }, 5000);
-    }
-  };
-
-
-  const resetForm = () => {
-    setTitle("");
-    setResumeData({ personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [], languages: [] });
-    setSkillInput("");
-  };
-
-  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (pdfInputRef.current) pdfInputRef.current.value = "";
-    if (!file || !user) return;
-    if (file.type !== "application/pdf") {
-      toast({ title: t.resumes.selectPdf, variant: "destructive" });
-      return;
-    }
-    setUploadingPdf(true);
-    try {
-      const pdfjsLib = await import("pdfjs-dist");
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let fullText = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        fullText += content.items.map((item: any) => item.str).join(" ") + "\n";
-      }
-
-      if (fullText.trim().length < 20) {
-        toast({ title: t.resumes.couldNotExtract, description: t.resumes.couldNotExtractDesc, variant: "destructive" });
-        return;
-      }
-
-      const { data, error } = await invokeFunction("parse-resume", {
-        body: { text: fullText },
-      });
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: t.common.error, description: data.error, variant: "destructive" });
-        return;
-      }
-
-      const resumeTitle = data.personalInfo?.fullName
-        ? `${data.personalInfo.fullName}'s Resume`
-        : file.name.replace(/\.pdf$/i, "");
-
-      const parsedData: ResumeData = {
-        personalInfo: data.personalInfo || {},
-        summary: data.summary || "",
-        skills: data.skills || [],
-        experience: (data.experience || []).map((exp: any) => ({
-          title: exp.title || "",
-          company: exp.company || "",
-          description: exp.description || "",
-          bullets: exp.bullets || [],
-        })),
-        education: data.education || [],
-        customSections: data.customSections || [],
-      };
-
-      const { data: created, error: createError } = await supabase.from("resumes").insert({
-        user_id: user.id,
-        title: resumeTitle,
-        resume_data: parsedData as any,
-      }).select().single();
-
-      if (createError) throw createError;
-
-      toast({ title: t.resumes.resumeImported, description: t.resumes.resumeImportedDesc });
-      fetchResumes();
-      if (created) openEditor(created);
-    } catch (err: any) {
-      console.error("PDF upload error:", err);
-      toast({ title: t.resumes.uploadFailed, description: err.message || t.resumes.unexpectedError, variant: "destructive" });
-    } finally {
-      setUploadingPdf(false);
-    }
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editingId) return;
-    const dataToSave = { ...resumeData, templateId: selectedTemplate };
-    const { error } = await supabase.from("resumes").update({
-      title,
-      resume_data: dataToSave as any,
-    }).eq("id", editingId);
-    if (error) {
-      toast({ title: t.resumes.errorSaving, description: error.message, variant: "destructive" });
-    } else {
-      lastSavedRef.current = JSON.stringify({ title, data: dataToSave });
-      toast({ title: t.resumes.saved });
-      fetchResumes();
-    }
-  };
-
   const handleDelete = async (id: string) => {
-    await supabase.from("resumes").delete().eq("id", id);
-    if (editingId === id) setEditingId(null);
-    fetchResumes();
-  };
-
-  const openEditor = (resume: Resume) => {
-    setEditingId(resume.id);
-    setTitle(resume.title);
-    const data = resume.resume_data as any as ResumeData;
-    const template = (data?.templateId as TemplateId) || "classic";
-    setSelectedTemplate(template);
-    const rd: ResumeData = {
-      personalInfo: data?.personalInfo || {},
-      summary: data?.summary || "",
-      skills: data?.skills || [],
-      experience: (data?.experience || []).map((e: any) => ({
-        title: e.title || "",
-        company: e.company || "",
-        description: e.description || "",
-        bullets: e.bullets || [],
-      })),
-      education: data?.education || [],
-      customSections: data?.customSections || [],
-      languages: data?.languages || [],
-      templateId: data?.templateId,
-    };
-    setResumeData(rd);
-    // Initialize last saved ref so auto-save doesn't trigger immediately
-    lastSavedRef.current = JSON.stringify({ title: resume.title, data: { ...rd, templateId: template } });
-  };
-
-  // AI helpers
-  const aiAssist = async (type: string, context: any) => {
-    setAiLoading(type);
-    try {
-      const { data, error } = await invokeFunction("resume-assist", {
-        body: { type, context },
-      });
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: t.common.error, description: data.error, variant: "destructive" });
-        return null;
-      }
-      return data;
-    } catch (e: any) {
-      toast({ title: t.common.error, description: e.message, variant: "destructive" });
-      return null;
-    } finally {
-      setAiLoading(null);
-    }
-  };
-
-  const generateSummary = async () => {
-    const result = await aiAssist("summary", {
-      jobTitle: title,
-      skills: resumeData.skills,
-      experience: resumeData.experience,
-    });
-    if (result?.summary) {
-      setResumeData((prev) => ({ ...prev, summary: result.summary }));
-      toast({ title: t.resumes.summaryGenerated });
-    }
-  };
-
-  const generateBullets = async (expIndex: number) => {
-    const exp = resumeData.experience?.[expIndex];
-    if (!exp) return;
-    const result = await aiAssist("bullets", {
-      title: exp.title,
-      company: exp.company,
-      description: exp.description,
-      skills: resumeData.skills,
-    });
-    if (result?.bullets) {
-      setResumeData((prev) => {
-        const experience = [...(prev.experience || [])];
-        experience[expIndex] = { ...experience[expIndex], bullets: result.bullets };
-        return { ...prev, experience };
-      });
-      toast({ title: t.resumes.bulletsGenerated });
-    }
-  };
-
-  const suggestSkills = async () => {
-    const result = await aiAssist("skills", {
-      jobTitle: title,
-      experience: resumeData.experience,
-      existingSkills: resumeData.skills,
-    });
-    if (result?.skills) {
-      setResumeData((prev) => ({
-        ...prev,
-        skills: [...new Set([...(prev.skills || []), ...result.skills])],
-      }));
-      toast({ title: t.resumes.skillsSuggested });
-    }
-  };
-
-  const addSkill = () => {
-    if (!skillInput.trim()) return;
-    setResumeData((prev) => ({
-      ...prev,
-      skills: [...(prev.skills || []), skillInput.trim()],
-    }));
-    setSkillInput("");
-  };
-
-  const removeSkill = (index: number) => {
-    setResumeData((prev) => ({
-      ...prev,
-      skills: (prev.skills || []).filter((_, i) => i !== index),
-    }));
-  };
-
-  const addExperience = () => {
-    setResumeData((prev) => ({
-      ...prev,
-      experience: [...(prev.experience || []), { title: "", company: "", startDate: "", endDate: "", description: "", bullets: [] }],
-    }));
-  };
-
-  const updateExperience = (index: number, field: string, value: string) => {
-    setResumeData((prev) => {
-      const experience = [...(prev.experience || [])];
-      experience[index] = { ...experience[index], [field]: value };
-      return { ...prev, experience };
-    });
-  };
-
-  const removeExperience = (index: number) => {
-    setResumeData((prev) => ({
-      ...prev,
-      experience: (prev.experience || []).filter((_, i) => i !== index),
-    }));
-  };
-
-  const addEducation = () => {
-    setResumeData((prev) => ({
-      ...prev,
-      education: [...(prev.education || []), { degree: "", school: "", startDate: "", endDate: "", year: "" }],
-    }));
-  };
-
-  const updateEducation = (index: number, field: string, value: string) => {
-    setResumeData((prev) => {
-      const education = [...(prev.education || [])];
-      education[index] = { ...education[index], [field]: value };
-      return { ...prev, education };
-    });
-  };
-
-  const removeEducation = (index: number) => {
-    setResumeData((prev) => ({
-      ...prev,
-      education: (prev.education || []).filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleExportPDF = async () => {
-    const { generateResumePDF } = await import("@/components/resume/pdfTemplates");
-    const { resolvePhotoUrl } = await import("@/lib/storageUtils");
-    const { buildPdfRgbMap } = await import("@/components/resume/resumeColorMap");
-    // Resolve storage path to signed URL for PDF rendering
-    const resolvedUrl = await resolvePhotoUrl(resumeData.personalInfo?.photoUrl);
-    const exportData = {
-      ...resumeData,
-      personalInfo: {
-        ...resumeData.personalInfo,
-        photoUrl: resolvedUrl || undefined,
-      },
-    };
-    const rgbMap = buildPdfRgbMap(selectedTemplate, resumeColors);
-    await generateResumePDF(exportData, title, selectedTemplate, { rgbMap });
-    toast({ title: t.resumes.pdfDownloaded });
-  };
-
-  const handleLinkedInImport = async () => {
-    if (!linkedinUrl.trim() || !user) return;
-    const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]{3,100}\/?$/i;
-    if (!linkedinRegex.test(linkedinUrl.trim())) {
-      toast({ title: t.resumes.invalidLinkedinUrl, description: t.resumes.invalidLinkedinUrlDesc, variant: "destructive" });
-      return;
-    }
-    setLinkedinLoading(true);
-    try {
-      const { data, error } = await invokeFunction("sync-linkedin", {
-        body: { linkedinUrl: linkedinUrl.trim() },
-      });
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: t.resumes.importFailed, description: data.error, variant: "destructive" });
-        return;
-      }
-
-      const resumeTitle = data.personalInfo?.fullName
-        ? `${data.personalInfo.fullName}'s Resume`
-        : "LinkedIn Resume";
-
-      const { data: created, error: createError } = await supabase.from("resumes").insert({
-        user_id: user.id,
-        title: resumeTitle,
-        resume_data: data as any,
-      }).select().single();
-
-      if (createError) throw createError;
-
-      toast({ title: t.resumes.linkedinImported, description: t.resumes.linkedinImportedDesc });
-      setLinkedinOpen(false);
-      setLinkedinUrl("");
+    const { error } = await supabase.from("resumes").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Error deleting", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Resume deleted" });
       fetchResumes();
-      if (created) openEditor(created);
-    } catch (err: any) {
-      console.error("LinkedIn import error:", err);
-      toast({ title: t.resumes.importFailed, description: err.message || t.resumes.unexpectedError, variant: "destructive" });
-    } finally {
-      setLinkedinLoading(false);
     }
   };
 
-  const handleTailor = async () => {
-    if (!tailorJD.trim()) return;
-    setTailoring(true);
-    try {
-      const { data, error } = await invokeFunction("tailor-resume", {
-        body: { resumeData, jobDescription: tailorJD },
-      });
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: t.common.error, description: data.error, variant: "destructive" });
-        return;
-      }
-      setResumeData((prev) => {
-        const updated = { ...prev };
-        if (data.summary) updated.summary = data.summary;
-        if (data.skills) updated.skills = data.skills;
-        if (data.experience && prev.experience) {
-          updated.experience = prev.experience.map((exp, i) => ({
-            ...exp,
-            bullets: data.experience[i]?.bullets || exp.bullets,
-          }));
-        }
-        return updated;
-      });
-      toast({ title: t.resumes.resumeTailored });
-      setTailorOpen(false);
-      setTailorJD("");
-    } catch (e: any) {
-      toast({ title: t.resumes.tailoringFailed, description: t.resumes.unexpectedError, variant: "destructive" });
-    } finally {
-      setTailoring(false);
-    }
-  };
-
-  const handleGrade = async () => {
-    setGrading(true);
-    setGradeResult(null);
-    try {
-      const { data, error } = await invokeFunction("grade-resume", {
-        body: { resumeData, jobDescription: gradeJD },
-      });
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: t.common.error, description: data.error, variant: "destructive" });
-        return;
-      }
-      setGradeResult(data);
-    } catch (e: any) {
-      toast({ title: t.resumes.gradingFailed, description: t.resumes.unexpectedError, variant: "destructive" });
-    } finally {
-      setGrading(false);
-    }
-  };
-
-  const computeResumeScore = (data: ResumeData, title: string) => {
+  const computeResumeScore = (data: ResumeData) => {
     let score = 20; 
     if (data?.personalInfo?.fullName) score += 10;
     if (data?.personalInfo?.email) score += 5;
@@ -601,203 +56,144 @@ export default function Resumes() {
     return Math.min(score, 100);
   };
 
-  const handleEdit = (resume: Resume) => {
-    openEditor(resume);
-  };
+  if (loading) return <div className="flex items-center justify-center h-screen text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Resumes...</div>;
 
-  const handleCreate = async () => {
-    if (!user || !title.trim()) return;
-    const { data, error } = await supabase.from("resumes").insert({
-      user_id: user.id,
-      title: title.trim(),
-      resume_data: { personalInfo: {}, summary: "", skills: [], experience: [], education: [], customSections: [] } as any,
-    }).select().single();
-    if (error) {
-      toast({ title: t.common.error, description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: t.resumes.resumeCreated });
-      setCreateOpen(false);
-      setTitle("");
-      fetchResumes();
-      if (data) openEditor(data);
-    }
-  };
-
-  const scoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
-  };
-
-  const progressColor = (score: number) => {
-    if (score >= 80) return "[&>div]:bg-green-500";
-    if (score >= 60) return "[&>div]:bg-yellow-500";
-    return "[&>div]:bg-red-500";
-  };
-
-  if (loading) return <div className="flex items-center justify-center h-full text-muted-foreground">{t.common.loading}</div>;
-
-  // Editor view
-  if (editingId) {
-    return (
-      <div className="h-[calc(100vh-4rem)] md:h-screen flex flex-col">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 gap-2">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => { autoSave(); setEditingId(null); resetForm(); fetchResumes(); }}>{t.common.back}</Button>
-            <h1 className="text-lg sm:text-xl font-bold">{t.resumes.editResume}</h1>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Dialog open={tailorOpen} onOpenChange={setTailorOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><Target className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.tailorToJob}</span><span className="sm:hidden">{t.resumes.tailorToJob}</span></Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>{t.resumes.tailorTitle}</DialogTitle>
-                  <DialogDescription>{t.resumes.tailorDesc}</DialogDescription>
-                </DialogHeader>
-                <Textarea
-                  rows={8}
-                  value={tailorJD}
-                  onChange={(e) => setTailorJD(e.target.value)}
-                  placeholder={t.resumes.tailorPlaceholder}
-                  className="min-h-[200px]"
-                />
-                <Button onClick={handleTailor} disabled={tailoring || !tailorJD.trim()} className="w-full">
-                  {tailoring ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.tailoring}</> : <><Sparkles className="h-4 w-4 mr-2" />{t.resumes.tailorMyResume}</>}
-                </Button>
-              </DialogContent>
-            </Dialog>
-            <Dialog open={gradeOpen} onOpenChange={(open) => { setGradeOpen(open); if (!open) { setGradeResult(null); setGradeJD(""); } }}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><ClipboardCheck className="h-4 w-4 mr-1 sm:mr-2" /><span className="hidden sm:inline">{t.resumes.gradeResume}</span><span className="sm:hidden">{t.resumes.gradeResume}</span></Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>{t.resumes.gradeTitle}</DialogTitle>
-                  <DialogDescription>{t.resumes.gradeDesc}</DialogDescription>
-                </DialogHeader>
-                {!gradeResult ? (
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>{t.resumes.gradeJdLabel}</Label>
-                      <Textarea
-                        rows={6}
-                        value={gradeJD}
-                        onChange={(e) => setGradeJD(e.target.value)}
-                        placeholder={t.resumes.gradeJdPlaceholder}
-                        className="min-h-[150px]"
-                      />
-                    </div>
-                    <Button onClick={handleGrade} disabled={grading} className="w-full">
-                      {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.grading}</> : <><ClipboardCheck className="h-4 w-4 mr-2" />{t.resumes.gradeMyResume}</>}
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="text-center p-6 rounded-lg border bg-muted/30">
-                      <div className={`text-5xl font-bold ${scoreColor(gradeResult.overallScore)}`}>{gradeResult.overallScore}</div>
-                      <div className="text-sm text-muted-foreground mt-1">{t.resumes.overallScore}</div>
-                      <Progress value={gradeResult.overallScore} className={`mt-3 h-3 ${progressColor(gradeResult.overallScore)}`} />
-                      <p className="text-sm mt-4 text-left">{gradeResult.overallAssessment}</p>
-                    </div>
-
-                    {[
-                      { key: "ats", label: t.resumes.atsCompatibility, data: gradeResult.ats },
-                      { key: "fit", label: gradeResult.fit?.label || t.resumes.jobFit, data: gradeResult.fit },
-                      { key: "writing", label: t.resumes.writingQuality, data: gradeResult.writing },
-                    ].map(({ key, label, data }) => (
-                      <div key={key} className="p-4 rounded-lg border space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-semibold">{label}</h3>
-                          <span className={`text-2xl font-bold ${scoreColor(data.score)}`}>{data.score}</span>
-                        </div>
-                        <Progress value={data.score} className={`h-2 ${progressColor(data.score)}`} />
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                          <div>
-                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t.resumes.strengths}</h4>
-                            <ul className="space-y-1.5">
-                              {data.strengths.map((s: string, i: number) => (
-                                <li key={i} className="text-sm flex gap-2 items-start">
-                                  <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
-                                  {s}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t.resumes.improvements}</h4>
-                            <ul className="space-y-1.5">
-                              {data.improvements.map((s: string, i: number) => (
-                                <li key={i} className="text-sm flex gap-2 items-start">
-                                  <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
-                                  {s}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-
-                    <Button variant="outline" onClick={() => { setGradeResult(null); }} className="w-full">
-                      {t.resumes.gradeAgain}
-                    </Button>
-                  </div>
-                )}
-              </DialogContent>
-            </Dialog>
-            <ATSScannerDialog resumeData={resumeData} />
-            <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} colors={resumeColors} />
-            <Button size="sm" onClick={handleSaveEdit}>{t.common.save}</Button>
-          </div>
+  return (
+    <div className="p-8 max-w-7xl mx-auto space-y-12 min-h-screen">
+      <SEOHead title="My Resumes — ResumePro" description="Manage and edit your professional resumes." />
+      
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight">Professional <span className="text-primary">Portfolio</span></h1>
+          <p className="text-slate-500 mt-2 font-medium">Create and manage multiple tailored resumes for different industries.</p>
         </div>
+        <Button onClick={() => navigate("/builder")} className="bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest text-xs h-14 px-8 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 gap-3">
+          <Plus className="w-5 h-5" /> Create New Resume
+        </Button>
+      </div>
 
-        {/* Side-by-side layout (stacked on mobile) */}
-        <div className="flex-1 min-h-0 flex flex-col md:flex-row">
-          {/* Editor panel */}
-          <div className="md:w-1/2 overflow-y-auto p-4 sm:p-6 space-y-5 border-b md:border-b-0 md:border-r">
-          {/* Resume Completion Score */}
-            <ResumeCompletionScore resumeData={resumeData} title={title} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {resumes.length === 0 ? (
+          <Card className="col-span-full py-32 border-2 border-dashed border-slate-100 bg-slate-50/50 rounded-[3rem] text-center space-y-6">
+             <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto shadow-sm">
+                <FileText className="w-10 h-10 text-slate-200" />
+             </div>
+             <div className="space-y-2">
+                <h3 className="text-xl font-black text-slate-900">Your portfolio is empty</h3>
+                <p className="text-slate-400 font-medium max-w-sm mx-auto">Start by building your first high-impact resume with our AI architect.</p>
+             </div>
+             <Button onClick={() => navigate("/builder")} className="bg-primary text-white font-black uppercase tracking-widest text-[10px] h-12 px-8 rounded-xl shadow-xl shadow-primary/20 transition-all">Get Started</Button>
+          </Card>
+        ) : (
+          resumes.map((resume) => {
+            const data = resume.resume_data as unknown as ResumeData;
+            const score = computeResumeScore(data);
+            return (
+              <motion.div
+                key={resume.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Card className="group relative rounded-[2.5rem] border-slate-100 bg-white shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                  <div className="aspect-[4/3] bg-slate-50 relative overflow-hidden flex items-center justify-center p-8 group-hover:p-6 transition-all duration-500">
+                     <div className="w-full h-full bg-white shadow-2xl rounded-sm border border-slate-100 overflow-hidden transform rotate-2 group-hover:rotate-0 transition-transform duration-500 origin-bottom-right">
+                        <div className="h-1.5 w-full bg-primary/20" />
+                        <div className="p-4 space-y-2">
+                           <div className="w-1/3 h-2 bg-slate-100 rounded" />
+                           <div className="w-1/2 h-1 bg-slate-50 rounded" />
+                           <div className="pt-4 space-y-1">
+                              <div className="w-full h-1 bg-slate-50 rounded" />
+                              <div className="w-full h-1 bg-slate-50 rounded" />
+                              <div className="w-3/4 h-1 bg-slate-50 rounded" />
+                           </div>
+                        </div>
+                     </div>
+                     <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/40 transition-all duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <Button onClick={() => navigate(`/builder/${resume.id}`)} className="bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] h-12 px-6 rounded-xl hover:bg-primary hover:text-white transition-all">
+                           <Edit className="w-4 h-4 mr-2" /> Open Editor
+                        </Button>
+                     </div>
+                  </div>
 
-            <div className="space-y-2">
-              <Label>{t.resumes.resumeTitle}</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+                  <CardHeader className="p-8 pb-4">
+                    <div className="flex items-center justify-between">
+                       <CardTitle className="text-xl font-black text-slate-900 truncate pr-4">{resume.title}</CardTitle>
+                       <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                             <Button variant="ghost" size="icon" className="rounded-full hover:bg-slate-100"><MoreVertical className="w-4 h-4 text-slate-400" /></Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="rounded-xl p-2 shadow-2xl border-slate-100">
+                             <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-lg font-bold text-xs uppercase tracking-widest p-3 gap-3">
+                                <Edit className="w-4 h-4" /> Edit
+                             </DropdownMenuItem>
+                             <DropdownMenuItem className="rounded-lg font-bold text-xs uppercase tracking-widest p-3 gap-3">
+                                <Download className="w-4 h-4" /> Download PDF
+                             </DropdownMenuItem>
+                             <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-lg font-bold text-xs uppercase tracking-widest p-3 gap-3 text-red-500 focus:text-red-500 focus:bg-red-50">
+                                <Trash2 className="w-4 h-4" /> Delete
+                             </DropdownMenuItem>
+                          </DropdownMenuContent>
+                       </DropdownMenu>
+                    </div>
+                    <CardDescription className="font-medium text-slate-400">
+                       Last modified {new Date(resume.updated_at).toLocaleDateString()}
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="p-8 pt-0 space-y-4">
+                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+                       <span className="text-slate-400">ATS Strength</span>
+                       <span className={score >= 80 ? "text-green-500" : score >= 50 ? "text-amber-500" : "text-red-500"}>{score}%</span>
+                    </div>
+                    <Progress value={score} className="h-2 bg-slate-50" />
+                    
+                    <div className="pt-4 flex items-center justify-between">
+                       <div className="flex -space-x-2">
+                          <div className="w-8 h-8 rounded-full bg-blue-50 border-2 border-white flex items-center justify-center text-[10px] font-black text-blue-600">AI</div>
+                          <div className="w-8 h-8 rounded-full bg-slate-900 border-2 border-white flex items-center justify-center text-[10px] font-black text-white">ATS</div>
+                       </div>
+                       <Button variant="ghost" onClick={() => navigate(`/builder/${resume.id}`)} className="text-primary font-black uppercase tracking-widest text-[10px] gap-2 p-0 h-auto hover:bg-transparent hover:text-primary/80">
+                          Configure <Sparkles className="w-3 h-3" />
+                       </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Advanced Features Spotlight */}
+      <section className="pt-20">
+         <div className="p-12 rounded-[3rem] bg-slate-50 border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="space-y-6 max-w-xl">
+               <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm">
+                  <Sparkles className="w-6 h-6 text-primary" />
+               </div>
+               <h2 className="text-3xl font-black text-slate-900">AI-Powered Coverage</h2>
+               <p className="text-slate-500 font-medium leading-relaxed">
+                  Generate professional cover letters tailored to your resumes and specific job descriptions. 
+                  Land more interviews with persuasive narratives.
+               </p>
+               <Button onClick={() => navigate("/cover-letters")} className="bg-slate-900 text-white rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8">Create Cover Letter</Button>
             </div>
-
-            {/* Template Selection */}
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">{t.resumes.pdfTemplate}</CardTitle>
-                <CardDescription>{t.resumes.choosePdfStyle}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} jobTitle={title} />
-              </CardContent>
-            </Card>
-
-            {/* Resume Color Customization */}
-            <ColorPanel
-              colors={resumeColors}
-              activePresetId={activePresetId}
-              onApplyPreset={applyPreset}
-              onSetColor={setColor}
-              onReset={resetColors}
-            />
-
-            {/* Personal Information */}
-            {user && (
-              <PersonalInfoSection
-                personalInfo={resumeData.personalInfo || {}}
-                onChange={(info) => setResumeData((prev) => ({ ...prev, personalInfo: info }))}
-                userId={user.id}
-              />
-            )}
-
-            {/* Summary */}
-            <Card>
-              <CardHeader className="pb-2">
+            <div className="w-full md:w-96 aspect-square bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-8 space-y-4">
+               <div className="h-4 w-1/3 bg-slate-100 rounded" />
+               <div className="space-y-2">
+                  <div className="h-2 w-full bg-slate-50 rounded" />
+                  <div className="h-2 w-full bg-slate-50 rounded" />
+                  <div className="h-2 w-3/4 bg-slate-50 rounded" />
+               </div>
+               <div className="pt-8 h-32 w-full bg-blue-50/30 rounded-2xl border border-blue-100 flex items-center justify-center">
+                  <Mail className="w-8 h-8 text-primary opacity-20" />
+               </div>
+            </div>
+         </div>
+      </section>
+    </div>
+  );
+}assName="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{t.resumes.professionalSummary}</CardTitle>
                   <Button size="sm" variant="outline" onClick={generateSummary} disabled={aiLoading === "summary"}>

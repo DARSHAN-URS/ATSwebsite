@@ -114,8 +114,6 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
 
 function JobSeekerDashboard() {
   const { user } = useAuth();
-  const { t, locale } = useLanguage();
-  const td = dashboardExtraTranslations[locale];
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     resumes: 0, applications: 0, savedJobs: 0, coverLetters: 0,
@@ -181,31 +179,41 @@ function JobSeekerDashboard() {
   }, [user]);
 
   const cards = [
-    { title: "Resumes", value: stats.resumes, icon: FileText, color: "text-blue-500", action: () => navigate("/resumes") },
-    { title: "Applications", value: stats.applications, icon: Briefcase, color: "text-purple-500", action: () => navigate("/jobs") },
-    { title: "Cover Letters", value: stats.coverLetters, icon: Mail, color: "text-pink-500", action: () => navigate("/resumes?tab=cover-letters") },
-    { title: "Response Rate", value: `${stats.responseRate}%`, icon: TrendingUp, color: "text-green-500" },
+    { title: "Total Resumes", value: stats.resumes, icon: FileText, color: "text-blue-500", action: () => navigate("/resumes") },
+    { title: "Active Apps", value: stats.applications, icon: Briefcase, color: "text-purple-500", action: () => navigate("/job-tracker") },
+    { title: "Success Rate", value: `${stats.responseRate}%`, icon: TrendingUp, color: "text-green-500" },
+    { title: "Saved Roles", value: stats.savedJobs, icon: Target, color: "text-amber-500", action: () => navigate("/jobs") },
   ];
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-12">
-      <SEOHead title="Dashboard — ResumePro" description="Your professional career control center." noindex />
+      <SEOHead title="Command Center — ResumePro" description="Your professional career control center." noindex />
       
-      {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            Welcome back, <span className="text-primary">{user?.user_metadata?.display_name?.split(" ")[0] || "there"}!</span>
-          </h1>
-          <p className="text-slate-500 mt-2 font-medium">Here's what's happening with your career progress today.</p>
-        </div>
-        <div className="flex gap-3">
-          <Button onClick={() => navigate("/builder")} className="bg-primary hover:bg-primary/90 text-white font-bold px-6 py-6 rounded-2xl shadow-xl shadow-primary/20 gap-2 h-auto">
-            <Plus className="w-5 h-5" /> Create New Resume
-          </Button>
-          <Button variant="outline" className="font-bold px-6 py-6 rounded-2xl h-auto border-slate-200 dark:border-slate-800">
-            <Sparkles className="w-5 h-5 mr-2 text-primary" /> AI Optimize
-          </Button>
+      {/* Welcome Header - Architectural Design */}
+      <div className="relative p-12 rounded-[3rem] bg-slate-900 overflow-hidden text-white group">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-1000" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="space-y-4 text-center md:text-left">
+             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 justify-center md:justify-start">
+                <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">System Active</span>
+                <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+             </motion.div>
+             <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-none">
+                Command <br /> <span className="text-primary italic">Center.</span>
+             </h1>
+             <p className="text-slate-400 font-medium max-w-md">Welcome back, {user?.user_metadata?.display_name?.split(" ")[0] || "Chief"}. Your career trajectory is currently up 12.4% from last month.</p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4">
+             <Button onClick={() => navigate("/builder")} className="h-16 px-8 bg-white text-slate-900 hover:bg-slate-100 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl transition-all hover:scale-105 active:scale-95">
+                <Plus className="w-5 h-5 mr-2" /> New Resume
+             </Button>
+             <Button onClick={() => navigate("/jobs")} className="h-16 px-8 bg-primary text-white hover:bg-primary/90 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95">
+                <Search className="w-5 h-5 mr-2" /> Find Jobs
+             </Button>
+          </div>
         </div>
       </div>
 
@@ -219,123 +227,152 @@ function JobSeekerDashboard() {
             transition={{ delay: i * 0.1 }}
           >
             <Card 
-              className={`group cursor-pointer rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1`}
+              className="group cursor-pointer rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
               onClick={card.action}
             >
               <CardHeader className="flex flex-row items-center justify-between pb-2 p-8">
                 <div className={`p-3 rounded-2xl bg-slate-50 dark:bg-slate-800 ${card.color}`}>
                   <card.icon className="h-6 w-6" />
                 </div>
-                <ArrowUpRight className="h-5 w-5 text-slate-300 group-hover:text-primary transition-colors" />
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Overview</div>
               </CardHeader>
               <CardContent className="p-8 pt-0">
-                <div className="text-4xl font-black text-slate-900 dark:text-white">{card.value}</div>
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-2">{card.title}</p>
+                <div className="text-4xl font-black text-slate-900 dark:text-white group-hover:text-primary transition-colors">{card.value}</div>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">{card.title}</p>
               </CardContent>
             </Card>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content Area */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Recent Applications */}
-          <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
-            <CardHeader className="p-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-xl font-black text-slate-900 dark:text-white">Recent Applications</CardTitle>
-                  <CardDescription className="text-sm font-medium mt-1">Track your progress at world-class companies</CardDescription>
-                </div>
-                <Button variant="ghost" onClick={() => navigate("/job-tracker")} className="text-primary font-bold">
-                  View All
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="p-8 pt-0 space-y-4">
-              {stats.recentApps.length > 0 ? (
-                stats.recentApps.map((app) => (
-                  <div
-                    key={app.id}
-                    className="flex items-center justify-between p-5 rounded-3xl bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 cursor-pointer transition-all group"
-                    onClick={() => navigate("/job-tracker")}
-                  >
-                    <div className="flex items-center gap-4 min-w-0">
-                      <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center font-black text-primary shadow-sm">
-                        {app.company.charAt(0)}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{app.position}</p>
-                        <p className="text-xs text-slate-500 font-medium truncate">{app.company}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6 shrink-0">
-                      <span className="hidden sm:block text-xs font-bold text-slate-400 uppercase tracking-tighter">
-                        {new Date(app.date_applied).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                      </span>
-                      <span className={`text-[10px] px-4 py-1.5 rounded-full font-black uppercase tracking-widest ${
-                        app.status === "offer" ? "bg-green-100 text-green-600 dark:bg-green-900/20" :
-                        app.status === "rejected" ? "bg-red-100 text-red-600 dark:bg-red-900/20" :
-                        app.status === "interview" ? "bg-primary/10 text-primary dark:bg-primary/20" :
-                        "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
-                      }`}>{app.status}</span>
-                    </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Left Column: Job Tracker & Resume Health */}
+        <div className="lg:col-span-2 space-y-10">
+          
+          {/* Job Tracker Insight */}
+          <Card className="rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+            <CardHeader className="p-10 pb-6">
+               <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                     <CardTitle className="text-2xl font-black">Application Tracker</CardTitle>
+                     <CardDescription className="font-medium">Active progress in the hiring funnel</CardDescription>
                   </div>
-                ))
-              ) : (
-                <div className="text-center py-12 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
-                  <Briefcase className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                  <p className="text-slate-500 font-bold">No applications tracked yet.</p>
-                  <Button variant="link" onClick={() => navigate("/jobs")} className="mt-2 text-primary">Start applying →</Button>
-                </div>
-              )}
+                  <Button variant="outline" onClick={() => navigate("/job-tracker")} className="rounded-xl font-bold h-12 px-6 border-slate-200">View Full Pipeline</Button>
+               </div>
+            </CardHeader>
+            <CardContent className="p-10 pt-0 space-y-6">
+               {stats.recentApps.length > 0 ? (
+                 <div className="space-y-4">
+                    {stats.recentApps.map((app) => (
+                      <div key={app.id} className="p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-slate-100 transition-all flex items-center justify-between group">
+                         <div className="flex items-center gap-5">
+                            <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center font-black text-primary shadow-sm text-xl border border-slate-100">
+                               {app.company.charAt(0)}
+                            </div>
+                            <div>
+                               <p className="font-black text-slate-900 dark:text-white leading-tight">{app.position}</p>
+                               <p className="text-sm text-slate-400 font-medium">{app.company}</p>
+                            </div>
+                         </div>
+                         <div className="flex items-center gap-8">
+                            <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-300">
+                               {new Date(app.date_applied).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                            </span>
+                            <Badge className={`rounded-full px-5 py-2 font-black uppercase tracking-widest text-[10px] border-none ${
+                               app.status === "offer" ? "bg-green-100 text-green-600" :
+                               app.status === "rejected" ? "bg-red-100 text-red-600" :
+                               app.status === "interview" ? "bg-primary/10 text-primary" :
+                               "bg-slate-100 text-slate-500"
+                            }`}>
+                               {app.status}
+                            </Badge>
+                         </div>
+                      </div>
+                    ))}
+                 </div>
+               ) : (
+                 <div className="text-center py-20 bg-slate-50 dark:bg-slate-800/50 rounded-[2.5rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
+                    <Briefcase className="w-16 h-16 text-slate-200 mx-auto mb-6" />
+                    <p className="text-slate-400 font-bold mb-6">No active applications found.</p>
+                    <Button onClick={() => navigate("/jobs")} className="bg-slate-900 text-white rounded-xl font-bold h-12 px-8">Find Your Next Role</Button>
+                 </div>
+               )}
             </CardContent>
           </Card>
 
-          {/* Charts or Queue Section */}
-          <Suspense fallback={<div className="h-[200px] animate-pulse bg-slate-50 dark:bg-slate-900 rounded-[2.5rem]" />}>
-            <AIApplyQueueSection />
-          </Suspense>
-          
-          <Suspense fallback={null}>
-            <JobTrackerSection />
-          </Suspense>
+          {/* AI Apply Discovery Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             <Card className="rounded-[2.5rem] bg-slate-900 text-white p-10 relative overflow-hidden group shadow-2xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000" />
+                <div className="relative z-10 space-y-6">
+                   <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-primary">
+                      <Zap className="w-6 h-6 fill-primary" />
+                   </div>
+                   <div className="space-y-2">
+                      <h3 className="text-2xl font-black">AI Auto-Apply</h3>
+                      <p className="text-slate-400 text-sm font-medium leading-relaxed">Let our agent find and apply to roles matching your profile instantly.</p>
+                   </div>
+                   <Button onClick={() => navigate("/jobs")} className="w-full bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[10px] h-12 rounded-xl">Initialize Agent</Button>
+                </div>
+             </Card>
+
+             <Card className="rounded-[2.5rem] border-slate-100 bg-white p-10 space-y-6 shadow-sm hover:shadow-xl transition-all">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
+                   <Mail className="w-6 h-6" />
+                </div>
+                <div className="space-y-2">
+                   <h3 className="text-2xl font-black">Email Outreach</h3>
+                   <p className="text-slate-500 text-sm font-medium leading-relaxed">Strategic direct messaging to recruiters and decision makers.</p>
+                </div>
+                <Button onClick={() => navigate("/email-outreach")} variant="outline" className="w-full rounded-xl h-12 font-black uppercase tracking-widest text-[10px] border-slate-200">Start Outreach</Button>
+             </Card>
+          </div>
         </div>
 
-        {/* Sidebar Widgets */}
-        <div className="space-y-8">
+        {/* Sidebar Column: Health, Stats, and Prep */}
+        <div className="space-y-10">
           <ResumeHealthCard navigate={navigate} />
-          
-          {/* Pro CTA Widget */}
-          <Card className="rounded-[2rem] bg-slate-900 p-8 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/2" />
-            <div className="relative z-10">
-              <Sparkles className="w-10 h-10 text-primary mb-6" />
-              <h3 className="text-xl font-black mb-3 leading-tight">Unlock AI Power</h3>
-              <p className="text-slate-400 text-sm font-medium mb-6 leading-relaxed">
-                Get unlimited AI tailoring, expert scoring, and direct application automation.
-              </p>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-xl">
-                Upgrade to Pro
-              </Button>
-            </div>
+
+          {/* Interview Prep Widget */}
+          <Card className="rounded-[2.5rem] border-slate-100 bg-white p-10 space-y-8 shadow-sm">
+             <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white">
+                   <Brain className="w-6 h-6" />
+                </div>
+                <div>
+                   <h3 className="text-lg font-black leading-tight">Interview Mastery</h3>
+                   <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Powered by Alex AI</p>
+                </div>
+             </div>
+             
+             <div className="space-y-6">
+                {[
+                  { name: "Mock Sessions", status: "Ready", icon: Mic },
+                  { name: "Question Bank", status: "1,200+", icon: FileText },
+                  { name: "Strength Analysis", status: "Updated", icon: Target },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between group cursor-pointer" onClick={() => navigate("/interview-prep")}>
+                    <div className="flex items-center gap-3">
+                       <item.icon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
+                       <span className="text-sm font-bold text-slate-900">{item.name}</span>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{item.status}</span>
+                  </div>
+                ))}
+             </div>
+
+             <Button onClick={() => navigate("/interview-prep")} className="w-full h-14 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl">Enter Dojo</Button>
           </Card>
 
-          {/* Schedule/Interview Widget */}
-          <Suspense fallback={null}>
-            <ScheduledInterviewsList />
-          </Suspense>
-
-          {/* Activity Widget */}
-          <Card className="rounded-[2rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-black flex items-center gap-2 uppercase tracking-widest text-slate-400">
-                <PieChart className="h-4 w-4" /> Application Funnel
+          {/* Analytics Funnel */}
+          <Card className="rounded-[2.5rem] border-slate-100 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-[10px] font-black flex items-center gap-2 uppercase tracking-[0.2em] text-slate-400">
+                <PieChart className="h-4 w-4" /> Funnel Performance
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div className="h-[200px] animate-pulse" />}>
+            <CardContent className="p-8 pt-0">
+              <Suspense fallback={<div className="h-[200px] animate-pulse bg-slate-50 rounded-2xl" />}>
                 <DashboardCharts
                   statusBreakdown={stats.statusBreakdown}
                   weeklyActivity={stats.weeklyActivity}

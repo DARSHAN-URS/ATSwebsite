@@ -23,13 +23,13 @@ import {
 } from "@/components/ui/dialog";
 import {
   User, Mail, Phone, MapPin, Lock, Shield, Trash2, Crown, Zap,
-  Eye, EyeOff, CreditCard, Receipt, CheckCircle, AlertTriangle, Camera, Building2, ChevronRight, ArrowRight, Settings
+  Eye, EyeOff, CreditCard, Receipt, CheckCircle, AlertTriangle, Camera, Building2, ChevronRight, ArrowRight, Settings, Loader2
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { accountTranslations } from "@/i18n/accountTranslations";
 import { motion } from "framer-motion";
 
-export default function AccountSettings() {
+export default function Profile() {
   const { user, signOut } = useAuth();
   const { subscription, status, isPro } = useSubscription();
   const { formatPrice, formatProPrice, symbol, proPrices } = useLocalCurrency();
@@ -170,35 +170,35 @@ export default function AccountSettings() {
     newPassword === confirmPassword;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-12">
-      <SEOHead title="Account Settings — ResumePro" description="Manage your profile, password, subscription, and billing." />
+    <div className="p-8 max-w-4xl mx-auto space-y-12 min-h-screen">
+      <SEOHead title="My Profile — ResumePro" description="Manage your professional profile and settings." />
 
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Account <span className="text-primary">Settings</span></h1>
-          <p className="text-slate-500 mt-2 font-medium">Manage your personal information and preferences.</p>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Personal <span className="text-primary">Profile</span></h1>
+          <p className="text-slate-500 mt-2 font-medium">Manage your professional identity and account settings.</p>
         </div>
-        <Button variant="outline" onClick={() => signOut()} className="rounded-xl border-slate-200 font-bold px-6">
+        <Button variant="outline" onClick={() => signOut()} className="rounded-xl border-slate-200 font-bold px-6 h-12 shadow-sm hover:bg-slate-50 transition-all">
            Sign Out
         </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-8">
         {/* Profile Card */}
-        <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+        <Card className="rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
           <CardHeader className="p-10 pb-0 flex flex-row items-start justify-between">
             <div className="space-y-1">
               <CardTitle className="text-2xl font-black">{ta.profileInfo}</CardTitle>
               <CardDescription className="font-medium">{ta.profileDesc}</CardDescription>
             </div>
             <div className="relative group">
-              <Avatar className="h-24 w-24 border-4 border-white dark:border-slate-800 shadow-2xl">
+              <Avatar className="h-24 w-24 border-4 border-white dark:border-slate-800 shadow-2xl transition-transform group-hover:scale-105 duration-500">
                 <AvatarImage src={resolvedAvatarUrl || undefined} alt={name} />
                 <AvatarFallback className="bg-primary text-white text-3xl font-black">{avatarFallback}</AvatarFallback>
               </Avatar>
               <input ref={photoInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
               <button
-                className="absolute bottom-0 right-0 h-8 w-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xl hover:bg-primary transition-all group-hover:scale-110"
+                className="absolute bottom-0 right-0 h-8 w-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xl hover:bg-primary transition-all scale-90 group-hover:scale-110"
                 onClick={() => photoInputRef.current?.click()}
                 disabled={uploadingPhoto}
               >
@@ -212,33 +212,33 @@ export default function AccountSettings() {
                 <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.fullName}</Label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input value={name} onChange={(e) => setName(e.target.value)} className="pl-11 rounded-xl h-12 bg-slate-50 dark:bg-slate-800 border-none" />
+                  <Input value={name} onChange={(e) => setName(e.target.value)} className="pl-11 rounded-xl h-12 bg-slate-50 dark:bg-slate-800 border-none font-bold" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.email}</Label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input value={user?.email || ""} disabled className="pl-11 rounded-xl h-12 bg-slate-50/50 dark:bg-slate-800/50 border-none cursor-not-allowed" />
+                  <Input value={user?.email || ""} disabled className="pl-11 rounded-xl h-12 bg-slate-50/50 dark:bg-slate-800/50 border-none cursor-not-allowed font-bold" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.phoneNumber}</Label>
                 <div className="relative">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+1 234 567 8900" className="pl-11 rounded-xl h-12 bg-slate-50 dark:bg-slate-800 border-none" />
+                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+1 234 567 8900" className="pl-11 rounded-xl h-12 bg-slate-50 dark:bg-slate-800 border-none font-bold" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.locationLabel}</Label>
                 <div className="relative">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="City, Country" className="pl-11 rounded-xl h-12 bg-slate-50 dark:bg-slate-800 border-none" />
+                  <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="City, Country" className="pl-11 rounded-xl h-12 bg-slate-50 dark:bg-slate-800 border-none font-bold" />
                 </div>
               </div>
             </div>
-            <div className="flex justify-end">
-               <Button onClick={handleSaveProfile} disabled={savingProfile} className="bg-slate-900 dark:bg-slate-800 text-white font-black uppercase tracking-widest text-xs px-10 h-12 rounded-xl shadow-xl shadow-slate-900/10 hover:bg-primary transition-all">
+            <div className="flex justify-end pt-4">
+               <Button onClick={handleSaveProfile} disabled={savingProfile} className="bg-slate-900 dark:bg-slate-800 text-white font-black uppercase tracking-widest text-xs px-10 h-14 rounded-2xl shadow-2xl shadow-slate-900/10 hover:bg-primary transition-all">
                  {savingProfile ? "Saving..." : ta.saveProfile}
                </Button>
             </div>
@@ -247,18 +247,18 @@ export default function AccountSettings() {
 
         {/* Subscription Card */}
         {role !== "recruiter" && (
-           <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden border-l-4 border-l-primary">
+           <Card className="rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden border-l-8 border-l-primary">
              <CardContent className="p-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex items-center gap-8">
-                   <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-white shadow-2xl ${isPro ? "bg-primary shadow-primary/30" : "bg-slate-400 shadow-slate-400/30"}`}>
+                <div className="flex items-center gap-8 text-left">
+                   <div className={`w-20 h-20 rounded-[2.5rem] flex items-center justify-center text-white shadow-2xl ${isPro ? "bg-primary shadow-primary/30" : "bg-slate-400 shadow-slate-400/30"}`}>
                       {isPro ? <Crown className="w-10 h-10" /> : <Zap className="w-10 h-10" />}
                    </div>
                    <div>
                       <div className="flex items-center gap-3">
                          <h3 className="text-2xl font-black">{isPro ? "Pro Plan" : "Free Plan"}</h3>
-                         <Badge className={isPro ? "bg-primary" : "bg-slate-100 text-slate-500"}>{isPro ? "Active" : "Standard"}</Badge>
+                         <Badge className={isPro ? "bg-primary font-black uppercase tracking-widest text-[9px] px-3 py-1" : "bg-slate-100 text-slate-500 font-black uppercase tracking-widest text-[9px] px-3 py-1"}>{isPro ? "Active" : "Standard"}</Badge>
                       </div>
-                      <p className="text-slate-500 font-medium mt-1">{isPro ? "Unlimited AI features and priority support." : "Upgrade to unlock advanced AI capabilities."}</p>
+                      <p className="text-slate-500 font-medium mt-1">{isPro ? "Unlimited AI features and priority support active." : "Upgrade to unlock advanced AI capabilities."}</p>
                    </div>
                 </div>
                 <Button onClick={() => navigate("/pricing")} className="bg-primary text-white font-black uppercase tracking-widest text-xs px-10 h-14 rounded-2xl shadow-2xl shadow-primary/20 hover:scale-105 transition-all">
@@ -270,20 +270,20 @@ export default function AccountSettings() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {/* Password & Security */}
-           <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+           <Card className="rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
               <CardHeader className="p-8">
                  <CardTitle className="text-xl font-black">{ta.passwordSecurity}</CardTitle>
                  <CardDescription className="font-medium">{ta.passwordSecurityDesc}</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-0 space-y-4">
-                 <Button variant="outline" className="w-full h-12 rounded-xl border-slate-200 font-bold justify-between group" onClick={() => setPasswordDialog(true)}>
+                 <Button variant="outline" className="w-full h-12 rounded-xl border-slate-200 font-bold justify-between group px-6" onClick={() => setPasswordDialog(true)}>
                     <div className="flex items-center gap-2">
                        <Lock className="w-4 h-4 text-slate-400" />
                        {ta.changePassword}
                     </div>
                     <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors" />
                  </Button>
-                 <Button variant="outline" className="w-full h-12 rounded-xl border-slate-200 font-bold justify-between group" onClick={handleForgotPassword}>
+                 <Button variant="outline" className="w-full h-12 rounded-xl border-slate-200 font-bold justify-between group px-6" onClick={handleForgotPassword}>
                     <div className="flex items-center gap-2">
                        <Mail className="w-4 h-4 text-slate-400" />
                        {ta.sendResetEmail}
@@ -294,7 +294,7 @@ export default function AccountSettings() {
            </Card>
 
            {/* Dangerous Area */}
-           <Card className="rounded-[2.5rem] border-red-50 dark:border-red-900/20 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+           <Card className="rounded-[3rem] border-red-50 dark:border-red-900/20 bg-white dark:bg-slate-900 shadow-sm overflow-hidden border-b-8 border-b-red-500/10">
               <CardHeader className="p-8">
                  <CardTitle className="text-xl font-black text-red-600">{ta.deleteAccount}</CardTitle>
                  <CardDescription className="font-medium">{ta.deleteAccountDesc}</CardDescription>
@@ -306,27 +306,29 @@ export default function AccountSettings() {
                        {ta.deleteMyAccount}
                      </Button>
                    </AlertDialogTrigger>
-                   <AlertDialogContent className="rounded-[2rem]">
+                   <AlertDialogContent className="rounded-[2.5rem] border-none shadow-2xl p-10">
                      <AlertDialogHeader>
-                       <AlertDialogTitle className="text-2xl font-black text-red-600">Are you absolutely sure?</AlertDialogTitle>
-                       <AlertDialogDescription className="font-medium">
-                         This will permanently delete your resumes, cover letters, and application history. This action cannot be undone.
-                         <div className="mt-4 p-4 bg-red-50 rounded-xl text-red-700 text-xs font-bold uppercase tracking-widest">
+                       <AlertDialogTitle className="text-3xl font-black text-red-600 tracking-tight">Are you absolutely sure?</AlertDialogTitle>
+                       <AlertDialogDescription className="font-medium text-slate-500 leading-relaxed text-base">
+                         This will permanently delete your resumes, cover letters, and application history. This action <span className="text-red-600 font-black">cannot be undone</span>.
+                         <div className="mt-6 p-6 bg-red-50 rounded-2xl text-red-700 text-xs font-black uppercase tracking-widest">
                             Type <span className="underline">DELETE</span> below to confirm.
                          </div>
                        </AlertDialogDescription>
                      </AlertDialogHeader>
-                     <Input 
-                       value={deleteConfirmText} 
-                       onChange={(e) => setDeleteConfirmText(e.target.value)} 
-                       className="rounded-xl h-12 border-red-100 focus:ring-red-500" 
-                     />
-                     <AlertDialogFooter>
-                       <AlertDialogCancel className="rounded-xl h-12 font-bold">Cancel</AlertDialogCancel>
+                     <div className="py-4">
+                        <Input 
+                          value={deleteConfirmText} 
+                          onChange={(e) => setDeleteConfirmText(e.target.value)} 
+                          className="rounded-xl h-14 border-red-100 focus:ring-red-500 text-center font-black tracking-widest uppercase" 
+                        />
+                     </div>
+                     <AlertDialogFooter className="gap-3">
+                       <AlertDialogCancel className="rounded-xl h-12 font-bold px-8">Cancel</AlertDialogCancel>
                        <AlertDialogAction 
                          onClick={handleDeleteAccount} 
                          disabled={deleteConfirmText !== "DELETE" || deletingAccount}
-                         className="rounded-xl h-12 bg-red-600 text-white font-bold hover:bg-red-700"
+                         className="rounded-xl h-12 bg-red-600 text-white font-bold hover:bg-red-700 px-8"
                        >
                          {deletingAccount ? "Deleting..." : "Delete Forever"}
                        </AlertDialogAction>
@@ -355,7 +357,7 @@ export default function AccountSettings() {
                  <div className="space-y-2">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.newPassword}</Label>
                    <div className="relative">
-                     <Input type={showNew ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="rounded-xl h-11 pr-10" />
+                     <Input type={showNew ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="rounded-xl h-12 pr-10" />
                      <button className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" onClick={() => setShowNew(!showNew)}>
                        {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                      </button>
@@ -364,14 +366,14 @@ export default function AccountSettings() {
                  <div className="space-y-2">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.confirmNewPassword}</Label>
                    <div className="relative">
-                     <Input type={showCurrent ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="rounded-xl h-11 pr-10" />
+                     <Input type={showCurrent ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="rounded-xl h-12 pr-10" />
                      <button className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" onClick={() => setShowCurrent(!showCurrent)}>
                        {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                      </button>
                    </div>
                  </div>
               </div>
-              <Button onClick={handleChangePassword} disabled={!passwordValid || savingPassword} className="w-full bg-primary text-white font-black h-12 rounded-xl">
+              <Button onClick={handleChangePassword} disabled={!passwordValid || savingPassword} className="w-full bg-primary text-white font-black h-14 rounded-2xl shadow-xl shadow-primary/20">
                  {savingPassword ? "Updating..." : ta.updatePassword}
               </Button>
            </div>

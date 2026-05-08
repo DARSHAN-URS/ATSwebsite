@@ -50,7 +50,7 @@ const ResumeTemplatePage = lazy(() => import("@/pages/seo/ResumeTemplatePage"));
 const ResumeGuidePage = lazy(() => import("@/pages/seo/ResumeGuidePage"));
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
-const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
+const Profile = lazy(() => import("@/pages/Profile"));
 import ProRoute from "@/components/ProRoute";
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
@@ -140,9 +140,11 @@ const App = () => (
                 >
                   <Route path="/dashboard" element={<RoleGuard requiredRole="job_seeker"><Dashboard /></RoleGuard>} />
                   <Route path="/resumes" element={<RoleGuard requiredRole="job_seeker"><Resumes /></RoleGuard>} />
+                  <Route path="/builder" element={<RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard>} />
+                  <Route path="/builder/:id" element={<RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard>} />
                   <Route path="/job-tracker" element={<RoleGuard requiredRole="job_seeker"><ProRoute><JobTracker /></ProRoute></RoleGuard>} />
                   <Route path="/email-outreach" element={<RoleGuard requiredRole="job_seeker"><ProRoute><EmailOutreach /></ProRoute></RoleGuard>} />
-                  <Route path="/cover-letters" element={<Navigate to="/resumes" replace />} />
+                  <Route path="/cover-letters" element={<RoleGuard requiredRole="job_seeker"><CoverLetters /></RoleGuard>} />
                   <Route path="/jobs" element={<RoleGuard requiredRole="job_seeker"><FindJobs /></RoleGuard>} />
                   <Route path="/companies" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Companies /></ProRoute></RoleGuard>} />
                   <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
@@ -152,7 +154,7 @@ const App = () => (
                   <Route path="/recruiter/jobs/:jobId/applicants" element={<RoleGuard requiredRole="recruiter"><RecruiterApplicants /></RoleGuard>} />
                   <Route path="/recruiter/candidates" element={<RoleGuard requiredRole="recruiter"><RecruiterCandidates /></RoleGuard>} />
                   <Route path="/recruiter/analytics" element={<RoleGuard requiredRole="recruiter"><RecruiterAnalytics /></RoleGuard>} />
-                  <Route path="/account" element={<AccountSettings />} />
+                  <Route path="/profile" element={<Profile />} />
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboard />} />
                   </Route>

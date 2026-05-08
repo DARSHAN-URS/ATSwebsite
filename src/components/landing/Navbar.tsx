@@ -69,7 +69,7 @@ export const Navbar = () => {
               </Button>
             </Link>
             <Link to="/auth">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl px-8 h-12 shadow-xl shadow-blue-600/20 group">
+              <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl px-8 h-12 shadow-xl shadow-slate-900/20 group">
                 Join Now
                 <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
