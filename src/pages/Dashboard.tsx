@@ -21,13 +21,20 @@ import {
   Mic,
   ZapIcon,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  Activity,
+  Award,
+  Clock,
+  ArrowRight,
+  ChevronRight,
+  ShieldCheck,
+  Star
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import type { ResumeData } from "@/components/resume/types";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // Lazy-load heavy chart + section components
@@ -35,12 +42,6 @@ const DashboardCharts = lazy(() => import("@/components/dashboard/DashboardChart
 const JobTrackerSection = lazy(() => import("@/components/job-tracker/JobTrackerSection"));
 const AIApplyQueueSection = lazy(() => import("@/components/resume/AIApplyQueueSection"));
 const ScheduledInterviewsList = lazy(() => import("@/components/ScheduledInterviewsList"));
-
-export default function Dashboard() {
-  const { role } = useUserRole();
-  if (role === "recruiter") return <RecruiterDashboard />;
-  return <JobSeekerDashboard />;
-}
 
 function computeResumeScore(rd: ResumeData, title: string): number {
   const pi = rd.personalInfo || {};
@@ -59,51 +60,128 @@ function computeResumeScore(rd: ResumeData, title: string): number {
   return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }
 
-function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
+const CircularProgress = ({ value, label, size = 120 }: { value: number; label: string; size?: number }) => {
+  const radius = (size - 10) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (value / 100) * circumference;
+
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg className="transform -rotate-90" width={size} height={size}>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="currentColor"
+          strokeWidth="6"
+          fill="transparent"
+          className="text-white/5"
+        />
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="currentColor"
+          strokeWidth="6"
+          fill="transparent"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 1.5, ease: "circOut" }}
+          className="text-blue-500"
+          style={{ filter: "drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))" }}
+        />
+      </svg>
+      <div className="absolute flex flex-col items-center justify-center">
+        <span className="text-2xl font-black text-white leading-none">{value}%</span>
+        <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-1">{label}</span>
+      </div>
+    </div>
+  );
+};
+
+function ResumeStrengthWidget() {
   const { user } = useAuth();
-  const [resumes, setResumes] = useState<Array<{ id: string; title: string; score: number }>>([]);
+  const navigate = useNavigate();
+  const [resume, setResume] = useState<{ title: string; score: number; id: string } | null>(null);
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("resumes").select("id, title, resume_data").order("updated_at", { ascending: false }).limit(3)
+    supabase.from("resumes").select("id, title, resume_data").order("updated_at", { ascending: false }).limit(1)
       .then(({ data }) => {
-        if (!data) return;
-        setResumes(data.map(r => ({
-          id: r.id,
-          title: r.title,
-          score: computeResumeScore(r.resume_data as unknown as ResumeData, r.title),
-        })));
+        if (data?.[0]) {
+          setResume({
+            id: data[0].id,
+            title: data[0].title,
+            score: computeResumeScore(data[0].resume_data as unknown as ResumeData, data[0].title)
+          });
+        }
       });
   }, [user]);
 
-  if (resumes.length === 0) return null;
+  if (!resume) return null;
 
   return (
-    <Card className="rounded-[3rem] border border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl premium-shadow p-8">
-      <CardHeader className="pb-6">
-        <CardTitle className="text-[10px] font-black flex items-center gap-2 uppercase tracking-[0.2em] text-slate-400">
-           <TrendingUp className="w-3 h-3" /> Resume Strength
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {resumes.map((r) => {
-          const color = r.score >= 80 ? "text-blue-600" : r.score >= 50 ? "text-amber-500" : "text-red-500";
-          const barColor = r.score >= 80 ? "bg-blue-600" : r.score >= 50 ? "bg-amber-500" : "bg-red-500";
-          return (
-            <div key={r.id} className="space-y-3 cursor-pointer group" onClick={() => navigate("/resumes")}>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors truncate max-w-[70%] tracking-tight">{r.title}</span>
-                <span className={`text-xs font-black ${color}`}>{r.score}%</span>
-              </div>
-              <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                <motion.div initial={{ width: 0 }} animate={{ width: `${r.score}%` }} transition={{ duration: 1, ease: "circOut" }} className={`h-full ${barColor} shadow-[0_0_10px_rgba(37,99,235,0.2)]`} />
-              </div>
-            </div>
-          );
-        })}
-      </CardContent>
+    <Card className="rounded-[3rem] border border-white/5 bg-white/5 backdrop-blur-xl p-8 premium-border group overflow-hidden relative">
+      <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+         <Target className="w-20 h-20 text-blue-500" />
+      </div>
+      <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+        <CircularProgress value={resume.score} label="ATS Score" />
+        <div className="flex-1 space-y-4 text-center md:text-left">
+          <div className="space-y-1">
+             <h3 className="text-xl font-black text-white tracking-tight">{resume.title}</h3>
+             <p className="text-[10px] font-bold text-blue-500/70 uppercase tracking-widest">Active Profile Architecture</p>
+          </div>
+          <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+             {resume.score < 90 && (
+                <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-[9px] font-bold text-amber-500 uppercase tracking-widest">
+                   AI Tip: Add more keywords
+                </div>
+             )}
+             <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-[9px] font-bold text-blue-500 uppercase tracking-widest">
+                High Discovery Potential
+             </div>
+          </div>
+          <Button onClick={() => navigate(`/builder/${resume.id}`)} variant="ghost" className="h-10 px-6 rounded-xl font-black uppercase tracking-widest text-[9px] text-blue-400 hover:bg-blue-600 hover:text-white transition-all gap-2">
+             Improve Module <ArrowRight className="w-3 h-3" />
+          </Button>
+        </div>
+      </div>
     </Card>
   );
+}
+
+function StatCard({ label, value, icon: Icon, trend, color }: { label: string; value: string | number; icon: any; trend?: string; color: string }) {
+  return (
+    <motion.div whileHover={{ y: -5 }} className="group">
+      <Card className="rounded-[2.5xl] border border-white/5 bg-white/5 backdrop-blur-xl p-8 premium-border relative overflow-hidden">
+        <div className={cn("absolute -top-4 -right-4 w-20 h-20 opacity-5 blur-2xl rounded-full", color)} />
+        <div className="flex items-start justify-between relative z-10">
+          <div className="space-y-4">
+            <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110", color.replace('bg-', 'bg-') + "/10", color.replace('bg-', 'text-'))}>
+               <Icon className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+               <h4 className="text-3xl font-black text-white tracking-tighter">{value}</h4>
+               <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">{label}</p>
+            </div>
+          </div>
+          {trend && (
+             <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-[8px] font-black text-emerald-500">
+                {trend}
+             </div>
+          )}
+        </div>
+      </Card>
+    </motion.div>
+  );
+}
+
+export default function Dashboard() {
+  const { role } = useUserRole();
+  if (role === "recruiter") return <RecruiterDashboard />;
+  return <JobSeekerDashboard />;
 }
 
 function JobSeekerDashboard() {
@@ -139,136 +217,170 @@ function JobSeekerDashboard() {
   }, [user]);
 
   const quickActions = [
-    { label: "Build Resume", icon: Plus, to: "/builder", desc: "Create a professional resume", color: "text-blue-600", bg: "bg-blue-600/10" },
-    { label: "Job Search", icon: Search, to: "/jobs", desc: "Find your next career role", color: "text-indigo-600", bg: "bg-indigo-600/10" },
-    { label: "Practice", icon: Mic, to: "/interview-prep", desc: "Train for your interview", color: "text-purple-600", bg: "bg-purple-600/10" },
-    { label: "My Stats", icon: Target, to: "/jobs", desc: "View your progress", color: "text-emerald-600", bg: "bg-emerald-600/10" }
+    { label: "Build Resume", icon: Plus, to: "/builder", color: "text-blue-500", bg: "bg-blue-600/10" },
+    { label: "AI Search", icon: Search, to: "/jobs", color: "text-indigo-500", bg: "bg-indigo-600/10" },
+    { label: "Interview", icon: Mic, to: "/interview-prep", color: "text-purple-500", bg: "bg-purple-600/10" },
+    { label: "Outreach", icon: Mail, to: "/email-outreach", color: "text-emerald-500", bg: "bg-emerald-600/10" }
   ];
 
   return (
-    <div className="min-h-screen bg-background mesh-gradient pb-20 overflow-x-hidden">
-      <SEOHead title="Dashboard — ResumePro" description="Manage your resumes and job search." />
+    <div className="min-h-screen bg-[#020617] pb-20 overflow-x-hidden selection:bg-blue-600/30 selection:text-blue-400">
+      <SEOHead title="Dashboard — ResumePro" description="Premium AI-powered career dashboard." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16 text-left relative">
-        {/* Background Decorative Element */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="container mx-auto px-8 pt-16 space-y-12 text-left relative">
+        {/* Futuristic Ambient Glows */}
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none" />
         
-        <div className="flex flex-col md:flex-row items-end justify-between gap-12 relative z-10">
-          <div className="space-y-4">
-             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/5 backdrop-blur-md rounded-full border border-blue-600/10 text-blue-600">
-                <Brain className="w-4 h-4" />
-                <span className="text-[9px] font-black uppercase tracking-[0.2em]">Control Center</span>
+        {/* Top Section - Welcome & Quick Actions */}
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-12 relative z-10">
+          <div className="space-y-6">
+             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/5 backdrop-blur-md rounded-full border border-blue-500/20 text-blue-400">
+                <Sparkles className="w-4 h-4 text-glow" />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em]">Neural System Active</span>
              </motion.div>
-             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
-                My <br /> <span className="text-blue-600">Dashboard.</span>
-             </h1>
+             <div className="space-y-2">
+                <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]">
+                   Welcome back, <br /> <span className="text-blue-500 text-glow">{user?.user_metadata?.display_name?.split(' ')[0] || "User"}.</span>
+                </h1>
+                <p className="text-slate-500 font-medium text-lg max-w-xl">Your professional architecture is optimized and ready for deployment.</p>
+             </div>
           </div>
-          <Button onClick={() => navigate("/builder")} className="h-20 px-10 rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] gap-4 shadow-2xl shadow-blue-600/40 hover:scale-105 active:scale-95 transition-all">
-             <Plus className="w-5 h-5" /> Create New Resume
-          </Button>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full lg:w-auto">
+            {quickActions.map((action, i) => (
+              <motion.button
+                key={action.label}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate(action.to)}
+                className="flex flex-col items-center justify-center gap-3 p-6 rounded-3xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-blue-500/30 transition-all duration-500 group"
+              >
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500", action.bg, action.color)}>
+                   <action.icon className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-white transition-colors">{action.label}</span>
+              </motion.button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
-           <div className="lg:col-span-8 space-y-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {quickActions.map((action, i) => (
-                  <motion.div key={action.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                    <Card onClick={() => navigate(action.to)} className="group rounded-[2.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 premium-shadow hover:-translate-y-2 transition-all duration-500 cursor-pointer">
-                      <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110", action.bg, action.color)}>
-                         <action.icon className="w-6 h-6" />
-                      </div>
-                      <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight mt-6 mb-2">{action.label}</h3>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">{action.desc}</p>
-                    </Card>
-                  </motion.div>
-                ))}
+        {/* Analytics Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+           <div className="lg:col-span-8 space-y-8">
+              <ResumeStrengthWidget />
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                 <StatCard label="Applications" value={stats.totalApplications} icon={Activity} trend="+12% this week" color="bg-blue-600" />
+                 <StatCard label="Profile Views" value="842" icon={Eye} trend="+54 today" color="bg-indigo-600" />
+                 <StatCard label="Interviews" value="4" icon={Users} color="bg-purple-600" />
               </div>
 
-              <Card className="rounded-[3.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 premium-shadow p-12">
-                <CardHeader className="p-0 pb-12 flex flex-row items-center justify-between">
-                  <div className="space-y-2">
-                    <CardTitle className="text-4xl font-black tracking-tighter">Job Tracker</CardTitle>
-                    <CardDescription className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Track your active applications</CardDescription>
-                  </div>
-                  <Button variant="ghost" onClick={() => navigate("/jobs")} className="h-12 px-6 rounded-full font-black text-[10px] uppercase tracking-widest text-blue-600 hover:bg-blue-50">View All</Button>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <Suspense fallback={<div className="h-[400px] bg-slate-50 animate-pulse rounded-[3rem]" />}>
-                    <JobTrackerSection compact onManage={() => navigate("/jobs")} />
-                  </Suspense>
-                </CardContent>
+              <Card className="rounded-[3rem] border border-white/5 bg-white/5 backdrop-blur-xl premium-shadow overflow-hidden group">
+                 <div className="p-10 pb-0 flex items-center justify-between">
+                    <div className="space-y-1">
+                       <h3 className="text-3xl font-black text-white tracking-tighter">Application Pulse</h3>
+                       <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Real-time velocity tracking</p>
+                    </div>
+                    <div className="flex gap-2">
+                       <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                       <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest">Live Feed</span>
+                    </div>
+                 </div>
+                 <div className="p-10">
+                    <Suspense fallback={<div className="h-[300px] animate-pulse bg-white/5 rounded-[2rem]" />}>
+                       <DashboardCharts
+                          statusBreakdown={stats.statusBreakdown}
+                          weeklyActivity={stats.weeklyActivity}
+                          applications={stats.applications}
+                          labels={{ 
+                            applicationStatus: "Status", 
+                            statusBreakdown: "Industry", 
+                            weeklyActivity: "Activity", 
+                            weeklyActivityDesc: "Submissions", 
+                            noAppsYet: "Deploy your first application...", 
+                            noActivityYet: "Idle state" 
+                          }}
+                       />
+                    </Suspense>
+                 </div>
               </Card>
            </div>
 
-           <div className="lg:col-span-4 space-y-12">
-              <ResumeHealthCard navigate={navigate} />
-              
-              <Card className="rounded-[3.5rem] border-none bg-slate-900 text-white p-12 shadow-2xl shadow-blue-600/30 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform duration-700">
-                   <ZapIcon className="w-24 h-24 text-blue-500" />
+           {/* Sidebar Widgets */}
+           <div className="lg:col-span-4 space-y-8">
+              <Card className="rounded-[3rem] border-none bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-10 shadow-2xl shadow-blue-600/20 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform duration-1000">
+                   <ZapIcon className="w-32 h-32" />
                 </div>
-                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-600/20 blur-[80px] rounded-full" />
-                
-                <CardHeader className="p-0 pb-10 relative z-10">
-                  <CardTitle className="text-3xl font-black tracking-tighter">Auto Apply</CardTitle>
-                  <CardDescription className="text-blue-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">AI applying to jobs for you</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0 relative z-10">
-                  <Suspense fallback={<div className="h-40 bg-slate-800 animate-pulse rounded-3xl" />}>
-                    <AIApplyQueueSection />
-                  </Suspense>
-                </CardContent>
+                <div className="relative z-10 space-y-8">
+                   <div className="space-y-2">
+                      <h3 className="text-3xl font-black tracking-tighter leading-none">Auto-Apply Mode</h3>
+                      <p className="text-blue-100/70 font-medium text-sm">AI is actively scouting 24/7.</p>
+                   </div>
+                   <div className="h-1 w-full bg-white/20 rounded-full overflow-hidden">
+                      <motion.div animate={{ x: [-100, 300] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="h-full w-1/3 bg-white shadow-[0_0_15px_white]" />
+                   </div>
+                   <Suspense fallback={<div className="h-20 bg-white/10 rounded-2xl" />}>
+                      <AIApplyQueueSection />
+                   </Suspense>
+                </div>
               </Card>
 
-              <Card className="rounded-[3.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 premium-shadow p-12">
-                <CardHeader className="p-0 pb-10">
-                  <div className="flex items-center gap-3 text-blue-600 mb-2">
-                    <Sparkles className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Upcoming</span>
-                  </div>
-                  <CardTitle className="text-3xl font-black tracking-tighter">Interviews</CardTitle>
-                  <CardDescription className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Your scheduled meetings</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <Suspense fallback={<div className="h-40 bg-slate-50 animate-pulse rounded-3xl" />}>
-                    <ScheduledInterviewsList />
-                  </Suspense>
-                </CardContent>
+              <Card className="rounded-[3rem] border border-white/5 bg-white/5 backdrop-blur-xl premium-border p-10 space-y-8">
+                <div className="flex items-center justify-between">
+                   <div className="space-y-1">
+                      <h3 className="text-2xl font-black text-white tracking-tighter">Next Briefing</h3>
+                      <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Scheduled Interviews</p>
+                   </div>
+                   <Clock className="w-5 h-5 text-blue-500" />
+                </div>
+                <Suspense fallback={<div className="h-40 bg-white/5 rounded-3xl animate-pulse" />}>
+                   <ScheduledInterviewsList />
+                </Suspense>
+                <Button className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest text-[9px] hover:bg-blue-600 hover:border-blue-600 transition-all">
+                   Manage Schedule
+                </Button>
+              </Card>
+
+              <Card className="rounded-[3rem] border border-white/5 bg-white/5 backdrop-blur-xl premium-border p-10 group overflow-hidden">
+                 <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform">
+                       <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <div className="space-y-1">
+                       <h4 className="text-lg font-black text-white tracking-tight">AI Insights</h4>
+                       <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest leading-none">Security Protocol: High</p>
+                    </div>
+                 </div>
+                 <div className="space-y-4">
+                    <div className="p-4 bg-white/5 rounded-2xl border border-white/5 space-y-2 group-hover:border-emerald-500/20 transition-all">
+                       <p className="text-[10px] font-medium text-slate-400">Optimization recommended for <span className="text-emerald-500 font-bold">Google</span> role matching.</p>
+                       <div className="flex items-center gap-2 text-[8px] font-black text-emerald-500 uppercase tracking-widest">
+                          <Activity className="w-3 h-3" /> Efficiency +24%
+                       </div>
+                    </div>
+                 </div>
               </Card>
            </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 relative z-10">
-          <Card className="rounded-[4rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 premium-shadow overflow-hidden">
-            <CardHeader className="p-12 pb-0">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <CardTitle className="text-4xl font-black tracking-tighter">Tracking Stats</CardTitle>
-                  <CardDescription className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Application speed and performance</CardDescription>
-                </div>
-                <div className="w-16 h-16 rounded-3xl bg-blue-600/5 flex items-center justify-center text-blue-600">
-                  <TrendingUp className="w-8 h-8" />
-                </div>
+        {/* Secondary Modules */}
+        <div className="relative z-10">
+           <Card className="rounded-[4rem] border border-white/5 bg-white/5 backdrop-blur-xl premium-shadow p-12">
+              <div className="flex items-center justify-between mb-12">
+                 <div className="space-y-2">
+                    <h2 className="text-4xl font-black text-white tracking-tighter">Opportunity Pipeline</h2>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Live Tracking Matrix</p>
+                 </div>
+                 <Button onClick={() => navigate("/jobs")} variant="ghost" className="h-12 px-8 rounded-full border border-white/10 text-blue-400 font-black uppercase tracking-widest text-[9px] hover:bg-blue-600 hover:text-white transition-all">
+                    Pipeline Analytics
+                 </Button>
               </div>
-            </CardHeader>
-            <CardContent className="p-12 pt-0">
-              <Suspense fallback={<div className="h-[300px] animate-pulse bg-slate-50 dark:bg-slate-800 rounded-[2rem]" />}>
-                <DashboardCharts
-                  statusBreakdown={stats.statusBreakdown}
-                  weeklyActivity={stats.weeklyActivity}
-                  applications={stats.applications}
-                  labels={{ 
-                    applicationStatus: "Job Status", 
-                    statusBreakdown: "Category", 
-                    weeklyActivity: "Application Speed", 
-                    weeklyActivityDesc: "Daily activity", 
-                    noAppsYet: "Start applying to see stats...", 
-                    noActivityYet: "No activity yet" 
-                  }}
-                />
+              <Suspense fallback={<div className="h-[400px] bg-white/5 rounded-[3rem] animate-pulse" />}>
+                 <JobTrackerSection compact onManage={() => navigate("/jobs")} />
               </Suspense>
-            </CardContent>
-          </Card>
+           </Card>
         </div>
       </div>
     </div>
@@ -303,69 +415,57 @@ function RecruiterDashboard() {
     })();
   }, [user]);
 
-  const cards = [
-    { title: "Live Jobs", value: stats.activeJobs, icon: Briefcase, color: "text-blue-600", action: () => navigate("/recruiter/jobs") },
-    { title: "Job Views", value: stats.totalViews, icon: Eye, color: "text-indigo-600", action: () => navigate("/recruiter/analytics") },
-    { title: "Applicants", value: stats.totalApplicants, icon: Users, color: "text-blue-400", action: () => navigate("/recruiter/candidates") },
-  ];
-
   return (
-    <div className="min-h-screen bg-background mesh-gradient pb-20 overflow-x-hidden">
-      <SEOHead title="Recruiter Hub — ResumePro" description="Manage your job posts and applicants." noindex />
+    <div className="min-h-screen bg-[#020617] pb-20 overflow-x-hidden selection:bg-blue-600/30 selection:text-blue-400">
+      <SEOHead title="Recruiter Dashboard — ResumePro" description="Premium Recruiter Hub." />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left relative">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
         
-        <div className="space-y-4 relative z-10">
-           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/5 backdrop-blur-md rounded-full border border-blue-600/10 text-blue-600">
-              <Building2 className="w-4 h-4" />
-              <span className="text-[9px] font-black uppercase tracking-[0.2em]">Recruiter Hub</span>
+        <div className="space-y-6 relative z-10">
+           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/5 backdrop-blur-md rounded-full border border-blue-500/20 text-blue-400">
+              <Building2 className="w-4 h-4 text-glow" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Talent Acquisition Engine</span>
            </motion.div>
-           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
-              Recruiter <br /> <span className="text-blue-600">Dashboard.</span>
+           <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-tight">
+              Recruiter <br /> <span className="text-blue-500 text-glow">Dashboard.</span>
            </h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
-          {cards.map((card, i) => (
-            <motion.div key={card.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-              <Card className="rounded-[3.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 premium-shadow hover:-translate-y-2 transition-all group cursor-pointer" onClick={card.action}>
-                <div className="flex items-center justify-between mb-8">
-                  <div className={cn("w-16 h-16 rounded-3xl flex items-center justify-center bg-slate-50 dark:bg-slate-800", card.color)}>
-                     <card.icon className="w-8 h-8" />
-                  </div>
-                  <ArrowUpRight className="w-6 h-6 text-slate-200 group-hover:text-blue-600 transition-colors" />
-                </div>
-                <div className="text-7xl font-black text-slate-900 dark:text-white leading-none tracking-tighter">{loading ? "—" : card.value}</div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-8">{card.title}</p>
-              </Card>
-            </motion.div>
-          ))}
+          <StatCard label="Active Postings" value={stats.activeJobs} icon={Briefcase} trend="+2 new" color="bg-blue-600" />
+          <StatCard label="Total Reach" value={stats.totalViews} icon={Eye} trend="+1.2k views" color="bg-indigo-600" />
+          <StatCard label="Candidates" value={stats.totalApplicants} icon={Users} color="bg-blue-400" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
-          <Card className="rounded-[4rem] border-none bg-slate-900 text-white p-12 shadow-2xl shadow-blue-600/30 group cursor-pointer relative overflow-hidden" onClick={() => navigate("/recruiter/jobs")}>
-             <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform duration-700">
-                <Plus className="w-32 h-32" />
-             </div>
-             <div className="flex items-center justify-between mb-10 relative z-10">
-                <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center shadow-xl shadow-blue-600/40"><Plus className="w-8 h-8" /></div>
-                <ArrowUpRight className="w-6 h-6 text-slate-700 group-hover:text-white transition-colors" />
-             </div>
-             <h3 className="text-5xl font-black tracking-tighter mb-4 relative z-10">Post a Job</h3>
-             <p className="text-slate-400 font-medium text-lg relative z-10">Create a new job posting for candidates.</p>
-          </Card>
-          <Card className="rounded-[4rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 premium-shadow group cursor-pointer relative overflow-hidden" onClick={() => navigate("/recruiter/company")}>
-             <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                <Building2 className="w-32 h-32" />
-             </div>
-             <div className="flex items-center justify-between mb-10 relative z-10">
-                <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center text-slate-400"><Building2 className="w-8 h-8" /></div>
-                <ArrowUpRight className="w-6 h-6 text-slate-100 group-hover:text-blue-600 transition-colors" />
-             </div>
-             <h3 className="text-5xl font-black tracking-tighter mb-4 relative z-10">Company Profile</h3>
-             <p className="text-slate-400 font-medium text-lg relative z-10">Manage your company information and brand.</p>
-          </Card>
+          <motion.button whileHover={{ y: -5 }} onClick={() => navigate("/recruiter/jobs")} className="group text-left">
+             <Card className="rounded-[4rem] border border-white/5 bg-slate-900/50 p-16 shadow-2xl relative overflow-hidden premium-border h-full">
+                <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+                   <Plus className="w-32 h-32" />
+                </div>
+                <div className="flex items-center justify-between mb-12">
+                   <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-600/40 group-hover:scale-110 transition-transform"><Plus className="w-10 h-10 text-white" /></div>
+                   <ArrowUpRight className="w-8 h-8 text-slate-700 group-hover:text-blue-500 transition-colors" />
+                </div>
+                <h3 className="text-5xl font-black text-white tracking-tighter mb-4">Post a Job</h3>
+                <p className="text-slate-500 font-medium text-xl">Deploy a new mission and discover elite talent.</p>
+             </Card>
+          </motion.button>
+          
+          <motion.button whileHover={{ y: -5 }} onClick={() => navigate("/recruiter/company")} className="group text-left">
+             <Card className="rounded-[4rem] border border-white/5 bg-white/5 backdrop-blur-xl p-16 premium-border h-full">
+                <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+                   <Building2 className="w-32 h-32 text-blue-500" />
+                </div>
+                <div className="flex items-center justify-between mb-12">
+                   <div className="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center text-slate-500 group-hover:text-blue-500 transition-colors"><Building2 className="w-10 h-10" /></div>
+                   <ArrowUpRight className="w-8 h-8 text-slate-100 group-hover:text-blue-500 transition-colors" />
+                </div>
+                <h3 className="text-5xl font-black text-white tracking-tighter mb-4">Company Core</h3>
+                <p className="text-slate-500 font-medium text-xl">Manage organizational identity and branding.</p>
+             </Card>
+          </motion.button>
         </div>
       </div>
     </div>
