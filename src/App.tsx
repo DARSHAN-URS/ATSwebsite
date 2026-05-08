@@ -51,6 +51,7 @@ const ResumeGuidePage = lazy(() => import("@/pages/seo/ResumeGuidePage"));
 const JobTracker = lazy(() => import("@/pages/JobTracker"));
 const EmailOutreach = lazy(() => import("@/pages/EmailOutreach"));
 const Profile = lazy(() => import("@/pages/Profile"));
+const PublicProfile = lazy(() => import("./pages/PublicProfile"));
 import ProRoute from "@/components/ProRoute";
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
@@ -109,6 +110,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/p/:slug" element={<PublicProfile />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/about" element={<About />} />

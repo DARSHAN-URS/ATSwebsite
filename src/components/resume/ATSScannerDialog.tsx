@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ScanSearch, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { ScanSearch, CheckCircle, XCircle, AlertTriangle, Globe, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import type { ResumeData } from "@/components/resume/types";
 
@@ -196,22 +196,35 @@ export default function ATSScannerDialog({ resumeData }: ATSScannerDialogProps) 
               </Card>
             </div>
 
-            {results.score < 70 && (
-              <Card className="border-yellow-500/30 bg-yellow-500/5">
-                <CardContent className="p-4 flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Tip: Improve your match score</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Add the missing keywords into your summary, skills, or experience bullets. Use "Tailor to Job" for AI-powered optimization.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+            {results.missing.length > 0 && (
+              <div className="space-y-4 pt-4">
+                 <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Bridge the Skill Gap</h4>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {results.missing.slice(0, 4).map((kw) => (
+                       <a 
+                         key={kw}
+                         href={`https://www.coursera.org/search?query=${encodeURIComponent(kw)}`}
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="flex items-center gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-all group"
+                       >
+                          <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center shrink-0">
+                             <Globe className="w-4 h-4 text-primary" />
+                          </div>
+                          <div>
+                             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Learn {kw}</p>
+                             <p className="text-xs font-bold text-slate-900 flex items-center gap-1 group-hover:text-primary transition-colors">
+                                View Courses <ExternalLink className="w-3 h-3" />
+                             </p>
+                          </div>
+                       </a>
+                    ))}
+                 </div>
+              </div>
             )}
 
-            <Button variant="outline" onClick={() => setResults(null)} className="w-full">
-              Scan Again
+            <Button variant="outline" onClick={() => setResults(null)} className="w-full h-12 rounded-xl font-bold">
+              Scan New Description
             </Button>
           </div>
         )}

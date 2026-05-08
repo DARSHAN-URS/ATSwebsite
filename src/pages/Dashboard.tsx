@@ -306,25 +306,25 @@ function JobSeekerDashboard() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000" />
                 <div className="relative z-10 space-y-6">
                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-primary">
-                      <Zap className="w-6 h-6 fill-primary" />
+                      <Layout className="w-6 h-6" />
                    </div>
                    <div className="space-y-2">
-                      <h3 className="text-2xl font-black">AI Auto-Apply</h3>
-                      <p className="text-slate-400 text-sm font-medium leading-relaxed">Let our agent find and apply to roles matching your profile instantly.</p>
+                      <h3 className="text-2xl font-black">Personal Brand</h3>
+                      <p className="text-slate-400 text-sm font-medium leading-relaxed">Your professional portfolio is live. Share your visual identity with the world.</p>
                    </div>
-                   <Button onClick={() => navigate("/jobs")} className="w-full bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[10px] h-12 rounded-xl">Initialize Agent</Button>
+                   <Button onClick={() => navigate("/resumes")} className="w-full bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[10px] h-12 rounded-xl">Share Profile</Button>
                 </div>
              </Card>
 
-             <Card className="rounded-[2.5rem] border-slate-100 bg-white p-10 space-y-6 shadow-sm hover:shadow-xl transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
-                   <Mail className="w-6 h-6" />
-                </div>
-                <div className="space-y-2">
-                   <h3 className="text-2xl font-black">Email Outreach</h3>
-                   <p className="text-slate-500 text-sm font-medium leading-relaxed">Strategic direct messaging to recruiters and decision makers.</p>
-                </div>
-                <Button onClick={() => navigate("/email-outreach")} variant="outline" className="w-full rounded-xl h-12 font-black uppercase tracking-widest text-[10px] border-slate-200">Start Outreach</Button>
+             <Card className="rounded-[2.5rem] border-slate-100 bg-white p-10 space-y-6 shadow-sm hover:shadow-xl transition-all group">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-primary/10 transition-colors">
+                   <Target className="w-6 h-6" />
+                 </div>
+                 <div className="space-y-2">
+                    <h3 className="text-2xl font-black">Skill Bridge</h3>
+                    <p className="text-slate-500 text-sm font-medium leading-relaxed">Discover missing skills in your profile and access elite certification paths.</p>
+                 </div>
+                 <Button onClick={() => navigate("/resumes")} variant="outline" className="w-full rounded-xl h-12 font-black uppercase tracking-widest text-[10px] border-slate-200">Bridge Gaps</Button>
              </Card>
           </div>
         </div>

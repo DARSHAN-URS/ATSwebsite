@@ -5,7 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, FileText, Trash2, Edit, Download, MoreVertical, Sparkles, Layout } from "lucide-react";
+import { 
+  Plus, FileText, Trash2, Edit, Download, MoreVertical, Sparkles, Layout, Share2, Copy, Check, ExternalLink 
+} from "lucide-react";
+import { 
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription 
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
@@ -26,6 +33,17 @@ export default function Resumes() {
   const navigate = useNavigate();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareId, setShareId] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    const url = `${window.location.origin}/p/${shareId}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    toast({ title: "Link copied to clipboard!" });
+  };
 
   const fetchResumes = async () => {
     const { data } = await supabase.from("resumes").select("*").order("updated_at", { ascending: false });
@@ -128,6 +146,9 @@ export default function Resumes() {
                              </DropdownMenuItem>
                              <DropdownMenuItem className="rounded-lg font-bold text-xs uppercase tracking-widest p-3 gap-3">
                                 <Download className="w-4 h-4" /> Download PDF
+                             </DropdownMenuItem>
+                             <DropdownMenuItem onClick={() => { setShareOpen(true); setShareId(resume.id); }} className="rounded-lg font-bold text-xs uppercase tracking-widest p-3 gap-3 text-primary focus:text-primary focus:bg-primary/5">
+                                <Share2 className="w-4 h-4" /> Share Profile
                              </DropdownMenuItem>
                              <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-lg font-bold text-xs uppercase tracking-widest p-3 gap-3 text-red-500 focus:text-red-500 focus:bg-red-50">
                                 <Trash2 className="w-4 h-4" /> Delete
@@ -724,6 +745,45 @@ export default function Resumes() {
               {linkedinLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t.resumes.importing}</> : <>{t.resumes.importProfile}</>}
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+      {/* Share Profile Dialog */}
+      <Dialog open={shareOpen} onOpenChange={setShareOpen}>
+        <DialogContent className="rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl max-w-md">
+           <div className="bg-slate-900 p-8 text-white relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/2" />
+              <div className="relative z-10">
+                 <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-primary/20">
+                    <Share2 className="h-6 w-6 text-white" />
+                 </div>
+                 <DialogTitle className="text-2xl font-black tracking-tight">Share Identity</DialogTitle>
+                 <p className="text-slate-400 text-sm font-medium mt-2">Generate a public link to your professional profile.</p>
+              </div>
+           </div>
+           <div className="p-8 space-y-6 bg-white">
+              <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Public Profile URL</Label>
+                 <div className="flex gap-2">
+                    <div className="flex-1 h-12 rounded-xl bg-slate-50 border border-slate-100 px-4 flex items-center text-xs font-bold text-slate-500 overflow-hidden truncate">
+                       {window.location.origin}/p/{shareId?.substring(0, 8)}...
+                    </div>
+                    <Button onClick={copyToClipboard} className="h-12 w-12 rounded-xl bg-slate-900 text-white shrink-0">
+                       {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                 </div>
+              </div>
+              <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10 flex items-center gap-4">
+                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0"><Sparkles className="w-5 h-5" /></div>
+                 <p className="text-[10px] font-bold text-slate-600 leading-relaxed">
+                    This link includes your resume preview, skills, and contact info in a high-performance visual format.
+                 </p>
+              </div>
+              <Button asChild className="w-full h-12 rounded-xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-primary/20">
+                 <Link to={`/p/${shareId}`} target="_blank" className="flex items-center gap-2">
+                    <ExternalLink className="w-4 h-4" /> Preview Live Site
+                 </Link>
+              </Button>
+           </div>
         </DialogContent>
       </Dialog>
     </div>
