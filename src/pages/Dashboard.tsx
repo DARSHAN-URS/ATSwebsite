@@ -21,7 +21,9 @@ import {
   ArrowUpRight,
   Sparkles,
   Target,
-  Layout
+  Layout,
+  Brain,
+  Mic
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
