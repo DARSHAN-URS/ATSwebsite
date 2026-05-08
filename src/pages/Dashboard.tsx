@@ -80,7 +80,7 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
     <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] p-8">
       <CardHeader className="pb-6">
         <CardTitle className="text-[10px] font-black flex items-center gap-2 uppercase tracking-widest text-slate-400">
-           Module Health
+           Resume Strength
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -137,33 +137,33 @@ function JobSeekerDashboard() {
   }, [user]);
 
   const quickActions = [
-    { label: "New Module", icon: Plus, to: "/builder", desc: "Build professional architecture" },
-    { label: "Find Roles", icon: Search, to: "/jobs", desc: "Search the global matrix" },
-    { label: "Simulate", icon: Mic, to: "/interview-prep", desc: "Neural stress testing" },
-    { label: "Analytics", icon: Target, to: "/jobs", desc: "Pipeline synchronized" }
+    { label: "Build Resume", icon: Plus, to: "/builder", desc: "Create a new professional resume" },
+    { label: "Job Search", icon: Search, to: "/jobs", desc: "Find your next career opportunity" },
+    { label: "Practice", icon: Mic, to: "/interview-prep", desc: "Train for your next interview" },
+    { label: "My Stats", icon: Target, to: "/jobs", desc: "View your application progress" }
   ];
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
-      <SEOHead title="Intelligence — ResumePro" description="Operational dashboard for high-impact candidates." />
+      <SEOHead title="Dashboard — ResumePro" description="Manage your resumes and job search." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16">
-        <div className="flex flex-col md:flex-row items-end justify-between gap-12 text-left">
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
+        <div className="flex flex-col md:flex-row items-end justify-between gap-12">
           <div className="space-y-4">
              <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
                 <Brain className="w-4 h-4" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-blue-600">Operational Hub</span>
+                <span className="text-[9px] font-black uppercase tracking-widest text-blue-600">Control Center</span>
              </div>
              <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                Intelligence <br /> <span className="text-blue-600">Dashboard.</span>
+                My <br /> <span className="text-blue-600">Dashboard.</span>
              </h1>
           </div>
           <Button onClick={() => navigate("/builder")} className="h-20 px-10 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-2xl shadow-blue-600/20 hover:scale-105 transition-all">
-             <Plus className="w-5 h-5" /> Initialize New Module
+             <Plus className="w-5 h-5" /> Create New Resume
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
            <div className="lg:col-span-8 space-y-12">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {quickActions.map((action, i) => (
@@ -173,7 +173,7 @@ function JobSeekerDashboard() {
                          <action.icon className="w-6 h-6" />
                       </div>
                       <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2">{action.label}</h3>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{action.desc}</p>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">{action.desc}</p>
                     </Card>
                   </motion.div>
                 ))}
@@ -182,10 +182,10 @@ function JobSeekerDashboard() {
               <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] p-12">
                 <CardHeader className="p-0 pb-12 flex flex-row items-center justify-between">
                   <div className="space-y-2">
-                    <CardTitle className="text-3xl font-black tracking-tighter">Strategic Pipeline</CardTitle>
-                    <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Real-time application tracking</CardDescription>
+                    <CardTitle className="text-3xl font-black tracking-tighter">Job Tracker</CardTitle>
+                    <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Track your active applications</CardDescription>
                   </div>
-                  <Button variant="ghost" onClick={() => navigate("/jobs")} className="rounded-xl font-black text-[10px] uppercase tracking-widest text-blue-600">Expand Matrix</Button>
+                  <Button variant="ghost" onClick={() => navigate("/jobs")} className="rounded-xl font-black text-[10px] uppercase tracking-widest text-blue-600">View All</Button>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Suspense fallback={<div className="h-[400px] bg-slate-50 animate-pulse rounded-[3rem]" />}>
@@ -203,8 +203,8 @@ function JobSeekerDashboard() {
                    <ZapIcon className="w-20 h-20" />
                 </div>
                 <CardHeader className="p-0 pb-10">
-                  <CardTitle className="text-3xl font-black tracking-tighter">AI Synchronization</CardTitle>
-                  <CardDescription className="text-blue-400 font-bold uppercase tracking-widest text-[10px] mt-2">Active recruitment queue</CardDescription>
+                  <CardTitle className="text-3xl font-black tracking-tighter">Auto Apply</CardTitle>
+                  <CardDescription className="text-blue-400 font-bold uppercase tracking-widest text-[10px] mt-2">AI applying to jobs for you</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Suspense fallback={<div className="h-40 bg-slate-800 animate-pulse rounded-3xl" />}>
@@ -215,8 +215,8 @@ function JobSeekerDashboard() {
 
               <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] p-12">
                 <CardHeader className="p-0 pb-10">
-                  <CardTitle className="text-2xl font-black tracking-tighter">Deployments</CardTitle>
-                  <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Upcoming simulations</CardDescription>
+                  <CardTitle className="text-2xl font-black tracking-tighter">Interviews</CardTitle>
+                  <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Your scheduled meetings</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Suspense fallback={<div className="h-40 bg-slate-50 animate-pulse rounded-3xl" />}>
@@ -227,11 +227,11 @@ function JobSeekerDashboard() {
            </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 text-left">
+        <div className="grid grid-cols-1 gap-12">
           <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
             <CardHeader className="p-12 pb-0">
-              <CardTitle className="text-3xl font-black tracking-tighter">Intelligence Metrics</CardTitle>
-              <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Data-driven career trajectory</CardDescription>
+              <CardTitle className="text-3xl font-black tracking-tighter">Tracking Stats</CardTitle>
+              <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Application speed and performance</CardDescription>
             </CardHeader>
             <CardContent className="p-12 pt-0">
               <Suspense fallback={<div className="h-[300px] animate-pulse bg-slate-50 dark:bg-slate-800 rounded-[2rem]" />}>
@@ -240,12 +240,12 @@ function JobSeekerDashboard() {
                   weeklyActivity={stats.weeklyActivity}
                   applications={stats.applications}
                   labels={{ 
-                    applicationStatus: "Pipeline Distribution", 
+                    applicationStatus: "Job Status", 
                     statusBreakdown: "Category", 
-                    weeklyActivity: "Strategic Velocity", 
-                    weeklyActivityDesc: "Operational rate", 
-                    noAppsYet: "Initializing metrics...", 
-                    noActivityYet: "Matrix idle" 
+                    weeklyActivity: "Application Speed", 
+                    weeklyActivityDesc: "Daily activity", 
+                    noAppsYet: "Start applying to see stats...", 
+                    noActivityYet: "No activity yet" 
                   }}
                 />
               </Suspense>
@@ -286,23 +286,23 @@ function RecruiterDashboard() {
   }, [user]);
 
   const cards = [
-    { title: "Active Deployments", value: stats.activeJobs, icon: Briefcase, color: "text-blue-600", action: () => navigate("/recruiter/jobs") },
-    { title: "Intelligence Views", value: stats.totalViews, icon: Eye, color: "text-indigo-600", action: () => navigate("/recruiter/analytics") },
-    { title: "Talent Matrix", value: stats.totalApplicants, icon: Users, color: "text-blue-400", action: () => navigate("/recruiter/candidates") },
+    { title: "Live Jobs", value: stats.activeJobs, icon: Briefcase, color: "text-blue-600", action: () => navigate("/recruiter/jobs") },
+    { title: "Job Views", value: stats.totalViews, icon: Eye, color: "text-indigo-600", action: () => navigate("/recruiter/analytics") },
+    { title: "Applicants", value: stats.totalApplicants, icon: Users, color: "text-blue-400", action: () => navigate("/recruiter/candidates") },
   ];
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
-      <SEOHead title="Enterprise Hub — ResumePro" description="Manage high-impact recruitment modules." noindex />
+      <SEOHead title="Recruiter Hub — ResumePro" description="Manage your job posts and applicants." noindex />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
         <div className="space-y-4">
            <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
               <Building2 className="w-4 h-4" />
-              <span className="text-[9px] font-black uppercase tracking-widest">Enterprise Protocol</span>
+              <span className="text-[9px] font-black uppercase tracking-widest">Recruiter Hub</span>
            </div>
            <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-              Enterprise <br /> <span className="text-blue-600">Dashboard.</span>
+              Recruiter <br /> <span className="text-blue-600">Dashboard.</span>
            </h1>
         </div>
 
@@ -329,16 +329,16 @@ function RecruiterDashboard() {
                 <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center"><Plus className="w-8 h-8" /></div>
                 <ArrowUpRight className="w-6 h-6 text-slate-700 group-hover:text-white" />
              </div>
-             <h3 className="text-4xl font-black tracking-tighter mb-4">Post Deployment</h3>
-             <p className="text-slate-400 font-medium">Initialize a new recruitment vector in the global matrix.</p>
+             <h3 className="text-4xl font-black tracking-tighter mb-4">Post a Job</h3>
+             <p className="text-slate-400 font-medium">Create a new job posting for candidates.</p>
           </Card>
           <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] group cursor-pointer" onClick={() => navigate("/recruiter/company")}>
              <div className="flex items-center justify-between mb-10">
                 <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-400"><Building2 className="w-8 h-8" /></div>
                 <ArrowUpRight className="w-6 h-6 text-slate-100 group-hover:text-blue-600" />
              </div>
-             <h3 className="text-4xl font-black tracking-tighter mb-4">Enterprise Brand</h3>
-             <p className="text-slate-400 font-medium">Configure your organizational identity and visibility.</p>
+             <h3 className="text-4xl font-black tracking-tighter mb-4">Company Profile</h3>
+             <p className="text-slate-400 font-medium">Manage your company information and brand.</p>
           </Card>
         </div>
       </div>

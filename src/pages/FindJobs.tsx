@@ -80,7 +80,7 @@ export default function FindJobs() {
       });
       if (error) throw error;
       setJobs(data?.jobs || []);
-      toast({ title: "Intelligence Dispatched", description: `Synchronized ${data?.jobs?.length || 0} opportunities.` });
+      toast({ title: "Jobs Found", description: `Found ${data?.jobs?.length || 0} job opportunities.` });
     } catch (e: any) {
       toast({ title: "Search Failed", description: e.message, variant: "destructive" });
     } finally {
@@ -92,9 +92,9 @@ export default function FindJobs() {
     const { error } = await supabase.from("saved_jobs").insert({
       user_id: user?.id, job_title: job.job_title, company: job.company, location: job.location, job_url: job.url
     });
-    if (error) toast({ title: "Protocol Error", variant: "destructive" });
+    if (error) toast({ title: "Error saving job", variant: "destructive" });
     else {
-      toast({ title: "Opportunity Saved" });
+      toast({ title: "Job Saved" });
       fetchSavedJobs();
     }
   };
@@ -103,55 +103,55 @@ export default function FindJobs() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
-      <SEOHead title="Opportunity Matrix — ResumePro" description="Synchronize your professional identity with global organizational requirements." />
+      <SEOHead title="Find Jobs — ResumePro" description="Search and apply for jobs with AI." />
       <ApplyWithResumeDialog open={applyDialogOpen} onOpenChange={setApplyDialogOpen} job={applyingJob} resumes={resumes} onSuccess={() => appliedIds.add(applyingJob?.id || "")} />
 
-      <div className="container mx-auto px-8 pt-16 space-y-16">
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
          <div className="flex flex-col md:flex-row items-end justify-between gap-12">
             <div className="space-y-4">
                <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
                   <Globe className="w-4 h-4" />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Global Protocol</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest">Global Search</span>
                </div>
                <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                  Opportunity <br /> <span className="text-blue-600">Matrix.</span>
+                  Find <br /> <span className="text-blue-600">Jobs.</span>
                </h1>
             </div>
          </div>
 
          <Tabs defaultValue="discovery" className="space-y-12">
             <TabsList className="h-16 p-2 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm inline-flex">
-               <TabsTrigger value="discovery" className="rounded-2xl px-10 font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">AI Discovery</TabsTrigger>
-               <TabsTrigger value="internal" className="rounded-2xl px-10 font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">Direct Board</TabsTrigger>
+               <TabsTrigger value="discovery" className="rounded-2xl px-10 font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">Search Web</TabsTrigger>
+               <TabsTrigger value="internal" className="rounded-2xl px-10 font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">Local Jobs</TabsTrigger>
             </TabsList>
 
             <TabsContent value="discovery" className="space-y-12 outline-none">
                <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-12">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
                      <div className="lg:col-span-5 space-y-4">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Neural Query</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Title</Label>
                         <div className="relative">
                            <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="e.g. Senior Software Architect" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold text-lg" />
+                           <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="e.g. Software Engineer" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold text-lg" />
                         </div>
                      </div>
                      <div className="lg:col-span-3 space-y-4">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Geographic Vector</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Location</Label>
                         <div className="relative">
                            <MapPin className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Global" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold" />
+                           <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Remote" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold" />
                         </div>
                      </div>
                      <div className="lg:col-span-2 space-y-4">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Identity Sync</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-8 font-bold text-xs"><SelectValue placeholder="Select Module" /></SelectTrigger>
+                           <SelectTrigger className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-8 font-bold text-xs"><SelectValue placeholder="Select Resume" /></SelectTrigger>
                            <SelectContent className="rounded-2xl border-none shadow-2xl p-2">{resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl font-bold">{r.title}</SelectItem>)}</SelectContent>
                         </Select>
                      </div>
                      <div className="lg:col-span-2">
                         <Button onClick={handleSearch} disabled={searching} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-2xl shadow-blue-600/20">
-                           {searching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />} Execute
+                           {searching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />} Search
                         </Button>
                      </div>
                   </div>
@@ -164,8 +164,8 @@ export default function FindJobs() {
                ) : jobs.length === 0 ? (
                   <div className="py-40 text-center space-y-6">
                      <div className="w-24 h-24 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center text-slate-300 mx-auto"><Target className="w-12 h-12" /></div>
-                     <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">System Ready</h3>
-                     <p className="text-slate-500 font-medium">Initialize a neural query to discovery global career vectors.</p>
+                     <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Ready to search</h3>
+                     <p className="text-slate-500 font-medium">Search for jobs using AI to find the best match for your resume.</p>
                   </div>
                ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -195,10 +195,10 @@ export default function FindJobs() {
                                  </div>
 
                                  <div className="flex items-center gap-4 pt-4">
-                                    <Button onClick={() => window.open(job.url, '_blank')} className="flex-1 h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-xl">
-                                       Apply via Source <ExternalLink className="w-4 h-4" />
+                                    <Button onClick={() => window.open(job.url, '_blank')} className="flex-1 h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-xl hover:bg-blue-600 transition-all">
+                                       Apply Now <ExternalLink className="w-4 h-4" />
                                     </Button>
-                                    <Button onClick={() => saveJob(job)} variant="outline" className={cn("h-16 w-16 rounded-2xl border-slate-100", isSaved(job.url) && "bg-blue-50 text-blue-600")}>
+                                    <Button variant="ghost" onClick={() => saveJob(job)} className={cn("h-16 w-16 rounded-2xl border border-slate-100", isSaved(job.url) ? "text-blue-600 bg-blue-50" : "text-slate-400 hover:text-blue-600 hover:bg-blue-50")}>
                                        {isSaved(job.url) ? <BookmarkCheck className="w-6 h-6" /> : <Bookmark className="w-6 h-6" />}
                                     </Button>
                                  </div>
@@ -210,39 +210,49 @@ export default function FindJobs() {
                )}
             </TabsContent>
 
-            <TabsContent value="internal" className="outline-none">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  {boardLoading ? (
-                     [1,2,3,4].map(i => <div key={i} className="h-64 rounded-[4rem] bg-white animate-pulse shadow-sm" />)
-                  ) : boardJobs.length === 0 ? (
-                     <div className="col-span-full py-40 text-center space-y-6">
-                        <div className="w-24 h-24 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center text-slate-300 mx-auto"><Building2 className="w-12 h-12" /></div>
-                        <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Board Empty</h3>
-                        <p className="text-slate-500 font-medium">No direct organizational roles detected in current matrix.</p>
-                     </div>
-                  ) : (
-                     boardJobs.map((job, i) => (
-                        <motion.div key={job.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                           <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl hover:-translate-y-2 transition-all space-y-8">
-                              <div className="space-y-4">
-                                 <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white"><ShieldCheck className="w-6 h-6" /></div>
-                                    <span className="font-black text-slate-900 dark:text-white text-xl tracking-tight">{job.company_name}</span>
+            <TabsContent value="internal" className="space-y-12 outline-none">
+               {boardLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                     {[1,2,3,4].map(i => <div key={i} className="h-64 rounded-[4rem] bg-white animate-pulse shadow-sm" />)}
+                  </div>
+               ) : boardJobs.length === 0 ? (
+                  <div className="py-40 text-center space-y-6">
+                     <div className="w-24 h-24 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center text-slate-300 mx-auto"><Briefcase className="w-12 h-12" /></div>
+                     <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">No Local Jobs</h3>
+                     <p className="text-slate-500 font-medium">Check back later for direct postings from recruiters.</p>
+                  </div>
+               ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                     {boardJobs.map((job, i) => (
+                        <motion.div key={job.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}>
+                           <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl transition-all space-y-8">
+                              <div className="flex items-center gap-4">
+                                 <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-blue-600/20">{job.company_name.charAt(0)}</div>
+                                 <div>
+                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">{job.title}</h3>
+                                    <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-1">{job.company_name}</p>
                                  </div>
-                                 <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{job.title}</h3>
                               </div>
+                              
                               <div className="flex flex-wrap gap-6 text-xs font-black text-slate-400 uppercase tracking-widest">
                                  <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {job.location || "Remote"}</div>
-                                 <div className="flex items-center gap-2"><Briefcase className="w-4 h-4" /> {job.job_type}</div>
+                                 <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {new Date(job.created_at).toLocaleDateString()}</div>
+                                 <div className="flex items-center gap-2"><Zap className="w-4 h-4" /> {job.job_type}</div>
                               </div>
-                              <Button onClick={() => { setApplyingJob(job); setApplyDialogOpen(true); }} className="w-full h-16 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-xl shadow-blue-600/20">
-                                 Instant Apply <Zap className="w-4 h-4" />
+
+                              <Button 
+                                onClick={() => { setApplyingJob(job); setApplyDialogOpen(true); }}
+                                disabled={appliedIds.has(job.id)}
+                                className={cn("w-full h-16 rounded-2xl font-black uppercase tracking-widest text-[10px] gap-3 shadow-xl transition-all", appliedIds.has(job.id) ? "bg-emerald-500 text-white" : "bg-blue-600 text-white hover:bg-slate-900")}
+                              >
+                                 {appliedIds.has(job.id) ? <ShieldCheck className="w-5 h-5" /> : <ExternalLink className="w-5 h-5" />}
+                                 {appliedIds.has(job.id) ? "Already Applied" : "Quick Apply"}
                               </Button>
                            </Card>
                         </motion.div>
-                     ))
-                  )}
-               </div>
+                     ))}
+                  </div>
+               )}
             </TabsContent>
          </Tabs>
       </div>

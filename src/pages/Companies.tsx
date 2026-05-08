@@ -42,12 +42,12 @@ export default function Companies() {
     if (!user) return;
     if (isPinned(company.name)) {
       await supabase.from("pinned_companies").delete().eq("user_id", user.id).eq("company_name", company.name);
-      toast({ title: "Removed from Matrix" });
+      toast({ title: "Unpinned" });
     } else {
       await supabase.from("pinned_companies").insert({
         user_id: user.id, company_name: company.name, company_logo: company.logo, company_website: company.website, city: company.city, country: company.country
       });
-      toast({ title: "Added to Matrix" });
+      toast({ title: "Pinned" });
     }
     fetchPinned();
   };
@@ -58,9 +58,9 @@ export default function Companies() {
     try {
       const { data } = await invokeFunction("search-companies", { body: { query, location, industry } });
       setCompanies(data?.companies ?? []);
-      toast({ title: "Intelligence Synchronized", description: `Detected ${data?.companies?.length || 0} organizations.` });
+      toast({ title: "Search Completed", description: `Found ${data?.companies?.length || 0} companies.` });
     } catch (e: any) {
-      toast({ title: "Synchronization Failed", variant: "destructive" });
+      toast({ title: "Search Failed", variant: "destructive" });
     } finally {
       setSearching(false);
     }
@@ -68,17 +68,17 @@ export default function Companies() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
-      <SEOHead title="Organizational Matrix — ResumePro" description="Access deep intelligence into company hiring patterns and organizational culture." />
+      <SEOHead title="Find Companies — ResumePro" description="Search for companies and see their open job positions." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16">
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
          <div className="flex flex-col md:flex-row items-end justify-between gap-12">
             <div className="space-y-4">
                <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
                   <Building2 className="w-4 h-4" />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Enterprise Intelligence</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest">Company Search</span>
                </div>
                <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                  Organizational <br /> <span className="text-blue-600">Matrix.</span>
+                  Companies.
                </h1>
             </div>
          </div>
@@ -86,22 +86,22 @@ export default function Companies() {
          <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
                <div className="lg:col-span-5 space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Entity Query</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
                   <div className="relative">
                      <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
                      <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. Google, Microsoft" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold text-lg" />
                   </div>
                </div>
                <div className="lg:col-span-4 space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Geographic Vector</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Location</Label>
                   <div className="relative">
                      <MapPin className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                     <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Global" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold" />
+                     <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. London" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold" />
                   </div>
                </div>
                <div className="lg:col-span-3">
                   <Button onClick={handleSearch} disabled={searching} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-2xl shadow-blue-600/20">
-                     {searching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />} Synchronize
+                     {searching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />} Search
                   </Button>
                </div>
             </div>
@@ -113,8 +113,8 @@ export default function Companies() {
             ) : companies.length === 0 ? (
                <div className="col-span-full py-40 text-center space-y-6">
                   <div className="w-24 h-24 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center text-slate-300 mx-auto"><ShieldCheck className="w-12 h-12" /></div>
-                  <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Intelligence Ready</h3>
-                  <p className="text-slate-500 font-medium">Query the matrix to retrieve deep organizational insights.</p>
+                  <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Ready to search</h3>
+                  <p className="text-slate-500 font-medium">Search for companies to see their active jobs.</p>
                </div>
             ) : (
                <AnimatePresence>
@@ -139,11 +139,11 @@ export default function Companies() {
 
                            <div className="space-y-4 pt-4 border-t border-slate-50 dark:border-slate-800">
                               <div className="flex items-center justify-between">
-                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Deployments</span>
+                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Open Jobs</span>
                                  <span className="text-blue-600 font-black">{company.open_jobs.length} roles</span>
                               </div>
-                              <Button onClick={() => window.open(company.website || '#', '_blank')} variant="outline" className="w-full h-16 rounded-2xl border-slate-100 font-black uppercase tracking-widest text-[10px] gap-3">
-                                 Enterprise Vector <ExternalLink className="w-4 h-4" />
+                              <Button onClick={() => window.open(company.website || '#', '_blank')} variant="outline" className="w-full h-16 rounded-2xl border-slate-100 font-black uppercase tracking-widest text-[10px] gap-3 hover:bg-blue-600 hover:text-white transition-all">
+                                 Visit Website <ExternalLink className="w-4 h-4" />
                               </Button>
                            </div>
                         </Card>
