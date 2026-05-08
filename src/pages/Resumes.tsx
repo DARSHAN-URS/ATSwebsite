@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Plus, FileText, Trash2, Edit, MoreVertical, Sparkles, 
-  Share2, Check, ExternalLink, Loader2, Search, Zap, Mail, ShieldCheck
+  Share2, Check, ExternalLink, Loader2, Search, Zap, Mail, ShieldCheck,
+  ArrowRight, Copy
 } from "lucide-react";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription 
@@ -15,6 +16,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
