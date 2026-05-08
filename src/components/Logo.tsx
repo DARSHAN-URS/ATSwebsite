@@ -1,39 +1,49 @@
+import { Sparkles } from "lucide-react";
+
 interface LogoProps {
   className?: string;
+  variant?: "auto" | "light" | "dark";
   width?: number;
   height?: number;
-  loading?: "lazy" | "eager";
-  fetchPriority?: "high" | "low" | "auto";
-  /** Use "light" to force white logo (e.g. on always-dark backgrounds like sidebar) */
-  variant?: "auto" | "light";
 }
 
-export default function Logo({ className = "h-10 w-auto", width = 160, height = 48, loading, fetchPriority, variant = "auto" }: LogoProps) {
-  const filterClass = variant === "light"
-    ? "brightness-0 invert"
-    : "dark:brightness-0 dark:invert";
-
-  // React 18 doesn't recognise fetchPriority on <img>; spread conditionally
-  const extraProps: Record<string, string> = {};
-  if (fetchPriority) extraProps.fetchpriority = fetchPriority;
+export default function Logo({ className = "h-10", variant = "auto" }: LogoProps) {
+  // Logic for colors based on variant
+  // auto: respects dark mode
+  // light: forces white (for dark backgrounds)
+  // dark: forces dark (for light backgrounds)
+  
+  const isDarkForce = variant === "dark";
+  const isLightForce = variant === "light";
+  
+  const iconColor = "text-primary";
+  const resumeColor = isLightForce 
+    ? "text-white" 
+    : isDarkForce 
+      ? "text-slate-900" 
+      : "text-slate-900 dark:text-white";
+  
+  const proColor = "text-primary";
 
   return (
-    <picture>
-      <source
-        srcSet="/images/logo-main-sm.webp"
-        type="image/webp"
-        sizes="(max-width: 768px) 160px, 192px"
-      />
-      <img
-        alt="ATS Pro Resume Builder"
-        className={`${className} object-contain ${filterClass}`}
-        width={width}
-        height={height}
-        loading={loading}
-        decoding="async"
-        src="/images/logo-main.png"
-        {...extraProps}
-      />
-    </picture>
+    <div className={`flex items-center gap-3 select-none ${className}`}>
+      <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 rotate-3 hover:rotate-0 transition-transform duration-500">
+        <Sparkles className="w-6 h-6 text-white" />
+      </div>
+      <div className="flex flex-col -space-y-1">
+        <div className="flex items-center gap-1.5">
+           <span className={`text-xl font-black tracking-tighter uppercase ${resumeColor}`}>
+             Resume
+           </span>
+           <span className={`text-xl font-black tracking-tighter uppercase ${proColor}`}>
+             Pro
+           </span>
+        </div>
+        <div className="flex items-center gap-1">
+           <div className="h-[2px] w-4 bg-primary rounded-full" />
+           <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400">AI Architect</span>
+        </div>
+      </div>
+    </div>
   );
 }
