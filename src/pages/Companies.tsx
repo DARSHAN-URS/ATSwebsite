@@ -77,7 +77,7 @@ export default function Companies() {
                   <Building2 className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">Company Search</span>
                </div>
-               <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+               <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                   Companies.
                </h1>
             </div>

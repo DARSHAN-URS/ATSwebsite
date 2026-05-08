@@ -103,7 +103,7 @@ export default function JobTracker() {
              </div>
              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Pipeline</span>
           </motion.div>
-          <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+          <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
              Tracking <br /> <span className="text-blue-600">Engine.</span>
           </h1>
         </div>

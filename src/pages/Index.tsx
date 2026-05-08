@@ -44,8 +44,8 @@ const Index = () => {
                <span className="text-[10px] font-black uppercase tracking-[0.3em]">AI-Powered Career Platform</span>
             </motion.div>
             
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-7xl md:text-[10rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] max-w-6xl mx-auto">
-               Career <br /> <span className="text-blue-600">Infrastructure.</span>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9] max-w-6xl mx-auto">
+               Career <br /> <span className="text-blue-600 text-glow">Infrastructure.</span>
             </motion.h1>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-xl md:text-2xl text-slate-500 dark:text-slate-400 font-medium max-w-3xl mx-auto leading-relaxed">
@@ -78,7 +78,7 @@ const Index = () => {
             <div className="flex flex-col md:flex-row items-end justify-between gap-12 text-left">
                <div className="space-y-4">
                   <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Core Features</span>
-                  <h2 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                  <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
                      Professional <br /> Performance.
                   </h2>
                </div>
@@ -126,7 +126,7 @@ const Index = () => {
             <div className="relative rounded-[5rem] bg-slate-900 dark:bg-blue-600 overflow-hidden p-16 md:p-32 text-center text-white space-y-12">
                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/20 dark:bg-white/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
                <div className="relative z-10 space-y-8">
-                  <h2 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.8] max-w-4xl mx-auto">Ready to Scale Your Career?</h2>
+                  <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] max-w-4xl mx-auto">Ready to Scale Your Career?</h2>
                   <p className="text-xl md:text-2xl text-blue-100/70 font-medium max-w-2xl mx-auto">Join thousands of professionals who have accelerated their career with ResumePro.</p>
                   <Button asChild className="h-24 px-16 bg-white text-blue-600 hover:bg-slate-100 font-black uppercase tracking-widest text-xs rounded-full shadow-2xl gap-4">
                      <Link to="/auth">Start Building Now <ChevronRight className="w-6 h-6" /></Link>

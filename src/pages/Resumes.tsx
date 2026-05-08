@@ -106,7 +106,7 @@ export default function Resumes() {
                   <ShieldCheck className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">My Resumes</span>
                </div>
-               <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+               <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                   Resumes.
                </h1>
             </div>
