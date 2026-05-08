@@ -19,7 +19,9 @@ import {
   Target,
   Layout,
   Mic,
-  ZapIcon
+  ZapIcon,
+  Sparkles,
+  TrendingUp
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
@@ -77,10 +79,10 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
   if (resumes.length === 0) return null;
 
   return (
-    <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] p-8">
+    <Card className="rounded-[3rem] border border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl premium-shadow p-8">
       <CardHeader className="pb-6">
-        <CardTitle className="text-[10px] font-black flex items-center gap-2 uppercase tracking-widest text-slate-400">
-           Resume Strength
+        <CardTitle className="text-[10px] font-black flex items-center gap-2 uppercase tracking-[0.2em] text-slate-400">
+           <TrendingUp className="w-3 h-3" /> Resume Strength
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -90,11 +92,11 @@ function ResumeHealthCard({ navigate }: { navigate: (p: string) => void }) {
           return (
             <div key={r.id} className="space-y-3 cursor-pointer group" onClick={() => navigate("/resumes")}>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-black text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors truncate max-w-[70%] tracking-tight">{r.title}</span>
+                <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors truncate max-w-[70%] tracking-tight">{r.title}</span>
                 <span className={`text-xs font-black ${color}`}>{r.score}%</span>
               </div>
-              <div className="h-2 w-full bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
-                <motion.div initial={{ width: 0 }} animate={{ width: `${r.score}%` }} transition={{ duration: 1 }} className={`h-full ${barColor}`} />
+              <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <motion.div initial={{ width: 0 }} animate={{ width: `${r.score}%` }} transition={{ duration: 1, ease: "circOut" }} className={`h-full ${barColor} shadow-[0_0_10px_rgba(37,99,235,0.2)]`} />
               </div>
             </div>
           );
@@ -137,55 +139,58 @@ function JobSeekerDashboard() {
   }, [user]);
 
   const quickActions = [
-    { label: "Build Resume", icon: Plus, to: "/builder", desc: "Create a new professional resume" },
-    { label: "Job Search", icon: Search, to: "/jobs", desc: "Find your next career opportunity" },
-    { label: "Practice", icon: Mic, to: "/interview-prep", desc: "Train for your next interview" },
-    { label: "My Stats", icon: Target, to: "/jobs", desc: "View your application progress" }
+    { label: "Build Resume", icon: Plus, to: "/builder", desc: "Create a professional resume", color: "text-blue-600", bg: "bg-blue-600/10" },
+    { label: "Job Search", icon: Search, to: "/jobs", desc: "Find your next career role", color: "text-indigo-600", bg: "bg-indigo-600/10" },
+    { label: "Practice", icon: Mic, to: "/interview-prep", desc: "Train for your interview", color: "text-purple-600", bg: "bg-purple-600/10" },
+    { label: "My Stats", icon: Target, to: "/jobs", desc: "View your progress", color: "text-emerald-600", bg: "bg-emerald-600/10" }
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-background mesh-gradient pb-20 overflow-x-hidden">
       <SEOHead title="Dashboard — ResumePro" description="Manage your resumes and job search." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
-        <div className="flex flex-col md:flex-row items-end justify-between gap-12">
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left relative">
+        {/* Background Decorative Element */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="flex flex-col md:flex-row items-end justify-between gap-12 relative z-10">
           <div className="space-y-4">
-             <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/5 backdrop-blur-md rounded-full border border-blue-600/10 text-blue-600">
                 <Brain className="w-4 h-4" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-blue-600">Control Center</span>
-             </div>
-             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em]">Control Center</span>
+             </motion.div>
+             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
                 My <br /> <span className="text-blue-600">Dashboard.</span>
              </h1>
           </div>
-          <Button onClick={() => navigate("/builder")} className="h-20 px-10 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-2xl shadow-blue-600/20 hover:scale-105 transition-all">
+          <Button onClick={() => navigate("/builder")} className="h-20 px-10 rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] gap-4 shadow-2xl shadow-blue-600/40 hover:scale-105 active:scale-95 transition-all">
              <Plus className="w-5 h-5" /> Create New Resume
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
            <div className="lg:col-span-8 space-y-12">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {quickActions.map((action, i) => (
                   <motion.div key={action.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                    <Card onClick={() => navigate(action.to)} className="group rounded-[3rem] border-none bg-white dark:bg-slate-900 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer">
-                      <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all mb-6">
+                    <Card onClick={() => navigate(action.to)} className="group rounded-[2.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 premium-shadow hover:-translate-y-2 transition-all duration-500 cursor-pointer">
+                      <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110", action.bg, action.color)}>
                          <action.icon className="w-6 h-6" />
                       </div>
-                      <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2">{action.label}</h3>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">{action.desc}</p>
+                      <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight mt-6 mb-2">{action.label}</h3>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">{action.desc}</p>
                     </Card>
                   </motion.div>
                 ))}
               </div>
 
-              <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] p-12">
+              <Card className="rounded-[3.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 premium-shadow p-12">
                 <CardHeader className="p-0 pb-12 flex flex-row items-center justify-between">
                   <div className="space-y-2">
-                    <CardTitle className="text-3xl font-black tracking-tighter">Job Tracker</CardTitle>
-                    <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Track your active applications</CardDescription>
+                    <CardTitle className="text-4xl font-black tracking-tighter">Job Tracker</CardTitle>
+                    <CardDescription className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Track your active applications</CardDescription>
                   </div>
-                  <Button variant="ghost" onClick={() => navigate("/jobs")} className="rounded-xl font-black text-[10px] uppercase tracking-widest text-blue-600">View All</Button>
+                  <Button variant="ghost" onClick={() => navigate("/jobs")} className="h-12 px-6 rounded-full font-black text-[10px] uppercase tracking-widest text-blue-600 hover:bg-blue-50">View All</Button>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Suspense fallback={<div className="h-[400px] bg-slate-50 animate-pulse rounded-[3rem]" />}>
@@ -198,25 +203,31 @@ function JobSeekerDashboard() {
            <div className="lg:col-span-4 space-y-12">
               <ResumeHealthCard navigate={navigate} />
               
-              <Card className="rounded-[4rem] border-none bg-slate-900 text-white p-12 shadow-2xl shadow-blue-600/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-20">
-                   <ZapIcon className="w-20 h-20" />
+              <Card className="rounded-[3.5rem] border-none bg-slate-900 text-white p-12 shadow-2xl shadow-blue-600/30 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform duration-700">
+                   <ZapIcon className="w-24 h-24 text-blue-500" />
                 </div>
-                <CardHeader className="p-0 pb-10">
+                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-600/20 blur-[80px] rounded-full" />
+                
+                <CardHeader className="p-0 pb-10 relative z-10">
                   <CardTitle className="text-3xl font-black tracking-tighter">Auto Apply</CardTitle>
-                  <CardDescription className="text-blue-400 font-bold uppercase tracking-widest text-[10px] mt-2">AI applying to jobs for you</CardDescription>
+                  <CardDescription className="text-blue-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">AI applying to jobs for you</CardDescription>
                 </CardHeader>
-                <CardContent className="p-0">
+                <CardContent className="p-0 relative z-10">
                   <Suspense fallback={<div className="h-40 bg-slate-800 animate-pulse rounded-3xl" />}>
                     <AIApplyQueueSection />
                   </Suspense>
                 </CardContent>
               </Card>
 
-              <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] p-12">
+              <Card className="rounded-[3.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 premium-shadow p-12">
                 <CardHeader className="p-0 pb-10">
-                  <CardTitle className="text-2xl font-black tracking-tighter">Interviews</CardTitle>
-                  <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Your scheduled meetings</CardDescription>
+                  <div className="flex items-center gap-3 text-blue-600 mb-2">
+                    <Sparkles className="w-4 h-4" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Upcoming</span>
+                  </div>
+                  <CardTitle className="text-3xl font-black tracking-tighter">Interviews</CardTitle>
+                  <CardDescription className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Your scheduled meetings</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Suspense fallback={<div className="h-40 bg-slate-50 animate-pulse rounded-3xl" />}>
@@ -227,11 +238,18 @@ function JobSeekerDashboard() {
            </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-12">
-          <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
+        <div className="grid grid-cols-1 gap-12 relative z-10">
+          <Card className="rounded-[4rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 premium-shadow overflow-hidden">
             <CardHeader className="p-12 pb-0">
-              <CardTitle className="text-3xl font-black tracking-tighter">Tracking Stats</CardTitle>
-              <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Application speed and performance</CardDescription>
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <CardTitle className="text-4xl font-black tracking-tighter">Tracking Stats</CardTitle>
+                  <CardDescription className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Application speed and performance</CardDescription>
+                </div>
+                <div className="w-16 h-16 rounded-3xl bg-blue-600/5 flex items-center justify-center text-blue-600">
+                  <TrendingUp className="w-8 h-8" />
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-12 pt-0">
               <Suspense fallback={<div className="h-[300px] animate-pulse bg-slate-50 dark:bg-slate-800 rounded-[2rem]" />}>
@@ -292,53 +310,61 @@ function RecruiterDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-background mesh-gradient pb-20 overflow-x-hidden">
       <SEOHead title="Recruiter Hub — ResumePro" description="Manage your job posts and applicants." noindex />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
-        <div className="space-y-4">
-           <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left relative">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="space-y-4 relative z-10">
+           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/5 backdrop-blur-md rounded-full border border-blue-600/10 text-blue-600">
               <Building2 className="w-4 h-4" />
-              <span className="text-[9px] font-black uppercase tracking-widest">Recruiter Hub</span>
-           </div>
-           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+              <span className="text-[9px] font-black uppercase tracking-[0.2em]">Recruiter Hub</span>
+           </motion.div>
+           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
               Recruiter <br /> <span className="text-blue-600">Dashboard.</span>
            </h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
           {cards.map((card, i) => (
             <motion.div key={card.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-              <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl hover:-translate-y-2 transition-all group cursor-pointer" onClick={card.action}>
+              <Card className="rounded-[3.5rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 premium-shadow hover:-translate-y-2 transition-all group cursor-pointer" onClick={card.action}>
                 <div className="flex items-center justify-between mb-8">
                   <div className={cn("w-16 h-16 rounded-3xl flex items-center justify-center bg-slate-50 dark:bg-slate-800", card.color)}>
                      <card.icon className="w-8 h-8" />
                   </div>
                   <ArrowUpRight className="w-6 h-6 text-slate-200 group-hover:text-blue-600 transition-colors" />
                 </div>
-                <div className="text-6xl font-black text-slate-900 dark:text-white leading-none">{loading ? "—" : card.value}</div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-6">{card.title}</p>
+                <div className="text-7xl font-black text-slate-900 dark:text-white leading-none tracking-tighter">{loading ? "—" : card.value}</div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-8">{card.title}</p>
               </Card>
             </motion.div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <Card className="rounded-[4rem] border-none bg-slate-900 text-white p-12 shadow-2xl shadow-blue-600/20 group cursor-pointer" onClick={() => navigate("/recruiter/jobs")}>
-             <div className="flex items-center justify-between mb-10">
-                <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center"><Plus className="w-8 h-8" /></div>
-                <ArrowUpRight className="w-6 h-6 text-slate-700 group-hover:text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
+          <Card className="rounded-[4rem] border-none bg-slate-900 text-white p-12 shadow-2xl shadow-blue-600/30 group cursor-pointer relative overflow-hidden" onClick={() => navigate("/recruiter/jobs")}>
+             <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                <Plus className="w-32 h-32" />
              </div>
-             <h3 className="text-4xl font-black tracking-tighter mb-4">Post a Job</h3>
-             <p className="text-slate-400 font-medium">Create a new job posting for candidates.</p>
+             <div className="flex items-center justify-between mb-10 relative z-10">
+                <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center shadow-xl shadow-blue-600/40"><Plus className="w-8 h-8" /></div>
+                <ArrowUpRight className="w-6 h-6 text-slate-700 group-hover:text-white transition-colors" />
+             </div>
+             <h3 className="text-5xl font-black tracking-tighter mb-4 relative z-10">Post a Job</h3>
+             <p className="text-slate-400 font-medium text-lg relative z-10">Create a new job posting for candidates.</p>
           </Card>
-          <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] group cursor-pointer" onClick={() => navigate("/recruiter/company")}>
-             <div className="flex items-center justify-between mb-10">
-                <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-400"><Building2 className="w-8 h-8" /></div>
-                <ArrowUpRight className="w-6 h-6 text-slate-100 group-hover:text-blue-600" />
+          <Card className="rounded-[4rem] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 premium-shadow group cursor-pointer relative overflow-hidden" onClick={() => navigate("/recruiter/company")}>
+             <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform duration-700">
+                <Building2 className="w-32 h-32" />
              </div>
-             <h3 className="text-4xl font-black tracking-tighter mb-4">Company Profile</h3>
-             <p className="text-slate-400 font-medium">Manage your company information and brand.</p>
+             <div className="flex items-center justify-between mb-10 relative z-10">
+                <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center text-slate-400"><Building2 className="w-8 h-8" /></div>
+                <ArrowUpRight className="w-6 h-6 text-slate-100 group-hover:text-blue-600 transition-colors" />
+             </div>
+             <h3 className="text-5xl font-black tracking-tighter mb-4 relative z-10">Company Profile</h3>
+             <p className="text-slate-400 font-medium text-lg relative z-10">Manage your company information and brand.</p>
           </Card>
         </div>
       </div>
