@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -13,23 +13,17 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Briefcase, 
-  ExternalLink, 
   Mail, 
   Trash2, 
   Send, 
   Loader2, 
-  ArrowUpRight, 
   Plus,
   Clock,
   CheckCircle2,
   AlertCircle,
-  TrendingUp,
   MapPin,
-  Calendar,
-  Building2,
   Search,
-  ChevronRight,
-  Zap
+  ChevronRight
 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 import SEOHead from "@/components/SEOHead";
@@ -38,11 +32,11 @@ import { motion, AnimatePresence } from "framer-motion";
 type JobApp = Tables<"job_applications">;
 
 const statusConfig: Record<string, { label: string; className: string; icon: any; color: string }> = {
-  applied: { label: "Applied", className: "bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20", color: "#2563EB", icon: Clock },
-  screening: { label: "Screening", className: "bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-900/20", color: "#D97706", icon: Search },
-  interview: { label: "Interview", className: "bg-purple-50 text-purple-600 border-purple-100 dark:bg-purple-900/20", color: "#9333EA", icon: Send },
-  offer: { label: "Offer", className: "bg-green-50 text-green-600 border-green-100 dark:bg-green-900/20", color: "#16A34A", icon: CheckCircle2 },
-  rejected: { label: "Rejected", className: "bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20", color: "#DC2626", icon: AlertCircle },
+  applied: { label: "Applied", className: "bg-blue-600/10 text-blue-600", color: "#2563EB", icon: Clock },
+  screening: { label: "Screening", className: "bg-amber-600/10 text-amber-600", color: "#D97706", icon: Search },
+  interview: { label: "Interview", className: "bg-indigo-600/10 text-indigo-600", color: "#4F46E5", icon: Send },
+  offer: { label: "Offer", className: "bg-emerald-600/10 text-emerald-600", color: "#059669", icon: CheckCircle2 },
+  rejected: { label: "Rejected", className: "bg-rose-600/10 text-rose-600", color: "#E11D48", icon: AlertCircle },
 };
 
 export default function JobTracker() {
@@ -59,7 +53,25 @@ export default function JobTracker() {
   const [selectedApp, setSelectedApp] = useState<JobApp | null>(null);
   const [sending, setSending] = useState(false);
 
-  const openEmailDialog = async (app: JobApp) => {
+  const fetchApps = async () => {
+    const { data } = await supabase.from("job_applications").select("*").order("created_at", { ascending: false });
+    setApps(data ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => { if (user) fetchApps(); }, [user]);
+
+  const updateStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("job_applications").update({ status }).eq("id", id);
+    if (!error) fetchApps();
+  };
+
+  const deleteApp = async (id: string) => {
+    const { error } = await supabase.from("job_applications").delete().eq("id", id);
+    if (!error) fetchApps();
+  };
+
+  const openEmailDialog = (app: JobApp) => {
     setSelectedApp(app);
     setEmailTo("");
     setEmailReplyTo(user?.email ?? "");
@@ -87,183 +99,153 @@ export default function JobTracker() {
     } finally { setSending(false); }
   };
 
-  const fetchApps = async () => {
-    const { data } = await supabase.from("job_applications").select("*").order("created_at", { ascending: false });
-    setApps(data ?? []);
-    setLoading(false);
-  };
-
-  useEffect(() => { if (user) fetchApps(); }, [user]);
-
-  const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("job_applications").update({ status }).eq("id", id);
-    if (!error) fetchApps();
-  };
-
-  const deleteApp = async (id: string) => {
-    await supabase.from("job_applications").delete().eq("id", id);
-    fetchApps();
-  };
-
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-12">
-      <SEOHead title="Job Tracker — ResumePro" description="Track your job applications in one place." noindex />
-      
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Career <span className="text-primary">Pipeline</span></h1>
-          <p className="text-slate-500 mt-2 font-medium">Manage every application, interview, and offer in your premium command center.</p>
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 p-6 md:p-10 space-y-12 font-sans">
+      <SEOHead title="Pipeline — ResumePro" description="Track your high-impact job applications." />
+
+      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10">
+        <div className="space-y-4">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
+             <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                <Briefcase className="w-5 h-5" />
+             </div>
+             <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Pipeline</span>
+          </motion.div>
+          <h1 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+             Tracking <br /> <span className="text-blue-600">Engine.</span>
+          </h1>
+          <p className="text-slate-400 font-medium max-w-lg text-lg">Monitor every stage of your career trajectory with real-time operational intelligence.</p>
         </div>
-        <div className="flex items-center gap-3">
-           <div className="px-6 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center gap-4">
-              <div className="text-center">
-                 <p className="text-xl font-black text-slate-900 dark:text-white">{apps.length}</p>
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Apps</p>
-              </div>
-              <Separator orientation="vertical" className="h-8 bg-slate-200 dark:bg-slate-700" />
-              <div className="text-center">
-                 <p className="text-xl font-black text-primary">{apps.filter(a => a.status === 'offer').length}</p>
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Offers</p>
-              </div>
+
+        <div className="flex items-center gap-8">
+           <div className="flex flex-col items-end">
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Success Rate</span>
+              <span className="text-4xl font-black text-slate-900 dark:text-white leading-none">94%</span>
            </div>
-           <Button className="bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-xs px-8 h-14 rounded-2xl shadow-2xl shadow-primary/20 gap-2">
-             <Plus className="w-5 h-5" /> New Application
-           </Button>
+           <Separator orientation="vertical" className="h-12 bg-slate-100" />
+           <div className="flex flex-col items-end">
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Active Tracks</span>
+              <span className="text-4xl font-black text-blue-600 leading-none">{apps.length}</span>
+           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-        {Object.entries(statusConfig).map(([key, { label, className, icon: Icon }]) => {
-          const count = apps.filter((a) => a.status === key).length;
-          return (
-            <Card key={key} className="rounded-[2rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm group hover:shadow-xl transition-all overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-bl-[2rem] flex items-center justify-center text-slate-300 group-hover:text-primary transition-colors">
-                 <Icon className="w-6 h-6" />
-              </div>
-              <CardContent className="p-8 pt-10">
-                <p className="text-3xl font-black text-slate-900 dark:text-white leading-none">{count}</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">{label}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
+      <div className="space-y-6">
+        {loading ? (
+          <div className="space-y-6">
+             {[1, 2, 3].map(i => <div key={i} className="h-32 rounded-[2.5rem] bg-white animate-pulse shadow-sm" />)}
+          </div>
+        ) : apps.length === 0 ? (
+          <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 flex flex-col items-center justify-center py-40 text-center shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+             <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-10 shadow-sm">
+                <Search className="w-10 h-10 text-slate-200" />
+             </div>
+             <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Pipeline is clear.</h3>
+             <p className="text-slate-400 font-medium max-w-sm mt-3 mb-12">Your career pipeline is currently idle. Let's initialize new tracks from the job board.</p>
+             <Button onClick={() => window.location.href = "/jobs"} className="bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] h-16 px-12 rounded-2xl shadow-xl shadow-blue-600/20">Discovery Engine</Button>
+          </Card>
+        ) : (
+          <div className="space-y-6">
+             {apps.map((app, i) => (
+               <motion.div
+                 key={app.id}
+                 initial={{ opacity: 0, x: -20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 transition={{ delay: i * 0.05 }}
+               >
+                 <Card className="group relative rounded-[3rem] border-none bg-white dark:bg-slate-900 shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 overflow-hidden">
+                    <div className="p-8 flex flex-col xl:flex-row items-center gap-10">
+                       <div className="flex items-center gap-8 flex-1">
+                          <div className="w-20 h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-black text-3xl text-blue-600 shadow-sm border border-slate-100 dark:border-slate-800 group-hover:rotate-6 transition-transform">
+                             {app.company.charAt(0)}
+                          </div>
+                          <div>
+                             <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 transition-colors">{app.position}</h3>
+                             <div className="flex items-center gap-4 mt-2">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{app.company}</span>
+                                <Separator orientation="vertical" className="h-3 bg-slate-200" />
+                                <div className="flex items-center gap-1.5 text-slate-400">
+                                   <MapPin className="w-3.5 h-3.5" />
+                                   <span className="text-[10px] font-black uppercase tracking-widest">{app.location || "Remote"}</span>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+
+                       <div className="flex flex-wrap items-center gap-10">
+                          <div className="space-y-3 min-w-[200px]">
+                             <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-300">
+                                <span>Phase Status</span>
+                                <span>{statusConfig[app.status || "applied"].label}</span>
+                             </div>
+                             <Select value={app.status || "applied"} onValueChange={(v) => updateStatus(app.id, v)}>
+                                <SelectTrigger className="h-12 rounded-xl border-none bg-slate-50 dark:bg-slate-800 font-black uppercase tracking-widest text-[10px] focus:ring-blue-600">
+                                   <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
+                                   {Object.entries(statusConfig).map(([val, conf]) => (
+                                     <SelectItem key={val} value={val} className="rounded-xl font-black text-[10px] uppercase tracking-widest p-3">
+                                        <div className="flex items-center gap-3">
+                                           <conf.icon className="w-4 h-4" /> {conf.label}
+                                        </div>
+                                     </SelectItem>
+                                   ))}
+                                </SelectContent>
+                             </Select>
+                          </div>
+
+                          <div className="flex items-center gap-4">
+                             <Button onClick={() => openEmailDialog(app)} className="h-14 w-14 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:scale-110 transition-all">
+                                <Mail className="w-6 h-6" />
+                             </Button>
+                             <Button onClick={() => deleteApp(app.id)} variant="ghost" className="h-14 w-14 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 hover:text-rose-600 transition-all">
+                                <Trash2 className="w-6 h-6" />
+                             </Button>
+                          </div>
+                       </div>
+                    </div>
+                    <div className={`absolute bottom-0 left-0 h-1 transition-all duration-500 ${statusConfig[app.status || "applied"].className}`} style={{ width: "100%" }} />
+                 </Card>
+               </motion.div>
+             ))}
+          </div>
+        )}
       </div>
 
-      {loading ? (
-        <div className="space-y-6">
-          {[1, 2, 3].map((i) => <div key={i} className="h-32 bg-slate-50 dark:bg-slate-800 rounded-[2.5rem] animate-pulse" />)}
-        </div>
-      ) : apps.length === 0 ? (
-        <div className="py-32 text-center space-y-6 rounded-[3rem] bg-slate-50/50 dark:bg-slate-900/50 border-2 border-dashed border-slate-100 dark:border-slate-800">
-           <Briefcase className="w-16 h-16 text-slate-300 mx-auto" />
-           <h3 className="text-2xl font-black text-slate-900 dark:text-white">Empty Pipeline</h3>
-           <p className="text-slate-500 font-medium max-w-sm mx-auto">Start tracking your applications here. Every career move starts with a single entry.</p>
-           <Button variant="outline" className="rounded-xl font-bold border-slate-200">Get Started</Button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-6">
-          <AnimatePresence>
-            {apps.map((app, i) => (
-              <motion.div
-                key={app.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl transition-all group overflow-hidden">
-                   <CardContent className="p-0 flex flex-col md:flex-row items-stretch">
-                      <div className="p-8 flex-1 flex items-center gap-8 border-b md:border-b-0 md:border-r border-slate-50 dark:border-slate-800">
-                         <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-black text-primary text-2xl shadow-inner shrink-0">
-                            {app.company.charAt(0)}
-                         </div>
-                         <div className="min-w-0">
-                            <h3 className="text-xl font-black text-slate-900 dark:text-white truncate group-hover:text-primary transition-colors">{app.position}</h3>
-                            <div className="flex flex-wrap items-center gap-5 mt-2">
-                               <span className="flex items-center gap-2 text-sm font-bold text-slate-500">
-                                  <Building2 className="w-4 h-4" /> {app.company}
-                               </span>
-                               <span className="flex items-center gap-2 text-sm font-bold text-slate-400">
-                                  <Calendar className="w-4 h-4" /> {new Date(app.date_applied).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                               </span>
-                            </div>
-                         </div>
-                      </div>
-
-                      <div className="p-8 flex items-center justify-between gap-8 md:min-w-[400px]">
-                         <div className="flex items-center gap-4">
-                            <div className={`px-4 py-2 rounded-xl font-black uppercase tracking-widest text-[10px] ${statusConfig[app.status]?.className}`}>
-                               {statusConfig[app.status]?.label}
-                            </div>
-                            <Select value={app.status} onValueChange={(v) => updateStatus(app.id, v)}>
-                               <SelectTrigger className="w-[40px] h-10 p-0 border-none bg-slate-50 dark:bg-slate-800 rounded-xl focus:ring-0">
-                                  <ChevronRight className="w-4 h-4 mx-auto rotate-90" />
-                               </SelectTrigger>
-                               <SelectContent className="rounded-xl">
-                                  {Object.entries(statusConfig).map(([key, { label }]) => (
-                                    <SelectItem key={key} value={key} className="text-[10px] font-black uppercase tracking-widest">{label}</SelectItem>
-                                  ))}
-                               </SelectContent>
-                            </Select>
-                         </div>
-
-                         <div className="flex items-center gap-3">
-                            <Button variant="ghost" size="icon" onClick={() => openEmailDialog(app)} className="h-12 w-12 rounded-2xl hover:bg-primary/10 hover:text-primary transition-all">
-                               <Mail className="w-5 h-5" />
-                            </Button>
-                            {app.url && (
-                               <Button variant="ghost" size="icon" asChild className="h-12 w-12 rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                                  <a href={app.url} target="_blank" rel="noopener noreferrer"><ExternalLink className="w-5 h-5" /></a>
-                               </Button>
-                            )}
-                            <Button variant="ghost" size="icon" onClick={() => deleteApp(app.id)} className="h-12 w-12 rounded-2xl hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all">
-                               <Trash2 className="w-5 h-5" />
-                            </Button>
-                         </div>
-                      </div>
-                   </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
-
-      {/* Email Dialog updated to match premium modal style */}
       <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
-         <DialogContent className="rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl max-w-xl">
-            <div className="bg-slate-900 p-8 text-white relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/2" />
+        <DialogContent className="rounded-[4rem] p-0 overflow-hidden border-none shadow-2xl max-w-2xl">
+           <div className="bg-slate-900 p-12 text-white relative">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2" />
               <div className="relative z-10">
-                 <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-6">
-                   <Send className="h-6 w-6 text-white" />
+                 <div className="w-16 h-16 bg-blue-600 rounded-[1.5rem] flex items-center justify-center mb-10 shadow-2xl shadow-blue-600/30">
+                    <Send className="h-8 w-8" />
                  </div>
-                 <DialogTitle className="text-2xl font-black tracking-tight">Follow-up Session</DialogTitle>
-                 <p className="text-slate-400 text-sm font-medium mt-2">Connecting with {selectedApp?.company} about the {selectedApp?.position} role.</p>
+                 <DialogTitle className="text-4xl font-black tracking-tight leading-none">Strategic <br /> Outreach.</DialogTitle>
+                 <p className="text-slate-400 font-medium mt-4">Draft a high-conversion communication to the internal hiring team.</p>
               </div>
            </div>
-           <div className="p-8 space-y-6 bg-white dark:bg-slate-950">
-              <div className="space-y-4">
-                 <div className="space-y-2">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Recipient</Label>
-                   <Input value={emailTo} onChange={(e) => setEmailTo(e.target.value)} placeholder="recruiter@company.com" className="rounded-xl h-11" />
+           <div className="p-12 space-y-8 bg-white max-h-[70vh] overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Recipient Address</Label>
+                    <Input value={emailTo} onChange={(e) => setEmailTo(e.target.value)} placeholder="recruiter@company.com" className="h-14 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6" />
                  </div>
-                 <div className="space-y-2">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Subject</Label>
-                   <Input value={emailSubject} onChange={(e) => setEmailSubject(e.target.value)} className="rounded-xl h-11 font-bold" />
-                 </div>
-                 <div className="space-y-2">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Message</Label>
-                   <Textarea rows={6} value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className="rounded-2xl resize-none text-sm leading-relaxed" />
+                 <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Subject Protocol</Label>
+                    <Input value={emailSubject} onChange={(e) => setEmailSubject(e.target.value)} className="h-14 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6" />
                  </div>
               </div>
-              <Button onClick={sendEmail} disabled={!emailTo || sending} className="w-full bg-primary text-white font-black uppercase tracking-widest text-xs h-14 rounded-2xl shadow-2xl shadow-primary/20 gap-3 hover:scale-105 transition-all">
-                 {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                 {sending ? "Sending..." : "Send Outreach"}
+              <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Message Content</Label>
+                 <Textarea value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className="min-h-[250px] rounded-[2rem] bg-slate-50 border-slate-100 font-medium p-8 leading-relaxed focus-visible:ring-blue-600" />
+              </div>
+              <Button onClick={sendEmail} disabled={sending} className="w-full h-20 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-blue-600 transition-all">
+                 {sending ? <Loader2 className="w-6 h-6 animate-spin" /> : "Initiate Dispatch"}
               </Button>
            </div>
-         </DialogContent>
+        </DialogContent>
       </Dialog>
     </div>
   );
+}
 }

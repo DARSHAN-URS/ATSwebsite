@@ -1,78 +1,67 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, Users, CreditCard, Briefcase, Headphones, Mail, ChevronDown, Settings, ShieldAlert } from "lucide-react";
-import Logo from "@/components/Logo";
+import { 
+  FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, 
+  Users, CreditCard, Briefcase, Headphones, Mail, Settings, ShieldCheck, Zap
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
+import { useState, useEffect } from "react";
 
 const jobSeekerNav = [
-{ to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
-{ to: "/resumes", icon: FileText, key: "resumes" as const },
-{ to: "/jobs", icon: Search, key: "findJobs" as const },
-{ to: "/companies", icon: Building2, key: "companies" as const },
-{ to: "/email-outreach", icon: Mail, key: "emailOutreach" as const },
-{ to: "/interview-prep", icon: Headphones, key: "interviewPrep" as const },
-{ to: "/pricing", icon: CreditCard, key: "pricing" as const }];
-
+  { to: "/dashboard", icon: LayoutDashboard, label: "Intelligence" },
+  { to: "/resumes", icon: FileText, label: "Repository" },
+  { to: "/jobs", icon: Search, label: "Matrix" },
+  { to: "/companies", icon: Building2, label: "Organizations" },
+  { to: "/email-outreach", icon: Mail, label: "Strategic Link" },
+  { to: "/interview-prep", icon: Headphones, label: "Simulations" },
+  { to: "/pricing", icon: CreditCard, label: "Subscription" },
+];
 
 const recruiterNav = [
-{ to: "/dashboard", icon: LayoutDashboard, key: "dashboard" as const },
-{ to: "/recruiter/company", icon: Building2, key: "companyProfile" as const },
-{ to: "/recruiter/jobs", icon: Briefcase, key: "myJobPosts" as const },
-{ to: "/recruiter/candidates", icon: Users, key: "candidates" as const },
-{ to: "/recruiter/analytics", icon: BarChart3, key: "analytics" as const }];
+  { to: "/dashboard", icon: LayoutDashboard, label: "Intelligence" },
+  { to: "/recruiter/company", icon: Building2, label: "Enterprise" },
+  { to: "/recruiter/jobs", icon: Briefcase, label: "Deployments" },
+  { to: "/recruiter/candidates", icon: Users, label: "Talent Matrix" },
+  { to: "/recruiter/analytics", icon: BarChart3, label: "Analytics" },
+];
 
-
-function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: () => void;onNavClick?: () => void;}) {
-  const { t } = useLanguage();
+function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut: () => void; onNavClick?: () => void; }) {
   const { role } = useUserRole();
   const navigate = useNavigate();
   const navItems = role === "recruiter" ? recruiterNav : jobSeekerNav;
-
-  const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
-  const avatarFallback = displayName.charAt(0).toUpperCase();
-
-  // Resolve avatar storage path to signed URL
+  const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Architect";
   const [resolvedAvatarUrl, setResolvedAvatarUrl] = useState<string | null>(null);
+
   useEffect(() => {
-    let cancelled = false;
     const avatarPath = user?.user_metadata?.avatar_url;
     if (avatarPath) {
       import("@/lib/storageUtils").then(({ resolvePhotoUrl }) => {
-        resolvePhotoUrl(avatarPath).then((url) => {
-          if (!cancelled) setResolvedAvatarUrl(url);
-        });
+        resolvePhotoUrl(avatarPath).then(url => setResolvedAvatarUrl(url));
       });
-    } else {
-      setResolvedAvatarUrl(null);
     }
-    return () => { cancelled = true; };
   }, [user?.user_metadata?.avatar_url]);
 
   return (
-    <>
-      <div className="p-8 pb-10">
-        <div className="flex items-center gap-2 group cursor-pointer" onClick={() => navigate("/")}>
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
-            <FileText className="text-white w-5 h-5" />
+    <div className="h-full flex flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800">
+      <div className="p-10">
+        <div className="flex items-center gap-4 group cursor-pointer" onClick={() => navigate("/")}>
+          <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-600/20 group-hover:scale-110 transition-transform">
+            <ShieldCheck className="text-white w-6 h-6" />
           </div>
-          <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-            RESUME<span className="text-primary">PRO</span>
+          <span className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">
+            RESUME<span className="text-blue-600">PRO</span>
           </span>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2">
-        {navItems.map((item) =>
+      <nav className="flex-1 px-6 space-y-3 overflow-y-auto">
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -80,116 +69,83 @@ function SidebarContent({ user, onSignOut, onNavClick }: {user: any;onSignOut: (
             onClick={onNavClick}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 px-4 py-3 text-sm font-bold transition-all rounded-xl",
-                isActive ?
-                "bg-primary/10 text-primary" :
-                "text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-white"
+                "flex items-center gap-4 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] transition-all rounded-2xl",
+                isActive ? "bg-blue-600 text-white shadow-xl shadow-blue-600/20" : "text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
               )
             }
           >
-            <item.icon className="h-5 w-5" aria-hidden="true" />
-            <span>{t.nav[item.key]}</span>
+            <item.icon className="h-5 w-5" />
+            <span>{item.label}</span>
           </NavLink>
-        )}
+        ))}
       </nav>
 
-      <div className="p-6 mt-auto">
-        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 mb-6 border border-slate-100 dark:border-slate-800">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Settings</p>
-          <div className="flex items-center justify-between">
-            <LanguageSwitcher className="h-8 text-xs bg-transparent border-none hover:bg-white dark:hover:bg-slate-800" />
-            <ThemeToggle className="h-8 w-8 rounded-lg hover:bg-white dark:hover:bg-slate-800" />
-          </div>
-        </div>
-
+      <div className="p-8 border-t border-slate-100 dark:border-slate-800">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors text-left group">
-              <div className="relative">
-                <Avatar className="h-10 w-10 border-2 border-white dark:border-slate-800 shadow-sm">
-                  <AvatarImage src={resolvedAvatarUrl || undefined} alt={displayName} />
-                  <AvatarFallback className="bg-primary text-white text-sm font-bold">
-                    {avatarFallback}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full" />
+            <button className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-left">
+              <Avatar className="h-12 w-12 border-2 border-white dark:border-slate-700 shadow-xl">
+                <AvatarImage src={resolvedAvatarUrl || undefined} />
+                <AvatarFallback className="bg-blue-600 text-white font-black">{displayName.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 overflow-hidden">
+                <p className="text-sm font-black text-slate-900 dark:text-white truncate tracking-tight">{displayName}</p>
+                <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{role || "Architect"}</p>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{displayName}</p>
-                <p className="text-[10px] text-slate-500 truncate font-medium uppercase tracking-tighter">{user?.email}</p>
-              </div>
-              <ChevronDown className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="right" align="end" className="w-64 rounded-2xl p-2 shadow-2xl border-slate-100 dark:border-slate-800">
-            <div className="px-3 py-3 border-b border-slate-50 dark:border-slate-800 mb-2">
-              <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{displayName}</p>
-              <p className="text-xs text-slate-500 truncate">{user?.email}</p>
-            </div>
-            <DropdownMenuItem onClick={() => {navigate("/profile");onNavClick?.();}} className="rounded-xl cursor-pointer gap-3 py-3 px-3 focus:bg-slate-50 dark:focus:bg-slate-800">
-              <Settings className="h-4 w-4 text-slate-400" />
-              <span className="font-bold text-xs text-slate-700 dark:text-slate-200">My Profile</span>
-            </DropdownMenuItem>
-            {role === "admin" && (
-              <DropdownMenuItem onClick={() => {navigate("/admin");onNavClick?.();}} className="rounded-xl cursor-pointer gap-3 py-3 px-3 focus:bg-primary/5 text-primary">
-                <ShieldAlert className="h-4 w-4" />
-                <span className="font-bold text-xs">Admin Dashboard</span>
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuSeparator className="bg-slate-50 dark:bg-slate-800" />
-            <DropdownMenuItem onClick={onSignOut} className="rounded-xl text-red-500 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/10 cursor-pointer gap-3 py-3 px-3">
-              <LogOut className="h-4 w-4" />
-              <span className="font-bold text-xs">Sign Out</span>
-            </DropdownMenuItem>
+          <DropdownMenuContent align="end" className="w-64 rounded-3xl p-3 border-none shadow-2xl bg-white dark:bg-slate-900">
+            <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-xl p-4 font-black text-[10px] uppercase tracking-widest gap-3 focus:bg-slate-50 dark:focus:bg-slate-800 cursor-pointer"><Settings className="w-4 h-4 text-blue-600" /> Account Settings</DropdownMenuItem>
+            <DropdownMenuSeparator className="my-2 bg-slate-50 dark:bg-slate-800" />
+            <DropdownMenuItem onClick={onSignOut} className="rounded-xl p-4 font-black text-[10px] uppercase tracking-widest gap-3 text-red-500 focus:bg-red-50 dark:focus:bg-red-950/20 cursor-pointer"><LogOut className="w-4 h-4" /> Terminate Session</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </>
+    </div>
   );
-
 }
 
 export default function AppLayout() {
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {isMobile &&
-      <header className="fixed top-0 left-0 right-0 z-40 h-12 flex items-center px-3 border-b border-primary/20 bg-background glow-border">
-          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Menu className="h-4 w-4" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground flex flex-col">
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setSheetOpen(false)} />
-            </SheetContent>
-          </Sheet>
-          <div className="flex items-center gap-2 ml-2">
-            <Logo className="h-8 w-auto" width={120} height={36} variant="light" />
-          </div>
-        </header>
-      }
-
-      {!isMobile &&
-      <aside className="w-72 bg-white dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col border-r border-slate-100 dark:border-slate-800 shrink-0">
+    <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans">
+      {!isMobile && (
+        <aside className="w-80 h-screen sticky top-0 overflow-hidden">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
-      }
+      )}
 
-      <main className={cn("flex-1 overflow-x-hidden overflow-y-auto", isMobile && "pt-12")}>
-        <Outlet />
+      <main className="flex-1 min-w-0">
+        {isMobile && (
+          <header className="h-20 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 flex items-center justify-between sticky top-0 z-50">
+            <div className="flex items-center gap-3" onClick={() => navigate("/")}>
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white"><ShieldCheck className="w-5 h-5" /></div>
+              <span className="text-lg font-black tracking-tighter text-slate-900 dark:text-white uppercase">RESUME<span className="text-blue-600">PRO</span></span>
+            </div>
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-xl"><Menu className="h-6 w-6 text-slate-600" /></Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="p-0 border-none w-80 bg-white dark:bg-slate-900">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setOpen(false)} />
+              </SheetContent>
+            </Sheet>
+          </header>
+        )}
+        <div className="relative">
+          <Outlet />
+        </div>
       </main>
-    </div>);
-
+    </div>
+  );
 }

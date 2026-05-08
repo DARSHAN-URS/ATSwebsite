@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, ScanSearch, CheckCircle, XCircle, AlertTriangle, Zap, Target, Sparkles, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ScanSearch, CheckCircle, XCircle, Zap, Target, Sparkles, ShieldCheck, Loader2 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData } from "@/components/resume/types";
@@ -46,18 +45,11 @@ function extractKeywords(text: string): string[] {
     if (cleaned.length < 2 || stopWords.has(cleaned)) return;
     wordCount[cleaned] = (wordCount[cleaned] || 0) + 1;
   });
-  for (let i = 0; i < words.length - 1; i++) {
-    const phrase = `${words[i]} ${words[i + 1]}`.trim();
-    if (phrase.length > 4 && !stopWords.has(words[i]) && !stopWords.has(words[i + 1])) {
-      wordCount[phrase] = (wordCount[phrase] || 0) + 1;
-    }
-  }
-  return Object.entries(wordCount).filter(([, count]) => count >= 1).sort((a, b) => b[1] - a[1]).slice(0, 60).map(([word]) => word);
+  return Object.entries(wordCount).filter(([, count]) => count >= 1).sort((a, b) => b[1] - a[1]).slice(0, 40).map(([word]) => word);
 }
 
 export default function ATSKeywordScanner() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -87,134 +79,125 @@ export default function ATSKeywordScanner() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-12">
-      <SEOHead title="ATS Scanner — ResumePro" description="Optimize your resume for applicant tracking systems." />
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
+      <SEOHead title="Auditor — ResumePro" description="Optimize your professional architecture for algorithmic detection." />
       
-      <div>
-         <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="mb-6 rounded-xl font-bold text-slate-500 hover:text-primary transition-colors gap-2">
-            <ArrowLeft className="h-4 w-4" /> Dashboard
-         </Button>
-         <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">ATS <span className="text-primary">Intelligence</span></h1>
-         <p className="text-slate-500 mt-2 font-medium">Beat the algorithms. Scan your resume against job descriptions to ensure perfect keyword alignment.</p>
+      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
+        <div className="space-y-4">
+           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                 <ScanSearch className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Architectural Audit Protocol</span>
+           </motion.div>
+           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]">
+              Audit <br /> <span className="text-blue-600">Scanner.</span>
+           </h1>
+           <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
+              Stress-test your resume against organizational algorithms to ensure maximum architectural compatibility and keyword alignment.
+           </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-         {/* Input Section */}
-         <div className="space-y-8">
-            <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
-               <CardHeader className="p-8">
-                  <CardTitle className="text-xl font-black">Selection</CardTitle>
-                  <CardDescription className="font-medium">Which resume are we testing today?</CardDescription>
-               </CardHeader>
-               <CardContent className="p-8 pt-0 space-y-6">
-                  <div className="space-y-2">
-                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Target Resume</Label>
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+         <div className="xl:col-span-4 space-y-10">
+            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 space-y-10">
+               <div className="space-y-6">
+                  <div className="space-y-3">
+                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Target Module</Label>
                      <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                        <SelectTrigger className="rounded-xl h-12 border-none bg-slate-50 dark:bg-slate-800"><SelectValue placeholder="Select..." /></SelectTrigger>
-                        <SelectContent className="rounded-xl">
-                           {resumes.map(r => <SelectItem key={r.id} value={r.id}>{r.title}</SelectItem>)}
+                        <SelectTrigger className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6">
+                           <SelectValue placeholder="Select Architecture" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
+                           {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl p-3 font-bold">{r.title}</SelectItem>)}
                         </SelectContent>
                      </Select>
                   </div>
-               </CardContent>
+                  <div className="space-y-3">
+                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Requirements</Label>
+                     <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste the target job description..." className="min-h-[300px] rounded-[2.5rem] bg-slate-50 border-slate-100 font-bold p-8" />
+                  </div>
+               </div>
+               <Button onClick={scan} disabled={scanning || !selectedResumeId || !jobDescription} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4 hover:scale-[1.02] transition-all">
+                  {scanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
+                  Execute Audit
+               </Button>
             </Card>
 
-            <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
-               <CardHeader className="p-8">
-                  <CardTitle className="text-xl font-black">Job Description</CardTitle>
-                  <CardDescription className="font-medium">Paste the text from the job posting.</CardDescription>
-               </CardHeader>
-               <CardContent className="p-8 pt-0 space-y-6">
-                  <Textarea 
-                    value={jobDescription} 
-                    onChange={(e) => setJobDescription(e.target.value)} 
-                    placeholder="Paste full job description here..." 
-                    className="rounded-2xl bg-slate-50 dark:bg-slate-800 border-none p-6 font-medium resize-none leading-relaxed h-[300px]" 
-                  />
-                  <Button 
-                    onClick={scan} 
-                    disabled={scanning || !selectedResumeId || !jobDescription} 
-                    className="w-full bg-slate-900 dark:bg-slate-800 text-white font-black uppercase tracking-widest text-xs h-14 rounded-2xl shadow-xl shadow-slate-900/10 hover:bg-primary transition-all gap-3"
-                  >
-                     {scanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <ScanSearch className="w-5 h-5" />}
-                     {scanning ? "Analyzing Content..." : "Start Deep Scan"}
-                  </Button>
-               </CardContent>
+            <Card className="rounded-[3rem] border-none bg-blue-600 text-white p-10 shadow-2xl shadow-blue-600/30">
+               <ShieldCheck className="w-10 h-10 mb-6" />
+               <h3 className="text-2xl font-black tracking-tight mb-3">Algorithmic Defense</h3>
+               <p className="text-blue-100 font-medium leading-relaxed">Our scanner uses high-fidelity extraction modules to identify critical keyword vectors required by modern ATS architectures.</p>
             </Card>
          </div>
 
-         {/* Results Section */}
-         <div className="space-y-8">
+         <div className="xl:col-span-8">
             <AnimatePresence mode="wait">
-               {!results && !scanning ? (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex flex-col items-center justify-center py-32 text-center space-y-6 rounded-[3rem] bg-slate-50/50 dark:bg-slate-900/50 border-2 border-dashed border-slate-100 dark:border-slate-800">
-                     <div className="w-20 h-20 bg-white dark:bg-slate-900 rounded-[2rem] flex items-center justify-center text-slate-200 shadow-sm">
-                        <Target className="w-10 h-10" />
-                     </div>
-                     <h3 className="text-2xl font-black text-slate-900 dark:text-white">Waiting for Scan</h3>
-                     <p className="text-slate-500 font-medium max-w-xs mx-auto">Input your resume and the job details to see your ATS match score.</p>
-                  </motion.div>
-               ) : scanning ? (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex flex-col items-center justify-center py-32 text-center space-y-8">
-                     <div className="relative">
-                        <div className="w-24 h-24 bg-primary/10 rounded-full animate-ping absolute inset-0" />
-                        <div className="w-24 h-24 bg-primary/20 rounded-[2.5rem] flex items-center justify-center text-primary relative z-10">
-                           <Sparkles className="w-10 h-10" />
+               {results ? (
+                  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-10">
+                     <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12">
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-10 border-b border-slate-50 dark:border-slate-800 pb-10">
+                           <div className="space-y-2 text-center md:text-left">
+                              <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Audit Score</h3>
+                              <p className="text-slate-500 font-bold">Overall compatibility with target requirement vectors.</p>
+                           </div>
+                           <div className="relative w-32 h-32 flex items-center justify-center">
+                              <svg className="w-full h-full transform -rotate-90">
+                                 <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-slate-50 dark:text-slate-800" />
+                                 <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray={364.4} strokeDashoffset={364.4 - (364.4 * results.score) / 100} className="text-blue-600 transition-all duration-1000 ease-out" />
+                              </svg>
+                              <span className="absolute text-3xl font-black text-slate-900 dark:text-white">{results.score}%</span>
+                           </div>
                         </div>
-                     </div>
-                     <div className="space-y-2">
-                        <h3 className="text-2xl font-black">Scanning...</h3>
-                        <p className="text-slate-500 font-medium animate-pulse">Our AI is extracting keywords and checking alignment.</p>
-                     </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12">
+                           <div className="space-y-6">
+                              <div className="flex items-center gap-3">
+                                 <CheckCircle className="w-5 h-5 text-emerald-500" />
+                                 <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Identified Vectors</span>
+                              </div>
+                              <div className="flex flex-wrap gap-3">
+                                 {results.matched.map(kw => <Badge key={kw} className="bg-emerald-50 text-emerald-600 rounded-xl px-4 py-2 border-emerald-100 font-bold uppercase text-[10px] tracking-widest">{kw}</Badge>)}
+                              </div>
+                           </div>
+                           <div className="space-y-6">
+                              <div className="flex items-center gap-3">
+                                 <XCircle className="w-5 h-5 text-rose-500" />
+                                 <span className="text-[10px] font-black uppercase tracking-widest text-rose-500">Missing Modules</span>
+                              </div>
+                              <div className="flex flex-wrap gap-3">
+                                 {results.missing.map(kw => <Badge key={kw} className="bg-rose-50 text-rose-600 rounded-xl px-4 py-2 border-rose-100 font-bold uppercase text-[10px] tracking-widest">{kw}</Badge>)}
+                              </div>
+                           </div>
+                        </div>
+                     </Card>
+
+                     <Card className="rounded-[3rem] border-none bg-slate-900 text-white p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div className="flex items-center gap-6">
+                           <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+                              <Sparkles className="w-8 h-8 text-blue-400" />
+                           </div>
+                           <div className="space-y-1">
+                              <h4 className="text-xl font-black tracking-tight">Optimization Recommended</h4>
+                              <p className="text-slate-400 font-medium">Inject the missing keyword vectors into your architecture to reach 95%+ compatibility.</p>
+                           </div>
+                        </div>
+                        <Button className="h-14 px-10 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all">Optimize Module</Button>
+                     </Card>
                   </motion.div>
                ) : (
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-                     <Card className="rounded-[3rem] border-slate-100 bg-white dark:bg-slate-900 shadow-2xl p-10 relative overflow-hidden">
-                        <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 ${results!.score >= 70 ? "bg-green-500/20" : "bg-amber-500/20"}`} />
-                        <div className="flex items-center justify-between mb-8">
-                           <h3 className="text-xl font-black">Alignment Score</h3>
-                           <span className={`text-5xl font-black ${results!.score >= 70 ? "text-green-500" : "text-amber-500"}`}>{results!.score}%</span>
+                  <div className="h-full flex items-center justify-center text-center p-20">
+                     <div className="space-y-6">
+                        <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-200 dark:text-slate-800 mx-auto border-4 border-dashed border-slate-100 dark:border-slate-800">
+                           <Target className="w-10 h-10" />
                         </div>
-                        <Progress value={results!.score} className={`h-4 ${results!.score >= 70 ? "bg-green-50" : "bg-amber-50"}`} />
-                        <p className="mt-8 text-slate-500 font-medium leading-relaxed">
-                           {results!.score >= 70 
-                             ? "Excellent alignment. Your resume uses the core language required by this employer." 
-                             : "Some gaps identified. Adding the missing keywords below could significantly improve your rank."}
-                        </p>
-                     </Card>
-
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card className="rounded-[2.5rem] border-green-50 bg-green-50/20 p-8 space-y-6">
-                           <h4 className="text-[10px] font-black uppercase tracking-widest text-green-600">Matched ({results!.matched.length})</h4>
-                           <div className="flex flex-wrap gap-2">
-                              {results!.matched.slice(0, 20).map(kw => <Badge key={kw} className="bg-white text-green-700 border-green-100 rounded-lg px-3 py-1 font-bold text-[10px]">{kw}</Badge>)}
-                           </div>
-                        </Card>
-                        <Card className="rounded-[2.5rem] border-red-50 bg-red-50/20 p-8 space-y-6">
-                           <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600">Missing ({results!.missing.length})</h4>
-                           <div className="flex flex-wrap gap-2">
-                              {results!.missing.slice(0, 20).map(kw => <Badge key={kw} className="bg-white text-red-700 border-red-100 rounded-lg px-3 py-1 font-bold text-[10px]">{kw}</Badge>)}
-                           </div>
-                        </Card>
+                        <div className="space-y-2">
+                           <h3 className="text-2xl font-black text-slate-300 dark:text-slate-800">Awaiting Data Input</h3>
+                           <p className="text-slate-400 dark:text-slate-800 font-medium max-w-xs mx-auto">Initialize the scan by selecting an architecture and defining organizational requirements.</p>
+                        </div>
                      </div>
-
-                     <Card className="rounded-[2.5rem] border-primary/10 bg-primary/5 p-8">
-                        <div className="flex items-center justify-between gap-6">
-                           <div className="flex items-center gap-4">
-                              <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
-                                 <Zap className="w-6 h-6" />
-                              </div>
-                              <div>
-                                 <h4 className="font-black text-primary">Need a fix?</h4>
-                                 <p className="text-primary/70 text-xs font-bold">Our AI can automatically insert these keywords.</p>
-                              </div>
-                           </div>
-                           <Button onClick={() => navigate("/resumes")} className="bg-primary text-white font-black uppercase tracking-widest text-[10px] h-11 px-6 rounded-xl gap-2">
-                              Fix Now <ArrowRight className="w-3.5 h-3.5" />
-                           </Button>
-                        </div>
-                     </Card>
-                  </motion.div>
+                  </div>
                )}
             </AnimatePresence>
          </div>
