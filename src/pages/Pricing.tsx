@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { 
-  Check, ShieldCheck, ArrowLeft, Zap, Star, Sparkles, Loader2
+  Check, ShieldCheck, ArrowLeft, Zap, Star, Sparkles, Loader2, ArrowRight
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";

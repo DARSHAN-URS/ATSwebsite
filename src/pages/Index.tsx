@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { 
   Search, Building2, CheckCircle2, Sparkles, Zap, ShieldCheck, 
   ArrowRight, Star, Cpu, Award, TrendingUp, Mail, Lock, ChevronRight,
-  Target, BarChart3, Users, Rocket
+  Target, BarChart3, Users, Rocket, HelpCircle, Globe
 } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Card } from "@/components/ui/card";
