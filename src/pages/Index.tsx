@@ -104,7 +104,7 @@ const Index = () => {
                       <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
                          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
                          <img 
-                           src="https://images.unsplash.com/photo-1551288049-bbbda536639a?q=80&w=2070&auto=format&fit=crop" 
+                           src="/images/architect-hero.png" 
                            alt="Operational Intelligence" 
                            className="w-full h-auto grayscale-0 group-hover:scale-105 transition-transform duration-1000" 
                          />
