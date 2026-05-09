@@ -12,6 +12,7 @@ import {
   Target, BarChart3, Users, Rocket
 } from "lucide-react";
 import Logo from "@/components/Logo";
+import { Card } from "@/components/ui/card";
 
 const Index = () => {
   const { user } = useAuth();
