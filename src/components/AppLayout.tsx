@@ -87,20 +87,6 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
           ))}
         </nav>
 
-        <div className="p-4 mt-auto">
-          <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
-                <span className="text-[9px] font-black text-white uppercase tracking-widest">Neural Link</span>
-              </div>
-              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">v4.2</span>
-            </div>
-            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-               <div className="h-full w-3/4 bg-blue-600 rounded-full" />
-            </div>
-          </div>
-        </div>
 
         <div className="p-6 pt-0">
           <DropdownMenu>

@@ -107,15 +107,17 @@ export default function EmailOutreach() {
     <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Email Outreach — ResumePro" description="Connect with recruiters using AI-powered emails." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
-         <div className="flex flex-col md:flex-row items-end justify-between gap-12">
-            <div className="space-y-4">
-               <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+      <div className="container mx-auto px-0 space-y-16 text-left">
+         <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            
+            <div className="relative z-10 space-y-8">
+               <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
                   <Mail className="w-4 h-4" />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Send Email</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">Communication Matrix</span>
                </div>
-               <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                  Email <br /> <span className="text-blue-600">Outreach.</span>
+               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
+                  Direct <br /><span className="text-blue-600">Outreach.</span>
                </h1>
             </div>
          </div>

@@ -95,72 +95,74 @@ export default function CoverLetters() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
+    <div className="container mx-auto px-0 space-y-16 text-left pb-20">
       <SEOHead title="Narratives — ResumePro" description="Synthesize high-fidelity professional narratives." />
       
-      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
-        <div className="space-y-4">
-           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-                 <FileText className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Narrative Architecture Protocol</span>
-           </motion.div>
-           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]">
-              Professional <br /> <span className="text-blue-600">Narratives.</span>
-           </h1>
-           <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
-              Synthesize high-fidelity cover letters that bridge the gap between your professional architecture and organizational requirements.
-           </p>
-        </div>
+      <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
+         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+         
+         <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-12 mb-8">
+            <div className="space-y-8">
+               <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
+                  <FileText className="w-4 h-4" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">Narrative Architecture</span>
+               </div>
+               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
+                  Professional <br /><span className="text-blue-600">Narratives.</span>
+               </h1>
+            </div>
 
-        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-           <DialogTrigger asChild>
-              <Button className="h-20 px-12 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-2xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all">
-                 <Plus className="w-6 h-6" /> Initialize New Narrative
-              </Button>
-           </DialogTrigger>
-           <DialogContent className="max-w-2xl rounded-[3rem] border-none p-10 bg-white dark:bg-slate-900">
-              <DialogHeader>
-                 <DialogTitle className="text-3xl font-black tracking-tight">Narrative Synthesis</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-8 py-6">
-                 <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Architecture Source</Label>
-                    <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                       <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
-                          <SelectValue placeholder="Select Module" />
-                       </SelectTrigger>
-                       <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
-                          {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl p-3 font-bold">{r.title}</SelectItem>)}
-                       </SelectContent>
-                    </Select>
-                 </div>
-                 <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Strategic Tone</Label>
-                    <Select value={tone} onValueChange={setTone}>
-                       <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
-                          <SelectValue />
-                       </SelectTrigger>
-                       <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
-                          <SelectItem value="professional" className="rounded-xl p-3 font-bold">Executive Professional</SelectItem>
-                          <SelectItem value="creative" className="rounded-xl p-3 font-bold">Creative Visionary</SelectItem>
-                          <SelectItem value="bold" className="rounded-xl p-3 font-bold">Impact Driven</SelectItem>
-                       </SelectContent>
-                    </Select>
-                 </div>
-                 <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Context</Label>
-                    <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[200px] rounded-2xl bg-white border-slate-100 font-bold p-6" />
-                 </div>
-                 <Button onClick={generate} disabled={generating || !selectedResumeId} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4">
-                    {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-                    Synthesize Narrative
-                 </Button>
-              </div>
-           </DialogContent>
-        </Dialog>
+            <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+               <DialogTrigger asChild>
+                  <Button className="h-20 px-12 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-3xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all mt-8 md:mt-16">
+                     <Plus className="w-6 h-6" /> Initialize Build
+                  </Button>
+               </DialogTrigger>
+               <DialogContent className="max-w-2xl rounded-[3rem] border-none p-10 bg-white">
+                  <DialogHeader>
+                     <DialogTitle className="text-3xl font-black tracking-tight">Narrative Synthesis</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-8 py-6">
+                     <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Architecture Source</Label>
+                        <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
+                           <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
+                              <SelectValue placeholder="Select Module" />
+                           </SelectTrigger>
+                           <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
+                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl p-3 font-bold">{r.title}</SelectItem>)}
+                           </SelectContent>
+                        </Select>
+                     </div>
+                     <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Strategic Tone</Label>
+                        <Select value={tone} onValueChange={setTone}>
+                           <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
+                              <SelectValue />
+                           </SelectTrigger>
+                           <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
+                              <SelectItem value="professional" className="rounded-xl p-3 font-bold">Executive Professional</SelectItem>
+                              <SelectItem value="creative" className="rounded-xl p-3 font-bold">Creative Visionary</SelectItem>
+                              <SelectItem value="bold" className="rounded-xl p-3 font-bold">Impact Driven</SelectItem>
+                           </SelectContent>
+                        </Select>
+                     </div>
+                     <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Context</Label>
+                        <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[200px] rounded-2xl bg-white border-slate-100 font-bold p-6" />
+                     </div>
+                     <Button onClick={generate} disabled={generating || !selectedResumeId} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4">
+                        {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+                        Synthesize Narrative
+                     </Button>
+                  </div>
+               </DialogContent>
+            </Dialog>
+         </div>
+         <p className="relative z-10 text-slate-500 font-medium text-lg max-w-xl px-16 md:px-24">Synthesize high-fidelity cover letters that bridge the gap between your professional architecture and organizational requirements.</p>
       </div>
+
+      <div className="px-8 space-y-16">
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
          <AnimatePresence>

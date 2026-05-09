@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   FileText, Search, Zap, Clock, CheckCircle2, XCircle, 
-  ArrowUpRight, BarChart3, Mail, Star, Sparkles, TrendingUp
+  ArrowUpRight, BarChart3, Mail, Star, Sparkles, TrendingUp, LayoutDashboard
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -56,15 +56,26 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="space-y-16 pb-20">
+    <div className="container mx-auto px-0 space-y-16 text-left pb-20">
       <SEOHead title="Mission Briefing — ResumePro" description="Operational overview of your career deployment." />
       
+      <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
+         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+         
+         <div className="relative z-10 space-y-8">
+            <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
+               <LayoutDashboard className="w-4 h-4" />
+               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Operational Command</span>
+            </div>
+            <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
+               Mission <br /><span className="text-blue-600">Briefing.</span>
+            </h1>
+            <p className="text-slate-500 font-medium text-lg max-w-xl">Welcome back, {user?.user_metadata?.display_name || "Agent"}. Here is your current deployment status.</p>
+         </div>
+      </div>
+
       {/* 1. Dashboard Stats Section */}
-      <section className="space-y-8">
-        <div className="space-y-2">
-           <h1 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">Dashboard</h1>
-           <p className="text-slate-500 font-medium">Welcome back! Here's your job search overview.</p>
-        </div>
+      <section className="space-y-8 px-8">
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
            {[

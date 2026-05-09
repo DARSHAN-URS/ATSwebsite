@@ -70,42 +70,42 @@ export default function Companies() {
     <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Find Companies — ResumePro" description="Search for companies and see their open job positions." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
-         <div className="flex flex-col md:flex-row items-end justify-between gap-12">
-            <div className="space-y-4">
-               <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+      <div className="container mx-auto px-0 space-y-16 text-left">
+         <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            
+            <div className="relative z-10 space-y-8 mb-16">
+               <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
                   <Building2 className="w-4 h-4" />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Company Search</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">Company Search</span>
                </div>
-               <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                  Companies.
+               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
+                  Industry <br /><span className="text-blue-600">Leaders.</span>
                </h1>
             </div>
-         </div>
 
-         <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
                <div className="lg:col-span-5 space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
-                  <div className="relative">
-                     <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                     <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. Google, Microsoft" className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-16 font-bold text-lg" />
+                  <div className="relative group">
+                     <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
+                     <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. Google, Microsoft" className="h-20 rounded-[2.2rem] bg-slate-50 border-none px-16 font-black text-lg focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all uppercase tracking-tight" />
                   </div>
                </div>
                <div className="lg:col-span-4 space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Location</Label>
-                  <div className="relative">
-                     <MapPin className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                     <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. London" className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-16 font-bold" />
+                  <div className="relative group">
+                     <MapPin className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
+                     <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. London" className="h-20 rounded-[2.2rem] bg-slate-50 border-none px-16 font-black focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all uppercase tracking-tight" />
                   </div>
                </div>
                <div className="lg:col-span-3">
-                  <Button onClick={handleSearch} disabled={searching} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-2xl shadow-blue-600/20">
-                     {searching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />} Search
+                  <Button onClick={handleSearch} disabled={searching} className="w-full h-20 rounded-[2.2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-xs gap-3 shadow-3xl shadow-blue-600/20 hover:scale-105 transition-all">
+                     {searching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />} Search Matrix
                   </Button>
                </div>
             </div>
-         </Card>
+         </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {searching ? (
