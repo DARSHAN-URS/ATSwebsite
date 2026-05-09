@@ -32,62 +32,68 @@ export default function About() {
       </nav>
 
       {/* Hero */}
-      <section className="relative pt-40 pb-32">
-         <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
-         <div className="container mx-auto px-8 relative z-10 text-center space-y-10">
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-3 px-5 py-2 bg-primary/10 rounded-2xl">
-               <Zap className="w-4 h-4 text-primary" />
-               <span className="text-[10px] font-black uppercase tracking-widest text-primary">The Vision</span>
+      <section className="relative pt-48 pb-32 overflow-hidden bg-white">
+         <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[10rem] -z-10 translate-x-1/4" />
+         <div className="container mx-auto px-8 relative z-10 space-y-12">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full">
+               <Zap className="w-4 h-4" />
+               <span className="text-[10px] font-black uppercase tracking-[0.2em]">The Vision</span>
             </motion.div>
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-6xl md:text-9xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-               Career <span className="text-primary">Evolution.</span>
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl md:text-2xl text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
-               ResumePro is more than a builder. It's a high-performance ecosystem designed to bridge the gap between talent and opportunity.
-            </motion.p>
+            <div className="space-y-8">
+               <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.85]">
+                  Career <br /><span className="text-blue-600">Evolution.</span>
+               </motion.h1>
+               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl md:text-3xl text-slate-500 font-medium max-w-3xl leading-relaxed">
+                  ResumePro is a high-performance ecosystem designed to bridge the gap between talent and opportunity.
+               </motion.p>
+            </div>
          </div>
       </section>
 
       {/* Stats Grid */}
-      <section className="container mx-auto px-8 pb-32">
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="container mx-auto px-8 pb-40">
+         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {stats.map((s, i) => (
-               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="p-10 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-center space-y-2">
-                  <p className="text-5xl font-black text-primary">{s.value}</p>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
+               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="p-12 rounded-[3.5rem] bg-slate-50/50 border border-slate-100 text-center space-y-3 hover:bg-white hover:shadow-2xl transition-all">
+                  <p className="text-6xl font-black text-blue-600 tracking-tighter">{s.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 leading-tight">{s.label}</p>
                </motion.div>
             ))}
          </div>
       </section>
 
-      {/* Mission */}
-      <section className="bg-slate-900 py-32 relative overflow-hidden">
-         <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/4" />
-         <div className="container mx-auto px-8 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-               <div className="space-y-10">
-                  <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/5 rounded-2xl border border-white/10">
-                     <Target className="w-4 h-4 text-primary" />
-                     <span className="text-[10px] font-black uppercase tracking-widest text-primary">Our Mission</span>
+      {/* Mission Infrastructure */}
+      <section className="bg-slate-900 py-40 relative overflow-hidden rounded-[4rem] mx-8">
+         <div className="absolute top-0 right-0 w-[50%] h-full bg-blue-600/10 rounded-full blur-[120px] translate-x-1/4" />
+         <div className="container mx-auto px-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+               <div className="space-y-12">
+                  <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full border border-white/10 text-blue-400">
+                     <Target className="w-4 h-4" />
+                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Our Mission</span>
                   </div>
-                  <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight leading-tight">
-                     Empowering the <span className="text-primary">next</span> generation of leaders.
+                  <h2 className="text-5xl md:text-[5.5rem] font-black text-white tracking-tighter leading-[0.9] uppercase">
+                     Empowering <br /> the elite <span className="text-blue-500">1%.</span>
                   </h2>
-                  <p className="text-xl text-slate-400 font-medium leading-relaxed">
-                     We believe that your potential shouldn't be limited by a template. We combine world-class design with cutting-edge AI to give you the competitive edge in any market.
+                  <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-xl">
+                     We believe your potential shouldn't be limited by legacy templates. We synthesize world-class design with neural AI to give you the ultimate edge.
                   </p>
                </div>
-               <div className="grid grid-cols-2 gap-6">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   {[
-                    { icon: Shield, title: "Secure", desc: "Enterprise-grade protection" },
-                    { icon: Globe, title: "Global", desc: "Built for every market" },
-                    { icon: Zap, title: "Fast", desc: "Instant AI generation" },
-                    { icon: Heart, title: "User-First", desc: "Handcrafted experience" }
+                    { icon: Shield, title: "SECURE", desc: "BANK-GRADE ENCRYPTION" },
+                    { icon: Globe, title: "GLOBAL", desc: "MULTI-REGION DEPLOYMENT" },
+                    { icon: Zap, title: "FAST", desc: "REAL-TIME SYNTHESIS" },
+                    { icon: Heart, title: "ELITE", desc: "HANDCRAFTED INTERFACES" }
                   ].map((item, i) => (
-                    <div key={i} className="p-8 rounded-[2rem] bg-white/5 border border-white/10 space-y-4">
-                       <item.icon className="w-8 h-8 text-primary" />
-                       <h4 className="text-lg font-black text-white">{item.title}</h4>
-                       <p className="text-slate-500 text-sm font-bold">{item.desc}</p>
+                    <div key={i} className="p-10 rounded-[3rem] bg-white/5 border border-white/10 space-y-6 group hover:bg-white/10 transition-all">
+                       <div className="w-16 h-16 rounded-2xl bg-blue-600/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                          <item.icon className="w-8 h-8" />
+                       </div>
+                       <div className="space-y-2">
+                          <h4 className="text-xl font-black text-white tracking-tight uppercase">{item.title}</h4>
+                          <p className="text-[10px] font-black text-slate-500 tracking-[0.2em]">{item.desc}</p>
+                       </div>
                     </div>
                   ))}
                </div>
@@ -96,26 +102,29 @@ export default function About() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-40 container mx-auto px-8 text-center space-y-12">
-         <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter">Join the elite <span className="text-primary">1%.</span></h2>
-         <p className="text-xl text-slate-500 font-medium max-w-2xl mx-auto">
-            Ready to stop applying and start getting hired? Build your professional legacy with ResumePro today.
-         </p>
-         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button asChild className="bg-primary text-white font-black uppercase tracking-widest text-xs h-16 px-12 rounded-2xl shadow-2xl shadow-primary/20 hover:scale-105 transition-all group">
-               <Link to="/" className="flex items-center gap-3">Start Building <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></Link>
+      <section className="py-60 container mx-auto px-8 text-center space-y-16">
+         <div className="space-y-6">
+            <h2 className="text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-none uppercase">Join the <span className="text-blue-600">Revolution.</span></h2>
+            <p className="text-2xl text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
+               Ready to stop applying and start getting deployed? Build your professional infrastructure with ResumePro today.
+            </p>
+         </div>
+         <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+            <Button asChild className="h-20 px-16 bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] shadow-3xl shadow-blue-600/30 hover:scale-105 transition-all group">
+               <Link to="/" className="flex items-center gap-4">Initialize Build <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" /></Link>
             </Button>
-            <Button asChild variant="outline" className="border-slate-200 dark:border-slate-800 font-black uppercase tracking-widest text-xs h-16 px-12 rounded-2xl">
-               <Link to="/pricing">View Plans</Link>
+            <Button asChild variant="outline" className="h-20 px-16 border-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] hover:bg-slate-50">
+               <Link to="/pricing">Scale Mission</Link>
             </Button>
          </div>
       </section>
 
-      <footer className="border-t border-slate-100 dark:border-slate-800 py-12 container mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-8">
-         <p className="text-sm font-bold text-slate-400">© {new Date().getFullYear()} ResumePro. All rights reserved.</p>
-         <div className="flex gap-10">
-            <Link to="/privacy" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Terms</Link>
+      <footer className="border-t border-slate-100 py-20 container mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-10">
+         <Logo variant="dark" className="h-10" />
+         <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">© 2026 ResumePro Dynamics. All systems operational.</p>
+         <div className="flex gap-12">
+            <Link to="/privacy" className="text-[10px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest transition-colors">Privacy</Link>
+            <Link to="/terms" className="text-[10px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest transition-colors">Terms</Link>
          </div>
       </footer>
     </div>

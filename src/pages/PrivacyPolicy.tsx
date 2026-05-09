@@ -14,19 +14,19 @@ const PrivacyPolicy = () => {
     <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400">
       <SEOHead title="Privacy Policy — ResumePro" description="Learn how ResumePro protects your personal information." />
       
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800">
-        <div className="container mx-auto flex h-20 items-center justify-between px-8">
-          <Link to="/"><Logo className="h-10" /></Link>
-          <Button asChild variant="ghost" className="rounded-xl font-bold text-slate-500 hover:text-primary">
-             <Link to="/" className="flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Home</Link>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+        <div className="container mx-auto flex h-24 items-center justify-between px-8">
+          <Link to="/"><Logo className="h-12" /></Link>
+          <Button asChild variant="ghost" className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] text-slate-400 hover:text-blue-600 gap-3">
+             <Link to="/"><ArrowLeft className="h-4 w-4" /> Initialize Return</Link>
           </Button>
         </div>
       </nav>
 
-      <main className="container mx-auto max-w-4xl px-8 pt-40 pb-32">
-        <div className="space-y-4 mb-16">
-           <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{tp.title}</h1>
-           <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{tp.lastUpdated} {new Date().toLocaleDateString(locale, { month: "long", day: "numeric", year: "numeric" })}</p>
+      <main className="container mx-auto max-w-4xl px-8 pt-48 pb-40">
+        <div className="space-y-6 mb-20 border-b border-slate-100 pb-12">
+           <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">{tp.title}</h1>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">{tp.lastUpdated} {new Date().toLocaleDateString(locale, { month: "long", day: "numeric", year: "numeric" })}</p>
         </div>
 
         <div className="space-y-12 text-base leading-relaxed">

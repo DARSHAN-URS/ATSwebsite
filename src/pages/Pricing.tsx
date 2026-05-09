@@ -84,68 +84,73 @@ export default function Pricing() {
                <ArrowLeft className="w-4 h-4" /> Go Back
             </Button>
          </div>
-
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto items-center">
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 max-w-7xl mx-auto items-stretch">
             {plans.map((plan, i) => (
                <motion.div 
                   key={plan.name} 
                   initial={{ opacity: 0, y: 30 }} 
                   animate={{ opacity: 1, y: 0 }} 
                   transition={{ delay: i * 0.1 }}
-                  className="relative"
+                  className="relative h-full"
                >
                   {plan.highlight && (
-                     <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20">
-                        <div className="px-6 py-2 bg-blue-600 rounded-full text-white font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-600/20 whitespace-nowrap">Best Value</div>
+                     <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-20">
+                        <div className="px-8 py-3 bg-blue-600 rounded-full text-white font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl shadow-blue-600/40 whitespace-nowrap">Recommended</div>
                      </div>
                   )}
 
                   <Card className={cn(
-                     "relative rounded-[4rem] border-none p-12 space-y-12 transition-all duration-700 hover:-translate-y-4 flex flex-col justify-between",
+                     "relative h-full rounded-[4rem] border-none p-16 space-y-16 transition-all duration-700 hover:-translate-y-4 flex flex-col justify-between group",
                      plan.highlight 
-                        ? "bg-slate-900 text-white min-h-[700px] shadow-2xl shadow-blue-600/20 scale-105 z-10 border-4 border-blue-600/30" 
-                        : "bg-white dark:bg-slate-900 min-h-[650px] shadow-[0_20px_50px_rgba(0,0,0,0.04)]"
+                        ? "bg-slate-900 text-white shadow-3xl shadow-blue-600/20 z-10 border-4 border-blue-600/30" 
+                        : "bg-slate-50/50 dark:bg-slate-900 shadow-sm hover:shadow-2xl hover:bg-white"
                   )}>
-                     <div className="space-y-8">
-                        <div className="space-y-2">
-                           <h3 className="text-3xl font-black tracking-tight">{plan.name}</h3>
-                           <p className={cn("text-sm font-medium", plan.highlight ? "text-slate-400" : "text-slate-500")}>{plan.desc}</p>
+                     <div className="space-y-12">
+                        <div className="space-y-4">
+                           <div className={cn("w-16 h-16 rounded-[1.5rem] flex items-center justify-center mb-8", plan.highlight ? "bg-blue-600 text-white" : "bg-white text-blue-600 shadow-sm")}>
+                              {plan.name === "Standard" ? <Star className="w-8 h-8" /> : plan.name === "Professional" ? <Zap className="w-8 h-8" /> : <ShieldCheck className="w-8 h-8" />}
+                           </div>
+                           <h3 className="text-4xl font-black tracking-tight uppercase leading-none">{plan.name}</h3>
+                           <p className={cn("text-base font-medium leading-relaxed", plan.highlight ? "text-slate-400" : "text-slate-500")}>{plan.desc}</p>
                         </div>
 
-                        <div className="flex items-baseline gap-2">
-                           <span className="text-6xl font-black tracking-tighter">${plan.price}</span>
-                           <span className={cn("text-xs font-black uppercase tracking-widest", plan.highlight ? "text-blue-500" : "text-slate-400")}>/ month</span>
+                        <div className="flex items-baseline gap-2 pt-6">
+                           <span className="text-7xl font-black tracking-tighter">${plan.price}</span>
+                           <span className={cn("text-[10px] font-black uppercase tracking-widest", plan.highlight ? "text-blue-500" : "text-slate-400")}>/ deployment</span>
                         </div>
 
-                        <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-slate-800">
+                        <div className={cn("space-y-5 pt-12 border-t", plan.highlight ? "border-white/10" : "border-slate-200")}>
                            {plan.features.map(f => (
-                              <div key={f} className="flex items-center gap-3">
-                                 <div className={cn("w-5 h-5 rounded-full flex items-center justify-center", plan.highlight ? "bg-blue-600 text-white" : "bg-blue-50 dark:bg-blue-900/30 text-blue-600")}>
+                              <div key={f} className="flex items-start gap-4">
+                                 <div className={cn("mt-1 w-5 h-5 rounded-full flex items-center justify-center shrink-0", plan.highlight ? "bg-blue-600/20 text-blue-400" : "bg-blue-600 text-white")}>
                                     <Check className="w-3 h-3" />
                                  </div>
-                                 <span className="text-xs font-bold tracking-tight">{f}</span>
+                                 <span className="text-sm font-black tracking-tight uppercase text-[11px] tracking-wider">{f}</span>
                               </div>
                            ))}
                         </div>
                      </div>
 
-                     <Button 
-                        onClick={() => handleSubscribe(plan.name.toLowerCase())} 
-                        disabled={loading === plan.name.toLowerCase() || (plan.price === "0" && plan.name === "Standard")}
-                        className={cn(
-                           "w-full h-20 rounded-[2rem] font-black uppercase tracking-widest text-[10px] gap-3 transition-all",
-                           plan.highlight 
-                              ? "bg-blue-600 text-white hover:bg-blue-500 shadow-xl shadow-blue-600/20" 
-                              : "bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:scale-105"
-                        )}
-                     >
-                        {loading === plan.name.toLowerCase() ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
-                        {plan.cta}
-                     </Button>
+                     <div className="pt-12">
+                        <Button 
+                           onClick={() => handleSubscribe(plan.name.toLowerCase())} 
+                           disabled={loading === plan.name.toLowerCase() || (plan.price === "0" && plan.name === "Standard")}
+                           className={cn(
+                              "w-full h-20 rounded-[2rem] font-black uppercase tracking-[0.2em] text-[10px] gap-4 transition-all shadow-2xl",
+                              plan.highlight 
+                                 ? "bg-blue-600 text-white hover:bg-blue-500 shadow-blue-600/30" 
+                                 : "bg-slate-900 text-white hover:bg-slate-800"
+                           )}
+                        >
+                           {loading === plan.name.toLowerCase() ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                           {plan.cta}
+                        </Button>
+                     </div>
                   </Card>
                </motion.div>
             ))}
          </div>
+
 
          <div className="py-20 text-center space-y-12 border-t border-slate-100 dark:border-slate-800">
             <div className="space-y-4">

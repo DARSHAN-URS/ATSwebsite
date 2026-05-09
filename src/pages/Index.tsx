@@ -250,51 +250,100 @@ const Index = () => {
          </div>
       </section>
 
-      {/* Architectural Footer */}
-      <footer className="py-32 bg-white border-t border-slate-50">
+      {/* FAQ Infrastructure */}
+      <section className="py-40 bg-slate-50/50 relative">
          <div className="container mx-auto px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
                <div className="space-y-10">
-                  <Logo variant="dark" className="h-14" />
-                  <p className="text-slate-500 font-medium leading-relaxed max-w-xs">The high-fidelity standard for professional career infrastructure.</p>
+                  <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+                     <HelpCircle className="w-4 h-4" />
+                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Operational Support</span>
+                  </div>
+                  <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9]">Common <br /> <span className="text-blue-600">Questions.</span></h2>
+                  <p className="text-xl text-slate-500 font-medium max-w-md leading-relaxed">Everything you need to know about deploying your professional identity on our grid.</p>
+               </div>
+               
+               <div className="space-y-6">
+                  {[
+                    { q: "How does the AI architectural builder work?", a: "Our system uses proprietary career vectors to synthesize your experience into high-density, ATS-optimized professional identity documents with 99.2% accuracy." },
+                    { q: "Is the infrastructure secure for executive data?", a: "We utilize bank-grade encryption protocols and enterprise-level data isolation to ensure your professional assets remain under your absolute control." },
+                    { q: "Can I deploy to global markets?", a: "Yes. Our grid supports multi-regional formatting standards, allowing you to optimize your resume for any primary global technology hub automatically." },
+                    { q: "How do I access the recruitment intelligence?", a: "By initializing a Professional or Executive plan, you gain direct access to our real-time talent matrix and autonomous outreach protocols." }
+                  ].map((faq, i) => (
+                     <div key={i} className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all space-y-4">
+                        <h4 className="text-lg font-black text-slate-900 tracking-tight uppercase">{faq.q}</h4>
+                        <p className="text-slate-500 font-medium leading-relaxed">{faq.a}</p>
+                     </div>
+                  ))}
+               </div>
+            </div>
+         </div>
+      </section>
+
+      {/* Architectural Footer */}
+      <footer className="py-40 bg-white border-t border-slate-50 relative overflow-hidden">
+         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+         <div className="container mx-auto px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-20">
+               <div className="lg:col-span-2 space-y-12">
+                  <Logo variant="dark" className="h-16" />
+                  <p className="text-slate-500 font-medium leading-relaxed max-w-sm text-lg">
+                     The high-fidelity standard for professional career infrastructure. Architecting the future of human talent deployment.
+                  </p>
+                  <div className="flex gap-6">
+                     {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-600/20 transition-all cursor-pointer">
+                           <Globe className="w-5 h-5" />
+                        </div>
+                     ))}
+                  </div>
                </div>
                
                <div className="space-y-10">
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]">Infrastructure</h4>
-                  <ul className="space-y-4">
-                     <li><Link to="/builder" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Neural Builder</Link></li>
-                     <li><Link to="/jobs" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Talent Grid</Link></li>
-                     <li><Link to="/interview-prep" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Interview Labs</Link></li>
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Infrastructure</h4>
+                  <ul className="space-y-6">
+                     <li><Link to="/builder" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Neural Builder</Link></li>
+                     <li><Link to="/jobs" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Talent Grid</Link></li>
+                     <li><Link to="/interview-prep" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Interview Labs</Link></li>
+                     <li><Link to="/email-outreach" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Outreach Ops</Link></li>
                   </ul>
                </div>
 
                <div className="space-y-10">
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]">Resources</h4>
-                  <ul className="space-y-4">
-                     <li><Link to="/blog" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Intelligence Blog</Link></li>
-                     <li><Link to="/pricing" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Mission Scaling</Link></li>
-                     <li><Link to="/contact" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Support Operations</Link></li>
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Resources</h4>
+                  <ul className="space-y-6">
+                     <li><Link to="/blog" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Intelligence Blog</Link></li>
+                     <li><Link to="/pricing" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Mission Scaling</Link></li>
+                     <li><Link to="/contact" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Support Operations</Link></li>
+                     <li><Link to="/about" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">The Vision</Link></li>
                   </ul>
                </div>
 
                <div className="space-y-10">
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]">Operational Status</h4>
-                  <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 space-y-4">
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Status</h4>
+                  <div className="p-10 rounded-[3rem] bg-slate-900 space-y-6 shadow-2xl">
                      <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                        <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">All Systems Operational</span>
+                        <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.8)] animate-pulse" />
+                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Operational</span>
                      </div>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Latency: 24ms <br /> Availability: 99.99%</p>
+                     <div className="space-y-2">
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Global Latency</p>
+                        <p className="text-xl font-black text-white tracking-tighter">24.2ms</p>
+                     </div>
+                     <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full w-[98%] bg-blue-600" />
+                     </div>
                   </div>
                </div>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-32 pt-20 border-t border-slate-100">
-               <div className="flex gap-10">
-                  <Link to="/privacy" className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
-                  <Link to="/terms" className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-40 pt-20 border-t border-slate-100">
+               <div className="flex gap-12">
+                  <Link to="/privacy" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">Privacy Protocols</Link>
+                  <Link to="/terms" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">Service Terms</Link>
+                  <Link to="/cookies" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">Cookie Policy</Link>
                </div>
-               <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">© 2026 ResumePro Infrastructure Dynamics. All rights reserved.</p>
+               <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">© 2026 ResumePro Infrastructure Dynamics. Deploying v4.0.82</p>
             </div>
          </div>
       </footer>
