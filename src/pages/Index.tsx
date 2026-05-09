@@ -131,7 +131,7 @@ const Index = () => {
       </section>
 
       {/* Mission Partners */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-12 bg-white relative overflow-hidden">
          <div className="container mx-auto px-8 relative z-10">
             <div className="flex flex-col md:flex-row items-center justify-between gap-16 border-y border-slate-100 py-20 px-12 rounded-[4rem] bg-slate-50/50">
                <div className="space-y-2 text-center md:text-left">
@@ -150,7 +150,7 @@ const Index = () => {
       </section>
 
       {/* Value Matrix */}
-      <section className="py-40 bg-white relative">
+      <section className="pt-10 pb-40 bg-white relative">
          <div className="container mx-auto px-8 space-y-32">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
                <div className="space-y-10">
