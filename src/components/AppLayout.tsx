@@ -51,66 +51,79 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   }, [user?.user_metadata?.avatar_url]);
 
   return (
-    <div className="h-full flex flex-col bg-white border-r border-slate-200/60 relative overflow-hidden">
-      <div className="p-8 relative z-10">
-        <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-          <Logo variant="dark" className="h-12" />
+    <div className="h-full flex flex-col bg-slate-50/50 relative overflow-hidden p-6">
+      <div className="bg-white rounded-[3rem] h-full flex flex-col shadow-sm border border-slate-100 relative overflow-hidden">
+        <div className="p-10 pb-6">
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
+            <Logo variant="dark" className="h-10 transition-transform group-hover:scale-105" />
+          </div>
         </div>
-      </div>
 
-      <nav className="flex-1 px-6 space-y-2 overflow-y-auto relative z-10 custom-scrollbar pt-4">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end
-            onClick={onNavClick}
-            className={({ isActive }) =>
-              cn(
-                "flex items-center justify-between px-6 py-4 transition-all rounded-2xl group/nav relative overflow-hidden",
-                isActive 
-                  ? "bg-slate-900 text-white shadow-xl shadow-slate-900/10" 
-                  : "text-slate-400 hover:text-blue-600 hover:bg-blue-50/50"
-              )
-            }
-          >
-            <div className="flex items-center gap-4 relative z-10">
-               <item.icon className={cn("h-5 w-5 transition-transform group-hover/nav:scale-110", "text-current")} />
-               <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
-            </div>
-            {item.label === "Premium" && <Sparkles className="w-4 h-4 text-amber-400 relative z-10" />}
-            
-            <div 
-              className={cn(
-                "absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-blue-600 rounded-r-full transition-transform duration-500",
-                "hidden group-[.active]/nav:block"
-              )} 
-            />
-          </NavLink>
-        ))}
-      </nav>
-
-      <div className="p-6 border-t border-slate-100 bg-white/50">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all text-left group">
-              <Avatar className="h-10 w-10 border-2 border-white shadow-sm transition-transform group-hover:scale-105">
-                <AvatarImage src={resolvedAvatarUrl || undefined} />
-                <AvatarFallback className="bg-blue-600 text-white text-xs font-bold">{displayName.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 overflow-hidden">
-                <p className="text-xs font-bold text-slate-900 truncate">{displayName}</p>
-                <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{role?.replace('_', ' ') || "Free Member"}</p>
+        <nav className="flex-1 px-4 space-y-2 overflow-y-auto custom-scrollbar pt-6">
+          <div className="px-6 mb-6">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Core Navigation</p>
+          </div>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end
+              onClick={onNavClick}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center justify-between px-6 py-5 transition-all rounded-[1.8rem] group/nav relative overflow-hidden",
+                  isActive 
+                    ? "bg-slate-900 text-white shadow-2xl shadow-slate-900/20" 
+                    : "text-slate-500 hover:text-blue-600 hover:bg-blue-50/80"
+                )
+              }
+            >
+              <div className="flex items-center gap-4 relative z-10">
+                 <item.icon className={cn("h-4.5 w-4.5 transition-transform group-hover/nav:scale-110", "text-current")} />
+                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
               </div>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" side="right" className="w-64 rounded-2xl p-2 border border-slate-200 shadow-xl bg-white text-slate-900">
-            <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-xl p-3 font-semibold text-sm gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer transition-all"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-xl p-3 font-semibold text-sm gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer transition-all"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
-            <DropdownMenuSeparator className="my-2 bg-slate-100" />
-            <DropdownMenuItem onClick={onSignOut} className="rounded-xl p-3 font-semibold text-sm gap-3 text-red-500 focus:bg-red-50/50 cursor-pointer transition-all"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {item.label === "Premium" && <Sparkles className="w-3.5 h-3.5 text-amber-400 relative z-10" />}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="p-4 mt-auto">
+          <div className="p-8 rounded-[2.5rem] bg-slate-50 border border-slate-100 space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Neural Link</span>
+              </div>
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">v4.0</span>
+            </div>
+            <div className="h-1.5 w-full bg-white rounded-full overflow-hidden">
+               <div className="h-full w-3/4 bg-blue-600 rounded-full" />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 pt-0">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="w-full flex items-center gap-4 p-4 rounded-[2rem] hover:bg-slate-50 transition-all text-left group border border-transparent hover:border-slate-100">
+                <Avatar className="h-12 w-12 border-4 border-white shadow-md transition-transform group-hover:scale-105">
+                  <AvatarImage src={resolvedAvatarUrl || undefined} />
+                  <AvatarFallback className="bg-blue-600 text-white text-sm font-black">{displayName.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 overflow-hidden">
+                  <p className="text-xs font-black text-slate-900 truncate uppercase tracking-tight">{displayName}</p>
+                  <p className="text-[9px] text-blue-600 font-black uppercase tracking-[0.2em]">{role?.replace('_', ' ') || "Free Member"}</p>
+                </div>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" side="right" className="w-64 rounded-[2rem] p-3 border-none shadow-3xl bg-white text-slate-900">
+              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
+              <DropdownMenuSeparator className="my-2 bg-slate-100" />
+              <DropdownMenuItem onClick={onSignOut} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 text-red-500 focus:bg-red-50 cursor-pointer"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </div>
   );
@@ -130,30 +143,68 @@ export default function AppLayout() {
   return (
     <div className="flex min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
       {!isMobile && (
-        <aside className="w-72 h-screen sticky top-0 overflow-hidden z-40">
+        <aside className="w-80 h-screen sticky top-0 overflow-hidden z-40 bg-slate-50/50">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       )}
 
-      <main className="flex-1 min-w-0 relative">
+      <main className="flex-1 min-w-0 flex flex-col bg-slate-50/50">
+        {!isMobile && (
+          <header className="h-24 px-12 flex items-center justify-between sticky top-0 z-30 bg-slate-50/50 backdrop-blur-md">
+            <div className="flex-1 max-w-xl">
+               <div className="relative group">
+                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+                  <input 
+                    type="text" 
+                    placeholder="Search mission objectives..." 
+                    className="w-full h-14 pl-14 pr-6 rounded-2xl bg-white border border-slate-100 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-medium"
+                  />
+               </div>
+            </div>
+            
+            <div className="flex items-center gap-8 ml-12">
+               <div className="flex items-center gap-4 px-6 py-3 bg-white rounded-full border border-slate-100 shadow-sm">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">System Operational</span>
+               </div>
+               
+               <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm hover:text-blue-600">
+                  <HelpCircle className="w-5 h-5" />
+               </Button>
+               
+               <div className="h-10 w-px bg-slate-200" />
+               
+               <Button onClick={() => navigate("/pricing")} className="h-12 px-8 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-600/20 hover:scale-105 transition-all">
+                  Upgrade Plan
+               </Button>
+            </div>
+          </header>
+        )}
+
         {isMobile && (
-          <header className="h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between sticky top-0 z-50">
+          <header className="h-20 border-b border-slate-100 bg-white px-8 flex items-center justify-between sticky top-0 z-50">
             <div className="flex items-center gap-2" onClick={() => navigate("/")}>
               <Logo variant="dark" className="h-8" />
             </div>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-lg hover:bg-slate-100"><Menu className="h-5 w-5 text-slate-500" /></Button>
+                <Button variant="ghost" size="icon" className="rounded-2xl hover:bg-slate-100"><Menu className="h-6 w-6 text-slate-900" /></Button>
               </SheetTrigger>
-              <SheetContent side="left" className="p-0 border-none w-72 bg-white">
+              <SheetContent side="left" className="p-0 border-none w-80 bg-white">
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
                 <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setOpen(false)} />
               </SheetContent>
             </Sheet>
           </header>
         )}
-        <div className="relative min-h-screen p-4 md:p-8">
-          <Outlet />
+        
+        <div className="flex-1 relative p-6 md:p-12 md:pt-4 overflow-y-auto">
+          <div className="bg-white rounded-[4rem] min-h-full shadow-sm border border-slate-100 overflow-hidden relative">
+             <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+             <div className="relative z-10 p-10 md:p-16">
+                <Outlet />
+             </div>
+          </div>
         </div>
       </main>
     </div>

@@ -99,44 +99,44 @@ export default function Resumes() {
     <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20 text-left">
       <SEOHead title="My Resumes — ResumePro" description="Create and manage your professional resumes." />
       
-      <div className="container mx-auto px-8 pt-16 space-y-16">
+      <div className="container mx-auto px-8 space-y-20">
          <div className="flex flex-col md:flex-row items-end justify-between gap-12">
-            <div className="space-y-4">
-               <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+            <div className="space-y-6">
+               <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
                   <ShieldCheck className="w-4 h-4" />
-                  <span className="text-[9px] font-black uppercase tracking-widest">My Resumes</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">Asset Management</span>
                </div>
-               <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                  Resumes.
+               <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none">
+                  Professional <br /><span className="text-blue-600">Assets.</span>
                </h1>
             </div>
 
-            <Button onClick={() => setCreateOpen(true)} className="h-20 px-10 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-2xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all">
-               <Plus className="w-5 h-5" /> Create New
+            <Button onClick={() => setCreateOpen(true)} className="h-20 px-12 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-3xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all">
+               <Plus className="w-5 h-5" /> Initialize Build
             </Button>
          </div>
 
-         <div className="relative group max-w-xl">
+         <div className="relative group max-w-2xl">
             <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-            <Input placeholder="Search resumes..." className="h-16 rounded-[2rem] bg-white dark:bg-slate-900 border-none px-16 font-bold shadow-sm focus:ring-blue-600/10 transition-all" />
+            <Input placeholder="Search document matrix..." className="h-20 rounded-[2.2rem] bg-white border border-slate-100 px-20 font-black text-lg shadow-sm focus:ring-blue-600/10 transition-all uppercase tracking-tight" />
          </div>
 
          {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                {[1,2,3].map(i => (
-                  <div key={i} className="h-[400px] rounded-[4rem] bg-slate-100 dark:bg-slate-900 animate-pulse" />
+                  <div key={i} className="h-[450px] rounded-[4rem] bg-slate-50 animate-pulse border border-slate-100" />
                ))}
             </div>
          ) : resumes.length === 0 ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-40 text-center space-y-8">
-               <div className="w-24 h-24 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center text-slate-300 mx-auto">
-                  <FileText className="w-12 h-12" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-48 text-center space-y-10">
+               <div className="w-32 h-32 bg-slate-50 rounded-[3rem] border border-slate-100 flex items-center justify-center text-slate-300 mx-auto">
+                  <FileText className="w-14 h-14" />
                </div>
-               <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">No resumes found</h3>
-                  <p className="text-slate-500 font-medium">You haven't created any resumes yet.</p>
+               <div className="space-y-4">
+                  <h3 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">No active <br /> assets found.</h3>
+                  <p className="text-lg text-slate-500 font-medium">Your document matrix is currently empty.</p>
                </div>
-               <Button onClick={() => setCreateOpen(true)} variant="link" className="text-blue-600 font-black uppercase tracking-widest text-xs">Create your first resume</Button>
+               <Button onClick={() => setCreateOpen(true)} variant="link" className="text-blue-600 font-black uppercase tracking-[0.2em] text-[11px]">Initialize First Build</Button>
             </motion.div>
          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -152,41 +152,50 @@ export default function Resumes() {
                            transition={{ delay: i * 0.05 }}
                            className="group"
                         >
-                           <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl hover:-translate-y-2 transition-all relative overflow-hidden h-full flex flex-col justify-between">
-                              <div className="space-y-8">
+                           <Card className="rounded-[4rem] border-none bg-white p-12 shadow-sm border border-slate-50 hover:shadow-3xl hover:-translate-y-4 transition-all duration-700 relative overflow-hidden h-full flex flex-col justify-between group">
+                              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
+                              <div className="space-y-10 relative z-10">
                                  <div className="flex items-start justify-between">
-                                    <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
-                                       <FileText className="w-8 h-8" />
+                                    <div className="w-20 h-20 rounded-[2rem] bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform shadow-sm">
+                                       <FileText className="w-10 h-10" />
                                     </div>
                                     <DropdownMenu>
                                        <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="icon" className="rounded-xl"><MoreVertical className="w-5 h-5 text-slate-400" /></Button>
+                                          <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl hover:bg-slate-50"><MoreVertical className="w-6 h-6 text-slate-400" /></Button>
                                        </DropdownMenuTrigger>
-                                       <DropdownMenuContent align="end" className="rounded-2xl border-none shadow-2xl p-2 w-48">
-                                          <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-xl p-3 font-bold gap-3"><Edit className="w-4 h-4" /> Edit Resume</DropdownMenuItem>
-                                          <DropdownMenuItem onClick={() => { setShareId(resume.id); setShareOpen(true); }} className="rounded-xl p-3 font-bold gap-3"><Share2 className="w-4 h-4" /> Share Link</DropdownMenuItem>
-                                          <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-xl p-3 font-bold gap-3 text-red-500 focus:bg-red-50"><Trash2 className="w-4 h-4" /> Delete Resume</DropdownMenuItem>
+                                       <DropdownMenuContent align="end" className="rounded-[2rem] border-none shadow-3xl p-3 w-56 bg-white">
+                                          <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Edit className="w-4 h-4" /> Edit Build</DropdownMenuItem>
+                                          <DropdownMenuItem onClick={() => { setShareId(resume.id); setShareOpen(true); }} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Share2 className="w-4 h-4" /> Share Link</DropdownMenuItem>
+                                          <DropdownMenuSeparator className="my-2 bg-slate-100" />
+                                          <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 text-red-500 focus:bg-red-50 cursor-pointer"><Trash2 className="w-4 h-4" /> Deconstruct</DropdownMenuItem>
                                        </DropdownMenuContent>
                                     </DropdownMenu>
                                  </div>
 
-                                 <div className="space-y-2">
-                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-none group-hover:text-blue-600 transition-colors">{resume.title}</h3>
-                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Last updated: {new Date(resume.updated_at).toLocaleDateString()}</p>
+                                 <div className="space-y-3">
+                                    <h3 className="text-3xl font-black text-slate-900 tracking-tighter leading-[1.1] group-hover:text-blue-600 transition-colors uppercase">{resume.title}</h3>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Last Sync: {new Date(resume.updated_at).toLocaleDateString()}</p>
                                  </div>
 
-                                 <div className="space-y-4 pt-8 border-t border-slate-50 dark:border-slate-800">
-                                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                       <span>Resume Score</span>
+                                 <div className="space-y-6 pt-10 border-t border-slate-50">
+                                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                                       <span>Quality Index</span>
                                        <span className={cn(score > 70 ? "text-blue-600" : "text-amber-500")}>{score}%</span>
                                     </div>
-                                    <Progress value={score} className="h-2 bg-white dark:bg-slate-800" />
+                                    <div className="h-2 w-full bg-slate-50 rounded-full overflow-hidden">
+                                       <motion.div 
+                                         initial={{ width: 0 }}
+                                         animate={{ width: `${score}%` }}
+                                         transition={{ duration: 1.5, ease: "circOut" }}
+                                         className={cn("h-full rounded-full", score > 70 ? "bg-blue-600" : "bg-amber-500")}
+                                       />
+                                    </div>
                                  </div>
                               </div>
 
-                              <div className="pt-10">
-                                 <Button onClick={() => navigate(`/builder/${resume.id}`)} className="w-full h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-xl hover:bg-blue-600 transition-all">
-                                    Edit Resume <ArrowRight className="w-4 h-4" />
+                              <div className="pt-12 relative z-10">
+                                 <Button onClick={() => navigate(`/builder/${resume.id}`)} className="w-full h-16 rounded-[1.8rem] bg-slate-900 text-white font-black uppercase tracking-[0.2em] text-[10px] gap-4 shadow-xl hover:bg-blue-600 transition-all">
+                                    Access Editor <ArrowRight className="w-4 h-4" />
                                  </Button>
                               </div>
                            </Card>

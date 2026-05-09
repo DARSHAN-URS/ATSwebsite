@@ -174,58 +174,69 @@ function JobSeekerDashboard() {
       
       <div className="space-y-10 max-w-7xl mx-auto">
         {/* Clean SaaS Header */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 text-center lg:text-left">
-             <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Active Session</span>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-16">
+          <div className="space-y-6 text-center lg:text-left">
+             <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+                <Sparkles className="w-4 h-4" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Deployment Session Active</span>
              </div>
-             <h1 className="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight leading-tight">
-                Welcome, <span className="text-blue-600">{user?.user_metadata?.display_name?.split(' ')[0] || "User"}</span>.
+             <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+                Mission <span className="text-blue-600">Briefing.</span>
              </h1>
+             <p className="text-xl text-slate-500 font-medium max-w-xl leading-relaxed">
+                Welcome back, <span className="text-slate-900 font-black">{user?.user_metadata?.display_name?.split(' ')[0] || "User"}</span>. Your professional matrix is synchronized at <span className="text-blue-600 font-black">94% efficiency</span>.
+             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {quickActions.map((action, i) => (
               <motion.button
                 key={action.label}
                 whileHover={{ y: -2, scale: 1.02 }}
                 onClick={() => navigate(action.to)}
-                className="flex items-center gap-2 px-6 py-4 rounded-2xl bg-white border border-slate-200/60 shadow-sm hover:border-blue-600 hover:text-blue-600 transition-all duration-300 group"
+                className="flex items-center gap-4 px-8 py-5 rounded-[2.2rem] bg-white border border-slate-100 shadow-sm hover:border-blue-600 hover:text-blue-600 transition-all duration-300 group"
               >
-                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform", action.bg, action.color)}>
-                   <action.icon className="w-4 h-4" />
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform", action.bg, action.color)}>
+                   <action.icon className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold uppercase tracking-widest">{action.label}</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{action.label}</span>
               </motion.button>
             ))}
           </div>
         </div>
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-           <div className="lg:col-span-8 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <div className="md:col-span-2"><ResumeStrengthWidget /></div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+           <div className="lg:col-span-8 space-y-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <div className="md:col-span-2">
+                    <Card className="rounded-[3.5rem] border-none bg-slate-50/50 p-10 shadow-sm hover:bg-white hover:shadow-2xl transition-all duration-700">
+                       <ResumeStrengthWidget />
+                    </Card>
+                 </div>
                  <StatCard label="Success Index" value="94%" icon={Award} color="bg-blue-600" />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                  <StatCard label="Deployments" value={stats.totalApplications} icon={Rocket} color="bg-indigo-600" />
-                 <StatCard label="Profile Views" value="842" icon={Eye} color="bg-emerald-600" />
-                 <StatCard label="Interviews" value="4" icon={Users} color="bg-purple-600" />
+                 <StatCard label="Matrix Reach" value="842" icon={Eye} color="bg-emerald-600" />
+                 <StatCard label="Direct Nodes" value="4" icon={Users} color="bg-purple-600" />
               </div>
 
-              <Card className="rounded-[2.5rem] border border-slate-200/60 bg-white shadow-sm overflow-hidden">
-                 <div className="p-8 pb-0 flex items-center justify-between">
-                    <h3 className="text-xl font-display font-black text-slate-900 tracking-tight uppercase">Pulse Analytics</h3>
-                    <div className="flex gap-2 items-center">
-                       <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                       <span className="text-[8px] font-black text-blue-600 uppercase tracking-[0.2em]">Operational</span>
+              <Card className="rounded-[4rem] border-none bg-slate-900 shadow-2xl overflow-hidden group relative">
+                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+                 <div className="p-12 pb-0 flex items-center justify-between relative z-10">
+                    <div className="space-y-2">
+                       <h3 className="text-2xl font-black text-white tracking-tighter uppercase leading-none">Pulse Intelligence</h3>
+                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Real-time synchronization</p>
+                    </div>
+                    <div className="flex gap-3 items-center">
+                       <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+                       <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em]">Operational</span>
                     </div>
                  </div>
-                 <div className="p-8">
-                    <Suspense fallback={<div className="h-[250px] animate-pulse bg-white rounded-2xl" />}>
+                 <div className="p-12 pt-16 relative z-10">
+                    <Suspense fallback={<div className="h-[300px] animate-pulse bg-white/5 rounded-[3rem]" />}>
                        <DashboardCharts
                           statusBreakdown={stats.statusBreakdown}
                           weeklyActivity={stats.weeklyActivity}
@@ -237,26 +248,39 @@ function JobSeekerDashboard() {
               </Card>
            </div>
 
-           <div className="lg:col-span-4 space-y-8">
-              <Card className="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-sm space-y-8">
+           <div className="lg:col-span-4 space-y-10">
+              <Card className="rounded-[3.5rem] border-none bg-white p-12 shadow-sm space-y-10 border border-slate-100">
                 <div className="flex items-center justify-between">
-                   <h3 className="text-lg font-display font-black text-slate-900 tracking-tight uppercase">Briefing</h3>
-                   <Clock className="w-4 h-4 text-blue-600" />
+                   <h3 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Briefing Hub</h3>
+                   <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600"><Clock className="w-5 h-5" /></div>
                 </div>
-                <Suspense fallback={<div className="h-32 bg-white rounded-2xl animate-pulse" />}>
-                   <ScheduledInterviewsList />
-                </Suspense>
-                <Button className="w-full h-12 rounded-xl bg-white border border-slate-100 text-slate-900 font-bold uppercase tracking-widest text-[9px] hover:bg-blue-600 hover:text-white transition-all">Schedule New</Button>
+                <div className="space-y-8">
+                   <Suspense fallback={<div className="h-32 bg-slate-50 animate-pulse rounded-3xl" />}>
+                      <ScheduledInterviewsList />
+                   </Suspense>
+                </div>
+                <Button className="w-full h-16 rounded-[1.8rem] bg-slate-900 text-white font-black uppercase tracking-[0.2em] text-[10px] hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10">Initialize New Session</Button>
               </Card>
 
-              <Card className="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 group overflow-hidden">
-                 <div className="flex items-center gap-4 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><ShieldCheck className="w-5 h-5" /></div>
-                    <h4 className="text-md font-bold text-slate-900 tracking-tight uppercase">AI Advisor</h4>
+              <Card className="rounded-[3.5rem] border-none bg-blue-600 p-12 text-white shadow-3xl shadow-blue-600/30 group overflow-hidden relative">
+                 <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:rotate-12 transition-transform">
+                    <ShieldCheck className="w-32 h-32" />
                  </div>
-                 <div className="p-5 bg-white rounded-2xl border border-slate-100 space-y-2">
-                    <p className="text-xs font-medium text-slate-600">Keyword density at <span className="text-blue-600 font-bold">92%</span> for FAANG roles.</p>
-                    <div className="flex items-center gap-2 text-[8px] font-black text-blue-600 uppercase tracking-widest"><TrendingUp className="w-3 h-3" /> Growth Detected</div>
+                 <div className="space-y-10 relative z-10">
+                    <div className="flex items-center gap-5">
+                       <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-xl border border-white/20"><Sparkles className="w-7 h-7" /></div>
+                       <div className="space-y-1">
+                          <h4 className="text-xl font-black tracking-tight uppercase leading-none">AI Advisor</h4>
+                          <p className="text-[10px] font-black text-blue-200 uppercase tracking-widest leading-none">Autonomous Engine</p>
+                       </div>
+                    </div>
+                    <div className="p-8 bg-white/10 rounded-[2.5rem] border border-white/10 backdrop-blur-sm space-y-5">
+                       <p className="text-base font-bold leading-relaxed italic">"Your keyword density for <span className="text-white underline underline-offset-4 decoration-2">Senior Architect</span> roles has reached the critical 95% threshold. Deployment ready."</p>
+                       <div className="flex items-center gap-3">
+                          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="text-[9px] font-black uppercase tracking-[0.3em]">High Reliability Signal</span>
+                       </div>
+                    </div>
                  </div>
               </Card>
            </div>

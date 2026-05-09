@@ -237,60 +237,69 @@ export default function RecruiterJobs() {
                      </Button>
                   </Card>
                ) : (
-                  <div className="grid grid-cols-1 gap-8">
-                     {filteredJobs.map((job) => (
-                        <Card key={job.id} className="rounded-[3.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_60px_rgba(0,0,0,0.03)] p-12 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative overflow-hidden">
-                           <div className="flex flex-col md:flex-row items-start justify-between gap-10 relative z-10">
-                              <div className="space-y-6 flex-1">
-                                 <div className="space-y-2">
-                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 transition-colors">{job.title}</h3>
-                                    <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">{job.company_name} <span className="mx-2 text-slate-200">|</span> {job.location || "Global Ops"}</p>
-                                 </div>
-                                 <div className="flex flex-wrap gap-3">
-                                    <Badge className="rounded-xl px-4 py-1.5 bg-blue-50 text-blue-600 border border-blue-100 text-[9px] font-black uppercase tracking-widest">{job.job_type}</Badge>
-                                    {job.salary_min && (
-                                       <Badge variant="outline" className="rounded-xl px-4 py-1.5 border-slate-100 text-slate-500 text-[9px] font-bold uppercase tracking-widest">
-                                          {job.salary_currency} {job.salary_min.toLocaleString()} - {job.salary_max?.toLocaleString()}
-                                       </Badge>
-                                    )}
-                                 </div>
-                                 {job.description && <p className="text-slate-500 font-medium leading-relaxed line-clamp-2 max-w-3xl">{job.description}</p>}
-                                 
-                                 <div className="flex items-center gap-10 pt-4 border-t border-slate-50 mt-8">
-                                    <div className="flex items-center gap-3">
-                                       <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600"><Eye className="w-5 h-5" /></div>
-                                       <div>
-                                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Reach</p>
-                                          <p className="text-sm font-black text-slate-900">{job.viewCount || 0} Views</p>
-                                       </div>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                       <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600"><Users className="w-5 h-5" /></div>
-                                       <div>
-                                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Applicants</p>
-                                          <p className="text-sm font-black text-slate-900">{job.appCount || 0} Candidates</p>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
+                   <div className="grid grid-cols-1 gap-12">
+                      {filteredJobs.map((job) => (
+                         <Card key={job.id} className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_30px_100px_rgba(0,0,0,0.04)] p-12 hover:shadow-[0_50px_150px_rgba(0,0,0,0.08)] transition-all duration-700 group relative overflow-hidden">
+                            <div className="flex flex-col md:flex-row items-start justify-between gap-12 relative z-10">
+                               <div className="space-y-10 flex-1">
+                                  <div className="space-y-4">
+                                     <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:rotate-6 transition-transform"><Briefcase className="w-6 h-6" /></div>
+                                        <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
+                                     </div>
+                                     <p className="text-slate-500 font-bold text-[11px] uppercase tracking-[0.3em] pl-16">{job.company_name} <span className="mx-3 text-slate-200">|</span> {job.location || "Global Ops"}</p>
+                                  </div>
+                                  
+                                  <div className="flex flex-wrap gap-4 pl-16">
+                                     <Badge className="rounded-2xl px-6 py-2 bg-blue-600 text-white border-none text-[10px] font-black uppercase tracking-widest">{job.job_type}</Badge>
+                                     {job.salary_min && (
+                                        <Badge variant="outline" className="rounded-2xl px-6 py-2 border-slate-200 text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                                           {job.salary_currency} {job.salary_min.toLocaleString()} - {job.salary_max?.toLocaleString()}
+                                        </Badge>
+                                     )}
+                                  </div>
 
-                              <div className="flex md:flex-col items-center gap-3">
-                                 <Button onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)} className="h-14 px-8 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-900/10">Manage Pipeline</Button>
-                                 <div className="flex items-center gap-2">
-                                    <Button variant="outline" size="icon" onClick={() => openEdit(job)} className="w-12 h-12 rounded-xl border-slate-100 hover:text-blue-600 transition-all"><Edit className="w-4 h-4" /></Button>
-                                    <Button variant="outline" size="icon" onClick={() => handleDelete(job.id)} className="w-12 h-12 rounded-xl border-slate-100 hover:text-red-500 transition-all"><Trash2 className="w-4 h-4" /></Button>
-                                    <Badge 
-                                       className={cn("h-12 rounded-xl px-4 flex items-center cursor-pointer text-[9px] font-black uppercase tracking-widest transition-all", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}
-                                       onClick={() => toggleStatus(job)}
-                                    >
-                                       {job.status}
-                                    </Badge>
-                                 </div>
-                              </div>
-                           </div>
-                        </Card>
-                     ))}
-                  </div>
+                                  {job.description && (
+                                    <div className="pl-16 space-y-4">
+                                       <p className="text-slate-500 font-medium leading-relaxed line-clamp-3 max-w-4xl text-lg italic border-l-4 border-slate-100 pl-8">{job.description}</p>
+                                    </div>
+                                  )}
+                                  
+                                  <div className="flex items-center gap-12 pt-10 border-t border-slate-50 mt-12 pl-16">
+                                     <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all"><Eye className="w-6 h-6" /></div>
+                                        <div>
+                                           <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Reach</p>
+                                           <p className="text-xl font-black text-slate-900">{job.viewCount || 0} Views</p>
+                                        </div>
+                                     </div>
+                                     <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-all"><Users className="w-6 h-6" /></div>
+                                        <div>
+                                           <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Candidates</p>
+                                           <p className="text-xl font-black text-slate-900">{job.appCount || 0} Active</p>
+                                        </div>
+                                     </div>
+                                  </div>
+                               </div>
+
+                               <div className="flex md:flex-col items-stretch gap-4 w-full md:w-auto">
+                                  <Button onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)} className="h-20 px-10 rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-slate-900/10 group-hover:bg-blue-600 transition-all">Manage Pipeline</Button>
+                                  <div className="grid grid-cols-2 gap-4">
+                                     <Button variant="outline" size="icon" onClick={() => openEdit(job)} className="w-full h-16 rounded-2xl border-slate-100 hover:text-blue-600 transition-all"><Edit className="w-5 h-5" /></Button>
+                                     <Button variant="outline" size="icon" onClick={() => handleDelete(job.id)} className="w-full h-16 rounded-2xl border-slate-100 hover:text-red-500 transition-all"><Trash2 className="w-5 h-5" /></Button>
+                                  </div>
+                                  <Badge 
+                                     className={cn("h-16 rounded-2xl px-6 flex items-center justify-center cursor-pointer text-[10px] font-black uppercase tracking-widest transition-all", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}
+                                     onClick={() => toggleStatus(job)}
+                                  >
+                                     {job.status === "active" ? "Operational" : "Terminated"}
+                                  </Badge>
+                               </div>
+                            </div>
+                         </Card>
+                      ))}
+                   </div>
                )}
             </TabsContent>
          </Tabs>
