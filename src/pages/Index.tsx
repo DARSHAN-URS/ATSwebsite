@@ -5,151 +5,296 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { 
   Search, Building2, CheckCircle2, Sparkles, Zap, ShieldCheck, 
   ArrowRight, Star, Cpu, Award, TrendingUp, Mail, Lock, ChevronRight,
   Target, BarChart3, Users, Rocket
 } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const Index = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { scrollY } = useScroll();
-  const yHero = useTransform(scrollY, [0, 500], [0, 100]);
-  const opacityHero = useTransform(scrollY, [0, 500], [1, 0]);
+  const yHero = useTransform(scrollY, [0, 800], [0, 150]);
+  const opacityHero = useTransform(scrollY, [0, 1600], [1, 0]);
 
   useEffect(() => {
     if (user) navigate("/dashboard", { replace: true });
   }, [user, navigate]);
 
-  const features = [
-    { title: "AI Optimization", desc: "Craft high-impact resumes with advanced neural keyword optimization.", icon: Sparkles, color: "text-blue-600", bg: "bg-blue-50" },
-    { title: "Job Intelligence", desc: "Access global opportunities across millions of verified companies.", icon: Search, color: "text-indigo-600", bg: "bg-indigo-50" },
-    { title: "Direct Outreach", desc: "Automate personalized emails directly to hiring managers.", icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
-    { title: "Interview Lab", desc: "Master behavioral and technical interviews with AI coaching.", icon: Target, color: "text-emerald-600", bg: "bg-emerald-50" },
-    { title: "Success Metrics", desc: "Track your application velocity and conversion rate in real-time.", icon: BarChart3, color: "text-amber-600", bg: "bg-amber-50" },
-    { title: "Elite Privacy", desc: "Your professional data is protected with enterprise-grade security.", icon: ShieldCheck, color: "text-rose-600", bg: "bg-rose-50" }
+  const stats = [
+    { label: "Talent Matrix", value: "2.4M+", icon: Users },
+    { label: "Mission Velocity", value: "98.2%", icon: Zap },
+    { label: "Global Reach", value: "140+", icon: Target },
   ];
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600 mesh-gradient-light">
-      <SEOHead title="ResumePro — World-Class AI Career Infrastructure" description="The modern standard for building resumes, automating job searches, and mastering interviews." />
+    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
+      <SEOHead title="ResumePro — The Architect of Modern Careers" description="World-class career infrastructure for high-growth technology professionals." />
       
       <Navbar />
 
-      {/* Modern SaaS Hero */}
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden border-b border-slate-100">
-         <motion.div style={{ y: yHero, opacity: opacityHero }} className="container mx-auto px-6 relative z-10 text-center space-y-10">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
-               <Rocket className="w-4 h-4" />
-               <span className="text-[11px] font-black uppercase tracking-widest">v2.0 Career OS Now Live</span>
-            </motion.div>
-            
-            <div className="space-y-6">
-               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-5xl md:text-8xl font-display font-black text-slate-900 tracking-tight leading-[0.9] max-w-5xl mx-auto">
-                  Build your career <br /> <span className="text-blue-600">automatically.</span>
-               </motion.h1>
-               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
-                  The modern standard for high-performance job seeking. Professional resumes, automated outreach, and AI interview prep.
-               </motion.p>
-            </div>
+      {/* Architectural Hero */}
+      <section className="relative pt-32 pb-20 md:pt-48 md:pb-40 overflow-hidden bg-white">
+          <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[10rem] -z-10 translate-x-1/4" />
+          
+          <div className="container mx-auto px-8 relative z-10">
+             <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+                <div className="lg:col-span-7 space-y-12">
+                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full shadow-2xl shadow-blue-600/20">
+                      <Rocket className="w-4 h-4" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Deployment v4.0 Active</span>
+                   </motion.div>
+                   
+                   <div className="space-y-8">
+                      <motion.h1 
+                        initial={{ opacity: 0, y: 30 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ delay: 0.1 }} 
+                        className="text-6xl md:text-[7.5rem] font-black text-slate-900 tracking-tighter leading-[0.85]"
+                      >
+                         Architecting <br /> <span className="text-blue-600">Careers.</span>
+                      </motion.h1>
+                      <motion.p 
+                        initial={{ opacity: 0, y: 20 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ delay: 0.2 }} 
+                        className="text-xl md:text-2xl text-slate-500 font-medium max-w-xl leading-relaxed"
+                      >
+                         The high-fidelity infrastructure for the next generation of technology professionals. Deploy your professional identity with AI precision.
+                      </motion.p>
+                   </div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-               <Button asChild size="lg" className="h-16 px-10 rounded-full shadow-xl shadow-blue-600/20 text-xs gap-3">
-                  <Link to="/auth">Get Started Free <ArrowRight className="w-4 h-4" /></Link>
-               </Button>
-               <Button variant="outline" size="lg" className="h-16 px-10 rounded-full border-slate-200 text-xs text-slate-600 hover:bg-slate-50 gap-3">
-                  View Demo
-               </Button>
-            </motion.div>
+                   <motion.div 
+                     initial={{ opacity: 0, y: 20 }} 
+                     animate={{ opacity: 1, y: 0 }} 
+                     transition={{ delay: 0.3 }} 
+                     className="flex flex-col sm:flex-row items-center gap-6 pt-6"
+                   >
+                      <Button asChild size="lg" className="h-20 px-12 rounded-[2rem] bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all">
+                         <Link to="/auth">Initialize Mission <ArrowRight className="w-5 h-5" /></Link>
+                      </Button>
+                      <Button variant="ghost" size="lg" className="h-20 px-12 rounded-[2rem] border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-xs gap-4 hover:bg-slate-50 transition-all">
+                         View Blueprints
+                      </Button>
+                   </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.8 }} className="pt-20 max-w-6xl mx-auto relative group">
-               <div className="absolute inset-0 bg-blue-600/10 blur-[120px] rounded-full scale-90 group-hover:scale-100 transition-transform duration-1000" />
-               <div className="relative rounded-[2rem] border border-slate-200 bg-white/50 backdrop-blur-xl p-4 shadow-2xl overflow-hidden">
-                  <div className="rounded-xl overflow-hidden border border-slate-100 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" alt="Dashboard Preview" className="w-full h-auto" />
-                  </div>
-               </div>
-            </motion.div>
-         </motion.div>
+                   <div className="grid grid-cols-3 gap-12 pt-16 border-t border-slate-100">
+                      {stats.map((s, i) => (
+                        <div key={i} className="space-y-2">
+                           <p className="text-3xl font-black text-slate-900 tracking-tight">{s.value}</p>
+                           <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">{s.label}</p>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="lg:col-span-5 relative lg:h-[700px] flex items-center">
+                   <motion.div 
+                     style={{ y: yHero }} 
+                     initial={{ opacity: 0, scale: 0.8 }} 
+                     animate={{ opacity: 1, scale: 1 }} 
+                     transition={{ delay: 0.4, duration: 1 }}
+                     className="relative z-10 w-full"
+                   >
+                      <div className="absolute inset-0 bg-blue-600/20 blur-[150px] rounded-full scale-150" />
+                      <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
+                         <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
+                         <img 
+                           src="https://images.unsplash.com/photo-1551288049-bbbda536639a?q=80&w=2070&auto=format&fit=crop" 
+                           alt="Operational Intelligence" 
+                           className="w-full h-auto grayscale-0 group-hover:scale-105 transition-transform duration-1000" 
+                         />
+                      </div>
+                      
+                      {/* Floating Metric Card */}
+                      <motion.div 
+                        animate={{ y: [0, -20, 0] }} 
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute -left-12 bottom-20 p-8 bg-white rounded-[2.5rem] shadow-3xl border border-slate-50 z-20 space-y-4"
+                      >
+                         <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
+                            <TrendingUp className="w-6 h-6" />
+                         </div>
+                         <div className="space-y-1">
+                            <p className="text-xs font-black uppercase tracking-widest text-slate-400">Success Factor</p>
+                            <p className="text-3xl font-black text-slate-900">92.4%</p>
+                         </div>
+                      </motion.div>
+                   </motion.div>
+                </div>
+             </div>
+          </div>
       </section>
 
-      {/* Trusted By / Social Proof */}
-      <section className="py-16 border-b border-slate-50 bg-slate-50/30">
-         <div className="container mx-auto px-6 text-center">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-10">Fueling careers at the world's best companies</p>
-            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
-               <span className="text-2xl font-black tracking-tighter text-slate-900">STRIPE</span>
-               <span className="text-2xl font-black tracking-tighter text-slate-900">LINEAR</span>
-               <span className="text-2xl font-black tracking-tighter text-slate-900">VERCEL</span>
-               <span className="text-2xl font-black tracking-tighter text-slate-900">FRAMER</span>
-               <span className="text-2xl font-black tracking-tighter text-slate-900">FIGMA</span>
+      {/* Mission Partners */}
+      <section className="py-24 bg-white relative overflow-hidden">
+         <div className="container mx-auto px-8 relative z-10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-16 border-y border-slate-100 py-20 px-12 rounded-[4rem] bg-slate-50/50">
+               <div className="space-y-2 text-center md:text-left">
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Trusted Infrastructure</h3>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Powering elite professionals globally</p>
+               </div>
+               <div className="flex flex-wrap justify-center items-center gap-16 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+                  <span className="text-2xl font-black tracking-tighter text-slate-900">GOOGLE</span>
+                  <span className="text-2xl font-black tracking-tighter text-slate-900">MICROSOFT</span>
+                  <span className="text-2xl font-black tracking-tighter text-slate-900">META</span>
+                  <span className="text-2xl font-black tracking-tighter text-slate-900">AMAZON</span>
+                  <span className="text-2xl font-black tracking-tighter text-slate-900">NETFLIX</span>
+               </div>
             </div>
          </div>
       </section>
 
-      {/* Feature Matrix */}
-      <section className="py-32 relative bg-white">
-         <div className="container mx-auto px-6 space-y-24">
-            <div className="text-center space-y-4 max-w-3xl mx-auto">
-               <span className="text-[11px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-full">Core Infrastructure</span>
-               <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 tracking-tight leading-tight">Everything you need to <br /> land the role.</h2>
+      {/* Value Matrix */}
+      <section className="py-40 bg-white relative">
+         <div className="container mx-auto px-8 space-y-32">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
+               <div className="space-y-10">
+                  <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
+                     <Sparkles className="w-4 h-4" />
+                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Operational Excellence</span>
+                  </div>
+                  <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9]">Everything <br /> built for <span className="text-blue-600">scale.</span></h2>
+               </div>
+               <p className="text-xl text-slate-500 font-medium max-w-xl leading-relaxed">
+                  Our architecture is engineered to handle every stage of your professional journey, from initial blueprint to final mission deployment.
+               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-               {features.map((f, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+               {[
+                 { title: "Neural Builder", desc: "Crafting resumes with algorithmic precision and keyword density optimization.", icon: Sparkles, color: "text-blue-600", bg: "bg-blue-50" },
+                 { title: "Talent Search", desc: "Access the global grid of opportunities across 1.2M verified enterprises.", icon: Search, color: "text-indigo-600", bg: "bg-indigo-50" },
+                 { title: "Outreach Ops", desc: "Autonomous messaging protocols directly into hiring manager decision systems.", icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
+                 { title: "Interview Labs", desc: "High-fidelity simulation environments for behavioral and technical training.", icon: Target, color: "text-emerald-600", bg: "bg-emerald-50" },
+                 { title: "Data Analytics", desc: "Real-time synchronization of application velocity and conversion metrics.", icon: BarChart3, color: "text-amber-600", bg: "bg-amber-50" },
+                 { title: "Security Core", desc: "Enterprise-grade encryption protecting your most valuable professional data.", icon: ShieldCheck, color: "text-rose-600", bg: "bg-rose-50" }
+               ].map((f, i) => (
                   <motion.div 
-                     key={i} 
-                     initial={{ opacity: 0, y: 20 }} 
-                     whileInView={{ opacity: 1, y: 0 }} 
-                     viewport={{ once: true }} 
-                     transition={{ delay: i * 0.1 }}
-                     className="p-10 rounded-[2.5rem] bg-white border border-slate-100 hover:border-blue-200 transition-all group hover:shadow-xl hover:shadow-blue-600/5"
+                    key={i} 
+                    initial={{ opacity: 0, y: 30 }} 
+                    whileInView={{ opacity: 1, y: 0 }} 
+                    viewport={{ once: true }} 
+                    transition={{ delay: i * 0.1 }}
+                    className="group p-12 rounded-[4rem] bg-white border border-slate-100 hover:border-blue-600/20 transition-all duration-500 hover:shadow-3xl relative overflow-hidden"
                   >
-                     <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform", f.bg, f.color)}>
-                        <f.icon className="w-6 h-6" />
+                     <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform">
+                        <f.icon className="w-24 h-24 text-slate-900" />
                      </div>
-                     <h3 className="text-xl font-bold text-slate-900 mb-4 tracking-tight">{f.title}</h3>
-                     <p className="text-slate-500 font-medium leading-relaxed text-sm">{f.desc}</p>
+                     <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center mb-10 transition-transform group-hover:scale-110 group-hover:rotate-3", f.bg, f.color)}>
+                        <f.icon className="w-8 h-8" />
+                     </div>
+                     <h3 className="text-2xl font-black text-slate-900 mb-6 tracking-tight uppercase leading-none">{f.title}</h3>
+                     <p className="text-slate-500 font-medium leading-relaxed text-lg">{f.desc}</p>
                   </motion.div>
                ))}
             </div>
          </div>
       </section>
 
-      {/* Premium CTA */}
-      <section className="py-32 bg-slate-950 relative overflow-hidden">
-         <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-transparent to-purple-600/20" />
-         <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-4xl mx-auto rounded-[3rem] bg-white/5 backdrop-blur-xl border border-white/10 p-12 md:p-20 text-center space-y-10">
-               <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-600/20 rounded-full border border-blue-600/30 text-blue-400">
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">Premium Intelligence</span>
-               </div>
-               <h2 className="text-4xl md:text-7xl font-display font-black text-white tracking-tight leading-tight">Scale your professional identity.</h2>
-               <p className="text-lg text-slate-400 font-medium max-w-xl mx-auto">Access the full suite of AI-powered career tools including automated outreach and interview labs.</p>
-               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
-                  <Button asChild size="lg" className="h-16 px-10 rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-2xl shadow-blue-600/40">
-                     <Link to="/pricing">Unlock Pro Features <Zap className="w-4 h-4" /></Link>
-                  </Button>
+      {/* Enterprise Deployment CTA */}
+      <section className="py-20 bg-white relative">
+         <div className="container mx-auto px-8 relative">
+            <div className="relative rounded-[4.5rem] bg-slate-900 p-16 md:p-32 overflow-hidden shadow-3xl text-center md:text-left">
+               <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-600/30 to-transparent pointer-events-none" />
+               <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[100px]" />
+               
+               <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="space-y-10">
+                     <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full border border-white/10 text-blue-400 backdrop-blur-md">
+                        <Zap className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Global Ready</span>
+                     </div>
+                     <h2 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] uppercase">
+                        Scale <br /> <span className="text-blue-500">Faster.</span>
+                     </h2>
+                     <p className="text-xl text-slate-400 font-medium max-w-lg leading-relaxed">
+                        Access the world's most advanced career infrastructure. Start building your professional matrix today.
+                     </p>
+                     <Button asChild size="lg" className="h-20 px-12 rounded-[2rem] bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[11px] gap-4 shadow-3xl shadow-blue-600/30 group">
+                        <Link to="/auth">Get Started Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></Link>
+                     </Button>
+                  </div>
+                  
+                  <div className="hidden lg:block relative group">
+                     <div className="absolute inset-0 bg-blue-600/20 blur-[100px] scale-150" />
+                     <Card className="rounded-[4rem] border-none bg-white/5 backdrop-blur-xl p-12 shadow-2xl relative overflow-hidden border border-white/10">
+                        <div className="space-y-10">
+                           <div className="flex items-center justify-between">
+                              <Logo variant="light" className="h-10 opacity-50" />
+                              <div className="flex -space-x-4">
+                                 {[1,2,3,4].map(i => <div key={i} className="w-10 h-10 rounded-full border-4 border-slate-900 bg-slate-800" />)}
+                              </div>
+                           </div>
+                           <div className="space-y-6">
+                              <div className="h-3 w-3/4 bg-white/10 rounded-full" />
+                              <div className="h-3 w-1/2 bg-white/10 rounded-full" />
+                              <div className="h-3 w-2/3 bg-white/10 rounded-full" />
+                           </div>
+                           <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                              <div className="flex items-center gap-3">
+                                 <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
+                                 <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Active Network</span>
+                              </div>
+                              <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Sync Active</span>
+                           </div>
+                        </div>
+                     </Card>
+                  </div>
                </div>
             </div>
          </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-20 border-t border-slate-100 bg-white">
-         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
-            <div className="flex items-center gap-3">
-               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white"><ShieldCheck className="w-4 h-4" /></div>
-               <span className="text-lg font-display font-black tracking-tight text-slate-900">ResumePro</span>
+      {/* Architectural Footer */}
+      <footer className="py-32 bg-white border-t border-slate-50">
+         <div className="container mx-auto px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
+               <div className="space-y-10">
+                  <Logo variant="dark" className="h-14" />
+                  <p className="text-slate-500 font-medium leading-relaxed max-w-xs">The high-fidelity standard for professional career infrastructure.</p>
+               </div>
+               
+               <div className="space-y-10">
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]">Infrastructure</h4>
+                  <ul className="space-y-4">
+                     <li><Link to="/builder" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Neural Builder</Link></li>
+                     <li><Link to="/jobs" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Talent Grid</Link></li>
+                     <li><Link to="/interview-prep" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Interview Labs</Link></li>
+                  </ul>
+               </div>
+
+               <div className="space-y-10">
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]">Resources</h4>
+                  <ul className="space-y-4">
+                     <li><Link to="/blog" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Intelligence Blog</Link></li>
+                     <li><Link to="/pricing" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Mission Scaling</Link></li>
+                     <li><Link to="/contact" className="text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">Support Operations</Link></li>
+                  </ul>
+               </div>
+
+               <div className="space-y-10">
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]">Operational Status</h4>
+                  <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 space-y-4">
+                     <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                        <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">All Systems Operational</span>
+                     </div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Latency: 24ms <br /> Availability: 99.99%</p>
+                  </div>
+               </div>
             </div>
-            <div className="flex gap-10 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-               <Link to="/privacy" className="hover:text-blue-600 transition-colors">Privacy</Link>
-               <Link to="/terms" className="hover:text-blue-600 transition-colors">Terms</Link>
-               <Link to="/contact" className="hover:text-blue-600 transition-colors">Contact</Link>
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-32 pt-20 border-t border-slate-100">
+               <div className="flex gap-10">
+                  <Link to="/privacy" className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
+                  <Link to="/terms" className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
+               </div>
+               <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">© 2026 ResumePro Infrastructure Dynamics. All rights reserved.</p>
             </div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">© 2026 ResumePro Infrastructure</p>
          </div>
       </footer>
     </div>

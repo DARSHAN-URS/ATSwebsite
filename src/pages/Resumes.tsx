@@ -96,7 +96,7 @@ export default function Resumes() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20 text-left">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20 text-left">
       <SEOHead title="My Resumes — ResumePro" description="Create and manage your professional resumes." />
       
       <div className="container mx-auto px-8 pt-16 space-y-16">
@@ -180,7 +180,7 @@ export default function Resumes() {
                                        <span>Resume Score</span>
                                        <span className={cn(score > 70 ? "text-blue-600" : "text-amber-500")}>{score}%</span>
                                     </div>
-                                    <Progress value={score} className="h-2 bg-slate-50 dark:bg-slate-800" />
+                                    <Progress value={score} className="h-2 bg-white dark:bg-slate-800" />
                                  </div>
                               </div>
 
@@ -207,7 +207,7 @@ export default function Resumes() {
                </div>
                <div className="space-y-3">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Resume Title</Label>
-                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-16 rounded-2xl bg-slate-50 border-none px-6 font-bold text-lg" />
+                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-16 rounded-2xl bg-white border-none px-6 font-bold text-lg" />
                </div>
                <Button onClick={handleCreate} disabled={!title.trim()} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-2xl shadow-blue-600/20">
                   Create Resume <Sparkles className="w-5 h-5" />
@@ -224,7 +224,7 @@ export default function Resumes() {
                   <DialogDescription className="font-medium text-slate-500">Copy this link to share your professional profile with others.</DialogDescription>
                </div>
                <div className="flex gap-4">
-                  <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-16 rounded-2xl bg-slate-50 border-none px-6 font-medium text-slate-500" />
+                  <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-16 rounded-2xl bg-white border-none px-6 font-medium text-slate-500" />
                   <Button onClick={() => copyShareLink(shareId)} className="h-16 w-16 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
                      {copied ? <Check className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
                   </Button>

@@ -31,7 +31,6 @@ export default function RecruiterCandidates() {
     if (!user) return;
     (async () => {
       setLoading(true);
-      // Get all recruiter's job posts
       const { data: jobs } = await supabase
         .from("job_posts")
         .select("id, title")
@@ -46,7 +45,6 @@ export default function RecruiterCandidates() {
       const jobIds = jobs.map((j) => j.id);
       const jobMap = new Map(jobs.map((j) => [j.id, j.title]));
 
-      // Get all applications for those jobs
       const { data: apps } = await supabase
         .from("job_post_applications" as any)
         .select("*")
@@ -96,73 +94,107 @@ export default function RecruiterCandidates() {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <SEOHead title="Candidates — ATS Pro" description="Search candidates across all your job posts." noindex />
-      <div>
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Users className="h-6 w-6" /> Candidate Search
-        </h1>
-        <p className="text-muted-foreground">Browse all applicants across your job posts.</p>
-      </div>
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20 font-sans">
+      <SEOHead title="Talent Matrix — ResumePro" description="Search candidates across all your job posts." noindex />
+      
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
+         <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div className="space-y-4">
+               <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+                  <Users className="w-4 h-4" />
+                  <span className="text-[9px] font-black uppercase tracking-widest">Candidate Intelligence</span>
+               </div>
+               <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                  Talent <br /> <span className="text-blue-600">Matrix.</span>
+               </h1>
+            </div>
 
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          className="pl-9"
-          placeholder="Search by name or job title..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+            <div className="w-full max-w-xl group relative">
+               <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
+               <Input
+                  className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 px-16 font-bold text-lg shadow-[0_10px_40px_rgba(0,0,0,0.02)] focus:ring-blue-600/10 transition-all"
+                  placeholder="Search by name, role, or skill..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+               />
+            </div>
+         </div>
 
-      {loading ? (
-        <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
-      ) : filtered.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-            <Users className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold">No candidates found</h3>
-            <p className="text-muted-foreground">{candidates.length === 0 ? "No applications have been received yet." : "Try adjusting your search."}</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Candidate</TableHead>
-                <TableHead>Job</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Applied</TableHead>
-                <TableHead className="w-10"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((c) => (
-                <TableRow
-                  key={c.id}
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => navigate(`/recruiter/jobs/${c.job_post_id}/applicants`)}
-                >
-                  <TableCell className="font-medium">{c.display_name}</TableCell>
-                  <TableCell>{c.job_title}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="capitalize">{c.status}</Badge>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground text-sm">
-                    {new Date(c.created_at).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <button onClick={(e) => toggleShortlist(e, c)} className="text-yellow-500 hover:text-yellow-600">
-                      {c.is_shortlisted ? <Star className="h-4 w-4 fill-current" /> : <StarOff className="h-4 w-4" />}
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
-      )}
+         {loading ? (
+            <div className="flex flex-col items-center justify-center py-40 space-y-6">
+               <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initializing Talent Scan</p>
+            </div>
+         ) : filtered.length === 0 ? (
+            <Card className="rounded-[4rem] border-2 border-dashed border-slate-100 bg-white dark:bg-slate-900/50 py-32 text-center space-y-8">
+               <div className="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-200">
+                  <Users className="w-10 h-10" />
+               </div>
+               <div className="space-y-2">
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Zero Matches Detected</h3>
+                  <p className="text-slate-500 font-medium max-w-sm mx-auto">{candidates.length === 0 ? "No applications have been deployed to your active missions yet." : "Adjust your search parameters to re-scan the matrix."}</p>
+               </div>
+            </Card>
+         ) : (
+            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_30px_80px_rgba(0,0,0,0.03)] overflow-hidden">
+               <div className="overflow-x-auto">
+                  <Table>
+                     <TableHeader className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100">
+                        <TableRow className="border-none hover:bg-transparent">
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Candidate Identification</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Assigned Mission</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Operational Status</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Deployment Date</TableHead>
+                           <TableHead className="h-20 px-10 w-20"></TableHead>
+                        </TableRow>
+                     </TableHeader>
+                     <TableBody>
+                        {filtered.map((c) => (
+                           <TableRow
+                              key={c.id}
+                              className="border-b border-slate-50 dark:border-white/5 cursor-pointer hover:bg-blue-50/30 transition-colors group"
+                              onClick={() => navigate(`/recruiter/jobs/${c.job_post_id}/applicants`)}
+                           >
+                              <TableCell className="px-10 py-8">
+                                 <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-600/20">{c.display_name[0]}</div>
+                                    <div>
+                                       <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{c.display_name}</p>
+                                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Verified Profile</p>
+                                    </div>
+                                 </div>
+                              </TableCell>
+                              <TableCell className="px-10 py-8">
+                                 <div className="space-y-1">
+                                    <p className="font-bold text-slate-700 dark:text-slate-300">{c.job_title}</p>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Active Mission</p>
+                                 </div>
+                              </TableCell>
+                              <TableCell className="px-10 py-8">
+                                 <Badge className={cn("rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest", c.status === "pending" ? "bg-amber-50 text-amber-600 border border-amber-100" : "bg-emerald-50 text-emerald-600 border border-emerald-100")}>
+                                    {c.status}
+                                 </Badge>
+                              </TableCell>
+                              <TableCell className="px-10 py-8 text-slate-400 font-bold text-sm">
+                                 {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                              </TableCell>
+                              <TableCell className="px-10 py-8 text-right">
+                                 <button 
+                                    onClick={(e) => toggleShortlist(e, c)} 
+                                    className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-all", c.is_shortlisted ? "bg-amber-100 text-amber-500 shadow-lg shadow-amber-500/10 scale-110" : "text-slate-300 hover:text-amber-500 hover:bg-amber-50")}
+                                 >
+                                    {c.is_shortlisted ? <Star className="h-5 w-5 fill-current" /> : <StarOff className="h-5 w-5" />}
+                                 </button>
+                              </TableCell>
+                           </TableRow>
+                        ))}
+                     </TableBody>
+                  </Table>
+               </div>
+            </Card>
+         )}
+      </div>
     </div>
   );
 }
+

@@ -102,7 +102,7 @@ export default function FindJobs() {
   const isSaved = (url: string) => savedJobs.some(sj => sj.job_url === url);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Find Jobs — ResumePro" description="Search and apply for jobs with AI." />
       <ApplyWithResumeDialog open={applyDialogOpen} onOpenChange={setApplyDialogOpen} job={applyingJob} resumes={resumes} onSuccess={() => appliedIds.add(applyingJob?.id || "")} />
 
@@ -132,20 +132,20 @@ export default function FindJobs() {
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Title</Label>
                         <div className="relative">
                            <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="e.g. Software Engineer" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold text-lg" />
+                           <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="e.g. Software Engineer" className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-16 font-bold text-lg" />
                         </div>
                      </div>
                      <div className="lg:col-span-3 space-y-4">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Location</Label>
                         <div className="relative">
                            <MapPin className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Remote" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold" />
+                           <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Remote" className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-16 font-bold" />
                         </div>
                      </div>
                      <div className="lg:col-span-2 space-y-4">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-8 font-bold text-xs"><SelectValue placeholder="Select Resume" /></SelectTrigger>
+                           <SelectTrigger className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-8 font-bold text-xs"><SelectValue placeholder="Select Resume" /></SelectTrigger>
                            <SelectContent className="rounded-2xl border-none shadow-2xl p-2">{resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl font-bold">{r.title}</SelectItem>)}</SelectContent>
                         </Select>
                      </div>

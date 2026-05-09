@@ -71,7 +71,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
       <SEOHead title="Account Architecture — ResumePro" description="Manage your professional infrastructure and authentication protocols." />
       
       <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
@@ -117,7 +117,7 @@ export default function Profile() {
                         <Shield className="w-5 h-5" />
                      </div>
                   ) : (
-                     <div className="p-6 rounded-3xl bg-slate-50 dark:bg-slate-800 text-slate-400 flex items-center justify-between">
+                     <div className="p-6 rounded-3xl bg-white dark:bg-slate-800 text-slate-400 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                            <Zap className="w-5 h-5" />
                            <span className="font-black text-xs uppercase tracking-widest">Base Tier</span>
@@ -141,19 +141,19 @@ export default function Profile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Identification</Label>
-                        <Input value={name} onChange={e => setName(e.target.value)} className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6" />
+                        <Input value={name} onChange={e => setName(e.target.value)} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Vector</Label>
-                        <Input value={user?.email} disabled className="h-16 rounded-2xl bg-slate-50/50 border-slate-100 font-bold px-6 text-slate-400" />
+                        <Input value={user?.email} disabled className="h-16 rounded-2xl bg-white/50 border-slate-100 font-bold px-6 text-slate-400" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Communication Link</Label>
-                        <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 555-000-0000" className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6" />
+                        <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 555-000-0000" className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Geospatial Sector</Label>
-                        <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6" />
+                        <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
                      </div>
                   </div>
                   <div className="flex justify-end pt-6">

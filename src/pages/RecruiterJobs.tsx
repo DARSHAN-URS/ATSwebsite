@@ -93,7 +93,6 @@ export default function RecruiterJobs() {
 
   const openNew = async () => {
     setEditingId(null);
-    // Pre-fill company name from company profile
     const { data } = await supabase
       .from("recruiter_companies" as any)
       .select("company_name")
@@ -143,9 +142,9 @@ export default function RecruiterJobs() {
     }
 
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({ title: "Protocol Error", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: editingId ? "Job updated" : "Job posted" });
+      toast({ title: editingId ? "Mission Updated" : "Mission Deployed" });
       setDialogOpen(false);
       fetchJobs();
     }
@@ -154,7 +153,7 @@ export default function RecruiterJobs() {
 
   const handleDelete = async (id: string) => {
     await supabase.from("job_posts").delete().eq("id", id) as any;
-    toast({ title: "Job deleted" });
+    toast({ title: "Mission Terminated" });
     fetchJobs();
   };
 
@@ -165,202 +164,201 @@ export default function RecruiterJobs() {
   };
 
   const filteredJobs = tab === "all" ? jobs : jobs.filter((j) => j.status === tab);
-
   const totalViews = jobs.reduce((s, j) => s + (j.viewCount || 0), 0);
   const totalApps = jobs.reduce((s, j) => s + (j.appCount || 0), 0);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <SEOHead title="My Job Posts — ATS Pro" description="Manage your job postings." noindex />
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">My Job Posts</h1>
-          <p className="text-muted-foreground">Create and manage your job listings</p>
-        </div>
-        <Button onClick={openNew}><Plus className="h-4 w-4 mr-2" />Post a Job</Button>
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20">
+      <SEOHead title="Mission Control — ResumePro" description="Manage your job postings." noindex />
+      
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
+         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8">
+            <div className="space-y-4">
+               <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+                  <Briefcase className="w-4 h-4" />
+                  <span className="text-[9px] font-black uppercase tracking-widest">Mission Management</span>
+               </div>
+               <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                  Active <br /> <span className="text-blue-600">Missions.</span>
+               </h1>
+            </div>
+            <Button onClick={openNew} className="h-16 px-10 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] gap-3 shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all">
+               <Plus className="w-5 h-5" /> Deploy New Job
+            </Button>
+         </div>
+
+         {/* Statistical Infrastructure */}
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+               { label: "Active Deployments", value: jobs.length, icon: Briefcase, color: "text-blue-600", bg: "bg-blue-50" },
+               { label: "Operational Reach", value: totalViews, icon: Eye, color: "text-indigo-600", bg: "bg-indigo-50" },
+               { label: "Elite Candidates", value: totalApps, icon: Users, color: "text-emerald-600", bg: "bg-emerald-50" }
+            ].map((stat, i) => (
+               <Card key={i} className="rounded-[2.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex items-center gap-8 group">
+                  <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6", stat.bg, stat.color)}>
+                     <stat.icon className="w-8 h-8" />
+                  </div>
+                  <div>
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
+                     <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</p>
+                  </div>
+               </Card>
+            ))}
+         </div>
+
+         <Tabs value={tab} onValueChange={setTab} className="w-full space-y-10">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+               <TabsList className="bg-transparent h-auto p-0 gap-8">
+                  {["all", "active", "closed"].map((t) => (
+                     <TabsTrigger key={t} value={t} className="bg-transparent border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none px-0 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
+                        {t} ({t === "all" ? jobs.length : jobs.filter(j => j.status === t).length})
+                     </TabsTrigger>
+                  ))}
+               </TabsList>
+            </div>
+
+            <TabsContent value={tab} className="mt-0">
+               {loading ? (
+                  <div className="flex flex-col items-center justify-center py-32 space-y-4">
+                     <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Synchronizing Job Data</p>
+                  </div>
+               ) : filteredJobs.length === 0 ? (
+                  <Card className="rounded-[4rem] border-2 border-dashed border-slate-100 bg-white dark:bg-slate-900/50 py-32 text-center space-y-8">
+                     <div className="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-300">
+                        <Briefcase className="w-10 h-10" />
+                     </div>
+                     <div className="space-y-2">
+                        <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">No Active Missions</h3>
+                        <p className="text-slate-500 font-medium max-w-sm mx-auto">Your operational queue is currently empty. Initialize a new mission to begin talent acquisition.</p>
+                     </div>
+                     <Button onClick={openNew} variant="outline" className="h-14 px-8 rounded-2xl border-slate-200 text-blue-600 font-black uppercase tracking-widest text-[10px] gap-3">
+                        <Plus className="w-4 h-4" /> Deploy Mission
+                     </Button>
+                  </Card>
+               ) : (
+                  <div className="grid grid-cols-1 gap-8">
+                     {filteredJobs.map((job) => (
+                        <Card key={job.id} className="rounded-[3.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_60px_rgba(0,0,0,0.03)] p-12 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative overflow-hidden">
+                           <div className="flex flex-col md:flex-row items-start justify-between gap-10 relative z-10">
+                              <div className="space-y-6 flex-1">
+                                 <div className="space-y-2">
+                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 transition-colors">{job.title}</h3>
+                                    <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">{job.company_name} <span className="mx-2 text-slate-200">|</span> {job.location || "Global Ops"}</p>
+                                 </div>
+                                 <div className="flex flex-wrap gap-3">
+                                    <Badge className="rounded-xl px-4 py-1.5 bg-blue-50 text-blue-600 border border-blue-100 text-[9px] font-black uppercase tracking-widest">{job.job_type}</Badge>
+                                    {job.salary_min && (
+                                       <Badge variant="outline" className="rounded-xl px-4 py-1.5 border-slate-100 text-slate-500 text-[9px] font-bold uppercase tracking-widest">
+                                          {job.salary_currency} {job.salary_min.toLocaleString()} - {job.salary_max?.toLocaleString()}
+                                       </Badge>
+                                    )}
+                                 </div>
+                                 {job.description && <p className="text-slate-500 font-medium leading-relaxed line-clamp-2 max-w-3xl">{job.description}</p>}
+                                 
+                                 <div className="flex items-center gap-10 pt-4 border-t border-slate-50 mt-8">
+                                    <div className="flex items-center gap-3">
+                                       <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600"><Eye className="w-5 h-5" /></div>
+                                       <div>
+                                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Reach</p>
+                                          <p className="text-sm font-black text-slate-900">{job.viewCount || 0} Views</p>
+                                       </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                       <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600"><Users className="w-5 h-5" /></div>
+                                       <div>
+                                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Applicants</p>
+                                          <p className="text-sm font-black text-slate-900">{job.appCount || 0} Candidates</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div className="flex md:flex-col items-center gap-3">
+                                 <Button onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)} className="h-14 px-8 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-900/10">Manage Pipeline</Button>
+                                 <div className="flex items-center gap-2">
+                                    <Button variant="outline" size="icon" onClick={() => openEdit(job)} className="w-12 h-12 rounded-xl border-slate-100 hover:text-blue-600 transition-all"><Edit className="w-4 h-4" /></Button>
+                                    <Button variant="outline" size="icon" onClick={() => handleDelete(job.id)} className="w-12 h-12 rounded-xl border-slate-100 hover:text-red-500 transition-all"><Trash2 className="w-4 h-4" /></Button>
+                                    <Badge 
+                                       className={cn("h-12 rounded-xl px-4 flex items-center cursor-pointer text-[9px] font-black uppercase tracking-widest transition-all", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}
+                                       onClick={() => toggleStatus(job)}
+                                    >
+                                       {job.status}
+                                    </Badge>
+                                 </div>
+                              </div>
+                           </div>
+                        </Card>
+                     ))}
+                  </div>
+               )}
+            </TabsContent>
+         </Tabs>
       </div>
-
-      {/* Summary stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <Briefcase className="h-8 w-8 text-primary" />
-            <div>
-              <p className="text-2xl font-bold">{jobs.length}</p>
-              <p className="text-xs text-muted-foreground">Total Posts</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <Eye className="h-8 w-8 text-primary" />
-            <div>
-              <p className="text-2xl font-bold">{totalViews}</p>
-              <p className="text-xs text-muted-foreground">Total Views</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <Users className="h-8 w-8 text-primary" />
-            <div>
-              <p className="text-2xl font-bold">{totalApps}</p>
-              <p className="text-xs text-muted-foreground">Total Applicants</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs value={tab} onValueChange={setTab}>
-        <TabsList>
-          <TabsTrigger value="all">All ({jobs.length})</TabsTrigger>
-          <TabsTrigger value="active">Active ({jobs.filter(j => j.status === "active").length})</TabsTrigger>
-          <TabsTrigger value="closed">Closed ({jobs.filter(j => j.status === "closed").length})</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value={tab}>
-          {loading ? (
-            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
-          ) : filteredJobs.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold">No job posts</h3>
-                <p className="text-muted-foreground mb-4">Create your first job listing to start finding candidates.</p>
-                <Button onClick={openNew}><Plus className="h-4 w-4 mr-2" />Post a Job</Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 mt-4">
-              {filteredJobs.map((job) => (
-                <Card key={job.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                    <div>
-                      <CardTitle className="text-lg">{job.title}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{job.company_name} {job.location && `• ${job.location}`}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant={job.status === "active" ? "default" : "secondary"}
-                        className="cursor-pointer"
-                        onClick={() => toggleStatus(job)}
-                      >
-                        {job.status}
-                      </Badge>
-                      <Button variant="ghost" size="icon" onClick={() => openEdit(job)}><Edit className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleDelete(job.id)}><Trash2 className="h-4 w-4" /></Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex gap-2 flex-wrap mb-3">
-                      <Badge variant="outline">{job.job_type}</Badge>
-                      {job.salary_min && job.salary_max && (
-                        <Badge variant="outline">{job.salary_currency} {job.salary_min.toLocaleString()} - {job.salary_max.toLocaleString()}</Badge>
-                      )}
-                    </div>
-                    {job.description && <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{job.description}</p>}
-                    <div className="flex items-center gap-4 pt-2 border-t">
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Eye className="h-3 w-3" /> {job.viewCount || 0} views
-                      </span>
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Users className="h-3 w-3" /> {job.appCount || 0} applicants
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="ml-auto"
-                        onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)}
-                      >
-                        View Applicants
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingId ? "Edit Job Post" : "Post a New Job"}</DialogTitle>
-            <DialogDescription>Fill in the details below to {editingId ? "update" : "create"} your job listing.</DialogDescription>
+        <DialogContent className="max-w-2xl rounded-[3rem] p-12 border-none shadow-3xl bg-white dark:bg-slate-900 overflow-y-auto max-h-[90vh]">
+          <DialogHeader className="space-y-4 text-left pb-6 border-b border-slate-100 mb-8">
+            <DialogTitle className="text-4xl font-black tracking-tighter uppercase">{editingId ? "Modify" : "Initialize"} Mission</DialogTitle>
+            <DialogDescription className="text-slate-500 font-medium">Configure your operational parameters for talent acquisition.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div><Label>Job Title *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-            <div><Label>Company Name *</Label><Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} /></div>
-            <div><Label>Location</Label><Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="e.g. New York, Remote" /></div>
-            <div>
-              <Label>Job Type</Label>
-              <Select value={form.job_type} onValueChange={(v) => setForm({ ...form, job_type: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="full-time">Full-time</SelectItem>
-                  <SelectItem value="part-time">Part-time</SelectItem>
-                  <SelectItem value="contract">Contract</SelectItem>
-                  <SelectItem value="remote">Remote</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Mission Title</Label>
+                  <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" placeholder="e.g. Lead System Architect" />
+               </div>
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Operational Base</Label>
+                  <Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+               </div>
             </div>
-            <div><Label>Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} /></div>
-            <div><Label>Requirements</Label><Textarea value={form.requirements} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={3} /></div>
-            <div className="grid grid-cols-3 gap-2">
-              <div><Label>Min Salary</Label><Input type="number" value={form.salary_min} onChange={(e) => setForm({ ...form, salary_min: e.target.value })} /></div>
-              <div><Label>Max Salary</Label><Input type="number" value={form.salary_max} onChange={(e) => setForm({ ...form, salary_max: e.target.value })} /></div>
-              <div>
-                <Label>Currency</Label>
-                <Select value={form.salary_currency} onValueChange={(v) => setForm({ ...form, salary_currency: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="USD">USD ($)</SelectItem>
-                    <SelectItem value="EUR">EUR (€)</SelectItem>
-                    <SelectItem value="GBP">GBP (£)</SelectItem>
-                    <SelectItem value="INR">INR (₹)</SelectItem>
-                    <SelectItem value="AED">AED (د.إ)</SelectItem>
-                    <SelectItem value="SAR">SAR (﷼)</SelectItem>
-                    <SelectItem value="QAR">QAR (﷼)</SelectItem>
-                    <SelectItem value="KWD">KWD (د.ك)</SelectItem>
-                    <SelectItem value="BHD">BHD (د.ب)</SelectItem>
-                    <SelectItem value="OMR">OMR (﷼)</SelectItem>
-                    <SelectItem value="EGP">EGP (£)</SelectItem>
-                    <SelectItem value="PKR">PKR (₨)</SelectItem>
-                    <SelectItem value="BDT">BDT (৳)</SelectItem>
-                    <SelectItem value="LKR">LKR (₨)</SelectItem>
-                    <SelectItem value="NPR">NPR (₨)</SelectItem>
-                    <SelectItem value="CAD">CAD ($)</SelectItem>
-                    <SelectItem value="AUD">AUD ($)</SelectItem>
-                    <SelectItem value="SGD">SGD ($)</SelectItem>
-                    <SelectItem value="MYR">MYR (RM)</SelectItem>
-                    <SelectItem value="JPY">JPY (¥)</SelectItem>
-                    <SelectItem value="CNY">CNY (¥)</SelectItem>
-                    <SelectItem value="KRW">KRW (₩)</SelectItem>
-                    <SelectItem value="BRL">BRL (R$)</SelectItem>
-                    <SelectItem value="ZAR">ZAR (R)</SelectItem>
-                    <SelectItem value="NGN">NGN (₦)</SelectItem>
-                    <SelectItem value="KES">KES (KSh)</SelectItem>
-                    <SelectItem value="CHF">CHF (Fr)</SelectItem>
-                    <SelectItem value="SEK">SEK (kr)</SelectItem>
-                    <SelectItem value="NOK">NOK (kr)</SelectItem>
-                    <SelectItem value="DKK">DKK (kr)</SelectItem>
-                    <SelectItem value="PLN">PLN (zł)</SelectItem>
-                    <SelectItem value="TRY">TRY (₺)</SelectItem>
-                    <SelectItem value="MXN">MXN ($)</SelectItem>
-                    <SelectItem value="PHP">PHP (₱)</SelectItem>
-                    <SelectItem value="IDR">IDR (Rp)</SelectItem>
-                    <SelectItem value="THB">THB (฿)</SelectItem>
-                    <SelectItem value="VND">VND (₫)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Geospatial Sector</Label>
+                  <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" placeholder="e.g. Remote, NY" />
+               </div>
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Deployment Model</Label>
+                  <Select value={form.job_type} onValueChange={(v) => setForm({ ...form, job_type: v })}>
+                     <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6"><SelectValue /></SelectTrigger>
+                     <SelectContent className="rounded-xl border-none shadow-2xl">
+                        {["full-time", "part-time", "contract", "remote"].map(v => <SelectItem key={v} value={v} className="rounded-lg font-bold uppercase text-[10px] tracking-widest">{v}</SelectItem>)}
+                     </SelectContent>
+                  </Select>
+               </div>
+            </div>
+
+            <div className="space-y-2">
+               <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Core Description</Label>
+               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="min-h-[150px] rounded-2xl bg-white border-slate-100 font-medium p-6" />
+            </div>
+
+            <div className="grid grid-cols-3 gap-6">
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Min Payload</Label>
+                  <Input type="number" value={form.salary_min} onChange={(e) => setForm({ ...form, salary_min: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+               </div>
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Max Payload</Label>
+                  <Input type="number" value={form.salary_max} onChange={(e) => setForm({ ...form, salary_max: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+               </div>
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Currency</Label>
+                  <Select value={form.salary_currency} onValueChange={(v) => setForm({ ...form, salary_currency: v })}>
+                     <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6"><SelectValue /></SelectTrigger>
+                     <SelectContent className="rounded-xl border-none shadow-2xl h-64 overflow-y-auto">
+                        {["USD", "EUR", "GBP", "INR", "AED", "SAR", "CAD", "AUD"].map(v => <SelectItem key={v} value={v} className="rounded-lg font-bold">{v}</SelectItem>)}
+                     </SelectContent>
+                  </Select>
+               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving || !form.title || !form.company_name}>
-              {saving ? "Saving..." : editingId ? "Update" : "Post Job"}
+          <DialogFooter className="pt-10 flex-col sm:flex-row gap-4">
+            <Button variant="ghost" onClick={() => setDialogOpen(false)} className="h-16 px-10 rounded-2xl font-black uppercase tracking-widest text-[10px] text-slate-400">Abort Mission</Button>
+            <Button onClick={handleSave} disabled={saving || !form.title || !form.company_name} className="h-16 px-12 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] shadow-xl shadow-blue-600/30">
+               {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : editingId ? "Update Parameters" : "Deploy Mission"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -368,3 +366,4 @@ export default function RecruiterJobs() {
     </div>
   );
 }
+

@@ -118,12 +118,12 @@ export default function Builder() {
   );
 
   return (
-    <div className="h-screen flex flex-col bg-[#f8fafc] dark:bg-[#020617] overflow-hidden font-sans text-left selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="h-screen flex flex-col bg-white dark:bg-[#020617] overflow-hidden font-sans text-left selection:bg-blue-600/10 selection:text-blue-600">
       {/* Top Navigation - FlowCV Style */}
       <header className="h-20 bg-white dark:bg-[#0a0f1d] border-b border-slate-100 dark:border-white/5 px-8 flex items-center justify-between z-40 shrink-0 premium-shadow">
         <div className="flex items-center gap-8">
           <Link to="/resumes">
-            <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 hover:bg-blue-600 hover:text-white transition-all duration-500">
+            <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-white dark:bg-white/5 hover:bg-blue-600 hover:text-white transition-all duration-500">
               <ChevronLeft className="w-5 h-5" />
             </Button>
           </Link>
@@ -143,7 +143,7 @@ export default function Builder() {
         </div>
 
         {/* Mode Toggles */}
-        <div className="flex items-center bg-slate-50 dark:bg-white/5 p-1.5 rounded-2.5xl border border-slate-100 dark:border-white/5 shadow-inner">
+        <div className="flex items-center bg-white dark:bg-white/5 p-1.5 rounded-2.5xl border border-slate-100 dark:border-white/5 shadow-inner">
            {[
              { id: "content", label: "Content", icon: FileText },
              { id: "design", label: "Customize", icon: Palette },
@@ -174,7 +174,7 @@ export default function Builder() {
 
       <div className="flex-1 flex overflow-hidden relative">
         {/* Editor Side - Modular Card System */}
-        <main className="w-full lg:w-[600px] xl:w-[700px] bg-slate-50/50 dark:bg-[#020617] border-r border-slate-100 dark:border-white/5 flex flex-col shrink-0 z-10">
+        <main className="w-full lg:w-[600px] xl:w-[700px] bg-white/50 dark:bg-[#020617] border-r border-slate-100 dark:border-white/5 flex flex-col shrink-0 z-10">
           <ScrollArea className="flex-1">
             <div className="p-12 space-y-12 max-w-3xl mx-auto">
               <ResumeCompletionScore resumeData={resumeData} title={title} />
@@ -201,7 +201,7 @@ export default function Builder() {
                           value={resumeData.summary} 
                           onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))}
                           placeholder="Craft a powerful professional mission statement..." 
-                          className="min-h-[250px] rounded-[2rem] bg-slate-50 dark:bg-[#020617] border-none p-8 font-medium focus:ring-2 focus:ring-blue-600/20 text-lg leading-relaxed text-left"
+                          className="min-h-[250px] rounded-[2rem] bg-white dark:bg-[#020617] border-none p-8 font-medium focus:ring-2 focus:ring-blue-600/20 text-lg leading-relaxed text-left"
                        />
                     </Card>
 

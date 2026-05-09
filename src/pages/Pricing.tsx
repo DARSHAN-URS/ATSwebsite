@@ -66,7 +66,7 @@ export default function Pricing() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Pricing — ResumePro" description="Select the best plan for your career growth." />
       
       <div className="container mx-auto px-8 pt-16 space-y-24 text-left">

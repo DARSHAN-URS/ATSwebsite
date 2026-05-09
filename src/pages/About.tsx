@@ -52,7 +52,7 @@ export default function About() {
       <section className="container mx-auto px-8 pb-32">
          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((s, i) => (
-               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="p-10 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-center space-y-2">
+               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="p-10 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-center space-y-2">
                   <p className="text-5xl font-black text-primary">{s.value}</p>
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
                </motion.div>

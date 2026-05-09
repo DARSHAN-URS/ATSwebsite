@@ -104,7 +104,7 @@ export default function EmailOutreach() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Email Outreach — ResumePro" description="Connect with recruiters using AI-powered emails." />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
@@ -126,16 +126,16 @@ export default function EmailOutreach() {
                   <div className="space-y-6">
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
-                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none px-6 font-bold" />
+                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Title</Label>
-                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none px-6 font-bold" />
+                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
+                           <SelectTrigger className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
                            <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
                               {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl font-bold">{r.title}</SelectItem>)}
                            </SelectContent>
@@ -168,21 +168,21 @@ export default function EmailOutreach() {
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Recruiter Email</Label>
                         <div className="relative">
                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={recruiterEmail} onChange={e => setRecruiterEmail(e.target.value)} placeholder="recruiter@company.com" className="h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none px-14 font-bold" />
+                           <Input value={recruiterEmail} onChange={e => setRecruiterEmail(e.target.value)} placeholder="recruiter@company.com" className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-14 font-bold" />
                         </div>
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Email Subject</Label>
-                        <Input value={subject} onChange={e => setSubject(e.target.value)} placeholder="Application for..." className="h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none px-6 font-bold" />
+                        <Input value={subject} onChange={e => setSubject(e.target.value)} placeholder="Application for..." className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold" />
                      </div>
                      <div className="space-y-3 flex-1 flex flex-col">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Email Body</Label>
-                        <Textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Draft narrative..." className="flex-1 rounded-3xl bg-slate-50 dark:bg-slate-800 border-none p-8 font-medium text-slate-700 dark:text-slate-200 resize-none min-h-[300px]" />
+                        <Textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Draft narrative..." className="flex-1 rounded-3xl bg-white dark:bg-slate-800 border-none p-8 font-medium text-slate-700 dark:text-slate-200 resize-none min-h-[300px]" />
                      </div>
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-6 pt-10 border-t border-slate-50 dark:border-slate-800">
-                     <div className="flex-1 flex items-center gap-4 px-6 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                     <div className="flex-1 flex items-center gap-4 px-6 py-4 bg-white dark:bg-slate-800 rounded-2xl">
                         <Paperclip className="w-5 h-5 text-slate-400" />
                         <span className="text-xs font-bold text-slate-500">Resume.pdf</span>
                         <div className="ml-auto w-4 h-4 rounded-full bg-green-500 shadow-lg shadow-green-500/20" />

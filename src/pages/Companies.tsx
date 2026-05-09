@@ -67,7 +67,7 @@ export default function Companies() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Find Companies — ResumePro" description="Search for companies and see their open job positions." />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
@@ -89,14 +89,14 @@ export default function Companies() {
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
                   <div className="relative">
                      <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                     <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. Google, Microsoft" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold text-lg" />
+                     <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. Google, Microsoft" className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-16 font-bold text-lg" />
                   </div>
                </div>
                <div className="lg:col-span-4 space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Location</Label>
                   <div className="relative">
                      <MapPin className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                     <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. London" className="h-20 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-none px-16 font-bold" />
+                     <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. London" className="h-20 rounded-[2rem] bg-white dark:bg-slate-800 border-none px-16 font-bold" />
                   </div>
                </div>
                <div className="lg:col-span-3">
@@ -122,7 +122,7 @@ export default function Companies() {
                      <motion.div key={company.name} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                         <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl hover:-translate-y-2 transition-all space-y-8 text-left">
                            <div className="flex items-start justify-between">
-                              <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-3xl overflow-hidden flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-xl">
+                              <div className="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl overflow-hidden flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-xl">
                                  {company.logo ? <img src={company.logo} alt={company.name} className="w-full h-full object-cover" /> : <Building2 className="w-8 h-8 text-slate-300" />}
                               </div>
                               <Button onClick={() => togglePin(company)} variant="ghost" size="icon" className={cn("w-12 h-12 rounded-2xl", isPinned(company.name) && "bg-blue-50 text-blue-600")}>

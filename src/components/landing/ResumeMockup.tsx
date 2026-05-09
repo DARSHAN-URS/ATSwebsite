@@ -13,7 +13,7 @@ export const ResumeMockup = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative z-10 glass p-4 rounded-[2rem] shadow-2xl border-slate-200"
           >
-            <div className="bg-slate-50 rounded-[1.5rem] overflow-hidden aspect-[16/10] relative group">
+            <div className="bg-white rounded-[1.5rem] overflow-hidden aspect-[16/10] relative group">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               
               {/* Fake Dashboard UI */}
@@ -37,11 +37,11 @@ export const ResumeMockup = () => {
                     <div className="grid grid-cols-2 gap-8">
                       <div className="flex flex-col gap-4">
                         <div className="w-1/3 h-4 bg-primary/20 rounded-md" />
-                        <div className="w-full h-24 bg-slate-50 rounded-md" />
+                        <div className="w-full h-24 bg-white rounded-md" />
                       </div>
                       <div className="flex flex-col gap-4">
                         <div className="w-1/3 h-4 bg-primary/20 rounded-md" />
-                        <div className="w-full h-24 bg-slate-50 rounded-md" />
+                        <div className="w-full h-24 bg-white rounded-md" />
                       </div>
                     </div>
                   </div>

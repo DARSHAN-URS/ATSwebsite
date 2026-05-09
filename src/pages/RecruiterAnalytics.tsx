@@ -35,8 +35,6 @@ export default function RecruiterAnalytics() {
     if (!user) return;
     const fetch = async () => {
       setLoading(true);
-
-      // Fetch recruiter's jobs
       const { data: jobs } = await supabase
         .from("job_posts")
         .select("id, title, company_name, status, created_at")
@@ -50,14 +48,11 @@ export default function RecruiterAnalytics() {
       }
 
       const jobIds = jobs.map((j: any) => j.id);
-
-      // Fetch views counts
       const { data: views } = await supabase
         .from("job_post_views")
         .select("job_post_id")
         .in("job_post_id", jobIds) as any;
 
-      // Fetch applications with status
       const { data: apps } = await supabase
         .from("job_post_applications")
         .select("job_post_id, status")
@@ -93,7 +88,6 @@ export default function RecruiterAnalytics() {
   const totalApps = analytics.reduce((s, a) => s + a.applications, 0);
   const activeJobs = analytics.filter((a) => a.status === "active").length;
 
-  // Aggregate status breakdown across all jobs
   const aggregateStatus: Record<string, number> = {};
   analytics.forEach((a) => {
     Object.entries(a.statusBreakdown).forEach(([status, count]) => {
@@ -101,120 +95,157 @@ export default function RecruiterAnalytics() {
     });
   });
   const pieData = Object.entries(aggregateStatus).map(([name, value]) => ({ name, value }));
-
   const barData = analytics.slice(0, 10).map((a) => ({
-    name: a.title.length > 20 ? a.title.slice(0, 20) + "…" : a.title,
+    name: a.title.length > 15 ? a.title.slice(0, 15) + "…" : a.title,
     views: a.views,
     applications: a.applications,
   }));
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <SEOHead title="Recruiter Analytics — ATS Pro Resume Builder" description="View analytics for your job postings." noindex />
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Recruiter Analytics</h1>
-        <p className="text-muted-foreground">Overview of your job postings performance</p>
-      </div>
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20">
+      <SEOHead title="Mission Intelligence — ResumePro" description="View analytics for your job postings." noindex />
+      
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
+         <div className="space-y-4">
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+               <BarChart3 className="w-4 h-4" />
+               <span className="text-[9px] font-black uppercase tracking-widest">Operational Intelligence</span>
+            </div>
+            <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+               Mission <br /> <span className="text-blue-600">Intelligence.</span>
+            </h1>
+            <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
+               Monitor mission velocity, candidate acquisition metrics, and operational efficiency across your entire recruitment matrix.
+            </p>
+         </div>
 
-      {loading ? (
-        <p className="text-muted-foreground">Loading analytics...</p>
-      ) : analytics.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-            <BarChart3 className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold">No data yet</h3>
-            <p className="text-muted-foreground">Post some jobs to see analytics here.</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <>
-          {/* Summary cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "Total Views", value: totalViews, icon: <Eye className="h-5 w-5 text-primary" /> },
-              { label: "Total Applications", value: totalApps, icon: <Users className="h-5 w-5 text-primary" /> },
-              { label: "Active Jobs", value: activeJobs, icon: <Briefcase className="h-5 w-5 text-primary" /> },
-              { label: "Avg. Views/Post", value: analytics.length ? Math.round(totalViews / analytics.length) : 0, icon: <TrendingUp className="h-5 w-5 text-primary" /> },
-            ].map((s) => (
-              <Card key={s.label}>
-                <CardContent className="pt-6 text-center">
-                  <div className="flex justify-center mb-2">{s.icon}</div>
-                  <p className="text-2xl font-bold text-foreground">{s.value}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+         {loading ? (
+            <div className="flex flex-col items-center justify-center py-40 space-y-6">
+               <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Processing Analytics Data</p>
+            </div>
+         ) : analytics.length === 0 ? (
+            <Card className="rounded-[4rem] border-2 border-dashed border-slate-100 bg-white dark:bg-slate-900/50 py-32 text-center space-y-8">
+               <div className="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-200">
+                  <BarChart3 className="w-10 h-10" />
+               </div>
+               <div className="space-y-2">
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Data Grid Offline</h3>
+                  <p className="text-slate-500 font-medium max-w-sm mx-auto">No operational data detected. Deploy a new mission to begin gathering intelligence.</p>
+               </div>
+            </Card>
+         ) : (
+            <>
+               <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                  {[
+                     { label: "Mission Reach", value: totalViews, icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
+                     { label: "Acquisition", value: totalApps, icon: Users, color: "text-indigo-600", bg: "bg-indigo-50" },
+                     { label: "Active Nodes", value: activeJobs, icon: Briefcase, color: "text-emerald-600", bg: "bg-emerald-50" },
+                     { label: "Node Velocity", value: analytics.length ? Math.round(totalViews / analytics.length) : 0, icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
+                  ].map((s, i) => (
+                     <Card key={i} className="rounded-[2.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex flex-col items-center text-center space-y-4 group">
+                        <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110", s.bg, s.color)}>
+                           <s.icon className="w-6 h-6" />
+                        </div>
+                        <div className="space-y-1">
+                           <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{s.value}</p>
+                           <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
+                        </div>
+                     </Card>
+                  ))}
+               </div>
 
-          {/* Charts row */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Bar chart */}
-            {barData.length > 0 && (
-              <Card>
-                <CardHeader><CardTitle className="text-base">Views & Applications by Post</CardTitle></CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={barData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                      <YAxis tick={{ fontSize: 11 }} />
-                      <Tooltip />
-                      <Bar dataKey="views" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="applications" fill="hsl(var(--primary) / 0.5)" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            )}
+               <div className="grid gap-12 md:grid-cols-2">
+                  <Card className="rounded-[3.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_25px_60px_rgba(0,0,0,0.03)] p-12 space-y-10">
+                     <div className="flex items-center justify-between px-2">
+                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Mission Performance</h3>
+                        <div className="flex gap-2">
+                           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-600" /><span className="text-[9px] font-black uppercase text-slate-400">Views</span></div>
+                           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-300" /><span className="text-[9px] font-black uppercase text-slate-400">Apps</span></div>
+                        </div>
+                     </div>
+                     <div className="h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                           <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                              <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#f1f5f9" />
+                              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }} dy={10} />
+                              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }} />
+                              <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                              <Bar dataKey="views" fill="#2563eb" radius={[6, 6, 0, 0]} barSize={24} />
+                              <Bar dataKey="applications" fill="#93c5fd" radius={[6, 6, 0, 0]} barSize={24} />
+                           </BarChart>
+                        </ResponsiveContainer>
+                     </div>
+                  </Card>
 
-            {/* Pie chart */}
-            {pieData.length > 0 && (
-              <Card>
-                <CardHeader><CardTitle className="text-base">Application Status Breakdown</CardTitle></CardHeader>
-                <CardContent className="flex items-center justify-center">
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, value }) => `${name} (${value})`}>
-                        {pieData.map((entry) => (
-                          <Cell key={entry.name} fill={STATUS_COLORS[entry.name] || "hsl(var(--muted))"} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+                  <Card className="rounded-[3.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_25px_60px_rgba(0,0,0,0.03)] p-12 space-y-10">
+                     <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight px-2 text-center md:text-left">Pipeline Status</h3>
+                     <div className="h-[300px] flex items-center justify-center">
+                        <ResponsiveContainer width="100%" height="100%">
+                           <PieChart>
+                              <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={8}>
+                                 {pieData.map((entry, index) => (
+                                    <Cell key={index} fill={STATUS_COLORS[entry.name] || "#e2e8f0"} stroke="none" />
+                                 ))}
+                              </Pie>
+                              <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                           </PieChart>
+                        </ResponsiveContainer>
+                        <div className="hidden lg:block space-y-4 pr-6">
+                           {pieData.map((d, i) => (
+                              <div key={i} className="flex items-center gap-3">
+                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: STATUS_COLORS[d.name] || '#e2e8f0' }} />
+                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">{d.name} <span className="text-slate-900 dark:text-white ml-2">{d.value}</span></p>
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                  </Card>
+               </div>
 
-          {/* Per-job breakdown */}
-          <div className="space-y-3">
-            <h2 className="text-lg font-semibold">Per-Job Breakdown</h2>
-            {analytics.map((job) => (
-              <Card key={job.id}>
-                <CardContent className="pt-4 pb-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div>
-                      <p className="font-medium">{job.title}</p>
-                      <p className="text-xs text-muted-foreground">{job.company_name} • {new Date(job.created_at).toLocaleDateString()}</p>
-                    </div>
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <Badge variant={job.status === "active" ? "default" : "secondary"}>{job.status}</Badge>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground"><Eye className="h-3.5 w-3.5" /> {job.views}</span>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground"><Users className="h-3.5 w-3.5" /> {job.applications}</span>
-                      {Object.entries(job.statusBreakdown).map(([status, count]) => (
-                        <span key={status} className="text-xs text-muted-foreground">
-                          {status}: {count}
-                        </span>
-                      ))}
-                    </div>
+               <div className="space-y-10">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-6">
+                     <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Operational Nodes</h2>
+                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Matrix Status</p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </>
-      )}
+                  <div className="grid grid-cols-1 gap-6">
+                     {analytics.map((job) => (
+                        <Card key={job.id} className="rounded-[2.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.02)] p-8 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300">
+                           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                              <div className="space-y-1">
+                                 <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{job.title}</p>
+                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{job.company_name} <span className="mx-2 opacity-30">•</span> {new Date(job.created_at).toLocaleDateString()}</p>
+                              </div>
+                              <div className="flex flex-wrap items-center gap-8">
+                                 <Badge className={cn("rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}>{job.status}</Badge>
+                                 <div className="flex items-center gap-10">
+                                    <div className="text-center">
+                                       <p className="text-lg font-black text-slate-900 dark:text-white">{job.views}</p>
+                                       <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Reach</p>
+                                    </div>
+                                    <div className="text-center">
+                                       <p className="text-lg font-black text-slate-900 dark:text-white">{job.applications}</p>
+                                       <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Nodes</p>
+                                    </div>
+                                 </div>
+                                 <div className="flex gap-2">
+                                    {Object.entries(job.statusBreakdown).map(([status, count]) => (
+                                       <div key={status} className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/10">
+                                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[status] || '#e2e8f0' }} />
+                                          <span className="text-[9px] font-bold text-slate-500 uppercase">{count}</span>
+                                       </div>
+                                    ))}
+                                 </div>
+                              </div>
+                           </div>
+                        </Card>
+                     ))}
+                  </div>
+               </div>
+            </>
+         )}
+      </div>
     </div>
   );
 }
+

@@ -11,6 +11,8 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
 import { useBlogTranslation } from "@/hooks/useBlogTranslation";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
 
 const SEED_ARTICLES = RAW_ARTICLES.filter((a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i);
 
@@ -77,7 +79,7 @@ export default function Blog() {
                  onClick={() => setActiveCategory(cat)}
                  className={cn(
                    "px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
-                   activeCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-slate-600"
+                   activeCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white dark:bg-slate-900 text-slate-400 hover:text-slate-600"
                  )}
                >
                   {cat}
@@ -98,7 +100,7 @@ export default function Blog() {
                >
                   <Link to={`/blog/${article.slug}`} className="group block h-full">
                      <Card className="rounded-[2.5rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl transition-all overflow-hidden h-full flex flex-col group-hover:-translate-y-2">
-                        <div className="aspect-[16/10] bg-slate-50 dark:bg-slate-800 relative overflow-hidden">
+                        <div className="aspect-[16/10] bg-white dark:bg-slate-800 relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
                            <div className="absolute bottom-6 left-6">
                               <Badge className={`rounded-lg px-3 py-1 font-black text-[10px] uppercase tracking-widest border-none ${CATEGORY_COLORS[article.category] || "bg-white text-primary"}`}>

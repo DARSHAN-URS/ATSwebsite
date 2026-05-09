@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Logo from "@/components/Logo";
 
 const jobSeekerNav = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -53,16 +54,11 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
     <div className="h-full flex flex-col bg-white border-r border-slate-200/60 relative overflow-hidden">
       <div className="p-8 relative z-10">
         <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:rotate-6 transition-all duration-300">
-            <ShieldCheck className="text-white w-5 h-5" />
-          </div>
-          <span className="text-xl font-display font-black tracking-tight text-slate-900">
-            Resume<span className="text-blue-600">Pro</span>
-          </span>
+          <Logo variant="dark" className="h-12" />
         </div>
       </div>
 
-      <nav className="flex-1 px-4 space-y-1 overflow-y-auto relative z-10 custom-scrollbar pt-2">
+      <nav className="flex-1 px-6 space-y-2 overflow-y-auto relative z-10 custom-scrollbar pt-4">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
@@ -71,23 +67,30 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
             onClick={onNavClick}
             className={({ isActive }) =>
               cn(
-                "flex items-center justify-between px-5 py-3.5 text-sm font-semibold transition-all rounded-xl group/nav",
+                "flex items-center justify-between px-6 py-4 transition-all rounded-2xl group/nav relative overflow-hidden",
                 isActive 
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
-                  : "text-slate-500 hover:text-blue-600 hover:bg-blue-50"
+                  ? "bg-slate-900 text-white shadow-xl shadow-slate-900/10" 
+                  : "text-slate-400 hover:text-blue-600 hover:bg-blue-50/50"
               )
             }
           >
-            <div className="flex items-center gap-4">
-               <item.icon className="h-5 w-5" />
-               <span>{item.label}</span>
+            <div className="flex items-center gap-4 relative z-10">
+               <item.icon className={cn("h-5 w-5 transition-transform group-hover/nav:scale-110", "text-current")} />
+               <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
             </div>
-            {item.label === "Premium" && <Sparkles className="w-4 h-4 text-amber-500" />}
+            {item.label === "Premium" && <Sparkles className="w-4 h-4 text-amber-400 relative z-10" />}
+            
+            <div 
+              className={cn(
+                "absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-blue-600 rounded-r-full transition-transform duration-500",
+                "hidden group-[.active]/nav:block"
+              )} 
+            />
           </NavLink>
         ))}
       </nav>
 
-      <div className="p-6 border-t border-slate-100 bg-slate-50/50">
+      <div className="p-6 border-t border-slate-100 bg-white/50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all text-left group">
@@ -125,7 +128,7 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="flex min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
       {!isMobile && (
         <aside className="w-72 h-screen sticky top-0 overflow-hidden z-40">
           <SidebarContent user={user} onSignOut={handleSignOut} />
@@ -136,8 +139,7 @@ export default function AppLayout() {
         {isMobile && (
           <header className="h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between sticky top-0 z-50">
             <div className="flex items-center gap-2" onClick={() => navigate("/")}>
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white"><ShieldCheck className="w-4 h-4" /></div>
-              <span className="text-lg font-display font-black tracking-tight text-slate-900">Resume<span className="text-blue-600">Pro</span></span>
+              <Logo variant="dark" className="h-8" />
             </div>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>

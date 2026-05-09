@@ -7,7 +7,7 @@ import {
   FileText, Briefcase, Search, Mail, Eye, Users, Building2, Zap, 
   CheckCircle2, Plus, ArrowUpRight, Brain, Target, Layout, Mic, 
   ZapIcon, Sparkles, TrendingUp, Activity, Award, Clock, ArrowRight, 
-  ChevronRight, ShieldCheck, Lock
+  ChevronRight, ShieldCheck, Lock, Rocket, BarChart3
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
@@ -169,7 +169,7 @@ function JobSeekerDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead title="Dashboard — ResumePro" description="Career Management Center." />
       
       <div className="space-y-10 max-w-7xl mx-auto">
@@ -225,7 +225,7 @@ function JobSeekerDashboard() {
                     </div>
                  </div>
                  <div className="p-8">
-                    <Suspense fallback={<div className="h-[250px] animate-pulse bg-slate-50 rounded-2xl" />}>
+                    <Suspense fallback={<div className="h-[250px] animate-pulse bg-white rounded-2xl" />}>
                        <DashboardCharts
                           statusBreakdown={stats.statusBreakdown}
                           weeklyActivity={stats.weeklyActivity}
@@ -238,33 +238,15 @@ function JobSeekerDashboard() {
            </div>
 
            <div className="lg:col-span-4 space-y-8">
-              {/* Premium Feature Card */}
-              <Card className="rounded-[2.5rem] premium-card p-10 group cursor-pointer hover:premium-glow transition-all duration-500">
-                <div className="relative z-10 space-y-6">
-                   <div className="flex items-center justify-between">
-                      <div className="px-3 py-1 bg-blue-600 rounded-full text-white font-black text-[9px] uppercase tracking-widest shadow-xl shadow-blue-600/30">Pro Feature</div>
-                      <Lock className="w-4 h-4 text-slate-500" />
-                   </div>
-                   <div className="space-y-2">
-                      <h3 className="text-2xl font-display font-black text-white tracking-tight leading-none uppercase">Auto-Apply</h3>
-                      <p className="text-slate-400 font-medium text-xs leading-relaxed">Let AI scout and apply to elite roles 24/7 on your behalf.</p>
-                   </div>
-                   <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                      <motion.div animate={{ x: [-100, 200] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="h-full w-1/4 bg-blue-500 shadow-[0_0_10px_#3b82f6]" />
-                   </div>
-                   <Button variant="premium" className="w-full h-14 rounded-2xl shadow-xl shadow-blue-600/20">Upgrade Now</Button>
-                </div>
-              </Card>
-
               <Card className="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-sm space-y-8">
                 <div className="flex items-center justify-between">
                    <h3 className="text-lg font-display font-black text-slate-900 tracking-tight uppercase">Briefing</h3>
                    <Clock className="w-4 h-4 text-blue-600" />
                 </div>
-                <Suspense fallback={<div className="h-32 bg-slate-50 rounded-2xl animate-pulse" />}>
+                <Suspense fallback={<div className="h-32 bg-white rounded-2xl animate-pulse" />}>
                    <ScheduledInterviewsList />
                 </Suspense>
-                <Button className="w-full h-12 rounded-xl bg-slate-50 border border-slate-100 text-slate-900 font-bold uppercase tracking-widest text-[9px] hover:bg-blue-600 hover:text-white transition-all">Schedule New</Button>
+                <Button className="w-full h-12 rounded-xl bg-white border border-slate-100 text-slate-900 font-bold uppercase tracking-widest text-[9px] hover:bg-blue-600 hover:text-white transition-all">Schedule New</Button>
               </Card>
 
               <Card className="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 group overflow-hidden">
@@ -272,7 +254,7 @@ function JobSeekerDashboard() {
                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><ShieldCheck className="w-5 h-5" /></div>
                     <h4 className="text-md font-bold text-slate-900 tracking-tight uppercase">AI Advisor</h4>
                  </div>
-                 <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                 <div className="p-5 bg-white rounded-2xl border border-slate-100 space-y-2">
                     <p className="text-xs font-medium text-slate-600">Keyword density at <span className="text-blue-600 font-bold">92%</span> for FAANG roles.</p>
                     <div className="flex items-center gap-2 text-[8px] font-black text-blue-600 uppercase tracking-widest"><TrendingUp className="w-3 h-3" /> Growth Detected</div>
                  </div>
@@ -290,7 +272,7 @@ function JobSeekerDashboard() {
                  </div>
                  <Button onClick={() => navigate("/jobs")} variant="ghost" className="h-10 px-6 rounded-full border border-slate-200 text-blue-600 font-bold uppercase tracking-widest text-[9px] hover:bg-blue-50 transition-all">Expand View</Button>
               </div>
-              <Suspense fallback={<div className="h-[300px] bg-slate-50 rounded-3xl animate-pulse" />}>
+              <Suspense fallback={<div className="h-[300px] bg-white rounded-3xl animate-pulse" />}>
                  <JobTrackerSection compact onManage={() => navigate("/jobs")} />
               </Suspense>
            </Card>
@@ -329,48 +311,145 @@ function RecruiterDashboard() {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-12 text-left relative">
-        <div className="space-y-4">
-           <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
-              <Building2 className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Recruiter Hub</span>
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20 font-sans">
+      <SEOHead title="Talent HQ — ResumePro" description="Recruitment Command Center." />
+      
+      <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
+        {/* Architectural Header */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
+           <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
+                 <Building2 className="w-4 h-4" />
+                 <span className="text-[9px] font-black uppercase tracking-widest">Global Talent Headquarters</span>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                 Scale <br /> <span className="text-blue-600">Intelligence.</span>
+              </h1>
+              <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
+                 Welcome back, <span className="text-slate-900 dark:text-white font-black">{user?.user_metadata?.display_name?.split(' ')[0] || "Commander"}</span>. Your talent matrix is performing at <span className="text-blue-600 font-black">94% efficiency</span>.
+              </p>
            </div>
-           <h1 className="text-5xl md:text-7xl font-display font-black text-slate-900 tracking-tight leading-tight">
-              Scale your <span className="text-blue-600">talent.</span>
-           </h1>
+
+           <div className="flex flex-wrap gap-4">
+              <Button onClick={() => navigate("/recruiter/jobs")} className="h-20 px-10 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all gap-4">
+                 <Plus className="w-5 h-5" /> Deploy New Mission
+              </Button>
+           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <StatCard label="Postings" value={stats.activeJobs} icon={Briefcase} color="bg-blue-600" />
-          <StatCard label="Total Reach" value={stats.totalViews} icon={Eye} color="bg-indigo-600" />
-          <StatCard label="Candidates" value={stats.totalApplicants} icon={Users} color="bg-blue-400" />
+        {/* Intelligence Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {[
+            { label: "Active Missions", value: stats.activeJobs, icon: Briefcase, color: "text-blue-600", bg: "bg-blue-50" },
+            { label: "Matrix Reach", value: stats.totalViews, icon: Eye, color: "text-indigo-600", bg: "bg-indigo-50" },
+            { label: "Operational Nodes", value: stats.totalApplicants, icon: Users, color: "text-emerald-600", bg: "bg-emerald-50" },
+            { label: "Growth Velocity", value: "+24%", icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" }
+          ].map((stat, i) => (
+            <Card key={i} className="rounded-[2.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex flex-col items-center text-center space-y-4 group">
+               <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110", stat.bg, stat.color)}>
+                  <stat.icon className="w-6 h-6" />
+               </div>
+               <div className="space-y-1">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
+               </div>
+            </Card>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <motion.button whileHover={{ y: -3 }} onClick={() => navigate("/recruiter/jobs")} className="group text-left">
-             <Card className="rounded-[3rem] border border-slate-200 bg-white p-12 shadow-sm relative overflow-hidden transition-all hover:shadow-xl hover:shadow-blue-600/5">
-                <div className="flex items-center justify-between mb-10">
-                   <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30 group-hover:scale-110 transition-transform"><Plus className="w-8 h-8 text-white" /></div>
-                   <ArrowUpRight className="w-6 h-6 text-slate-300 group-hover:text-blue-600 transition-colors" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+           {/* Command Modules */}
+           <div className="lg:col-span-8 space-y-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <motion.button whileHover={{ y: -5 }} onClick={() => navigate("/recruiter/jobs")} className="group text-left h-full">
+                    <Card className="h-full rounded-[4rem] border-none bg-slate-900 p-12 shadow-2xl relative overflow-hidden group">
+                       <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform">
+                          <Rocket className="w-32 h-32 text-white" />
+                       </div>
+                       <div className="space-y-12 relative z-10">
+                          <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-600/30">
+                             <Plus className="w-8 h-8 text-white" />
+                          </div>
+                          <div className="space-y-2">
+                             <h3 className="text-4xl font-black text-white tracking-tighter uppercase">Initialize <br /> Mission</h3>
+                             <p className="text-slate-400 font-medium">Deploy new job postings to the global talent matrix.</p>
+                          </div>
+                          <ArrowUpRight className="w-8 h-8 text-white/20 group-hover:text-blue-600 group-hover:translate-x-2 transition-all" />
+                       </div>
+                    </Card>
+                 </motion.button>
+                 
+                 <motion.button whileHover={{ y: -5 }} onClick={() => navigate("/recruiter/company")} className="group text-left h-full">
+                    <Card className="h-full rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_30px_80px_rgba(0,0,0,0.03)] border border-slate-100 dark:border-white/5 relative overflow-hidden group">
+                       <div className="space-y-12 relative z-10">
+                          <div className="w-16 h-16 bg-slate-50 dark:bg-white/5 rounded-3xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors border border-slate-100 dark:border-white/5">
+                             <Building2 className="w-8 h-8" />
+                          </div>
+                          <div className="space-y-2">
+                             <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Company <br /> Core</h3>
+                             <p className="text-slate-500 font-medium">Manage organizational identity and mission branding.</p>
+                          </div>
+                          <ArrowUpRight className="w-8 h-8 text-slate-200 group-hover:text-blue-600 group-hover:translate-x-2 transition-all" />
+                       </div>
+                    </Card>
+                 </motion.button>
+              </div>
+
+              {/* Data Visualization Stream */}
+              <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_40px_100px_rgba(0,0,0,0.03)] overflow-hidden">
+                 <div className="p-12 pb-0 flex items-center justify-between">
+                    <div className="space-y-2">
+                       <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Operational Flow</h3>
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Real-time talent acquisition metrics</p>
+                    </div>
+                    <Button variant="ghost" onClick={() => navigate("/recruiter/analytics")} className="h-12 px-6 rounded-2xl border border-slate-100 text-blue-600 font-black uppercase tracking-widest text-[9px] gap-2">Full Scan <BarChart3 className="w-4 h-4" /></Button>
+                 </div>
+                 <div className="p-12 min-h-[400px] flex items-center justify-center">
+                    <div className="flex flex-col items-center text-center space-y-6 grayscale opacity-30">
+                       <Activity className="w-16 h-16 text-slate-300" />
+                       <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Synchronizing Data Grid...</p>
+                    </div>
+                 </div>
+              </Card>
+           </div>
+
+           {/* Sidebar Intelligence */}
+           <div className="lg:col-span-4 space-y-10">
+              <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 p-12 shadow-[0_30px_80px_rgba(0,0,0,0.03)] space-y-12">
+                <div className="flex items-center justify-between">
+                   <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Mission Brief</h3>
+                   <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600"><Clock className="w-5 h-5" /></div>
                 </div>
-                <h3 className="text-3xl font-display font-black text-slate-900 tracking-tight mb-2 uppercase">Post a Job</h3>
-                <p className="text-slate-500 font-medium text-sm">Deploy new missions and discover elite talent.</p>
-             </Card>
-          </motion.button>
-          
-          <motion.button whileHover={{ y: -3 }} onClick={() => navigate("/recruiter/company")} className="group text-left">
-             <Card className="rounded-[3rem] border border-slate-200 bg-white p-12 shadow-sm relative overflow-hidden transition-all hover:shadow-xl hover:shadow-blue-600/5">
-                <div className="flex items-center justify-between mb-10">
-                   <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors"><Building2 className="w-8 h-8" /></div>
-                   <ArrowUpRight className="w-6 h-6 text-slate-300 group-hover:text-blue-600 transition-colors" />
+                <div className="space-y-8">
+                   <Suspense fallback={<div className="h-32 bg-slate-50 animate-pulse rounded-3xl" />}>
+                      <ScheduledInterviewsList />
+                   </Suspense>
                 </div>
-                <h3 className="text-3xl font-display font-black text-slate-900 tracking-tight mb-2 uppercase">Company Core</h3>
-                <p className="text-slate-500 font-medium text-sm">Manage organizational identity and branding.</p>
-             </Card>
-          </motion.button>
+                <Button onClick={() => navigate("/recruiter/candidates")} className="w-full h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10">Manage Personnel</Button>
+              </Card>
+
+              <Card className="rounded-[4rem] border-none bg-blue-600 p-12 text-white shadow-2xl shadow-blue-600/20 relative overflow-hidden group">
+                 <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:rotate-12 transition-transform">
+                    <ShieldCheck className="w-32 h-32" />
+                 </div>
+                 <div className="space-y-8 relative z-10">
+                    <div className="flex items-center gap-4">
+                       <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md"><Sparkles className="w-6 h-6" /></div>
+                       <h4 className="text-xl font-black tracking-tight uppercase leading-none">AI Advisor <br /> <span className="text-blue-200 text-xs tracking-widest">Active System</span></h4>
+                    </div>
+                    <div className="p-8 bg-white/10 rounded-[2.5rem] border border-white/10 backdrop-blur-sm space-y-4">
+                       <p className="text-sm font-bold leading-relaxed">Intelligence scan detected <span className="text-white font-black underline">3 elite candidates</span> matching your Lead Architect mission specs.</p>
+                       <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="text-[9px] font-black uppercase tracking-widest">High Probability Match</span>
+                       </div>
+                    </div>
+                 </div>
+              </Card>
+           </div>
         </div>
       </div>
     </div>
   );
 }
+

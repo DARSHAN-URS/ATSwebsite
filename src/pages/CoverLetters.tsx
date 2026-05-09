@@ -95,7 +95,7 @@ export default function CoverLetters() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
       <SEOHead title="Narratives — ResumePro" description="Synthesize high-fidelity professional narratives." />
       
       <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
@@ -128,7 +128,7 @@ export default function CoverLetters() {
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Architecture Source</Label>
                     <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                       <SelectTrigger className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6">
+                       <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
                           <SelectValue placeholder="Select Module" />
                        </SelectTrigger>
                        <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
@@ -139,7 +139,7 @@ export default function CoverLetters() {
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Strategic Tone</Label>
                     <Select value={tone} onValueChange={setTone}>
-                       <SelectTrigger className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6">
+                       <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
                           <SelectValue />
                        </SelectTrigger>
                        <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
@@ -151,7 +151,7 @@ export default function CoverLetters() {
                  </div>
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Context</Label>
-                    <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[200px] rounded-2xl bg-slate-50 border-slate-100 font-bold p-6" />
+                    <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[200px] rounded-2xl bg-white border-slate-100 font-bold p-6" />
                  </div>
                  <Button onClick={generate} disabled={generating || !selectedResumeId} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4">
                     {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
@@ -168,7 +168,7 @@ export default function CoverLetters() {
                <motion.div key={cl.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: i * 0.1 }}>
                   <Card className="rounded-[3rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 group hover:shadow-2xl transition-all relative overflow-hidden">
                      <div className="absolute top-0 right-0 p-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" onClick={() => setEditingId(cl.id)} className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm border border-slate-100 dark:border-slate-700">
+                        <Button variant="ghost" size="icon" onClick={() => setEditingId(cl.id)} className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm border border-slate-100 dark:border-slate-700">
                            <Edit className="w-5 h-5" />
                         </Button>
                         <Button variant="ghost" size="icon" onClick={() => deleteLetter(cl.id)} className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white shadow-sm border border-rose-100">

@@ -60,7 +60,7 @@ export default function InterviewPrep() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
       <SEOHead title="Interview Prep — ResumePro" description="Practice your professional interviews with AI." />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
@@ -83,12 +83,12 @@ export default function InterviewPrep() {
                      <div className="space-y-8">
                         <div className="space-y-4">
                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Position</Label>
-                           <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-[1.5rem] bg-slate-50 dark:bg-slate-800 border-none px-6 font-bold text-lg" />
+                           <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-[1.5rem] bg-white dark:bg-slate-800 border-none px-6 font-bold text-lg" />
                         </div>
                         <div className="space-y-4">
                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
                            <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                              <SelectTrigger className="h-16 rounded-[1.5rem] bg-slate-50 dark:bg-slate-800 border-none px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
+                              <SelectTrigger className="h-16 rounded-[1.5rem] bg-white dark:bg-slate-800 border-none px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
                               <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
                                  {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl p-3 font-bold">{r.title}</SelectItem>)}
                               </SelectContent>

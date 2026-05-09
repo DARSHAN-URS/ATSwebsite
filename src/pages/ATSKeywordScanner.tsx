@@ -79,7 +79,7 @@ export default function ATSKeywordScanner() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
       <SEOHead title="Auditor — ResumePro" description="Optimize your professional architecture for algorithmic detection." />
       
       <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
@@ -106,7 +106,7 @@ export default function ATSKeywordScanner() {
                   <div className="space-y-3">
                      <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Target Module</Label>
                      <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                        <SelectTrigger className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6">
+                        <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6">
                            <SelectValue placeholder="Select Architecture" />
                         </SelectTrigger>
                         <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
@@ -116,7 +116,7 @@ export default function ATSKeywordScanner() {
                   </div>
                   <div className="space-y-3">
                      <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Requirements</Label>
-                     <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste the target job description..." className="min-h-[300px] rounded-[2.5rem] bg-slate-50 border-slate-100 font-bold p-8" />
+                     <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste the target job description..." className="min-h-[300px] rounded-[2.5rem] bg-white border-slate-100 font-bold p-8" />
                   </div>
                </div>
                <Button onClick={scan} disabled={scanning || !selectedResumeId || !jobDescription} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4 hover:scale-[1.02] transition-all">
@@ -189,7 +189,7 @@ export default function ATSKeywordScanner() {
                ) : (
                   <div className="h-full flex items-center justify-center text-center p-20">
                      <div className="space-y-6">
-                        <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-200 dark:text-slate-800 mx-auto border-4 border-dashed border-slate-100 dark:border-slate-800">
+                        <div className="w-24 h-24 rounded-[2.5rem] bg-white dark:bg-slate-900 flex items-center justify-center text-slate-200 dark:text-slate-800 mx-auto border-4 border-dashed border-slate-100 dark:border-slate-800">
                            <Target className="w-10 h-10" />
                         </div>
                         <div className="space-y-2">

@@ -11,6 +11,7 @@ import ResumePreview from "@/components/resume/ResumePreview";
 import type { ResumeData } from "@/components/resume/types";
 import { DEFAULT_COLORS } from "@/hooks/useResumeColors";
 import SEOHead from "@/components/SEOHead";
+import Logo from "@/components/Logo";
 
 export default function PublicProfile() {
   const { slug } = useParams();
@@ -49,13 +50,13 @@ export default function PublicProfile() {
   const pi = data.personalInfo || {};
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 text-slate-900 dark:text-white selection:bg-blue-600 selection:text-white overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white selection:bg-blue-600 selection:text-white overflow-x-hidden font-sans">
       <SEOHead title={`${pi.fullName || "Professional"} — ResumePro`} description="High-fidelity professional identity matrix." />
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl">
         <div className="container mx-auto px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">
-            RESUME<span className="text-blue-600">PRO</span>
+          <Link to="/" className="flex items-center gap-2">
+            <Logo variant="auto" className="h-10" />
           </Link>
           <div className="flex items-center gap-4">
              <Button className="bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] h-10 px-8 rounded-xl hover:scale-105 transition-all shadow-lg shadow-blue-600/20">
@@ -92,7 +93,7 @@ export default function PublicProfile() {
                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Core Modules</h3>
                <div className="flex flex-wrap gap-3">
                   {(data.skills || []).slice(0, 15).map(skill => (
-                     <span key={skill} className="px-5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">{skill}</span>
+                     <span key={skill} className="px-5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">{skill}</span>
                   ))}
                </div>
             </div>

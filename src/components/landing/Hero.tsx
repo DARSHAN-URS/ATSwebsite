@@ -15,7 +15,7 @@ export const Hero = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-3 px-6 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm mx-auto"
+            className="inline-flex items-center gap-3 px-6 py-2.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm mx-auto"
           >
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -54,7 +54,7 @@ export const Hero = () => {
                 Get Started Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button variant="ghost" className="font-black uppercase tracking-widest text-xs h-16 px-10 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900">
+            <Button variant="ghost" className="font-black uppercase tracking-widest text-xs h-16 px-10 rounded-2xl hover:bg-white dark:hover:bg-slate-900">
               View Examples
             </Button>
           </motion.div>

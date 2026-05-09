@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronRight, Sparkles } from "lucide-react";
+import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 
 export const Navbar = () => {
@@ -41,12 +42,7 @@ export const Navbar = () => {
           )}
         >
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-600/20 group-hover:rotate-12 transition-transform duration-500">
-              <Sparkles className="text-white w-5 h-5" />
-            </div>
-            <span className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">
-              RESUME<span className="text-blue-600">PRO</span>
-            </span>
+            <Logo variant={isScrolled ? "auto" : "dark"} className="h-12" />
           </Link>
 
           {/* Desktop Menu */}
@@ -69,7 +65,7 @@ export const Navbar = () => {
               </Button>
             </Link>
             <Link to="/auth">
-              <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl px-8 h-12 shadow-xl shadow-slate-900/20 group">
+              <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-[0.2em] text-[10px] rounded-[1.5rem] px-10 h-14 shadow-2xl shadow-slate-900/20 group">
                 Join Now
                 <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
