@@ -51,17 +51,17 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   }, [user?.user_metadata?.avatar_url]);
 
   return (
-    <div className="h-full flex flex-col bg-slate-50/50 relative overflow-hidden p-6">
-      <div className="bg-white rounded-[3rem] h-full flex flex-col shadow-sm border border-slate-100 relative overflow-hidden">
+    <div className="h-full flex flex-col bg-white relative overflow-hidden p-6">
+      <div className="bg-slate-900 rounded-[3rem] h-full flex flex-col shadow-2xl shadow-slate-900/20 relative overflow-hidden">
         <div className="p-10 pb-6">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-            <Logo variant="dark" className="h-10 transition-transform group-hover:scale-105" />
+            <Logo variant="light" className="h-10 transition-transform group-hover:scale-105" />
           </div>
         </div>
 
         <nav className="flex-1 px-4 space-y-2 overflow-y-auto custom-scrollbar pt-6">
           <div className="px-6 mb-6">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Core Navigation</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Operational Hub</p>
           </div>
           {navItems.map((item) => (
             <NavLink
@@ -73,8 +73,8 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
                 cn(
                   "flex items-center justify-between px-6 py-5 transition-all rounded-[1.8rem] group/nav relative overflow-hidden",
                   isActive 
-                    ? "bg-slate-900 text-white shadow-2xl shadow-slate-900/20" 
-                    : "text-slate-500 hover:text-blue-600 hover:bg-blue-50/80"
+                    ? "bg-blue-600 text-white shadow-2xl shadow-blue-600/30" 
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
                 )
               }
             >
@@ -88,15 +88,15 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
         </nav>
 
         <div className="p-4 mt-auto">
-          <div className="p-8 rounded-[2.5rem] bg-slate-50 border border-slate-100 space-y-6">
+          <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Neural Link</span>
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                <span className="text-[9px] font-black text-white uppercase tracking-widest">Neural Link</span>
               </div>
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">v4.0</span>
+              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">v4.2</span>
             </div>
-            <div className="h-1.5 w-full bg-white rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                <div className="h-full w-3/4 bg-blue-600 rounded-full" />
             </div>
           </div>
@@ -105,22 +105,22 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
         <div className="p-6 pt-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="w-full flex items-center gap-4 p-4 rounded-[2rem] hover:bg-slate-50 transition-all text-left group border border-transparent hover:border-slate-100">
-                <Avatar className="h-12 w-12 border-4 border-white shadow-md transition-transform group-hover:scale-105">
+              <button className="w-full flex items-center gap-4 p-4 rounded-[2rem] hover:bg-white/5 transition-all text-left group border border-transparent hover:border-white/5">
+                <Avatar className="h-12 w-12 border-4 border-slate-800 shadow-md transition-transform group-hover:scale-105">
                   <AvatarImage src={resolvedAvatarUrl || undefined} />
                   <AvatarFallback className="bg-blue-600 text-white text-sm font-black">{displayName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 overflow-hidden">
-                  <p className="text-xs font-black text-slate-900 truncate uppercase tracking-tight">{displayName}</p>
-                  <p className="text-[9px] text-blue-600 font-black uppercase tracking-[0.2em]">{role?.replace('_', ' ') || "Free Member"}</p>
+                  <p className="text-xs font-black text-white truncate uppercase tracking-tight">{displayName}</p>
+                  <p className="text-[9px] text-blue-500 font-black uppercase tracking-[0.2em]">{role?.replace('_', ' ') || "Free Member"}</p>
                 </div>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" side="right" className="w-64 rounded-[2rem] p-3 border-none shadow-3xl bg-white text-slate-900">
-              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
-              <DropdownMenuSeparator className="my-2 bg-slate-100" />
-              <DropdownMenuItem onClick={onSignOut} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 text-red-500 focus:bg-red-50 cursor-pointer"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
+            <DropdownMenuContent align="end" side="right" className="w-64 rounded-[2rem] p-3 border-none shadow-3xl bg-slate-900 text-white">
+              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
+              <DropdownMenuSeparator className="my-2 bg-white/5" />
+              <DropdownMenuItem onClick={onSignOut} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -148,31 +148,31 @@ export default function AppLayout() {
         </aside>
       )}
 
-      <main className="flex-1 min-w-0 flex flex-col bg-slate-50/50">
+      <main className="flex-1 min-w-0 flex flex-col bg-white">
         {!isMobile && (
-          <header className="h-24 px-12 flex items-center justify-between sticky top-0 z-30 bg-slate-50/50 backdrop-blur-md">
+          <header className="h-24 px-12 flex items-center justify-between sticky top-0 z-30 bg-white/80 backdrop-blur-md">
             <div className="flex-1 max-w-xl">
                <div className="relative group">
                   <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                   <input 
                     type="text" 
                     placeholder="Search mission objectives..." 
-                    className="w-full h-14 pl-14 pr-6 rounded-2xl bg-white border border-slate-100 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-medium"
+                    className="w-full h-14 pl-14 pr-6 rounded-2xl bg-slate-50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-medium"
                   />
                </div>
             </div>
             
             <div className="flex items-center gap-8 ml-12">
-               <div className="flex items-center gap-4 px-6 py-3 bg-white rounded-full border border-slate-100 shadow-sm">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+               <div className="flex items-center gap-4 px-6 py-3 bg-slate-50 rounded-full border border-slate-100/50 shadow-sm">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                   <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">System Operational</span>
                </div>
                
-               <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm hover:text-blue-600">
+               <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100/50 shadow-sm hover:text-blue-600">
                   <HelpCircle className="w-5 h-5" />
                </Button>
                
-               <div className="h-10 w-px bg-slate-200" />
+               <div className="h-10 w-px bg-slate-100" />
                
                <Button onClick={() => navigate("/pricing")} className="h-12 px-8 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-600/20 hover:scale-105 transition-all">
                   Upgrade Plan
