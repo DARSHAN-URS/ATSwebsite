@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import {
   Mic, MicOff, Volume2, Brain, Loader2, Zap, RotateCcw, ShieldCheck, Target, Sparkles, ChevronRight, 
   User, Activity, TrendingUp, BarChart3, Clock, MessageSquare, Star, Info, CheckCircle2, AlertCircle, Heart,
-  Video, Play, Settings2, BarChart
+  Video, Play, Settings2, BarChart, ArrowRight, History
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
