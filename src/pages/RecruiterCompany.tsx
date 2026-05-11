@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Building2, Globe, Users, Save, Loader2 } from "lucide-react";
+import { Building2, Globe, Users, Save, Loader2, Zap } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 
 const industries = [

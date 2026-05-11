@@ -96,23 +96,24 @@ export default function Resumes() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20 text-left">
+    <div className="min-h-screen bg-white font-sans pb-20 text-left">
       <SEOHead title="My Resumes — ResumePro" description="Create and manage your professional resumes." />
       
-      <div className="container mx-auto px-0 space-y-20">
+      <div className="container mx-auto px-0 space-y-12">
          <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-12 mb-16">
-               <div className="space-y-8">
-                  <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
-                     <ShieldCheck className="w-4 h-4" />
-                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Asset Management</span>
-                  </div>
-                  <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
-                     Professional <br /><span className="text-blue-600">Assets.</span>
-                  </h1>
-               </div>
+                <div className="space-y-8">
+                   <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Asset Management</span>
+                   </div>
+                   <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
+                      Resumes.
+                   </h1>
+                   <p className="text-slate-500 font-medium text-lg max-w-xl">Manage your professional document matrix and synchronize with global mission objectives.</p>
+                </div>
 
                <Button onClick={() => setCreateOpen(true)} className="h-20 px-12 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-3xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all mt-8 md:mt-16">
                   <Plus className="w-5 h-5" /> Initialize Build
@@ -121,7 +122,7 @@ export default function Resumes() {
 
             <div className="relative group max-w-2xl z-10">
                <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
-               <Input placeholder="Search document matrix..." className="h-20 rounded-[2.2rem] bg-slate-50 border-none px-20 font-black text-lg focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all uppercase tracking-tight" />
+               <Input placeholder="Search document matrix..." className="h-20 rounded-[2.2rem] bg-slate-50 border border-slate-100 px-20 font-black text-lg focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all uppercase tracking-tight" />
             </div>
          </div>
 
@@ -156,7 +157,7 @@ export default function Resumes() {
                            transition={{ delay: i * 0.05 }}
                            className="group"
                         >
-                           <Card className="rounded-[4rem] border-none bg-white p-12 shadow-sm border border-slate-50 hover:shadow-3xl hover:-translate-y-4 transition-all duration-700 relative overflow-hidden h-full flex flex-col justify-between group">
+                         <Card className="rounded-[4rem] border-none bg-slate-50/30 p-12 shadow-sm border border-slate-100 hover:border-blue-600/20 hover:bg-blue-50/10 hover:shadow-3xl hover:-translate-y-4 transition-all duration-700 relative overflow-hidden h-full flex flex-col justify-between group">
                               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
                               <div className="space-y-10 relative z-10">
                                  <div className="flex items-start justify-between">
@@ -197,11 +198,11 @@ export default function Resumes() {
                                  </div>
                               </div>
 
-                              <div className="pt-12 relative z-10">
-                                 <Button onClick={() => navigate(`/builder/${resume.id}`)} className="w-full h-16 rounded-[1.8rem] bg-slate-900 text-white font-black uppercase tracking-[0.2em] text-[10px] gap-4 shadow-xl hover:bg-blue-600 transition-all">
-                                    Access Editor <ArrowRight className="w-4 h-4" />
-                                 </Button>
-                              </div>
+                               <div className="pt-12 relative z-10">
+                                  <Button onClick={() => navigate(`/builder/${resume.id}`)} className="w-full h-16 rounded-[1.8rem] bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[10px] gap-4 shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition-all">
+                                     Access Editor <ArrowRight className="w-4 h-4" />
+                                  </Button>
+                               </div>
                            </Card>
                         </motion.div>
                      );

@@ -197,5 +197,6 @@ export default function CoverLetters() {
          <CoverLetterEditor id={editingId} onClose={() => { setEditingId(null); fetchData(); }} />
       )}
     </div>
-  );
+  </div>
+);
 }

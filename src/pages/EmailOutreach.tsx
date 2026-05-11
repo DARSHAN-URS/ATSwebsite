@@ -104,48 +104,50 @@ export default function EmailOutreach() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white font-sans pb-20">
       <SEOHead title="Email Outreach — ResumePro" description="Connect with recruiters using AI-powered emails." />
       
       <div className="container mx-auto px-0 space-y-16 text-left">
          <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
             
-            <div className="relative z-10 space-y-8">
+            <div className="space-y-8">
                <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
                   <Mail className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">Communication Matrix</span>
                </div>
-               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
-                  Direct <br /><span className="text-blue-600">Outreach.</span>
+               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
+                  Outreach.
                </h1>
+               <p className="text-slate-500 font-medium text-lg max-w-xl">Autonomous messaging protocols and direct recruiter synchronization with mission-critical precision.</p>
             </div>
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-5 space-y-10">
-               <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-12 space-y-10">
+               <Card className="rounded-[4rem] border-none bg-blue-50/30 shadow-sm border border-blue-100/50 p-12 space-y-10 group hover:bg-blue-50/50 transition-all">
                   <div className="space-y-6">
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
-                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold" />
+                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Title</Label>
-                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold" />
+                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
+                           <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
+                           <SelectTrigger className="h-16 rounded-2xl bg-white/50 border-blue-100 px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
                            <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
                               {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl font-bold">{r.title}</SelectItem>)}
                            </SelectContent>
                         </Select>
                      </div>
                   </div>
-                  <Button onClick={generateWithAI} disabled={generating} className="w-full h-20 rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-2xl hover:bg-blue-600 transition-all">
-                     {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5 text-blue-500" />} Create Draft with AI
+                  <Button onClick={generateWithAI} disabled={generating} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-2xl shadow-blue-600/20 hover:scale-105 transition-all">
+                     {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />} Create Draft with AI
                   </Button>
                </Card>
 
@@ -164,22 +166,22 @@ export default function EmailOutreach() {
             </div>
 
             <div className="lg:col-span-7">
-               <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-2xl p-12 space-y-10 min-h-[800px] flex flex-col">
+               <Card className="rounded-[4rem] border-none bg-white shadow-2xl p-12 space-y-10 min-h-[800px] flex flex-col border border-slate-100">
                   <div className="space-y-6 flex-1 text-left">
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Recruiter Email</Label>
                         <div className="relative">
                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={recruiterEmail} onChange={e => setRecruiterEmail(e.target.value)} placeholder="recruiter@company.com" className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-14 font-bold" />
+                           <Input value={recruiterEmail} onChange={e => setRecruiterEmail(e.target.value)} placeholder="recruiter@company.com" className="h-16 rounded-2xl bg-white border-slate-100 px-14 font-bold" />
                         </div>
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Email Subject</Label>
-                        <Input value={subject} onChange={e => setSubject(e.target.value)} placeholder="Application for..." className="h-16 rounded-2xl bg-white dark:bg-slate-800 border-none px-6 font-bold" />
+                        <Input value={subject} onChange={e => setSubject(e.target.value)} placeholder="Application for..." className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold" />
                      </div>
                      <div className="space-y-3 flex-1 flex flex-col">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Email Body</Label>
-                        <Textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Draft narrative..." className="flex-1 rounded-3xl bg-white dark:bg-slate-800 border-none p-8 font-medium text-slate-700 dark:text-slate-200 resize-none min-h-[300px]" />
+                        <Textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Draft narrative..." className="flex-1 rounded-3xl bg-white border-slate-100 p-8 font-medium text-slate-700 resize-none min-h-[300px]" />
                      </div>
                   </div>
 

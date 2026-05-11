@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Star, StarOff, Search, Users, Loader2 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import { cn } from "@/lib/utils";
 
 interface CandidateRow {
   id: string;

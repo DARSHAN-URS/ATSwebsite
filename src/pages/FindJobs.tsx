@@ -114,8 +114,8 @@ export default function FindJobs() {
                <Briefcase className="w-4 h-4" />
                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Opportunity Scanner</span>
             </div>
-            <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
-               Active <br /><span className="text-blue-600">Deployments.</span>
+            <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
+               Jobs.
             </h1>
             <p className="text-slate-500 font-medium text-lg max-w-xl">AI-powered job search, recruiter posts & external listings synchronized in real-time.</p>
          </div>
@@ -146,7 +146,7 @@ export default function FindJobs() {
          </div>
 
          {/* Horizontal Search Bar Card */}
-         <Card className="rounded-[2.5rem] border-none bg-slate-50/50 p-6 shadow-sm border border-slate-100">
+         <Card className="rounded-[2.5rem] border-none bg-blue-50/30 p-6 shadow-sm border border-blue-100/50">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                <div className="md:col-span-3 space-y-2 px-2">
                   <Label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Resume Asset</Label>
@@ -210,7 +210,7 @@ export default function FindJobs() {
                   ) : (
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {jobs.map((job, i) => (
-                           <Card key={i} className="rounded-[3.5rem] border-none bg-slate-50/30 hover:bg-white p-10 shadow-sm border border-slate-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden">
+                           <Card key={i} className="rounded-[3.5rem] border-none bg-slate-50/30 hover:bg-blue-50/10 p-10 shadow-sm border border-slate-100 hover:border-blue-600/20 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden">
                               <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:scale-110 transition-transform">
                                  <Building2 className="w-20 h-20 text-slate-900" />
                               </div>

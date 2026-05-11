@@ -60,7 +60,7 @@ export default function InterviewPrep() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
+    <div className="min-h-screen bg-white font-sans pb-20">
       <SEOHead title="Interview Prep — ResumePro" description="Practice your professional interviews with AI." />
       
       <div className="container mx-auto px-0 space-y-16 text-left">
@@ -72,25 +72,26 @@ export default function InterviewPrep() {
                   <Brain className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">Cognitive Training</span>
                </div>
-               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
-                  Practice <br /><span className="text-blue-600">Hub.</span>
+               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
+                  Practice.
                </h1>
+               <p className="text-slate-500 font-medium text-lg max-w-xl">High-fidelity simulation environments for behavioral and technical cognitive training.</p>
             </div>
          </div>
 
          {!started ? (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                <div className="lg:col-span-5">
-                  <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-12 space-y-12">
+                  <Card className="rounded-[4rem] border-none bg-blue-50/30 shadow-sm border border-blue-100/50 p-12 space-y-12 hover:bg-blue-50/50 transition-all">
                      <div className="space-y-8">
                         <div className="space-y-4">
                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Position</Label>
-                           <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-[1.5rem] bg-white dark:bg-slate-800 border-none px-6 font-bold text-lg" />
+                           <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-[1.5rem] bg-white border-slate-100 px-6 font-bold text-lg" />
                         </div>
                         <div className="space-y-4">
                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
                            <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                              <SelectTrigger className="h-16 rounded-[1.5rem] bg-white dark:bg-slate-800 border-none px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
+                              <SelectTrigger className="h-16 rounded-[1.5rem] bg-white border-slate-100 px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
                               <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
                                  {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl p-3 font-bold">{r.title}</SelectItem>)}
                               </SelectContent>
@@ -102,8 +103,8 @@ export default function InterviewPrep() {
                      </Button>
                   </Card>
                </div>
-               <div className="lg:col-span-7 flex flex-col justify-center space-y-8 px-12">
-                  <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Practice your interview.</h3>
+                <div className="lg:col-span-7 flex flex-col justify-center space-y-8 px-12">
+                   <h3 className="text-4xl font-black text-slate-900 tracking-tight">Practice your interview.</h3>
                   <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-xl">
                      Our AI simulator helps you get better at answering questions and feeling confident. 
                      Prepare for common interview questions and get feedback.
@@ -115,7 +116,7 @@ export default function InterviewPrep() {
             </motion.div>
          ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-12">
-               <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-2xl p-16 relative overflow-hidden">
+                <Card className="rounded-[4rem] border-none bg-white shadow-2xl p-16 relative overflow-hidden border border-blue-100/50">
                   <div className="absolute top-0 right-0 p-8">
                      <div className={cn("px-4 py-2 rounded-full border text-[9px] font-black uppercase tracking-widest transition-all", 
                         phase === "listening" ? "bg-blue-600 text-white border-blue-600" : "bg-slate-100 text-slate-400 border-slate-200"
@@ -137,7 +138,7 @@ export default function InterviewPrep() {
                      
                      <div className="text-center space-y-4">
                         <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">AI Voice</p>
-                        <h3 className="text-3xl font-bold text-slate-900 dark:text-white max-w-2xl leading-snug">
+                        <h3 className="text-3xl font-bold text-slate-900 max-w-2xl leading-snug">
                            {messages[messages.length - 1]?.content || "Connecting to AI practice..."}
                         </h3>
                      </div>
