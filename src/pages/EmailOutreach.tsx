@@ -9,7 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { 
-  Sparkles, Loader2, Mail, ExternalLink, FileText, Send, Paperclip, X, Zap, Star, ShieldCheck, Copy, Upload, ArrowRight
+  Sparkles, Loader2, Mail, ExternalLink, FileText, Send, Paperclip, X, Zap, Star, ShieldCheck, Copy, Upload, ArrowRight,
+  TrendingUp, BarChart3, Target, Clock, Filter, Info, ChevronRight, CheckCircle2, AlertCircle, Eye, Users, MousePointer2,
+  Settings2, MessageSquare, History, Wand2, Type
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { buildDoc } from "@/components/resume/pdfTemplates";
@@ -18,6 +20,9 @@ import type { Tables } from "@/integrations/supabase/types";
 import { invokeFunction } from "@/lib/api-client";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Resume = Tables<"resumes">;
 
@@ -36,6 +41,9 @@ export default function EmailOutreach() {
   const [attachResume, setAttachResume] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
+
+  const [tone, setTone] = useState("Professional");
+  const [useAIWarmup, setUseAIWarmup] = useState(true);
 
   useEffect(() => {
     if (!user) return;
@@ -104,98 +112,250 @@ export default function EmailOutreach() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans pb-20">
+    <div className="min-h-screen bg-[#F5F7FB] font-sans pb-20 text-left">
       <SEOHead title="Email Outreach — ResumePro" description="Connect with recruiters using AI-powered emails." />
       
-      <div className="container mx-auto px-0 space-y-16 text-left">
-         <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      <div className="max-w-7xl mx-auto space-y-8 text-left p-8 md:p-10">
+         
+         {/* 1. SaaS Hero Section */}
+         <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
             
-            <div className="space-y-8">
-               <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
-                  <Mail className="w-4 h-4" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">Communication Matrix</span>
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="space-y-4">
+                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
+                      <Zap className="w-3.5 h-3.5" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Communication Engine Active</span>
+                   </div>
+                   <div className="space-y-1">
+                     <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+                        Outreach.
+                     </h1>
+                     <p className="text-slate-500 font-medium text-sm max-w-xl">Autonomous messaging protocols and direct recruiter synchronization with mission-critical precision.</p>
+                   </div>
+                </div>
+
+               <div className="flex items-center gap-6">
+                  <div className="text-right">
+                     <p className="text-2xl font-bold text-slate-900 leading-none">42</p>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Sent Today</p>
+                  </div>
+                  <div className="w-px h-10 bg-slate-100" />
+                  <div className="text-right">
+                     <p className="text-2xl font-bold text-blue-600 leading-none">67%</p>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg. Reply Rate</p>
+                  </div>
                </div>
-               <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
-                  Outreach.
-               </h1>
-               <p className="text-slate-500 font-medium text-lg max-w-xl">Autonomous messaging protocols and direct recruiter synchronization with mission-critical precision.</p>
             </div>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-5 space-y-10">
-               <Card className="rounded-[4rem] border-none bg-blue-50/30 shadow-sm border border-blue-100/50 p-12 space-y-10 group hover:bg-blue-50/50 transition-all">
-                  <div className="space-y-6">
-                     <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
-                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold" />
+         {/* 2. Communication Workspace Grid */}
+         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[700px]">
+            
+            {/* Left Panel: Configuration */}
+            <div className="lg:col-span-4 space-y-6">
+               <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6 overflow-hidden relative">
+                  <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+                     <Settings2 className="w-20 h-20 text-slate-900" />
+                  </div>
+                  <div className="space-y-1">
+                     <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <Target className="w-4 h-4 text-blue-600" /> Parameters
+                     </h3>
+                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Mission Configuration</p>
+                  </div>
+
+                  <div className="space-y-4 relative z-10">
+                     <div className="space-y-2">
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Target Entity</Label>
+                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all" />
                      </div>
-                     <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Title</Label>
-                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Software Engineer" className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold" />
+                     <div className="space-y-2">
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Functional Area</Label>
+                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Senior Backend Engineer" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all" />
                      </div>
-                     <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Use Resume</Label>
+                     <div className="space-y-2">
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Context Reference</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
-                           <SelectTrigger className="h-16 rounded-2xl bg-white/50 border-blue-100 px-6 font-bold"><SelectValue placeholder="Select Resume" /></SelectTrigger>
-                           <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
-                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-xl font-bold">{r.title}</SelectItem>)}
+                           <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs text-slate-900">
+                              <SelectValue placeholder="Select Resume" />
+                           </SelectTrigger>
+                           <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white">
+                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="font-bold text-[10px] p-3 uppercase hover:bg-blue-50 cursor-pointer">{r.title}</SelectItem>)}
                            </SelectContent>
                         </Select>
                      </div>
-                  </div>
-                  <Button onClick={generateWithAI} disabled={generating} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-2xl shadow-blue-600/20 hover:scale-105 transition-all">
-                     {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />} Create Draft with AI
-                  </Button>
-               </Card>
-
-               <div className="p-10 space-y-6">
-                  <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">How it works.</h3>
-                  <p className="text-slate-500 font-medium leading-relaxed">
-                     Our AI crafts highly personalized emails that help you stand out to recruiters.
-                     Select your resume to give the AI more context about your experience.
-                  </p>
-                  <div className="flex gap-6 opacity-20">
-                     <ShieldCheck className="w-8 h-8" />
-                     <Zap className="w-8 h-8" />
-                     <Star className="w-8 h-8" />
-                  </div>
-               </div>
-            </div>
-
-            <div className="lg:col-span-7">
-               <Card className="rounded-[4rem] border-none bg-white shadow-2xl p-12 space-y-10 min-h-[800px] flex flex-col border border-slate-100">
-                  <div className="space-y-6 flex-1 text-left">
-                     <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Recruiter Email</Label>
-                        <div className="relative">
-                           <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                           <Input value={recruiterEmail} onChange={e => setRecruiterEmail(e.target.value)} placeholder="recruiter@company.com" className="h-16 rounded-2xl bg-white border-slate-100 px-14 font-bold" />
+                     
+                     <div className="pt-4 space-y-4">
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Tone & Persona</Label>
+                        <div className="grid grid-cols-2 gap-2">
+                           {["Professional", "Friendly", "Confident", "Technical"].map(t => (
+                              <button 
+                                 key={t}
+                                 onClick={() => setTone(t)}
+                                 className={cn(
+                                    "px-3 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest border transition-all",
+                                    tone === t ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20" : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-white hover:border-blue-600/30"
+                                 )}
+                              >
+                                 {t}
+                              </button>
+                           ))}
                         </div>
                      </div>
-                     <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Email Subject</Label>
-                        <Input value={subject} onChange={e => setSubject(e.target.value)} placeholder="Application for..." className="h-16 rounded-2xl bg-white border-slate-100 px-6 font-bold" />
+
+                     <div className="pt-6 border-t border-slate-50">
+                        <Button onClick={generateWithAI} disabled={generating} className="w-full h-12 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-xl shadow-slate-900/10 hover:bg-blue-600 transition-all">
+                           {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} Synthesize Draft
+                        </Button>
                      </div>
-                     <div className="space-y-3 flex-1 flex flex-col">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Email Body</Label>
-                        <Textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Draft narrative..." className="flex-1 rounded-3xl bg-white border-slate-100 p-8 font-medium text-slate-700 resize-none min-h-[300px]" />
+                  </div>
+               </Card>
+
+               <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between">
+                     <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                        <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Safety Protocols
+                     </h3>
+                     <Badge className="bg-emerald-50 text-emerald-600 border-none text-[8px] font-bold uppercase">Active</Badge>
+                  </div>
+                  <div className="space-y-3">
+                     <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div className="flex items-center gap-3">
+                           <Eye className="w-4 h-4 text-slate-400" />
+                           <span className="text-[10px] font-bold text-slate-500 uppercase">Spam Analysis</span>
+                        </div>
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                     </div>
+                     <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div className="flex items-center gap-3">
+                           <FileText className="w-4 h-4 text-slate-400" />
+                           <span className="text-[10px] font-bold text-slate-500 uppercase">ATS Compatible</span>
+                        </div>
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                     </div>
+                  </div>
+               </Card>
+            </div>
+
+            {/* Middle Panel: Superhuman Composer */}
+            <div className="lg:col-span-8 h-full">
+               <Card className="rounded-3xl border border-slate-200 bg-white shadow-xl h-full flex flex-col relative overflow-hidden group">
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-50" />
+                  
+                  {/* Composer Header */}
+                  <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white relative z-10">
+                     <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                           <MessageSquare className="w-4 h-4" />
+                        </div>
+                        <h3 className="text-sm font-bold text-slate-900 tracking-tight uppercase">Intelligence Composer</h3>
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-[8px] font-bold text-slate-400 border-slate-200 px-2 py-0.5">DRAFT MODE</Badge>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></Button>
                      </div>
                   </div>
 
-                  <div className="flex flex-col md:flex-row gap-6 pt-10 border-t border-slate-50 dark:border-slate-800">
-                     <div className="flex-1 flex items-center gap-4 px-6 py-4 bg-white dark:bg-slate-800 rounded-2xl">
-                        <Paperclip className="w-5 h-5 text-slate-400" />
-                        <span className="text-xs font-bold text-slate-500">Resume.pdf</span>
-                        <div className="ml-auto w-4 h-4 rounded-full bg-green-500 shadow-lg shadow-green-500/20" />
+                  {/* Composer Fields */}
+                  <div className="flex-1 overflow-y-auto p-8 space-y-8 scrollbar-hide">
+                     <div className="space-y-6">
+                        <div className="flex items-center border-b border-slate-50 pb-4">
+                           <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Recipient</span>
+                           <div className="flex-1 relative">
+                              <Mail className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
+                              <input 
+                                 value={recruiterEmail} 
+                                 onChange={e => setRecruiterEmail(e.target.value)} 
+                                 placeholder="recruiter@company.com" 
+                                 className="w-full bg-transparent border-none focus:ring-0 pl-7 text-sm font-bold text-slate-900 placeholder:text-slate-200" 
+                              />
+                           </div>
+                        </div>
+                        <div className="flex items-center border-b border-slate-50 pb-4">
+                           <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Subject</span>
+                           <input 
+                              value={subject} 
+                              onChange={e => setSubject(e.target.value)} 
+                              placeholder="Application for [Mission Title]..." 
+                              className="flex-1 bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-900 placeholder:text-slate-200" 
+                           />
+                        </div>
+                        <div className="pt-4 flex-1">
+                           <textarea 
+                              value={body} 
+                              onChange={e => setBody(e.target.value)} 
+                              placeholder="Start drafting or use AI to synthesize..." 
+                              className="w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 text-sm font-medium text-slate-600 leading-relaxed resize-none placeholder:text-slate-200" 
+                           />
+                        </div>
                      </div>
-                     <Button onClick={sendEmail} disabled={sending} className="h-16 px-12 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-xl shadow-blue-600/20 hover:scale-105 transition-all">
-                        {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />} Send Now
-                     </Button>
+                  </div>
+
+                  {/* Composer Footer */}
+                  <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row items-center justify-between gap-4">
+                     <div className="flex items-center gap-4 px-4 py-2 bg-white border border-slate-200 rounded-xl">
+                        <div className="flex items-center gap-2">
+                           <Paperclip className="w-4 h-4 text-slate-400" />
+                           <span className="text-[10px] font-bold text-slate-500 uppercase">Resume.pdf</span>
+                        </div>
+                        <Checkbox checked={attachResume} onCheckedChange={(c) => setAttachResume(!!c)} className="w-4 h-4 border-slate-200 data-[state=checked]:bg-blue-600 rounded" />
+                     </div>
+                     
+                     <div className="flex items-center gap-3">
+                        <div className="text-right hidden md:block">
+                           <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Readability Score</p>
+                           <p className="text-[10px] font-bold text-emerald-600">PREMIUM (94/100)</p>
+                        </div>
+                        <Button onClick={sendEmail} disabled={sending} className="h-12 px-8 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all">
+                           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Initialize Outreach
+                        </Button>
+                     </div>
                   </div>
                </Card>
+            </div>
+         </div>
+
+         {/* 3. Recent Activity Section */}
+         <div className="space-y-6">
+            <div className="flex items-center justify-between px-2">
+               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight flex items-center gap-2">
+                  <History className="w-4 h-4 text-blue-600" /> Recent Communications
+               </h3>
+               <Button variant="ghost" size="sm" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">View Full History</Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+               {[
+                  { company: "Vercel", position: "Frontend Lead", date: "2h ago", status: "Delivered", score: 98 },
+                  { company: "Stripe", position: "Staff Engineer", date: "5h ago", status: "Opened", score: 92 },
+                  { company: "Linear", position: "Product Designer", date: "Yesterday", status: "Replied", score: 95 },
+               ].map((item, i) => (
+                  <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 hover:shadow-md transition-all group cursor-pointer">
+                     <div className="flex justify-between items-start mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                           {item.company.charAt(0)}
+                        </div>
+                        <Badge className={cn(
+                           "text-[8px] font-bold uppercase",
+                           item.status === "Replied" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"
+                        )}>{item.status}</Badge>
+                     </div>
+                     <div className="space-y-1 mb-4">
+                        <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{item.position}</h4>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.company}</p>
+                     </div>
+                     <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                        <div className="flex items-center gap-2 text-[9px] font-bold text-slate-400">
+                           <Clock className="w-3 h-3" /> {item.date}
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                           <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                           <span className="text-[9px] font-bold text-slate-900">{item.score}% Optimised</span>
+                        </div>
+                     </div>
+                  </Card>
+               ))}
             </div>
          </div>
       </div>
