@@ -464,7 +464,6 @@ export default function FindJobs() {
             </div>
          </div>
       </div>
-      </div>
     </div>
   );
 }
