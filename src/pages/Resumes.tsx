@@ -7,7 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Plus, FileText, Trash2, Edit, MoreVertical, Sparkles, 
   Share2, Check, ExternalLink, Loader2, Search, Zap, Mail, ShieldCheck,
-  ArrowRight, Copy
+  ArrowRight, Copy, TrendingUp, Star, Clock, Filter, BarChart3,
+  ChevronRight, Download, Eye, Layers
 } from "lucide-react";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription 
@@ -19,11 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData } from "@/components/resume/types";
 import SEOHead from "@/components/SEOHead";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 type Resume = Tables<"resumes">;
 
@@ -96,154 +99,261 @@ export default function Resumes() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans pb-20 text-left">
-    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20">
+    <div className="min-h-screen bg-[#F5F7FB] font-sans pb-20 text-left">
+    <div className="max-w-7xl mx-auto space-y-8 text-left p-8 md:p-10">
       <SEOHead title="My Resumes — ResumePro" description="Create and manage your professional resumes." />
       
-      <div className="relative bg-white rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 shadow-sm">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-            
-            <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-12 mb-16">
-                <div className="space-y-8">
-                   <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
-                      <ShieldCheck className="w-4 h-4" />
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Asset Management</span>
-                   </div>
-                   <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
-                      Resumes.
-                   </h1>
-                   <p className="text-slate-500 font-medium text-lg max-w-xl">Manage your professional document matrix and synchronize with global mission objectives.</p>
+      {/* 1. SaaS Hero Section */}
+      <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
+         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+         
+         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+             <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
+                   <ShieldCheck className="w-3.5 h-3.5" />
+                   <span className="text-[10px] font-bold uppercase tracking-wider">Asset Management</span>
                 </div>
+                <div className="space-y-1">
+                  <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+                     Resumes.
+                  </h1>
+                  <p className="text-slate-500 font-medium text-sm max-w-xl">Manage your professional document matrix and synchronize with global mission objectives.</p>
+                </div>
+             </div>
 
-               <Button onClick={() => setCreateOpen(true)} className="h-14 px-8 bg-blue-600 text-white font-bold uppercase tracking-wider text-[11px] rounded-2xl shadow-xl shadow-blue-600/20 gap-3 hover:scale-105 transition-all self-center md:self-auto">
-                  <Plus className="w-4 h-4" /> Initialize Build
-               </Button>
-            </div>
-
-            <div className="relative group max-w-2xl z-10">
-               <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-               <Input placeholder="Search document matrix..." className="h-14 rounded-2xl bg-slate-50 border border-slate-200 px-14 font-medium text-sm focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all" />
+            <div className="flex items-center gap-3">
+              <Button variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                 <Download className="w-3.5 h-3.5" /> Export All
+              </Button>
+              <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
+                 <Plus className="w-3.5 h-3.5" /> New Resume
+              </Button>
             </div>
          </div>
+      </div>
 
-         {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-               {[1,2,3].map(i => (
-                  <div key={i} className="h-[450px] rounded-[4rem] bg-slate-50 animate-pulse border border-slate-100" />
-               ))}
+      {/* 2. Analytics Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+         {[
+           { label: "Total Assets", value: resumes.length, sub: "Resumes in cloud", icon: FileText, color: "text-blue-600", bg: "bg-blue-50" },
+           { label: "Avg. ATS Score", value: resumes.length > 0 ? `${Math.round(resumes.reduce((acc, r) => acc + computeResumeScore(r.resume_data as any), 0) / resumes.length)}%` : "0%", sub: "Across all builds", icon: BarChart3, color: "text-purple-600", bg: "bg-purple-50" },
+           { label: "Active Deployments", value: "3", sub: "Live applications", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
+           { label: "Asset Quality", value: "High", sub: "Optimization level", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
+         ].map((stat, i) => (
+           <Card key={i} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center gap-4">
+                 <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
+                    <stat.icon className="w-5 h-5" />
+                 </div>
+                 <div>
+                    <p className="text-lg font-bold text-slate-900 leading-none mb-1">{stat.value}</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{stat.label}</p>
+                 </div>
+              </div>
+           </Card>
+         ))}
+      </div>
+
+      {/* 3. Search & Filter Bar */}
+      <div className="flex flex-col md:flex-row items-center gap-4">
+         <div className="relative group flex-1 w-full">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+            <Input 
+              placeholder="Search document matrix..." 
+              className="h-12 rounded-xl bg-white border border-slate-200 pl-11 pr-16 font-medium text-sm focus:ring-4 focus:ring-blue-600/5 transition-all w-full" 
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-1.5 py-0.5 bg-slate-50 border border-slate-200 rounded text-[9px] font-bold text-slate-400 uppercase">
+               <span>⌘</span>
+               <span>K</span>
             </div>
-         ) : resumes.length === 0 ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-48 text-center space-y-10">
-               <div className="w-32 h-32 bg-slate-50 rounded-[3rem] border border-slate-100 flex items-center justify-center text-slate-300 mx-auto">
-                  <FileText className="w-14 h-14" />
+         </div>
+         <div className="flex items-center gap-2 w-full md:w-auto">
+            <Button variant="outline" className="h-12 px-4 rounded-xl border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-500 gap-2 hover:bg-white transition-all flex-1 md:flex-none">
+               <Filter className="w-3.5 h-3.5" /> Filter
+            </Button>
+            <Button variant="outline" className="h-12 px-4 rounded-xl border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-500 gap-2 hover:bg-white transition-all flex-1 md:flex-none">
+               <Clock className="w-3.5 h-3.5" /> Recent
+            </Button>
+         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+         {/* Main Content Grid */}
+         <div className="lg:col-span-8 space-y-8">
+            {loading ? (
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[1,2,3,4].map(i => (
+                     <div key={i} className="h-64 rounded-3xl bg-white animate-pulse border border-slate-200" />
+                  ))}
                </div>
-               <div className="space-y-4">
-                  <h3 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">No active <br /> assets found.</h3>
-                  <p className="text-lg text-slate-500 font-medium">Your document matrix is currently empty.</p>
+            ) : resumes.length === 0 ? (
+               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-24 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
+                  <div className="w-20 h-20 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-300 mx-auto">
+                     <FileText className="w-10 h-10" />
+                  </div>
+                  <div className="space-y-2">
+                     <h3 className="text-xl font-bold text-slate-900 tracking-tight">No active assets found</h3>
+                     <p className="text-sm text-slate-500 font-medium">Your document matrix is currently empty.</p>
+                  </div>
+                  <Button onClick={() => setCreateOpen(true)} className="bg-slate-900 text-white rounded-xl h-10 px-6 text-[11px] font-bold uppercase tracking-widest">Initialize First Build</Button>
+               </motion.div>
+            ) : (
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <AnimatePresence>
+                     {resumes.map((resume, i) => {
+                        const data = resume.resume_data as any as ResumeData;
+                        const score = computeResumeScore(data);
+                        return (
+                           <motion.div 
+                              key={resume.id} 
+                              initial={{ opacity: 0, y: 10 }} 
+                              animate={{ opacity: 1, y: 0 }} 
+                              transition={{ delay: i * 0.05 }}
+                           >
+                            <Card className="rounded-3xl border border-slate-200 bg-white p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between">
+                                 <div className="space-y-6 relative z-10">
+                                    <div className="flex items-start justify-between">
+                                       <div className="flex items-center gap-4">
+                                          <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                             <FileText className="w-5 h-5" />
+                                          </div>
+                                          <div>
+                                             <h3 className="text-base font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors truncate max-w-[150px]">{resume.title}</h3>
+                                             <div className="flex items-center gap-2">
+                                                <Badge variant="secondary" className="bg-emerald-50 text-emerald-600 border-emerald-100 text-[8px] px-1.5 h-4 font-bold uppercase tracking-widest">Optimized</Badge>
+                                                <span className="text-[9px] text-slate-400 font-medium">v1.2</span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <DropdownMenu>
+                                          <DropdownMenuTrigger asChild>
+                                             <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-slate-50"><MoreVertical className="w-4 h-4 text-slate-400" /></Button>
+                                          </DropdownMenuTrigger>
+                                          <DropdownMenuContent align="end" className="rounded-xl border border-slate-100 shadow-xl p-1.5 w-48 bg-white">
+                                             <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /> Edit Build</DropdownMenuItem>
+                                             <DropdownMenuItem onClick={() => { setShareId(resume.id); setShareOpen(true); }} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Share2 className="w-3.5 h-3.5" /> Share Link</DropdownMenuItem>
+                                             <DropdownMenuSeparator className="my-1.5 bg-slate-100" />
+                                             <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 text-red-500 focus:bg-red-50 cursor-pointer"><Trash2 className="w-3.5 h-3.5" /> Delete Asset</DropdownMenuItem>
+                                          </DropdownMenuContent>
+                                       </DropdownMenu>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-50">
+                                       <div className="space-y-1">
+                                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ATS Score</p>
+                                          <div className="flex items-center gap-2">
+                                             <span className="text-sm font-bold text-slate-900">{score}%</span>
+                                             <div className="flex-1 h-1 bg-slate-50 rounded-full overflow-hidden">
+                                                <div className={cn("h-full rounded-full", score > 80 ? "bg-emerald-500" : score > 50 ? "bg-blue-500" : "bg-amber-500")} style={{ width: `${score}%` }} />
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div className="space-y-1">
+                                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Target Role</p>
+                                          <p className="text-[11px] font-bold text-slate-600 truncate">Software Engineer</p>
+                                       </div>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-1.5">
+                                       {["React", "Node.js", "TypeScript"].map(tag => (
+                                          <span key={tag} className="px-2 py-0.5 bg-slate-50 text-slate-500 text-[9px] font-bold uppercase rounded-md border border-slate-100">{tag}</span>
+                                       ))}
+                                    </div>
+                                 </div>
+
+                                 <div className="pt-6 flex items-center justify-between">
+                                    <p className="text-[9px] text-slate-400 font-medium">Sync: {format(new Date(resume.updated_at), "MMM d, yyyy")}</p>
+                                    <Button onClick={() => navigate(`/builder/${resume.id}`)} variant="ghost" className="h-8 px-3 rounded-lg text-blue-600 text-[10px] font-bold uppercase tracking-wider gap-2 hover:bg-blue-50">
+                                       Open <ArrowRight className="w-3.5 h-3.5" />
+                                    </Button>
+                                 </div>
+                              </Card>
+                           </motion.div>
+                        );
+                     })}
+                  </AnimatePresence>
                </div>
-               <Button onClick={() => setCreateOpen(true)} variant="link" className="text-blue-600 font-black uppercase tracking-[0.2em] text-[11px]">Initialize First Build</Button>
-            </motion.div>
-         ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-               <AnimatePresence>
-                  {resumes.map((resume, i) => {
-                     const data = resume.resume_data as any as ResumeData;
-                     const score = computeResumeScore(data);
-                     return (
-                        <motion.div 
-                           key={resume.id} 
-                           initial={{ opacity: 0, y: 20 }} 
-                           animate={{ opacity: 1, y: 0 }} 
-                           transition={{ delay: i * 0.05 }}
-                           className="group"
-                        >
-                         <Card className="rounded-[4rem] border-none bg-slate-50/30 p-12 shadow-sm border border-slate-100 hover:border-blue-600/20 hover:bg-blue-50/10 hover:shadow-3xl hover:-translate-y-4 transition-all duration-700 relative overflow-hidden h-full flex flex-col justify-between group">
-                              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
-                              <div className="space-y-10 relative z-10">
-                                 <div className="flex items-start justify-between">
-                                    <div className="w-20 h-20 rounded-[2rem] bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform shadow-sm">
-                                       <FileText className="w-10 h-10" />
-                                    </div>
-                                    <DropdownMenu>
-                                       <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl hover:bg-slate-50"><MoreVertical className="w-6 h-6 text-slate-400" /></Button>
-                                       </DropdownMenuTrigger>
-                                       <DropdownMenuContent align="end" className="rounded-[2rem] border-none shadow-3xl p-3 w-56 bg-white">
-                                          <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Edit className="w-4 h-4" /> Edit Build</DropdownMenuItem>
-                                          <DropdownMenuItem onClick={() => { setShareId(resume.id); setShareOpen(true); }} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Share2 className="w-4 h-4" /> Share Link</DropdownMenuItem>
-                                          <DropdownMenuSeparator className="my-2 bg-slate-100" />
-                                          <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 text-red-500 focus:bg-red-50 cursor-pointer"><Trash2 className="w-4 h-4" /> Deconstruct</DropdownMenuItem>
-                                       </DropdownMenuContent>
-                                    </DropdownMenu>
-                                 </div>
+            )}
+         </div>
 
-                                 <div className="space-y-3">
-                                    <h3 className="text-3xl font-black text-slate-900 tracking-tighter leading-[1.1] group-hover:text-blue-600 transition-colors uppercase">{resume.title}</h3>
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Last Sync: {new Date(resume.updated_at).toLocaleDateString()}</p>
-                                 </div>
+         {/* Right Sidebar: Activity & Insights */}
+         <div className="lg:col-span-4 space-y-8">
+            <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+               <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                     <TrendingUp className="w-4 h-4 text-blue-600" /> Recent Activity
+                  </h3>
+                  <Badge className="bg-blue-50 text-blue-600 border-none text-[8px] font-bold uppercase">Live</Badge>
+               </div>
+               <div className="space-y-5">
+                  {[
+                    { title: "ATS Score Improved", desc: "Build 'Senior SE' +12 points", time: "2m ago", icon: Zap, color: "text-amber-500", bg: "bg-amber-50" },
+                    { title: "Asset Deployed", desc: "Application sent to Stripe", time: "1h ago", icon: Share2, color: "text-blue-500", bg: "bg-blue-50" },
+                    { title: "Optimization Sync", desc: "Keywords synchronized", time: "3h ago", icon: ShieldCheck, color: "text-emerald-500", bg: "bg-emerald-50" },
+                  ].map((act, i) => (
+                    <div key={i} className="flex gap-4 group cursor-pointer">
+                       <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110", act.bg, act.color)}>
+                          <act.icon className="w-4 h-4" />
+                       </div>
+                       <div className="space-y-1">
+                          <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{act.title}</p>
+                          <p className="text-[10px] text-slate-500 font-medium leading-tight">{act.desc}</p>
+                          <p className="text-[9px] text-slate-400 font-medium">{act.time}</p>
+                       </div>
+                    </div>
+                  ))}
+               </div>
+               <Button variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">View All Activity</Button>
+            </Card>
 
-                                 <div className="space-y-6 pt-10 border-t border-slate-50">
-                                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                                       <span>Quality Index</span>
-                                       <span className={cn(score > 70 ? "text-blue-600" : "text-amber-500")}>{score}%</span>
-                                    </div>
-                                    <div className="h-2 w-full bg-slate-50 rounded-full overflow-hidden">
-                                       <motion.div 
-                                         initial={{ width: 0 }}
-                                         animate={{ width: `${score}%` }}
-                                         transition={{ duration: 1.5, ease: "circOut" }}
-                                         className={cn("h-full rounded-full", score > 70 ? "bg-blue-600" : "bg-amber-500")}
-                                       />
-                                    </div>
-                                 </div>
-                              </div>
-
-                               <div className="pt-12 relative z-10">
-                                  <Button onClick={() => navigate(`/builder/${resume.id}`)} className="w-full h-16 rounded-[1.8rem] bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[10px] gap-4 shadow-xl shadow-blue-600/20 hover:scale-[1.02] transition-all">
-                                     Access Editor <ArrowRight className="w-4 h-4" />
-                                  </Button>
-                               </div>
-                           </Card>
-                        </motion.div>
-                     );
-                  })}
-               </AnimatePresence>
-            </div>
-         )}
+            <Card className="rounded-3xl border border-slate-200 bg-slate-900 p-6 shadow-xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
+               <div className="relative z-10 space-y-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+                     <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                     <h3 className="text-white text-sm font-bold tracking-tight">Pro Insight</h3>
+                     <p className="text-slate-400 text-[11px] leading-relaxed">Your resume matching for <span className="text-blue-400">FAANG</span> roles is currently 84% above the benchmark.</p>
+                  </div>
+                  <Button className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Optimize further</Button>
+               </div>
+            </Card>
+         </div>
       </div>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-         <DialogContent className="rounded-[3rem] p-12 border-none shadow-2xl max-w-lg">
-            <div className="space-y-8">
-               <div className="space-y-4">
-                  <DialogTitle className="text-4xl font-black tracking-tighter">New Resume</DialogTitle>
-                  <DialogDescription className="font-medium text-slate-500">Give your new resume a title to get started.</DialogDescription>
+         <DialogContent className="rounded-3xl p-8 border-none shadow-2xl max-w-lg bg-white">
+            <div className="space-y-6">
+               <div className="space-y-2">
+                  <DialogTitle className="text-2xl font-bold tracking-tight">New Resume Build</DialogTitle>
+                  <DialogDescription className="text-sm font-medium text-slate-500">Initialize a new professional identity asset.</DialogDescription>
                </div>
-               <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Resume Title</Label>
-                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-16 rounded-2xl bg-white border-none px-6 font-bold text-lg" />
+               <div className="space-y-2">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Resume Title</Label>
+                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm" />
                </div>
-               <Button onClick={handleCreate} disabled={!title.trim()} className="w-full h-20 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-2xl shadow-blue-600/20">
-                  Create Resume <Sparkles className="w-5 h-5" />
+               <Button onClick={handleCreate} disabled={!title.trim()} className="w-full h-12 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20">
+                  Initialize Build <Sparkles className="w-4 h-4" />
                </Button>
             </div>
          </DialogContent>
       </Dialog>
 
       <Dialog open={shareOpen} onOpenChange={setShareOpen}>
-         <DialogContent className="rounded-[3rem] p-12 border-none shadow-2xl max-w-lg">
-            <div className="space-y-8">
-               <div className="space-y-4">
-                  <DialogTitle className="text-4xl font-black tracking-tighter">Share Link</DialogTitle>
-                  <DialogDescription className="font-medium text-slate-500">Copy this link to share your professional profile with others.</DialogDescription>
+         <DialogContent className="rounded-3xl p-8 border-none shadow-2xl max-w-lg bg-white">
+            <div className="space-y-6">
+               <div className="space-y-2">
+                  <DialogTitle className="text-2xl font-bold tracking-tight">Share Identity</DialogTitle>
+                  <DialogDescription className="text-sm font-medium text-slate-500">Global link for professional profile synchronization.</DialogDescription>
                </div>
-               <div className="flex gap-4">
-                  <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-16 rounded-2xl bg-white border-none px-6 font-medium text-slate-500" />
-                  <Button onClick={() => copyShareLink(shareId)} className="h-16 w-16 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
-                     {copied ? <Check className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
+               <div className="flex gap-2">
+                  <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-medium text-slate-600 text-xs flex-1" />
+                  <Button onClick={() => copyShareLink(shareId)} className="h-12 w-12 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 flex items-center justify-center">
+                     {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                   </Button>
                </div>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Anyone with this link can view your profile.</p>
+               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center">Public synchronization active.</p>
             </div>
          </DialogContent>
       </Dialog>
