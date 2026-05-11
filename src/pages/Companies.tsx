@@ -314,7 +314,3 @@ export default function Companies() {
     </div>
   );
 }
-      </div>
-    </div>
-  );
-}
