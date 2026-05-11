@@ -100,7 +100,7 @@ export default function Resumes() {
       <SEOHead title="My Resumes — ResumePro" description="Create and manage your professional resumes." />
       
       <div className="container mx-auto px-0 space-y-12">
-         <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
+         <div className="relative bg-white rounded-[4rem] p-20 md:p-32 overflow-hidden border border-slate-100 shadow-sm">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-12 mb-16">

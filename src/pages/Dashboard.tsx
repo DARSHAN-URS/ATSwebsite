@@ -59,7 +59,7 @@ export default function Dashboard() {
     <div className="container mx-auto px-0 space-y-16 text-left pb-20">
       <SEOHead title="Mission Briefing — ResumePro" description="Operational overview of your career deployment." />
       
-      <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
+      <div className="relative bg-white rounded-[4rem] p-20 md:p-32 overflow-hidden border border-slate-100 shadow-sm">
          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
          
          <div className="relative z-10 space-y-8">
@@ -90,7 +90,7 @@ export default function Dashboard() {
                animate={{ opacity: 1, y: 0 }} 
                transition={{ delay: i * 0.1 }}
              >
-                <Card className="rounded-[3rem] border-none bg-slate-50/50 hover:bg-white transition-all duration-500 p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 group">
+                 <Card className="rounded-[3rem] border-none bg-blue-50/30 hover:bg-white transition-all duration-500 p-10 shadow-sm border border-blue-100/50 hover:shadow-2xl hover:-translate-y-2 group">
                    <div className="flex justify-between items-start mb-6">
                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
                       <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors">
@@ -111,7 +111,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
          {/* Application Status Breakdown */}
          <div className="lg:col-span-5">
-            <Card className="rounded-[4rem] border-none bg-slate-50/50 p-12 h-full space-y-10 relative overflow-hidden group">
+             <Card className="rounded-[4rem] border-none bg-blue-50/30 p-16 h-full space-y-12 relative overflow-hidden group border border-blue-100/50">
                <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform">
                   <BarChart3 className="w-24 h-24 text-slate-900" />
                </div>
@@ -153,7 +153,7 @@ export default function Dashboard() {
 
          {/* Job Tracker Section */}
          <div className="lg:col-span-7">
-            <Card className="rounded-[4rem] border-none bg-slate-50/50 p-12 h-full space-y-10 group">
+             <Card className="rounded-[4rem] border-none bg-slate-50/30 p-16 h-full space-y-12 group border border-slate-100">
                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="space-y-2">
                      <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Job Tracker</h2>

@@ -137,13 +137,8 @@ export default function AppLayout() {
       <main className="flex-1 min-w-0 flex flex-col bg-white">
 
         
-        <div className="flex-1 relative p-6 md:p-12 md:pt-12 overflow-y-auto">
-          <div className="bg-white rounded-[4rem] min-h-full shadow-sm border border-slate-100 overflow-hidden relative">
-             <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-             <div className="relative z-10 p-10 md:p-16">
-                <Outlet />
-             </div>
-          </div>
+        <div className="flex-1 relative overflow-y-auto bg-white p-4 md:p-12">
+           <Outlet />
         </div>
       </main>
     </div>
