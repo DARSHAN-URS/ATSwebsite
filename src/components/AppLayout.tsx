@@ -135,56 +135,9 @@ export default function AppLayout() {
       )}
 
       <main className="flex-1 min-w-0 flex flex-col bg-white">
-        {!isMobile && (
-          <header className="h-24 px-12 flex items-center justify-between sticky top-0 z-30 bg-white/80 backdrop-blur-md">
-            <div className="flex-1 max-w-xl">
-               <div className="relative group">
-                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-                  <input 
-                    type="text" 
-                    placeholder="Search mission objectives..." 
-                    className="w-full h-14 pl-14 pr-6 rounded-2xl bg-slate-50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-medium"
-                  />
-               </div>
-            </div>
-            
-            <div className="flex items-center gap-8 ml-12">
-               <div className="flex items-center gap-4 px-6 py-3 bg-slate-50 rounded-full border border-slate-100/50 shadow-sm">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                  <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">System Operational</span>
-               </div>
-               
-               <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100/50 shadow-sm hover:text-blue-600">
-                  <HelpCircle className="w-5 h-5" />
-               </Button>
-               
-               <div className="h-10 w-px bg-slate-100" />
-               
-               <Button onClick={() => navigate("/pricing")} className="h-12 px-8 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-600/20 hover:scale-105 transition-all">
-                  Upgrade Plan
-               </Button>
-            </div>
-          </header>
-        )}
 
-        {isMobile && (
-          <header className="h-20 border-b border-slate-100 bg-white px-8 flex items-center justify-between sticky top-0 z-50">
-            <div className="flex items-center gap-2" onClick={() => navigate("/")}>
-              <Logo variant="dark" className="h-8" />
-            </div>
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-2xl hover:bg-slate-100"><Menu className="h-6 w-6 text-slate-900" /></Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="p-0 border-none w-80 bg-white">
-                <SheetTitle className="sr-only">Navigation</SheetTitle>
-                <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setOpen(false)} />
-              </SheetContent>
-            </Sheet>
-          </header>
-        )}
         
-        <div className="flex-1 relative p-6 md:p-12 md:pt-4 overflow-y-auto">
+        <div className="flex-1 relative p-6 md:p-12 md:pt-12 overflow-y-auto">
           <div className="bg-white rounded-[4rem] min-h-full shadow-sm border border-slate-100 overflow-hidden relative">
              <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
              <div className="relative z-10 p-10 md:p-16">
