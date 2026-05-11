@@ -56,153 +56,214 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="container mx-auto px-0 space-y-16 text-left pb-20">
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20">
       <SEOHead title="Mission Briefing — ResumePro" description="Operational overview of your career deployment." />
       
-      <div className="relative bg-white rounded-[4rem] p-20 md:p-32 overflow-hidden border border-slate-100 shadow-sm">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      {/* 1. Compact Hero Section */}
+      <div className="relative bg-white rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 shadow-sm">
+         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
-         <div className="relative z-10 space-y-8">
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
-               <LayoutDashboard className="w-4 h-4" />
-               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Operational Command</span>
+         <div className="relative z-10 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
+               <LayoutDashboard className="w-3.5 h-3.5" />
+               <span className="text-[10px] font-bold uppercase tracking-wider">Mission Briefing</span>
             </div>
-            <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9]">
-               Mission <br /><span className="text-blue-600">Briefing.</span>
-            </h1>
-            <p className="text-slate-500 font-medium text-lg max-w-xl">Welcome back, {user?.user_metadata?.display_name || "Agent"}. Here is your current deployment status.</p>
+            <div className="space-y-1">
+              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none">
+                 Welcome back, <span className="text-blue-600">{user?.user_metadata?.display_name || "Agent"}.</span>
+              </h1>
+              <p className="text-slate-500 font-medium text-sm max-w-xl">Your professional identity deployment is currently 84% optimized. 2 new missions identified.</p>
+            </div>
          </div>
       </div>
 
-      {/* 1. Dashboard Stats Section */}
-      <section className="space-y-8 px-8">
+      {/* 2. Quick Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+         {[
+           { label: "Applications", value: stats.apps, sub: "+12% from last month", icon: Zap, color: "text-blue-600", bg: "bg-blue-50" },
+           { label: "Interviews", value: appsByStatus.filter(a => a.status === "interview").length, sub: "Scheduled this week", icon: Star, color: "text-purple-600", bg: "bg-purple-50" },
+           { label: "Resume Score", value: "92/100", sub: "ATS Optimization", icon: FileText, color: "text-emerald-600", bg: "bg-emerald-50" },
+           { label: "Response Rate", value: `${stats.responseRate}%`, sub: "Above average", icon: TrendingUp, color: "text-orange-600", bg: "bg-orange-50" },
+         ].map((s, i) => (
+           <motion.div 
+             key={i} 
+             initial={{ opacity: 0, y: 10 }} 
+             animate={{ opacity: 1, y: 0 }} 
+             transition={{ delay: i * 0.1 }}
+           >
+              <Card className="rounded-3xl border border-slate-200 bg-white hover:shadow-md transition-all duration-300 p-6 group cursor-pointer">
+                 <div className="flex justify-between items-start mb-4">
+                    <div className={cn("p-2.5 rounded-xl transition-colors", s.bg, s.color)}>
+                       <s.icon className="w-5 h-5" />
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-slate-600 transition-colors" />
+                 </div>
+                 <div className="space-y-1">
+                    <p className="text-2xl font-bold text-slate-900 tracking-tight">{s.value}</p>
+                    <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{s.label}</p>
+                    <div className="flex items-center gap-1.5 pt-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <p className="text-[10px] font-medium text-slate-500">{s.sub}</p>
+                    </div>
+                 </div>
+              </Card>
+           </motion.div>
+         ))}
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-           {[
-             { label: "Resumes", value: stats.resumes, sub: "Created resumes", icon: FileText },
-             { label: "Cover Letters", value: stats.letters, sub: "Generated letters", icon: Mail },
-             { label: "Applications", value: stats.apps, sub: "Tracked applications", icon: Zap },
-             { label: "Response Rate", value: `${stats.responseRate}%`, sub: "From tracked apps", icon: TrendingUp },
-           ].map((s, i) => (
-             <motion.div 
-               key={i} 
-               initial={{ opacity: 0, y: 20 }} 
-               animate={{ opacity: 1, y: 0 }} 
-               transition={{ delay: i * 0.1 }}
-             >
-                 <Card className="rounded-[3rem] border-none bg-blue-50/30 hover:bg-white transition-all duration-500 p-10 shadow-sm border border-blue-100/50 hover:shadow-2xl hover:-translate-y-2 group">
-                   <div className="flex justify-between items-start mb-6">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
-                      <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors">
-                         <s.icon className="w-5 h-5" />
-                      </div>
-                   </div>
-                   <div className="space-y-1">
-                      <p className="text-4xl font-black text-slate-900 tracking-tight">{s.value}</p>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.sub}</p>
-                   </div>
-                </Card>
-             </motion.div>
-           ))}
-        </div>
-      </section>
-
-      {/* 2. Application Status & Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-         {/* Application Status Breakdown */}
-         <div className="lg:col-span-5">
-             <Card className="rounded-[4rem] border-none bg-blue-50/30 p-16 h-full space-y-12 relative overflow-hidden group border border-blue-100/50">
-               <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform">
-                  <BarChart3 className="w-24 h-24 text-slate-900" />
-               </div>
-               <div className="space-y-2">
+      {/* 3. Main Dashboard Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+         
+         {/* Left Column: Activity & Jobs */}
+         <div className="lg:col-span-8 space-y-8">
+            
+            {/* Recent Activity */}
+            <Card className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+               <div className="p-6 border-b border-slate-100 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                      <Clock className="w-4 h-4 text-blue-600" />
-                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Status Metrics</h3>
+                     <h3 className="text-sm font-bold text-slate-900">Recent Activity</h3>
                   </div>
-                  <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Application Status</h2>
-                  <p className="text-slate-500 text-xs font-medium">Breakdown by current status</p>
+                  <Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors">View All</Button>
                </div>
-
-               {appsByStatus.length === 0 ? (
-                 <div className="py-20 text-center space-y-4">
-                    <p className="text-slate-400 font-bold text-sm">No applications yet. Start tracking to see stats.</p>
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">No activity to display yet.</p>
-                 </div>
-               ) : (
-                 <div className="space-y-6">
-                    {statuses.map((s, i) => (
-                      <div key={i} className="space-y-2">
-                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                            <span className="text-slate-500">{s.label}</span>
-                            <span className="text-slate-900">{s.count}</span>
-                         </div>
-                         <div className="h-2 w-full bg-white rounded-full overflow-hidden">
-                            <motion.div 
-                              initial={{ width: 0 }} 
-                              animate={{ width: stats.apps > 0 ? `${(s.count / stats.apps) * 100}%` : 0 }} 
-                              className={cn("h-full rounded-full", s.label === "Applied" ? "bg-blue-600" : s.label === "Screening" ? "bg-amber-500" : s.label === "Interview" ? "bg-purple-600" : s.label === "Offer" ? "bg-emerald-500" : "bg-rose-500")} 
-                            />
-                         </div>
-                      </div>
-                    ))}
-                 </div>
-               )}
+               <div className="p-0">
+                  {[
+                    { type: "app", title: "Applied to Senior Product Designer", company: "Stripe", time: "2 hours ago", status: "applied" },
+                    { type: "interview", title: "Interview scheduled with Engineering Team", company: "Vercel", time: "5 hours ago", status: "interview" },
+                    { type: "resume", title: "Resume 'Design_2024' score updated", company: "System", time: "1 day ago", status: "system" }
+                  ].map((activity, i) => (
+                    <div key={i} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group cursor-pointer">
+                       <div className="flex items-center gap-4">
+                          <div className={cn(
+                            "w-10 h-10 rounded-xl flex items-center justify-center",
+                            activity.type === "app" ? "bg-blue-50 text-blue-600" : activity.type === "interview" ? "bg-purple-50 text-purple-600" : "bg-emerald-50 text-emerald-600"
+                          )}>
+                             {activity.type === "app" ? <Zap className="w-4 h-4" /> : activity.type === "interview" ? <Clock className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                          </div>
+                          <div>
+                             <p className="text-[13px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{activity.title}</p>
+                             <p className="text-[11px] text-slate-500 font-medium">{activity.company} • {activity.time}</p>
+                          </div>
+                       </div>
+                       <div className={cn(
+                         "px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest",
+                         activity.status === "applied" ? "bg-blue-100 text-blue-700" : activity.status === "interview" ? "bg-purple-100 text-purple-700" : "bg-slate-100 text-slate-600"
+                       )}>
+                         {activity.status}
+                       </div>
+                    </div>
+                  ))}
+               </div>
             </Card>
+
+            {/* Job Recommendations */}
+            <div className="space-y-4">
+               <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-500" /> Job Recommendations
+                  </h3>
+                  <Link to="/jobs" className="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:underline">View Grid</Link>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[
+                    { role: "Staff UI Engineer", company: "Linear", match: "98%", salary: "$180k - $240k", tags: ["Remote", "React"] },
+                    { role: "Product Manager", company: "Notion", match: "94%", salary: "$160k - $210k", tags: ["Hybrid", "Product"] }
+                  ].map((job, i) => (
+                    <Card key={i} className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 transition-all group cursor-pointer shadow-sm">
+                       <div className="flex justify-between items-start mb-4">
+                          <div className="w-10 h-10 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
+                            {job.company.charAt(0)}
+                          </div>
+                          <div className="bg-emerald-50 text-emerald-600 px-2 py-1 rounded-lg text-[10px] font-bold">
+                             {job.match} Match
+                          </div>
+                       </div>
+                       <div className="space-y-3">
+                          <div>
+                             <p className="text-sm font-bold text-slate-900 leading-tight">{job.role}</p>
+                             <p className="text-[11px] text-slate-500 font-medium">{job.company}</p>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                             {job.tags.map(tag => (
+                               <span key={tag} className="px-2 py-0.5 bg-slate-50 text-slate-400 text-[9px] font-bold uppercase rounded-md">{tag}</span>
+                             ))}
+                          </div>
+                       </div>
+                    </Card>
+                  ))}
+               </div>
+            </div>
          </div>
 
-         {/* Job Tracker Section */}
-         <div className="lg:col-span-7">
-             <Card className="rounded-[4rem] border-none bg-slate-50/30 p-16 h-full space-y-12 group border border-slate-100">
-               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="space-y-2">
-                     <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Job Tracker</h2>
-                     <p className="text-slate-500 text-xs font-medium">Track your job applications in one place</p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                     {statuses.map((s) => (
-                       <button 
-                         key={s.label}
-                         onClick={() => setActiveFilter(s.label)}
-                         className={cn(
-                           "flex items-center gap-2 px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
-                           activeFilter === s.label ? "bg-slate-900 text-white shadow-lg" : "bg-white text-slate-400 hover:bg-slate-100"
-                         )}
-                       >
-                         {s.label} <span className={cn("px-2 py-0.5 rounded-full text-[8px]", activeFilter === s.label ? "bg-white/20 text-white" : s.color)}>{s.count}</span>
-                       </button>
-                     ))}
-                  </div>
+         {/* Right Column: Progress & Tasks */}
+         <div className="lg:col-span-4 space-y-8">
+            
+            {/* Resume Progress */}
+            <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+               <div className="flex items-center gap-3">
+                  <FileText className="w-4 h-4 text-blue-600" />
+                  <h3 className="text-sm font-bold text-slate-900">Resume Progress</h3>
                </div>
-
-               <div className="min-h-[300px] rounded-[3rem] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center p-12 text-center space-y-6">
-                  <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-slate-200 shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all">
-                     <Zap className="w-10 h-10" />
-                  </div>
-                  <div className="space-y-2">
-                     <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">No applications yet</h3>
-                     <p className="text-slate-400 text-sm font-medium">Save & track jobs from the Find Jobs page</p>
-                  </div>
-               </div>
-
-               {/* Find Jobs Promo Card */}
-               <Card className="rounded-[3rem] border-none bg-white p-10 shadow-xl shadow-slate-900/5 group/find overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-                     <div className="space-y-4 text-center md:text-left">
-                        <div className="flex items-center gap-3 justify-center md:justify-start">
-                           <Search className="w-5 h-5 text-blue-600" />
-                           <h3 className="text-xl font-black text-slate-900 tracking-tight uppercase">Find Jobs</h3>
+               <div className="space-y-6">
+                  <div className="relative pt-1">
+                     <div className="flex mb-2 items-center justify-between">
+                        <div>
+                           <span className="text-[10px] font-bold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-50">
+                              Optimization Level
+                           </span>
                         </div>
-                        <p className="text-slate-500 font-medium text-sm leading-relaxed max-w-md">
-                           Discover jobs matched to your resume using AI. Get match scores, save listings, and track your applications — all in one place.
-                        </p>
+                        <div className="text-right">
+                           <span className="text-xs font-bold inline-block text-blue-600">
+                              84%
+                           </span>
+                        </div>
                      </div>
-                     <Button asChild size="lg" className="h-16 px-10 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] gap-4 shadow-2xl shadow-slate-900/20 hover:bg-blue-600 transition-all">
-                        <Link to="/jobs">Explore Grid <ArrowUpRight className="w-4 h-4" /></Link>
-                     </Button>
+                     <div className="overflow-hidden h-1.5 mb-4 text-xs flex rounded bg-slate-100">
+                        <motion.div initial={{ width: 0 }} animate={{ width: "84%" }} transition={{ duration: 1 }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"></motion.div>
+                     </div>
                   </div>
-               </Card>
+                  <div className="space-y-3">
+                    {[
+                      { label: "Keyword Density", done: true },
+                      { label: "Action Verbs", done: true },
+                      { label: "Contact Info Matrix", done: true },
+                      { label: "Skills Synchronization", done: false }
+                    ].map((step, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <span className="text-[11px] font-medium text-slate-500">{step.label}</span>
+                        {step.done ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <div className="w-3.5 h-3.5 rounded-full border border-slate-200" />}
+                      </div>
+                    ))}
+                  </div>
+                  <Button className="w-full h-10 rounded-xl bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-all">Optimize Resume</Button>
+               </div>
+            </Card>
+
+            {/* Outreach Tasks */}
+            <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+               <div className="flex items-center gap-3">
+                  <Mail className="w-4 h-4 text-blue-600" />
+                  <h3 className="text-sm font-bold text-slate-900">Outreach Tasks</h3>
+               </div>
+               <div className="space-y-4">
+                  {[
+                    { title: "Follow up with Netflix recruiter", due: "Today", priority: "High" },
+                    { title: "Review Stripe interview invite", due: "Tomorrow", priority: "Critical" },
+                    { title: "Send letter to Meta hiring lead", due: "2 days", priority: "Medium" }
+                  ].map((task, i) => (
+                    <div key={i} className="p-3 rounded-2xl border border-slate-50 hover:border-slate-200 transition-all group cursor-pointer">
+                       <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-1">{task.title}</p>
+                       <div className="flex items-center justify-between">
+                          <span className="text-[9px] text-slate-400 font-medium">Due {task.due}</span>
+                          <span className={cn(
+                            "text-[8px] font-black uppercase tracking-widest",
+                            task.priority === "Critical" ? "text-rose-500" : task.priority === "High" ? "text-orange-500" : "text-slate-400"
+                          )}>{task.priority}</span>
+                       </div>
+                    </div>
+                  ))}
+                  <Button variant="outline" className="w-full h-10 rounded-xl border-slate-200 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">View Task Matrix</Button>
+               </div>
             </Card>
          </div>
       </div>

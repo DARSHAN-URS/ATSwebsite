@@ -102,28 +102,30 @@ export default function FindJobs() {
   const isSaved = (url: string) => savedJobs.some(sj => sj.job_url === url);
 
   return (
-    <div className="container mx-auto px-0 space-y-12 text-left pb-20">
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20">
       <SEOHead title="Find Jobs — ResumePro" description="Search and apply for jobs with AI." />
       <ApplyWithResumeDialog open={applyDialogOpen} onOpenChange={setApplyDialogOpen} job={applyingJob} resumes={resumes} onSuccess={() => appliedIds.add(applyingJob?.id || "")} />
       
-      <div className="relative bg-white rounded-[4rem] p-20 md:p-32 overflow-hidden border border-slate-100 shadow-sm">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      <div className="relative bg-white rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 shadow-sm">
+         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
-         <div className="relative z-10 space-y-8">
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600/5 rounded-full border border-blue-600/10 text-blue-600">
-               <Briefcase className="w-4 h-4" />
-               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Opportunity Scanner</span>
+         <div className="relative z-10 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
+               <Briefcase className="w-3.5 h-3.5" />
+               <span className="text-[10px] font-bold uppercase tracking-wider">Opportunity Scanner</span>
             </div>
-            <h1 className="text-7xl md:text-9xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">
-               Jobs.
-            </h1>
-            <p className="text-slate-500 font-medium text-lg max-w-xl">AI-powered job search, recruiter posts & external listings synchronized in real-time.</p>
+            <div className="space-y-1">
+              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+                 Jobs.
+              </h1>
+              <p className="text-slate-500 font-medium text-sm max-w-xl">AI-powered job search, recruiter posts & external listings synchronized in real-time.</p>
+            </div>
          </div>
       </div>
 
-      <div className="px-8 space-y-16">
+      <div className="space-y-8">
          {/* Navigation Tabs Bar */}
-         <div className="w-full h-16 p-1.5 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm flex items-center">
+         <div className="w-full h-14 p-1 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex items-center">
             {[
                { id: "ai", label: "AI Search", icon: Sparkles },
                { id: "recruiter", label: "Recruiter Posts", icon: Briefcase },
@@ -134,19 +136,19 @@ export default function FindJobs() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={cn(
-                  "flex-1 h-full flex items-center justify-center gap-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === tab.id ? "bg-slate-900 text-white shadow-xl" : "text-slate-400 hover:text-slate-900"
+                  "flex-1 h-full flex items-center justify-center gap-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all",
+                  activeTab === tab.id ? "bg-white text-slate-900 shadow-sm border border-slate-200" : "text-slate-400 hover:text-slate-900"
                   )}
                >
-                  <tab.icon className="w-4 h-4" />
+                  <tab.icon className="w-3.5 h-3.5" />
                   {tab.label}
-                  {tab.count !== undefined && <span className={cn("ml-1 px-2 py-0.5 rounded-full text-[8px]", activeTab === tab.id ? "bg-white/20" : "bg-slate-200")}>{tab.count}</span>}
+                  {tab.count !== undefined && <span className={cn("ml-1.5 px-2 py-0.5 rounded-full text-[8px]", activeTab === tab.id ? "bg-slate-900 text-white" : "bg-slate-200")}>{tab.count}</span>}
                </button>
             ))}
          </div>
 
          {/* Horizontal Search Bar Card */}
-         <Card className="rounded-[2.5rem] border-none bg-blue-50/30 p-6 shadow-sm border border-blue-100/50">
+         <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                <div className="md:col-span-3 space-y-2 px-2">
                   <Label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Resume Asset</Label>

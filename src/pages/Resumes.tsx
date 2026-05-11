@@ -97,10 +97,10 @@ export default function Resumes() {
 
   return (
     <div className="min-h-screen bg-white font-sans pb-20 text-left">
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20">
       <SEOHead title="My Resumes — ResumePro" description="Create and manage your professional resumes." />
       
-      <div className="container mx-auto px-0 space-y-12">
-         <div className="relative bg-white rounded-[4rem] p-20 md:p-32 overflow-hidden border border-slate-100 shadow-sm">
+      <div className="relative bg-white rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 shadow-sm">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-12 mb-16">
@@ -115,14 +115,14 @@ export default function Resumes() {
                    <p className="text-slate-500 font-medium text-lg max-w-xl">Manage your professional document matrix and synchronize with global mission objectives.</p>
                 </div>
 
-               <Button onClick={() => setCreateOpen(true)} className="h-20 px-12 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-3xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all mt-8 md:mt-16">
-                  <Plus className="w-5 h-5" /> Initialize Build
+               <Button onClick={() => setCreateOpen(true)} className="h-14 px-8 bg-blue-600 text-white font-bold uppercase tracking-wider text-[11px] rounded-2xl shadow-xl shadow-blue-600/20 gap-3 hover:scale-105 transition-all self-center md:self-auto">
+                  <Plus className="w-4 h-4" /> Initialize Build
                </Button>
             </div>
 
             <div className="relative group max-w-2xl z-10">
-               <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
-               <Input placeholder="Search document matrix..." className="h-20 rounded-[2.2rem] bg-slate-50 border border-slate-100 px-20 font-black text-lg focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all uppercase tracking-tight" />
+               <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+               <Input placeholder="Search document matrix..." className="h-14 rounded-2xl bg-slate-50 border border-slate-200 px-14 font-medium text-sm focus:bg-white shadow-sm focus:ring-4 focus:ring-blue-600/5 transition-all" />
             </div>
          </div>
 

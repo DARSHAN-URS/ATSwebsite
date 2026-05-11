@@ -51,17 +51,16 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   }, [user?.user_metadata?.avatar_url]);
 
   return (
-    <div className="h-full flex flex-col bg-white relative overflow-hidden p-6">
-      <div className="bg-slate-900 rounded-[3rem] h-full flex flex-col shadow-2xl shadow-slate-900/20 relative overflow-hidden">
-        <div className="p-10 pb-6">
-          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-            <Logo variant="light" className="h-10 transition-transform group-hover:scale-105" />
-          </div>
+    <div className="h-full flex flex-col bg-slate-900 relative overflow-hidden border-r border-white/5">
+      <div className="p-8">
+        <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
+          <Logo variant="light" className="h-8 transition-transform group-hover:scale-105" />
         </div>
+      </div>
 
-        <nav className="flex-1 px-4 space-y-2 overflow-y-auto custom-scrollbar pt-6">
-          <div className="px-6 mb-6">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Operational Hub</p>
+        <nav className="flex-1 px-4 space-y-1 overflow-y-auto pt-4">
+          <div className="px-4 mb-4">
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">Operational Hub</p>
           </div>
           {navItems.map((item) => (
             <NavLink
@@ -71,42 +70,54 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
               onClick={onNavClick}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center justify-between px-6 py-5 transition-all rounded-[1.8rem] group/nav relative overflow-hidden",
+                  "flex items-center justify-between px-4 py-3.5 transition-all rounded-xl group/nav relative",
                   isActive 
-                    ? "bg-blue-600 text-white shadow-2xl shadow-blue-600/30" 
+                    ? "bg-blue-600/10 text-blue-400 border-l-2 border-blue-500 shadow-[inset_0_0_20px_rgba(37,99,235,0.05)]" 
                     : "text-slate-400 hover:text-white hover:bg-white/5"
                 )
               }
             >
-              <div className="flex items-center gap-4 relative z-10">
-                 <item.icon className={cn("h-4.5 w-4.5 transition-transform group-hover/nav:scale-110", "text-current")} />
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
+              <div className="flex items-center gap-3 relative z-10">
+                 <item.icon className={cn("h-4 w-4 transition-transform group-hover/nav:scale-110", "text-current")} />
+                 <span className="text-[11px] font-medium tracking-tight">{item.label}</span>
               </div>
               {item.label === "Premium" && <Sparkles className="w-3.5 h-3.5 text-amber-400 relative z-10" />}
             </NavLink>
           ))}
+
+          <div className="pt-8 px-4 mb-4">
+            <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em]">Support & Resources</p>
+          </div>
+          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+            <HelpCircle className="w-4 h-4" />
+            <span className="text-[11px] font-medium tracking-tight">Support Center</span>
+          </button>
+          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+            <Settings className="w-4 h-4" />
+            <span className="text-[11px] font-medium tracking-tight">System Status</span>
+          </button>
         </nav>
 
 
-        <div className="p-6 pt-0">
+        <div className="p-4 border-t border-white/5">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="w-full flex items-center gap-4 p-4 rounded-[2rem] hover:bg-white/5 transition-all text-left group border border-transparent hover:border-white/5">
-                <Avatar className="h-12 w-12 border-4 border-slate-800 shadow-md transition-transform group-hover:scale-105">
+              <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-left group">
+                <Avatar className="h-9 w-9 border border-white/10">
                   <AvatarImage src={resolvedAvatarUrl || undefined} />
-                  <AvatarFallback className="bg-blue-600 text-white text-sm font-black">{displayName.charAt(0)}</AvatarFallback>
+                  <AvatarFallback className="bg-blue-600 text-white text-xs font-bold">{displayName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 overflow-hidden">
-                  <p className="text-xs font-black text-white truncate uppercase tracking-tight">{displayName}</p>
-                  <p className="text-[9px] text-blue-500 font-black uppercase tracking-[0.2em]">{role?.replace('_', ' ') || "Free Member"}</p>
+                  <p className="text-[11px] font-bold text-white truncate tracking-tight">{displayName}</p>
+                  <p className="text-[9px] text-slate-500 font-medium truncate uppercase tracking-widest">{role?.replace('_', ' ') || "Free Member"}</p>
                 </div>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" side="right" className="w-64 rounded-[2rem] p-3 border-none shadow-3xl bg-slate-900 text-white">
-              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
+            <DropdownMenuContent align="end" side="right" className="w-64 rounded-xl p-2 border border-white/10 shadow-2xl bg-slate-900 text-white">
+              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
               <DropdownMenuSeparator className="my-2 bg-white/5" />
-              <DropdownMenuItem onClick={onSignOut} className="rounded-xl p-4 font-black uppercase tracking-widest text-[9px] gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
+              <DropdownMenuItem onClick={onSignOut} className="rounded-lg p-3 text-[11px] font-medium gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -127,17 +138,17 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="flex min-h-screen bg-[#F5F7FB] font-sans selection:bg-blue-600/10 selection:text-blue-600">
       {!isMobile && (
-        <aside className="w-80 h-screen sticky top-0 overflow-hidden z-40 bg-slate-50/50">
+        <aside className="w-64 h-screen sticky top-0 overflow-hidden z-40 border-r border-slate-200">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       )}
 
-      <main className="flex-1 min-w-0 flex flex-col bg-white">
+      <main className="flex-1 min-w-0 flex flex-col bg-[#F5F7FB]">
 
         
-        <div className="flex-1 relative overflow-y-auto bg-white p-4 md:p-12">
+        <div className="flex-1 relative overflow-y-auto p-8 md:p-10">
            <Outlet />
         </div>
       </main>
