@@ -358,5 +358,6 @@ export default function Resumes() {
          </DialogContent>
       </Dialog>
     </div>
+    </div>
   );
 }
