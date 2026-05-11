@@ -345,8 +345,4 @@ export default function InterviewPrep() {
       </div>
     </div>
   );
-})}
-      </div>
-    </div>
-  );
 }
