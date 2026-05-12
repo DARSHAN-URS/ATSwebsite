@@ -67,7 +67,10 @@ export default function ModernOnboarding() {
               className="space-y-6"
             >
               <div className={`w-20 h-20 mx-auto rounded-[2rem] ${steps[step].bg} flex items-center justify-center`}>
-                <steps[step].icon className={`w-10 h-10 ${steps[step].color}`} />
+                {(() => {
+                  const Icon = steps[step].icon;
+                  return <Icon className={`w-10 h-10 ${steps[step].color}`} />;
+                })()}
               </div>
               <div className="space-y-2">
                 <h3 className="text-2xl font-black tracking-tight text-slate-900">{steps[step].title}</h3>
