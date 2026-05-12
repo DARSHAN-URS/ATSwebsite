@@ -1,9 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Plus, Trash2, GripVertical, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { CustomSection } from "./types";
+import { cn } from "@/lib/utils";
 
 interface Props {
   sections: CustomSection[];
@@ -12,88 +14,128 @@ interface Props {
 
 export default function CustomSectionsEditor({ sections, onChange }: Props) {
   const addSection = () => {
-    onChange([...sections, { id: crypto.randomUUID(), title: "", items: [""] }]);
-  };
-
-  const updateTitle = (index: number, title: string) => {
-    const updated = [...sections];
-    updated[index] = { ...updated[index], title };
-    onChange(updated);
-  };
-
-  const addItem = (sectionIndex: number) => {
-    const updated = [...sections];
-    updated[sectionIndex] = {
-      ...updated[sectionIndex],
-      items: [...updated[sectionIndex].items, ""],
+    const newSection: CustomSection = {
+      id: crypto.randomUUID(),
+      title: "New Section",
+      items: [""],
     };
-    onChange(updated);
+    onChange([...sections, newSection]);
   };
 
-  const updateItem = (sectionIndex: number, itemIndex: number, value: string) => {
-    const updated = [...sections];
-    const items = [...updated[sectionIndex].items];
-    items[itemIndex] = value;
-    updated[sectionIndex] = { ...updated[sectionIndex], items };
-    onChange(updated);
+  const removeSection = (id: string) => {
+    onChange(sections.filter((s) => s.id !== id));
   };
 
-  const removeItem = (sectionIndex: number, itemIndex: number) => {
-    const updated = [...sections];
-    updated[sectionIndex] = {
-      ...updated[sectionIndex],
-      items: updated[sectionIndex].items.filter((_, i) => i !== itemIndex),
-    };
-    onChange(updated);
+  const updateSection = (id: string, updates: Partial<CustomSection>) => {
+    onChange(sections.map((s) => (s.id === id ? { ...s, ...updates } : s)));
   };
 
-  const removeSection = (index: number) => {
-    onChange(sections.filter((_, i) => i !== index));
+  const addItem = (sectionId: string) => {
+    const section = sections.find((s) => s.id === sectionId);
+    if (section) {
+      updateSection(sectionId, { items: [...section.items, ""] });
+    }
+  };
+
+  const updateItem = (sectionId: string, index: number, value: string) => {
+    const section = sections.find((s) => s.id === sectionId);
+    if (section) {
+      const newItems = [...section.items];
+      newItems[index] = value;
+      updateSection(sectionId, { items: newItems });
+    }
+  };
+
+  const removeItem = (sectionId: string, index: number) => {
+    const section = sections.find((s) => s.id === sectionId);
+    if (section) {
+      const newItems = section.items.filter((_, i) => i !== index);
+      updateSection(sectionId, { items: newItems });
+    }
   };
 
   return (
-    <div className="space-y-4">
-      {sections.map((section, si) => (
-        <Card key={section.id}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex-1">
-                <Label className="text-xs">Section Title</Label>
-                <Input
-                  value={section.title}
-                  onChange={(e) => updateTitle(si, e.target.value)}
-                  placeholder="e.g. Certifications, Projects, Languages..."
-                  className="font-medium"
-                />
-              </div>
-              <Button variant="ghost" size="icon" className="shrink-0 mt-4" onClick={() => removeSection(si)}>
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {section.items.map((item, ii) => (
-              <div key={ii} className="flex gap-2 items-center">
-                <span className="text-muted-foreground">•</span>
-                <Input
-                  value={item}
-                  onChange={(e) => updateItem(si, ii, e.target.value)}
-                  placeholder="Add an item..."
-                  className="h-8 text-sm"
-                />
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => removeItem(si, ii)}>
-                  <X className="h-3 w-3" />
+    <div className="space-y-6">
+      <AnimatePresence mode="popLayout">
+        {sections.map((section) => (
+          <motion.div
+            key={section.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            layout
+          >
+            <Card className="border-slate-100 shadow-sm rounded-[2rem] overflow-hidden bg-white">
+              <div className="p-6 border-b border-slate-50 bg-slate-50/30 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <GripVertical className="w-4 h-4 text-slate-300" />
+                  <input
+                    value={section.title}
+                    onChange={(e) => updateSection(section.id, { title: e.target.value })}
+                    className="bg-transparent border-none p-0 focus:ring-0 text-sm font-black uppercase tracking-widest text-slate-900 w-48"
+                    placeholder="Section Title"
+                  />
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => removeSection(section.id)}
+                  className="h-8 w-8 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"
+                >
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-            ))}
-            <Button size="sm" variant="outline" onClick={() => addItem(si)} className="text-xs">
-              <Plus className="h-3 w-3 mr-1" />Add Item
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
-      <Button variant="outline" onClick={addSection} className="w-full border-dashed">
-        <Plus className="h-4 w-4 mr-2" />Add Custom Section
+              
+              <div className="p-6 space-y-4">
+                <div className="space-y-3">
+                  {section.items.map((item, index) => (
+                    <motion.div 
+                      key={index} 
+                      layout
+                      className="flex items-center gap-3 group"
+                    >
+                      <div className="flex-1 relative">
+                        <Input
+                          value={item}
+                          onChange={(e) => updateItem(section.id, index, e.target.value)}
+                          placeholder="Add an achievement or detail..."
+                          className="h-11 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-medium pr-10"
+                        />
+                        <button className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
+                          <Wand2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeItem(section.id, index)}
+                        className="h-9 w-9 rounded-xl text-slate-300 hover:text-rose-500 hover:bg-rose-50 opacity-0 group-hover:opacity-100 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => addItem(section.id)}
+                  className="w-full h-11 rounded-xl border-dashed border-slate-200 text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all font-bold text-xs gap-2"
+                >
+                  <Plus className="w-4 h-4" /> Add Item
+                </Button>
+              </div>
+            </Card>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
+      <Button
+        onClick={addSection}
+        className="w-full h-16 rounded-[2rem] border-2 border-dashed border-slate-100 bg-transparent text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all font-black uppercase tracking-widest text-[10px] gap-2"
+      >
+        <Plus className="w-4 h-4" /> Add New Section
       </Button>
     </div>
   );

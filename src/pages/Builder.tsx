@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronLeft, Sparkles, Save, Eye, Layout, Type, Grid, Settings, 
   Loader2, Zap, ZoomIn, ZoomOut, ShieldCheck, Download, Wand2, FileText,
-  Palmtree, Palette, LayoutGrid
+  Palmtree, Palette, LayoutGrid, Share2, History, RotateCcw, X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -25,10 +25,18 @@ import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
 import TemplateSelector from "@/components/resume/TemplateSelector";
 import ResumePreview from "@/components/resume/ResumePreview";
 import LanguagesEditor from "@/components/resume/LanguagesEditor";
+import ExperienceEditor from "@/components/resume/ExperienceEditor";
+import EducationEditor from "@/components/resume/EducationEditor";
 import ColorPanel from "@/components/editor/ColorPanel";
 import ResumeCompletionScore from "@/components/resume/ResumeCompletionScore";
 import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 import ResumeExportDialog from "@/components/resume/ResumeExportDialog";
+
+// New Layout Components
+import SectionNavigator from "@/components/builder/SectionNavigator";
+import ATSAnalyticsRow from "@/components/builder/ATSAnalyticsRow";
+import AIAssistantSidebar from "@/components/builder/AIAssistantSidebar";
+import ModernOnboarding from "@/components/builder/ModernOnboarding";
 
 export default function Builder() {
   const { id } = useParams();
@@ -39,8 +47,9 @@ export default function Builder() {
 
   const [loading, setLoading] = useState(!!id);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("content");
-  const [zoom, setZoom] = useState(90);
+  const [activeSection, setActiveSection] = useState("personal");
+  const [zoom, setZoom] = useState(85);
+  const [isAiThinking, setIsAiThinking] = useState(false);
 
   const [title, setTitle] = useState("Untitled Resume");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("classic");
@@ -55,6 +64,17 @@ export default function Builder() {
   });
 
   const [aiLoading, setAiLoading] = useState<string | null>(null);
+
+  // Completion Tracking for Navigator
+  const completionData = {
+    personal: !!resumeData.personalInfo?.fullName,
+    summary: !!resumeData.summary && resumeData.summary.length > 50,
+    experience: (resumeData.experience || []).length > 0,
+    education: (resumeData.education || []).length > 0,
+    skills: (resumeData.skills || []).length >= 5,
+    languages: (resumeData.languages || []).length > 0,
+    custom: (resumeData.customSections || []).length > 0,
+  };
 
   useEffect(() => {
     if (!id || !user) return;
@@ -111,184 +131,265 @@ export default function Builder() {
   };
 
   if (loading) return (
-    <div className="h-screen flex flex-col items-center justify-center bg-[#0a0f1d] space-y-6">
-      <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full shadow-2xl shadow-blue-600/20" />
-      <p className="text-white font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Initializing Workspace</p>
+    <div className="h-screen flex flex-col items-center justify-center bg-[#F5F7FB] space-y-6">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full" />
+      <p className="text-slate-900 font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Initializing Workspace</p>
     </div>
   );
 
   return (
-    <div className="h-screen flex flex-col bg-white dark:bg-[#020617] overflow-hidden font-sans text-left selection:bg-blue-600/10 selection:text-blue-600">
-      {/* Top Navigation - FlowCV Style */}
-      <header className="h-20 bg-white dark:bg-[#0a0f1d] border-b border-slate-100 dark:border-white/5 px-8 flex items-center justify-between z-40 shrink-0 premium-shadow">
-        <div className="flex items-center gap-8">
+    <div className="h-screen flex flex-col bg-[#F5F7FB] mesh-gradient-light overflow-hidden font-sans text-left">
+      <ModernOnboarding />
+      {/* Top Navigation - Premium Glass */}
+      <header className="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 flex items-center justify-between z-40 shrink-0">
+        <div className="flex items-center gap-6">
           <Link to="/resumes">
-            <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl bg-white dark:bg-white/5 hover:bg-blue-600 hover:text-white transition-all duration-500">
-              <ChevronLeft className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="w-10 h-10 rounded-xl hover:bg-slate-100">
+              <ChevronLeft className="w-5 h-5 text-slate-500" />
             </Button>
           </Link>
-          <div className="h-8 w-px bg-slate-100 dark:bg-white/5" />
+          <div className="h-6 w-px bg-slate-100" />
           <div className="flex flex-col">
             <input 
               value={title} 
               onChange={e => setTitle(e.target.value)}
-              className="text-lg font-black text-slate-900 dark:text-white tracking-tight bg-transparent border-none p-0 focus:ring-0 w-64 uppercase"
+              className="text-sm font-bold text-slate-900 bg-transparent border-none p-0 focus:ring-0 w-48"
               placeholder="Resume Title"
             />
-            <div className="flex items-center gap-2">
-              <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.1)]", saving ? "bg-amber-500 animate-pulse" : "bg-emerald-500")} />
-              <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest">{saving ? "Synchronizing" : "Saved"}</span>
+            <div className="flex items-center gap-1.5">
+              <div className={cn("w-1.5 h-1.5 rounded-full", saving ? "bg-amber-500 animate-pulse" : "bg-emerald-500")} />
+              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{saving ? "Saving..." : "All changes saved"}</span>
             </div>
           </div>
         </div>
 
-        {/* Mode Toggles */}
-        <div className="flex items-center bg-white dark:bg-white/5 p-1.5 rounded-2.5xl border border-slate-100 dark:border-white/5 shadow-inner">
-           {[
-             { id: "content", label: "Content", icon: FileText },
-             { id: "design", label: "Customize", icon: Palette },
-             { id: "templates", label: "Layout", icon: LayoutGrid },
-             { id: "ai", label: "AI Tools", icon: Wand2 },
-           ].map((tab) => (
-             <button
-               key={tab.id}
-               onClick={() => setActiveTab(tab.id)}
-               className={cn(
-                 "flex items-center gap-3 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500",
-                 activeTab === tab.id 
-                  ? "bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-xl" 
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-white"
-               )}
-             >
-               <tab.icon className="w-4 h-4" />
-               <span className="hidden md:inline">{tab.label}</span>
-             </button>
-           ))}
-        </div>
-
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="sm" className="gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+            <History className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">History</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+            <Share2 className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Share</span>
+          </Button>
+          <div className="h-6 w-px bg-slate-100 mx-2" />
           <ATSScannerDialog resumeData={resumeData} />
           <ResumeExportDialog resumeData={resumeData} title={title} templateId={selectedTemplate} colors={colors} />
         </div>
       </header>
 
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Editor Side - Modular Card System */}
-        <main className="w-full lg:w-[600px] xl:w-[700px] bg-white/50 dark:bg-[#020617] border-r border-slate-100 dark:border-white/5 flex flex-col shrink-0 z-10">
+      {/* ATS Analytics Row */}
+      <ATSAnalyticsRow score={82} keywordMatch={14} readability="Advanced" />
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Navigator */}
+        <SectionNavigator 
+          activeSection={activeSection} 
+          onSectionChange={setActiveSection}
+          completionData={completionData}
+        />
+
+        {/* Center Editor */}
+        <main className="flex-1 bg-[#F5F7FB] flex flex-col overflow-hidden">
           <ScrollArea className="flex-1">
-            <div className="p-12 space-y-12 max-w-3xl mx-auto">
-              <ResumeCompletionScore resumeData={resumeData} title={title} />
-
+            <div className="p-8 pb-32 max-w-2xl mx-auto w-full">
               <AnimatePresence mode="wait">
-                {activeTab === "content" && (
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-12 pb-20">
-                    <PersonalInfoSection personalInfo={resumeData.personalInfo || {}} onChange={info => setResumeData(prev => ({ ...prev, personalInfo: info }))} userId={user?.id || ""} />
-
-                    <Card className="rounded-[3rem] border border-slate-100 dark:border-white/5 bg-white dark:bg-[#0a0f1d] p-10 premium-shadow space-y-8">
-                       <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                             <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-blue-600/30"><Sparkles className="w-6 h-6" /></div>
-                             <div className="space-y-1 text-left">
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Professional Summary</h3>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Introduction narrative</p>
-                             </div>
-                          </div>
-                          <Button onClick={generateSummary} disabled={aiLoading === "summary"} variant="ghost" className="h-12 px-6 rounded-2xl font-black uppercase tracking-widest text-[10px] text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-600/10 gap-2">
-                             {aiLoading === "summary" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />} AI Generate
-                          </Button>
-                       </div>
-                       <Textarea 
-                          value={resumeData.summary} 
-                          onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))}
-                          placeholder="Craft a powerful professional mission statement..." 
-                          className="min-h-[250px] rounded-[2rem] bg-white dark:bg-[#020617] border-none p-8 font-medium focus:ring-2 focus:ring-blue-600/20 text-lg leading-relaxed text-left"
-                       />
-                    </Card>
-
-                    <CustomSectionsEditor sections={resumeData.customSections || []} onChange={sections => setResumeData(prev => ({ ...prev, customSections: sections }))} />
-                    
-                    <Card className="rounded-[3rem] border border-slate-100 dark:border-white/5 bg-white dark:bg-[#0a0f1d] p-10 premium-shadow space-y-8">
-                       <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-slate-900 dark:bg-white/5 rounded-2xl flex items-center justify-center text-white"><Settings className="w-6 h-6 text-blue-600" /></div>
-                          <div className="space-y-1 text-left">
-                             <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Languages</h3>
-                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Global communication</p>
-                          </div>
-                       </div>
-                       <LanguagesEditor languages={resumeData.languages || []} onChange={langs => setResumeData(prev => ({ ...prev, languages: langs }))} />
-                    </Card>
-
-                    <div className="flex justify-center pt-8">
-                       <Button onClick={() => saveResume(true)} className="h-16 px-10 rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] gap-4 shadow-2xl shadow-blue-600/40 hover:scale-105 active:scale-95 transition-all">
-                          <Save className="w-5 h-5" /> Save Changes
-                       </Button>
+                <motion.div
+                  key={activeSection}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-8"
+                >
+                  {activeSection === "personal" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Personal Information</h2>
+                        <p className="text-sm text-slate-500 font-medium">How should recruiters contact you?</p>
+                      </div>
+                      <PersonalInfoSection personalInfo={resumeData.personalInfo || {}} onChange={info => setResumeData(prev => ({ ...prev, personalInfo: info }))} userId={user?.id || ""} />
                     </div>
-                  </motion.div>
-                )}
+                  )}
 
-                {activeTab === "design" && (
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-12">
-                    <ColorPanel colors={colors} activePresetId={activePresetId} onPresetSelect={applyPreset} onColorChange={setColor} onReset={resetColors} />
-                  </motion.div>
-                )}
-
-                {activeTab === "templates" && (
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-12">
-                    <TemplateSelector selectedId={selectedTemplate} onSelect={setSelectedTemplate} />
-                  </motion.div>
-                )}
-                
-                {activeTab === "ai" && (
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                     <Card className="p-10 rounded-[3rem] bg-blue-600 text-white space-y-6 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-20"><Zap className="w-24 h-24" /></div>
-                        <h4 className="text-2xl font-black tracking-tight">AI Enhancement Suite</h4>
-                        <p className="text-sm font-medium text-blue-100/70 leading-relaxed">Optimize your resume content using our advanced neural engine. Scan for ATS compatibility, translate into multiple languages, or refine your professional narrative.</p>
-                        <div className="grid grid-cols-2 gap-4 pt-4">
-                           <Button className="h-14 rounded-2xl bg-white text-blue-600 font-black uppercase tracking-widest text-[9px] hover:bg-slate-100 shadow-xl shadow-blue-900/20">Scan Compatibility</Button>
-                           <Button className="h-14 rounded-2xl bg-blue-500 text-white font-black uppercase tracking-widest text-[9px] border border-white/20 hover:bg-blue-400">Translate Module</Button>
+                  {activeSection === "summary" && (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                          <h2 className="text-2xl font-black tracking-tight text-slate-900">Professional Summary</h2>
+                          <p className="text-sm text-slate-500 font-medium">Introduce yourself in 2-3 powerful sentences.</p>
                         </div>
-                     </Card>
-                     
-                     <div className="p-10 bg-white dark:bg-[#0a0f1d] rounded-[3rem] border border-slate-100 dark:border-white/5 space-y-4">
-                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Workspace Management</h4>
-                        <p className="text-xs text-slate-500 leading-relaxed font-medium">Export settings and data backup protocols are managed through your centralized dashboard.</p>
-                        <Button variant="outline" className="w-full h-14 rounded-2xl border-slate-200 dark:border-white/10 font-black uppercase tracking-widest text-[9px] dark:text-slate-400" onClick={() => navigate("/resumes")}>Manage All Resumes</Button>
-                     </div>
-                  </motion.div>
-                )}
+                        <Button onClick={generateSummary} disabled={aiLoading === "summary"} variant="outline" className="rounded-xl font-black uppercase tracking-widest text-[10px] gap-2 border-blue-100 text-blue-600 hover:bg-blue-50">
+                           {aiLoading === "summary" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />} AI Generate
+                        </Button>
+                      </div>
+                      <Card className="p-6 border-slate-100 shadow-sm rounded-2xl">
+                        <Textarea 
+                           value={resumeData.summary} 
+                           onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))}
+                           placeholder="Craft a powerful professional mission statement..." 
+                           className="min-h-[300px] border-none p-0 focus-visible:ring-0 text-base leading-relaxed resize-none font-medium"
+                        />
+                        <div className="mt-4 pt-4 border-t border-slate-50 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                          <span>{resumeData.summary?.length || 0} characters</span>
+                          <span className="flex items-center gap-1.5 text-blue-600"><Wand2 className="w-3 h-3" /> AI Writing Assistant Active</span>
+                        </div>
+                      </Card>
+                    </div>
+                  )}
+
+                  {activeSection === "custom" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Custom Sections</h2>
+                        <p className="text-sm text-slate-500 font-medium">Add projects, certifications, or custom categories.</p>
+                      </div>
+                      <CustomSectionsEditor sections={resumeData.customSections || []} onChange={sections => setResumeData(prev => ({ ...prev, customSections: sections }))} />
+                    </div>
+                  )}
+
+                  {activeSection === "experience" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Work Experience</h2>
+                        <p className="text-sm text-slate-500 font-medium">List your recent roles and achievements.</p>
+                      </div>
+                      <ExperienceEditor 
+                        experience={resumeData.experience || []} 
+                        onChange={exp => setResumeData(prev => ({ ...prev, experience: exp }))} 
+                      />
+                    </div>
+                  )}
+
+                  {activeSection === "education" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Education</h2>
+                        <p className="text-sm text-slate-500 font-medium">Where did you study?</p>
+                      </div>
+                      <EducationEditor 
+                        education={resumeData.education || []} 
+                        onChange={edu => setResumeData(prev => ({ ...prev, education: edu }))} 
+                      />
+                    </div>
+                  )}
+
+                  {activeSection === "skills" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Skills</h2>
+                        <p className="text-sm text-slate-500 font-medium">What are your technical and soft skills?</p>
+                      </div>
+                      <Card className="p-8 border-slate-100 shadow-sm rounded-2xl space-y-6 bg-white">
+                        <div className="flex flex-wrap gap-2">
+                          {(resumeData.skills || []).map((skill, i) => (
+                            <motion.div 
+                              key={i} 
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700 flex items-center gap-2 group hover:border-blue-200 transition-all"
+                            >
+                              {skill}
+                              <button 
+                                onClick={() => setResumeData(prev => ({ ...prev, skills: prev.skills?.filter((_, idx) => idx !== i) }))}
+                                className="text-slate-300 hover:text-rose-500 transition-colors"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </motion.div>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <Input 
+                            placeholder="Add a skill (e.g. React, Python, Leadership)..."
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                const val = e.currentTarget.value.trim();
+                                if (val) {
+                                  setResumeData(prev => ({ ...prev, skills: [...(prev.skills || []), val] }));
+                                  e.currentTarget.value = "";
+                                }
+                              }
+                            }}
+                            className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-medium"
+                          />
+                        </div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Press Enter to add skill</p>
+                      </Card>
+                    </div>
+                  )}
+
+                  {activeSection === "languages" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Languages</h2>
+                        <p className="text-sm text-slate-500 font-medium">What languages do you speak?</p>
+                      </div>
+                      <LanguagesEditor languages={resumeData.languages || []} onChange={langs => setResumeData(prev => ({ ...prev, languages: langs }))} />
+                    </div>
+                  )}
+
+                  {activeSection === "design" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Theme & Colors</h2>
+                        <p className="text-sm text-slate-500 font-medium">Personalize your resume aesthetic.</p>
+                      </div>
+                      <ColorPanel colors={colors} activePresetId={activePresetId} onPresetSelect={applyPreset} onColorChange={setColor} onReset={resetColors} />
+                    </div>
+                  )}
+
+                  {activeSection === "templates" && (
+                    <div className="space-y-6">
+                      <div className="space-y-1">
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900">Templates</h2>
+                        <p className="text-sm text-slate-500 font-medium">Choose a layout that fits your industry.</p>
+                      </div>
+                      <TemplateSelector selectedId={selectedTemplate} onSelect={setSelectedTemplate} />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between pt-12">
+                    <Button variant="ghost" className="text-xs font-bold text-slate-400 hover:text-slate-600">
+                      <RotateCcw className="w-3.5 h-3.5 mr-2" /> Reset Changes
+                    </Button>
+                    <Button onClick={() => saveResume(true)} className="h-12 px-8 rounded-xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-2 shadow-lg shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                      <Save className="w-4 h-4" /> Save Resume
+                    </Button>
+                  </div>
+                </motion.div>
               </AnimatePresence>
             </div>
           </ScrollArea>
         </main>
 
-        {/* Live Preview Side - Document Centered */}
-        <section className="flex-1 bg-slate-100/50 dark:bg-[#020617]/50 p-12 overflow-hidden relative group">
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-2 rounded-2.5xl shadow-2xl border border-white/20 dark:border-white/5 opacity-0 group-hover:opacity-100 transition-all duration-700">
-             <Button variant="ghost" size="icon" onClick={() => setZoom(z => Math.max(50, z - 10))} className="w-12 h-12 rounded-2xl text-slate-600 hover:bg-blue-600 hover:text-white transition-all"><ZoomOut className="w-5 h-5" /></Button>
-             <div className="w-px h-6 bg-slate-100 dark:bg-white/5" />
-             <span className="text-[10px] font-black text-slate-400 w-12 text-center">{zoom}%</span>
-             <div className="w-px h-6 bg-slate-100 dark:bg-white/5" />
-             <Button variant="ghost" size="icon" onClick={() => setZoom(z => Math.min(150, z + 10))} className="w-12 h-12 rounded-2xl text-slate-600 hover:bg-blue-600 hover:text-white transition-all"><ZoomIn className="w-5 h-5" /></Button>
+        {/* Right Preview */}
+        <section className="flex-1 bg-slate-200/40 flex flex-col items-center p-8 overflow-hidden relative border-l border-slate-100 group">
+          <div className="absolute top-8 right-8 z-30 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white">
+             <Button variant="ghost" size="icon" onClick={() => setZoom(z => Math.max(50, z - 10))} className="w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors"><ZoomOut className="w-4 h-4" /></Button>
+             <div className="w-px h-4 bg-slate-200 mx-1" />
+             <span className="text-[10px] font-black text-slate-400 w-10 text-center">{zoom}%</span>
+             <div className="w-px h-4 bg-slate-200 mx-1" />
+             <Button variant="ghost" size="icon" onClick={() => setZoom(z => Math.min(150, z + 10))} className="w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors"><ZoomIn className="w-4 h-4" /></Button>
           </div>
           
-          <div className="h-full flex items-start justify-center overflow-auto custom-scrollbar perspective-1000">
+          <div className="h-full w-full flex items-start justify-center overflow-auto custom-scrollbar pt-8 pb-32 perspective-2000">
             <motion.div 
-               initial={{ opacity: 0, scale: 0.9, y: 20 }}
-               animate={{ opacity: 1, scale: 1, y: 0 }}
-               transition={{ duration: 0.8, ease: "circOut" }}
                style={{ 
-                  transform: `scale(${zoom / 100})`, 
+                  scale: zoom / 100,
                   transformOrigin: "top center",
-                  transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
                }}
-               className="shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)]"
+               className="shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] rounded-sm bg-white ring-1 ring-slate-200/50 hover:shadow-[0_70px_120px_-20px_rgba(0,0,0,0.2)] transition-shadow duration-700"
             >
               <ResumePreview resumeData={resumeData} title={title} templateId={selectedTemplate} colors={colors} />
             </motion.div>
           </div>
         </section>
+
+        {/* AI Assistant Sidebar */}
+        <AIAssistantSidebar />
       </div>
     </div>
   );
 }
+
