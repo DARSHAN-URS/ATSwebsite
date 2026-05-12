@@ -72,6 +72,7 @@ const TermsOfService = () => {
            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tt.s9Title}</h2>
            <p className="font-medium text-slate-600 dark:text-slate-400">{tt.s9Content} <span className="text-blue-600 font-bold">support@atsproresumebuilder.com</span>.</p>
         </section>
+      </div>
     </div>
   );
 };
