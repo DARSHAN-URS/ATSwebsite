@@ -4,32 +4,30 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Crown, Calendar, IndianRupee } from "lucide-react";
+import { CheckCircle, Crown, Calendar, IndianRupee, Zap, ShieldCheck, ArrowRight, Loader2, Sparkles } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import { motion, AnimatePresence } from "framer-motion";
 
 const PLAN_CONFIG: Record<string, { name: string; days: number; amount: number; message: string }> = {
   pro_weekly: {
     name: "7-Day Pro",
     days: 7,
     amount: 198,
-    message:
-      "Your 7-Day Pro plan is now active. You have full access to all premium features — unlimited resumes, AI grading & tailoring, cover letter generator, and more — for the next 7 days. Make the most of your week — start building your dream resume now!",
+    message: "Your 7-Day Pro plan is now active. You have full access to all premium features for the next 7 days.",
   },
   pro_biweekly: {
     name: "14-Day Pro",
     days: 14,
     amount: 358,
-    message:
-      "Your 14-Day Pro plan is now active. Enjoy two full weeks of unlimited access to all Pro features — AI-powered resume optimization, job matching, LinkedIn import, and priority support. You've got 14 days to supercharge your job search!",
+    message: "Your 14-Day Pro plan is now active. Enjoy two full weeks of unlimited access to all Pro features.",
   },
   pro_monthly: {
     name: "Monthly Pro",
     days: 30,
     amount: 598,
-    message:
-      "Your Monthly Pro plan is now active. You now have 30 days of complete access to every premium feature — unlimited resumes, AI grading, one-click tailoring, cover letters, email outreach, and priority support. This is your month to land your dream job — let's make it happen!",
+    message: "Your Monthly Pro plan is now active. You now have 30 days of complete access to every premium feature.",
   },
 };
 
@@ -78,97 +76,142 @@ export default function PaymentSuccess() {
 
   if (!plan || !token) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-4">
-        <SEOHead title="Payment — ATS Pro Resume Builder" description="Payment confirmation page." />
-        <p className="text-muted-foreground mb-4">
-          {!token ? "Missing payment verification token. If you completed payment, please contact support." : "Invalid or missing plan information."}
-        </p>
-        <Button onClick={() => navigate("/pricing")}>Back to Pricing</Button>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+        <SEOHead title="Payment — ResumePro" description="Payment confirmation page." />
+        <div className="space-y-6 max-w-md">
+           <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-600 mx-auto">
+              <ShieldCheck className="w-8 h-8 opacity-20" />
+           </div>
+           <h2 className="text-2xl font-black uppercase tracking-tight">Verification Error</h2>
+           <p className="text-slate-500 font-medium leading-relaxed">
+             {!token ? "Missing payment verification token. If you completed payment, please contact support." : "Invalid or missing plan information."}
+           </p>
+           <Button onClick={() => navigate("/pricing")} className="h-14 px-8 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px]">Back to Pricing</Button>
+        </div>
       </div>
     );
   }
 
-  if (authLoading) {
+  if (authLoading || (activating && !error)) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-muted-foreground">
-        Loading…
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+        <div className="space-y-6">
+           <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto" />
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] animate-pulse">Initializing Premium Architecture...</p>
+        </div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-4">
-        <SEOHead title="Payment — ATS Pro Resume Builder" description="Payment confirmation page." />
-        <p className="text-muted-foreground text-center max-w-md">
-          Please sign in to activate your <strong>{plan.name}</strong> plan. Your payment has been received — once you log in, your plan will be activated automatically.
-        </p>
-        <Button onClick={() => navigate("/?login=true&redirect=" + encodeURIComponent("/payment-success?plan=" + planId))}>
-          Sign In to Activate
-        </Button>
-      </div>
-    );
-  }
-
-  if (activating && !error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-muted-foreground">
-        Activating your plan…
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+        <SEOHead title="Payment — ResumePro" description="Payment confirmation page." />
+        <div className="space-y-8 max-w-md">
+           <div className="w-20 h-20 bg-blue-50 rounded-[2rem] flex items-center justify-center text-blue-600 mx-auto shadow-2xl shadow-blue-600/10">
+              <Zap className="w-10 h-10" />
+           </div>
+           <div className="space-y-2">
+              <h2 className="text-3xl font-black uppercase tracking-tight">Activation Pending</h2>
+              <p className="text-slate-500 font-medium leading-relaxed">
+                Please sign in to activate your <strong>{plan.name}</strong> plan. Your payment has been received — once you log in, your plan will be activated automatically.
+              </p>
+           </div>
+           <Button onClick={() => navigate("/?login=true&redirect=" + encodeURIComponent("/payment-success?plan=" + planId + "&token=" + token))} className="h-16 w-full rounded-2xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] shadow-2xl shadow-blue-600/20">
+             Sign In to Activate
+           </Button>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-4">
-        <SEOHead title="Activation Error — ATS Pro Resume Builder" description="Payment activation error." />
-        <p className="text-destructive text-center max-w-md">{error}</p>
-        <Button onClick={() => navigate("/pricing")}>Back to Pricing</Button>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+        <SEOHead title="Activation Error — ResumePro" description="Payment activation error." />
+        <div className="space-y-6 max-w-md">
+           <div className="w-20 h-20 bg-rose-50 rounded-[2rem] flex items-center justify-center text-rose-600 mx-auto">
+              <ShieldCheck className="w-10 h-10" />
+           </div>
+           <div className="space-y-2">
+              <h2 className="text-2xl font-black uppercase tracking-tight">Deployment Failed</h2>
+              <p className="text-rose-600/80 font-bold uppercase text-[10px] tracking-widest">{error}</p>
+           </div>
+           <Button onClick={() => navigate("/pricing")} className="h-14 px-8 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px]">Back to Pricing</Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 py-10 bg-background">
-      <SEOHead title="Payment Successful — ATS Pro Resume Builder" description="Your Pro plan has been activated." />
-      <Card className="max-w-lg w-full border-primary/30 shadow-xl shadow-primary/10">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
-            <CheckCircle className="h-9 w-9 text-green-600 dark:text-green-400" />
-          </div>
-          <CardTitle className="text-2xl">🎉 Thank You for Subscribing!</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          <p className="text-sm text-muted-foreground text-center">{plan.message}</p>
+    <div className="min-h-screen bg-white dark:bg-slate-950 flex flex-col items-center justify-center p-8 font-sans overflow-hidden">
+      <SEOHead title="Mission Accomplished — ResumePro" description="Your Pro plan has been activated." />
+      
+      {/* Background Ambience */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-600/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-lg border p-3 text-center">
-              <Crown className="h-5 w-5 mx-auto text-primary mb-1" />
-              <p className="text-xs text-muted-foreground">Plan</p>
-              <p className="font-semibold text-sm">{plan.name}</p>
-            </div>
-            <div className="rounded-lg border p-3 text-center">
-              <Calendar className="h-5 w-5 mx-auto text-primary mb-1" />
-              <p className="text-xs text-muted-foreground">Duration</p>
-              <p className="font-semibold text-sm">{plan.days} Days</p>
-            </div>
-            <div className="rounded-lg border p-3 text-center">
-              <IndianRupee className="h-5 w-5 mx-auto text-primary mb-1" />
-              <p className="text-xs text-muted-foreground">Amount Paid</p>
-              <p className="font-semibold text-sm">₹{plan.amount}</p>
-            </div>
-            <div className="rounded-lg border p-3 text-center">
-              <Calendar className="h-5 w-5 mx-auto text-primary mb-1" />
-              <p className="text-xs text-muted-foreground">Expires On</p>
-              <p className="font-semibold text-sm">{expiresAt}</p>
-            </div>
-          </div>
+      <motion.div 
+         initial={{ opacity: 0, y: 40 }} 
+         animate={{ opacity: 1, y: 0 }}
+         className="max-w-xl w-full relative z-10"
+      >
+        <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_40px_80px_rgba(0,0,0,0.06)] overflow-hidden">
+           <div className="p-12 text-center space-y-8">
+              <div className="relative">
+                 <motion.div 
+                    initial={{ scale: 0 }} 
+                    animate={{ scale: 1 }} 
+                    transition={{ type: "spring", damping: 12, delay: 0.2 }}
+                    className="w-24 h-24 rounded-[2.5rem] bg-emerald-500 text-white flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/40 relative z-10"
+                 >
+                    <CheckCircle className="w-12 h-12" />
+                 </motion.div>
+                 <motion.div 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ delay: 0.5 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                 >
+                    <div className="w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl animate-pulse" />
+                 </motion.div>
+              </div>
 
-          <Button className="w-full gap-1.5" onClick={() => navigate("/dashboard")}>
-            <Crown className="h-4 w-4" /> Go to Dashboard
-          </Button>
-        </CardContent>
-      </Card>
+              <div className="space-y-4">
+                 <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
+                    <Crown className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Protocol Activated</span>
+                 </div>
+                 <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">
+                    Mission <br /> <span className="text-blue-600">Accomplished.</span>
+                 </h1>
+                 <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-sm mx-auto">
+                    {plan.message} Your career infrastructure is now optimized for elite performance.
+                 </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                 <div className="p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-center space-y-1">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Active Plan</p>
+                    <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{plan.name}</p>
+                 </div>
+                 <div className="p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-center space-y-1">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Expiry Date</p>
+                    <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{expiresAt || "Loading..."}</p>
+                 </div>
+              </div>
+
+              <div className="pt-8 space-y-4">
+                 <Button onClick={() => navigate("/dashboard")} className="h-20 w-full rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-[0.2em] text-[11px] gap-4 shadow-2xl hover:bg-blue-600 transition-all group">
+                    Initialize Workspace <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                 </Button>
+                 <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] flex items-center justify-center gap-2">
+                    <Sparkles className="w-3 h-3" /> System fully operational
+                 </p>
+              </div>
+           </div>
+        </Card>
+      </motion.div>
     </div>
   );
 }
