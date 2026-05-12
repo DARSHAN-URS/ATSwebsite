@@ -46,7 +46,7 @@ const NotFound = () => {
                   className="text-9xl md:text-[12rem] font-black text-slate-900 dark:text-white tracking-tighter leading-none"
                >
                   404<span className="text-blue-600">.</span>
-               </h1 >
+               </motion.h1>
                <motion.div 
                   initial={{ opacity: 0 }} 
                   animate={{ opacity: 1 }} 
