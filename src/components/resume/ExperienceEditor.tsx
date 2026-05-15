@@ -203,5 +203,4 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
       </Button>
     </div>
   );
-  );
 }

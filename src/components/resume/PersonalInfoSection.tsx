@@ -232,5 +232,3 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
     </Card>
   );
 }
-  );
-}
