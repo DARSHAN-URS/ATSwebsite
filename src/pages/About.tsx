@@ -7,6 +7,12 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { aboutTranslations } from "@/i18n/aboutTranslations";
 import { motion } from "framer-motion";
 
+import { Navbar } from "@/components/landing/Navbar";
+import { Footer } from "@/components/landing/Footer";
+
+import { Navbar } from "@/components/landing/Navbar";
+import { Footer } from "@/components/landing/Footer";
+
 export default function About() {
   const { locale } = useLanguage();
   const ta = aboutTranslations[locale];
@@ -22,14 +28,7 @@ export default function About() {
     <div className="min-h-screen bg-white dark:bg-slate-950 overflow-x-hidden">
       <SEOHead title="About — ResumePro" description="Learn about the future of career growth." />
 
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800">
-        <div className="container mx-auto flex h-20 items-center justify-between px-8">
-          <Link to="/"><Logo className="h-10" /></Link>
-          <Button asChild variant="ghost" className="rounded-xl font-bold text-slate-500 hover:text-primary">
-             <Link to="/" className="flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Home</Link>
-          </Button>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="relative pt-48 pb-32 overflow-hidden bg-white">
@@ -111,7 +110,7 @@ export default function About() {
          </div>
          <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
             <Button asChild className="h-20 px-16 bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] shadow-3xl shadow-blue-600/30 hover:scale-105 transition-all group">
-               <Link to="/" className="flex items-center gap-4">Initialize Build <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" /></Link>
+               <Link to="/auth" className="flex items-center gap-4">Initialize Build <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" /></Link>
             </Button>
             <Button asChild variant="outline" className="h-20 px-16 border-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] hover:bg-slate-50">
                <Link to="/pricing">Scale Mission</Link>
@@ -119,14 +118,7 @@ export default function About() {
          </div>
       </section>
 
-      <footer className="border-t border-slate-100 py-20 container mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-10">
-         <Logo variant="dark" className="h-10" />
-         <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">© 2026 ResumePro Dynamics. All systems operational.</p>
-         <div className="flex gap-12">
-            <Link to="/privacy" className="text-[10px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-[10px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest transition-colors">Terms</Link>
-         </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -433,7 +433,7 @@ export default function FindJobs() {
                      </div>
                   </div>
                   
-                  <Button variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Optimize My Identity</Button>
+                  <Button onClick={() => navigate("/resumes")} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Optimize My Identity</Button>
                </Card>
 
                {/* Trending Roles Card */}
@@ -453,7 +453,7 @@ export default function FindJobs() {
                      </div>
                      <div className="space-y-2">
                         {["Senior AI Engineer", "DevOps Specialist", "Product Designer"].map(role => (
-                           <div key={role} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-all cursor-pointer">
+                           <div key={role} onClick={() => toast({ title: "Market Alert", description: `Synchronizing deep search for ${role} positions.` })} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-all cursor-pointer">
                               <span className="text-[11px] font-medium text-slate-300">{role}</span>
                               <ChevronRight className="w-3 h-3 text-slate-500" />
                            </div>

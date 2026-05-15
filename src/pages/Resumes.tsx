@@ -122,9 +122,9 @@ export default function Resumes() {
              </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
-                 <Download className="w-3.5 h-3.5" /> Export All
-              </Button>
+               <Button onClick={() => toast({ title: "Export Started", description: "Your assets are being bundled for export." })} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                  <Download className="w-3.5 h-3.5" /> Export All
+               </Button>
               <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
                  <Plus className="w-3.5 h-3.5" /> New Resume
               </Button>
@@ -140,7 +140,12 @@ export default function Resumes() {
            { label: "Active Deployments", value: "3", sub: "Live applications", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
            { label: "Asset Quality", value: "High", sub: "Optimization level", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
          ].map((stat, i) => (
-           <Card key={i} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <Card key={i} onClick={() => {
+               if (stat.label === "Total Assets") navigate("/resumes");
+               if (stat.label === "Avg. ATS Score") navigate("/resumes");
+               if (stat.label === "Active Deployments") navigate("/job-tracker");
+               if (stat.label === "Asset Quality") navigate("/resumes");
+            }} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm cursor-pointer hover:border-blue-600/20 transition-all">
               <div className="flex items-center gap-4">
                  <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                     <stat.icon className="w-5 h-5" />
@@ -291,7 +296,7 @@ export default function Resumes() {
                     { title: "Asset Deployed", desc: "Application sent to Stripe", time: "1h ago", icon: Share2, color: "text-blue-500", bg: "bg-blue-50" },
                     { title: "Optimization Sync", desc: "Keywords synchronized", time: "3h ago", icon: ShieldCheck, color: "text-emerald-500", bg: "bg-emerald-50" },
                   ].map((act, i) => (
-                    <div key={i} className="flex gap-4 group cursor-pointer">
+                    <div key={i} onClick={() => navigate("/resumes")} className="flex gap-4 group cursor-pointer">
                        <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110", act.bg, act.color)}>
                           <act.icon className="w-4 h-4" />
                        </div>
@@ -303,7 +308,7 @@ export default function Resumes() {
                     </div>
                   ))}
                </div>
-               <Button variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">View All Activity</Button>
+               <Button onClick={() => navigate("/resumes")} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">View All Activity</Button>
             </Card>
 
             <Card className="rounded-3xl border border-slate-200 bg-slate-900 p-6 shadow-xl relative overflow-hidden">
@@ -316,7 +321,7 @@ export default function Resumes() {
                      <h3 className="text-white text-sm font-bold tracking-tight">Pro Insight</h3>
                      <p className="text-slate-400 text-[11px] leading-relaxed">Your resume matching for <span className="text-blue-400">FAANG</span> roles is currently 84% above the benchmark.</p>
                   </div>
-                  <Button className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Optimize further</Button>
+                  <Button onClick={() => navigate("/resumes")} className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Optimize further</Button>
                </div>
             </Card>
          </div>

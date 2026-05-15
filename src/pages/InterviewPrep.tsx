@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -27,6 +28,7 @@ type Phase = "setup" | "listening" | "thinking" | "speaking" | "idle" | "summary
 export default function InterviewPrep() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const [position, setPosition] = useState("");
   const [industry, setIndustry] = useState("");
@@ -244,7 +246,7 @@ export default function InterviewPrep() {
                         { role: "Product Manager", date: "Yesterday", score: 82 },
                         { role: "Lead UI Designer", date: "3 days ago", score: 88 }
                      ].map((session, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-100 hover:border-blue-600/30 transition-all group cursor-pointer">
+                        <div key={i} onClick={() => navigate("/resumes")} className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-100 hover:border-blue-600/30 transition-all group cursor-pointer">
                            <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
                                  <Play className="w-3.5 h-3.5" />

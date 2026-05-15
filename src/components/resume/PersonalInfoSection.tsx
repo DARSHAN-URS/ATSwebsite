@@ -68,117 +68,169 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
   };
 
   return (
-    <Card className="border-slate-100 shadow-sm rounded-[2rem] overflow-hidden bg-white">
-      <CardContent className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-          <div className="relative group">
-            <Avatar className="h-32 w-32 border-4 border-white shadow-xl">
-              {resolvedPhotoUrl ? (
-                <AvatarImage src={resolvedPhotoUrl} alt="Profile" className="object-cover" />
-              ) : null}
-              <AvatarFallback className="bg-slate-50 text-slate-300">
-                <User className="h-12 w-12" />
-              </AvatarFallback>
-            </Avatar>
-            
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-            
-            <button 
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
-              className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full border-4 border-white flex items-center justify-center text-white shadow-lg hover:scale-110 active:scale-95 transition-all"
-            >
-              <Camera className="w-4 h-4" />
-            </button>
-
-            {personalInfo.photoUrl && (
+    <Card className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)]">
+      <div className="flex flex-col lg:flex-row min-h-[600px]">
+        {/* Main Form Area */}
+        <div className="flex-1 p-12 space-y-12">
+          <div className="flex flex-col md:flex-row items-center gap-12 border-b border-slate-50 pb-12">
+            <div className="relative group">
+              <div className="w-32 h-32 rounded-[2.5rem] bg-slate-50 border-4 border-white shadow-xl overflow-hidden relative group">
+                {resolvedPhotoUrl ? (
+                  <img src={resolvedPhotoUrl} alt="Profile" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-200">
+                    <User className="w-12 h-12" />
+                  </div>
+                )}
+                {uploading && (
+                  <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                    <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                  </div>
+                )}
+              </div>
+              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
               <button 
-                onClick={removePhoto}
-                className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-rose-500 shadow-sm transition-colors"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute -bottom-2 -right-2 w-10 h-10 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-10"
               >
-                <X className="w-3.5 h-3.5" />
+                <Camera className="w-4 h-4" />
               </button>
-            )}
+            </div>
+            <div className="space-y-2 text-center md:text-left">
+               <h3 className="text-xl font-black text-slate-900 tracking-tight">Identity Image</h3>
+               <p className="text-sm text-slate-500 font-medium">Upload a professional high-resolution headshot.</p>
+               <div className="flex items-center gap-4 pt-2">
+                  <Button variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()} className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-blue-600 hover:bg-blue-50">Change Photo</Button>
+                  {personalInfo.photoUrl && <Button variant="ghost" size="sm" onClick={removePhoto} className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-rose-600 hover:bg-rose-50">Remove</Button>}
+               </div>
+            </div>
           </div>
 
-          <div className="flex-1 w-full space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <User className="w-3 h-3" /> Full Name
-                </Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Full Name</Label>
+              <div className="relative">
+                <User className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 
                   value={personalInfo.fullName || ""} 
                   onChange={(e) => update("fullName", e.target.value)} 
-                  placeholder="John Doe"
-                  className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-bold"
+                  placeholder="e.g. John Doe"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                 />
+                <Sparkles className="absolute right-6 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-blue-200 cursor-pointer hover:text-blue-600 transition-colors" />
               </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <MapPin className="w-3 h-3" /> Location
-                </Label>
+            </div>
+
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Location</Label>
+              <div className="relative">
+                <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 
                   value={personalInfo.location || ""} 
                   onChange={(e) => update("location", e.target.value)} 
-                  placeholder="San Francisco, CA"
-                  className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-bold"
+                  placeholder="e.g. San Francisco, CA"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <Mail className="w-3 h-3" /> Email
-                </Label>
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Email Vector</Label>
+              <div className="relative">
+                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 
                   value={personalInfo.email || ""} 
                   onChange={(e) => update("email", e.target.value)} 
-                  placeholder="john@example.com"
-                  className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-bold"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <Phone className="w-3 h-3" /> Phone
-                </Label>
-                <Input 
-                  value={personalInfo.phone || ""} 
-                  onChange={(e) => update("phone", e.target.value)} 
-                  placeholder="+1 (555) 000-0000"
-                  className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-bold"
+                  placeholder="e.g. john@example.com"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <Linkedin className="w-3 h-3" /> LinkedIn
-                </Label>
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Phone Link</Label>
+              <div className="relative">
+                <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
+                <Input 
+                  value={personalInfo.phone || ""} 
+                  onChange={(e) => update("phone", e.target.value)} 
+                  placeholder="e.g. +1 555-000-0000"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">LinkedIn Profile</Label>
+              <div className="relative">
+                <Linkedin className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 
                   value={personalInfo.linkedin || ""} 
                   onChange={(e) => update("linkedin", e.target.value)} 
-                  placeholder="linkedin.com/in/johndoe"
-                  className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-bold"
+                  placeholder="linkedin.com/in/username"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                 />
               </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <Globe className="w-3 h-3" /> Portfolio
-                </Label>
+            </div>
+
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Portfolio URL</Label>
+              <div className="relative">
+                <Globe className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 
                   value={personalInfo.portfolio || ""} 
                   onChange={(e) => update("portfolio", e.target.value)} 
-                  placeholder="johndoe.com"
-                  className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-bold"
+                  placeholder="yourname.com"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                 />
               </div>
             </div>
           </div>
         </div>
-      </CardContent>
+
+        {/* AI Sidebar Panel */}
+        <div className="w-full lg:w-80 bg-slate-50/50 border-l border-slate-50 p-12 space-y-8">
+           <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-600">
+                 <Sparkles className="w-4 h-4" />
+              </div>
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900">AI Data Audit</h4>
+           </div>
+
+           <div className="space-y-6">
+              {!personalInfo.fullName && (
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
+                   <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Identity missing. Please enter your full name.</p>
+                </div>
+              )}
+              {!personalInfo.linkedin && (
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
+                   <Lightbulb className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
+                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Your LinkedIn URL is missing. Adding it increases credibility.</p>
+                </div>
+              )}
+              {!personalInfo.photoUrl && (
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
+                   <Camera className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Professional photo not detected. Consider uploading one.</p>
+                </div>
+              )}
+              {personalInfo.phone && personalInfo.phone.length < 10 && (
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
+                   <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
+                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Phone formatting issue detected. Check your entry.</p>
+                </div>
+              )}
+              <div className="p-6 rounded-[2rem] bg-blue-600 text-white space-y-3 shadow-lg shadow-blue-600/20">
+                 <p className="text-[10px] font-black uppercase tracking-widest">Studio Tip</p>
+                 <p className="text-xs font-bold leading-relaxed">Ensure your email is professional. Avoid nicknames in professional blueprints.</p>
+              </div>
+           </div>
+        </div>
+      </div>
     </Card>
+  );
+}
   );
 }

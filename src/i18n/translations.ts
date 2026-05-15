@@ -41,6 +41,7 @@ const en = {
     emailOutreach: "Email Outreach",
     blog: "Blog",
     about: "About",
+    resumeTemplates: "Templates",
   },
   common: {
     save: "Save",
@@ -488,6 +489,7 @@ const ar: TranslationKeys = {
     emailOutreach: "البريد الإلكتروني",
     blog: "المدونة",
     about: "حول",
+    resumeTemplates: "القوالب",
   },
   common: {
     save: "حفظ",
@@ -925,6 +927,7 @@ const es: TranslationKeys = {
     emailOutreach: "Correo Electrónico",
     blog: "Blog",
     about: "Acerca de",
+    resumeTemplates: "Plantillas",
   },
   common: {
     save: "Guardar",
@@ -1362,6 +1365,7 @@ const fr: TranslationKeys = {
     emailOutreach: "E-mail Prospection",
     blog: "Blog",
     about: "À propos",
+    resumeTemplates: "Modèles",
   },
   common: {
     save: "Enregistrer",
@@ -1799,6 +1803,7 @@ const hi: TranslationKeys = {
     emailOutreach: "ईमेल आउटरीच",
     blog: "ब्लॉग",
     about: "हमारे बारे में",
+    resumeTemplates: "टेम्पलेट्स",
   },
   common: {
     save: "सहेजें",
@@ -2236,6 +2241,7 @@ const pt: TranslationKeys = {
     emailOutreach: "E-mail Contato",
     blog: "Blog",
     about: "Sobre",
+    resumeTemplates: "Modelos",
   },
   common: {
     save: "Salvar",
@@ -2673,6 +2679,7 @@ const de: TranslationKeys = {
     emailOutreach: "E-Mail Kontakt",
     blog: "Blog",
     about: "Über uns",
+    resumeTemplates: "Vorlagen",
   },
   common: {
     save: "Speichern",
@@ -3110,6 +3117,7 @@ const zh: TranslationKeys = {
     emailOutreach: "邮件联系",
     blog: "博客",
     about: "关于",
+    resumeTemplates: "模板",
   },
   common: {
     save: "保存",
@@ -3547,6 +3555,7 @@ const ja: TranslationKeys = {
     emailOutreach: "メール連絡",
     blog: "ブログ",
     about: "概要",
+    resumeTemplates: "テンプレート",
   },
   common: {
     save: "保存",
@@ -3984,6 +3993,7 @@ const ko: TranslationKeys = {
     emailOutreach: "이메일 연락",
     blog: "블로그",
     about: "소개",
+    resumeTemplates: "템플릿",
   },
   common: {
     save: "저장",

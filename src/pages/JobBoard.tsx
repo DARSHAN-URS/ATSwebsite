@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ interface JobPost {
 
 export default function JobBoard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
   const [jobs, setJobs] = useState<JobPost[]>([]);
@@ -77,7 +79,14 @@ export default function JobBoard() {
 
   const handleApplyClick = (e: React.MouseEvent, jobId: string) => {
     e.stopPropagation();
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to apply for this position.",
+      });
+      navigate("/auth");
+      return;
+    }
     const job = jobs.find((j) => j.id === jobId);
     if (job) {
       setApplyingJob(job);

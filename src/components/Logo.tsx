@@ -6,23 +6,41 @@ interface LogoProps {
 export default function Logo({ className = "h-12", variant = "auto" }: LogoProps) {
   return (
     <div className={`relative flex items-center select-none ${className}`}>
-      {/* Dark variant for light backgrounds (removes white bg via multiply) */}
-      <div className={`h-full ${variant === 'light' ? 'hidden' : variant === 'auto' ? 'dark:hidden' : ''}`}>
-        <img 
-          src="/images/logo-main.png" 
-          alt="ATS Pro" 
-          className="h-full w-auto object-contain mix-blend-multiply"
-        />
-      </div>
+      {/* Dark variant for light backgrounds (Knocks out white background) */}
+      <div 
+        className={`h-full w-48 ${variant === 'light' ? 'hidden' : variant === 'auto' ? 'dark:hidden' : ''}`}
+        style={{
+          backgroundColor: 'currentColor',
+          WebkitMaskImage: 'url(/images/logo-main.png)',
+          maskImage: 'url(/images/logo-main.png)',
+          WebkitMaskSize: 'contain',
+          maskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          maskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'left center',
+          maskPosition: 'left center',
+          maskMode: 'luminance',
+          WebkitMaskMode: 'luminance'
+        }}
+      />
 
-      {/* Light variant for dark backgrounds (removes black bg via screen) */}
-      <div className={`h-full ${variant === 'dark' ? 'hidden' : variant === 'auto' ? 'hidden dark:block' : variant === 'light' ? 'block' : 'hidden'}`}>
-        <img 
-          src="/images/logo-white.png" 
-          alt="ATS Pro" 
-          className="h-full w-auto object-contain mix-blend-screen"
-        />
-      </div>
+      {/* Light variant for dark backgrounds (Knocks out black background) */}
+      <div 
+        className={`h-full w-48 ${variant === 'dark' ? 'hidden' : variant === 'auto' ? 'hidden dark:block' : variant === 'light' ? 'block' : 'hidden'}`}
+        style={{
+          backgroundColor: 'white',
+          WebkitMaskImage: 'url(/images/logo-white.png)',
+          maskImage: 'url(/images/logo-white.png)',
+          WebkitMaskSize: 'contain',
+          maskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          maskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'left center',
+          maskPosition: 'left center',
+          maskMode: 'luminance',
+          WebkitMaskMode: 'luminance'
+        }}
+      />
     </div>
   );
 }

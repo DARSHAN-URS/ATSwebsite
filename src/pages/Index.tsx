@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import SEOHead from "@/components/SEOHead";
@@ -13,9 +14,11 @@ import {
 } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Card } from "@/components/ui/card";
+import { Footer } from "@/components/landing/Footer";
 
 const Index = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const yHero = useTransform(scrollY, [0, 800], [0, 150]);
@@ -26,9 +29,9 @@ const Index = () => {
   }, [user, navigate]);
 
   const stats = [
-    { label: "Talent Matrix", value: "2.4M+", icon: Users },
-    { label: "Mission Velocity", value: "98.2%", icon: Zap },
-    { label: "Global Reach", value: "140+", icon: Target },
+    { label: "Active Users", value: "2.4M+", icon: Users },
+    { label: "Success Rate", value: "98.2%", icon: Zap },
+    { label: "Countries", value: "140+", icon: Target },
   ];
 
   return (
@@ -44,10 +47,15 @@ const Index = () => {
           <div className="container mx-auto px-8 relative z-10">
              <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
                 <div className="lg:col-span-7 space-y-12">
-                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full shadow-2xl shadow-blue-600/20">
+                   <motion.button 
+                     initial={{ opacity: 0, x: -20 }} 
+                     animate={{ opacity: 1, x: 0 }} 
+                     onClick={() => toast({ title: "System Ready", description: "Our latest version 4.0 is live and ready for use." })}
+                     className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full shadow-2xl shadow-blue-600/20 hover:scale-105 transition-transform"
+                   >
                       <Rocket className="w-4 h-4" />
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Deployment v4.0 Active</span>
-                   </motion.div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">New Version 4.0 Live</span>
+                   </motion.button>
                    
                    <div className="space-y-8">
                       <motion.h1 
@@ -56,7 +64,7 @@ const Index = () => {
                         transition={{ delay: 0.1 }} 
                         className="text-6xl md:text-[7.5rem] font-black text-slate-900 tracking-tighter leading-[0.85]"
                       >
-                         Architecting <br /> <span className="text-blue-600">Careers.</span>
+                         Build Your <br /> <span className="text-blue-600">Career.</span>
                       </motion.h1>
                       <motion.p 
                         initial={{ opacity: 0, y: 20 }} 
@@ -64,7 +72,7 @@ const Index = () => {
                         transition={{ delay: 0.2 }} 
                         className="text-xl md:text-2xl text-slate-500 font-medium max-w-xl leading-relaxed"
                       >
-                         The high-fidelity infrastructure for the next generation of technology professionals. Deploy your professional identity with AI precision.
+                         The easiest way to create professional resumes and land your dream job with AI-powered tools.
                       </motion.p>
                    </div>
 
@@ -75,10 +83,10 @@ const Index = () => {
                      className="flex flex-col sm:flex-row items-center gap-6 pt-6"
                    >
                       <Button asChild size="lg" className="h-20 px-12 rounded-[2rem] bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all">
-                         <Link to="/auth">Initialize Mission <ArrowRight className="w-5 h-5" /></Link>
+                         <Link to="/auth">Start Building <ArrowRight className="w-5 h-5" /></Link>
                       </Button>
-                      <Button variant="ghost" size="lg" className="h-20 px-12 rounded-[2rem] border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-xs gap-4 hover:bg-slate-50 transition-all">
-                         View Blueprints
+                      <Button asChild variant="ghost" size="lg" className="h-20 px-12 rounded-[2rem] border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-xs gap-4 hover:bg-slate-50 transition-all">
+                         <Link to="/resume-templates">See Templates</Link>
                       </Button>
                    </motion.div>
 
@@ -104,8 +112,8 @@ const Index = () => {
                       <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
                          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
                          <img 
-                           src="/images/architect-hero.png" 
-                           alt="Operational Intelligence" 
+                           src="/images/resume-editor-hero.png" 
+                           alt="Resume Intelligence Editor" 
                            className="w-full h-auto grayscale-0 group-hover:scale-105 transition-transform duration-1000" 
                          />
                       </div>
@@ -116,12 +124,12 @@ const Index = () => {
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                         className="absolute -left-12 bottom-20 p-8 bg-white rounded-[2.5rem] shadow-3xl border border-slate-50 z-20 space-y-4"
                       >
-                         <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
-                            <TrendingUp className="w-6 h-6" />
+                         <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                            <Sparkles className="w-6 h-6" />
                          </div>
                          <div className="space-y-1">
-                            <p className="text-xs font-black uppercase tracking-widest text-slate-400">Success Factor</p>
-                            <p className="text-3xl font-black text-slate-900">92.4%</p>
+                            <p className="text-xs font-black uppercase tracking-widest text-slate-400">ATS Match Score</p>
+                            <p className="text-3xl font-black text-slate-900">98.2%</p>
                          </div>
                       </motion.div>
                    </motion.div>
@@ -167,12 +175,12 @@ const Index = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                {[
-                 { title: "Neural Builder", desc: "Crafting resumes with algorithmic precision and keyword density optimization.", icon: Sparkles, color: "text-blue-600", bg: "bg-blue-50" },
-                 { title: "Talent Search", desc: "Access the global grid of opportunities across 1.2M verified enterprises.", icon: Search, color: "text-indigo-600", bg: "bg-indigo-50" },
-                 { title: "Outreach Ops", desc: "Autonomous messaging protocols directly into hiring manager decision systems.", icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
-                 { title: "Interview Labs", desc: "High-fidelity simulation environments for behavioral and technical training.", icon: Target, color: "text-emerald-600", bg: "bg-emerald-50" },
-                 { title: "Data Analytics", desc: "Real-time synchronization of application velocity and conversion metrics.", icon: BarChart3, color: "text-amber-600", bg: "bg-amber-50" },
-                 { title: "Security Core", desc: "Enterprise-grade encryption protecting your most valuable professional data.", icon: ShieldCheck, color: "text-rose-600", bg: "bg-rose-50" }
+                 { title: "AI Resume Builder", desc: "Create perfect resumes with AI-powered keyword optimization.", icon: Sparkles, color: "text-blue-600", bg: "bg-blue-50" },
+                 { title: "Job Search", desc: "Find the best opportunities from over 1.2M verified companies.", icon: Search, color: "text-indigo-600", bg: "bg-indigo-50" },
+                 { title: "Email Assistant", desc: "Send professional messages directly to hiring managers.", icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
+                 { title: "Interview Practice", desc: "Prepare for your interviews with high-quality AI simulations.", icon: Target, color: "text-emerald-600", bg: "bg-emerald-50" },
+                 { title: "Track Progress", desc: "See your job application status and success rates in real-time.", icon: BarChart3, color: "text-amber-600", bg: "bg-amber-50" },
+                 { title: "Safe & Secure", desc: "Your personal data is protected with bank-grade security.", icon: ShieldCheck, color: "text-rose-600", bg: "bg-rose-50" }
                ].map((f, i) => (
                   <motion.div 
                     key={i} 
@@ -210,10 +218,10 @@ const Index = () => {
                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">Global Ready</span>
                      </div>
                      <h2 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] uppercase">
-                        Scale <br /> <span className="text-blue-500">Faster.</span>
+                        Grow <br /> <span className="text-blue-500">Faster.</span>
                      </h2>
                      <p className="text-xl text-slate-400 font-medium max-w-lg leading-relaxed">
-                        Access the world's most advanced career infrastructure. Start building your professional matrix today.
+                        Use the world's most advanced tools for your career. Start building your future today.
                      </p>
                      <Button asChild size="lg" className="h-20 px-12 rounded-[2rem] bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[11px] gap-4 shadow-3xl shadow-blue-600/30 group">
                         <Link to="/auth">Get Started Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></Link>
@@ -280,73 +288,10 @@ const Index = () => {
          </div>
       </section>
 
-      {/* Architectural Footer */}
-      <footer className="py-40 bg-white border-t border-slate-50 relative overflow-hidden">
-         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-         <div className="container mx-auto px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-20">
-               <div className="lg:col-span-2 space-y-12">
-                  <Logo variant="dark" className="h-16" />
-                  <p className="text-slate-500 font-medium leading-relaxed max-w-sm text-lg">
-                     The high-fidelity standard for professional career infrastructure. Architecting the future of human talent deployment.
-                  </p>
-                  <div className="flex gap-6">
-                     {[1, 2, 3, 4].map(i => (
-                        <div key={i} className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-600/20 transition-all cursor-pointer">
-                           <Globe className="w-5 h-5" />
-                        </div>
-                     ))}
-                  </div>
-               </div>
-               
-               <div className="space-y-10">
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Infrastructure</h4>
-                  <ul className="space-y-6">
-                     <li><Link to="/builder" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Neural Builder</Link></li>
-                     <li><Link to="/jobs" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Talent Grid</Link></li>
-                     <li><Link to="/interview-prep" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Interview Labs</Link></li>
-                     <li><Link to="/email-outreach" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Outreach Ops</Link></li>
-                  </ul>
-               </div>
-
-               <div className="space-y-10">
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Resources</h4>
-                  <ul className="space-y-6">
-                     <li><Link to="/blog" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Intelligence Blog</Link></li>
-                     <li><Link to="/pricing" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Mission Scaling</Link></li>
-                     <li><Link to="/contact" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">Support Operations</Link></li>
-                     <li><Link to="/about" className="text-slate-500 hover:text-blue-600 font-black text-[11px] uppercase tracking-widest transition-colors">The Vision</Link></li>
-                  </ul>
-               </div>
-
-               <div className="space-y-10">
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Status</h4>
-                  <div className="p-10 rounded-[3rem] bg-slate-900 space-y-6 shadow-2xl">
-                     <div className="flex items-center gap-3">
-                        <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.8)] animate-pulse" />
-                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Operational</span>
-                     </div>
-                     <div className="space-y-2">
-                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Global Latency</p>
-                        <p className="text-xl font-black text-white tracking-tighter">24.2ms</p>
-                     </div>
-                     <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div className="h-full w-[98%] bg-blue-600" />
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-40 pt-20 border-t border-slate-100">
-               <div className="flex gap-12">
-                  <Link to="/privacy" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">Privacy Protocols</Link>
-                  <Link to="/terms" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">Service Terms</Link>
-                  <Link to="/cookies" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">Cookie Policy</Link>
-               </div>
-               <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">© 2026 ResumePro Infrastructure Dynamics. Deploying v4.0.82</p>
-            </div>
-         </div>
-      </footer>
+      <Footer />
+    </div>
+  );
+};
     </div>
   );
 };

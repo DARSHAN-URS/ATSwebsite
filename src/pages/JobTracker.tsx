@@ -133,7 +133,7 @@ export default function JobTracker() {
              </div>
              <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Pipeline is clear.</h3>
              <p className="text-slate-400 font-medium max-w-sm mt-3 mb-12">Your career pipeline is currently idle. Let's initialize new tracks from the job board.</p>
-             <Button onClick={() => window.location.href = "/jobs"} className="bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] h-16 px-12 rounded-2xl shadow-xl shadow-blue-600/20">Discovery Engine</Button>
+             <Button onClick={() => navigate("/job-board")} className="bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] h-16 px-12 rounded-2xl shadow-xl shadow-blue-600/20">Discovery Engine</Button>
           </Card>
         ) : (
           <div className="space-y-6">

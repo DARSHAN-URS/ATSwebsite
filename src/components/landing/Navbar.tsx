@@ -2,13 +2,16 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronRight, Sparkles } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/i18n/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,10 +22,10 @@ export const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Templates", path: "/resume-templates" },
-    { name: "Interview Prep", path: "/interview-preparation" },
-    { name: "Pricing", path: "/pricing" },
-    { name: "Blog", path: "/blog" },
+    { name: t.nav.resumeTemplates, path: "/resume-templates" },
+    { name: t.nav.interviewPrep, path: "/interview-preparation" },
+    { name: t.nav.pricing, path: "/pricing" },
+    { name: t.nav.blog, path: "/blog" },
   ];
 
   return (
@@ -42,7 +45,7 @@ export const Navbar = () => {
           )}
         >
           <Link to="/" className="flex items-center gap-3 group">
-            <Logo variant={isScrolled ? "auto" : "dark"} className="h-12" />
+            <Logo variant={isScrolled ? "auto" : "dark"} className="h-14" />
           </Link>
 
           {/* Desktop Menu */}
@@ -59,26 +62,30 @@ export const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
+            <LanguageSwitcher />
             <Link to="/auth">
               <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-600">
-                Log in
+                {t.nav.logIn}
               </Button>
             </Link>
             <Link to="/auth">
               <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-[0.2em] text-[10px] rounded-[1.5rem] px-10 h-14 shadow-2xl shadow-slate-900/20 group">
-                Join Now
+                {t.nav.getStarted}
                 <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button
-            className="lg:hidden text-slate-900 dark:text-white p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="lg:hidden flex items-center gap-4">
+            <LanguageSwitcher className="h-9 px-3" />
+            <button
+              className="text-slate-900 dark:text-white p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -103,10 +110,10 @@ export const Navbar = () => {
                 </Link>
               ))}
               <div className="h-px bg-slate-100 dark:bg-slate-800 my-2" />
-              <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-slate-900 dark:text-white">Log in</Link>
+              <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-slate-900 dark:text-white">{t.nav.logIn}</Link>
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full bg-primary text-white font-black uppercase tracking-widest text-xs h-14 rounded-2xl">
-                  Get Started
+                  {t.nav.getStarted}
                 </Button>
               </Link>
             </div>

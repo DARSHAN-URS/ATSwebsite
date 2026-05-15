@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState, useEffect } from "react";
@@ -18,12 +19,12 @@ import Logo from "@/components/Logo";
 
 const jobSeekerNav = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/resumes", icon: FileText, label: "Resumes" },
+  { to: "/resumes", icon: FileText, label: "My Resumes" },
   { to: "/jobs", icon: Search, label: "Find Jobs" },
   { to: "/companies", icon: Building2, label: "Companies" },
-  { to: "/email-outreach", icon: Mail, label: "Outreach" },
-  { to: "/interview-prep", icon: Headphones, label: "Practice Hub" },
-  { to: "/pricing", icon: CreditCard, label: "Premium" },
+  { to: "/email-outreach", icon: Mail, label: "Email Outreach" },
+  { to: "/interview-prep", icon: Headphones, label: "Interview Prep" },
+  { to: "/pricing", icon: CreditCard, label: "Upgrade" },
 ];
 
 const recruiterNav = [
@@ -37,6 +38,27 @@ const recruiterNav = [
 function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut: () => void; onNavClick?: () => void; }) {
   const { role } = useUserRole();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { t } = useLanguage();
+  
+  const jobSeekerNav = [
+    { to: "/dashboard", icon: LayoutDashboard, label: t.nav.dashboard },
+    { to: "/resumes", icon: FileText, label: t.nav.resumes },
+    { to: "/jobs", icon: Search, label: t.nav.findJobs },
+    { to: "/companies", icon: Building2, label: t.nav.companies },
+    { to: "/email-outreach", icon: Mail, label: t.nav.emailOutreach },
+    { to: "/interview-prep", icon: Headphones, label: t.nav.interviewPrep },
+    { to: "/pricing", icon: CreditCard, label: t.nav.pricing },
+  ];
+
+  const recruiterNav = [
+    { to: "/dashboard", icon: LayoutDashboard, label: t.nav.dashboard },
+    { to: "/recruiter/company", icon: Building2, label: t.nav.companyProfile },
+    { to: "/recruiter/jobs", icon: Briefcase, label: t.nav.jobBoard },
+    { to: "/recruiter/candidates", icon: Users, label: t.nav.candidates },
+    { to: "/recruiter/analytics", icon: BarChart3, label: t.nav.analytics },
+  ];
+
   const navItems = role === "recruiter" ? recruiterNav : jobSeekerNav;
   const displayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
   const [resolvedAvatarUrl, setResolvedAvatarUrl] = useState<string | null>(null);
@@ -54,13 +76,13 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
     <div className="h-full flex flex-col bg-slate-900 relative overflow-hidden border-r border-white/5">
       <div className="p-8">
         <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-          <Logo variant="light" className="h-8 transition-transform group-hover:scale-105" />
+          <Logo variant="light" className="h-10 transition-transform group-hover:scale-105" />
         </div>
       </div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto pt-4">
-          <div className="px-4 mb-4">
-            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">Operational Hub</p>
+          <div className="px-4 mb-4 flex items-center justify-between">
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">{t.common?.mainMenu || "Main Menu"}</p>
           </div>
           {navItems.map((item) => (
             <NavLink
@@ -81,21 +103,20 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
                  <item.icon className={cn("h-4 w-4 transition-transform group-hover/nav:scale-110", "text-current")} />
                  <span className="text-[11px] font-medium tracking-tight">{item.label}</span>
               </div>
-              {item.label === "Premium" && <Sparkles className="w-3.5 h-3.5 text-amber-400 relative z-10" />}
             </NavLink>
           ))}
 
           <div className="pt-8 px-4 mb-4">
-            <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em]">Support & Resources</p>
+            <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em]">{t.common?.support || "Help & Support"}</p>
           </div>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+          <button onClick={() => navigate("/contact")} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all text-left">
             <HelpCircle className="w-4 h-4" />
-            <span className="text-[11px] font-medium tracking-tight">Support Center</span>
+            <span className="text-[11px] font-medium tracking-tight">{t.nav.about} / {t.nav.blog}</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
-            <Settings className="w-4 h-4" />
-            <span className="text-[11px] font-medium tracking-tight">System Status</span>
-          </button>
+          
+          <div className="px-4 py-4">
+             <LanguageSwitcher className="w-full justify-start bg-white/5 border-white/5 text-slate-300 hover:bg-white/10 hover:text-white" />
+          </div>
         </nav>
 
 
@@ -114,10 +135,10 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" side="right" className="w-64 rounded-xl p-2 border border-white/10 shadow-2xl bg-slate-900 text-white">
-              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><Settings className="w-4 h-4" /> Profile Settings</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><CreditCard className="w-4 h-4" /> Subscription</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><Settings className="w-4 h-4" /> {t.common?.edit || "Settings"}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><CreditCard className="w-4 h-4" /> {t.nav.pricing}</DropdownMenuItem>
               <DropdownMenuSeparator className="my-2 bg-white/5" />
-              <DropdownMenuItem onClick={onSignOut} className="rounded-lg p-3 text-[11px] font-medium gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> Sign Out</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut} className="rounded-lg p-3 text-[11px] font-medium gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> {t.nav.signOut}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
       </div>
@@ -137,14 +158,14 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FB] font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="flex min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
       {!isMobile && (
         <aside className="w-64 h-screen sticky top-0 overflow-hidden z-40 border-r border-slate-200">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       )}
 
-      <main className="flex-1 min-w-0 flex flex-col bg-[#F5F7FB]">
+      <main className="flex-1 min-w-0 flex flex-col bg-white">
 
         
         <div className="flex-1 relative overflow-y-auto p-8 md:p-10">

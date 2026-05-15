@@ -58,6 +58,7 @@ const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Builder = lazy(() => import("@/pages/Builder"));
 const Auth = lazy(() => import("@/pages/Auth"));
+const JobBoard = lazy(() => import("@/pages/JobBoard"));
 import AdminRoute from "@/components/auth/AdminRoute";
 
 
@@ -114,7 +115,8 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/payment-success" element={<PaymentSuccess />} />
-                <Route path="/builder" element={<Builder />} />
+                <Route path="/job-board" element={<JobBoard />} />
+                <Route path="/cookies" element={<PrivacyPolicy />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogArticlePage />} />
                 <Route path="/ats-resume-builder" element={<ATSResumeBuilderSEO />} />
@@ -129,6 +131,9 @@ const App = () => (
                 <Route path="/resume-template/:jobTitle" element={<ResumeTemplatePage />} />
                 <Route path="/resume-guide/:topic" element={<ResumeGuidePage />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/select-role" element={<RoleRoute><RoleSelection /></RoleRoute>} />
                 <Route
                   element={
@@ -139,17 +144,13 @@ const App = () => (
                 >
                   <Route path="/dashboard" element={<RoleGuard requiredRole="job_seeker"><Dashboard /></RoleGuard>} />
                   <Route path="/resumes" element={<RoleGuard requiredRole="job_seeker"><Resumes /></RoleGuard>} />
-                  <Route path="/builder" element={<RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard>} />
-                  <Route path="/builder/:id" element={<RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard>} />
                   <Route path="/job-tracker" element={<RoleGuard requiredRole="job_seeker"><ProRoute><JobTracker /></ProRoute></RoleGuard>} />
                   <Route path="/email-outreach" element={<RoleGuard requiredRole="job_seeker"><ProRoute><EmailOutreach /></ProRoute></RoleGuard>} />
                   <Route path="/cover-letters" element={<RoleGuard requiredRole="job_seeker"><CoverLetters /></RoleGuard>} />
                   <Route path="/jobs" element={<RoleGuard requiredRole="job_seeker"><FindJobs /></RoleGuard>} />
                   <Route path="/companies" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Companies /></ProRoute></RoleGuard>} />
+
                   <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
-                  <Route path="/pricing" element={<Pricing />} />
-                  <Route path="/terms" element={<TermsOfService />} />
-                  <Route path="/privacy" element={<PrivacyPolicy />} />
 
                   <Route path="/recruiter/company" element={<RoleGuard requiredRole="recruiter"><RecruiterCompany /></RoleGuard>} />
                   <Route path="/recruiter/jobs" element={<RoleGuard requiredRole="recruiter"><RecruiterJobs /></RoleGuard>} />
@@ -160,8 +161,11 @@ const App = () => (
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboard />} />
                   </Route>
-
                 </Route>
+
+                <Route path="/builder" element={<ProtectedRoute><RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard></ProtectedRoute>} />
+                <Route path="/builder/:id" element={<ProtectedRoute><RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard></ProtectedRoute>} />
+
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

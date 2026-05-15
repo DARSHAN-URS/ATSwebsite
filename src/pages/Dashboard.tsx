@@ -90,6 +90,12 @@ export default function Dashboard() {
              initial={{ opacity: 0, y: 10 }} 
              animate={{ opacity: 1, y: 0 }} 
              transition={{ delay: i * 0.1 }}
+             onClick={() => {
+                if (s.label === "Applications") navigate("/job-tracker");
+                if (s.label === "Interviews") navigate("/job-tracker?status=interview");
+                if (s.label === "Resume Score") navigate("/resumes");
+                if (s.label === "Response Rate") navigate("/job-tracker");
+             }}
            >
               <Card className="rounded-3xl border border-slate-200 bg-white hover:shadow-md transition-all duration-300 p-6 group cursor-pointer">
                  <div className="flex justify-between items-start mb-4">
@@ -124,7 +130,7 @@ export default function Dashboard() {
                      <Clock className="w-4 h-4 text-blue-600" />
                      <h3 className="text-sm font-bold text-slate-900">Recent Activity</h3>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors">View All</Button>
+                  <Button onClick={() => navigate("/resumes")} variant="ghost" size="sm" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors">View All</Button>
                </div>
                <div className="p-0">
                   {[
@@ -132,7 +138,7 @@ export default function Dashboard() {
                     { type: "interview", title: "Interview scheduled with Engineering Team", company: "Vercel", time: "5 hours ago", status: "interview" },
                     { type: "resume", title: "Resume 'Design_2024' score updated", company: "System", time: "1 day ago", status: "system" }
                   ].map((activity, i) => (
-                    <div key={i} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group cursor-pointer">
+                    <div key={i} onClick={() => navigate("/resumes")} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group cursor-pointer">
                        <div className="flex items-center gap-4">
                           <div className={cn(
                             "w-10 h-10 rounded-xl flex items-center justify-center",
@@ -162,14 +168,14 @@ export default function Dashboard() {
                   <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-500" /> Job Recommendations
                   </h3>
-                  <Link to="/jobs" className="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:underline">View Grid</Link>
+                  <Link to="/job-board" className="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:underline">View Grid</Link>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { role: "Staff UI Engineer", company: "Linear", match: "98%", salary: "$180k - $240k", tags: ["Remote", "React"] },
                     { role: "Product Manager", company: "Notion", match: "94%", salary: "$160k - $210k", tags: ["Hybrid", "Product"] }
                   ].map((job, i) => (
-                    <Card key={i} className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 transition-all group cursor-pointer shadow-sm">
+                    <Card key={i} onClick={() => navigate("/job-board")} className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 transition-all group cursor-pointer shadow-sm">
                        <div className="flex justify-between items-start mb-4">
                           <div className="w-10 h-10 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
                             {job.company.charAt(0)}
@@ -235,7 +241,7 @@ export default function Dashboard() {
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full h-10 rounded-xl bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-all">Optimize Resume</Button>
+                  <Button onClick={() => navigate("/resumes")} className="w-full h-10 rounded-xl bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-all">Optimize Resume</Button>
                </div>
             </Card>
 
@@ -251,7 +257,7 @@ export default function Dashboard() {
                     { title: "Review Stripe interview invite", due: "Tomorrow", priority: "Critical" },
                     { title: "Send letter to Meta hiring lead", due: "2 days", priority: "Medium" }
                   ].map((task, i) => (
-                    <div key={i} className="p-3 rounded-2xl border border-slate-50 hover:border-slate-200 transition-all group cursor-pointer">
+                    <div key={i} onClick={() => navigate("/email-outreach")} className="p-3 rounded-2xl border border-slate-50 hover:border-slate-200 transition-all group cursor-pointer">
                        <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-1">{task.title}</p>
                        <div className="flex items-center justify-between">
                           <span className="text-[9px] text-slate-400 font-medium">Due {task.due}</span>
@@ -262,7 +268,7 @@ export default function Dashboard() {
                        </div>
                     </div>
                   ))}
-                  <Button variant="outline" className="w-full h-10 rounded-xl border-slate-200 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">View Task Matrix</Button>
+                  <Button onClick={() => navigate("/email-outreach")} variant="outline" className="w-full h-10 rounded-xl border-slate-200 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">View Task Matrix</Button>
                </div>
             </Card>
          </div>

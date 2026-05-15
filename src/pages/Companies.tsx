@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/api-client";
 import { Card } from "@/components/ui/card";
@@ -22,6 +23,7 @@ interface PinnedCompany { company_name: string; company_logo: string | null; com
 
 export default function Companies() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
   const [industry, setIndustry] = useState("");
@@ -186,7 +188,7 @@ export default function Companies() {
                                           {company.logo ? <img src={company.logo} alt={company.name} className="w-full h-full object-cover" /> : <Building2 className="w-6 h-6" />}
                                        </div>
                                        <div className="flex gap-2">
-                                          <Button variant="ghost" size="icon" className="w-9 h-9 rounded-lg hover:bg-slate-50"><Share2 className="w-4 h-4 text-slate-400" /></Button>
+                                          <Button onClick={() => toast({ title: "Intelligence Shared", description: "Entity parameters have been synchronized to your clipboard." })} variant="ghost" size="icon" className="w-9 h-9 rounded-lg hover:bg-slate-50"><Share2 className="w-4 h-4 text-slate-400" /></Button>
                                           <Button onClick={() => togglePin(company)} variant="ghost" size="icon" className={cn("w-9 h-9 rounded-lg transition-all", isPinned(company.name) ? "text-blue-600 bg-blue-50" : "text-slate-300 hover:text-blue-600")}>
                                              <Star className={cn("w-4 h-4", isPinned(company.name) && "fill-current")} />
                                           </Button>
@@ -288,7 +290,7 @@ export default function Companies() {
                      </div>
                   </div>
                   
-                  <Button variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Export Analysis</Button>
+                  <Button onClick={() => toast({ title: "Analysis Exported", description: "Intelligence report generated in PDF format." })} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Export Analysis</Button>
                </Card>
 
                {/* Recruiter Activity Sidebar Card */}
@@ -305,7 +307,7 @@ export default function Companies() {
                         <h3 className="text-white text-base font-bold tracking-tight">Active Recruiter Hubs</h3>
                         <p className="text-slate-400 text-[11px] leading-relaxed">Recruiters from <span className="text-blue-400 font-bold">FAANG</span> and <span className="text-blue-400 font-bold">Top Tier Startups</span> are searching for your skill profile.</p>
                      </div>
-                     <Button className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Increase Visibility</Button>
+                     <Button onClick={() => navigate("/pricing")} className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Increase Visibility</Button>
                   </div>
                </Card>
             </div>

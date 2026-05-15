@@ -71,7 +71,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 p-6 md:p-10 space-y-16 font-sans">
+    <div className="min-h-screen bg-white p-6 md:p-10 space-y-16 font-sans">
       <SEOHead title="Account Architecture — ResumePro" description="Manage your professional infrastructure and authentication protocols." />
       
       <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
@@ -80,12 +80,12 @@ export default function Profile() {
               <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
                  <Settings className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Infrastructure</span>
+              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Account Settings</span>
            </motion.div>
-           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]">
-              Account <br /> <span className="text-blue-600">Architect.</span>
+           <h1 className="text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-[0.85] uppercase">
+              My <br /> <span className="text-blue-600">Account.</span>
            </h1>
-           <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
+           <p className="text-xl text-slate-500 font-medium max-w-xl leading-relaxed">
               Manage your professional credentials, subscription tier, and security protocols from a centralized interface.
            </p>
         </div>
@@ -93,18 +93,18 @@ export default function Profile() {
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
          <div className="xl:col-span-4 space-y-10">
-            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 flex flex-col items-center text-center">
+            <Card className="rounded-[4rem] border-none bg-slate-50/50 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 flex flex-col items-center text-center">
                <div className="relative group">
-                  <Avatar className="w-40 h-40 rounded-[3rem] border-4 border-slate-50 dark:border-slate-800 shadow-2xl">
+                  <Avatar className="w-40 h-40 rounded-[3rem] border-4 border-white shadow-2xl">
                      <AvatarImage src={resolvedAvatarUrl || ""} />
                      <AvatarFallback className="bg-blue-600 text-white text-4xl font-black">{name[0]}</AvatarFallback>
                   </Avatar>
-                  <button onClick={() => photoInputRef.current?.click()} className="absolute bottom-0 right-0 w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all border border-slate-100 dark:border-slate-700">
+                  <button onClick={() => photoInputRef.current?.click()} className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all border border-slate-100">
                      {uploadingPhoto ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
                   </button>
                   <input type="file" ref={photoInputRef} onChange={handlePhotoUpload} className="hidden" accept="image/*" />
                </div>
-               <h2 className="text-3xl font-black text-slate-900 dark:text-white mt-8 tracking-tight">{name}</h2>
+               <h2 className="text-3xl font-black text-slate-900 mt-8 tracking-tight">{name}</h2>
                <p className="text-slate-500 font-bold text-sm uppercase tracking-widest mt-1">{user?.email}</p>
                
                <div className="w-full mt-10 space-y-4">
@@ -112,66 +112,66 @@ export default function Profile() {
                      <div className="p-6 rounded-3xl bg-blue-600 text-white flex items-center justify-between shadow-xl shadow-blue-600/30">
                         <div className="flex items-center gap-3">
                            <Crown className="w-5 h-5" />
-                           <span className="font-black text-xs uppercase tracking-widest">Architect Pro</span>
+                           <span className="font-black text-xs uppercase tracking-widest">Pro Member</span>
                         </div>
                         <Shield className="w-5 h-5" />
                      </div>
                   ) : (
-                     <div className="p-6 rounded-3xl bg-white dark:bg-slate-800 text-slate-400 flex items-center justify-between">
+                     <div className="p-6 rounded-3xl bg-slate-100 text-slate-400 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                            <Zap className="w-5 h-5" />
-                           <span className="font-black text-xs uppercase tracking-widest">Base Tier</span>
+                           <span className="font-black text-xs uppercase tracking-widest">Free Plan</span>
                         </div>
                      </div>
                   )}
                   <Button onClick={() => signOut()} variant="outline" className="w-full h-14 rounded-2xl border-slate-100 text-rose-500 font-black uppercase tracking-widest text-[10px] gap-3">
-                     <LogOut className="w-4 h-4" /> Terminate Session
+                     <LogOut className="w-4 h-4" /> Sign Out
                   </Button>
                </div>
             </Card>
          </div>
 
          <div className="xl:col-span-8 space-y-10">
-            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12">
+            <Card className="rounded-[4rem] border-none bg-white shadow-[0_40px_80px_rgba(0,0,0,0.06)] p-12 border border-slate-50">
                <div className="space-y-10">
                   <div className="flex items-center gap-3">
                      <User className="w-5 h-5 text-blue-600" />
-                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Identity Module</h3>
+                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Personal Details</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                      <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Identification</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Name</Label>
                         <Input value={name} onChange={e => setName(e.target.value)} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
                      </div>
                      <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Vector</Label>
-                        <Input value={user?.email} disabled className="h-16 rounded-2xl bg-white/50 border-slate-100 font-bold px-6 text-slate-400" />
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Address</Label>
+                        <Input value={user?.email} disabled className="h-16 rounded-2xl bg-slate-50 border-slate-100 font-bold px-6 text-slate-400" />
                      </div>
                      <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Communication Link</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Phone Number</Label>
                         <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 555-000-0000" className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
                      </div>
                      <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Geospatial Sector</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Location</Label>
                         <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
                      </div>
                   </div>
                   <div className="flex justify-end pt-6">
                      <Button onClick={handleUpdateProfile} disabled={savingProfile} className="h-16 px-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4 hover:scale-105 transition-all">
                         {savingProfile ? <Loader2 className="w-5 h-5 animate-spin" /> : <Shield className="w-5 h-5" />}
-                        Synchronize Module
+                        Save Changes
                      </Button>
                   </div>
                </div>
             </Card>
 
-            <Card className="rounded-[3rem] border-none bg-rose-50 dark:bg-rose-900/10 p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <Card className="rounded-[3rem] border-none bg-rose-50 p-10 flex flex-col md:flex-row items-center justify-between gap-8">
                <div className="space-y-2 text-center md:text-left">
-                  <h3 className="text-xl font-black text-rose-600 tracking-tight">Destruction Protocol</h3>
-                  <p className="text-rose-600/70 font-medium text-sm">Irreversible termination of all operational modules and data vectors.</p>
+                  <h3 className="text-xl font-black text-rose-600 tracking-tight">Delete Account</h3>
+                  <p className="text-rose-600/70 font-medium text-sm">Permanently delete all your data and account information.</p>
                </div>
-               <Button variant="ghost" className="h-14 px-10 rounded-2xl bg-white dark:bg-rose-900/20 text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all gap-3">
-                  <Trash2 className="w-4 h-4" /> Purge Account
+               <Button variant="ghost" className="h-14 px-10 rounded-2xl bg-white text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all gap-3">
+                  <Trash2 className="w-4 h-4" /> Delete Forever
                </Button>
             </Card>
          </div>

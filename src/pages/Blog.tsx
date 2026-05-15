@@ -12,6 +12,8 @@ import { miscTranslations } from "@/i18n/miscTranslations";
 import { useBlogTranslation } from "@/hooks/useBlogTranslation";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Navbar } from "@/components/landing/Navbar";
+import { Footer } from "@/components/landing/Footer";
 
 
 const SEED_ARTICLES = RAW_ARTICLES.filter((a, i, arr) => arr.findIndex((b) => b.slug === a.slug) === i);
@@ -42,8 +44,12 @@ export default function Blog() {
   const ALL_CATEGORIES = ["All", ...Array.from(new Set(SEED_ARTICLES.map((a) => a.category)))];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans">
       <SEOHead title="Career Blog — ResumePro" description="Expert career advice on ATS resumes, interview preparation, and job search strategies." />
+
+      <Navbar />
+
+      <main className="pb-40">
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
@@ -162,6 +168,8 @@ export default function Blog() {
             </div>
          </div>
       </section>
+      </main>
+      <Footer />
     </div>
   );
 }
