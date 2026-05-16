@@ -24,7 +24,7 @@ const Index = () => {
   const { scrollY } = useScroll();
   const { t } = useLanguage();
   const tl = t.landing;
-  const tle = t.landing_extra;
+  const tle = t.landingExtra;
   const yHero = useTransform(scrollY, [0, 800], [0, 150]);
   const opacityHero = useTransform(scrollY, [0, 1600], [1, 0]);
 
