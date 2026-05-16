@@ -12,7 +12,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import SEOHead from "@/components/SEOHead";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "../i18n/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 
 export default function Dashboard() {

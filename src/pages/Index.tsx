@@ -15,7 +15,7 @@ import {
 import Logo from "@/components/Logo";
 import { Card } from "@/components/ui/card";
 import { Footer } from "@/components/landing/Footer";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const Index = () => {
   const { user } = useAuth();

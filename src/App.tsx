@@ -10,12 +10,10 @@ import { lazy, Suspense } from "react";
 
 // Eagerly loaded — small, needed immediately
 import AppLayout from "@/components/AppLayout";
-
-// Index page lazy-loaded to keep initial bundle small
-const Index = lazy(() => import("@/pages/Index"));
+import Index from "@/pages/Index";
 
 // Lazy-loaded — only pulled in when the user navigates there
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
+import Dashboard from "@/pages/Dashboard";
 const Resumes = lazy(() => import("@/pages/Resumes"));
 const FindJobs = lazy(() => import("@/pages/FindJobs"));
 const Companies = lazy(() => import("@/pages/Companies"));
