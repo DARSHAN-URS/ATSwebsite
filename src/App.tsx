@@ -147,6 +147,7 @@ const App = () => (
                   <Route path="/cover-letters" element={<RoleGuard requiredRole="job_seeker"><CoverLetters /></RoleGuard>} />
                   <Route path="/jobs" element={<RoleGuard requiredRole="job_seeker"><FindJobs /></RoleGuard>} />
                   <Route path="/companies" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Companies /></ProRoute></RoleGuard>} />
+                  <Route path="/upgrade" element={<RoleGuard requiredRole="job_seeker"><Pricing isInternal={true} /></RoleGuard>} />
 
                   <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
 

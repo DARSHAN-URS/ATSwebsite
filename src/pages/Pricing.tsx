@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
-export default function Pricing() {
+export default function Pricing({ isInternal = false }: { isInternal?: boolean }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -101,12 +101,12 @@ export default function Pricing() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans">
+    <div className={cn("min-h-screen text-slate-900 font-sans", !isInternal && "bg-white")}>
       <SEOHead title={`${tp.title} — ResumePro`} description={tp.subtitle} />
       
-      <Navbar />
+      {!isInternal && <Navbar />}
 
-      <main className="max-w-7xl mx-auto px-8 pt-48 pb-40 space-y-20">
+      <main className={cn("max-w-7xl mx-auto px-8 space-y-20", isInternal ? "py-10" : "pt-48 pb-40")}>
         <div className="text-center space-y-6 max-w-2xl mx-auto mb-20">
            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
               <Sparkles className="w-3.5 h-3.5" />
@@ -237,7 +237,7 @@ export default function Pricing() {
         </div>
       </main>
 
-      <Footer />
+      {!isInternal && <Footer />}
     </div>
   );
 }
