@@ -342,9 +342,6 @@ const en = {
   // Landing page
   landing: {
     heroTagline: "Trusted by 10,000+ job seekers — Free to start",
-    heroTitle: "The Best AI Resume Builder for",
-    heroHighlight: "Modern ATS Success.",
-    heroDesc: "Our free AI resume builder helps you create a professional, ATS-optimized resume in minutes. Use our AI resume grader to scan your content, identify keyword gaps, and land 3× more interviews.",
     buildFreeResume: "Build Free ATS Resume",
     uploadResume: "Upload Existing Resume",
     atsFriendly: "100% ATS-Friendly",
@@ -859,9 +856,6 @@ const ar: TranslationKeys = {
   },
   landing: {
     heroTagline: "موثوق من قبل أكثر من 10,000 باحث عن عمل — مجاني للبدء",
-    heroTitle: "أفضل أداة لبناء السيرة الذاتية بالذكاء الاصطناعي لـ",
-    heroHighlight: "نجاح ATS الحديث.",
-    heroDesc: "يساعدك منشئ السيرة الذاتية المجاني بالذكاء الاصطناعي على إنشاء سيرة ذاتية احترافية محسنة لأنظمة ATS في دقائق.",
     buildFreeResume: "إنشاء سيرة ذاتية مجانية",
     uploadResume: "رفع سيرة ذاتية موجودة",
     atsFriendly: "متوافق مع ATS 100%",
@@ -1371,9 +1365,6 @@ const es: TranslationKeys = {
   },
   landing: {
     heroTagline: "Confiado por más de 10,000 buscadores de empleo — Gratis para empezar",
-    heroTitle: "El Mejor Constructor de CV con IA para",
-    heroHighlight: "Éxito ATS Moderno.",
-    heroDesc: "Nuestro constructor de CV gratuito con IA te ayuda a crear un currículo profesional optimizado para ATS en minutos.",
     buildFreeResume: "Crear CV ATS Gratis",
     uploadResume: "Subir CV Existente",
     atsFriendly: "100% Compatible con ATS",
@@ -1884,9 +1875,6 @@ const fr: TranslationKeys = {
   },
   landing: {
     heroTagline: "Approuvé par plus de 10 000 chercheurs d'emploi — Gratuit pour commencer",
-    heroTitle: "Le Meilleur Créateur de CV IA pour",
-    heroHighlight: "Le Succès ATS Moderne.",
-    heroDesc: "Notre créateur de CV gratuit avec IA vous aide à créer un CV professionnel optimisé pour les ATS en quelques minutes.",
     buildFreeResume: "Créer un CV ATS Gratuit",
     uploadResume: "Télécharger un CV Existant",
     atsFriendly: "100% Compatible ATS",
@@ -2396,9 +2384,6 @@ const hi: TranslationKeys = {
   },
   landing: {
     heroTagline: "10,000+ नौकरी खोजने वालों द्वारा विश्वसनीय — शुरू करना मुफ्त",
-    heroTitle: "सर्वश्रेष्ठ AI रिज्यूमे बिल्डर",
-    heroHighlight: "आधुनिक ATS सफलता के लिए।",
-    heroDesc: "हमारा मुफ्त AI रिज्यूमे बिल्डर आपको मिनटों में एक पेशेवर, ATS-अनुकूलित रिज्यूमे बनाने में मदद करता है।",
     buildFreeResume: "मुफ्त ATS रिज्यूमे बनाएं",
     uploadResume: "मौजूदा रिज्यूमे अपलोड करें",
     atsFriendly: "100% ATS-अनुकूल",
@@ -2909,9 +2894,6 @@ const pt: TranslationKeys = {
   },
   landing: {
     heroTagline: "Confiado por mais de 10.000 candidatos — Grátis para começar",
-    heroTitle: "O Melhor Criador de CV com IA para",
-    heroHighlight: "Sucesso ATS Moderno.",
-    heroDesc: "Nosso criador de CV gratuito com IA ajuda você a criar um currículo profissional otimizado para ATS em minutos.",
     buildFreeResume: "Criar CV ATS Grátis",
     uploadResume: "Enviar CV Existente",
     atsFriendly: "100% Compatível com ATS",
@@ -3422,9 +3404,6 @@ const de: TranslationKeys = {
   },
   landing: {
     heroTagline: "Von über 10.000 Jobsuchenden vertraut — Kostenlos starten",
-    heroTitle: "Der beste KI-Lebenslauf-Builder für",
-    heroHighlight: "modernen ATS-Erfolg.",
-    heroDesc: "Unser kostenloser KI-Lebenslauf-Builder hilft Ihnen, einen professionellen, ATS-optimierten Lebenslauf in Minuten zu erstellen.",
     buildFreeResume: "Kostenlosen ATS-Lebenslauf erstellen",
     uploadResume: "Vorhandenen Lebenslauf hochladen",
     atsFriendly: "100% ATS-freundlich",
@@ -3934,9 +3913,6 @@ const zh: TranslationKeys = {
   },
   landing: {
     heroTagline: "超过10,000名求职者的信赖之选 — 免费开始",
-    heroTitle: "最佳AI简历生成器",
-    heroHighlight: "助力现代ATS成功。",
-    heroDesc: "我们的免费AI简历生成器帮助您在几分钟内创建专业的、ATS优化的简历。",
     buildFreeResume: "免费创建ATS简历",
     uploadResume: "上传现有简历",
     atsFriendly: "100% ATS友好",
@@ -4446,9 +4422,6 @@ const ja: TranslationKeys = {
   },
   landing: {
     heroTagline: "10,000人以上の求職者に信頼されています — 無料で開始",
-    heroTitle: "最高のAI履歴書ビルダー",
-    heroHighlight: "ATS成功のために。",
-    heroDesc: "無料AIツールでプロフェッショナルなATS対応履歴書を数分で作成。",
     buildFreeResume: "無料でATS履歴書を作成",
     uploadResume: "既存の履歴書をアップロード",
     atsFriendly: "100% ATS対応",
@@ -4958,9 +4931,6 @@ const ko: TranslationKeys = {
   },
   landing: {
     heroTagline: "10,000명 이상의 구직자가 신뢰합니다 — 무료로 시작",
-    heroTitle: "최고의 AI 이력서 빌더",
-    heroHighlight: "ATS 성공을 위해.",
-    heroDesc: "무료 AI 도구로 전문적인 ATS 최적화 이력서를 몇 분 만에 작성하세요.",
     buildFreeResume: "무료 ATS 이력서 만들기",
     uploadResume: "기존 이력서 업로드",
     atsFriendly: "100% ATS 호환",
