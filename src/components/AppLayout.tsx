@@ -16,6 +16,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Logo from "@/components/Logo";
+import { useLanguage } from "@/i18n/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const jobSeekerNav = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
