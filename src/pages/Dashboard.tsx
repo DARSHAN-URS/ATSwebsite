@@ -135,24 +135,7 @@ export default function Dashboard() {
                </div>
             </div>
 
-            <div className="relative group flex-1 hidden md:block">
-               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl blur opacity-10 group-hover:opacity-20 transition duration-1000" />
-               <div className="relative bg-slate-100 rounded-3xl border border-slate-200 overflow-hidden aspect-[16/10] shadow-2xl">
-                  <img 
-                    src="/images/resume-editor-hero.png" 
-                    alt="Resume Editor Preview" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">AI Engine Active</span>
-                     </div>
-                     <Badge className="bg-white/20 backdrop-blur-md text-white border-none text-[8px] font-black uppercase">v2.0 Optimized</Badge>
-                  </div>
-               </div>
-            </div>
+
          </div>
       </div>
 
