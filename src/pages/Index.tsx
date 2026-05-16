@@ -138,7 +138,6 @@ const Index = () => {
              </div>
           </div>
       </section>
->
 
       {/* Mission Partners */}
       <section className="py-12 bg-white relative overflow-hidden">
