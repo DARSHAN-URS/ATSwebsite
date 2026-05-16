@@ -11,8 +11,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/SEOHead";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function AdminDashboard() {
+  const { t } = useLanguage();
+  const ta = t.adminDashboard;
+  
   const [stats, setStats] = useState({ users: 0, jobs: 0, resumes: 0 });
   const [users, setUsers] = useState<any[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
@@ -38,7 +44,7 @@ export default function AdminDashboard() {
       setUsers(uList.data || []);
       setJobs(jList.data || []);
     } catch (error) {
-      toast.error("Failed to fetch admin data");
+      toast.error(ta.failedFetch);
     } finally {
       setLoading(false);
     }
@@ -54,9 +60,9 @@ export default function AdminDashboard() {
       .update({ role: newRole as any })
       .eq("user_id", userId);
     
-    if (error) toast.error("Failed to update role");
+    if (error) toast.error(ta.failedUpdateRole);
     else {
-      toast.success(`Role updated to ${newRole}`);
+      toast.success(`${ta.roleUpdated} ${newRole}`);
       fetchData();
     }
   };
@@ -67,9 +73,9 @@ export default function AdminDashboard() {
       .update({ status })
       .eq("id", jobId);
     
-    if (error) toast.error("Failed to update job status");
+    if (error) toast.error(ta.failedUpdateJob);
     else {
-      toast.success(`Job status updated to ${status}`);
+      toast.success(`${ta.jobStatusUpdated} ${status}`);
       fetchData();
     }
   };
@@ -78,7 +84,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 font-sans pb-20">
-      <SEOHead title="System Control — ResumePro" description="Administrative control panel." noindex />
+      <SEOHead title={ta.seoTitle} description={ta.seoDesc} noindex />
       
       <div className="max-w-7xl mx-auto px-8 pt-16 space-y-16">
         {/* Header Section */}
@@ -88,13 +94,13 @@ export default function AdminDashboard() {
                  <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
                     <ShieldAlert className="w-5 h-5" />
                  </div>
-                 <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Oversight</span>
+                 <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">{ta.operationalOversight}</span>
               </motion.div>
               <h1 className="text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] uppercase">
-                 Control <br /> <span className="text-blue-600">Center.</span>
+                 {ta.control} <br /> <span className="text-blue-600">{ta.center}</span>
               </h1>
               <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
-                 High-fidelity management of global infrastructure nodes, mission parameters, and user-identity matrices.
+                 {ta.subtitle}
               </p>
            </div>
 
@@ -105,18 +111,18 @@ export default function AdminDashboard() {
            <div className="space-y-4 text-right">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 rounded-full text-emerald-600 dark:text-emerald-400">
                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                 <span className="text-[10px] font-bold uppercase tracking-widest">Core Systems Active</span>
+                 <span className="text-[10px] font-bold uppercase tracking-widest">{ta.coreSystemsActive}</span>
               </div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sync: 12ms Latency</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{ta.syncLatency}</p>
            </div>
         </div>
 
         {/* Real-time Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { title: "Total Entities", value: stats.users, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
-            { title: "Active Missions", value: stats.jobs, icon: Briefcase, color: "text-emerald-600", bg: "bg-emerald-50" },
-            { title: "Architecture Syncs", value: stats.resumes, icon: FileText, color: "text-purple-600", bg: "bg-purple-50" }
+            { title: ta.totalEntities, value: stats.users, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
+            { title: ta.activeMissions, value: stats.jobs, icon: Briefcase, color: "text-emerald-600", bg: "bg-emerald-50" },
+            { title: ta.architectureSyncs, value: stats.resumes, icon: FileText, color: "text-purple-600", bg: "bg-purple-50" }
           ].map((stat, i) => (
             <Card key={i} className="rounded-[3rem] border-none bg-slate-50 dark:bg-slate-900 p-10 flex items-center justify-between group hover:bg-white dark:hover:bg-slate-800 transition-all hover:shadow-2xl">
                <div className="space-y-2">
@@ -139,7 +145,7 @@ export default function AdminDashboard() {
                   value={val} 
                   className="bg-transparent border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none px-0 py-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all"
                 >
-                  {val === "users" ? "Entity Management" : val === "jobs" ? "Mission Moderation" : "System Diagnostics"}
+                  {val === "users" ? ta.tabEntityManagement : val === "jobs" ? ta.tabMissionModeration : ta.tabSystemDiagnostics}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -148,7 +154,7 @@ export default function AdminDashboard() {
                <div className="relative group hidden md:block">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                   <Input 
-                    placeholder="Scan identities..." 
+                    placeholder={ta.scanIdentities} 
                     className="h-12 pl-11 w-64 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold text-xs"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -163,9 +169,9 @@ export default function AdminDashboard() {
                 <Table>
                    <TableHeader className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100 dark:border-slate-800">
                       <TableRow className="border-none hover:bg-transparent">
-                        <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400">Identification Matrix</TableHead>
-                        <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400">Operational Role</TableHead>
-                        <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400">Deployment Date</TableHead>
+                        <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.idMatrix}</TableHead>
+                        <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.opRole}</TableHead>
+                        <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400">{ta.deploymentDate}</TableHead>
                         <TableHead className="h-20 px-10 text-right"></TableHead>
                       </TableRow>
                    </TableHeader>
@@ -176,14 +182,14 @@ export default function AdminDashboard() {
                               <div className="flex items-center gap-4">
                                  <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-600/20">{user.display_name?.[0] || "?"}</div>
                                  <div>
-                                    <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{user.display_name || "Unknown Identity"}</p>
+                                    <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{user.display_name || ta.unknownIdentity}</p>
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{user.user_id.substring(0, 18)}...</p>
                                  </div>
                               </div>
                            </TableCell>
                            <TableCell className="px-10 py-8">
                               <Badge className="rounded-xl px-4 py-1.5 bg-slate-900 dark:bg-white/10 text-white border-none text-[9px] font-black uppercase tracking-widest">
-                                 {user.user_roles?.[0]?.role || "Unassigned"}
+                                 {user.user_roles?.[0]?.role || ta.unassigned}
                               </Badge>
                            </TableCell>
                            <TableCell className="px-10 py-8 text-slate-500 font-bold text-sm">
@@ -195,11 +201,11 @@ export default function AdminDashboard() {
                                     <Button variant="ghost" size="icon" className="h-12 w-12 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><MoreHorizontal className="h-5 w-5" /></Button>
                                  </DropdownMenuTrigger>
                                  <DropdownMenuContent align="end" className="rounded-2xl border-none shadow-3xl p-2 min-w-[200px]">
-                                    <DropdownMenuItem onClick={() => handleUpdateRole(user.user_id, "admin")} className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest">Escalate to Admin</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleUpdateRole(user.user_id, "recruiter")} className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest">Assign Recruiter</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleUpdateRole(user.user_id, "job_seeker")} className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest">Assign Job Seeker</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleUpdateRole(user.user_id, "admin")} className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest">{ta.escalateAdmin}</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleUpdateRole(user.user_id, "recruiter")} className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest">{ta.assignRecruiter}</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleUpdateRole(user.user_id, "job_seeker")} className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest">{ta.assignJobSeeker}</DropdownMenuItem>
                                     <div className="h-px bg-slate-100 dark:bg-slate-800 my-2" />
-                                    <DropdownMenuItem className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest text-rose-600">Terminate Entity</DropdownMenuItem>
+                                    <DropdownMenuItem className="rounded-xl p-3 font-black text-[10px] uppercase tracking-widest text-rose-600">{ta.terminateEntity}</DropdownMenuItem>
                                  </DropdownMenuContent>
                               </DropdownMenu>
                            </TableCell>
@@ -227,13 +233,13 @@ export default function AdminDashboard() {
                              onClick={() => handleUpdateJobStatus(job.id, "active")}
                              className="flex-1 md:flex-none h-16 px-8 rounded-2xl bg-emerald-500 text-white font-black uppercase tracking-widest text-[10px] gap-2 shadow-xl shadow-emerald-500/20"
                            >
-                              <CheckCircle className="h-4 w-4" /> Approve
+                              <CheckCircle className="h-4 w-4" /> {ta.approve}
                            </Button>
                            <Button 
                              onClick={() => handleUpdateJobStatus(job.id, "suspended")}
                              className="flex-1 md:flex-none h-16 px-8 rounded-2xl bg-rose-500 text-white font-black uppercase tracking-widest text-[10px] gap-2 shadow-xl shadow-rose-500/20"
                            >
-                              <XCircle className="h-4 w-4" /> Suspend
+                              <XCircle className="h-4 w-4" /> {ta.suspend}
                            </Button>
                         </div>
                      </div>
@@ -245,18 +251,18 @@ export default function AdminDashboard() {
           <TabsContent value="logs" className="m-0">
              <Card className="rounded-[4rem] border-none bg-slate-900 p-12 space-y-10 shadow-3xl">
                 <div className="flex items-center justify-between border-b border-white/10 pb-8">
-                   <h3 className="text-2xl font-black text-white tracking-tight uppercase">Diagnostic Flux</h3>
+                   <h3 className="text-2xl font-black text-white tracking-tight uppercase">{ta.diagnosticFlux}</h3>
                    <div className="flex items-center gap-3">
                       <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.8)]" />
-                      <span className="text-[10px] font-black text-white uppercase tracking-widest">Continuous Monitoring</span>
+                      <span className="text-[10px] font-black text-white uppercase tracking-widest">{ta.continuousMonitoring}</span>
                    </div>
                 </div>
                 <div className="space-y-4">
                    {[
-                     { level: "SUCCESS", msg: "Global identity synchronization complete across 4 primary nodes.", time: "JUST NOW" },
-                     { level: "INFO", msg: "Automatic cleanup of legacy resume architectures (3,421 units purged).", time: "12M AGO" },
-                     { level: "WARN", msg: "Increased latency detected in EU-CENTRAL-1 mission distribution.", time: "45M AGO" },
-                     { level: "SYSTEM", msg: "Kernel update v4.2.1-architect deployed to production grid.", time: "2H AGO" }
+                     { level: "SUCCESS", msg: ta.logSync, time: ta.justNow },
+                     { level: "INFO", msg: ta.logCleanup, time: `12${ta.minsAgo}` },
+                     { level: "WARN", msg: ta.logLatency, time: `45${ta.minsAgo}` },
+                     { level: "SYSTEM", msg: ta.logUpdate, time: `2${ta.hoursAgo}` }
                    ].map((log, i) => (
                       <div key={i} className="flex items-center gap-8 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
                          <Badge variant="outline" className={cn("rounded-lg border-none px-3 font-black text-[9px] uppercase tracking-widest", log.level === "SUCCESS" ? "bg-emerald-500/20 text-emerald-400" : log.level === "WARN" ? "bg-amber-500/20 text-amber-400" : "bg-blue-500/20 text-blue-400")}>

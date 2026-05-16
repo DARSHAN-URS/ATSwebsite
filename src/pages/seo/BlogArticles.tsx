@@ -2424,7 +2424,7 @@ export function BlogArticlePage() {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center font-sans">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-2">Article Not Found</h1>
           <Button asChild><Link to="/blog">Back to Blog</Link></Button>
@@ -2448,7 +2448,7 @@ export function BlogArticlePage() {
     : article.content;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead
         title={article.seoTitle}
         description={article.description}
@@ -2457,7 +2457,7 @@ export function BlogArticlePage() {
         ogType="article"
       />
 
-      <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2"><Logo className="h-10" /></Link>
           <div className="flex items-center gap-3">
@@ -2491,24 +2491,24 @@ export function BlogArticlePage() {
               <Clock className="h-3 w-3" />{article.readTime}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-4">{tTitle}</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed">{tDescription}</p>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4 uppercase">{tTitle}</h1>
+          <p className="text-lg text-slate-500 font-medium leading-relaxed">{tDescription}</p>
         </header>
 
-        <article className="prose prose-neutral dark:prose-invert max-w-none">
+        <article className="prose prose-neutral max-w-none">
           {tContent.map((block, i) => {
             if (block.startsWith("## ")) {
-              return <h2 key={i} className="text-xl font-bold mt-8 mb-3 text-foreground">{block.replace("## ", "")}</h2>;
+              return <h2 key={i} className="text-xl font-black mt-12 mb-6 text-slate-900 uppercase tracking-tight">{block.replace("## ", "")}</h2>;
             }
             const rendered = block
               .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
               .replace(/\*(.*?)\*/g, "<em>$1</em>")
               .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary underline hover:opacity-80 transition">$1</a>');
-            return <p key={i} className="mb-4 text-foreground/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: rendered }} />;
+            return <p key={i} className="mb-6 text-slate-600 font-medium text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: rendered }} />;
           })}
         </article>
 
-        <div className="mt-12 border-t border-border/60 pt-8">
+        <div className="mt-16 border-t border-slate-100 pt-12">
           <h2 className="text-lg font-bold mb-4">{ba.relatedH2}</h2>
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" size="sm" asChild><Link to="/ats-resume-builder">ATS Resume Builder</Link></Button>

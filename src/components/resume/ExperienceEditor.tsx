@@ -1,10 +1,13 @@
-import { Plus, Trash2, GripVertical, Calendar, Building2, Wand2 } from "lucide-react";
+import { Plus, Trash2, GripVertical, Calendar, Building2, Wand2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ExperienceItem } from "./types";
+import { invokeFunction } from "@/lib/api-client";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 interface Props {
   experience: ExperienceItem[];
@@ -12,6 +15,9 @@ interface Props {
 }
 
 export default function ExperienceEditor({ experience, onChange }: Props) {
+  const { toast } = useToast();
+  const [aiLoading, setAiLoading] = useState<number | null>(null);
+
   const addItem = () => {
     const newItem: ExperienceItem = {
       company: "",
@@ -58,6 +64,42 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
       bullets: updated[itemIndex].bullets.filter((_, i) => i !== bulletIndex),
     };
     onChange(updated);
+  };
+
+  const handleAiAssist = async (index: number) => {
+    const item = experience[index];
+    if (!item.title || !item.company) {
+      toast({ 
+        title: "Missing Information", 
+        description: "Please provide a job title and company name first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setAiLoading(index);
+    try {
+      const { data, error } = await invokeFunction("resume-assist", {
+        body: { 
+          type: "experience_bullets", 
+          context: { 
+            jobTitle: item.title, 
+            company: item.company,
+            currentBullets: item.bullets.filter(b => b.trim().length > 0)
+          } 
+        }
+      });
+
+      if (error) throw error;
+      if (data?.bullets) {
+        updateItem(index, { bullets: data.bullets });
+        toast({ title: "Achievements Optimized", description: "AI has refined your mission impact statements." });
+      }
+    } catch (err: any) {
+      toast({ title: "AI Sync Error", description: err.message, variant: "destructive" });
+    } finally {
+      setAiLoading(null);
+    }
   };
 
   return (
@@ -149,8 +191,14 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
                        <Sparkles className="w-4 h-4 text-blue-600" />
                        <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900">Mission Achievements</Label>
                     </div>
-                    <Button variant="ghost" size="sm" className="h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest text-blue-600 gap-2 hover:bg-blue-50 transition-all">
-                      <Wand2 className="w-3.5 h-3.5" /> AI Assist
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => handleAiAssist(index)}
+                      disabled={aiLoading === index}
+                      className="h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest text-blue-600 gap-2 hover:bg-blue-50 transition-all"
+                    >
+                      {aiLoading === index ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />} AI Assist
                     </Button>
                   </div>
                   <div className="space-y-4">

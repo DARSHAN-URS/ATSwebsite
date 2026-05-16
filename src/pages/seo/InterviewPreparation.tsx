@@ -14,7 +14,7 @@ export default function InterviewPreparation() {
   const featIcons = [<Mic className="h-5 w-5" />, <Brain className="h-5 w-5" />, <Target className="h-5 w-5" />, <BookOpen className="h-5 w-5" />];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead
         title="Interview Preparation — AI Mock Interviews & Question Bank"
         description="Prepare for your next job interview with AI-powered mock interviews, resume-based question generation, STAR method coaching, and readiness scoring. Free interview prep tools."
@@ -22,7 +22,7 @@ export default function InterviewPreparation() {
         keywords="interview preparation, mock interview, interview questions, STAR method, behavioral interview, technical interview preparation"
       />
 
-      <nav className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-slate-100 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2"><Logo className="h-10" /></Link>
           <div className="flex items-center gap-3">
@@ -42,12 +42,12 @@ export default function InterviewPreparation() {
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-secondary/30 py-16">
+      <section className="border-t border-slate-100 bg-slate-50/50 py-16">
         <div className="mx-auto max-w-5xl px-4">
           <h2 className="font-display text-2xl font-extrabold text-center mb-10">{t.interview.featuresH2}</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {t.interview.features.map((f, i) => (
-              <div key={i} className="rounded-2xl border border-border/60 bg-card p-6 bounce-hover">
+              <div key={i} className="rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-xl transition-all">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{featIcons[i]}</div>
                 <h3 className="text-sm font-bold mb-1">{f.title}</h3>
                 <p className="text-sm text-muted-foreground">{f.desc}</p>
@@ -78,12 +78,12 @@ export default function InterviewPreparation() {
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-secondary/30 py-16">
+      <section className="border-t border-slate-100 bg-slate-50/50 py-16">
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="font-display text-2xl font-extrabold text-center mb-8">{t.interview.faqH2}</h2>
           <Accordion type="single" collapsible className="w-full">
             {t.interview.faqs.map((item, i) => (
-              <AccordionItem key={i} value={`faq-${i}`}>
+              <AccordionItem key={i} value={`faq-${i}`} className="border-none bg-white rounded-2xl px-6 mb-4 shadow-sm">
                 <AccordionTrigger className="text-left text-sm font-medium">{item.q}</AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground">{item.a}</AccordionContent>
               </AccordionItem>
@@ -103,7 +103,7 @@ export default function InterviewPreparation() {
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-secondary/30 py-12">
+      <section className="border-t border-slate-100 bg-slate-50/50 py-12">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="font-display text-2xl font-extrabold mb-4">{t.interview.finalH2}</h2>
           <p className="text-muted-foreground mb-6">{t.interview.finalSub}</p>
@@ -111,7 +111,7 @@ export default function InterviewPreparation() {
         </div>
       </section>
 
-      <footer className="border-t border-border/60 py-8 text-center">
+      <footer className="border-t border-slate-100 py-8 text-center bg-white">
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ATS Pro Resume Builder. <Link to="/privacy" className="underline">{t.nav.privacy}</Link> · <Link to="/terms" className="underline">{t.nav.terms}</Link></p>
       </footer>
 

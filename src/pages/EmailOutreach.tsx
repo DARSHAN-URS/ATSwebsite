@@ -23,12 +23,15 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 type Resume = Tables<"resumes">;
 
 export default function EmailOutreach() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
+  const to = t.emailOutreach;
 
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>("");
@@ -42,8 +45,7 @@ export default function EmailOutreach() {
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
 
-  const [tone, setTone] = useState("Professional");
-  const [useAIWarmup, setUseAIWarmup] = useState(true);
+  const [tone, setTone] = useState("professional");
 
   useEffect(() => {
     if (!user) return;
@@ -69,18 +71,18 @@ export default function EmailOutreach() {
 
   const generateWithAI = async () => {
     if (!company || !position) {
-      toast({ title: "More info needed", description: "Please enter the company and job title.", variant: "destructive" });
+      toast({ title: to.moreInfoNeeded, description: to.enterCompanyJob, variant: "destructive" });
       return;
     }
     setGenerating(true);
     try {
-      const { data, error } = await invokeFunction("generate-outreach-email", { position, company, resumeId: selectedResumeId || undefined });
+      const { data, error } = await invokeFunction("generate-outreach-email", { position, company, resumeId: selectedResumeId || undefined, tone });
       if (error) throw new Error(error.message);
       setSubject(data.subject);
       setBody(data.body);
-      toast({ title: "Draft Created" });
+      toast({ title: to.draftCreated });
     } catch (err: any) {
-      toast({ title: "Failed to create draft", variant: "destructive" });
+      toast({ title: to.failedDraft, variant: "destructive" });
     } finally {
       setGenerating(false);
     }
@@ -88,7 +90,7 @@ export default function EmailOutreach() {
 
   const sendEmail = async () => {
     if (!recruiterEmail || !subject || !body) {
-      toast({ title: "Please fill in all fields", variant: "destructive" });
+      toast({ title: to.fillFields, variant: "destructive" });
       return;
     }
     setSending(true);
@@ -103,9 +105,9 @@ export default function EmailOutreach() {
       }
       const { error } = await invokeFunction("send-outreach-email", { to: recruiterEmail, subject, body, fromName, attachmentBase64 });
       if (error) throw new Error(error.message);
-      toast({ title: "Email Sent" });
+      toast({ title: to.emailSent });
     } catch (err: any) {
-      toast({ title: "Failed to send email", variant: "destructive" });
+      toast({ title: to.failedSend, variant: "destructive" });
     } finally {
       setSending(false);
     }
@@ -113,7 +115,7 @@ export default function EmailOutreach() {
 
   return (
     <div className="min-h-screen bg-[#F5F7FB] font-sans pb-20 text-left">
-      <SEOHead title="Email Outreach — ResumePro" description="Connect with recruiters using AI-powered emails." />
+      <SEOHead title={to.seoTitle} description={to.seoDesc} />
       
       <div className="max-w-7xl mx-auto space-y-8 text-left p-8 md:p-10">
          
@@ -125,25 +127,25 @@ export default function EmailOutreach() {
                 <div className="space-y-4">
                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
                       <Zap className="w-3.5 h-3.5" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider">Communication Engine Active</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider">{to.engineActive}</span>
                    </div>
                    <div className="space-y-1">
                      <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
-                        Outreach.
+                        {to.title}
                      </h1>
-                     <p className="text-slate-500 font-medium text-sm max-w-xl">Autonomous messaging protocols and direct recruiter synchronization with mission-critical precision.</p>
+                     <p className="text-slate-500 font-medium text-sm max-w-xl">{to.subtitle}</p>
                    </div>
                 </div>
 
                <div className="flex items-center gap-6">
                   <div className="text-right">
                      <p className="text-2xl font-bold text-slate-900 leading-none">42</p>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Sent Today</p>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{to.sentToday}</p>
                   </div>
                   <div className="w-px h-10 bg-slate-100" />
                   <div className="text-right">
                      <p className="text-2xl font-bold text-blue-600 leading-none">67%</p>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg. Reply Rate</p>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{to.avgReplyRate}</p>
                   </div>
                </div>
             </div>
@@ -160,25 +162,25 @@ export default function EmailOutreach() {
                   </div>
                   <div className="space-y-1">
                      <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <Target className="w-4 h-4 text-blue-600" /> Parameters
+                        <Target className="w-4 h-4 text-blue-600" /> {to.parameters}
                      </h3>
-                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Mission Configuration</p>
+                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{to.missionConfig}</p>
                   </div>
 
                   <div className="space-y-4 relative z-10">
                      <div className="space-y-2">
-                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Target Entity</Label>
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.targetEntity}</Label>
                         <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all" />
                      </div>
                      <div className="space-y-2">
-                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Functional Area</Label>
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.functionalArea}</Label>
                         <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Senior Backend Engineer" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all" />
                      </div>
                      <div className="space-y-2">
-                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Context Reference</Label>
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.contextReference}</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
                            <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs text-slate-900">
-                              <SelectValue placeholder="Select Resume" />
+                              <SelectValue placeholder={to.selectResume} />
                            </SelectTrigger>
                            <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white">
                               {resumes.map(r => <SelectItem key={r.id} value={r.id} className="font-bold text-[10px] p-3 uppercase hover:bg-blue-50 cursor-pointer">{r.title}</SelectItem>)}
@@ -187,18 +189,18 @@ export default function EmailOutreach() {
                      </div>
                      
                      <div className="pt-4 space-y-4">
-                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Tone & Persona</Label>
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.tonePersona}</Label>
                         <div className="grid grid-cols-2 gap-2">
-                           {["Professional", "Friendly", "Confident", "Technical"].map(t => (
+                           {Object.entries(to.tones).map(([key, label]) => (
                               <button 
-                                 key={t}
-                                 onClick={() => setTone(t)}
+                                 key={key}
+                                 onClick={() => setTone(key)}
                                  className={cn(
                                     "px-3 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest border transition-all",
-                                    tone === t ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20" : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-white hover:border-blue-600/30"
+                                    tone === key ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20" : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-white hover:border-blue-600/30"
                                  )}
                               >
-                                 {t}
+                                 {label}
                               </button>
                            ))}
                         </div>
@@ -206,7 +208,7 @@ export default function EmailOutreach() {
 
                      <div className="pt-6 border-t border-slate-50">
                         <Button onClick={generateWithAI} disabled={generating} className="w-full h-12 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-xl shadow-slate-900/10 hover:bg-blue-600 transition-all">
-                           {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} Synthesize Draft
+                           {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} {to.synthesizeDraft}
                         </Button>
                      </div>
                   </div>
@@ -215,22 +217,22 @@ export default function EmailOutreach() {
                <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
                      <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                        <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Safety Protocols
+                        <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> {to.safetyProtocols}
                      </h3>
-                     <Badge className="bg-emerald-50 text-emerald-600 border-none text-[8px] font-bold uppercase">Active</Badge>
+                     <Badge className="bg-emerald-50 text-emerald-600 border-none text-[8px] font-bold uppercase">{to.active}</Badge>
                   </div>
                   <div className="space-y-3">
                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                         <div className="flex items-center gap-3">
                            <Eye className="w-4 h-4 text-slate-400" />
-                           <span className="text-[10px] font-bold text-slate-500 uppercase">Spam Analysis</span>
+                           <span className="text-[10px] font-bold text-slate-500 uppercase">{to.spamAnalysis}</span>
                         </div>
                         <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                      </div>
                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                         <div className="flex items-center gap-3">
                            <FileText className="w-4 h-4 text-slate-400" />
-                           <span className="text-[10px] font-bold text-slate-500 uppercase">ATS Compatible</span>
+                           <span className="text-[10px] font-bold text-slate-500 uppercase">{to.atsCompatible}</span>
                         </div>
                         <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                      </div>
@@ -249,10 +251,10 @@ export default function EmailOutreach() {
                         <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                            <MessageSquare className="w-4 h-4" />
                         </div>
-                        <h3 className="text-sm font-bold text-slate-900 tracking-tight uppercase">Intelligence Composer</h3>
+                        <h3 className="text-sm font-bold text-slate-900 tracking-tight uppercase">{to.intelligenceComposer}</h3>
                      </div>
                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-[8px] font-bold text-slate-400 border-slate-200 px-2 py-0.5">DRAFT MODE</Badge>
+                        <Badge variant="outline" className="text-[8px] font-bold text-slate-400 border-slate-200 px-2 py-0.5">{to.draftMode}</Badge>
                         <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></Button>
                      </div>
                   </div>
@@ -261,7 +263,7 @@ export default function EmailOutreach() {
                   <div className="flex-1 overflow-y-auto p-8 space-y-8 scrollbar-hide">
                      <div className="space-y-6">
                         <div className="flex items-center border-b border-slate-50 pb-4">
-                           <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Recipient</span>
+                           <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{to.recipient}</span>
                            <div className="flex-1 relative">
                               <Mail className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
                               <input 
@@ -273,7 +275,7 @@ export default function EmailOutreach() {
                            </div>
                         </div>
                         <div className="flex items-center border-b border-slate-50 pb-4">
-                           <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Subject</span>
+                           <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{to.subject}</span>
                            <input 
                               value={subject} 
                               onChange={e => setSubject(e.target.value)} 
@@ -285,7 +287,7 @@ export default function EmailOutreach() {
                            <textarea 
                               value={body} 
                               onChange={e => setBody(e.target.value)} 
-                              placeholder="Start drafting or use AI to synthesize..." 
+                              placeholder={to.startDrafting} 
                               className="w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 text-sm font-medium text-slate-600 leading-relaxed resize-none placeholder:text-slate-200" 
                            />
                         </div>
@@ -304,11 +306,11 @@ export default function EmailOutreach() {
                      
                      <div className="flex items-center gap-3">
                         <div className="text-right hidden md:block">
-                           <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Readability Score</p>
-                           <p className="text-[10px] font-bold text-emerald-600">PREMIUM (94/100)</p>
+                           <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{to.readabilityScore}</p>
+                           <p className="text-[10px] font-bold text-emerald-600">{to.premium} (94/100)</p>
                         </div>
                         <Button onClick={sendEmail} disabled={sending} className="h-12 px-8 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all">
-                           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Initialize Outreach
+                           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} {to.initializeOutreach}
                         </Button>
                      </div>
                   </div>
@@ -320,9 +322,9 @@ export default function EmailOutreach() {
          <div className="space-y-6">
             <div className="flex items-center justify-between px-2">
                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight flex items-center gap-2">
-                  <History className="w-4 h-4 text-blue-600" /> Recent Communications
+                  <History className="w-4 h-4 text-blue-600" /> {to.recentCommunications}
                </h3>
-               <Button variant="ghost" size="sm" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">View Full History</Button>
+               <Button variant="ghost" size="sm" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">{to.viewFullHistory}</Button>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -351,7 +353,7 @@ export default function EmailOutreach() {
                         </div>
                         <div className="flex items-center gap-1.5">
                            <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                           <span className="text-[9px] font-bold text-slate-900">{item.score}% Optimised</span>
+                           <span className="text-[9px] font-bold text-slate-900">{item.score}% {to.optimised}</span>
                         </div>
                      </div>
                   </Card>

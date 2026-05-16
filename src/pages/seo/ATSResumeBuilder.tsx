@@ -35,7 +35,7 @@ export default function ATSResumeBuilder() {
                <span className="text-[10px] font-black uppercase tracking-widest">{t.ats.tag}</span>
             </div>
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">{t.ats.h1}</h1>
-            <p className="text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">{t.ats.subtitle}</p>
+            <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">{t.ats.subtitle}</p>
             <div className="pt-8 flex flex-wrap justify-center gap-4">
               <Button size="lg" className="h-16 px-10 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-2xl shadow-blue-600/20 hover:scale-105 transition-all" asChild><Link to="/">{t.ats.buildNow} <ArrowRight className="h-4 w-4" /></Link></Button>
               <Button variant="outline" size="lg" className="h-16 px-10 rounded-2xl border-slate-200 font-black uppercase tracking-widest text-[10px] hover:bg-slate-50" asChild><Link to="/resume-templates">{t.ats.browseTemplates}</Link></Button>
@@ -63,7 +63,7 @@ export default function ATSResumeBuilder() {
                   <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-slate-400 group-hover:text-blue-600 shadow-sm transition-colors">{icons[i]}</div>
                   <div className="space-y-3">
                      <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{f.title}</h3>
-                     <p className="text-base text-slate-500 font-medium leading-relaxed">{f.desc}</p>
+                     <p className="text-base text-slate-600 font-medium leading-relaxed">{f.desc}</p>
                   </div>
                 </div>
               ))}
@@ -92,7 +92,7 @@ export default function ATSResumeBuilder() {
               {t.ats.faqs.map((item, i) => (
                 <AccordionItem key={i} value={`faq-${i}`} className="border-none bg-slate-50 rounded-[2rem] px-8 overflow-hidden">
                   <AccordionTrigger className="text-left text-lg font-black uppercase tracking-tight py-8 hover:no-underline">{item.q}</AccordionTrigger>
-                  <AccordionContent className="text-base text-slate-500 font-medium leading-relaxed pb-8">{item.a}</AccordionContent>
+                  <AccordionContent className="text-base text-slate-600 font-medium leading-relaxed pb-8">{item.a}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
@@ -113,7 +113,7 @@ export default function ATSResumeBuilder() {
         <section className="py-40">
           <div className="mx-auto max-w-4xl px-8 text-center space-y-10">
             <h2 className="text-5xl md:text-7xl font-black text-slate-900 uppercase tracking-tighter leading-none">{t.ats.ctaH2}</h2>
-            <p className="text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">{t.ats.ctaSub}</p>
+            <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">{t.ats.ctaSub}</p>
             <Button size="lg" className="h-20 px-12 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-3xl shadow-blue-600/30 hover:scale-105 transition-all" asChild><Link to="/">{t.ats.ctaBtn} <ArrowRight className="h-6 w-6" /></Link></Button>
           </div>
         </section>

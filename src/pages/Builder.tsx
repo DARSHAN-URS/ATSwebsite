@@ -38,6 +38,11 @@ import SectionNavigator from "@/components/builder/SectionNavigator";
 import ATSAnalyticsRow from "@/components/builder/ATSAnalyticsRow";
 import AIAssistantSidebar from "@/components/builder/AIAssistantSidebar";
 import ModernOnboarding from "@/components/builder/ModernOnboarding";
+import StudioTopBar from "@/components/builder/StudioTopBar";
+import StudioSidebar from "@/components/builder/StudioSidebar";
+import StudioEditor from "@/components/builder/StudioEditor";
+import StudioPreview from "@/components/builder/StudioPreview";
+import AICopilot from "@/components/builder/AICopilot";
 
 export default function Builder() {
   const { id } = useParams();
@@ -66,7 +71,6 @@ export default function Builder() {
 
   const [aiLoading, setAiLoading] = useState<string | null>(null);
 
-  // Completion Tracking for Navigator
   const completionData = {
     personal: !!resumeData.personalInfo?.fullName,
     summary: !!resumeData.summary && resumeData.summary.length > 50,
@@ -76,6 +80,22 @@ export default function Builder() {
     languages: (resumeData.languages || []).length > 0,
     custom: (resumeData.customSections || []).length > 0,
   };
+
+  const dynamicScore = useMemo(() => {
+    const checks = [
+      !!title && title !== "Untitled Resume",
+      !!resumeData.personalInfo?.fullName,
+      !!(resumeData.personalInfo?.email && resumeData.personalInfo?.phone),
+      !!resumeData.summary && resumeData.summary.length > 50,
+      (resumeData.skills || []).length >= 5,
+      (resumeData.experience || []).length > 0,
+      (resumeData.experience || []).some(e => e.bullets && e.bullets.length >= 2),
+      (resumeData.education || []).length > 0,
+      !!(resumeData.personalInfo?.linkedin || resumeData.personalInfo?.portfolio),
+    ];
+    const doneCount = checks.filter(Boolean).length;
+    return Math.round((doneCount / checks.length) * 100);
+  }, [resumeData, title]);
 
   useEffect(() => {
     if (!id || !user) return;
@@ -147,9 +167,15 @@ export default function Builder() {
         title={title}
         onTitleChange={setTitle}
         saving={saving}
-        score={82}
+        score={dynamicScore}
         onAiImprove={() => toast({ title: "AI Optimizing...", description: "Refining your professional identity." })}
         onExport={() => saveResume(true)}
+      />
+
+      <ATSAnalyticsRow 
+        score={dynamicScore}
+        keywordMatch={(resumeData.skills || []).length}
+        readability={dynamicScore > 70 ? "High Fidelity" : "Draft Mode"}
       />
 
       <div className="flex-1 flex overflow-hidden">

@@ -41,7 +41,7 @@ export default function ResumeTemplates() {
               <h1 className="text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
                  Layout <br /> <span className="text-blue-600">Dynamics.</span>
               </h1>
-              <p className="text-xl text-slate-500 font-medium max-w-xl leading-relaxed">
+              <p className="text-xl text-slate-700 font-medium max-w-xl leading-relaxed">
                  {t.tpl.subtitle}
               </p>
            </div>
@@ -53,7 +53,7 @@ export default function ResumeTemplates() {
               <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">{t.tpl.browseH2}</h2>
               <div className="flex items-center gap-3">
                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
-                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Library v2.4</span>
+                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Global Library v2.4</span>
               </div>
            </div>
 
@@ -67,15 +67,15 @@ export default function ResumeTemplates() {
                    viewport={{ once: true }}
                >
                   <Card className="group relative rounded-[3rem] border-none bg-slate-50 p-10 space-y-8 hover:bg-white transition-all duration-500 hover:shadow-3xl hover:-translate-y-4">
-                     <div className="aspect-[3/4] rounded-3xl bg-white border border-slate-100 overflow-hidden relative shadow-inner">
-                        {/* Blueprint Placeholder */}
-                        <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
-                           <div className="absolute inset-0 grid grid-cols-8 gap-2 p-4">
-                              {[...Array(64)].map((_, j) => <div key={j} className="h-4 bg-blue-600 rounded-sm" />)}
-                           </div>
-                        </div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                           <div className="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+                     <div className="aspect-[3/4] rounded-3xl bg-white border border-slate-100 overflow-hidden relative shadow-inner group/img">
+                        <img 
+                          src={tp.image} 
+                          alt={tp.name} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                           <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
                               <Sparkles className="w-8 h-8" />
                            </div>
                         </div>
@@ -86,7 +86,7 @@ export default function ResumeTemplates() {
                            <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{tp.name}</h3>
                            <Badge className="bg-blue-600/10 text-blue-600 border-none text-[9px] font-black uppercase tracking-widest px-3">{tp.best}</Badge>
                         </div>
-                        <p className="text-sm font-medium text-slate-500 leading-relaxed">{tp.desc}</p>
+                        <p className="text-sm font-medium text-slate-600 leading-relaxed">{tp.desc}</p>
                      </div>
 
                      <Button className="w-full h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] group-hover:bg-blue-600 transition-colors" asChild>
@@ -104,7 +104,7 @@ export default function ResumeTemplates() {
               <div className="absolute top-0 right-0 p-12 opacity-5"><ShieldCheck className="w-64 h-64" /></div>
               <div className="relative z-10 space-y-8">
                  <h2 className="text-5xl font-black tracking-tighter leading-none uppercase">{t.tpl.whatMakesH2}</h2>
-                 <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-xl">{t.tpl.whatMakesIntro}</p>
+                 <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-xl">{t.tpl.whatMakesIntro}</p>
                  <div className="space-y-6 pt-6">
                     {t.tpl.whatMakesList.map((item, i) => (
                        <div key={i} className="flex items-center gap-4 group">

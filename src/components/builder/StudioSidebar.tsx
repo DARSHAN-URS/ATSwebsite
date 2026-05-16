@@ -16,11 +16,11 @@ const sections = [
   { id: "personal", label: "Personal Info", icon: User },
   { id: "summary", label: "Professional Summary", icon: FileText },
   { id: "experience", label: "Work Experience", icon: Briefcase },
-  { id: "projects", label: "Key Projects", icon: Sparkles },
   { id: "education", label: "Education", icon: GraduationCap },
-  { id: "skills", label: "Core Skills", icon: Zap },
+  { id: "skills", label: "Core Skills", icon: Sparkles },
   { id: "languages", label: "Languages", icon: Languages },
-  { id: "certificates", label: "Certificates", icon: Settings },
+  { id: "design", label: "Visual Design", icon: Palette },
+  { id: "templates", label: "Architecture", icon: LayoutGrid },
 ];
 
 export default function StudioSidebar({

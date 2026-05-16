@@ -69,6 +69,14 @@ const en = {
   engineerResume: "Engineer Resume",
   interviewPreparation: "Interview Preparation",
   resumeDownload: "Resume Download",
+  archFaq1Q: "How does the AI architectural builder work?",
+  archFaq1A: "Our system uses proprietary career vectors to synthesize your experience into high-density, ATS-optimized professional identity documents with 99.2% accuracy.",
+  archFaq2Q: "Is the infrastructure secure for executive data?",
+  archFaq2A: "We utilize bank-grade encryption protocols and enterprise-level data isolation to ensure your professional assets remain under your absolute control.",
+  archFaq3Q: "Can I deploy to global markets?",
+  archFaq3A: "Yes. Our grid supports multi-regional formatting standards, allowing you to optimize your resume for any primary global technology hub automatically.",
+  archFaq4Q: "How do I access the recruitment intelligence?",
+  archFaq4A: "By initializing a Professional or Executive plan, you gain direct access to our real-time talent matrix and autonomous outreach protocols.",
 };
 
 type LandingExtra = typeof en;
@@ -137,6 +145,14 @@ const ar: LandingExtra = {
   engineerResume: "سيرة المهندس",
   interviewPreparation: "التحضير للمقابلة",
   resumeDownload: "تحميل السيرة الذاتية",
+  archFaq1Q: "كيف يعمل منشئ الذكاء الاصطناعي المعماري؟",
+  archFaq1A: "يستخدم نظامنا ناقلات مهنية خاصة لتجميع خبرتك في وثائق هوية مهنية محسنة لـ ATS بدقة 99.2٪.",
+  archFaq2Q: "هل البنية التحتية آمنة للبيانات التنفيذية؟",
+  archFaq2A: "نحن نستخدم بروتوكولات تشفير من الدرجة المصرفية وعزل البيانات على مستوى المؤسسة لضمان بقاء أصولك المهنية تحت سيطرتك المطلقة.",
+  archFaq3Q: "هل يمكنني النشر في الأسواق العالمية؟",
+  archFaq3A: "نعم. تدعم شبكتنا معايير التنسيق متعددة المناطق، مما يتيح لك تحسين سيرتك الذاتية لأي مركز تكنولوجي عالمي رئيسي تلقائيًا.",
+  archFaq4Q: "كيف يمكنني الوصول إلى استخبارات التوظيف؟",
+  archFaq4A: "من خلال تهيئة خطة مهنية أو تنفيذية، يمكنك الوصول المباشر إلى مصفوفة المواهب في الوقت الفعلي وبروتوكولات التواصل الذاتية.",
 };
 
 const es: LandingExtra = {
@@ -203,6 +219,14 @@ const es: LandingExtra = {
   engineerResume: "CV de Ingeniero",
   interviewPreparation: "Preparación para Entrevistas",
   resumeDownload: "Descarga de CV",
+  archFaq1Q: "¿Cómo funciona el constructor arquitectónico de IA?",
+  archFaq1A: "Nuestro sistema utiliza vectores de carrera patentados para sintetizar su experiencia en documentos de identidad profesional optimizados para ATS con un 99.2% de precisión.",
+  archFaq2Q: "¿Es segura la infraestructura para datos ejecutivos?",
+  archFaq2A: "Utilizamos protocolos de cifrado de grado bancario y aislamiento de datos a nivel empresarial para garantizar que sus activos profesionales permanezcan bajo su control absoluto.",
+  archFaq3Q: "¿Puedo desplegar en mercados globales?",
+  archFaq3A: "Sí. Nuestra red admite estándares de formato multirregionales, lo que le permite optimizar su currículum para cualquier centro tecnológico global principal automáticamente.",
+  archFaq4Q: "¿Cómo accedo a la inteligencia de reclutamiento?",
+  archFaq4A: "Al inicializar un plan Profesional o Ejecutivo, obtiene acceso directo a nuestra matriz de talento en tiempo real y protocolos de alcance autónomo.",
 };
 
 const fr: LandingExtra = {
@@ -269,6 +293,14 @@ const fr: LandingExtra = {
   engineerResume: "CV d'Ingénieur",
   interviewPreparation: "Préparation aux Entretiens",
   resumeDownload: "Téléchargement de CV",
+  archFaq1Q: "Comment fonctionne le constructeur architectural IA ?",
+  archFaq1A: "Notre système utilise des vecteurs de carrière propriétaires pour synthétiser votre expérience dans des documents d'identité professionnelle optimisés pour l'ATS avec une précision de 99,2 %.",
+  archFaq2Q: "L'infrastructure est-elle sécurisée pour les données exécutives ?",
+  archFaq2A: "Nous utilisons des protocoles de cryptage de niveau bancaire et une isolation des données au niveau de l'entreprise pour garantir que vos actifs professionnels restent sous votre contrôle absolu.",
+  archFaq3Q: "Puis-je me déployer sur les marchés mondiaux ?",
+  archFaq3A: "Oui. Notre réseau prend en charge les normes de formatage multirégionales, vous permettant d'optimiser automatiquement votre CV pour n'importe quel centre technologique mondial majeur.",
+  archFaq4Q: "Comment accéder à l'intelligence de recrutement ?",
+  archFaq4A: "En initialisant un plan Professionnel ou Exécutif, vous obtenez un accès direct à notre matrice de talents en temps réel et à nos protocoles de sensibilisation autonomes.",
 };
 
 const hi: LandingExtra = {
@@ -335,6 +367,14 @@ const hi: LandingExtra = {
   engineerResume: "इंजीनियर रिज्यूमे",
   interviewPreparation: "साक्षात्कार तैयारी",
   resumeDownload: "रिज्यूमे डाउनलोड",
+  archFaq1Q: "AI आर्किटेक्चरल बिल्डर कैसे काम करता है?",
+  archFaq1A: "हमारा सिस्टम 99.2% सटीकता के साथ उच्च-घनत्व, ATS-अनुकूलित पेशेवर पहचान दस्तावेजों में आपके अनुभव को संश्लेषित करने के लिए मालिकाना करियर वैक्टर का उपयोग करता है।",
+  archFaq2Q: "क्या कार्यकारी डेटा के लिए बुनियादी ढांचा सुरक्षित है?",
+  archFaq2A: "हम यह सुनिश्चित करने के लिए बैंक-ग्रेड एन्क्रिप्शन प्रोटोकॉल और एंटरप्राइज-लेवल डेटा अलगाव का उपयोग करते हैं कि आपकी पेशेवर संपत्ति आपके पूर्ण नियंत्रण में रहे।",
+  archFaq3Q: "क्या मैं वैश्विक बाजारों में तैनाती कर सकता हूं?",
+  archFaq3A: "हाँ। हमारा ग्रिड बहु-क्षेत्रीय स्वरूपण मानकों का समर्थन करता है, जिससे आप किसी भी प्राथमिक वैश्विक प्रौद्योगिकी केंद्र के लिए अपने रिज्यूमे को स्वचालित रूप से अनुकूलित कर सकते हैं।",
+  archFaq4Q: "मैं भर्ती बुद्धिमत्ता तक कैसे पहुँच सकता हूँ?",
+  archFaq4A: "एक व्यावसायिक या कार्यकारी योजना शुरू करके, आप हमारे रीयल-टाइम टैलेंट मैट्रिक्स और स्वायत्त आउटरीच प्रोटोकॉल तक सीधी पहुँच प्राप्त करते हैं।",
 };
 
 const pt: LandingExtra = {
@@ -401,6 +441,14 @@ const pt: LandingExtra = {
   engineerResume: "CV de Engenheiro",
   interviewPreparation: "Preparação para Entrevistas",
   resumeDownload: "Download de CV",
+  archFaq1Q: "Como funciona o construtor arquitetônico de IA?",
+  archFaq1A: "Nosso sistema usa vetores de carreira proprietários para sintetizar sua experiência em documentos de identidade profissional otimizados para ATS com 99,2% de precisão.",
+  archFaq2Q: "A infraestrutura é segura para dados executivos?",
+  archFaq2A: "Utilizamos protocolos de criptografia de nível bancário e isolamento de dados em nível empresarial para garantir que seus ativos profissionais permaneçam sob seu controle absoluto.",
+  archFaq3Q: "Posso implantar em mercados globais?",
+  archFaq3A: "Sim. Nossa rede suporta padrões de formatação multirregionais, permitindo que você otimize seu currículo para qualquer centro de tecnologia global primário automaticamente.",
+  archFaq4Q: "Como acesso a inteligência de recrutamento?",
+  archFaq4A: "Ao inicializar um plano Profissional ou Executivo, você ganha acesso direto à nossa matriz de talentos em tempo real e protocolos de alcance autônomos.",
 };
 
 const de: LandingExtra = {
@@ -467,6 +515,14 @@ const de: LandingExtra = {
   engineerResume: "Ingenieur-Lebenslauf",
   interviewPreparation: "Interviewvorbereitung",
   resumeDownload: "Lebenslauf-Download",
+  archFaq1Q: "Wie funktioniert der architektonische KI-Builder?",
+  archFaq1A: "Unser System verwendet proprietäre Karrierevektoren, um Ihre Erfahrung in hochdichte, ATS-optimierte professionelle Identitätsdokumente mit einer Genauigkeit von 99,2 % zu synthetisieren.",
+  archFaq2Q: "Ist die Infrastruktur für Executive-Daten sicher?",
+  archFaq2A: "Wir verwenden Banken-Verschlüsselungsprotokolle und Datenisolierung auf Unternehmensebene, um sicherzustellen, dass Ihre beruflichen Vermögenswerte unter Ihrer absoluten Kontrolle bleiben.",
+  archFaq3Q: "Kann ich in globalen Märkten bereitstellen?",
+  archFaq3A: "Ja. Unser Raster unterstützt multiregionale Formatierungsstandards, sodass Sie Ihren Lebenslauf automatisch für jedes primäre globale Technologiezentrum optimieren können.",
+  archFaq4Q: "Wie greife ich auf die Rekrutierungsintelligenz zu?",
+  archFaq4A: "Durch die Initialisierung eines Professional- oder Executive-Plans erhalten Sie direkten Zugriff auf unsere Echtzeit-Talentmatrix und autonomen Outreach-Protokolle.",
 };
 
 const zh: LandingExtra = {
@@ -533,6 +589,14 @@ const zh: LandingExtra = {
   engineerResume: "工程师简历",
   interviewPreparation: "面试准备",
   resumeDownload: "简历下载",
+  archFaq1Q: "AI 架构构建器是如何工作的？",
+  archFaq1A: "我们的系统使用专有的职业向量，将您的经验合成为高密度、ATS 优化的专业身份文档，准确率高达 99.2%。",
+  archFaq2Q: "高管数据的基础设施安全吗？",
+  archFaq2A: "我们利用银行级加密协议和企业级数据隔离，确保您的专业资产始终处于您的绝对控制之下。",
+  archFaq3Q: "我可以部署到全球市场吗？",
+  archFaq3A: "可以。我们的网格支持多区域格式化标准，允许您自动为任何主要的全球技术中心优化简历。",
+  archFaq4Q: "如何访问招聘情报？",
+  archFaq4A: "通过初始化专业或高管计划，您可以直接访问我们的实时人才矩阵和自主外联协议。",
 };
 
 const ja: LandingExtra = {
@@ -599,6 +663,14 @@ const ja: LandingExtra = {
   engineerResume: "エンジニア履歴書",
   interviewPreparation: "面接準備",
   resumeDownload: "履歴書ダウンロード",
+  archFaq1Q: "AIアーキテクチャルビルダーはどのように機能しますか？",
+  archFaq1A: "当社のシステムは、独自のキャリアベクターを使用して、あなたの経験を99.2%の精度で、高密度でATSに最適化されたプロフェッショナルなアイデンティティドキュメントに合成します。",
+  archFaq2Q: "エグゼクティブデータのためのインフラストラクチャは安全ですか？",
+  archFaq2A: "銀行グレードの暗号化プロトコルと企業レベルのデータ分離を利用して、プロフェッショナルな資産があなたの絶対的な制御下にあることを保証します。",
+  archFaq3Q: "グローバル市場に展開できますか？",
+  archFaq3A: "はい。当社のグリッドはマルチリージョンのフォーマット標準をサポートしており、主要なグローバルテクノロジーハブに合わせて履歴書を自動的に最適化できます。",
+  archFaq4Q: "リクルートインテリジェンスにはどのようにアクセスしますか？",
+  archFaq4A: "プロフェッショナルまたはエグゼクティブプランを初期化することで、当社のリアルタイムタレントマトリックスと自律的なアウトリーチプロトコルに直接アクセスできます。",
 };
 
 const ko: LandingExtra = {
@@ -665,6 +737,14 @@ const ko: LandingExtra = {
   engineerResume: "엔지니어 이력서",
   interviewPreparation: "면접 준비",
   resumeDownload: "이력서 다운로드",
+  archFaq1Q: "AI 아키텍처 빌더는 어떻게 작동하나요?",
+  archFaq1A: "당사의 시스템은 독점적인 커리어 벡터를 사용하여 귀하의 경험을 99.2%의 정확도로 고밀도 ATS 최적화 전문 신원 문서로 합성합니다.",
+  archFaq2Q: "임원 데이터를 위한 인프라가 안전한가요?",
+  archFaq2A: "당사는 귀하의 전문 자산이 귀하의 절대적인 통제하에 있도록 은행급 암호화 프로토콜과 기업 수준의 데이터 격리를 활용합니다.",
+  archFaq3Q: "글로벌 시장에 배포할 수 있나요?",
+  archFaq3A: "예. 당사의 그리드는 다중 지역 포맷 표준을 지원하여 주요 글로벌 기술 허브에 맞게 이력서를 자동으로 최적화할 수 있습니다.",
+  archFaq4Q: "채용 인텔리전스에 어떻게 액세스하나요?",
+  archFaq4A: "Professional 또는 Executive 플랜을 초기화하면 당사의 실시간 인재 매트릭스 및 자율 아웃리치 프로토콜에 직접 액세스할 수 있습니다.",
 };
 
 export const landingExtraTranslations: Record<Locale, LandingExtra> = { en, ar, es, fr, hi, pt, de, zh, ja, ko };

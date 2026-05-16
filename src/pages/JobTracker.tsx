@@ -49,7 +49,7 @@ export default function JobTracker() {
   const [sending, setSending] = useState(false);
 
   const fetchApps = async () => {
-    const { data } = await supabase.from("job_tracker").select("*").eq("user_id", user?.id).order("created_at", { ascending: false });
+    const { data } = await supabase.from("job_applications").select("*").eq("user_id", user?.id).order("created_at", { ascending: false });
     setApps(data ?? []);
     setLoading(false);
   };
@@ -57,12 +57,15 @@ export default function JobTracker() {
   useEffect(() => { if (user) fetchApps(); }, [user]);
 
   const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("job_tracker").update({ status }).eq("id", id);
+    const { error } = await supabase.from("job_applications").update({ status }).eq(
+      "id",
+      id
+    );
     if (!error) fetchApps();
   };
 
   const deleteApp = async (id: string) => {
-    const { error } = await supabase.from("job_tracker").delete().eq("id", id);
+    const { error } = await supabase.from("job_applications").delete().eq("id", id);
     if (!error) fetchApps();
   };
 
