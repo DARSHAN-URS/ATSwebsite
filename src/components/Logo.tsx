@@ -19,8 +19,6 @@ export default function Logo({ className = "h-12", variant = "auto" }: LogoProps
           maskRepeat: 'no-repeat',
           WebkitMaskPosition: 'left center',
           maskPosition: 'left center',
-          maskMode: 'luminance',
-          WebkitMaskMode: 'luminance'
         }}
       />
 
@@ -37,8 +35,6 @@ export default function Logo({ className = "h-12", variant = "auto" }: LogoProps
           maskRepeat: 'no-repeat',
           WebkitMaskPosition: 'left center',
           maskPosition: 'left center',
-          maskMode: 'luminance',
-          WebkitMaskMode: 'luminance'
         }}
       />
     </div>

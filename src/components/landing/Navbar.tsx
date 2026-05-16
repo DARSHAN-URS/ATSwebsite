@@ -44,7 +44,7 @@ export const Navbar = () => {
               : "bg-transparent border-transparent"
           )}
         >
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group text-slate-900">
             <Logo variant={isScrolled ? "auto" : "dark"} className="h-14" />
           </Link>
 
