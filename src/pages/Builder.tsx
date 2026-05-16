@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import type { ResumeData } from "@/components/resume/types";
 import { type TemplateId } from "@/components/resume/pdfTemplates";
 import { useResumeColors } from "@/hooks/useResumeColors";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
@@ -178,20 +179,28 @@ export default function Builder() {
         readability={dynamicScore > 70 ? "High Fidelity" : "Draft Mode"}
       />
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left: Section Navigation */}
-        <StudioSidebar 
-          activeSection={activeSection}
-          onSectionChange={setActiveSection}
-          completionData={completionData}
-        />
+      <div className="flex-1 overflow-hidden">
+        <PanelGroup direction="horizontal">
+          {/* Left: Section Navigation */}
+          <Panel defaultSize={20} minSize={15} maxSize={30}>
+            <StudioSidebar 
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
+              completionData={completionData}
+            />
+          </Panel>
 
-        {/* Center: Editing Workspace */}
-        <StudioEditor 
-          activeSection={activeSection}
-          onSave={() => saveResume(true)}
-          saving={saving}
-        >
+          <PanelResizeHandle className="w-2 bg-slate-100 hover:bg-blue-400 active:bg-blue-600 transition-colors cursor-col-resize z-50 flex items-center justify-center">
+            <div className="w-1 h-8 rounded-full bg-slate-300" />
+          </PanelResizeHandle>
+
+          {/* Center: Editing Workspace */}
+          <Panel defaultSize={40} minSize={30}>
+            <StudioEditor 
+              activeSection={activeSection}
+              onSave={() => saveResume(true)}
+              saving={saving}
+            >
           {activeSection === "personal" && (
             <div className="space-y-12">
                <div className="space-y-4">
@@ -353,17 +362,25 @@ export default function Builder() {
                <TemplateSelector selectedId={selectedTemplate} onSelect={setSelectedTemplate} />
             </div>
           )}
-        </StudioEditor>
+            </StudioEditor>
+          </Panel>
 
-        {/* Right: Live Preview Canvas */}
-        <StudioPreview 
-          resumeData={resumeData}
-          title={title}
-          selectedTemplate={selectedTemplate}
-          colors={colors}
-          zoom={zoom}
-          onZoomChange={setZoom}
-        />
+          <PanelResizeHandle className="w-2 bg-slate-100 hover:bg-blue-400 active:bg-blue-600 transition-colors cursor-col-resize z-50 flex items-center justify-center">
+            <div className="w-1 h-8 rounded-full bg-slate-300" />
+          </PanelResizeHandle>
+
+          {/* Right: Live Preview Canvas */}
+          <Panel defaultSize={40} minSize={30}>
+            <StudioPreview 
+              resumeData={resumeData}
+              title={title}
+              selectedTemplate={selectedTemplate}
+              colors={colors}
+              zoom={zoom}
+              onZoomChange={setZoom}
+            />
+          </Panel>
+        </PanelGroup>
       </div>
 
       {/* Floating AI Assistant */}
