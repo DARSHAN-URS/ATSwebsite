@@ -23,7 +23,7 @@ export default function StudioPreview({
   onZoomChange,
 }: StudioPreviewProps) {
   return (
-    <section className="flex-1 bg-[#EDF2F7] flex flex-col h-full overflow-hidden relative border-l border-slate-200">
+    <section className="flex-1 min-w-0 bg-[#EDF2F7] flex flex-col h-full overflow-hidden relative border-l border-slate-200">
       {/* Top Preview Controls */}
       <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-auto">
         <div className="bg-white/90 backdrop-blur-md p-2 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white flex items-center gap-2">
@@ -46,7 +46,8 @@ export default function StudioPreview({
       </div>
       
       {/* Paper Canvas */}
-      <div className="flex-1 overflow-auto custom-scrollbar pt-28 pb-32 flex justify-center items-start">
+      <div className="flex-1 overflow-auto custom-scrollbar pt-28 pb-32">
+        <div className="min-h-full flex flex-col items-center justify-start min-w-max px-8">
         <motion.div 
            initial={{ opacity: 0, scale: 0.95 }}
            animate={{ opacity: 1, scale: 1 }}
@@ -65,6 +66,7 @@ export default function StudioPreview({
             />
           </div>
         </motion.div>
+        </div>
       </div>
 
       {/* Template Helper Text */}

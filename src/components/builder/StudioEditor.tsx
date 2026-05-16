@@ -17,7 +17,7 @@ export default function StudioEditor({
   saving,
 }: StudioEditorProps) {
   return (
-    <main className="flex-1 bg-[#F8FAFC] h-full flex flex-col overflow-hidden">
+    <main className="flex-1 min-w-0 bg-[#F8FAFC] h-full flex flex-col overflow-hidden">
       <ScrollArea className="flex-1">
         <div className="p-12 pb-40 max-w-4xl mx-auto w-full">
           <AnimatePresence mode="wait">

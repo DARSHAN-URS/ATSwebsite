@@ -226,7 +226,7 @@ export default function Builder() {
                      value={resumeData.summary} 
                      onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))}
                      placeholder="Craft your career mission..." 
-                     className="min-h-[350px] border-none p-0 focus-visible:ring-0 text-xl leading-relaxed resize-none font-medium text-slate-700 placeholder:text-slate-200"
+                     className="min-h-[350px] bg-transparent border-none p-0 focus-visible:ring-0 text-xl leading-relaxed resize-none font-medium text-slate-700 placeholder:text-slate-200"
                   />
                   <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-between">
                      <div className="flex items-center gap-3">
