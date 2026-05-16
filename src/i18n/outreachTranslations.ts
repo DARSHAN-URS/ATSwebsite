@@ -1,4 +1,4 @@
-import type { Locale } from "./translations";
+import { Locale } from "./types";
 
 const en = {
   seoTitle: "Email Outreach — ResumePro",

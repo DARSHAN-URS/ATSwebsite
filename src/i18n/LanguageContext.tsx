@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { rtlLocales, type Locale, type TranslationKeys } from "./translations";
+import { Locale, rtlLocales } from "./types";
+import { type TranslationKeys } from "./translations";
 
 // Import only English eagerly — it's the default and needed at startup.
 // All other locales are dynamically imported to avoid a 135KB bundle hit on first load.

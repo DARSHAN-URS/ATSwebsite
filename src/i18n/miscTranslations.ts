@@ -1,4 +1,4 @@
-import type { Locale } from "./translations";
+import { Locale } from "./types";
 
 export interface MiscTranslations {
   // Blog page UI
