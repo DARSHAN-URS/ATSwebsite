@@ -50,9 +50,8 @@ export default function StudioPreview({
         <div className="min-h-full flex flex-col items-center justify-start min-w-max px-8">
         <motion.div 
            initial={{ opacity: 0, scale: 0.95 }}
-           animate={{ opacity: 1, scale: 1 }}
+           animate={{ opacity: 1, scale: zoom / 100 }}
            style={{ 
-              scale: zoom / 100,
               transformOrigin: "top center",
            }}
            className="shadow-[0_40px_100px_rgba(0,0,0,0.12)] rounded-sm bg-white ring-1 ring-slate-200/50"

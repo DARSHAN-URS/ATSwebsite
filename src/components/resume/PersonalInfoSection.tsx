@@ -187,47 +187,6 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
             </div>
           </div>
         </div>
-
-        {/* AI Sidebar Panel */}
-        <div className="w-full lg:w-80 bg-slate-50/50 border-l border-slate-50 p-12 space-y-8">
-           <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-600">
-                 <Sparkles className="w-4 h-4" />
-              </div>
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900">AI Data Audit</h4>
-           </div>
-
-           <div className="space-y-6">
-              {!personalInfo.fullName && (
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
-                   <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Identity missing. Please enter your full name.</p>
-                </div>
-              )}
-              {!personalInfo.linkedin && (
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
-                   <Lightbulb className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
-                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Your LinkedIn URL is missing. Adding it increases credibility.</p>
-                </div>
-              )}
-              {!personalInfo.photoUrl && (
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
-                   <Camera className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
-                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Professional photo not detected. Consider uploading one.</p>
-                </div>
-              )}
-              {personalInfo.phone && personalInfo.phone.length < 10 && (
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-slate-100">
-                   <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Phone formatting issue detected. Check your entry.</p>
-                </div>
-              )}
-              <div className="p-6 rounded-[2rem] bg-blue-600 text-white space-y-3 shadow-lg shadow-blue-600/20">
-                 <p className="text-[10px] font-black uppercase tracking-widest">Studio Tip</p>
-                 <p className="text-xs font-bold leading-relaxed">Ensure your email is professional. Avoid nicknames in professional blueprints.</p>
-              </div>
-           </div>
-        </div>
       </div>
     </Card>
   );
