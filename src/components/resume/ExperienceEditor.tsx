@@ -1,4 +1,4 @@
-import { Plus, Trash2, GripVertical, Calendar, Building2, Wand2, Loader2 } from "lucide-react";
+import { Plus, Trash2, GripVertical, Calendar, Building2, Wand2, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

@@ -52,6 +52,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpdateRole = async (userId: string, newRole: string) => {

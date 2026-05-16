@@ -140,7 +140,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
               <DropdownMenuItem onClick={() => {navigate("/profile"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><Settings className="w-4 h-4" /> {t.common?.edit || "Settings"}</DropdownMenuItem>
               <DropdownMenuItem onClick={() => {navigate("/pricing"); onNavClick?.();}} className="rounded-lg p-3 text-[11px] font-medium gap-3 focus:bg-white/10 focus:text-white cursor-pointer"><CreditCard className="w-4 h-4" /> {t.nav.pricing}</DropdownMenuItem>
               <DropdownMenuSeparator className="my-2 bg-white/5" />
-              <DropdownMenuItem onClick={handleSignOut} className="rounded-lg p-3 text-[11px] font-medium gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> {t.nav.signOut}</DropdownMenuItem>
+              <DropdownMenuItem onClick={onSignOut} className="rounded-lg p-3 text-[11px] font-medium gap-3 text-red-400 focus:bg-red-500/10 cursor-pointer"><LogOut className="w-4 h-4" /> {t.nav.signOut}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
       </div>

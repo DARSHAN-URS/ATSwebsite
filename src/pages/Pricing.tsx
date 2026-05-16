@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -113,7 +113,7 @@ export default function Pricing() {
               <span className="text-[10px] font-black uppercase tracking-widest">{tp.premiumIntelligenceAccess}</span>
            </div>
            <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none uppercase">
-              {tl.heroTitle.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.heroHighlight || "Career."}</span>
+              {tl.archHeroTitle.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.heroHighlight || "Career."}</span>
            </h1>
            <p className="text-slate-500 font-medium text-lg leading-relaxed">{tp.subtitle}</p>
         </div>

@@ -102,6 +102,7 @@ export function useBlogTranslation(
     });
 
     return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [texts.join("|"), locale, context]);
 
   return { translated, isTranslating };

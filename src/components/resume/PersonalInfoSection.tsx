@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe, Camera } from "lucide-react";
+import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe, Camera, Loader2, Sparkles, AlertCircle, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePhotoUrl } from "@/lib/storageUtils";

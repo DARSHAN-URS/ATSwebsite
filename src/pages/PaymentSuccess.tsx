@@ -72,7 +72,7 @@ export default function PaymentSuccess() {
     };
 
     activate();
-  }, [authLoading, user, plan, done, token]);
+  }, [authLoading, user, plan, done, token, planId]);
 
   if (!plan || !token) {
     return (

@@ -3,9 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Users, Briefcase, TrendingUp, BarChart3 } from "lucide-react";
+import { Eye, Users, Briefcase, TrendingUp, BarChart3, Loader2 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import SEOHead from "@/components/SEOHead";
+import { cn } from "@/lib/utils";
 
 interface JobAnalytics {
   id: string;

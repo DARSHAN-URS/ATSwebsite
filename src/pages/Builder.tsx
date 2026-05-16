@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -112,7 +112,7 @@ export default function Builder() {
       setSelectedTemplate((rd.templateId as TemplateId) || "classic");
       setLoading(false);
     })();
-  }, [id, user]);
+  }, [id, user, navigate, toast]);
 
   const saveResume = useCallback(async (manual = false) => {
     if (!user) return;
@@ -133,7 +133,7 @@ export default function Builder() {
     } finally {
       if (manual) setSaving(false);
     }
-  }, [id, user, title, resumeData, selectedTemplate]);
+  }, [id, user, title, resumeData, selectedTemplate, navigate, toast]);
 
   const generateSummary = async () => {
     setAiLoading("summary");

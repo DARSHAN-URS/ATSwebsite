@@ -1,4 +1,4 @@
-import { aboutTranslations } from "./aboutTranslations";
+﻿import { aboutTranslations } from "./aboutTranslations";
 import { accountTranslations } from "./accountTranslations";
 import { dashboardExtraTranslations } from "./dashboardExtraTranslations";
 import { landingExtraTranslations } from "./landingExtraTranslations";
@@ -10,6 +10,7 @@ import { termsTranslations } from "./termsTranslations";
 import { adminTranslations } from "./adminTranslations";
 import { outreachTranslations } from "./outreachTranslations";
 import { Locale, localeNames, rtlLocales } from "./types";
+export { localeNames };
 
 export type TranslationKeys = typeof en;
 
@@ -429,8 +430,8 @@ const en = {
     easy: "Easy",
     // Architect Design Strings
     newVersion: "New Version 4.0 Live",
-    heroTitle: "Build Your Career.",
-    heroDesc: "The easiest way to create professional resumes and land your dream job with AI-powered tools.",
+    archHeroTitle: "Build Your Career.",
+    archHeroDesc: "The easiest way to create professional resumes and land your dream job with AI-powered tools.",
     startBuilding: "Start Building",
     seeTemplates: "See Templates",
     trustedInfrastructure: "Trusted Infrastructure",
@@ -886,8 +887,8 @@ const ar: TranslationKeys = {
     moreInterviews: "مقابلات أكثر",
     // Architect Design Strings
     newVersion: "الإصدار 4.0 الجديد مباشر",
-    heroTitle: "ابنِ مسيرتك المهنية.",
-    heroDesc: "أسهل طريقة لإنشاء سير ذاتية احترافية والحصول على وظيفة أحلامك بأدوات الذكاء الاصطناعي.",
+    archHeroTitle: "ابنِ مسيرتك المهنية.",
+    archHeroDesc: "أسهل طريقة لإنشاء سير ذاتية احترافية والحصول على وظيفة أحلامك بأدوات الذكاء الاصط나عي.",
     startBuilding: "ابدأ البناء",
     seeTemplates: "مشاهدة القوالب",
     trustedInfrastructure: "بنية تحتية موثوقة",
@@ -1447,8 +1448,8 @@ const es: TranslationKeys = {
     easy: "Fácil",
     // Architect Design Strings
     newVersion: "Nueva Versión 4.0 en Vivo",
-    heroTitle: "Construye Tu Carrera.",
-    heroDesc: "La forma más fácil de crear currículos profesionales y conseguir el trabajo de tus sueños con herramientas de IA.",
+    archHeroTitle: "Construye Tu Carrera.",
+    archHeroDesc: "La forma más fácil de crear currículos profesionales y conseguir el trabajo de tus sueños con herramientas de IA.",
     startBuilding: "Empezar a Construir",
     seeTemplates: "Ver Plantillas",
     trustedInfrastructure: "Infraestructura Confiable",
@@ -1957,8 +1958,8 @@ const fr: TranslationKeys = {
     easy: "Facile",
     // Architect Design Strings
     newVersion: "Nouvelle Version 4.0 en ligne",
-    heroTitle: "Construisez votre carrière.",
-    heroDesc: "Le moyen le plus simple de créer des CV professionnels et de décrocher l'emploi de vos rêves avec des outils IA.",
+    archHeroTitle: "Construisez votre carrière.",
+    archHeroDesc: "Le moyen le plus simple de créer des CV professionnels et de décrocher l'emploi de vos rêves avec des outils IA.",
     startBuilding: "Commencer à bâtir",
     seeTemplates: "Voir les modèles",
     trustedInfrastructure: "Infrastructure de confiance",
@@ -2466,8 +2467,8 @@ const hi: TranslationKeys = {
     easy: "आसान",
     // Architect Design Strings
     newVersion: "नया संस्करण 4.0 लाइव",
-    heroTitle: "अपना करियर बनाएं।",
-    heroDesc: "AI-संचालित टूल के साथ पेशेवर रेज़्यूमे बनाने और अपने सपनों की नौकरी पाने का सबसे आसान तरीका।",
+    archHeroTitle: "अपना करियर बनाएं।",
+    archHeroDesc: "AI-संचालित टूल के साथ पेशेवर रेज़्यूमे बनाने और अपने सपनों की नौकरी पाने का सबसे आसान तरीका।",
     startBuilding: "बनाना शुरू करें",
     seeTemplates: "टेम्प्लेट देखें",
     trustedInfrastructure: "विश्वसनीय बुनियादी ढांचा",
@@ -2976,8 +2977,8 @@ const pt: TranslationKeys = {
     easy: "Fácil",
     // Architect Design Strings
     newVersion: "Nova Versão 4.0 Live",
-    heroTitle: "Construa Sua Carreira.",
-    heroDesc: "A maneira mais fácil de criar currículos profissionais e conseguir o emprego dos seus sonhos com ferramentas de IA.",
+    archHeroTitle: "Construa Sua Carreira.",
+    archHeroDesc: "A maneira mais fácil de criar currículos profissionais e conseguir o emprego dos seus sonhos com ferramentas de IA.",
     startBuilding: "Começar a Construir",
     seeTemplates: "Ver Modelos",
     trustedInfrastructure: "Infraestrutura Confiável",
@@ -3486,8 +3487,8 @@ const de: TranslationKeys = {
     easy: "Einfach",
     // Architect Design Strings
     newVersion: "Neue Version 4.0 Live",
-    heroTitle: "Bauen Sie Ihre Karriere auf.",
-    heroDesc: "Der einfachste Weg, professionelle Lebensläufe zu erstellen und Ihren Traumjob mit KI-gestützten Tools zu finden.",
+    archHeroTitle: "Bauen Sie Ihre Karriere auf.",
+    archHeroDesc: "Der einfachste Weg, professionelle Lebensläufe zu erstellen und Ihren Traumjob mit KI-gestützten Tools zu finden.",
     startBuilding: "Bauen beginnen",
     seeTemplates: "Vorlagen ansehen",
     trustedInfrastructure: "Vertrauenswürdige Infrastruktur",
@@ -3995,8 +3996,8 @@ const zh: TranslationKeys = {
     easy: "简单",
     // Architect Design Strings
     newVersion: "4.0 版本上线",
-    heroTitle: "打造您的职业生涯。",
-    heroDesc: "使用 AI 驱动的工具创建专业简历并获得理想工作的最简单方法。",
+    archHeroTitle: "打造您的职业生涯。",
+    archHeroDesc: "使用 AI 驱动的工具创建专业简历并获得理想工作的最简单方法。",
     startBuilding: "开始创建",
     seeTemplates: "查看模板",
     trustedInfrastructure: "可信基础设施",
@@ -4504,8 +4505,8 @@ const ja: TranslationKeys = {
     easy: "簡単",
     // Architect Design Strings
     newVersion: "新バージョン 4.0 ライブ",
-    heroTitle: "あなたのキャリアを築く。",
-    heroDesc: "AI 搭載ツールを使用してプロフェッショナルな履歴書を作成し、夢の仕事に就くための最も簡単な方法。",
+    archHeroTitle: "あなたのキャリアを築く。",
+    archHeroDesc: "AI 搭載ツールを使用してプロフェッショナルな履歴書を作成し、夢の仕事に就くための最も簡単な方法。",
     startBuilding: "作成を開始",
     seeTemplates: "テンプレートを見る",
     trustedInfrastructure: "信頼できるインフラ",
@@ -5013,8 +5014,8 @@ const ko: TranslationKeys = {
     easy: "간편",
     // Architect Design Strings
     newVersion: "새 버전 4.0 라이브",
-    heroTitle: "당신의 커리어를 구축하세요.",
-    heroDesc: "AI 기반 도구로 전문적인 이력서를 작성하고 꿈의 직장을 구하는 가장 쉬운 방법.",
+    archHeroTitle: "당신의 커리어를 구축하세요.",
+    archHeroDesc: "AI 기반 도구로 전문적인 이력서를 작성하고 꿈의 직장을 구하는 가장 쉬운 방법.",
     startBuilding: "작성 시작",
     seeTemplates: "템플릿 보기",
     trustedInfrastructure: "신뢰할 수 있는 인프라",

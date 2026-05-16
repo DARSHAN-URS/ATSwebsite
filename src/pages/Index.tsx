@@ -40,7 +40,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
-      <SEOHead title={`ResumePro — ${t.landing.heroTitle}`} description={t.landing.heroDesc} />
+      <SEOHead title={`ResumePro — ${t.landing.archHeroTitle}`} description={t.landing.archHeroDesc} />
       
       <Navbar />
 
@@ -67,7 +67,7 @@ const Index = () => {
                         transition={{ delay: 0.1 }} 
                         className="text-6xl md:text-[7.5rem] font-black text-slate-900 tracking-tighter leading-[0.85]"
                       >
-                         {t.landing.heroTitle.split(" ").slice(0, 2).join(" ")} <br /> <span className="text-blue-600">{t.landing.heroTitle.split(" ").slice(2).join(" ")}</span>
+                         {t.landing.archHeroTitle.split(" ").slice(0, 2).join(" ")} <br /> <span className="text-blue-600">{t.landing.archHeroTitle.split(" ").slice(2).join(" ")}</span>
                       </motion.h1>
                       <motion.p 
                         initial={{ opacity: 0, y: 20 }} 
@@ -75,7 +75,7 @@ const Index = () => {
                         transition={{ delay: 0.2 }} 
                         className="text-xl md:text-2xl text-slate-700 font-medium max-w-xl leading-relaxed"
                       >
-                         {t.landing.heroDesc}
+                         {t.landing.archHeroDesc}
                       </motion.p>
                    </div>
 

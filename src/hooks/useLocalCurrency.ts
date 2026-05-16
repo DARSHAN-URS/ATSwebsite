@@ -68,7 +68,9 @@ function detectCountry(): string {
 
     const primary = lang.split("-")[0];
     if (EU_LANGUAGES.includes(primary)) return "EU";
-  } catch {}
+  } catch (e) {
+    // ignore
+  }
   return "US"; // fallback
 }
 

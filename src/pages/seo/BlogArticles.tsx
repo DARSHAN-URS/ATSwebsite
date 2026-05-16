@@ -2421,6 +2421,12 @@ export const SEED_ARTICLES: BlogArticle[] = [...BASE_ARTICLES, ...EXTRA_ARTICLES
 export function BlogArticlePage() {
   const { slug } = useParams();
   const article = SEED_ARTICLES.find((a) => a.slug === slug);
+  const { locale } = useLanguage();
+  const ba = miscTranslations[locale].blogArticle;
+
+  // Translate title, description, category, and all content blocks
+  const textsToTranslate = article ? [article.title, article.description, article.category, ...article.content] : [];
+  const { translated, isTranslating } = useBlogTranslation(textsToTranslate, locale, "article-content");
 
   if (!article) {
     return (
@@ -2432,13 +2438,6 @@ export function BlogArticlePage() {
       </div>
     );
   }
-
-  const { locale } = useLanguage();
-  const ba = miscTranslations[locale].blogArticle;
-
-  // Translate title, description, category, and all content blocks
-  const textsToTranslate = [article.title, article.description, article.category, ...article.content];
-  const { translated, isTranslating } = useBlogTranslation(textsToTranslate, locale, "article-content");
 
   const tTitle = translated[0] || article.title;
   const tDescription = translated[1] || article.description;

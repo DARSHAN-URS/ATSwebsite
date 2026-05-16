@@ -67,6 +67,7 @@ export default function EmailOutreach() {
     const name = personal?.fullName || personal?.name || "";
     if (jobTitle && !position) setPosition(jobTitle);
     if (name && !fromName) setFromName(name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResumeId, resumes]);
 
   const generateWithAI = async () => {

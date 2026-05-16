@@ -114,6 +114,7 @@ export default function AIApplyQueueSection() {
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchQueue(); }, [user]);
 
   const handleAutoApplyAll = async () => {

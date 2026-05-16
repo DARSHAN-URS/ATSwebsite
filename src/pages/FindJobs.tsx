@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { invokeFunction } from "@/lib/api-client";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,6 +35,7 @@ interface JobPost {
 export default function FindJobs() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>("");
@@ -58,6 +60,7 @@ export default function FindJobs() {
       if (data && data.length > 0) setSelectedResumeId(data[0].id);
     });
     fetchSavedJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
@@ -67,6 +70,7 @@ export default function FindJobs() {
       setBoardJobs((data as any) ?? []);
       setBoardLoading(false);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchSavedJobs = async () => {

@@ -38,7 +38,7 @@ function extractText(data: ResumeData): string {
 
 function extractKeywords(text: string): string[] {
   const stopWords = new Set(["a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by", "from", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "do", "does", "did", "will", "would", "could", "should", "may", "might", "can", "this", "that", "these", "those", "it", "its", "we", "our", "you", "your", "they", "their", "he", "she", "his", "her", "not", "no", "all", "each", "every", "both", "few", "more", "most", "other", "some", "such", "than", "too", "very", "just", "about", "above", "after", "again", "also", "any", "as", "because", "before", "between", "during", "into", "through", "under", "until", "up", "what", "when", "where", "which", "while", "who", "whom", "why", "how", "if", "then", "so", "work", "working", "worked", "experience", "role", "job", "position", "team", "company", "etc", "including", "using", "ability", "strong", "excellent", "required", "preferred", "must", "years", "minimum", "looking", "seeking", "responsible", "responsibilities", "requirements", "qualifications"]);
-  const words = text.toLowerCase().replace(/[^a-z0-9\s\-\+\#\.]/g, " ").split(/\s+/);
+  const words = text.toLowerCase().replace(/[^a-z0-9\s+#.-]/g, " ").split(/\s+/);
   const wordCount: Record<string, number> = {};
   words.forEach((w) => {
     const cleaned = w.trim();

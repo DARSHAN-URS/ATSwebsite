@@ -33,6 +33,8 @@ export default defineConfig(({ mode }) => ({
           "vendor-react": ["react", "react-dom", "react-router-dom"],
           "vendor-forms": ["react-hook-form", "@hookform/resolvers", "zod"],
           "vendor-supabase": ["@supabase/supabase-js"],
+          "ui-components": ["lucide-react", "framer-motion", "clsx", "tailwind-merge"],
+          "charts": ["recharts"],
         },
       },
     },

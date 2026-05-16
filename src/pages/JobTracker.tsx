@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -37,6 +38,7 @@ const statusConfig: Record<string, { label: string; icon: any; className: string
 export default function JobTracker() {
   const { user, session } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [apps, setApps] = useState<JobApp[]>([]);
   const [loading, setLoading] = useState(true);
   const [emailOpen, setEmailOpen] = useState(false);
@@ -54,6 +56,7 @@ export default function JobTracker() {
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (user) fetchApps(); }, [user]);
 
   const updateStatus = async (id: string, status: string) => {

@@ -46,7 +46,7 @@ function extractKeywords(text: string): string[] {
     "responsible", "responsibilities", "requirements", "qualifications",
   ]);
 
-  const words = text.toLowerCase().replace(/[^a-z0-9\s\-\+\#\.]/g, " ").split(/\s+/);
+  const words = text.toLowerCase().replace(/[^a-z0-9\s+#.-]/g, " ").split(/\s+/);
   const wordCount: Record<string, number> = {};
 
   words.forEach((w) => {

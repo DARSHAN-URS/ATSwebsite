@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { invokeFunction } from "@/lib/api-client";
 import SEOHead from "@/components/SEOHead";
+import { cn } from "@/lib/utils";
 import ScheduledInterviewsList from "@/components/ScheduledInterviewsList";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -92,6 +93,7 @@ export default function RecruiterApplicants() {
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchData(); }, [user, jobId]);
 
   const handleAIAnalyze = async () => {

@@ -14,6 +14,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Plus, Edit, Trash2, Briefcase, Eye, Users, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";
+import { cn } from "@/lib/utils";
 
 interface JobPost {
   id: string;
@@ -89,6 +90,7 @@ export default function RecruiterJobs() {
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchJobs(); }, [user]);
 
   const openNew = async () => {
