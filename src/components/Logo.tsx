@@ -6,7 +6,7 @@ interface LogoProps {
 export default function Logo({ className = "h-12", variant = "auto" }: LogoProps) {
   return (
     <div className={`relative flex items-center select-none ${className}`}>
-      {/* Dark variant for light backgrounds (logo-main.png with white background knocked out via multiply) */}
+      {/* Dark variant for light backgrounds (logo-main.png) */}
       <img
         src="/images/logo-main.png"
         alt="ATS Pro"
@@ -17,12 +17,9 @@ export default function Logo({ className = "h-12", variant = "auto" }: LogoProps
               ? 'dark:hidden' 
               : ''
         }`}
-        style={{
-          mixBlendMode: 'multiply',
-        }}
       />
 
-      {/* Light variant for dark backgrounds (logo-white.png with black background knocked out via screen) */}
+      {/* Light variant for dark backgrounds (logo-white.png) */}
       <img
         src="/images/logo-white.png"
         alt="ATS Pro"
@@ -35,11 +32,9 @@ export default function Logo({ className = "h-12", variant = "auto" }: LogoProps
                 ? 'block' 
                 : 'hidden'
         }`}
-        style={{
-          mixBlendMode: 'screen',
-        }}
       />
     </div>
   );
 }
+
 
