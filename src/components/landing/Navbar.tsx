@@ -40,12 +40,12 @@ export const Navbar = () => {
           className={cn(
             "flex items-center justify-between px-8 py-4 transition-all duration-500 rounded-[2rem]",
             isScrolled 
-              ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] border border-slate-200/50 dark:border-slate-800/50" 
-              : "bg-transparent border-transparent"
+              ? "bg-slate-950/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-slate-800/50" 
+              : "bg-slate-950/95 backdrop-blur-xl border border-slate-800/30"
           )}
         >
-          <Link to="/" className="flex items-center gap-3 group text-slate-900">
-            <Logo variant={isScrolled ? "auto" : "dark"} className="h-14" />
+          <Link to="/" className="flex items-center gap-3 group text-white">
+            <Logo variant="light" className="h-14" />
           </Link>
 
           {/* Desktop Menu */}
@@ -64,7 +64,7 @@ export const Navbar = () => {
           <div className="hidden lg:flex items-center gap-6">
             <LanguageSwitcher />
             <Link to="/auth">
-              <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-600">
+              <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600">
                 {t.nav.logIn}
               </Button>
             </Link>
@@ -80,7 +80,7 @@ export const Navbar = () => {
           <div className="lg:hidden flex items-center gap-4">
             <LanguageSwitcher className="h-9 px-3" />
             <button
-              className="text-slate-900 dark:text-white p-2"
+              className="text-white p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
