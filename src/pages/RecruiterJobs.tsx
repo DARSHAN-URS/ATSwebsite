@@ -170,7 +170,7 @@ export default function RecruiterJobs() {
   const totalApps = jobs.reduce((s, j) => s + (j.appCount || 0), 0);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20">
+    <div className="min-h-screen bg-slate-50 pb-20">
       <SEOHead title="Mission Control — ResumePro" description="Manage your job postings." noindex />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
@@ -180,7 +180,7 @@ export default function RecruiterJobs() {
                   <Briefcase className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">Mission Management</span>
                </div>
-               <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+               <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
                   Active <br /> <span className="text-blue-600">Missions.</span>
                </h1>
             </div>
@@ -196,13 +196,13 @@ export default function RecruiterJobs() {
                { label: "Operational Reach", value: totalViews, icon: Eye, color: "text-indigo-600", bg: "bg-indigo-50" },
                { label: "Elite Candidates", value: totalApps, icon: Users, color: "text-emerald-600", bg: "bg-emerald-50" }
             ].map((stat, i) => (
-               <Card key={i} className="rounded-[2.5rem] border-none bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex items-center gap-8 group">
+               <Card key={i} className="rounded-[2.5rem] border border-slate-100 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex items-center gap-8 group">
                   <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6", stat.bg, stat.color)}>
                      <stat.icon className="w-8 h-8" />
                   </div>
                   <div>
                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
-                     <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</p>
+                     <p className="text-4xl font-black text-slate-900 tracking-tight">{stat.value}</p>
                   </div>
                </Card>
             ))}
@@ -226,12 +226,12 @@ export default function RecruiterJobs() {
                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Synchronizing Job Data</p>
                   </div>
                ) : filteredJobs.length === 0 ? (
-                  <Card className="rounded-[4rem] border-2 border-dashed border-slate-100 bg-white dark:bg-slate-900/50 py-32 text-center space-y-8">
-                     <div className="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-300">
+                  <Card className="rounded-[4rem] border border-slate-200 bg-white py-32 text-center space-y-8">
+                     <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300">
                         <Briefcase className="w-10 h-10" />
                      </div>
                      <div className="space-y-2">
-                        <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">No Active Missions</h3>
+                        <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">No Active Missions</h3>
                         <p className="text-slate-500 font-medium max-w-sm mx-auto">Your operational queue is currently empty. Initialize a new mission to begin talent acquisition.</p>
                      </div>
                      <Button onClick={openNew} variant="outline" className="h-14 px-8 rounded-2xl border-slate-200 text-blue-600 font-black uppercase tracking-widest text-[10px] gap-3">
@@ -241,13 +241,13 @@ export default function RecruiterJobs() {
                ) : (
                    <div className="grid grid-cols-1 gap-12">
                       {filteredJobs.map((job) => (
-                         <Card key={job.id} className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_30px_100px_rgba(0,0,0,0.04)] p-12 hover:shadow-[0_50px_150px_rgba(0,0,0,0.08)] transition-all duration-700 group relative overflow-hidden">
+                         <Card key={job.id} className="rounded-[4rem] border border-slate-100 bg-white shadow-[0_30px_100px_rgba(0,0,0,0.04)] p-12 hover:shadow-[0_50px_150px_rgba(0,0,0,0.08)] transition-all duration-700 group relative overflow-hidden">
                             <div className="flex flex-col md:flex-row items-start justify-between gap-12 relative z-10">
                                <div className="space-y-10 flex-1">
                                   <div className="space-y-4">
                                      <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:rotate-6 transition-transform"><Briefcase className="w-6 h-6" /></div>
-                                        <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
+                                        <h3 className="text-4xl font-black text-slate-900 tracking-tighter group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
                                      </div>
                                      <p className="text-slate-500 font-bold text-[11px] uppercase tracking-[0.3em] pl-16">{job.company_name} <span className="mx-3 text-slate-200">|</span> {job.location || "Global Ops"}</p>
                                   </div>
@@ -308,7 +308,7 @@ export default function RecruiterJobs() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl rounded-[3rem] p-12 border-none shadow-3xl bg-white dark:bg-slate-900 overflow-y-auto max-h-[90vh]">
+        <DialogContent className="max-w-2xl rounded-[3rem] p-12 border-none shadow-3xl bg-white overflow-y-auto max-h-[90vh]">
           <DialogHeader className="space-y-4 text-left pb-6 border-b border-slate-100 mb-8">
             <DialogTitle className="text-4xl font-black tracking-tighter uppercase">{editingId ? "Modify" : "Initialize"} Mission</DialogTitle>
             <DialogDescription className="text-slate-500 font-medium">Configure your operational parameters for talent acquisition.</DialogDescription>

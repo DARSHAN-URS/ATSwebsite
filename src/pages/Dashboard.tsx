@@ -36,6 +36,14 @@ export default function Dashboard() {
   const [activities, setActivities] = useState<any[]>([]);
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loadingContent, setLoadingContent] = useState(true);
+  const [checklist, setChecklist] = useState([
+    { label: "Keyword Density", done: false },
+    { label: "Action Verbs", done: false },
+    { label: "Contact Info Matrix", done: false },
+    { label: "Skills Synchronization", done: false }
+  ]);
+  const [optimizationScore, setOptimizationScore] = useState(0);
+  const [outreachTasks, setOutreachTasks] = useState([]);
 
   useEffect(() => {
     if (!user) return;
@@ -57,6 +65,77 @@ export default function Dashboard() {
         responseRate: appCount > 0 ? Math.round((responseCount / appCount) * 100) : 0
       });
       setAppsByStatus(apps || []);
+
+      // Fetch latest resume data for checklist
+      const { data: latestResumeList } = await supabase.from("resumes").select("*").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(1);
+      const latestResume = latestResumeList && latestResumeList.length > 0 ? latestResumeList[0] : null;
+
+      let hasSkills = false;
+      let hasPersonalInfo = false;
+      let hasWorkExperience = false;
+      let hasActionVerbs = false;
+
+      if (latestResume && latestResume.resume_data) {
+        try {
+          const rd = latestResume.resume_data;
+          hasSkills = Array.isArray(rd.skills) && rd.skills.length > 0;
+          hasPersonalInfo = !!(rd.personalInfo?.email || rd.personalInfo?.phone || rd.personalInfo?.fullName);
+          hasWorkExperience = Array.isArray(rd.workExperience) && rd.workExperience.length > 0;
+          hasActionVerbs = hasWorkExperience && rd.workExperience.some((w) => w.description && w.description.length > 10);
+        } catch (e) {
+          console.error("Error parsing resume data", e);
+        }
+      }
+
+      const steps = [
+        { label: "Keyword Density", done: hasWorkExperience },
+        { label: "Action Verbs", done: hasActionVerbs },
+        { label: "Contact Info Matrix", done: hasPersonalInfo },
+        { label: "Skills Synchronization", done: hasSkills }
+      ];
+      setChecklist(steps);
+      const doneCount = steps.filter(s => s.done).length;
+      setOptimizationScore(Math.round((doneCount / steps.length) * 100));
+
+      const tasks = [];
+      if (apps && apps.length > 0) {
+        apps.forEach((app) => {
+          if (app.status === "applied") {
+            tasks.push({
+              title: `Follow up on application for ${app.position} at ${app.company}`,
+              due: "in 3 days",
+              priority: "High"
+            });
+          } else if (app.status === "screening") {
+            tasks.push({
+              title: `Prepare questions for ${app.company} screening call`,
+              due: "Tomorrow",
+              priority: "Critical"
+            });
+          } else if (app.status === "interview") {
+            tasks.push({
+              title: `Complete mock interview prep for ${app.company}`,
+              due: "Today",
+              priority: "Critical"
+            });
+          } else if (app.status === "offer") {
+            tasks.push({
+              title: `Review compensation & terms for ${app.company} offer`,
+              due: "in 2 days",
+              priority: "Medium"
+            });
+          }
+        });
+      }
+      
+      if (tasks.length === 0) {
+        tasks.push(
+          { title: "Optimize and grade your first resume", due: "Today", priority: "Critical" },
+          { title: "Generate customized cover letter for your dream role", due: "Tomorrow", priority: "High" },
+          { title: "Configure your outreach signature & recruiter metrics", due: "2 days", priority: "Medium" }
+        );
+      }
+      setOutreachTasks(tasks.slice(0, 3));
 
       // 2. Fetch Recent Activity
       const activityList = [];
@@ -85,13 +164,46 @@ export default function Dashboard() {
       // 3. Fetch Recommendations (from job_posts)
       const { data: jobPosts } = await supabase.from("job_posts").select("*").eq("status", "active").limit(2);
       if (jobPosts) {
-        setRecommendations(jobPosts.map(j => ({
-          role: j.title,
-          company: j.company_name,
-          match: "90%", // Placeholder for real AI score
-          salary: j.salary_min ? `₹${j.salary_min} - ₹${j.salary_max}` : "Competitive",
-          tags: [j.job_type, j.location || "Remote"].filter(Boolean)
-        })));
+        let resumeSkills: string[] = [];
+        let resumeTitle = "";
+        if (latestResume && latestResume.resume_data) {
+          try {
+            const rd: any = latestResume.resume_data;
+            resumeSkills = Array.isArray(rd.skills) 
+              ? rd.skills.map((s: any) => (typeof s === 'string' ? s : s?.name || "").toLowerCase().trim()).filter(Boolean)
+              : [];
+            resumeTitle = (rd.personalInfo?.title || latestResume.title || "").toLowerCase();
+          } catch (e) {
+            console.error("Error parsing resume details for match score", e);
+          }
+        }
+
+        setRecommendations(jobPosts.map(j => {
+          let score = 70;
+          const roleLower = j.title.toLowerCase();
+          const reqsLower = ((j.requirements || "") + " " + (j.description || "")).toLowerCase();
+          
+          if (resumeTitle) {
+            if (roleLower.includes(resumeTitle) || resumeTitle.includes(roleLower)) {
+              score += 15;
+            }
+          }
+          let skillMatches = 0;
+          resumeSkills.forEach((skill: string) => {
+            if (roleLower.includes(skill) || reqsLower.includes(skill)) {
+              skillMatches++;
+            }
+          });
+          score += Math.min(15, skillMatches * 3);
+          
+          return {
+            role: j.title,
+            company: j.company_name,
+            match: `${Math.min(99, score)}%`,
+            salary: j.salary_min ? `₹${j.salary_min} - ₹${j.salary_max}` : "Competitive",
+            tags: [j.job_type, j.location || "Remote"].filter(Boolean)
+          };
+        }));
       }
 
       setLoadingContent(false);
@@ -273,71 +385,62 @@ export default function Dashboard() {
             
             {/* Resume Progress */}
             <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-               <div className="flex items-center gap-3">
-                  <FileText className="w-4 h-4 text-blue-600" />
-                  <h3 className="text-sm font-bold text-slate-900">{td.resumeProgress}</h3>
-               </div>
-               <div className="space-y-6">
-                  <div className="relative pt-1">
-                     <div className="flex mb-2 items-center justify-between">
-                        <div>
-                           <span className="text-[10px] font-bold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-50">
-                              {td.optimizationLevel}
-                           </span>
-                        </div>
-                        <div className="text-right">
-                           <span className="text-xs font-bold inline-block text-blue-600">
-                              84%
-                           </span>
-                        </div>
-                     </div>
-                     <div className="overflow-hidden h-1.5 mb-4 text-xs flex rounded bg-slate-100">
-                        <motion.div initial={{ width: 0 }} animate={{ width: "84%" }} transition={{ duration: 1 }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"></motion.div>
-                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      { label: "Keyword Density", done: true },
-                      { label: "Action Verbs", done: true },
-                      { label: "Contact Info Matrix", done: true },
-                      { label: "Skills Synchronization", done: false }
-                    ].map((step, i) => (
-                      <div key={i} className="flex items-center justify-between">
-                        <span className="text-[11px] font-medium text-slate-500">{step.label}</span>
-                        {step.done ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <div className="w-3.5 h-3.5 rounded-full border border-slate-200" />}
+                <div className="flex items-center gap-3">
+                   <FileText className="w-4 h-4 text-blue-600" />
+                   <h3 className="text-sm font-bold text-slate-900">{td.resumeProgress}</h3>
+                </div>
+                <div className="space-y-6">
+                   <div className="relative pt-1">
+                      <div className="flex mb-2 items-center justify-between">
+                         <div>
+                            <span className="text-[10px] font-bold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-50">
+                               {td.optimizationLevel}
+                            </span>
+                         </div>
+                         <div className="text-right">
+                            <span className="text-xs font-bold inline-block text-blue-600">
+                               {optimizationScore}%
+                            </span>
+                         </div>
                       </div>
-                    ))}
-                  </div>
-                  <Button onClick={() => navigate("/resumes")} className="w-full h-10 rounded-xl bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-all">{t.resumes.gradeResume}</Button>
-               </div>
-            </Card>
-
-            {/* Outreach Tasks */}
-            <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-               <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-blue-600" />
-                  <h3 className="text-sm font-bold text-slate-900">{td.outreachTasks}</h3>
-               </div>
-               <div className="space-y-4">
-                  {[
-                    { title: "Follow up with Netflix recruiter", due: "Today", priority: "High" },
-                    { title: "Review Stripe interview invite", due: "Tomorrow", priority: "Critical" },
-                    { title: "Send letter to Meta hiring lead", due: "2 days", priority: "Medium" }
-                  ].map((task, i) => (
-                    <div key={i} onClick={() => navigate("/email-outreach")} className="p-3 rounded-2xl border border-slate-50 hover:border-slate-200 transition-all group cursor-pointer">
-                       <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-1">{task.title}</p>
-                       <div className="flex items-center justify-between">
-                          <span className="text-[9px] text-slate-400 font-medium">Due {task.due}</span>
-                          <span className={cn(
-                            "text-[8px] font-black uppercase tracking-widest",
-                            task.priority === "Critical" ? "text-rose-500" : task.priority === "High" ? "text-orange-500" : "text-slate-400"
-                          )}>{task.priority}</span>
+                      <div className="overflow-hidden h-1.5 mb-4 text-xs flex rounded bg-slate-100">
+                         <motion.div initial={{ width: 0 }} animate={{ width: `${optimizationScore}%` }} transition={{ duration: 1 }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"></motion.div>
+                      </div>
+                   </div>
+                   <div className="space-y-3">
+                     {checklist.map((step, i) => (
+                       <div key={i} className="flex items-center justify-between">
+                         <span className="text-[11px] font-medium text-slate-500">{step.label}</span>
+                         {step.done ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <div className="w-3.5 h-3.5 rounded-full border border-slate-200" />}
                        </div>
-                    </div>
-                  ))}
-                  <Button onClick={() => navigate("/email-outreach")} variant="outline" className="w-full h-10 rounded-xl border-slate-200 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">{td.viewTaskMatrix}</Button>
-               </div>
-            </Card>
+                     ))}
+                   </div>
+                   <Button onClick={() => navigate("/resumes")} className="w-full h-10 rounded-xl bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-all">{t.resumes.gradeResume}</Button>
+                </div>
+             </Card>
+
+             {/* Outreach Tasks */}
+             <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+                <div className="flex items-center gap-3">
+                   <Mail className="w-4 h-4 text-blue-600" />
+                   <h3 className="text-sm font-bold text-slate-900">{td.outreachTasks}</h3>
+                </div>
+                <div className="space-y-4">
+                   {outreachTasks.map((task, i) => (
+                     <div key={i} onClick={() => navigate("/email-outreach")} className="p-3 rounded-2xl border border-slate-50 hover:border-slate-200 transition-all group cursor-pointer">
+                        <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-1">{task.title}</p>
+                        <div className="flex items-center justify-between">
+                           <span className="text-[9px] text-slate-400 font-medium">Due {task.due}</span>
+                           <span className={cn(
+                             "text-[8px] font-black uppercase tracking-widest",
+                             task.priority === "Critical" ? "text-rose-500" : task.priority === "High" ? "text-orange-500" : "text-slate-400"
+                           )}>{task.priority}</span>
+                        </div>
+                     </div>
+                   ))}
+                   <Button onClick={() => navigate("/email-outreach")} variant="outline" className="w-full h-10 rounded-xl border-slate-200 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">{td.viewTaskMatrix}</Button>
+                </div>
+             </Card>
          </div>
       </div>
     </div>

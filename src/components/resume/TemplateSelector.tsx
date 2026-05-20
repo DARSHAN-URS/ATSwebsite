@@ -63,7 +63,7 @@ export default function TemplateSelector({ selected, onChange, jobTitle }: Templ
               "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border",
               activeTab === tab
                 ? "bg-primary text-primary-foreground border-primary"
-                : "bg-muted/50 text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
+                : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 hover:text-slate-800 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white"
             )}
           >
             {CATEGORY_ICONS[tab] || <FileText className="w-4 h-4" />}

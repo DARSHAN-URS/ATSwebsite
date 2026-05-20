@@ -91,26 +91,6 @@ export default function StudioSidebar({
           );
         })}
       </nav>
-
-      {/* AI Suggestions Widget */}
-      <div className="mt-8 p-6 rounded-[2rem] bg-white/5 border border-white/10 space-y-4 relative z-10">
-         <div className="flex items-center gap-2 text-blue-400">
-            <Lightbulb className="w-4 h-4" />
-            <span className="text-[10px] font-black uppercase tracking-widest">AI Suggestions</span>
-         </div>
-         <div className="space-y-3">
-            {[
-              "Add measurable achievements",
-              "Missing certifications",
-              "Improve ATS keywords"
-            ].map((s, i) => (
-              <div key={i} className="flex items-start gap-3 group cursor-pointer">
-                 <div className="w-1 h-1 rounded-full bg-blue-500/50 mt-1.5 group-hover:scale-150 transition-transform" />
-                 <p className="text-[11px] text-slate-400 font-medium leading-relaxed group-hover:text-white transition-colors">{s}</p>
-              </div>
-            ))}
-         </div>
-      </div>
     </aside>
   );
 }

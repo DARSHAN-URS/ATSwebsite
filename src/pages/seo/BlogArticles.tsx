@@ -8,6 +8,8 @@ import Logo from "@/components/Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { miscTranslations } from "@/i18n/miscTranslations";
 import { useBlogTranslation } from "@/hooks/useBlogTranslation";
+import { cn } from "@/lib/utils";
+
 
 export interface BlogArticle {
   slug: string;
@@ -2418,7 +2420,7 @@ const BASE_ARTICLES: BlogArticle[] = [
 export const SEED_ARTICLES: BlogArticle[] = [...BASE_ARTICLES, ...EXTRA_ARTICLES];
 
 
-export function BlogArticlePage() {
+export function BlogArticlePage({ isInternal = false }: { isInternal?: boolean }) {
   const { slug } = useParams();
   const article = SEED_ARTICLES.find((a) => a.slug === slug);
   const { locale } = useLanguage();
@@ -2430,10 +2432,10 @@ export function BlogArticlePage() {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center font-sans">
+      <div className={cn("min-h-screen flex items-center justify-center font-sans", !isInternal ? "bg-white" : "bg-transparent")}>
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-2">Article Not Found</h1>
-          <Button asChild><Link to="/blog">Back to Blog</Link></Button>
+          <Button asChild><Link to={isInternal ? "/dashboard/blog" : "/blog"}>Back to Blog</Link></Button>
         </div>
       </div>
     );
@@ -2447,7 +2449,7 @@ export function BlogArticlePage() {
     : article.content;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className={cn("min-h-screen text-slate-900 font-sans selection:bg-blue-600/10 selection:text-blue-600", !isInternal ? "bg-white" : "bg-transparent")}>
       <SEOHead
         title={article.seoTitle}
         description={article.description}
@@ -2456,18 +2458,20 @@ export function BlogArticlePage() {
         ogType="article"
       />
 
-      <nav className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2"><Logo className="h-10" /></Link>
-          <div className="flex items-center gap-3">
-            <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition">{ba.blog}</Link>
-            <Button size="sm" asChild><Link to="/">{ba.getStarted}</Link></Button>
+      {!isInternal && (
+        <nav className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur-xl">
+          <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+            <Link to="/" className="flex items-center gap-2"><Logo className="h-10" /></Link>
+            <div className="flex items-center gap-3">
+              <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition">{ba.blog}</Link>
+              <Button size="sm" asChild><Link to="/">{ba.getStarted}</Link></Button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      )}
 
       <main className="mx-auto max-w-3xl px-4 py-12">
-        <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-8 transition">
+        <Link to={isInternal ? "/dashboard/blog" : "/blog"} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-8 transition">
           <ArrowLeft className="h-4 w-4" /> {ba.backToBlog}
         </Link>
 
@@ -2514,7 +2518,7 @@ export function BlogArticlePage() {
             <Button variant="outline" size="sm" asChild><Link to="/resume-templates">Resume Templates</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/interview-preparation">Interview Prep</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/resume-builder-for-freshers">Fresher Resume</Link></Button>
-            <Button variant="outline" size="sm" asChild><Link to="/blog">{ba.moreArticles}</Link></Button>
+            <Button variant="outline" size="sm" asChild><Link to={isInternal ? "/dashboard/blog" : "/blog"}>{ba.moreArticles}</Link></Button>
           </div>
         </div>
       </main>

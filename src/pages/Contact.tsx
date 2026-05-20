@@ -13,8 +13,13 @@ import AppLayout from "@/components/AppLayout";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-export default function Contact() {
+interface ContactProps {
+  isInternal?: boolean;
+}
+
+export default function Contact({ isInternal = false }: ContactProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -50,15 +55,15 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans">
+    <div className={cn("min-h-screen text-slate-900 font-sans", isInternal ? "bg-transparent" : "bg-white")}>
       <SEOHead 
         title="Contact — ResumePro" 
         description="Initialize communication with our support modules for architectural guidance."
       />
       
-      <Navbar />
+      {!isInternal && <Navbar />}
 
-      <main className="max-w-7xl mx-auto px-8 pt-48 pb-40 space-y-20">
+      <main className={cn("max-w-7xl mx-auto px-8 pb-40 space-y-20", isInternal ? "pt-10" : "pt-48")}>
         {/* Header Section */}
         <div className="flex flex-col md:flex-row items-end justify-between gap-12">
            <div className="space-y-6">
@@ -93,38 +98,19 @@ export default function Contact() {
           {/* Contact Info Sidebar */}
           <div className="lg:col-span-4 space-y-10">
              <div className="grid grid-cols-1 gap-6">
-                {[
-                  { icon: Mail, label: "Transmission", value: "support@resumepro.com", desc: "For technical inquiries" },
-                  { icon: MessageSquare, label: "Real-time", value: "Live Chat", desc: "Available Mon-Fri, 9am-6pm" },
-                  { icon: MapPin, label: "Node Location", value: "Remote First", desc: "Distributed global team" }
-                ].map((item, i) => (
-                  <Card key={i} className="rounded-[2.5rem] border-none bg-slate-50 dark:bg-slate-900 p-10 space-y-8 hover:bg-white dark:hover:bg-slate-800 hover:shadow-2xl transition-all group">
-                     <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-600 shadow-sm transition-colors">
-                        <item.icon className="w-6 h-6" />
-                     </div>
-                     <div className="space-y-2">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{item.label}</p>
-                        <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{item.value}</h3>
-                        <p className="text-base text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{item.desc}</p>
-                     </div>
-                  </Card>
-                ))}
+                <Card className="rounded-[2.5rem] border border-slate-100/50 bg-slate-50 dark:bg-slate-900 p-10 space-y-8 hover:bg-white dark:hover:bg-slate-800 hover:shadow-2xl transition-all group">
+                   <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-600 shadow-sm transition-colors">
+                      <Mail className="w-6 h-6" />
+                   </div>
+                   <div className="space-y-2">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Transmission</p>
+                      <h3 className="text-base sm:text-lg lg:text-[13px] xl:text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none break-all select-all">
+                         support@atsproresume.com
+                      </h3>
+                      <p className="text-base text-slate-500 dark:text-slate-400 font-medium leading-relaxed">For technical inquiries & support</p>
+                   </div>
+                </Card>
              </div>
-
-             <Card className="rounded-[3.5rem] border-none bg-blue-600 text-white p-12 shadow-2xl shadow-blue-600/30 space-y-10">
-                <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center">
-                   <Phone className="w-10 h-10 text-blue-200" />
-                </div>
-                <div className="space-y-4">
-                   <h3 className="text-4xl font-black tracking-tight uppercase leading-[0.9]">Enterprise <br /> Demo.</h3>
-                   <p className="text-blue-100 font-medium text-lg leading-relaxed">
-                      Schedule a 15-min deep dive of our AI synthesis tools for your recruitment team.
-                   </p>
-                </div>
-                <Button variant="secondary" className="w-full h-20 rounded-[2rem] font-black uppercase tracking-widest text-[11px] bg-white text-blue-600 hover:bg-blue-50 shadow-xl">
-                   Book Strategic Call
-                </Button>
-             </Card>
           </div>
 
           {/* Form Content */}
@@ -234,7 +220,7 @@ export default function Contact() {
         </div>
       </main>
 
-      <Footer />
+      {!isInternal && <Footer />}
     </div>
   );
 }

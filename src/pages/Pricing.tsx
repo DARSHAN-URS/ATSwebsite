@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/LanguageContext";
 
@@ -44,8 +45,10 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
 
     setLoading(planName);
     try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { plan: planId, userId: user.id, userEmail: user.email },
+      const { data, error } = await invokeFunction("create-checkout", {
+        plan: planId,
+        userId: user.id,
+        userEmail: user.email,
       });
       if (error) throw error;
       if (data?.url) window.location.href = data.url;

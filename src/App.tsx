@@ -27,6 +27,7 @@ const RecruiterAnalytics = lazy(() => import("@/pages/RecruiterAnalytics"));
 const RecruiterCompany = lazy(() => import("@/pages/RecruiterCompany"));
 const RecruiterApplicants = lazy(() => import("@/pages/RecruiterApplicants"));
 const RecruiterCandidates = lazy(() => import("@/pages/RecruiterCandidates"));
+const RecruiterDashboard = lazy(() => import("@/pages/RecruiterDashboard"));
 const About = lazy(() => import("@/pages/About"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
@@ -81,7 +82,7 @@ function RoleGuard({ children, requiredRole }: { children: React.ReactNode; requ
   
   if (loading) return <PageFallback />;
   if (role !== requiredRole) {
-    return <Navigate to={role === "recruiter" ? "/recruiter/jobs" : "/dashboard"} replace />;
+    return <Navigate to={role === "recruiter" ? "/recruiter/dashboard" : "/dashboard"} replace />;
   }
   return <>{children}</>;
 }
@@ -92,7 +93,7 @@ function RoleRoute({ children }: { children: React.ReactNode }) {
 
   if (loading || roleLoading) return <PageFallback />;
   if (!user) return <Navigate to="/" replace />;
-  if (role) return <Navigate to={role === "recruiter" ? "/recruiter/jobs" : "/dashboard"} replace />;
+  if (role) return <Navigate to={role === "recruiter" ? "/recruiter/dashboard" : "/dashboard"} replace />;
   return <>{children}</>;
 }
 
@@ -151,12 +152,17 @@ const App = () => (
 
                   <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
 
+                  <Route path="/recruiter/dashboard" element={<RoleGuard requiredRole="recruiter"><RecruiterDashboard /></RoleGuard>} />
                   <Route path="/recruiter/company" element={<RoleGuard requiredRole="recruiter"><RecruiterCompany /></RoleGuard>} />
                   <Route path="/recruiter/jobs" element={<RoleGuard requiredRole="recruiter"><RecruiterJobs /></RoleGuard>} />
                   <Route path="/recruiter/jobs/:jobId/applicants" element={<RoleGuard requiredRole="recruiter"><RecruiterApplicants /></RoleGuard>} />
                   <Route path="/recruiter/candidates" element={<RoleGuard requiredRole="recruiter"><RecruiterCandidates /></RoleGuard>} />
                   <Route path="/recruiter/analytics" element={<RoleGuard requiredRole="recruiter"><RecruiterAnalytics /></RoleGuard>} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/dashboard/about" element={<About isInternal={true} />} />
+                  <Route path="/dashboard/blog" element={<Blog isInternal={true} />} />
+                  <Route path="/dashboard/blog/:slug" element={<BlogArticlePage isInternal={true} />} />
+                  <Route path="/dashboard/contact" element={<Contact isInternal={true} />} />
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboard />} />
                   </Route>

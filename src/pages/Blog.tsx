@@ -28,7 +28,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   "AI & Tech": "text-indigo-500 bg-indigo-50",
 };
 
-export default function Blog() {
+export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
   const { locale } = useLanguage();
   const mt = miscTranslations[locale].blog;
   const [search, setSearch] = useState("");
@@ -44,15 +44,15 @@ export default function Blog() {
   const ALL_CATEGORIES = ["All", ...Array.from(new Set(SEED_ARTICLES.map((a) => a.category)))];
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className={cn("min-h-screen font-sans", !isInternal ? "bg-white" : "bg-transparent")}>
       <SEOHead title="Career Blog — ResumePro" description="Expert career advice on ATS resumes, interview preparation, and job search strategies." />
 
-      <Navbar />
+      {!isInternal && <Navbar />}
 
-      <main className="pb-40">
+      <main className={cn(isInternal ? "pb-20" : "pb-40")}>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      <section className={cn("relative pb-20 overflow-hidden", isInternal ? "pt-10" : "pt-32")}>
          <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
          <div className="container mx-auto px-8 relative z-10 text-center space-y-8">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-2xl">
@@ -77,7 +77,7 @@ export default function Blog() {
       </section>
 
       {/* Category Filter */}
-      <section className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+      <section className={cn("sticky z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100", isInternal ? "top-14" : "top-0")}>
          <div className="container mx-auto px-8 flex gap-4 overflow-x-auto py-4 scrollbar-hide no-scrollbar">
             {ALL_CATEGORIES.map(cat => (
                <button 
@@ -104,7 +104,7 @@ export default function Blog() {
                  animate={{ opacity: 1, y: 0 }}
                  transition={{ delay: i * 0.05 }}
                >
-                  <Link to={`/blog/${article.slug}`} className="group block h-full">
+                  <Link to={isInternal ? `/dashboard/blog/${article.slug}` : `/blog/${article.slug}`} className="group block h-full">
                      <Card className="rounded-[4rem] border-none bg-slate-50/50 shadow-sm hover:shadow-3xl hover:bg-white transition-all overflow-hidden h-full flex flex-col group-hover:-translate-y-4">
                         <div className="p-4">
                            <div className="aspect-[16/10] bg-white relative overflow-hidden rounded-[3rem]">
@@ -155,21 +155,23 @@ export default function Blog() {
       </section>
 
       {/* Newsletter */}
-      <section className="container mx-auto px-8 pb-32">
-         <div className="rounded-[3rem] bg-slate-900 p-12 md:p-20 text-center space-y-10 relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2" />
-            <div className="relative z-10 space-y-6 max-w-xl mx-auto">
-               <h2 className="text-4xl font-black text-white tracking-tight">Stay <span className="text-primary">Ahead.</span></h2>
-               <p className="text-slate-400 font-medium">Get exclusive career strategies and resume hacks delivered to your inbox every Sunday.</p>
-               <form className="flex flex-col sm:flex-row gap-3">
-                  <Input placeholder="you@example.com" className="bg-white/10 border-white/10 text-white rounded-2xl h-14 px-6 font-medium focus-visible:ring-primary" />
-                  <Button className="bg-primary text-white font-black uppercase tracking-widest text-xs h-14 px-10 rounded-2xl shadow-xl shadow-primary/20">Subscribe</Button>
-               </form>
-            </div>
-         </div>
-      </section>
+      {!isInternal && (
+        <section className="container mx-auto px-8 pb-32">
+           <div className="rounded-[3rem] bg-slate-900 p-12 md:p-20 text-center space-y-10 relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2" />
+              <div className="relative z-10 space-y-6 max-w-xl mx-auto">
+                 <h2 className="text-4xl font-black text-white tracking-tight">Stay <span className="text-primary">Ahead.</span></h2>
+                 <p className="text-slate-400 font-medium">Get exclusive career strategies and resume hacks delivered to your inbox every Sunday.</p>
+                 <form className="flex flex-col sm:flex-row gap-3">
+                    <Input placeholder="you@example.com" className="bg-white/10 border-white/10 text-white rounded-2xl h-14 px-6 font-medium focus-visible:ring-primary" />
+                    <Button className="bg-primary text-white font-black uppercase tracking-widest text-xs h-14 px-10 rounded-2xl shadow-xl shadow-primary/20">Subscribe</Button>
+                 </form>
+              </div>
+           </div>
+        </section>
+      )}
       </main>
-      <Footer />
+      {!isInternal && <Footer />}
     </div>
   );
 }

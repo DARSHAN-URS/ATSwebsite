@@ -5,11 +5,12 @@ import Logo from "@/components/Logo";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
-export default function About() {
+export default function About({ isInternal = false }: { isInternal?: boolean }) {
   const { t } = useLanguage();
   const ta = t.about;
 
@@ -21,13 +22,13 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 overflow-x-hidden">
+    <div className={cn("min-h-screen overflow-x-hidden", !isInternal ? "bg-white dark:bg-slate-950" : "bg-transparent")}>
       <SEOHead title={`${ta.tagline} — ResumePro`} description={ta.heroDesc1} />
 
-      <Navbar />
+      {!isInternal && <Navbar />}
 
       {/* Hero */}
-      <section className="relative pt-48 pb-32 overflow-hidden bg-white">
+      <section className={cn("relative pb-32 overflow-hidden bg-white", isInternal ? "pt-10" : "pt-48")}>
          <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[10rem] -z-10 translate-x-1/4" />
          <div className="container mx-auto px-8 relative z-10 space-y-12">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full">
@@ -114,7 +115,7 @@ export default function About() {
          </div>
       </section>
 
-      <Footer />
+      {!isInternal && <Footer />}
     </div>
   );
 }

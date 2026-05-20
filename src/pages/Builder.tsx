@@ -36,7 +36,6 @@ import ResumeExportDialog from "@/components/resume/ResumeExportDialog";
 
 // New Layout Components
 import SectionNavigator from "@/components/builder/SectionNavigator";
-import ATSAnalyticsRow from "@/components/builder/ATSAnalyticsRow";
 import AIAssistantSidebar from "@/components/builder/AIAssistantSidebar";
 import ModernOnboarding from "@/components/builder/ModernOnboarding";
 import StudioTopBar from "@/components/builder/StudioTopBar";
@@ -56,6 +55,7 @@ export default function Builder() {
   const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState("personal");
   const [zoom, setZoom] = useState(85);
+  const [exportOpen, setExportOpen] = useState(false);
   const [isAiThinking, setIsAiThinking] = useState(false);
 
   const [title, setTitle] = useState("Untitled Resume");
@@ -170,14 +170,12 @@ export default function Builder() {
         saving={saving}
         score={dynamicScore}
         onAiImprove={() => toast({ title: "AI Optimizing...", description: "Refining your professional identity." })}
-        onExport={() => saveResume(true)}
+        onExport={async () => {
+          await saveResume(true);
+          setExportOpen(true);
+        }}
       />
 
-      <ATSAnalyticsRow 
-        score={dynamicScore}
-        keywordMatch={(resumeData.skills || []).length}
-        readability={dynamicScore > 70 ? "High Fidelity" : "Draft Mode"}
-      />
 
       <div className="flex-1 overflow-hidden">
         <PanelGroup direction="horizontal">
@@ -359,7 +357,7 @@ export default function Builder() {
                      Select a structural architecture that aligns with your industry mission.
                   </p>
                </div>
-               <TemplateSelector selectedId={selectedTemplate} onSelect={setSelectedTemplate} />
+               <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
             </div>
           )}
             </StudioEditor>
@@ -385,6 +383,16 @@ export default function Builder() {
 
       {/* Floating AI Assistant */}
       <AICopilot />
+
+      <ResumeExportDialog 
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        resumeData={resumeData}
+        title={title}
+        templateId={selectedTemplate}
+        colors={colors}
+        showTrigger={false}
+      />
     </div>
   );
 }

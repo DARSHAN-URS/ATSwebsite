@@ -47,6 +47,21 @@ export default function EmailOutreach() {
 
   const [tone, setTone] = useState("professional");
 
+  const [history, setHistory] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
+
+  const fetchHistory = async () => {
+    if (!user) return;
+    setLoadingHistory(true);
+    const { data } = await supabase
+      .from("email_outreach_history")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("sent_at", { ascending: false });
+    if (data) setHistory(data);
+    setLoadingHistory(false);
+  };
+
   useEffect(() => {
     if (!user) return;
     supabase.from("resumes").select("*").order("updated_at", { ascending: false }).then(({ data }) => {
@@ -55,6 +70,7 @@ export default function EmailOutreach() {
         if (data.length > 0) setSelectedResumeId(data[0].id);
       }
     });
+    fetchHistory();
   }, [user]);
 
   useEffect(() => {
@@ -104,8 +120,30 @@ export default function EmailOutreach() {
           attachmentBase64 = doc.output('datauristring').split(',')[1];
         }
       }
-      const { error } = await invokeFunction("send-outreach-email", { to: recruiterEmail, subject, body, fromName, attachmentBase64 });
+      const { error } = await invokeFunction("send-outreach-email", { 
+        to: recruiterEmail, 
+        subject, 
+        body, 
+        fromName, 
+        resumePdfBase64: attachmentBase64,
+        resumeFilename: "Resume.pdf"
+      });
       if (error) throw new Error(error.message);
+
+      // Save dynamic outreach record
+      if (user) {
+        await supabase.from("email_outreach_history").insert({
+          user_id: user.id,
+          company,
+          position,
+          recruiter_email: recruiterEmail,
+          subject,
+          body,
+          resume_id: selectedResumeId || null
+        });
+        fetchHistory();
+      }
+
       toast({ title: to.emailSent });
     } catch (err: any) {
       toast({ title: to.failedSend, variant: "destructive" });
@@ -329,36 +367,41 @@ export default function EmailOutreach() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-               {[
-                  { company: "Vercel", position: "Frontend Lead", date: "2h ago", status: "Delivered", score: 98 },
-                  { company: "Stripe", position: "Staff Engineer", date: "5h ago", status: "Opened", score: 92 },
-                  { company: "Linear", position: "Product Designer", date: "Yesterday", status: "Replied", score: 95 },
-               ].map((item, i) => (
-                  <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 hover:shadow-md transition-all group cursor-pointer">
-                     <div className="flex justify-between items-start mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                           {item.company.charAt(0)}
+               {loadingHistory ? (
+                  <div className="col-span-full py-12 text-center text-slate-400 font-medium italic">Loading outreach history...</div>
+               ) : history.length === 0 ? (
+                  <div className="col-span-full py-16 text-center space-y-4 bg-white rounded-3xl border border-slate-200 border-dashed w-full">
+                     <Mail className="w-8 h-8 text-slate-300 mx-auto" />
+                     <p className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">No recent communications</p>
+                     <p className="text-slate-400 text-xs max-w-xs mx-auto">Create and synthesize your first outreach parameters above to get in touch with hiring recruiters!</p>
+                  </div>
+               ) : (
+                  history.map((item) => (
+                     <Card key={item.id} className="rounded-3xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 hover:shadow-md transition-all group cursor-pointer">
+                        <div className="flex justify-between items-start mb-4">
+                           <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                              {item.company.charAt(0)}
+                           </div>
+                           <Badge className="text-[8px] font-bold uppercase bg-blue-50 text-blue-600 border-none">
+                              Delivered
+                           </Badge>
                         </div>
-                        <Badge className={cn(
-                           "text-[8px] font-bold uppercase",
-                           item.status === "Replied" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"
-                        )}>{item.status}</Badge>
-                     </div>
-                     <div className="space-y-1 mb-4">
-                        <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{item.position}</h4>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.company}</p>
-                     </div>
-                     <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                        <div className="flex items-center gap-2 text-[9px] font-bold text-slate-400">
-                           <Clock className="w-3 h-3" /> {item.date}
+                        <div className="space-y-1 mb-4">
+                           <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{item.position}</h4>
+                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.company}</p>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                           <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                           <span className="text-[9px] font-bold text-slate-900">{item.score}% {to.optimised}</span>
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                           <div className="flex items-center gap-2 text-[9px] font-bold text-slate-400">
+                              <Clock className="w-3 h-3" /> {new Date(item.sent_at).toLocaleDateString()}
+                           </div>
+                           <div className="flex items-center gap-1.5">
+                              <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                              <span className="text-[9px] font-bold text-slate-900">95% {to.optimised}</span>
+                           </div>
                         </div>
-                     </div>
-                  </Card>
-               ))}
+                     </Card>
+                  ))
+               )}
             </div>
          </div>
       </div>

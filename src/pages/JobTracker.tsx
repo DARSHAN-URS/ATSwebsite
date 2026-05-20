@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
+import { invokeFunction } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -86,7 +87,7 @@ export default function JobTracker() {
     if (!emailTo || !session?.access_token) return;
     setSending(true);
     try {
-      const { error } = await supabase.functions.invoke("send-outreach-email", {
+      const { error } = await invokeFunction("send-outreach-email", {
         body: { to: emailTo, subject: emailSubject, body: emailBody, fromName: emailFromName, replyTo: emailReplyTo, position: selectedApp?.position, company: selectedApp?.company }
       });
       if (error) throw error;

@@ -4,7 +4,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { 
   FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, 
   Users, CreditCard, Briefcase, Headphones, Mail, Settings, ShieldCheck, Zap,
-  ChevronRight, Sparkles, User, HelpCircle
+  ChevronRight, Sparkles, User, HelpCircle, Info, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -29,7 +29,7 @@ const jobSeekerNav = [
 ];
 
 const recruiterNav = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/recruiter/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/recruiter/company", icon: Building2, label: "Company" },
   { to: "/recruiter/jobs", icon: Briefcase, label: "Jobs" },
   { to: "/recruiter/candidates", icon: Users, label: "Candidates" },
@@ -52,7 +52,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   ];
 
   const recruiterNav = [
-    { to: "/dashboard", icon: LayoutDashboard, label: t.nav.dashboard },
+    { to: "/recruiter/dashboard", icon: LayoutDashboard, label: t.nav.dashboard },
     { to: "/recruiter/company", icon: Building2, label: t.nav.companyProfile },
     { to: "/recruiter/jobs", icon: Briefcase, label: t.nav.jobBoard },
     { to: "/recruiter/candidates", icon: Users, label: t.nav.candidates },
@@ -109,18 +109,30 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
           <div className="pt-8 px-4 mb-4">
             <p className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.2em]">{t.common?.support || "Help & Support"}</p>
           </div>
-          <button onClick={() => navigate("/contact")} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all text-left">
-            <HelpCircle className="w-4 h-4" />
-            <span className="text-[11px] font-medium tracking-tight">{t.nav.about} / {t.nav.blog}</span>
-          </button>
           
-          <div className="px-4 py-4">
-             <LanguageSwitcher className="w-full justify-start bg-white/5 border-white/5 text-slate-300 hover:bg-white/10 hover:text-white" />
-          </div>
+          <NavLink
+            to="/dashboard/contact"
+            onClick={onNavClick}
+            className={({ isActive }) =>
+              cn(
+                "flex items-center justify-between px-4 py-3 transition-all rounded-xl group/nav relative",
+                isActive 
+                  ? "bg-blue-600/10 text-blue-400 border-l-2 border-blue-500 shadow-[inset_0_0_20px_rgba(37,99,235,0.05)]" 
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+              )
+            }
+          >
+            <div className="flex items-center gap-3 relative z-10">
+               <HelpCircle className="h-4 w-4 transition-transform group-hover/nav:scale-110 text-current" />
+               <span className="text-[11px] font-medium tracking-tight">Contact Us</span>
+            </div>
+          </NavLink>
         </nav>
 
 
-        <div className="p-4 border-t border-white/5">
+        <div className="p-4 border-t border-white/5 space-y-3">
+          <LanguageSwitcher className="w-full justify-start bg-white/5 border-white/5 text-slate-300 hover:bg-white/10 hover:text-white" />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-left group">

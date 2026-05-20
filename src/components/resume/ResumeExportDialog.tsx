@@ -16,6 +16,9 @@ interface ResumeExportDialogProps {
   title: string;
   templateId: TemplateId;
   colors?: ResumeColors;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showTrigger?: boolean;
 }
 
 type ExportFormat = "pdf" | "docx" | "txt";
@@ -67,8 +70,19 @@ function cleanFilename(name: string): string {
   return (name || "resume").replace(/[^a-zA-Z0-9\s_-]/g, "").replace(/\s+/g, "_").substring(0, 60);
 }
 
-export default function ResumeExportDialog({ resumeData, title, templateId, colors = DEFAULT_COLORS }: ResumeExportDialogProps) {
-  const [open, setOpen] = useState(false);
+export default function ResumeExportDialog({ 
+  resumeData, 
+  title, 
+  templateId, 
+  colors = DEFAULT_COLORS,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  showTrigger = true
+}: ResumeExportDialogProps) {
+  const [localOpen, setLocalOpen] = useState(false);
+  const open = controlledOpen !== undefined ? controlledOpen : localOpen;
+  const setOpen = controlledOnOpenChange !== undefined ? controlledOnOpenChange : setLocalOpen;
+  
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
   const [exportSuccess, setExportSuccess] = useState(false);
   const { toast } = useToast();
@@ -141,13 +155,15 @@ export default function ResumeExportDialog({ resumeData, title, templateId, colo
 
   return (
     <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setExportSuccess(false); }}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Download className="h-4 w-4 mr-1 sm:mr-2" />
-          <span className="hidden sm:inline">Export</span>
-          <span className="sm:hidden">Export</span>
-        </Button>
-      </DialogTrigger>
+      {showTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="outline" size="sm">
+            <Download className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Export</span>
+            <span className="sm:hidden">Export</span>
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

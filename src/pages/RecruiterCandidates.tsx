@@ -95,7 +95,7 @@ export default function RecruiterCandidates() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20 font-sans">
+    <div className="min-h-screen bg-slate-50 pb-20 font-sans">
       <SEOHead title="Talent Matrix — ResumePro" description="Search candidates across all your job posts." noindex />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
@@ -105,7 +105,7 @@ export default function RecruiterCandidates() {
                   <Users className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">Candidate Intelligence</span>
                </div>
-               <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+               <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
                   Talent <br /> <span className="text-blue-600">Matrix.</span>
                </h1>
             </div>
@@ -113,7 +113,7 @@ export default function RecruiterCandidates() {
             <div className="w-full max-w-xl group relative">
                <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
                <Input
-                  className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 px-16 font-bold text-lg shadow-[0_10px_40px_rgba(0,0,0,0.02)] focus:ring-blue-600/10 transition-all"
+                  className="h-20 rounded-[2rem] bg-white border-slate-100 px-16 font-bold text-lg shadow-[0_10px_40px_rgba(0,0,0,0.02)] focus:ring-blue-600/10 transition-all"
                   placeholder="Search by name, role, or skill..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -127,20 +127,20 @@ export default function RecruiterCandidates() {
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initializing Talent Scan</p>
             </div>
          ) : filtered.length === 0 ? (
-            <Card className="rounded-[4rem] border-2 border-dashed border-slate-100 bg-white dark:bg-slate-900/50 py-32 text-center space-y-8">
-               <div className="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-200">
+            <Card className="rounded-[4rem] border-2 border-dashed border-slate-200 bg-white py-32 text-center space-y-8">
+               <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-200">
                   <Users className="w-10 h-10" />
                </div>
                <div className="space-y-2">
-                  <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Zero Matches Detected</h3>
+                  <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Zero Matches Detected</h3>
                   <p className="text-slate-500 font-medium max-w-sm mx-auto">{candidates.length === 0 ? "No applications have been deployed to your active missions yet." : "Adjust your search parameters to re-scan the matrix."}</p>
                </div>
             </Card>
          ) : (
-            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_30px_80px_rgba(0,0,0,0.03)] overflow-hidden">
+            <Card className="rounded-[4rem] border border-slate-100 bg-white shadow-[0_30px_80px_rgba(0,0,0,0.03)] overflow-hidden">
                <div className="overflow-x-auto">
                   <Table>
-                     <TableHeader className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-100">
+                     <TableHeader className="bg-slate-50/50 border-b border-slate-100">
                         <TableRow className="border-none hover:bg-transparent">
                            <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Candidate Identification</TableHead>
                            <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Assigned Mission</TableHead>
@@ -153,21 +153,21 @@ export default function RecruiterCandidates() {
                         {filtered.map((c) => (
                            <TableRow
                               key={c.id}
-                              className="border-b border-slate-50 dark:border-white/5 cursor-pointer hover:bg-blue-50/30 transition-colors group"
+                              className="border-b border-slate-100 cursor-pointer hover:bg-blue-50/30 transition-colors group"
                               onClick={() => navigate(`/recruiter/jobs/${c.job_post_id}/applicants`)}
                            >
                               <TableCell className="px-10 py-8">
                                  <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-600/20">{c.display_name[0]}</div>
                                     <div>
-                                       <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{c.display_name}</p>
+                                       <p className="text-lg font-black text-slate-900 tracking-tight">{c.display_name}</p>
                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Verified Profile</p>
                                     </div>
                                  </div>
                               </TableCell>
                               <TableCell className="px-10 py-8">
                                  <div className="space-y-1">
-                                    <p className="font-bold text-slate-700 dark:text-slate-300">{c.job_title}</p>
+                                    <p className="font-bold text-slate-700">{c.job_title}</p>
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Active Mission</p>
                                  </div>
                               </TableCell>
