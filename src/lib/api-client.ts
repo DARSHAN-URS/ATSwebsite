@@ -9,7 +9,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const invokeFunction = async (name: string, options: any) => {
   // Extract body from options if it's in { body: ... } format, else use options as body
   const body = options?.body !== undefined ? options.body : options;
-  console.log(`[API Client] Calling ${name}. Backend URL: ${BACKEND_URL || "NOT SET (Falling back to Supabase)"}`);
+  console.log(`[API Client] Calling ${name}. Backend URL: ${BACKEND_URL || "NOT SET"}`);
 
   if (BACKEND_URL) {
     try {
@@ -27,6 +27,8 @@ export const invokeFunction = async (name: string, options: any) => {
         path = "/api/emails/contact";
       } else if (name === "activate-subscription") {
         path = "/api/payments/activate-subscription";
+      } else if (name === "create-checkout") {
+        path = "/api/payments/create-checkout";
       }
 
       const response = await fetch(`${BACKEND_URL}${path}`, {
@@ -43,24 +45,29 @@ export const invokeFunction = async (name: string, options: any) => {
         return { data, error: null };
       }
 
-      // If Railway returns 404, it means this specific function isn't implemented in Node.js yet.
-      // Fallback to Supabase Edge Function to ensure service continuity.
-      if (response.status === 404) {
-        console.warn(`[API Client] Function "${name}" not found on Railway (${path}). Falling back to Supabase.`);
-        return await supabase.functions.invoke(name, { body });
-      }
-
       const errData = await response.json().catch(() => ({ error: response.statusText }));
       console.error(`[API Client] Railway API Error (${name}):`, errData);
-      return { data: null, error: errData };
+      // Fall through to Supabase
     } catch (err: any) {
       console.error(`[API Client] Railway Critical Error (${name}):`, err);
-      // Fallback to Supabase on network/unexpected errors to avoid blocking the user
-      console.warn(`[API Client] Falling back to Supabase for "${name}" due to network error.`);
-      return await supabase.functions.invoke(name, { body });
+      // Fall through to Supabase
     }
   }
 
-  // Default to Supabase if BACKEND_URL is not configured
-  return await supabase.functions.invoke(name, { body });
+  console.log(`[API Client] Falling back to Supabase for "${name}"...`);
+  try {
+    const { data, error } = await supabase.functions.invoke(name, {
+      body: body,
+    });
+    
+    if (error) {
+      console.error(`[API Client] Supabase Fallback Error (${name}):`, error);
+      return { data: null, error };
+    }
+    
+    return { data, error: null };
+  } catch (fallbackErr: any) {
+    console.error(`[API Client] Supabase Fallback Critical Error (${name}):`, fallbackErr);
+    return { data: null, error: fallbackErr };
+  }
 };
