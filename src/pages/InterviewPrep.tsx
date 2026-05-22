@@ -164,7 +164,7 @@ export default function InterviewPrep() {
     "Google", "Microsoft", "Amazon", "Meta", "Apple"
   ];
 
-  const [activeTab, setActiveTab] = useState("Mock Interview");
+
 
   useEffect(() => {
     if (user) {

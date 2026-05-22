@@ -4,227 +4,186 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ScanSearch, CheckCircle, XCircle, AlertTriangle, Globe, ExternalLink } from "lucide-react";
+import { ScanSearch, CheckCircle, XCircle, Globe, ExternalLink, Loader2, ArrowRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import type { ResumeData } from "@/components/resume/types";
-
-function extractText(data: ResumeData): string {
-  const parts: string[] = [];
-  if (data.summary) parts.push(data.summary);
-  if (data.skills?.length) parts.push(data.skills.join(" "));
-  data.experience?.forEach((exp) => {
-    if (exp.title) parts.push(exp.title);
-    if (exp.company) parts.push(exp.company);
-    if (exp.description) parts.push(exp.description);
-    exp.bullets?.forEach((b) => parts.push(b));
-  });
-  data.education?.forEach((edu) => {
-    if (edu.degree) parts.push(edu.degree);
-    if (edu.school) parts.push(edu.school);
-  });
-  data.customSections?.forEach((s) => {
-    if (s.title) parts.push(s.title);
-    s.items?.forEach((i) => parts.push(i));
-  });
-  return parts.join(" ").toLowerCase();
-}
-
-function extractKeywords(text: string): string[] {
-  const stopWords = new Set([
-    "a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with",
-    "by", "from", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had",
-    "do", "does", "did", "will", "would", "could", "should", "may", "might", "can",
-    "this", "that", "these", "those", "it", "its", "we", "our", "you", "your", "they",
-    "their", "he", "she", "his", "her", "not", "no", "all", "each", "every", "both",
-    "few", "more", "most", "other", "some", "such", "than", "too", "very", "just",
-    "about", "above", "after", "again", "also", "any", "as", "because", "before",
-    "between", "during", "into", "through", "under", "until", "up", "what", "when",
-    "where", "which", "while", "who", "whom", "why", "how", "if", "then", "so",
-    "work", "working", "worked", "experience", "role", "job", "position", "team",
-    "company", "etc", "including", "using", "ability", "strong", "excellent",
-    "required", "preferred", "must", "years", "minimum", "looking", "seeking",
-    "responsible", "responsibilities", "requirements", "qualifications",
-  ]);
-
-  const words = text.toLowerCase().replace(/[^a-z0-9\s+#.-]/g, " ").split(/\s+/);
-  const wordCount: Record<string, number> = {};
-
-  words.forEach((w) => {
-    const cleaned = w.trim();
-    if (cleaned.length < 2 || stopWords.has(cleaned)) return;
-    wordCount[cleaned] = (wordCount[cleaned] || 0) + 1;
-  });
-
-  for (let i = 0; i < words.length - 1; i++) {
-    const phrase = `${words[i]} ${words[i + 1]}`.trim();
-    if (phrase.length > 4 && !stopWords.has(words[i]) && !stopWords.has(words[i + 1])) {
-      wordCount[phrase] = (wordCount[phrase] || 0) + 1;
-    }
-  }
-
-  return Object.entries(wordCount)
-    .filter(([, count]) => count >= 1)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 60)
-    .map(([word]) => word);
-}
+import { invokeFunction } from "@/lib/api-client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ATSScannerDialogProps {
   resumeData: ResumeData;
+  onNavigate?: (section: string) => void;
 }
 
-export default function ATSScannerDialog({ resumeData }: ATSScannerDialogProps) {
+interface AIResult {
+  overallScore: number;
+  overallAssessment: string;
+  ats: {
+    score: number;
+    strengths: string[];
+    improvements: string[];
+  };
+}
+
+export default function ATSScannerDialog({ resumeData, onNavigate }: ATSScannerDialogProps) {
   const [open, setOpen] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
-  const [results, setResults] = useState<{
-    matched: string[];
-    missing: string[];
-    score: number;
-  } | null>(null);
+  const [results, setResults] = useState<AIResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
-  const scan = () => {
-    const resumeText = extractText(resumeData);
-    const jdKeywords = extractKeywords(jobDescription);
+  const scan = async () => {
+    if (!jobDescription.trim()) return;
+    setLoading(true);
+    
+    try {
+      const { data, error } = await invokeFunction("grade-resume", {
+        resumeData,
+        jobDescription
+      });
+      
+      if (error) throw new Error(error.message || "Failed to analyze resume.");
+      
+      setResults(data);
+    } catch (err: any) {
+      toast({ title: "Analysis Failed", description: err.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const matched: string[] = [];
-    const missing: string[] = [];
+  const handleNavigate = (improvement: string) => {
+    if (!onNavigate) return;
+    const lower = improvement.toLowerCase();
+    let target = "";
+    if (lower.includes("skill")) target = "skills";
+    else if (lower.includes("experience") || lower.includes("work")) target = "experience";
+    else if (lower.includes("summary") || lower.includes("objective")) target = "summary";
+    else if (lower.includes("education")) target = "education";
+    else if (lower.includes("project")) target = "custom";
+    else target = "personal";
 
-    jdKeywords.forEach((kw) => {
-      if (resumeText.includes(kw)) {
-        matched.push(kw);
-      } else {
-        missing.push(kw);
-      }
-    });
-
-    const score = jdKeywords.length > 0 ? Math.round((matched.length / jdKeywords.length) * 100) : 0;
-    setResults({ matched, missing, score });
+    setOpen(false); // Close dialog
+    setTimeout(() => onNavigate(target), 100); // Slight delay for smooth transition
   };
 
   const scoreColor = results
-    ? results.score >= 70 ? "text-green-600" : results.score >= 40 ? "text-yellow-600" : "text-destructive"
+    ? results.ats.score >= 70 ? "text-green-600" : results.ats.score >= 40 ? "text-yellow-600" : "text-destructive"
     : "";
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setResults(null); setJobDescription(""); } }}>
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setResults(null); setJobDescription(""); setLoading(false); } }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <ScanSearch className="h-4 w-4 mr-1 sm:mr-2" />
-          <span className="hidden sm:inline">ATS Scan</span>
+        <Button variant="outline" size="sm" className="bg-white/50 border-blue-100 hover:bg-blue-50 hover:text-blue-600 transition-all shadow-sm rounded-full px-4 font-bold text-xs">
+          <ScanSearch className="h-3.5 w-3.5 mr-2 text-blue-500" />
+          <span className="hidden sm:inline uppercase tracking-widest text-slate-600">AI ATS Scan</span>
           <span className="sm:hidden">ATS</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto rounded-[2rem]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <ScanSearch className="h-5 w-5 text-primary" /> ATS Keyword Scanner
+          <DialogTitle className="flex items-center gap-2 text-2xl font-black">
+            <ScanSearch className="h-6 w-6 text-blue-600" /> AI ATS Scanner
           </DialogTitle>
-          <DialogDescription>
-            Paste a job description to find missing keywords in your resume.
+          <DialogDescription className="text-base font-medium">
+            Paste a job description and our AI will analyze your resume to give you a true ATS match score and actionable feedback.
           </DialogDescription>
         </DialogHeader>
 
         {!results ? (
-          <div className="space-y-4">
+          <div className="space-y-4 mt-4">
             <Textarea
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder="Paste the full job description here..."
-              rows={6}
-              className="min-h-[150px]"
+              rows={8}
+              className="min-h-[200px] resize-none bg-slate-50 border-slate-200 rounded-2xl focus-visible:ring-blue-500"
+              disabled={loading}
             />
-            <Button onClick={scan} disabled={!jobDescription.trim()} className="w-full gap-2">
-              <ScanSearch className="h-4 w-4" /> Scan Keywords
+            <Button 
+              onClick={scan} 
+              disabled={!jobDescription.trim() || loading} 
+              className="w-full h-14 rounded-2xl gap-2 font-bold text-lg bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-600/20"
+            >
+              {loading ? (
+                <><Loader2 className="h-5 w-5 animate-spin" /> Analyzing Resume against JD...</>
+              ) : (
+                <><ScanSearch className="h-5 w-5" /> Scan Keywords & Grade Resume</>
+              )}
             </Button>
           </div>
         ) : (
-          <div className="space-y-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center justify-between">
-                  <span>Match Score</span>
-                  <span className={`text-3xl font-bold font-mono ${scoreColor}`}>{results.score}%</span>
+          <div className="space-y-6 mt-4">
+            <Card className="border-2 border-slate-100 shadow-sm rounded-3xl overflow-hidden">
+              <CardHeader className="pb-4 bg-slate-50/50">
+                <CardTitle className="text-lg flex items-center justify-between">
+                  <span>ATS Match Score</span>
+                  <span className={`text-5xl font-black font-mono tracking-tighter ${scoreColor}`}>{results.ats.score}%</span>
                 </CardTitle>
-                <CardDescription>
-                  {results.score >= 70
-                    ? "Great match! Your resume aligns well."
-                    : results.score >= 40
-                    ? "Fair match. Consider adding missing keywords."
-                    : "Low match. Your resume may be filtered by ATS."}
+                <CardDescription className="text-base font-medium text-slate-600">
+                  {results.overallAssessment}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Progress value={results.score} className="h-2.5" />
+              <CardContent className="pt-6">
+                <Progress value={results.ats.score} className="h-3 bg-slate-100" />
               </CardContent>
             </Card>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card>
+            <div className="grid gap-6 md:grid-cols-2 items-start">
+              <Card className="rounded-3xl border-slate-100 shadow-sm h-full">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2 text-green-600">
-                    <CheckCircle className="h-4 w-4" /> Matched ({results.matched.length})
+                    <CheckCircle className="h-5 w-5" /> Strengths
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-wrap gap-1.5">
-                  {results.matched.map((kw) => (
-                    <Badge key={kw} variant="secondary" className="text-xs bg-green-500/10 text-green-600 border-green-500/20">
-                      {kw}
-                    </Badge>
-                  ))}
-                  {results.matched.length === 0 && (
-                    <p className="text-xs text-muted-foreground">No matching keywords found.</p>
-                  )}
+                <CardContent>
+                  <ul className="space-y-3">
+                    {results.ats.strengths?.map((str, idx) => (
+                      <li key={idx} className="flex gap-3 text-sm text-slate-700 leading-relaxed">
+                        <span className="text-green-500 font-bold mt-0.5">•</span> {str}
+                      </li>
+                    ))}
+                    {(!results.ats.strengths || results.ats.strengths.length === 0) && (
+                      <p className="text-sm text-muted-foreground">No particular strengths found for this JD.</p>
+                    )}
+                  </ul>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="rounded-3xl border-slate-100 shadow-sm h-full bg-blue-50/30 border-blue-100/50">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2 text-destructive">
-                    <XCircle className="h-4 w-4" /> Missing ({results.missing.length})
+                  <CardTitle className="text-base flex items-center gap-2 text-blue-700">
+                    <ScanSearch className="h-5 w-5" /> AI Improvements
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-wrap gap-1.5">
-                  {results.missing.slice(0, 30).map((kw) => (
-                    <Badge key={kw} variant="outline" className="text-xs border-destructive/30 text-destructive">
-                      {kw}
-                    </Badge>
-                  ))}
-                  {results.missing.length === 0 && (
-                    <p className="text-xs text-muted-foreground">All keywords matched! 🎉</p>
-                  )}
+                <CardContent>
+                  <ul className="space-y-4">
+                    {results.ats.improvements?.map((imp, idx) => (
+                      <li key={idx} className="flex flex-col gap-2 text-sm text-slate-700 leading-relaxed bg-white p-4 rounded-2xl border border-blue-100 shadow-sm">
+                        <div className="flex gap-2">
+                           <span className="text-blue-500 font-bold mt-0.5">•</span> 
+                           <span>{imp}</span>
+                        </div>
+                        {onNavigate && (
+                           <button 
+                             onClick={() => handleNavigate(imp)}
+                             className="self-end mt-1 text-[11px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 uppercase tracking-wider"
+                           >
+                              Fix this section <ArrowRight className="w-3 h-3" />
+                           </button>
+                        )}
+                      </li>
+                    ))}
+                    {(!results.ats.improvements || results.ats.improvements.length === 0) && (
+                      <p className="text-sm text-muted-foreground">Your resume is perfectly optimized!</p>
+                    )}
+                  </ul>
                 </CardContent>
               </Card>
             </div>
 
-            {results.missing.length > 0 && (
-              <div className="space-y-4 pt-4">
-                 <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Bridge the Skill Gap</h4>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {results.missing.slice(0, 4).map((kw) => (
-                       <a 
-                         key={kw}
-                         href={`https://www.coursera.org/search?query=${encodeURIComponent(kw)}`}
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="flex items-center gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-all group"
-                       >
-                          <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center shrink-0">
-                             <Globe className="w-4 h-4 text-primary" />
-                          </div>
-                          <div>
-                             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Learn {kw}</p>
-                             <p className="text-xs font-bold text-slate-900 flex items-center gap-1 group-hover:text-primary transition-colors">
-                                View Courses <ExternalLink className="w-3 h-3" />
-                             </p>
-                          </div>
-                       </a>
-                    ))}
-                 </div>
-              </div>
-            )}
-
-            <Button variant="outline" onClick={() => setResults(null)} className="w-full h-12 rounded-xl font-bold">
-              Scan New Description
+            <Button variant="outline" onClick={() => setResults(null)} className="w-full h-14 rounded-2xl font-bold text-slate-500 hover:text-slate-900 border-2">
+              Scan Another Description
             </Button>
           </div>
         )}

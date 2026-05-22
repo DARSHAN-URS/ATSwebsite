@@ -174,6 +174,8 @@ export default function Builder() {
           await saveResume(true);
           setExportOpen(true);
         }}
+        resumeData={resumeData}
+        onNavigateSection={setActiveSection}
       />
 
 

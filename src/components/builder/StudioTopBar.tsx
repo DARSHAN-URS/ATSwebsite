@@ -3,6 +3,8 @@ import { ChevronLeft, Sparkles, Zap, Download, FileText, CheckCircle2 } from "lu
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { ResumeData } from "@/components/resume/types";
+import ATSScannerDialog from "@/components/resume/ATSScannerDialog";
 
 interface StudioTopBarProps {
   title: string;
@@ -11,6 +13,8 @@ interface StudioTopBarProps {
   score: number;
   onAiImprove: () => void;
   onExport: () => void;
+  resumeData?: ResumeData;
+  onNavigateSection?: (section: string) => void;
 }
 
 export default function StudioTopBar({
@@ -20,6 +24,8 @@ export default function StudioTopBar({
   score,
   onAiImprove,
   onExport,
+  resumeData,
+  onNavigateSection,
 }: StudioTopBarProps) {
   return (
     <header className="sticky top-0 left-0 right-0 z-50 px-8 py-4">
@@ -88,6 +94,9 @@ export default function StudioTopBar({
           >
             AI Improve <Sparkles className="w-4 h-4 text-blue-400 group-hover:rotate-12 transition-transform" />
           </Button>
+          {resumeData && (
+             <ATSScannerDialog resumeData={resumeData} onNavigate={onNavigateSection} />
+          )}
           <Button 
             onClick={onExport}
             className="rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] px-8 h-12 shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all gap-2 group"
