@@ -536,8 +536,16 @@ export default function InterviewPrep() {
                            <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs text-slate-900 shadow-sm">
                               <SelectValue />
                            </SelectTrigger>
-                           <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white">
-                              {["Junior", "Intermediate", "Senior", "Executive"].map(l => <SelectItem key={l} value={l} className="font-bold text-[10px] p-3 uppercase hover:bg-blue-50 cursor-pointer">{l}</SelectItem>)}
+                           <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
+                              {["Junior", "Intermediate", "Senior", "Executive"].map(l => (
+                                 <SelectItem 
+                                    key={l} 
+                                    value={l} 
+                                    className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white"
+                                 >
+                                    {l}
+                                 </SelectItem>
+                              ))}
                            </SelectContent>
                         </Select>
                      </div>
@@ -547,8 +555,16 @@ export default function InterviewPrep() {
                            <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs text-slate-900 shadow-sm">
                               <SelectValue placeholder="Select Resume" />
                            </SelectTrigger>
-                           <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white">
-                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="font-bold text-[10px] p-3 uppercase hover:bg-blue-50 cursor-pointer">{r.title}</SelectItem>)}
+                           <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
+                              {resumes.map(r => (
+                                 <SelectItem 
+                                    key={r.id} 
+                                    value={r.id} 
+                                    className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white"
+                                 >
+                                    {r.title}
+                                 </SelectItem>
+                              ))}
                            </SelectContent>
                         </Select>
                      </div>
