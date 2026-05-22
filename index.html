@@ -39,7 +39,7 @@
     <!-- Analytics & Pixel — load 5s after page becomes interactive -->
     <script>
       function loadTrackers() {
-        if (window.__trackersLoaded) return;
+        if (window.__trackersLoaded || localStorage.getItem('cookie-consent') !== 'true') return;
         window.__trackersLoaded = true;
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -56,6 +56,10 @@
         s.async = true;
         document.head.appendChild(s);
       }
+      window.grantCookieConsent = function() {
+        localStorage.setItem('cookie-consent', 'true');
+        loadTrackers();
+      };
       window.addEventListener('load', function() { setTimeout(loadTrackers, 5000); });
     </script>
 

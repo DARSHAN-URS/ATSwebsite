@@ -301,7 +301,7 @@ export default function EmailOutreach() {
                   {/* Composer Fields */}
                   <div className="flex-1 overflow-y-auto p-8 space-y-8 scrollbar-hide">
                      <div className="space-y-6">
-                        <div className="flex items-center border-b border-slate-50 pb-4">
+                        <div className="flex items-center border-b border-slate-100 focus-within:border-blue-500/50 pb-3 transition-colors duration-200">
                            <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{to.recipient}</span>
                            <div className="flex-1 relative">
                               <Mail className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
@@ -309,17 +309,17 @@ export default function EmailOutreach() {
                                  value={recruiterEmail} 
                                  onChange={e => setRecruiterEmail(e.target.value)} 
                                  placeholder="recruiter@company.com" 
-                                 className="w-full bg-transparent border-none focus:ring-0 pl-7 text-sm font-bold text-slate-900 placeholder:text-slate-200" 
+                                 className="w-full bg-transparent border-none focus:outline-none focus:ring-0 outline-none pl-7 text-sm font-bold text-slate-900 placeholder:text-slate-300 transition-all" 
                               />
                            </div>
                         </div>
-                        <div className="flex items-center border-b border-slate-50 pb-4">
+                        <div className="flex items-center border-b border-slate-100 focus-within:border-blue-500/50 pb-3 transition-colors duration-200">
                            <span className="w-20 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{to.subject}</span>
                            <input 
                               value={subject} 
                               onChange={e => setSubject(e.target.value)} 
                               placeholder="Application for [Mission Title]..." 
-                              className="flex-1 bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-900 placeholder:text-slate-200" 
+                              className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 outline-none text-sm font-bold text-slate-900 placeholder:text-slate-300 transition-all" 
                            />
                         </div>
                         <div className="pt-4 flex-1">
@@ -327,7 +327,7 @@ export default function EmailOutreach() {
                               value={body} 
                               onChange={e => setBody(e.target.value)} 
                               placeholder={to.startDrafting} 
-                              className="w-full h-full min-h-[400px] bg-transparent border-none focus:ring-0 text-sm font-medium text-slate-600 leading-relaxed resize-none placeholder:text-slate-200" 
+                              className="w-full h-full min-h-[400px] bg-transparent border-none focus:outline-none focus:ring-0 outline-none text-sm font-medium text-slate-600 leading-relaxed resize-none placeholder:text-slate-300 transition-all" 
                            />
                         </div>
                      </div>

@@ -11,6 +11,7 @@ import { lazy, Suspense } from "react";
 // Eagerly loaded — small, needed immediately
 import AppLayout from "@/components/AppLayout";
 import Index from "@/pages/Index";
+import { CookieConsent } from "@/components/CookieConsent";
 
 // Lazy-loaded — only pulled in when the user navigates there
 import Dashboard from "@/pages/Dashboard";
@@ -176,6 +177,7 @@ const App = () => (
             </Suspense>
            </UserRoleProvider>
           </AuthProvider>
+          <CookieConsent />
         </BrowserRouter>
       </TooltipProvider>
     </LanguageProvider>

@@ -50,6 +50,7 @@ export default function Resumes() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [resumes, setResumes] = useState<Resume[]>([]);
+  const [appsCount, setAppsCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -63,6 +64,10 @@ export default function Resumes() {
       .then(({ data }) => {
         setResumes(data || []);
         setLoading(false);
+      });
+    supabase.from("job_applications").select("*", { count: 'exact', head: true }).eq("user_id", user.id)
+      .then(({ count }) => {
+        setAppsCount(count || 0);
       });
   }, [user]);
 
@@ -137,7 +142,7 @@ export default function Resumes() {
          {[
            { label: "Total Assets", value: resumes.length, sub: "Resumes in cloud", icon: FileText, color: "text-blue-600", bg: "bg-blue-50" },
            { label: "Avg. ATS Score", value: resumes.length > 0 ? `${Math.round(resumes.reduce((acc, r) => acc + computeResumeScore(r.resume_data as any), 0) / resumes.length)}%` : "0%", sub: "Across all builds", icon: BarChart3, color: "text-purple-600", bg: "bg-purple-50" },
-           { label: "Active Deployments", value: "3", sub: "Live applications", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
+           { label: "Active Deployments", value: appsCount, sub: "Live applications", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
            { label: "Asset Quality", value: "High", sub: "Optimization level", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
          ].map((stat, i) => (
             <Card key={i} onClick={() => {
@@ -309,20 +314,6 @@ export default function Resumes() {
                   ))}
                </div>
                <Button onClick={() => navigate("/resumes")} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">View All Activity</Button>
-            </Card>
-
-            <Card className="rounded-3xl border border-slate-200 bg-slate-900 p-6 shadow-xl relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
-               <div className="relative z-10 space-y-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
-                     <Sparkles className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1">
-                     <h3 className="text-white text-sm font-bold tracking-tight">Pro Insight</h3>
-                     <p className="text-slate-400 text-[11px] leading-relaxed">Your resume matching for <span className="text-blue-400">FAANG</span> roles is currently 84% above the benchmark.</p>
-                  </div>
-                  <Button onClick={() => navigate("/resumes")} className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Optimize further</Button>
-               </div>
             </Card>
          </div>
       </div>

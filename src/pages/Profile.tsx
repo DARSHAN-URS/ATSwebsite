@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
+import { invokeFunction } from "@/lib/api-client";
 
 export default function Profile() {
   const { user, signOut } = useAuth();
@@ -67,6 +68,24 @@ export default function Profile() {
       toast({ title: "Upload failed", variant: "destructive" });
     } finally {
       setUploadingPhoto(false);
+    }
+  };
+
+  const [cancelling, setCancelling] = useState(false);
+  const handleCancelSubscription = async () => {
+    if (!confirm("Are you sure you want to cancel your Pro subscription? You will lose access to premium features immediately.")) return;
+    
+    setCancelling(true);
+    try {
+      const { error } = await invokeFunction("cancel-subscription", {});
+      if (error) throw error;
+      toast({ title: "Subscription Cancelled" });
+      // Reload page to reflect changes
+      window.location.reload();
+    } catch (err: any) {
+      toast({ title: "Cancellation failed", description: err.message, variant: "destructive" });
+    } finally {
+      setCancelling(false);
     }
   };
 
@@ -161,6 +180,46 @@ export default function Profile() {
                         {savingProfile ? <Loader2 className="w-5 h-5 animate-spin" /> : <Shield className="w-5 h-5" />}
                         Save Changes
                      </Button>
+                  </div>
+               </div>
+            </Card>
+
+            <Card className="rounded-[4rem] border-none bg-white shadow-[0_40px_80px_rgba(0,0,0,0.06)] p-12 border border-slate-50">
+               <div className="space-y-10">
+                  <div className="flex items-center gap-3">
+                     <Crown className="w-5 h-5 text-blue-600" />
+                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Billing & Subscription</h3>
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 rounded-3xl bg-slate-50 border border-slate-100">
+                     <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                           <span className="text-xl font-black text-slate-900">{isPro ? "Pro Subscription" : "Free Tier"}</span>
+                           {isPro && <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest">Active</span>}
+                        </div>
+                        <p className="text-sm font-medium text-slate-500">
+                           {isPro 
+                              ? "You have full access to all premium intelligence features, unlimited resumes, and AI grading."
+                              : "You are currently on the free tier with basic access. Upgrade to unlock AI features."}
+                        </p>
+                     </div>
+                     <div className="flex flex-col gap-3 shrink-0">
+                        {!isPro ? (
+                           <Button onClick={() => window.location.href = "/upgrade"} className="h-12 px-8 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-xl shadow-blue-600/20 hover:scale-105 transition-all">
+                              Upgrade to Pro
+                           </Button>
+                        ) : (
+                           <>
+                              <Button onClick={() => window.location.href = "/upgrade"} variant="outline" className="h-12 px-8 border-slate-200 text-slate-600 font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-100 transition-all">
+                                 Change Plan
+                              </Button>
+                              <Button onClick={handleCancelSubscription} disabled={cancelling} variant="ghost" className="h-12 px-8 text-rose-500 hover:bg-rose-50 font-black uppercase tracking-widest text-xs rounded-xl transition-all">
+                                 {cancelling ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                                 Cancel Plan
+                              </Button>
+                           </>
+                        )}
+                     </div>
                   </div>
                </div>
             </Card>

@@ -158,6 +158,8 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
   );
 }
 
+import { BugReportWidget } from "@/components/BugReportWidget";
+
 export default function AppLayout() {
   const { user, signOut } = useAuth();
   const isMobile = useIsMobile();
@@ -177,12 +179,11 @@ export default function AppLayout() {
         </aside>
       )}
 
-      <main className="flex-1 min-w-0 flex flex-col bg-white">
-
-        
+      <main className="flex-1 min-w-0 flex flex-col bg-white relative">
         <div className="flex-1 relative overflow-y-auto p-8 md:p-10">
            <Outlet />
         </div>
+        <BugReportWidget />
       </main>
     </div>
   );

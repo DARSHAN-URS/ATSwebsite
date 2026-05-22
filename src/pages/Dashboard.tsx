@@ -128,13 +128,6 @@ export default function Dashboard() {
         });
       }
       
-      if (tasks.length === 0) {
-        tasks.push(
-          { title: "Optimize and grade your first resume", due: "Today", priority: "Critical" },
-          { title: "Generate customized cover letter for your dream role", due: "Tomorrow", priority: "High" },
-          { title: "Configure your outreach signature & recruiter metrics", due: "2 days", priority: "Medium" }
-        );
-      }
       setOutreachTasks(tasks.slice(0, 3));
 
       // 2. Fetch Recent Activity
@@ -254,10 +247,10 @@ export default function Dashboard() {
       {/* 2. Quick Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
          {[
-           { label: td.statsApplications, value: stats.apps, sub: "+12% from last month", icon: Zap, color: "text-blue-600", bg: "bg-blue-50" },
+           { label: td.statsApplications, value: stats.apps, sub: "Active pipeline tracking", icon: Zap, color: "text-blue-600", bg: "bg-blue-50" },
            { label: td.statsInterviews, value: appsByStatus.filter(a => a.status === "interview").length, sub: "Scheduled this week", icon: Star, color: "text-purple-600", bg: "bg-purple-50" },
-           { label: td.statsResumeScore, value: "92/100", sub: "ATS Optimization", icon: FileText, color: "text-emerald-600", bg: "bg-emerald-50" },
-           { label: td.statsResponseRate, value: `${stats.responseRate}%`, sub: "Above average", icon: TrendingUp, color: "text-orange-600", bg: "bg-orange-50" },
+           { label: td.statsResumeScore, value: optimizationScore === 0 ? "0/100" : `${optimizationScore}/100`, sub: "ATS Optimization", icon: FileText, color: "text-emerald-600", bg: "bg-emerald-50" },
+           { label: td.statsResponseRate, value: `${stats.responseRate}%`, sub: "Current operational rate", icon: TrendingUp, color: "text-orange-600", bg: "bg-orange-50" },
          ].map((s, i) => (
            <motion.div 
              key={i} 
@@ -426,7 +419,12 @@ export default function Dashboard() {
                    <h3 className="text-sm font-bold text-slate-900">{td.outreachTasks}</h3>
                 </div>
                 <div className="space-y-4">
-                   {outreachTasks.map((task, i) => (
+                   {outreachTasks.length === 0 ? (
+                      <div className="text-center text-slate-400 font-medium py-8 text-xs italic">
+                         No active outreach tasks detected.
+                      </div>
+                    ) : (
+                      outreachTasks.map((task, i) => (
                      <div key={i} onClick={() => navigate("/email-outreach")} className="p-3 rounded-2xl border border-slate-50 hover:border-slate-200 transition-all group cursor-pointer">
                         <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-1">{task.title}</p>
                         <div className="flex items-center justify-between">
@@ -437,7 +435,7 @@ export default function Dashboard() {
                            )}>{task.priority}</span>
                         </div>
                      </div>
-                   ))}
+                   )))}
                    <Button onClick={() => navigate("/email-outreach")} variant="outline" className="w-full h-10 rounded-xl border-slate-200 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">{td.viewTaskMatrix}</Button>
                 </div>
              </Card>

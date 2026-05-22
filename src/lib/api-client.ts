@@ -34,6 +34,8 @@ export const invokeFunction = async (name: string, options: any) => {
       path = "/api/payments/activate-subscription";
     } else if (name === "create-checkout") {
       path = "/api/payments/create-checkout";
+    } else if (name === "cancel-subscription") {
+      path = "/api/payments/cancel-subscription";
     }
 
     const response = await fetch(`${BACKEND_URL}${path}`, {
