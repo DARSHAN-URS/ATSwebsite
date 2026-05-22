@@ -138,7 +138,9 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                     </div>
                  )}
 
-                 <Card className={cn(
+                 <Card 
+                    id={plan.highlight ? "pro-plan-card" : undefined}
+                    className={cn(
                     "relative h-full rounded-[3.5rem] border-2 p-10 space-y-10 transition-all duration-500 flex flex-col justify-between group",
                     plan.highlight 
                        ? "bg-white border-blue-600 shadow-[0_20px_50px_rgba(37,99,235,0.1)] z-10" 
@@ -180,7 +182,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
 
                        <div className="space-y-4">
                           {plan.features.map((f, fi) => (
-                             <div key={fi} className={cn("flex items-center gap-3", !f.included && "opacity-40")}>
+                             <div key={fi} className={cn("flex items-center gap-3", !f.included && !plan.highlight && "opacity-60")}>
                                 <div className={cn(
                                    "w-5 h-5 rounded-full flex items-center justify-center shrink-0",
                                    f.included ? "bg-blue-50 text-blue-600" : "text-slate-300"
@@ -188,9 +190,21 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                                    {f.included ? <Check className="w-3.5 h-3.5" /> : <span className="text-lg leading-none">×</span>}
                                 </div>
                                 <span className={cn(
-                                   "text-[11px] font-bold tracking-tight uppercase tracking-wider",
+                                   "text-[11px] font-bold tracking-tight uppercase tracking-wider flex-1",
                                    f.included ? "text-slate-700" : "text-slate-400 line-through"
                                 )}>{f.text}</span>
+                                {/* Free plan: show upgrade link on excluded features */}
+                                {!f.included && !plan.highlight && (
+                                   <button
+                                      onClick={() => {
+                                         const proCard = document.getElementById("pro-plan-card");
+                                         if (proCard) proCard.scrollIntoView({ behavior: "smooth", block: "center" });
+                                      }}
+                                      className="text-[9px] font-black uppercase tracking-wider text-blue-600 hover:text-blue-700 hover:underline transition-colors whitespace-nowrap"
+                                   >
+                                      Upgrade →
+                                   </button>
+                                )}
                              </div>
                           ))}
                        </div>
