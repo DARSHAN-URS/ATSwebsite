@@ -356,10 +356,8 @@ export default function InterviewPrep() {
 
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] font-sans pb-20 text-left selection:bg-blue-600/30">
-      <SEOHead title="Interview Prep — ResumePro" description="Practice your professional interviews with AI." />
-      
-      <div className="max-w-7xl mx-auto space-y-8 p-8 md:p-10 relative">
+    <div className="max-w-7xl mx-auto space-y-8 pb-20 relative font-sans text-left">
+      <SEOHead title="Interview Intelligence - ResumePro" description="Practice your interview skills with AI." />
          
          {/* 1. Premium Hero Header */}
          <div className="relative bg-white rounded-[2rem] p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
@@ -961,7 +959,6 @@ export default function InterviewPrep() {
                </Card>
          </div>
       </div>
-   </div>
-</div>
-);
+    </div>
+  );
 }

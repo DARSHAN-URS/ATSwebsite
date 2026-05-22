@@ -99,8 +99,8 @@ export default function JobTracker() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 p-6 md:p-10 space-y-12 font-sans">
-      <SEOHead title="Tracking Engine — ResumePro" description="Monitor your operational pipeline in real-time." />
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20 font-sans">
+      <SEOHead title="Tracking Engine - ResumePro" description="Monitor your operational pipeline in real-time." />
 
       <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10 text-left">
         <div className="space-y-4">

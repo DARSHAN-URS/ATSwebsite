@@ -72,10 +72,8 @@ export default function Companies() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] font-sans pb-20 text-left">
-      <SEOHead title="Find Companies — ResumePro" description="Search for companies and see their open job positions." />
-      
-      <div className="max-w-7xl mx-auto space-y-8 text-left p-8 md:p-10">
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20 font-sans">
+      <SEOHead title="Find Companies - ResumePro" description="Search for companies and see their open job positions." />
          
          {/* 1. SaaS Hero Section */}
          <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
@@ -312,7 +310,6 @@ export default function Companies() {
                </Card>
             </div>
          </div>
-      </div>
     </div>
   );
 }

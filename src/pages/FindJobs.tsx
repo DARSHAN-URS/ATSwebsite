@@ -214,8 +214,8 @@ export default function FindJobs() {
   })();
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 text-left p-8 md:p-10 bg-[#F5F7FB] min-h-screen">
-      <SEOHead title="Find Jobs — ResumePro" description="Search and apply for jobs with AI." />
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20 font-sans">
+      <SEOHead title="Find Jobs - ResumePro" description="Search and apply for jobs with AI." />
       <ApplyWithResumeDialog open={applyDialogOpen} onOpenChange={setApplyDialogOpen} job={applyingJob} resumes={resumes} onSuccess={() => appliedIds.add(applyingJob?.id || "")} />
       
       {/* 1. SaaS Hero Section */}

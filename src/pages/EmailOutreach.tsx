@@ -153,10 +153,8 @@ export default function EmailOutreach() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] font-sans pb-20 text-left">
+    <div className="max-w-7xl mx-auto space-y-8 text-left pb-20 font-sans">
       <SEOHead title={to.seoTitle} description={to.seoDesc} />
-      
-      <div className="max-w-7xl mx-auto space-y-8 text-left p-8 md:p-10">
          
          {/* 1. SaaS Hero Section */}
          <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
@@ -404,7 +402,6 @@ export default function EmailOutreach() {
                )}
             </div>
          </div>
-      </div>
     </div>
   );
 }
