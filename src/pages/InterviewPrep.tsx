@@ -62,16 +62,9 @@ export default function InterviewPrep() {
       } catch (e) {
         console.error(e);
       }
-    } else {
-      const defaultHistory = [
-        { id: "1", role: "Backend Architect", date: "Today", score: 94, communication: 96, technical: 92, timestamp: Date.now() - 7200000 },
-        { id: "2", role: "Product Manager", date: "Yesterday", score: 82, communication: 88, technical: 76, timestamp: Date.now() - 86400000 },
-        { id: "3", role: "Lead UI Designer", date: "3 days ago", score: 88, communication: 90, technical: 86, timestamp: Date.now() - 259200000 }
-      ];
-      setHistoryList(defaultHistory);
-      localStorage.setItem("mock_interviews_history", JSON.stringify(defaultHistory));
     }
   }, []);
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -124,19 +117,19 @@ export default function InterviewPrep() {
   const totalSessions = historyList.length;
   const averageReadiness = totalSessions > 0 
     ? Math.round(historyList.reduce((sum, h) => sum + h.score, 0) / totalSessions) 
-    : 84;
+    : 0;
 
   const averageTech = totalSessions > 0
     ? Math.round(historyList.reduce((sum, h) => sum + h.technical, 0) / totalSessions)
-    : 88;
+    : 0;
 
   const averageComm = totalSessions > 0
     ? Math.round(historyList.reduce((sum, h) => sum + (h.communication || 85), 0) / totalSessions)
-    : 90;
+    : 0;
 
   const averageSysDesign = totalSessions > 0
     ? Math.round(historyList.reduce((sum, h) => sum + Math.max(50, Math.round((h.technical * 0.9 + h.communication * 0.1) - 4)), 0) / totalSessions)
-    : 75;
+    : 0;
 
   const analyticsData = historyList.slice().reverse().map(h => ({
     name: h.date,
@@ -144,13 +137,31 @@ export default function InterviewPrep() {
   })).slice(-7);
 
   if (analyticsData.length === 0) {
-    analyticsData.push({ name: "Today", score: 84 });
+    analyticsData.push({ name: "No Sessions", score: 0 });
   }
 
   const pieData = [
     { name: "Technical", value: averageTech, color: "#2563eb" },
     { name: "Behavioral", value: averageComm, color: "#10b981" },
     { name: "System Design", value: averageSysDesign, color: "#f59e0b" },
+  ];
+
+  const [activeTab, setActiveTab] = useState("Mock Interview");
+  const [showRoleSuggestions, setShowRoleSuggestions] = useState(false);
+  const [showIndustrySuggestions, setShowIndustrySuggestions] = useState(false);
+
+  const ROLE_SUGGESTIONS = [
+    "Software Engineer", "Frontend Developer", "Backend Developer", "Full Stack Developer",
+    "Product Manager", "Data Scientist", "Data Analyst", "UX/UI Designer", 
+    "Marketing Manager", "Sales Executive", "Financial Analyst", "HR Manager", 
+    "Business Analyst", "Project Manager"
+  ];
+
+  const INDUSTRY_SUGGESTIONS = [
+    "Technology & Software", "Fintech", "Healthcare & Medical", 
+    "E-commerce", "SaaS", "AI & Machine Learning", 
+    "Finance & Banking", "Education / EdTech", "Manufacturing",
+    "Google", "Microsoft", "Amazon", "Meta", "Apple"
   ];
 
   const [activeTab, setActiveTab] = useState("Mock Interview");
@@ -370,7 +381,7 @@ export default function InterviewPrep() {
 
                <div className="flex items-center gap-10 bg-slate-50/50 p-6 rounded-3xl border border-slate-100 backdrop-blur-sm">
                   <div className="text-right">
-                     <p className="text-3xl font-black text-slate-900 leading-none">{averageReadiness}%</p>
+                     <p className="text-3xl font-black text-slate-900 leading-none">{totalSessions > 0 ? `${averageReadiness}%` : "--"}</p>
                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-2">Readiness Score</p>
                   </div>
                   <div className="w-px h-12 bg-slate-200" />
@@ -385,10 +396,10 @@ export default function InterviewPrep() {
          {/* 2. Stats Row */}
          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-               { label: "Confidence", value: `${averageComm}%`, icon: TrendingUp, color: "text-blue-600", bg: "bg-blue-50" },
-               { label: "Technical", value: `${averageTech}%`, icon: Code, color: "text-indigo-600", bg: "bg-indigo-50" },
-               { label: "Communication", value: averageComm >= 85 ? "High" : averageComm >= 70 ? "Medium" : "Needs Work", icon: MessageSquare, color: "text-emerald-600", bg: "bg-emerald-50" },
-               { label: "Readiness", value: averageReadiness >= 80 ? "Ready" : averageReadiness >= 65 ? "Improving" : "Critical", icon: ShieldCheck, color: "text-amber-600", bg: "bg-amber-50" },
+               { label: "Confidence", value: totalSessions > 0 ? `${averageComm}%` : "--", icon: TrendingUp, color: "text-blue-600", bg: "bg-blue-50" },
+               { label: "Technical", value: totalSessions > 0 ? `${averageTech}%` : "--", icon: Code, color: "text-indigo-600", bg: "bg-indigo-50" },
+               { label: "Communication", value: totalSessions === 0 ? "--" : averageComm >= 85 ? "High" : averageComm >= 70 ? "Medium" : "Needs Work", icon: MessageSquare, color: "text-emerald-600", bg: "bg-emerald-50" },
+               { label: "Readiness", value: totalSessions === 0 ? "--" : averageReadiness >= 80 ? "Ready" : averageReadiness >= 65 ? "Improving" : "Critical", icon: ShieldCheck, color: "text-amber-600", bg: "bg-amber-50" },
             ].map((stat, i) => (
                <Card key={i} className="bg-white border border-slate-200 p-5 rounded-[1.5rem] hover:shadow-lg transition-all duration-300 group cursor-pointer hover:-translate-y-1">
                   <div className="flex items-center justify-between mb-4">
@@ -439,11 +450,87 @@ export default function InterviewPrep() {
                   <div className="space-y-5 relative z-10">
                      <div className="space-y-2">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Target Role</Label>
-                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Senior Frontend Dev" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all shadow-sm" />
+                        <div className="relative">
+                           <Input 
+                              value={position} 
+                              onChange={e => setPosition(e.target.value)} 
+                              onFocus={() => setShowRoleSuggestions(true)}
+                              onBlur={() => setTimeout(() => setShowRoleSuggestions(false), 200)}
+                              placeholder="e.g. Senior Frontend Dev" 
+                              className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all shadow-sm" 
+                           />
+                           <AnimatePresence>
+                              {showRoleSuggestions && (
+                                 <motion.div 
+                                    initial={{ opacity: 0, y: 5 }} 
+                                    animate={{ opacity: 1, y: 0 }} 
+                                    exit={{ opacity: 0, y: 5 }}
+                                    className="absolute z-50 w-full mt-1 bg-white border border-slate-100 rounded-xl shadow-xl max-h-48 overflow-y-auto overflow-x-hidden p-1"
+                                 >
+                                    {ROLE_SUGGESTIONS
+                                       .filter(r => r.toLowerCase().includes(position.toLowerCase()))
+                                       .map((role, idx) => (
+                                       <button
+                                          key={idx}
+                                          type="button"
+                                          onClick={() => {
+                                             setPosition(role);
+                                             setShowRoleSuggestions(false);
+                                          }}
+                                          className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
+                                       >
+                                          {role}
+                                       </button>
+                                    ))}
+                                    {position && ROLE_SUGGESTIONS.filter(r => r.toLowerCase().includes(position.toLowerCase())).length === 0 && (
+                                       <div className="px-3 py-2 text-xs font-medium text-slate-400">Press enter to use "{position}"</div>
+                                    )}
+                                 </motion.div>
+                              )}
+                           </AnimatePresence>
+                        </div>
                      </div>
                      <div className="space-y-2">
-                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Industry</Label>
-                        <Input value={industry} onChange={e => setIndustry(e.target.value)} placeholder="e.g. Fintech" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all shadow-sm" />
+                        <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Industry / Company</Label>
+                        <div className="relative">
+                           <Input 
+                              value={industry} 
+                              onChange={e => setIndustry(e.target.value)} 
+                              onFocus={() => setShowIndustrySuggestions(true)}
+                              onBlur={() => setTimeout(() => setShowIndustrySuggestions(false), 200)}
+                              placeholder="e.g. Fintech" 
+                              className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all shadow-sm" 
+                           />
+                           <AnimatePresence>
+                              {showIndustrySuggestions && (
+                                 <motion.div 
+                                    initial={{ opacity: 0, y: 5 }} 
+                                    animate={{ opacity: 1, y: 0 }} 
+                                    exit={{ opacity: 0, y: 5 }}
+                                    className="absolute z-50 w-full mt-1 bg-white border border-slate-100 rounded-xl shadow-xl max-h-48 overflow-y-auto overflow-x-hidden p-1"
+                                 >
+                                    {INDUSTRY_SUGGESTIONS
+                                       .filter(i => i.toLowerCase().includes(industry.toLowerCase()))
+                                       .map((ind, idx) => (
+                                       <button
+                                          key={idx}
+                                          type="button"
+                                          onClick={() => {
+                                             setIndustry(ind);
+                                             setShowIndustrySuggestions(false);
+                                          }}
+                                          className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
+                                       >
+                                          {ind}
+                                       </button>
+                                    ))}
+                                    {industry && INDUSTRY_SUGGESTIONS.filter(i => i.toLowerCase().includes(industry.toLowerCase())).length === 0 && (
+                                       <div className="px-3 py-2 text-xs font-medium text-slate-400">Press enter to use "{industry}"</div>
+                                    )}
+                                 </motion.div>
+                              )}
+                           </AnimatePresence>
+                        </div>
                      </div>
                      <div className="space-y-2">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">Experience Level</Label>
