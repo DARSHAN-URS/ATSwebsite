@@ -33,6 +33,9 @@ const About = lazy(() => import("@/pages/About"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 const InterviewPrep = lazy(() => import("@/pages/InterviewPrep"));
+const InterviewSession = lazy(() => import("@/pages/InterviewSession"));
+const InterviewQuestions = lazy(() => import("@/pages/InterviewQuestions"));
+const InterviewPerformance = lazy(() => import("@/pages/InterviewPerformance"));
 const Blog = lazy(() => import("@/pages/Blog"));
 const ATSResumeBuilderSEO = lazy(() => import("@/pages/seo/ATSResumeBuilder"));
 const ResumeTemplatesSEO = lazy(() => import("@/pages/seo/ResumeTemplates"));
@@ -152,6 +155,9 @@ const App = () => (
                   <Route path="/upgrade" element={<RoleGuard requiredRole="job_seeker"><Pricing isInternal={true} /></RoleGuard>} />
 
                   <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep/session" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewSession /></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep/questions" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewQuestions /></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep/performance" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPerformance /></ProRoute></RoleGuard>} />
 
                   <Route path="/recruiter/dashboard" element={<RoleGuard requiredRole="recruiter"><RecruiterDashboard /></RoleGuard>} />
                   <Route path="/recruiter/company" element={<RoleGuard requiredRole="recruiter"><RecruiterCompany /></RoleGuard>} />

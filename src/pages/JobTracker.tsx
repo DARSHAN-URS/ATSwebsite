@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,12 +13,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { 
   Briefcase, Search, Mail, MapPin, Trash2, CheckCircle2, 
-  Clock, XCircle, Loader2, Send, ArrowUpRight
+  Clock, XCircle, Loader2, Send
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type JobApp = {
   id: string;
@@ -40,8 +43,8 @@ export default function JobTracker() {
   const { user, session } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [apps, setApps] = useState<JobApp[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailTo, setEmailTo] = useState("");
   const [emailSubject, setEmailSubject] = useState("");
@@ -51,27 +54,75 @@ export default function JobTracker() {
   const [selectedApp, setSelectedApp] = useState<JobApp | null>(null);
   const [sending, setSending] = useState(false);
 
-  const fetchApps = async () => {
-    const { data } = await supabase.from("job_applications").select("*").eq("user_id", user?.id).order("created_at", { ascending: false });
-    setApps(data ?? []);
-    setLoading(false);
-  };
+  // Fetch applications with React Query
+  const { data: apps = [], isLoading } = useQuery({
+    queryKey: ["job-applications", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("job_applications")
+        .select("*")
+        .eq("user_id", user?.id)
+        .order("created_at", { ascending: false });
+        
+      if (error) throw error;
+      return (data || []) as JobApp[];
+    },
+    enabled: !!user?.id,
+  });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (user) fetchApps(); }, [user]);
+  // Optimistic Update Status Mutation
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const { error } = await supabase.from("job_applications").update({ status }).eq("id", id);
+      if (error) throw error;
+    },
+    onMutate: async ({ id, status }) => {
+      await queryClient.cancelQueries({ queryKey: ["job-applications", user?.id] });
+      const previousApps = queryClient.getQueryData<JobApp[]>(["job-applications", user?.id]);
+      
+      queryClient.setQueryData<JobApp[]>(["job-applications", user?.id], (old) => 
+        old?.map(app => app.id === id ? { ...app, status } : app)
+      );
+      
+      return { previousApps };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousApps) {
+        queryClient.setQueryData(["job-applications", user?.id], context.previousApps);
+      }
+      toast({ title: "Failed to update status", variant: "destructive" });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["job-applications", user?.id] });
+    }
+  });
 
-  const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("job_applications").update({ status }).eq(
-      "id",
-      id
-    );
-    if (!error) fetchApps();
-  };
-
-  const deleteApp = async (id: string) => {
-    const { error } = await supabase.from("job_applications").delete().eq("id", id);
-    if (!error) fetchApps();
-  };
+  // Optimistic Delete Mutation
+  const deleteAppMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("job_applications").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["job-applications", user?.id] });
+      const previousApps = queryClient.getQueryData<JobApp[]>(["job-applications", user?.id]);
+      
+      queryClient.setQueryData<JobApp[]>(["job-applications", user?.id], (old) => 
+        old?.filter(app => app.id !== id)
+      );
+      
+      return { previousApps };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousApps) {
+        queryClient.setQueryData(["job-applications", user?.id], context.previousApps);
+      }
+      toast({ title: "Failed to delete track", variant: "destructive" });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["job-applications", user?.id] });
+    }
+  });
 
   const openEmailDialog = (app: JobApp) => {
     setSelectedApp(app);
@@ -129,9 +180,35 @@ export default function JobTracker() {
       </div>
 
       <div className="space-y-6 text-left">
-        {loading ? (
+        {isLoading ? (
           <div className="space-y-6">
-             {[1, 2, 3].map(i => <div key={i} className="h-32 rounded-[2.5rem] bg-white animate-pulse shadow-sm" />)}
+             {[1, 2, 3].map(i => (
+                <Card key={i} className="group relative rounded-[3rem] border-none bg-white p-8 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.02)]">
+                  <div className="flex flex-col xl:flex-row items-center gap-10">
+                    <div className="flex items-center gap-8 flex-1 w-full">
+                      <Skeleton className="w-20 h-20 rounded-[2rem]" />
+                      <div className="space-y-3 flex-1">
+                        <Skeleton className="h-6 w-1/3" />
+                        <div className="flex items-center gap-4">
+                          <Skeleton className="h-4 w-20" />
+                          <Separator orientation="vertical" className="h-3 bg-slate-100" />
+                          <Skeleton className="h-4 w-20" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-10 w-full xl:w-auto">
+                      <div className="space-y-3 min-w-[200px]">
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-12 w-full rounded-xl" />
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <Skeleton className="h-14 w-14 rounded-2xl" />
+                        <Skeleton className="h-14 w-14 rounded-2xl" />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+             ))}
           </div>
         ) : apps.length === 0 ? (
           <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 flex flex-col items-center justify-center py-40 text-center shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
@@ -171,7 +248,7 @@ export default function JobTracker() {
                                 <span>Phase Status</span>
                                 <span>{statusConfig[app.status || "applied"].label}</span>
                              </div>
-                             <Select value={app.status || "applied"} onValueChange={(v) => updateStatus(app.id, v)}>
+                             <Select value={app.status || "applied"} onValueChange={(v) => updateStatusMutation.mutate({ id: app.id, status: v })}>
                                 <SelectTrigger className="h-12 rounded-xl border-none bg-white dark:bg-slate-800 font-black uppercase tracking-widest text-[10px] focus:ring-blue-600">
                                    <SelectValue />
                                 </SelectTrigger>
@@ -188,12 +265,27 @@ export default function JobTracker() {
                           </div>
 
                           <div className="flex items-center gap-4">
-                             <Button onClick={() => openEmailDialog(app)} className="h-14 w-14 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:scale-110 transition-all">
-                                <Mail className="w-6 h-6" />
-                             </Button>
-                             <Button onClick={() => deleteApp(app.id)} variant="ghost" className="h-14 w-14 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 hover:text-rose-600 transition-all">
-                                <Trash2 className="w-6 h-6" />
-                             </Button>
+                             <Tooltip>
+                               <TooltipTrigger asChild>
+                                 <Button onClick={() => openEmailDialog(app)} className="h-14 w-14 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:scale-110 transition-all">
+                                    <Mail className="w-6 h-6" />
+                                 </Button>
+                               </TooltipTrigger>
+                               <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                                 Draft Outreach Email
+                               </TooltipContent>
+                             </Tooltip>
+                             
+                             <Tooltip>
+                               <TooltipTrigger asChild>
+                                 <Button onClick={() => deleteAppMutation.mutate(app.id)} variant="ghost" className="h-14 w-14 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 hover:text-rose-600 transition-all">
+                                    <Trash2 className="w-6 h-6" />
+                                 </Button>
+                               </TooltipTrigger>
+                               <TooltipContent className="bg-rose-600 text-white font-bold text-xs rounded-xl border-none">
+                                 Delete Application Track
+                               </TooltipContent>
+                             </Tooltip>
                           </div>
                        </div>
                     </div>

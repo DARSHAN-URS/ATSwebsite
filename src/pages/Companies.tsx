@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/api-client";
@@ -16,6 +16,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/useAuth";
 
 interface OpenJob { job_title: string; job_type: string; location: string; url: string; }
 interface Company { name: string; logo: string | null; website: string | null; city: string | null; country: string | null; open_jobs: OpenJob[]; }
@@ -24,51 +28,94 @@ interface PinnedCompany { company_name: string; company_logo: string | null; com
 export default function Companies() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
   const [industry, setIndustry] = useState("");
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const [searching, setSearching] = useState(false);
-  const [pinnedCompanies, setPinnedCompanies] = useState<PinnedCompany[]>([]);
+  
+  // State to trigger search queries
+  const [activeSearch, setActiveSearch] = useState<{q: string, l: string, i: string} | null>(null);
 
-  const fetchPinned = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { data } = await supabase.from("pinned_companies").select("*");
-    if (data) setPinnedCompanies(data);
-  }, []);
+  // Cached Query: Pinned Companies
+  const { data: pinnedCompanies = [] } = useQuery({
+    queryKey: ["pinned-companies", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("pinned_companies").select("*").eq("user_id", user?.id);
+      if (error) throw error;
+      return (data || []) as PinnedCompany[];
+    },
+    enabled: !!user?.id,
+  });
 
-  useEffect(() => { fetchPinned(); }, [fetchPinned]);
+  // Cached Query: Search Companies
+  const { data: companies = [], isFetching: searching } = useQuery({
+    queryKey: ["search-companies", activeSearch],
+    queryFn: async () => {
+      if (!activeSearch) return [];
+      const { data } = await invokeFunction("search-companies", { 
+        body: { query: activeSearch.q, location: activeSearch.l, industry: activeSearch.i } 
+      });
+      return (data?.companies || []) as Company[];
+    },
+    enabled: !!activeSearch,
+  });
 
   const isPinned = (name: string) => pinnedCompanies.some(p => p.company_name === name);
 
-  const togglePin = async (company: Company) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    if (isPinned(company.name)) {
-      await supabase.from("pinned_companies").delete().eq("user_id", user.id).eq("company_name", company.name);
-      toast({ title: "Unpinned" });
-    } else {
-      await supabase.from("pinned_companies").insert({
-        user_id: user.id, company_name: company.name, company_logo: company.logo, company_website: company.website, city: company.city, country: company.country
+  // Optimistic Mutation: Toggle Pin
+  const togglePinMutation = useMutation({
+    mutationFn: async (company: Company) => {
+      if (!user) throw new Error("Not logged in");
+      if (isPinned(company.name)) {
+        const { error } = await supabase.from("pinned_companies").delete().eq("user_id", user.id).eq("company_name", company.name);
+        if (error) throw error;
+        return { pinned: false, name: company.name };
+      } else {
+        const { error } = await supabase.from("pinned_companies").insert({
+          user_id: user.id, company_name: company.name, company_logo: company.logo, company_website: company.website, city: company.city, country: company.country
+        });
+        if (error) throw error;
+        return { pinned: true, name: company.name };
+      }
+    },
+    onMutate: async (company) => {
+      await queryClient.cancelQueries({ queryKey: ["pinned-companies", user?.id] });
+      const previousPinned = queryClient.getQueryData<PinnedCompany[]>(["pinned-companies", user?.id]);
+      
+      queryClient.setQueryData<PinnedCompany[]>(["pinned-companies", user?.id], (old = []) => {
+        if (isPinned(company.name)) {
+          return old.filter(p => p.company_name !== company.name);
+        } else {
+          return [...old, { 
+            company_name: company.name, 
+            company_logo: company.logo, 
+            company_website: company.website, 
+            city: company.city, 
+            country: company.country 
+          } as PinnedCompany];
+        }
       });
-      toast({ title: "Pinned" });
+      return { previousPinned };
+    },
+    onError: (err, company, context) => {
+      if (context?.previousPinned) {
+        queryClient.setQueryData(["pinned-companies", user?.id], context.previousPinned);
+      }
+      toast({ title: "Failed to update pin", variant: "destructive" });
+    },
+    onSuccess: (data) => {
+      toast({ title: data.pinned ? "Pinned" : "Unpinned" });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["pinned-companies", user?.id] });
     }
-    fetchPinned();
-  };
+  });
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (!query) return;
-    setSearching(true);
-    try {
-      const { data } = await invokeFunction("search-companies", { body: { query, location, industry } });
-      setCompanies(data?.companies ?? []);
-      toast({ title: "Search Completed", description: `Found ${data?.companies?.length || 0} companies.` });
-    } catch (e: any) {
-      toast({ title: "Search Failed", variant: "destructive" });
-    } finally {
-      setSearching(false);
-    }
+    setActiveSearch({ q: query, l: location, i: industry });
   };
 
   return (
@@ -164,7 +211,44 @@ export default function Companies() {
             <div className="lg:col-span-8 space-y-6">
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[500px]">
                   {searching ? (
-                     [1,2,3,4,5,6].map(i => <div key={i} className="h-64 rounded-3xl bg-white animate-pulse border border-slate-200 shadow-sm" />)
+                     [1,2,3,4,5,6].map(i => (
+                        <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-[320px] flex flex-col justify-between shadow-sm">
+                           <div className="space-y-5">
+                              <div className="flex items-start justify-between">
+                                 <Skeleton className="w-14 h-14 rounded-xl" />
+                                 <div className="flex gap-2">
+                                    <Skeleton className="w-9 h-9 rounded-lg" />
+                                    <Skeleton className="w-9 h-9 rounded-lg" />
+                                 </div>
+                              </div>
+                              <div className="space-y-2">
+                                 <Skeleton className="h-5 w-3/4" />
+                                 <Skeleton className="h-4 w-1/2" />
+                              </div>
+                              <div className="grid grid-cols-2 gap-3 py-4 border-y border-slate-50">
+                                 <div className="space-y-2">
+                                    <Skeleton className="h-3 w-16" />
+                                    <Skeleton className="h-4 w-12" />
+                                 </div>
+                                 <div className="space-y-2">
+                                    <Skeleton className="h-3 w-16" />
+                                    <Skeleton className="h-4 w-8" />
+                                 </div>
+                              </div>
+                           </div>
+                           <Skeleton className="h-11 w-full rounded-xl mt-4" />
+                        </Card>
+                     ))
+                  ) : companies.length === 0 && activeSearch ? (
+                     <div className="col-span-full py-32 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
+                        <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mx-auto border border-slate-100">
+                           <Search className="w-10 h-10" />
+                        </div>
+                        <div className="space-y-2">
+                           <h3 className="text-xl font-bold text-slate-900 tracking-tight uppercase">No Entities Found</h3>
+                           <p className="text-slate-500 font-medium text-sm">Adjust your parameters and initialize search again.</p>
+                        </div>
+                     </div>
                   ) : companies.length === 0 ? (
                      <div className="col-span-full py-32 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
                         <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mx-auto border border-slate-100">
@@ -186,10 +270,25 @@ export default function Companies() {
                                           {company.logo ? <img src={company.logo} alt={company.name} className="w-full h-full object-cover" /> : <Building2 className="w-6 h-6" />}
                                        </div>
                                        <div className="flex gap-2">
-                                          <Button onClick={() => toast({ title: "Intelligence Shared", description: "Entity parameters have been synchronized to your clipboard." })} variant="ghost" size="icon" className="w-9 h-9 rounded-lg hover:bg-slate-50"><Share2 className="w-4 h-4 text-slate-400" /></Button>
-                                          <Button onClick={() => togglePin(company)} variant="ghost" size="icon" className={cn("w-9 h-9 rounded-lg transition-all", isPinned(company.name) ? "text-blue-600 bg-blue-50" : "text-slate-300 hover:text-blue-600")}>
-                                             <Star className={cn("w-4 h-4", isPinned(company.name) && "fill-current")} />
-                                          </Button>
+                                          <Tooltip>
+                                            <TooltipTrigger asChild>
+                                              <Button onClick={() => toast({ title: "Intelligence Shared", description: "Entity parameters have been synchronized to your clipboard." })} variant="ghost" size="icon" className="w-9 h-9 rounded-lg hover:bg-slate-50"><Share2 className="w-4 h-4 text-slate-400" /></Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                                              Share entity data
+                                            </TooltipContent>
+                                          </Tooltip>
+                                          
+                                          <Tooltip>
+                                            <TooltipTrigger asChild>
+                                              <Button onClick={() => togglePinMutation.mutate(company)} variant="ghost" size="icon" className={cn("w-9 h-9 rounded-lg transition-all", isPinned(company.name) ? "text-blue-600 bg-blue-50" : "text-slate-300 hover:text-blue-600")}>
+                                                 <Star className={cn("w-4 h-4", isPinned(company.name) && "fill-current")} />
+                                              </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                                              {isPinned(company.name) ? "Unpin entity" : "Pin entity"}
+                                            </TooltipContent>
+                                          </Tooltip>
                                        </div>
                                     </div>
 
@@ -221,9 +320,16 @@ export default function Companies() {
                                  </div>
 
                                  <div className="pt-6">
-                                    <Button onClick={() => window.open(company.website || '#', '_blank')} variant="outline" className="w-full h-11 rounded-xl border-slate-100 text-slate-900 font-bold uppercase tracking-widest text-[9px] gap-2 hover:bg-slate-900 hover:text-white transition-all">
-                                       Launch Intelligence <ExternalLink className="w-3.5 h-3.5" />
-                                    </Button>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button onClick={() => window.open(company.website || '#', '_blank')} variant="outline" className="w-full h-11 rounded-xl border-slate-100 text-slate-900 font-bold uppercase tracking-widest text-[9px] gap-2 hover:bg-slate-900 hover:text-white transition-all">
+                                           Launch Intelligence <ExternalLink className="w-3.5 h-3.5" />
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                                        Open company website
+                                      </TooltipContent>
+                                    </Tooltip>
                                  </div>
                               </Card>
                            </motion.div>
@@ -288,7 +394,14 @@ export default function Companies() {
                      </div>
                   </div>
                   
-                  <Button onClick={() => toast({ title: "Analysis Exported", description: "Intelligence report generated in PDF format." })} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Export Analysis</Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button onClick={() => toast({ title: "Analysis Exported", description: "Intelligence report generated in PDF format." })} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Export Analysis</Button>
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                      Export to PDF
+                    </TooltipContent>
+                  </Tooltip>
                </Card>
 
                {/* Recruiter Activity Sidebar Card */}

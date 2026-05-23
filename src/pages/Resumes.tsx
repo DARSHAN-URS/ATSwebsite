@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Plus, FileText, Trash2, Edit, MoreVertical, Sparkles, 
-  Share2, Check, ExternalLink, Loader2, Search, Zap, Mail, ShieldCheck,
-  ArrowRight, Copy, TrendingUp, Star, Clock, Filter, BarChart3,
-  ChevronRight, Download, Eye, Layers
+  Share2, Check, Download, ArrowRight, Copy, TrendingUp, Star, Zap, ShieldCheck, BarChart3, Search, Filter, Clock
 } from "lucide-react";
 import { 
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription 
+  Dialog, DialogContent, DialogTitle, DialogDescription 
 } from "@/components/ui/dialog";
 import { 
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger 
@@ -19,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import type { Tables } from "@/integrations/supabase/types";
 import type { ResumeData } from "@/components/resume/types";
@@ -27,6 +24,9 @@ import SEOHead from "@/components/SEOHead";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Resume = Tables<"resumes">;
 
@@ -49,50 +49,101 @@ export default function Resumes() {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [resumes, setResumes] = useState<Resume[]>([]);
-  const [appsCount, setAppsCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  
   const [createOpen, setCreateOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
   const [shareId, setShareId] = useState("");
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (!user) return;
-    supabase.from("resumes").select("*").order("updated_at", { ascending: false })
-      .then(({ data }) => {
-        setResumes(data || []);
-        setLoading(false);
-      });
-    supabase.from("job_applications").select("*", { count: 'exact', head: true }).eq("user_id", user.id)
-      .then(({ count }) => {
-        setAppsCount(count || 0);
-      });
-  }, [user]);
+  // Cache API Data: Fetch Resumes
+  const { data: resumes = [], isLoading: resumesLoading } = useQuery({
+    queryKey: ["resumes", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("resumes")
+        .select("*")
+        .eq("user_id", user?.id)
+        .order("updated_at", { ascending: false });
+      if (error) throw error;
+      return (data || []) as Resume[];
+    },
+    enabled: !!user?.id,
+  });
 
-  const handleCreate = async () => {
-    if (!title.trim()) return;
-    const { data, error } = await supabase.from("resumes").insert({
-      user_id: user?.id,
-      title: title.trim(),
-      resume_data: {
-        personalInfo: { fullName: user?.user_metadata?.display_name || "" },
-        education: [], experience: [], skills: [], languages: [], projects: [], certifications: [],
-      } as any,
-    }).select().single();
+  // Cache API Data: Fetch Apps Count
+  const { data: appsCount = 0 } = useQuery({
+    queryKey: ["job-applications-count", user?.id],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("job_applications")
+        .select("*", { count: 'exact', head: true })
+        .eq("user_id", user?.id);
+      if (error) throw error;
+      return count || 0;
+    },
+    enabled: !!user?.id,
+  });
 
-    if (error) {
-      toast({ title: "Error", description: "Failed to create resume.", variant: "destructive" });
-    } else {
+  // Optimistic Rendering: Create Resume
+  const createResumeMutation = useMutation({
+    mutationFn: async (newTitle: string) => {
+      const { data, error } = await supabase.from("resumes").insert({
+        user_id: user?.id,
+        title: newTitle.trim(),
+        resume_data: {
+          personalInfo: { fullName: user?.user_metadata?.display_name || "" },
+          education: [], experience: [], skills: [], languages: [], projects: [], certifications: [],
+        } as any,
+      }).select().single();
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["resumes", user?.id] });
       navigate(`/builder/${data.id}`);
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to create resume.", variant: "destructive" });
     }
+  });
+
+  // Optimistic Rendering: Delete Resume
+  const deleteResumeMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("resumes").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["resumes", user?.id] });
+      const previousResumes = queryClient.getQueryData<Resume[]>(["resumes", user?.id]);
+      
+      queryClient.setQueryData<Resume[]>(["resumes", user?.id], (old) => 
+        old?.filter(r => r.id !== id)
+      );
+      
+      return { previousResumes };
+    },
+    onError: (err, id, context) => {
+      if (context?.previousResumes) {
+        queryClient.setQueryData(["resumes", user?.id], context.previousResumes);
+      }
+      toast({ title: "Delete failed", variant: "destructive" });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["resumes", user?.id] });
+    }
+  });
+
+  const handleCreate = () => {
+    if (!title.trim()) return;
+    createResumeMutation.mutate(title);
   };
 
-  const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("resumes").delete().eq("id", id);
-    if (error) toast({ title: "Delete failed", variant: "destructive" });
-    else setResumes(resumes.filter(r => r.id !== id));
+  const handleDelete = (id: string) => {
+    deleteResumeMutation.mutate(id);
   };
 
   const copyShareLink = (id: string) => {
@@ -126,12 +177,27 @@ export default function Resumes() {
              </div>
 
             <div className="flex items-center gap-3">
-               <Button onClick={() => toast({ title: "Export Started", description: "Your assets are being bundled for export." })} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
-                  <Download className="w-3.5 h-3.5" /> Export All
-               </Button>
-              <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
-                 <Plus className="w-3.5 h-3.5" /> New Resume
-              </Button>
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <Button onClick={() => toast({ title: "Export Started", description: "Your assets are being bundled for export." })} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                      <Download className="w-3.5 h-3.5" /> Export All
+                   </Button>
+                 </TooltipTrigger>
+                 <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                   Download all resumes as PDF
+                 </TooltipContent>
+               </Tooltip>
+
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
+                      <Plus className="w-3.5 h-3.5" /> New Resume
+                   </Button>
+                 </TooltipTrigger>
+                 <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                   Initialize a new resume build
+                 </TooltipContent>
+               </Tooltip>
             </div>
          </div>
       </div>
@@ -139,8 +205,8 @@ export default function Resumes() {
       {/* 2. Analytics Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
          {[
-           { label: "Total Assets", value: resumes.length, sub: "Resumes in cloud", icon: FileText, color: "text-blue-600", bg: "bg-blue-50" },
-           { label: "Avg. ATS Score", value: resumes.length > 0 ? `${Math.round(resumes.reduce((acc, r) => acc + computeResumeScore(r.resume_data as any), 0) / resumes.length)}%` : "0%", sub: "Across all builds", icon: BarChart3, color: "text-purple-600", bg: "bg-purple-50" },
+           { label: "Total Assets", value: resumesLoading ? "-" : resumes.length, sub: "Resumes in cloud", icon: FileText, color: "text-blue-600", bg: "bg-blue-50" },
+           { label: "Avg. ATS Score", value: resumesLoading ? "-" : resumes.length > 0 ? `${Math.round(resumes.reduce((acc, r) => acc + computeResumeScore(r.resume_data as any), 0) / resumes.length)}%` : "0%", sub: "Across all builds", icon: BarChart3, color: "text-purple-600", bg: "bg-purple-50" },
            { label: "Active Deployments", value: appsCount, sub: "Live applications", icon: Zap, color: "text-emerald-600", bg: "bg-emerald-50" },
            { label: "Asset Quality", value: "High", sub: "Optimization level", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
          ].map((stat, i) => (
@@ -189,10 +255,41 @@ export default function Resumes() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
          {/* Main Content Grid */}
          <div className="lg:col-span-8 space-y-8">
-            {loading ? (
+            {resumesLoading ? (
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[1,2,3,4].map(i => (
-                     <div key={i} className="h-64 rounded-3xl bg-white animate-pulse border border-slate-200" />
+                     <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-64 flex flex-col justify-between shadow-sm">
+                        <div className="space-y-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-4">
+                              <Skeleton className="w-12 h-12 rounded-xl" />
+                              <div className="space-y-2">
+                                <Skeleton className="h-5 w-32" />
+                                <div className="flex gap-2">
+                                  <Skeleton className="h-4 w-16 rounded-full" />
+                                  <Skeleton className="h-4 w-8 rounded-full" />
+                                </div>
+                              </div>
+                            </div>
+                            <Skeleton className="w-8 h-8 rounded-lg" />
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-50">
+                            <div className="space-y-2">
+                               <Skeleton className="h-3 w-16" />
+                               <Skeleton className="h-5 w-12" />
+                            </div>
+                            <div className="space-y-2">
+                               <Skeleton className="h-3 w-16" />
+                               <Skeleton className="h-4 w-24" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="pt-6 flex items-center justify-between">
+                          <Skeleton className="h-3 w-24" />
+                          <Skeleton className="h-8 w-20 rounded-lg" />
+                        </div>
+                     </Card>
                   ))}
                </div>
             ) : resumes.length === 0 ? (
@@ -218,6 +315,7 @@ export default function Resumes() {
                               initial={{ opacity: 0, y: 10 }} 
                               animate={{ opacity: 1, y: 0 }} 
                               transition={{ delay: i * 0.05 }}
+                              layout
                            >
                             <Card className="rounded-3xl border border-slate-200 bg-white p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between">
                                  <div className="space-y-6 relative z-10">
@@ -272,9 +370,16 @@ export default function Resumes() {
 
                                  <div className="pt-6 flex items-center justify-between">
                                     <p className="text-[9px] text-slate-400 font-medium">Sync: {format(new Date(resume.updated_at), "MMM d, yyyy")}</p>
-                                    <Button onClick={() => navigate(`/builder/${resume.id}`)} variant="ghost" className="h-8 px-3 rounded-lg text-blue-600 text-[10px] font-bold uppercase tracking-wider gap-2 hover:bg-blue-50">
-                                       Open <ArrowRight className="w-3.5 h-3.5" />
-                                    </Button>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button onClick={() => navigate(`/builder/${resume.id}`)} variant="ghost" className="h-8 px-3 rounded-lg text-blue-600 text-[10px] font-bold uppercase tracking-wider gap-2 hover:bg-blue-50">
+                                           Open <ArrowRight className="w-3.5 h-3.5" />
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                                        Open resume in builder
+                                      </TooltipContent>
+                                    </Tooltip>
                                  </div>
                               </Card>
                            </motion.div>
@@ -328,8 +433,8 @@ export default function Resumes() {
                   <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Resume Title</Label>
                   <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm" />
                </div>
-               <Button onClick={handleCreate} disabled={!title.trim()} className="w-full h-12 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20">
-                  Initialize Build <Sparkles className="w-4 h-4" />
+               <Button onClick={handleCreate} disabled={!title.trim() || createResumeMutation.isPending} className="w-full h-12 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20">
+                  {createResumeMutation.isPending ? "Initializing..." : "Initialize Build"} <Sparkles className="w-4 h-4" />
                </Button>
             </div>
          </DialogContent>

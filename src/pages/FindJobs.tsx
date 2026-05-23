@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { invokeFunction } from "@/lib/api-client";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,6 +20,9 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { format } from "date-fns";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Resume = Tables<"resumes">;
 type SavedJob = Tables<"saved_jobs">;
@@ -36,84 +39,53 @@ export default function FindJobs() {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const [resumes, setResumes] = useState<Resume[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("all");
-  const [jobs, setJobs] = useState<JobListing[]>([]);
-  const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
-  const [searching, setSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeSearch, setActiveSearch] = useState<{q: string, l: string, t: string} | null>(null);
   const [activeTab, setActiveTab] = useState<"ai" | "recruiter" | "external" | "saved">("ai");
 
-  const [boardJobs, setBoardJobs] = useState<JobPost[]>([]);
-  const [boardLoading, setBoardLoading] = useState(true);
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
   const [applyDialogOpen, setApplyDialogOpen] = useState(false);
   const [applyingJob, setApplyingJob] = useState<JobPost | null>(null);
 
-  useEffect(() => {
-    if (!user) return;
-    supabase.from("resumes").select("*").order("created_at", { ascending: false }).then(({ data }) => {
-      setResumes(data ?? []);
-      if (data && data.length > 0) setSelectedResumeId(data[0].id);
-    });
-    fetchSavedJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  // Cached Queries
+  const { data: resumes = [], isSuccess: resumesLoaded } = useQuery({
+    queryKey: ["resumes", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("resumes").select("*").eq("user_id", user?.id).order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data || []) as Resume[];
+    },
+    enabled: !!user?.id,
+  });
 
-  useEffect(() => {
-    (async () => {
-      setBoardLoading(true);
-      const { data } = await supabase.from("job_posts").select("*").eq("status", "active").order("created_at", { ascending: false });
-      setBoardJobs((data as any) ?? []);
-      setBoardLoading(false);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Automatically select first resume on load
+  if (resumesLoaded && resumes.length > 0 && !selectedResumeId) {
+    setSelectedResumeId(resumes[0].id);
+  }
 
-  const fetchSavedJobs = async () => {
-    const { data } = await supabase.from("saved_jobs").select("*").eq("user_id", user?.id);
-    setSavedJobs(data || []);
-  };
+  const { data: savedJobs = [] } = useQuery({
+    queryKey: ["saved-jobs", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("saved_jobs").select("*").eq("user_id", user?.id);
+      if (error) throw error;
+      return (data || []) as SavedJob[];
+    },
+    enabled: !!user?.id,
+  });
 
-  const handleSearch = async () => {
-    if (!searchQuery && activeTab === "ai") return;
-    setSearching(true);
-    try {
-      const { data, error } = await invokeFunction("search-jobs", { 
-        body: { 
-          query: searchQuery, 
-          location, 
-          job_type: jobType === "all" ? "" : jobType, 
-          resume_data: parsedResumeData,
-          resume_title: selectedResume?.title || ""
-        } 
-      });
-      if (error) throw new Error(typeof error === 'string' ? error : JSON.stringify(error));
-      setJobs(data?.jobs || []);
-      toast({ title: "Scanning Complete", description: `Synchronized ${data?.jobs?.length || 0} mission opportunities.` });
-    } catch (e: any) {
-      toast({ title: "Search Failed", description: e.message, variant: "destructive" });
-    } finally {
-      setSearching(false);
+  const { data: boardJobs = [], isLoading: boardLoading } = useQuery({
+    queryKey: ["board-jobs"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("job_posts").select("*").eq("status", "active").order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data || []) as JobPost[];
     }
-  };
-
-
-  const saveJob = async (job: JobListing) => {
-    const { error } = await supabase.from("saved_jobs").insert({
-      user_id: user?.id, job_title: job.job_title, company: job.company, location: job.location, job_url: job.url
-    });
-    if (error) toast({ title: "Error saving job", variant: "destructive" });
-    else {
-      toast({ title: "Link Saved to Matrix" });
-      fetchSavedJobs();
-    }
-  };
-
-  const isSaved = (url: string) => savedJobs.some(sj => sj.job_url === url);
+  });
 
   const selectedResume = resumes.find(r => r.id === selectedResumeId);
   const parsedResumeData = (() => {
@@ -126,6 +98,83 @@ export default function FindJobs() {
       return selectedResume.resume_data || null;
     }
   })();
+
+  const { data: jobs = [], isFetching: searching } = useQuery({
+    queryKey: ["search-jobs", activeSearch, selectedResumeId],
+    queryFn: async () => {
+      if (!activeSearch) return [];
+      const { data, error } = await invokeFunction("search-jobs", { 
+        body: { 
+          query: activeSearch.q, 
+          location: activeSearch.l, 
+          job_type: activeSearch.t === "all" ? "" : activeSearch.t, 
+          resume_data: parsedResumeData,
+          resume_title: selectedResume?.title || ""
+        } 
+      });
+      if (error) throw new Error(typeof error === 'string' ? error : JSON.stringify(error));
+      toast({ title: "Scanning Complete", description: `Synchronized ${data?.jobs?.length || 0} mission opportunities.` });
+      return (data?.jobs || []) as JobListing[];
+    },
+    enabled: !!activeSearch,
+  });
+
+  const saveJobMutation = useMutation({
+    mutationFn: async (job: JobListing) => {
+      const { error } = await supabase.from("saved_jobs").insert({
+        user_id: user?.id, job_title: job.job_title, company: job.company, location: job.location, job_url: job.url
+      });
+      if (error) throw error;
+    },
+    onMutate: async (job) => {
+      await queryClient.cancelQueries({ queryKey: ["saved-jobs", user?.id] });
+      const previousSaved = queryClient.getQueryData<SavedJob[]>(["saved-jobs", user?.id]);
+      
+      queryClient.setQueryData<SavedJob[]>(["saved-jobs", user?.id], (old = []) => 
+        [...old, { job_title: job.job_title, company: job.company, location: job.location, job_url: job.url } as SavedJob]
+      );
+      
+      return { previousSaved };
+    },
+    onError: (err, job, context) => {
+      if (context?.previousSaved) {
+        queryClient.setQueryData(["saved-jobs", user?.id], context.previousSaved);
+      }
+      toast({ title: "Error saving job", variant: "destructive" });
+    },
+    onSuccess: () => {
+      toast({ title: "Link Saved to Matrix" });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["saved-jobs", user?.id] });
+    }
+  });
+
+  const deleteSavedJobMutation = useMutation({
+    mutationFn: async (url: string) => {
+      const { error } = await supabase.from("saved_jobs").delete().eq("user_id", user?.id).eq("job_url", url);
+      if (error) throw error;
+    },
+    onMutate: async (url) => {
+      await queryClient.cancelQueries({ queryKey: ["saved-jobs", user?.id] });
+      const previousSaved = queryClient.getQueryData<SavedJob[]>(["saved-jobs", user?.id]);
+      
+      queryClient.setQueryData<SavedJob[]>(["saved-jobs", user?.id], (old = []) => 
+        old.filter(j => j.job_url !== url)
+      );
+      return { previousSaved };
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["saved-jobs", user?.id] });
+    }
+  });
+
+  const handleSearch = () => {
+    if (!searchQuery && activeTab === "ai") return;
+    setActiveSearch({ q: searchQuery, l: location, t: jobType });
+  };
+
+  const isSaved = (url: string) => savedJobs.some(sj => sj.job_url === url);
 
   const resumeSkills = Array.isArray(parsedResumeData?.skills) 
     ? parsedResumeData.skills.map((s: any) => (typeof s === 'string' ? s : s?.name || "").toLowerCase().trim()).filter(Boolean)
@@ -350,8 +399,39 @@ export default function FindJobs() {
                      <motion.div key="ai" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
                      {searching ? (
                         <div className="space-y-4">
-                           {[1,2,3].map(i => <div key={i} className="h-48 rounded-3xl bg-white animate-pulse border border-slate-200" />)}
+                           {[1,2,3].map(i => (
+                              <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col md:flex-row gap-6">
+                                 <Skeleton className="w-14 h-14 rounded-2xl shrink-0" />
+                                 <div className="flex-1 space-y-4">
+                                    <div className="space-y-2">
+                                       <Skeleton className="h-5 w-1/2" />
+                                       <Skeleton className="h-4 w-1/3" />
+                                    </div>
+                                    <div className="flex gap-2">
+                                       <Skeleton className="h-4 w-16 rounded-full" />
+                                       <Skeleton className="h-4 w-20 rounded-full" />
+                                    </div>
+                                    <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                                       <Skeleton className="h-3 w-32" />
+                                       <div className="flex gap-2">
+                                          <Skeleton className="h-9 w-9 rounded-xl" />
+                                          <Skeleton className="h-9 w-24 rounded-xl" />
+                                       </div>
+                                    </div>
+                                 </div>
+                              </Card>
+                           ))}
                         </div>
+                     ) : jobs.length === 0 && activeSearch ? (
+                        <Card className="py-24 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
+                           <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mx-auto">
+                              <Search className="w-10 h-10" />
+                           </div>
+                           <div className="space-y-2 px-4">
+                              <h3 className="text-xl font-bold text-slate-900 tracking-tight">No Opportunities Found</h3>
+                              <p className="text-sm text-slate-500 font-medium max-w-xs mx-auto">Adjust search parameters and try again.</p>
+                           </div>
+                        </Card>
                      ) : jobs.length === 0 ? (
                         <Card className="py-24 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
                            <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mx-auto">
@@ -404,12 +484,27 @@ export default function FindJobs() {
                                              <span className="flex items-center gap-1"><Target className="w-3 h-3" /> 12 Applicants</span>
                                           </div>
                                           <div className="flex items-center gap-2">
-                                             <Button variant="ghost" size="icon" onClick={() => saveJob(job)} className={cn("h-9 w-9 rounded-xl transition-all", isSaved(job.url) ? "text-rose-500 bg-rose-50" : "text-slate-300 hover:text-rose-500 hover:bg-rose-50")}>
-                                                <Heart className={cn("w-4 h-4", isSaved(job.url) ? "fill-current" : "")} />
-                                             </Button>
-                                             <Button onClick={() => window.open(job.url, '_blank')} className="h-9 px-4 rounded-xl bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest gap-2 hover:bg-blue-600">
-                                                Apply <ExternalLink className="w-3 h-3" />
-                                             </Button>
+                                             <Tooltip>
+                                               <TooltipTrigger asChild>
+                                                 <Button variant="ghost" size="icon" onClick={() => saveJobMutation.mutate(job)} className={cn("h-9 w-9 rounded-xl transition-all", isSaved(job.url) ? "text-rose-500 bg-rose-50" : "text-slate-300 hover:text-rose-500 hover:bg-rose-50")}>
+                                                    <Heart className={cn("w-4 h-4", isSaved(job.url) ? "fill-current" : "")} />
+                                                 </Button>
+                                               </TooltipTrigger>
+                                               <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                                                 {isSaved(job.url) ? "Saved" : "Save Job"}
+                                               </TooltipContent>
+                                             </Tooltip>
+                                             
+                                             <Tooltip>
+                                               <TooltipTrigger asChild>
+                                                 <Button onClick={() => window.open(job.url, '_blank')} className="h-9 px-4 rounded-xl bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest gap-2 hover:bg-blue-600">
+                                                    Apply <ExternalLink className="w-3 h-3" />
+                                                 </Button>
+                                               </TooltipTrigger>
+                                               <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                                                 Apply externally
+                                               </TooltipContent>
+                                             </Tooltip>
                                           </div>
                                        </div>
                                     </div>
@@ -424,7 +519,16 @@ export default function FindJobs() {
                      <motion.div key="recruiter" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                         {boardLoading ? (
                            <div className="space-y-4">
-                              {[1,2,3].map(i => <div key={i} className="h-48 rounded-3xl bg-white animate-pulse border border-slate-200" />)}
+                              {[1,2,3].map(i => (
+                                 <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 flex items-center gap-6">
+                                    <Skeleton className="w-14 h-14 rounded-2xl shrink-0" />
+                                    <div className="flex-1 space-y-2">
+                                       <Skeleton className="h-5 w-1/3" />
+                                       <Skeleton className="h-3 w-1/4" />
+                                    </div>
+                                    <Skeleton className="w-24 h-10 rounded-xl" />
+                                 </Card>
+                              ))}
                            </div>
                         ) : boardJobs.length === 0 ? (
                            <Card className="py-24 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
@@ -482,8 +586,22 @@ export default function FindJobs() {
                                        <p className="text-[11px] font-bold text-blue-600 uppercase tracking-widest">{sj.company}</p>
                                     </div>
                                     <div className="flex gap-2">
-                                       <Button variant="ghost" size="icon" onClick={() => window.open(sj.job_url, '_blank')} className="h-10 w-10 rounded-xl hover:text-blue-600"><ExternalLink className="w-4 h-4" /></Button>
-                                       <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:text-rose-500"><Trash2 className="w-4 h-4" /></Button>
+                                       <Tooltip>
+                                         <TooltipTrigger asChild>
+                                           <Button variant="ghost" size="icon" onClick={() => window.open(sj.job_url, '_blank')} className="h-10 w-10 rounded-xl hover:text-blue-600"><ExternalLink className="w-4 h-4" /></Button>
+                                         </TooltipTrigger>
+                                         <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                                           Open External Listing
+                                         </TooltipContent>
+                                       </Tooltip>
+                                       <Tooltip>
+                                         <TooltipTrigger asChild>
+                                           <Button onClick={() => deleteSavedJobMutation.mutate(sj.job_url)} variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:text-rose-500"><Trash2 className="w-4 h-4" /></Button>
+                                         </TooltipTrigger>
+                                         <TooltipContent className="bg-rose-600 text-white font-bold text-xs rounded-xl border-none">
+                                           Remove from Saved
+                                         </TooltipContent>
+                                       </Tooltip>
                                     </div>
                                  </Card>
                               ))}

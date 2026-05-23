@@ -37,34 +37,65 @@ export default function PaymentSuccess() {
   const { user, loading: authLoading } = useAuth();
   const [activating, setActivating] = useState(true);
   const [done, setDone] = useState(false);
+  const [activePlanId, setActivePlanId] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
-
+  
   const planId = searchParams.get("plan") || "";
   const token = searchParams.get("token") || "";
-  const plan = PLAN_CONFIG[planId];
+  const sessionId = searchParams.get("session_id") || "";
+  
+  const plan = activePlanId ? PLAN_CONFIG[activePlanId] : PLAN_CONFIG[planId];
 
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (authLoading || !user || !plan || done || !token) return;
+    if (authLoading || !user || done || (!token && !sessionId)) return;
 
     const activate = async () => {
       setActivating(true);
       setError(null);
 
-      const { data, error: invokeError } = await invokeFunction("activate-subscription", {
-        body: { plan_id: planId, token },
-      });
+      try {
+        if (sessionId) {
+          // Stripe verification flow
+          const { data, error: invokeError } = await invokeFunction("verify-session", {
+            body: { session_id: sessionId },
+          });
 
-      if (invokeError || data?.error) {
-        console.error("Activation error:", invokeError || data?.error);
-        setError(data?.error || "Activation failed. Please contact support.");
-        setActivating(false);
-        return;
-      }
+          if (invokeError || data?.error) {
+            console.error("Session verification error:", invokeError || data?.error);
+            setError(data?.error || "Verification failed. Please contact support.");
+            setActivating(false);
+            return;
+          }
 
-      if (data?.expires_at) {
-        setExpiresAt(new Date(data.expires_at).toLocaleDateString());
+          if (data?.plan_id) {
+            setActivePlanId(data.plan_id);
+          }
+          if (data?.expires_at) {
+            setExpiresAt(new Date(data.expires_at).toLocaleDateString());
+          }
+        } else if (token && planId) {
+          // Legacy/Mock activation flow
+          setActivePlanId(planId);
+          const { data, error: invokeError } = await invokeFunction("activate-subscription", {
+            body: { plan_id: planId, token },
+          });
+
+          if (invokeError || data?.error) {
+            console.error("Activation error:", invokeError || data?.error);
+            setError(data?.error || "Activation failed. Please contact support.");
+            setActivating(false);
+            return;
+          }
+
+          if (data?.expires_at) {
+            setExpiresAt(new Date(data.expires_at).toLocaleDateString());
+          }
+        }
+      } catch (err: any) {
+        console.error("Critical error:", err);
+        setError("An unexpected error occurred. Please try again.");
       }
 
       setActivating(false);
@@ -72,9 +103,9 @@ export default function PaymentSuccess() {
     };
 
     activate();
-  }, [authLoading, user, plan, done, token, planId]);
+  }, [authLoading, user, done, token, sessionId, planId]);
 
-  if (!plan || !token) {
+  if ((!plan && !sessionId && !activePlanId) || (!token && !sessionId)) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
         <SEOHead title="Payment — ResumePro" description="Payment confirmation page." />
@@ -84,7 +115,7 @@ export default function PaymentSuccess() {
            </div>
            <h2 className="text-2xl font-black uppercase tracking-tight">Verification Error</h2>
            <p className="text-slate-500 font-medium leading-relaxed">
-             {!token ? "Missing payment verification token. If you completed payment, please contact support." : "Invalid or missing plan information."}
+             {!token && !sessionId ? "Missing payment verification token. If you completed payment, please contact support." : "Invalid or missing plan information."}
            </p>
            <Button onClick={() => navigate("/pricing")} className="h-14 px-8 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px]">Back to Pricing</Button>
         </div>

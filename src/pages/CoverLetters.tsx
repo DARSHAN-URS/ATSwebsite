@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/api-client";
@@ -14,6 +14,9 @@ import { Plus, FileText, Trash2, Edit, Sparkles, Loader2, Mail, Zap, ShieldCheck
 import { motion, AnimatePresence } from "framer-motion";
 import CoverLetterEditor from "@/components/cover-letter/CoverLetterEditor";
 import SEOHead from "@/components/SEOHead";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface CoverLetterData {
   greeting: string;
@@ -36,11 +39,8 @@ export interface CoverLetter {
 export default function CoverLetters() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   
-  const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
-  const [resumes, setResumes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -49,28 +49,33 @@ export default function CoverLetters() {
   const [tone, setTone] = useState("professional");
   const [title, setTitle] = useState("");
 
-  const fetchData = async () => {
-    if (!user) return;
-    setLoading(true);
-    const [clRes, rRes] = await Promise.all([
-      supabase.from("cover_letters").select("*").order("updated_at", { ascending: false }),
-      supabase.from("resumes").select("id, title")
-    ]);
-    if (clRes.data) setCoverLetters(clRes.data as unknown as CoverLetter[]);
-    if (rRes.data) setResumes(rRes.data);
-    setLoading(false);
-  };
+  const { data: coverLetters = [], isLoading: lettersLoading } = useQuery({
+    queryKey: ["cover-letters", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("cover_letters").select("*").eq("user_id", user?.id).order("updated_at", { ascending: false });
+      if (error) throw error;
+      return (data || []) as unknown as CoverLetter[];
+    },
+    enabled: !!user?.id,
+  });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { fetchData(); }, [user]);
+  const { data: resumes = [] } = useQuery({
+    queryKey: ["resumes-list", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("resumes").select("id, title").eq("user_id", user?.id);
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user?.id,
+  });
 
-  const generate = async () => {
-    setGenerating(true);
-    try {
+  const generateMutation = useMutation({
+    mutationFn: async () => {
       const { data, error } = await invokeFunction("generate-cover-letter", {
         resumeId: selectedResumeId, jobDescription, tone,
       });
       if (error) throw error;
+      
       const { data: saved, error: saveError } = await supabase.from("cover_letters").insert({
         user_id: user?.id,
         title: title || `Narrative for ${tone}`,
@@ -79,21 +84,44 @@ export default function CoverLetters() {
         tone,
         cover_letter_data: data.coverLetterData,
       }).select().single();
+      
       if (saveError) throw saveError;
+      return saved;
+    },
+    onSuccess: () => {
       toast({ title: "Narrative Synthesized" });
       setCreateOpen(false);
-      fetchData();
-    } catch (err: any) {
+      queryClient.invalidateQueries({ queryKey: ["cover-letters", user?.id] });
+    },
+    onError: () => {
       toast({ title: "Synthesis failed", variant: "destructive" });
-    } finally {
-      setGenerating(false);
     }
-  };
+  });
 
-  const deleteLetter = async (id: string) => {
-    await supabase.from("cover_letters").delete().eq("id", id);
-    fetchData();
-  };
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("cover_letters").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["cover-letters", user?.id] });
+      const previousLetters = queryClient.getQueryData<CoverLetter[]>(["cover-letters", user?.id]);
+      
+      queryClient.setQueryData<CoverLetter[]>(["cover-letters", user?.id], (old = []) => 
+        old.filter(cl => cl.id !== id)
+      );
+      return { previousLetters };
+    },
+    onError: (err, id, context) => {
+      if (context?.previousLetters) {
+        queryClient.setQueryData(["cover-letters", user?.id], context.previousLetters);
+      }
+      toast({ title: "Delete failed", variant: "destructive" });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["cover-letters", user?.id] });
+    }
+  });
 
   return (
     <div className="container mx-auto px-0 space-y-16 text-left pb-20">
@@ -152,8 +180,8 @@ export default function CoverLetters() {
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Context</Label>
                         <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[200px] rounded-2xl bg-white border-slate-100 font-bold p-6" />
                      </div>
-                     <Button onClick={generate} disabled={generating || !selectedResumeId} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4">
-                        {generating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+                     <Button onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending || !selectedResumeId} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4">
+                        {generateMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
                         Synthesize Narrative
                      </Button>
                   </div>
@@ -166,36 +194,64 @@ export default function CoverLetters() {
       <div className="px-8 space-y-16">
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-         <AnimatePresence>
-            {coverLetters.map((cl, i) => (
-               <motion.div key={cl.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: i * 0.1 }}>
-                  <Card className="rounded-[3rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 group hover:shadow-2xl transition-all relative overflow-hidden">
-                     <div className="absolute top-0 right-0 p-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" onClick={() => setEditingId(cl.id)} className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm border border-slate-100 dark:border-slate-700">
-                           <Edit className="w-5 h-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteLetter(cl.id)} className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white shadow-sm border border-rose-100">
-                           <Trash2 className="w-5 h-5" />
-                        </Button>
-                     </div>
-                     <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 mb-8 group-hover:scale-110 transition-transform">
-                        <Mail className="w-8 h-8" />
-                     </div>
-                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">{cl.title}</h3>
-                     <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-6">{new Date(cl.updated_at).toLocaleDateString()}</p>
-                     
-                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tone Module:</span>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">{cl.tone}</span>
-                     </div>
-                  </Card>
-               </motion.div>
-            ))}
-         </AnimatePresence>
+         {lettersLoading ? (
+            [1,2,3].map(i => (
+               <Card key={i} className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 relative overflow-hidden h-[280px] flex flex-col justify-end">
+                  <Skeleton className="absolute top-8 right-8 w-12 h-12 rounded-xl" />
+                  <Skeleton className="absolute top-8 right-24 w-12 h-12 rounded-xl" />
+                  <Skeleton className="w-16 h-16 rounded-2xl mb-8" />
+                  <Skeleton className="h-8 w-3/4 mb-2" />
+                  <Skeleton className="h-3 w-1/4 mb-6" />
+                  <Skeleton className="h-3 w-1/2" />
+               </Card>
+            ))
+         ) : (
+            <AnimatePresence>
+               {coverLetters.map((cl, i) => (
+                  <motion.div key={cl.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: i * 0.1 }}>
+                     <Card className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 group hover:shadow-2xl transition-all relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <Tooltip>
+                             <TooltipTrigger asChild>
+                               <Button variant="ghost" size="icon" onClick={() => setEditingId(cl.id)} className="w-12 h-12 rounded-xl bg-white text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm border border-slate-100">
+                                  <Edit className="w-5 h-5" />
+                               </Button>
+                             </TooltipTrigger>
+                             <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                               Edit Narrative
+                             </TooltipContent>
+                           </Tooltip>
+                           
+                           <Tooltip>
+                             <TooltipTrigger asChild>
+                               <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(cl.id)} className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white shadow-sm border border-rose-100">
+                                  <Trash2 className="w-5 h-5" />
+                               </Button>
+                             </TooltipTrigger>
+                             <TooltipContent className="bg-rose-600 text-white font-bold text-xs rounded-xl border-none">
+                               Delete Narrative
+                             </TooltipContent>
+                           </Tooltip>
+                        </div>
+                        <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-8 group-hover:scale-110 transition-transform">
+                           <Mail className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight line-clamp-1">{cl.title}</h3>
+                        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-6">{new Date(cl.updated_at).toLocaleDateString()}</p>
+                        
+                        <div className="flex items-center gap-2">
+                           <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tone Module:</span>
+                           <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">{cl.tone}</span>
+                        </div>
+                     </Card>
+                  </motion.div>
+               ))}
+            </AnimatePresence>
+         )}
       </div>
 
       {editingId && (
-         <CoverLetterEditor id={editingId} onClose={() => { setEditingId(null); fetchData(); }} />
+         <CoverLetterEditor id={editingId} onClose={() => { setEditingId(null); queryClient.invalidateQueries({ queryKey: ["cover-letters", user?.id] }); }} />
       )}
     </div>
   </div>

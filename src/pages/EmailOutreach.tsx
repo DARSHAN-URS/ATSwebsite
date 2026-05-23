@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
@@ -24,6 +23,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Resume = Tables<"resumes">;
 
@@ -32,8 +34,8 @@ export default function EmailOutreach() {
   const { toast } = useToast();
   const { t } = useLanguage();
   const to = t.emailOutreach;
+  const queryClient = useQueryClient();
 
-  const [resumes, setResumes] = useState<Resume[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>("");
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
@@ -42,36 +44,33 @@ export default function EmailOutreach() {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [attachResume, setAttachResume] = useState(true);
-  const [generating, setGenerating] = useState(false);
-  const [sending, setSending] = useState(false);
-
   const [tone, setTone] = useState("professional");
 
-  const [history, setHistory] = useState<any[]>([]);
-  const [loadingHistory, setLoadingHistory] = useState(true);
+  // Cached Queries
+  const { data: resumes = [], isSuccess: resumesLoaded } = useQuery({
+    queryKey: ["resumes", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("resumes").select("*").eq("user_id", user?.id).order("updated_at", { ascending: false });
+      if (error) throw error;
+      return (data || []) as Resume[];
+    },
+    enabled: !!user?.id,
+  });
 
-  const fetchHistory = async () => {
-    if (!user) return;
-    setLoadingHistory(true);
-    const { data } = await supabase
-      .from("email_outreach_history")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("sent_at", { ascending: false });
-    if (data) setHistory(data);
-    setLoadingHistory(false);
-  };
+  const { data: history = [], isLoading: loadingHistory } = useQuery({
+    queryKey: ["outreach-history", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("email_outreach_history").select("*").eq("user_id", user?.id).order("sent_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user?.id,
+  });
 
-  useEffect(() => {
-    if (!user) return;
-    supabase.from("resumes").select("*").order("updated_at", { ascending: false }).then(({ data }) => {
-      if (data) {
-        setResumes(data);
-        if (data.length > 0) setSelectedResumeId(data[0].id);
-      }
-    });
-    fetchHistory();
-  }, [user]);
+  // Automatically select first resume on load
+  if (resumesLoaded && resumes.length > 0 && !selectedResumeId) {
+    setSelectedResumeId(resumes[0].id);
+  }
 
   useEffect(() => {
     if (!selectedResumeId) return;
@@ -86,32 +85,31 @@ export default function EmailOutreach() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResumeId, resumes]);
 
-  const generateWithAI = async () => {
-    if (!company || !position) {
-      toast({ title: to.moreInfoNeeded, description: to.enterCompanyJob, variant: "destructive" });
-      return;
-    }
-    setGenerating(true);
-    try {
+  // Mutations
+  const generateMutation = useMutation({
+    mutationFn: async () => {
+      if (!company || !position) throw new Error("Missing company or position");
       const { data, error } = await invokeFunction("generate-outreach-email", { position, company, resumeId: selectedResumeId || undefined, tone });
       if (error) throw new Error(error.message);
+      return data;
+    },
+    onSuccess: (data) => {
       setSubject(data.subject);
       setBody(data.body);
       toast({ title: to.draftCreated });
-    } catch (err: any) {
-      toast({ title: to.failedDraft, variant: "destructive" });
-    } finally {
-      setGenerating(false);
+    },
+    onError: (err) => {
+      if (err.message === "Missing company or position") {
+        toast({ title: to.moreInfoNeeded, description: to.enterCompanyJob, variant: "destructive" });
+      } else {
+        toast({ title: to.failedDraft, variant: "destructive" });
+      }
     }
-  };
+  });
 
-  const sendEmail = async () => {
-    if (!recruiterEmail || !subject || !body) {
-      toast({ title: to.fillFields, variant: "destructive" });
-      return;
-    }
-    setSending(true);
-    try {
+  const sendMutation = useMutation({
+    mutationFn: async () => {
+      if (!recruiterEmail || !subject || !body) throw new Error("Missing fields");
       let attachmentBase64 = null;
       if (attachResume && selectedResumeId) {
         const resume = resumes.find(r => r.id === selectedResumeId);
@@ -130,9 +128,8 @@ export default function EmailOutreach() {
       });
       if (error) throw new Error(error.message);
 
-      // Save dynamic outreach record
       if (user) {
-        await supabase.from("email_outreach_history").insert({
+        const { error: dbError } = await supabase.from("email_outreach_history").insert({
           user_id: user.id,
           company,
           position,
@@ -141,16 +138,21 @@ export default function EmailOutreach() {
           body,
           resume_id: selectedResumeId || null
         });
-        fetchHistory();
+        if (dbError) throw dbError;
       }
-
+    },
+    onSuccess: () => {
       toast({ title: to.emailSent });
-    } catch (err: any) {
-      toast({ title: to.failedSend, variant: "destructive" });
-    } finally {
-      setSending(false);
+      queryClient.invalidateQueries({ queryKey: ["outreach-history", user?.id] });
+    },
+    onError: (err) => {
+      if (err.message === "Missing fields") {
+        toast({ title: to.fillFields, variant: "destructive" });
+      } else {
+        toast({ title: to.failedSend, variant: "destructive" });
+      }
     }
-  };
+  });
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-20 font-sans">
@@ -244,8 +246,8 @@ export default function EmailOutreach() {
                      </div>
 
                      <div className="pt-6 border-t border-slate-50">
-                        <Button onClick={generateWithAI} disabled={generating} className="w-full h-12 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-xl shadow-slate-900/10 hover:bg-blue-600 transition-all">
-                           {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} {to.synthesizeDraft}
+                        <Button onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending} className="w-full h-12 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-xl shadow-slate-900/10 hover:bg-blue-600 transition-all">
+                           {generateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} {to.synthesizeDraft}
                         </Button>
                      </div>
                   </div>
@@ -292,7 +294,14 @@ export default function EmailOutreach() {
                      </div>
                      <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-[8px] font-bold text-slate-400 border-slate-200 px-2 py-0.5">{to.draftMode}</Badge>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></Button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></Button>
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                            Clear Draft
+                          </TooltipContent>
+                        </Tooltip>
                      </div>
                   </div>
 
@@ -346,8 +355,8 @@ export default function EmailOutreach() {
                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{to.readabilityScore}</p>
                            <p className="text-[10px] font-bold text-emerald-600">{to.premium} (94/100)</p>
                         </div>
-                        <Button onClick={sendEmail} disabled={sending} className="h-12 px-8 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all">
-                           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} {to.initializeOutreach}
+                        <Button onClick={() => sendMutation.mutate()} disabled={sendMutation.isPending} className="h-12 px-8 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all">
+                           {sendMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} {to.initializeOutreach}
                         </Button>
                      </div>
                   </div>
@@ -366,7 +375,22 @@ export default function EmailOutreach() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                {loadingHistory ? (
-                  <div className="col-span-full py-12 text-center text-slate-400 font-medium italic">Loading outreach history...</div>
+                  [1,2,3].map(i => (
+                     <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-5">
+                        <div className="flex justify-between items-start mb-4">
+                           <Skeleton className="w-10 h-10 rounded-xl" />
+                           <Skeleton className="w-16 h-5 rounded-full" />
+                        </div>
+                        <div className="space-y-2 mb-4">
+                           <Skeleton className="h-4 w-3/4" />
+                           <Skeleton className="h-3 w-1/2" />
+                        </div>
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                           <Skeleton className="h-3 w-20" />
+                           <Skeleton className="h-3 w-16" />
+                        </div>
+                     </Card>
+                  ))
                ) : history.length === 0 ? (
                   <div className="col-span-full py-16 text-center space-y-4 bg-white rounded-3xl border border-slate-200 border-dashed w-full">
                      <Mail className="w-8 h-8 text-slate-300 mx-auto" />

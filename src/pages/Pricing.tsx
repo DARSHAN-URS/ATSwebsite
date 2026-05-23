@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
         plan: planId,
         userId: user.id,
         userEmail: user.email,
+        currency: pricingConfig.code,
       });
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
@@ -60,6 +61,45 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
   };
 
   const [billingCycle, setBillingCycle] = useState<"7day" | "14day" | "pro">("pro");
+
+  const [pricingConfig, setPricingConfig] = useState({
+    symbol: "₹",
+    code: "INR",
+    rates: {
+      pro: { price: "598", original: "1,196" },
+      biweekly: { price: "299", original: "598" },
+      weekly: { price: "199", original: "398" }
+    }
+  });
+
+  useEffect(() => {
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        if (data.country_code === "AE") {
+          setPricingConfig({
+            symbol: "AED ",
+            code: "AED",
+            rates: {
+              pro: { price: "29", original: "58" },
+              biweekly: { price: "15", original: "30" },
+              weekly: { price: "9", original: "18" }
+            }
+          });
+        } else if (data.country_code !== "IN") {
+          setPricingConfig({
+            symbol: "$",
+            code: "USD",
+            rates: {
+              pro: { price: "9", original: "18" },
+              biweekly: { price: "5", original: "10" },
+              weekly: { price: "3", original: "6" }
+            }
+          });
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   const plans = [
     {
@@ -81,8 +121,8 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
     },
     {
       name: tp.proName.toUpperCase(),
-      price: billingCycle === "pro" ? "598" : billingCycle === "14day" ? "299" : "199",
-      originalPrice: billingCycle === "pro" ? "1,196" : billingCycle === "14day" ? "598" : "398",
+      price: billingCycle === "pro" ? pricingConfig.rates.pro.price : billingCycle === "14day" ? pricingConfig.rates.biweekly.price : pricingConfig.rates.weekly.price,
+      originalPrice: billingCycle === "pro" ? pricingConfig.rates.pro.original : billingCycle === "14day" ? pricingConfig.rates.biweekly.original : pricingConfig.rates.weekly.original,
       desc: tp.perMonth,
       features: [
         { text: tp.unlimitedResumes, included: true },
@@ -155,9 +195,9 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                             {plan.highlight && <Zap className="w-8 h-8 text-blue-600" />}
                           </div>
                           <div className="flex items-end gap-3">
-                            <h3 className="text-4xl font-black tracking-tight uppercase leading-none text-slate-900">{plan.name === "FREE" ? tp.freeName : `₹${plan.price}`}</h3>
+                            <h3 className="text-4xl font-black tracking-tight uppercase leading-none text-slate-900">{plan.name === "FREE" ? tp.freeName : `${pricingConfig.symbol}${plan.price}`}</h3>
                             {plan.originalPrice && (
-                              <p className="text-sm font-bold text-slate-400 line-through pb-1">₹{plan.originalPrice}</p>
+                              <p className="text-sm font-bold text-slate-400 line-through pb-1">{pricingConfig.symbol}{plan.originalPrice}</p>
                             )}
                           </div>
                           <p className="text-sm font-medium text-slate-500">{plan.desc}</p>
