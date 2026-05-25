@@ -50,16 +50,7 @@ const Index = () => {
           <div className="container mx-auto px-8 relative z-10">
              <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
                 <div className="lg:col-span-7 space-y-12">
-                   <motion.button 
-                     initial={{ opacity: 0, x: -20 }} 
-                     animate={{ opacity: 1, x: 0 }} 
-                     onClick={() => toast({ title: "System Ready", description: t.landing.newVersion })}
-                     className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full shadow-2xl shadow-blue-600/20 hover:scale-105 transition-transform"
-                   >
-                      <Rocket className="w-4 h-4" />
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t.landing.newVersion}</span>
-                   </motion.button>
-                   
+
                    <div className="space-y-8">
                       <motion.h1 
                         initial={{ opacity: 0, y: 30 }} 

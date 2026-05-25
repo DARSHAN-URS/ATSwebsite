@@ -229,7 +229,7 @@ export default function Dashboard() {
                <div className="space-y-1">
                  <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-[0.9]">
                     {td.welcomeAgent} <br />
-                    <span className="text-blue-600">{user?.user_metadata?.display_name || "Agent"}.</span>
+                    <span className="text-blue-600">{user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.display_name || user?.email?.split('@')[0] || "Agent"}.</span>
                  </h1>
                  <p className="text-slate-500 font-medium text-lg max-w-md pt-2">{td.identityOptimized}</p>
                </div>
