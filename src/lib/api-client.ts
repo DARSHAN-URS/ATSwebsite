@@ -8,7 +8,9 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  */
 export const invokeFunction = async (name: string, options: any) => {
   // Extract body from options if it's in { body: ... } format, else use options as body
-  const body = options?.body !== undefined ? options.body : options;
+  // We check if the keys are only 'headers', 'body', or 'method' to determine if it's an options object.
+  const isOptionsObj = options && typeof options === 'object' && Object.keys(options).every(k => ['headers', 'body', 'method'].includes(k));
+  const body = isOptionsObj && options.body !== undefined ? options.body : options;
   console.log(`[API Client] Calling ${name}. Backend URL: ${BACKEND_URL || "NOT SET"}`);
 
   if (!BACKEND_URL) {
