@@ -24,7 +24,7 @@ export function UserRoleProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
+    if (!user?.id) {
       setRole(null);
       setLoading(false);
       return;
@@ -32,7 +32,7 @@ export function UserRoleProvider({ children }: { children: ReactNode }) {
 
     let cancelled = false;
     const fetchRole = async () => {
-      setLoading(true);
+      if (role === null) setLoading(true);
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
@@ -50,7 +50,7 @@ export function UserRoleProvider({ children }: { children: ReactNode }) {
 
     fetchRole();
     return () => { cancelled = true; };
-  }, [user]);
+  }, [user?.id]);
 
   const setUserRole = async (newRole: AppRole) => {
     if (!user) return null;

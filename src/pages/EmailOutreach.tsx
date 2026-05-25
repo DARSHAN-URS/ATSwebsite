@@ -76,10 +76,10 @@ export default function EmailOutreach() {
     if (!selectedResumeId) return;
     const resume = resumes.find((r) => r.id === selectedResumeId);
     if (!resume?.resume_data) return;
-    const rd = resume.resume_data as any;
+    const rd = resume.resume_data as unknown as ResumeData;
     const personal = rd.personalInfo;
-    const jobTitle = personal?.jobTitle || personal?.title || "";
-    const name = personal?.fullName || personal?.name || "";
+    const jobTitle = resume.title || "";
+    const name = personal?.fullName || "";
     if (jobTitle && !position) setPosition(jobTitle);
     if (name && !fromName) setFromName(name);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -63,7 +63,7 @@ const Builder = lazy(() => import("@/pages/Builder"));
 const Auth = lazy(() => import("@/pages/Auth"));
 const JobBoard = lazy(() => import("@/pages/JobBoard"));
 import AdminRoute from "@/components/auth/AdminRoute";
-
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
@@ -111,6 +111,7 @@ const App = () => (
           <AuthProvider>
            <UserRoleProvider>
             <Suspense fallback={<PageFallback />}>
+              <ErrorBoundary>
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
@@ -145,41 +146,42 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 >
-                  <Route path="/dashboard" element={<RoleGuard requiredRole="job_seeker"><Dashboard /></RoleGuard>} />
-                  <Route path="/resumes" element={<RoleGuard requiredRole="job_seeker"><Resumes /></RoleGuard>} />
-                  <Route path="/job-tracker" element={<RoleGuard requiredRole="job_seeker"><ProRoute><JobTracker /></ProRoute></RoleGuard>} />
-                  <Route path="/email-outreach" element={<RoleGuard requiredRole="job_seeker"><ProRoute><EmailOutreach /></ProRoute></RoleGuard>} />
-                  <Route path="/cover-letters" element={<RoleGuard requiredRole="job_seeker"><CoverLetters /></RoleGuard>} />
-                  <Route path="/jobs" element={<RoleGuard requiredRole="job_seeker"><FindJobs /></RoleGuard>} />
-                  <Route path="/companies" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Companies /></ProRoute></RoleGuard>} />
-                  <Route path="/upgrade" element={<RoleGuard requiredRole="job_seeker"><Pricing isInternal={true} /></RoleGuard>} />
+                  <Route path="/dashboard" element={<RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><Dashboard /></Suspense></RoleGuard>} />
+                  <Route path="/resumes" element={<RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><Resumes /></Suspense></RoleGuard>} />
+                  <Route path="/job-tracker" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><JobTracker /></Suspense></ProRoute></RoleGuard>} />
+                  <Route path="/email-outreach" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><EmailOutreach /></Suspense></ProRoute></RoleGuard>} />
+                  <Route path="/cover-letters" element={<RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><CoverLetters /></Suspense></RoleGuard>} />
+                  <Route path="/jobs" element={<RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><FindJobs /></Suspense></RoleGuard>} />
+                  <Route path="/companies" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><Companies /></Suspense></ProRoute></RoleGuard>} />
+                  <Route path="/upgrade" element={<RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><Pricing isInternal={true} /></Suspense></RoleGuard>} />
 
-                  <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPrep /></ProRoute></RoleGuard>} />
-                  <Route path="/interview-prep/session" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewSession /></ProRoute></RoleGuard>} />
-                  <Route path="/interview-prep/questions" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewQuestions /></ProRoute></RoleGuard>} />
-                  <Route path="/interview-prep/performance" element={<RoleGuard requiredRole="job_seeker"><ProRoute><InterviewPerformance /></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><InterviewPrep /></Suspense></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep/session" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><InterviewSession /></Suspense></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep/questions" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><InterviewQuestions /></Suspense></ProRoute></RoleGuard>} />
+                  <Route path="/interview-prep/performance" element={<RoleGuard requiredRole="job_seeker"><ProRoute><Suspense fallback={<PageFallback />}><InterviewPerformance /></Suspense></ProRoute></RoleGuard>} />
 
-                  <Route path="/recruiter/dashboard" element={<RoleGuard requiredRole="recruiter"><RecruiterDashboard /></RoleGuard>} />
-                  <Route path="/recruiter/company" element={<RoleGuard requiredRole="recruiter"><RecruiterCompany /></RoleGuard>} />
-                  <Route path="/recruiter/jobs" element={<RoleGuard requiredRole="recruiter"><RecruiterJobs /></RoleGuard>} />
-                  <Route path="/recruiter/jobs/:jobId/applicants" element={<RoleGuard requiredRole="recruiter"><RecruiterApplicants /></RoleGuard>} />
-                  <Route path="/recruiter/candidates" element={<RoleGuard requiredRole="recruiter"><RecruiterCandidates /></RoleGuard>} />
-                  <Route path="/recruiter/analytics" element={<RoleGuard requiredRole="recruiter"><RecruiterAnalytics /></RoleGuard>} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/dashboard/about" element={<About isInternal={true} />} />
-                  <Route path="/dashboard/blog" element={<Blog isInternal={true} />} />
-                  <Route path="/dashboard/blog/:slug" element={<BlogArticlePage isInternal={true} />} />
-                  <Route path="/dashboard/contact" element={<Contact isInternal={true} />} />
+                  <Route path="/recruiter/dashboard" element={<RoleGuard requiredRole="recruiter"><Suspense fallback={<PageFallback />}><RecruiterDashboard /></Suspense></RoleGuard>} />
+                  <Route path="/recruiter/company" element={<RoleGuard requiredRole="recruiter"><Suspense fallback={<PageFallback />}><RecruiterCompany /></Suspense></RoleGuard>} />
+                  <Route path="/recruiter/jobs" element={<RoleGuard requiredRole="recruiter"><Suspense fallback={<PageFallback />}><RecruiterJobs /></Suspense></RoleGuard>} />
+                  <Route path="/recruiter/jobs/:jobId/applicants" element={<RoleGuard requiredRole="recruiter"><Suspense fallback={<PageFallback />}><RecruiterApplicants /></Suspense></RoleGuard>} />
+                  <Route path="/recruiter/candidates" element={<RoleGuard requiredRole="recruiter"><Suspense fallback={<PageFallback />}><RecruiterCandidates /></Suspense></RoleGuard>} />
+                  <Route path="/recruiter/analytics" element={<RoleGuard requiredRole="recruiter"><Suspense fallback={<PageFallback />}><RecruiterAnalytics /></Suspense></RoleGuard>} />
+                  <Route path="/profile" element={<Suspense fallback={<PageFallback />}><Profile /></Suspense>} />
+                  <Route path="/dashboard/about" element={<Suspense fallback={<PageFallback />}><About isInternal={true} /></Suspense>} />
+                  <Route path="/dashboard/blog" element={<Suspense fallback={<PageFallback />}><Blog isInternal={true} /></Suspense>} />
+                  <Route path="/dashboard/blog/:slug" element={<Suspense fallback={<PageFallback />}><BlogArticlePage isInternal={true} /></Suspense>} />
+                  <Route path="/dashboard/contact" element={<Suspense fallback={<PageFallback />}><Contact isInternal={true} /></Suspense>} />
                   <Route element={<AdminRoute />}>
-                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin" element={<Suspense fallback={<PageFallback />}><AdminDashboard /></Suspense>} />
                   </Route>
                 </Route>
 
-                <Route path="/builder" element={<ProtectedRoute><RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard></ProtectedRoute>} />
-                <Route path="/builder/:id" element={<ProtectedRoute><RoleGuard requiredRole="job_seeker"><Builder /></RoleGuard></ProtectedRoute>} />
+                <Route path="/builder" element={<ProtectedRoute><RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><Builder /></Suspense></RoleGuard></ProtectedRoute>} />
+                <Route path="/builder/:id" element={<ProtectedRoute><RoleGuard requiredRole="job_seeker"><Suspense fallback={<PageFallback />}><Builder /></Suspense></RoleGuard></ProtectedRoute>} />
 
-                <Route path="*" element={<NotFound />} />
+                <Route path="*" element={<Suspense fallback={<PageFallback />}><NotFound /></Suspense>} />
               </Routes>
+            </ErrorBoundary>
             </Suspense>
            </UserRoleProvider>
           </AuthProvider>
