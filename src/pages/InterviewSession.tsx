@@ -525,7 +525,7 @@ export default function InterviewSession() {
            </div>
         </Card>
       ) : isLoadingFeedback ? (
-        <Card className="bg-white border border-slate-200 rounded-[2.5rem] shadow-xl relative min-h-[500px] flex flex-col items-center justify-center p-8 text-center space-y-6">
+        <Card className="bg-white border border-slate-200 rounded-[2.5rem] shadow-xl relative min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px] flex flex-col items-center justify-center p-8 text-center space-y-6">
            <div className="w-24 h-24 rounded-full bg-blue-50 flex items-center justify-center">
               <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
            </div>
@@ -536,7 +536,7 @@ export default function InterviewSession() {
         </Card>
       ) : (
         <Card className="bg-white border border-slate-200 rounded-[2.5rem] shadow-xl relative overflow-hidden min-h-[600px] flex flex-col group">
-           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+           <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
            
            <div className="flex items-center justify-between p-6 md:p-8 border-b border-slate-100 bg-white/50 backdrop-blur-sm relative z-10">
               <div className="flex items-center gap-4">

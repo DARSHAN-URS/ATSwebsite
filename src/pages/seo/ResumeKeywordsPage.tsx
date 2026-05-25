@@ -125,7 +125,7 @@ export default function ResumeKeywordsPage() {
             <h2 className="font-display text-2xl font-extrabold">Essential {data.jobTitle} ATS Keywords</h2>
           </div>
           <p className="text-sm text-muted-foreground mb-5">These are the highest-impact keywords for {data.jobTitle} resumes based on job posting analysis:</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-3">
             {keywords.map((kw) => (
               <div key={kw} className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2">
                 <CheckCircle className="h-4 w-4 text-primary shrink-0" />

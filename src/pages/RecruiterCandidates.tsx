@@ -109,7 +109,7 @@ export default function RecruiterCandidates() {
                   <Users className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">Candidate Intelligence</span>
                </div>
-               <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+               <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
                   Talent <br /> <span className="text-blue-600">Matrix.</span>
                </h1>
             </div>

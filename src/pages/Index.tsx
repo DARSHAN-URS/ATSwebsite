@@ -56,7 +56,7 @@ const Index = () => {
                         initial={{ opacity: 0, y: 30 }} 
                         animate={{ opacity: 1, y: 0 }} 
                         transition={{ delay: 0.1 }} 
-                        className="text-6xl md:text-[7.5rem] font-black text-slate-900 tracking-tighter leading-[0.85]"
+                        className="text-2xl md:text-4xl md:text-6xl md:text-[7.5rem] font-black text-slate-900 tracking-tighter leading-[0.85]"
                       >
                          {t.landing.archHeroTitle.split(" ").slice(0, 2).join(" ")} <br /> <span className="text-blue-600">{t.landing.archHeroTitle.split(" ").slice(2).join(" ")}</span>
                       </motion.h1>
@@ -84,7 +84,7 @@ const Index = () => {
                       </Button>
                    </motion.div>
 
-                   <div className="grid grid-cols-3 gap-12 pt-16 border-t border-slate-100">
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pt-16 border-t border-slate-100">
                       {stats.map((s, i) => (
                         <div key={i} className="space-y-2">
                            <p className="text-3xl font-black text-slate-900 tracking-tight">{s.value}</p>
@@ -160,7 +160,7 @@ const Index = () => {
                      <Sparkles className="w-4 h-4" />
                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{tl.operationalExcellence}</span>
                   </div>
-                  <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">{tl.builtForScale.split(" ").slice(0, -1).join(" ")} <br /> {tl.builtForScale.split(" ").slice(-1)} <span className="text-blue-600">.</span></h2>
+                  <h2 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">{tl.builtForScale.split(" ").slice(0, -1).join(" ")} <br /> {tl.builtForScale.split(" ").slice(-1)} <span className="text-blue-600">.</span></h2>
                </div>
                <p className="text-xl text-slate-600 font-medium max-w-xl leading-relaxed">
                   {tl.scaleDesc}
@@ -208,7 +208,7 @@ const Index = () => {
                         <Zap className="w-4 h-4" />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">{tl.globalReady}</span>
                      </div>
-                     <h2 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] uppercase">
+                     <h2 className="text-3xl md:text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] uppercase">
                         {tl.growFaster.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-500">{tl.growFaster.split(" ").slice(-1)}</span>
                      </h2>
                      <p className="text-xl text-slate-400 font-medium max-w-lg leading-relaxed">
@@ -258,7 +258,7 @@ const Index = () => {
                      <HelpCircle className="w-4 h-4" />
                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{tl.operationalSupport}</span>
                   </div>
-                  <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">{tl.commonQuestions.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.commonQuestions.split(" ").slice(-1)}</span></h2>
+                  <h2 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">{tl.commonQuestions.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.commonQuestions.split(" ").slice(-1)}</span></h2>
                   <p className="text-xl text-slate-600 font-medium max-w-md leading-relaxed">{tl.supportDesc}</p>
                </div>
                

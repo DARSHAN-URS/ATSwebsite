@@ -215,7 +215,7 @@ export default function RecruiterApplicants() {
                      <Users className="w-4 h-4" />
                      <span className="text-[9px] font-black uppercase tracking-widest">Mission Operations</span>
                   </div>
-                  <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                  <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                      Pipeline <br /> <span className="text-blue-600">Dynamics.</span>
                   </h1>
                   <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
@@ -247,7 +247,7 @@ export default function RecruiterApplicants() {
                  const config = stageConfig[stage];
                  const StageIcon = config.icon;
                  return (
-                   <div key={stage} className="flex-shrink-0 w-[400px] snap-center space-y-10">
+                   <div key={stage} className="flex-shrink-0 w-full lg:w-[400px] snap-center space-y-10">
                       <div className="flex items-center justify-between px-6 border-l-4 border-blue-600 h-10">
                          <div className="flex items-center gap-4">
                             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">{config.label}</h3>
@@ -346,10 +346,10 @@ export default function RecruiterApplicants() {
       <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
         <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 border-none bg-white font-sans">
            <div className="bg-slate-50 border-b border-slate-100 p-16 text-slate-900 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
+              <div className="absolute top-0 right-0 w-full lg:w-[500px] h-auto lg:h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
               <div className="relative z-10 space-y-10">
                  <div className="flex items-center justify-between">
-                    <div className="w-24 h-24 rounded-[2rem] bg-blue-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl">
+                    <div className="w-24 h-24 rounded-[2rem] bg-blue-600 flex items-center justify-center text-white text-2xl md:text-4xl font-black shadow-2xl">
                        {selectedApp?.profile?.display_name?.charAt(0) || "?"}
                     </div>
                     <Badge className={cn("rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em]", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900" : "bg-slate-100 text-slate-600")}>
@@ -357,14 +357,14 @@ export default function RecruiterApplicants() {
                     </Badge>
                  </div>
                  <div className="space-y-2">
-                    <h2 className="text-5xl font-black tracking-tighter leading-tight text-slate-900">{selectedApp?.profile?.display_name || "Applicant"}</h2>
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight text-slate-900">{selectedApp?.profile?.display_name || "Applicant"}</h2>
                     <p className="text-blue-600 font-black uppercase tracking-[0.3em] text-xs">Mission Component • {selectedApp ? new Date(selectedApp.created_at).toLocaleDateString() : ""}</p>
                  </div>
               </div>
            </div>
 
            <div className="p-16 space-y-16">
-              <div className="grid grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                  <div className="space-y-4">
                     <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Operational Status</Label>
                     <Select

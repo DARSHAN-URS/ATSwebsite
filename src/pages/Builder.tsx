@@ -204,7 +204,7 @@ export default function Builder() {
           {activeSection === "personal" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Personal Information</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Personal Information</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Your identity is the core of your professional blueprint. Ensure all communication links are active.
                   </p>
@@ -221,7 +221,7 @@ export default function Builder() {
             <div className="space-y-12">
                <div className="flex items-end justify-between">
                   <div className="space-y-4">
-                     <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Professional Summary</h2>
+                     <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Professional Summary</h2>
                      <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                         Summarize your career mission in 2-3 powerful sentences.
                      </p>
@@ -235,7 +235,7 @@ export default function Builder() {
                      value={resumeData.summary} 
                      onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))}
                      placeholder="Craft your career mission..." 
-                     className="min-h-[350px] bg-transparent border-none p-0 focus-visible:ring-0 text-xl leading-relaxed resize-none font-medium text-slate-700 placeholder:text-slate-200"
+                     className="min-h-[120px] md:min-h-[200px] md:min-h-[350px] bg-transparent border-none p-0 focus-visible:ring-0 text-xl leading-relaxed resize-none font-medium text-slate-700 placeholder:text-slate-200"
                   />
                   <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-between">
                      <div className="flex items-center gap-3">
@@ -251,7 +251,7 @@ export default function Builder() {
           {activeSection === "experience" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Work Experience</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Work Experience</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Your career timeline is a sequence of successful mission deployments.
                   </p>
@@ -266,7 +266,7 @@ export default function Builder() {
           {activeSection === "education" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Education</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Education</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Where did you acquire your foundational technical knowledge?
                   </p>
@@ -281,7 +281,7 @@ export default function Builder() {
           {activeSection === "skills" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Core Skills</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Core Skills</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Identify your primary technical vectors and professional capabilities.
                   </p>
@@ -330,7 +330,7 @@ export default function Builder() {
           {activeSection === "languages" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Languages</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Languages</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      What communication protocols do you support for global collaboration?
                   </p>
@@ -342,7 +342,7 @@ export default function Builder() {
           {activeSection === "design" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Aesthetic Engine</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Aesthetic Engine</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Personalize the visual identity of your professional blueprints.
                   </p>
@@ -354,7 +354,7 @@ export default function Builder() {
           {activeSection === "templates" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Templates</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Templates</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Select a structural architecture that aligns with your industry mission.
                   </p>

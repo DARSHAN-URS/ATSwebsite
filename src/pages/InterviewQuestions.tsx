@@ -238,7 +238,7 @@ export default function InterviewQuestions() {
 
         {/* Right Main Area - Results */}
         <div className="md:col-span-8">
-           <Card className="bg-white border border-slate-200 p-8 rounded-[2rem] shadow-sm min-h-[500px]">
+           <Card className="bg-white border border-slate-200 p-8 rounded-[2rem] shadow-sm min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px]">
               <div className="flex items-center gap-3 mb-8 pb-6 border-b border-slate-100">
                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <BookOpen className="w-5 h-5" />

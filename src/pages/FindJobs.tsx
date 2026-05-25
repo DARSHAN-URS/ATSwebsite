@@ -284,7 +284,7 @@ export default function FindJobs() {
       
       {/* 1. SaaS Hero Section */}
       <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
-         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+         <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
              <div className="space-y-4">
@@ -407,7 +407,7 @@ export default function FindJobs() {
          </Card>
 
          {/* Content Area Grid */}
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[500px]">
+         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px]">
             <div className="lg:col-span-8">
                <AnimatePresence mode="wait">
                   {activeTab === "ai" && (

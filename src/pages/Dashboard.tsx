@@ -218,7 +218,7 @@ export default function Dashboard() {
       
       {/* 1. Compact Hero Section */}
       <div className="relative bg-white rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 shadow-sm">
-         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+         <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="space-y-6 flex-1">
@@ -227,7 +227,7 @@ export default function Dashboard() {
                   <span className="text-[10px] font-bold uppercase tracking-wider">{td.missionBriefing}</span>
                </div>
                <div className="space-y-1">
-                 <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-[0.9]">
+                 <h1 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-[0.9]">
                     {td.welcomeAgent} <br />
                     <span className="text-blue-600">{user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.display_name || user?.email?.split('@')[0] || "Agent"}.</span>
                  </h1>

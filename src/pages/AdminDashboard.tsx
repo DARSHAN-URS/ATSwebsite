@@ -97,7 +97,7 @@ export default function AdminDashboard() {
                  </div>
                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">{ta.operationalOversight}</span>
               </motion.div>
-              <h1 className="text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] uppercase">
+              <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] uppercase">
                  {ta.control} <br /> <span className="text-blue-600">{ta.center}</span>
               </h1>
               <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
             <Card key={i} className="rounded-[3rem] border-none bg-slate-50 dark:bg-slate-900 p-10 flex items-center justify-between group hover:bg-white dark:hover:bg-slate-800 transition-all hover:shadow-2xl">
                <div className="space-y-2">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.title}</p>
-                  <p className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">{stat.value.toLocaleString()}</p>
+                  <p className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter">{stat.value.toLocaleString()}</p>
                </div>
                <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6", stat.bg, stat.color)}>
                   <stat.icon className="w-8 h-8" />
@@ -289,7 +289,7 @@ function StatCard({ title, value, icon: Icon, color }: any) {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest font-mono">{title}</p>
-            <p className="text-4xl font-bold mt-1 font-display tabular-nums tracking-tighter">{value}</p>
+            <p className="text-2xl md:text-4xl font-bold mt-1 font-display tabular-nums tracking-tighter">{value}</p>
           </div>
           <div className={`p-4 rounded-2xl bg-muted/50 group-hover:bg-muted transition-colors ${color}`}>
             <Icon className="h-7 w-7" />

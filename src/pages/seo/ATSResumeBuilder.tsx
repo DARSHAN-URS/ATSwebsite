@@ -34,7 +34,7 @@ export default function ATSResumeBuilder() {
                <Sparkles className="w-3.5 h-3.5" />
                <span className="text-[10px] font-black uppercase tracking-widest">{t.ats.tag}</span>
             </div>
-            <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">{t.ats.h1}</h1>
+            <h1 className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">{t.ats.h1}</h1>
             <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">{t.ats.subtitle}</p>
             <div className="pt-8 flex flex-wrap justify-center gap-4">
               <Button size="lg" className="h-16 px-10 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] gap-3 shadow-2xl shadow-blue-600/20 hover:scale-105 transition-all" asChild><Link to="/">{t.ats.buildNow} <ArrowRight className="h-4 w-4" /></Link></Button>
@@ -45,7 +45,7 @@ export default function ATSResumeBuilder() {
 
         <section className="border-y border-slate-100 bg-slate-50/50 py-32">
           <div className="mx-auto max-w-4xl px-8 space-y-8 text-center">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tight">{t.ats.whatIsH2}</h2>
+            <h2 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tight">{t.ats.whatIsH2}</h2>
             <div className="space-y-6 text-lg text-slate-600 font-medium leading-relaxed max-w-3xl mx-auto">
                <p>{t.ats.whatIsP1}</p>
                <p>{t.ats.whatIsP2}</p>
@@ -56,7 +56,7 @@ export default function ATSResumeBuilder() {
 
         <section className="py-32">
           <div className="mx-auto max-w-6xl px-8">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 text-center uppercase tracking-tight mb-20">{t.ats.howH2}</h2>
+            <h2 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 text-center uppercase tracking-tight mb-20">{t.ats.howH2}</h2>
             <div className="grid md:grid-cols-2 gap-8">
               {t.ats.features.map((f, i) => (
                 <div key={i} className="rounded-[3rem] border-none bg-slate-50 p-12 space-y-6 hover:bg-white hover:shadow-3xl transition-all group">
@@ -73,7 +73,7 @@ export default function ATSResumeBuilder() {
 
         <section className="border-y border-slate-100 bg-slate-900 py-32 rounded-[4rem] mx-8 overflow-hidden">
           <div className="mx-auto max-w-4xl px-8 space-y-12">
-            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">{t.ats.tipsH2}</h2>
+            <h2 className="text-2xl md:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">{t.ats.tipsH2}</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {t.ats.tips.map((tip, i) => (
                 <li key={i} className="flex gap-4 p-6 rounded-2xl bg-white/5 border border-white/5">
@@ -87,7 +87,7 @@ export default function ATSResumeBuilder() {
 
         <section className="py-40">
           <div className="mx-auto max-w-3xl px-8 space-y-16">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 text-center uppercase tracking-tight">{t.ats.faqH2}</h2>
+            <h2 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 text-center uppercase tracking-tight">{t.ats.faqH2}</h2>
             <Accordion type="single" collapsible className="w-full space-y-4">
               {t.ats.faqs.map((item, i) => (
                 <AccordionItem key={i} value={`faq-${i}`} className="border-none bg-slate-50 rounded-[2rem] px-8 overflow-hidden">
@@ -112,7 +112,7 @@ export default function ATSResumeBuilder() {
 
         <section className="py-40">
           <div className="mx-auto max-w-4xl px-8 text-center space-y-10">
-            <h2 className="text-5xl md:text-7xl font-black text-slate-900 uppercase tracking-tighter leading-none">{t.ats.ctaH2}</h2>
+            <h2 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 uppercase tracking-tighter leading-none">{t.ats.ctaH2}</h2>
             <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">{t.ats.ctaSub}</p>
             <Button size="lg" className="h-20 px-12 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-xs gap-4 shadow-3xl shadow-blue-600/30 hover:scale-105 transition-all" asChild><Link to="/">{t.ats.ctaBtn} <ArrowRight className="h-6 w-6" /></Link></Button>
           </div>

@@ -171,7 +171,7 @@ export default function RecruiterDashboard() {
               <ShieldCheck className="w-4 h-4" />
               <span className="text-[9px] font-black uppercase tracking-widest">Workspace Core</span>
             </div>
-            <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
               Command <span className="text-blue-600">Central.</span>
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
@@ -209,7 +209,7 @@ export default function RecruiterDashboard() {
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
-                    <p className="text-4xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+                    <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">{stat.value}</p>
                   </div>
                 </Card>
               ))}

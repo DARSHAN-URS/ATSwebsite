@@ -73,7 +73,7 @@ export default function Contact({ isInternal = false }: ContactProps) {
                  </div>
                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Communication Protocol</span>
               </motion.div>
-              <h1 className="text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] uppercase">
+              <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] uppercase">
                  Get in <br /> <span className="text-blue-600">Touch.</span>
               </h1>
               <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
@@ -127,7 +127,7 @@ export default function Contact({ isInternal = false }: ContactProps) {
                         <CheckCircle2 className="h-16 w-16" />
                       </div>
                       <div className="space-y-4">
-                         <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Message Received.</h2>
+                         <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Message Received.</h2>
                          <p className="text-slate-500 dark:text-slate-400 font-medium text-xl leading-relaxed max-w-sm">
                            Thank you for reaching out. A specialist will synchronize with your request at <strong>{formData.email}</strong> shortly.
                          </p>
@@ -199,7 +199,7 @@ export default function Contact({ isInternal = false }: ContactProps) {
                           placeholder="Provide detailed context for your inquiry..."
                           value={formData.message}
                           onChange={(e) => setFormData({...formData, message: e.target.value})}
-                          className="rounded-[3rem] bg-slate-50 dark:bg-slate-800 border-none font-bold p-10 text-lg focus-visible:ring-blue-600 min-h-[250px] transition-all resize-none"
+                          className="rounded-[3rem] bg-slate-50 dark:bg-slate-800 border-none font-bold p-10 text-lg focus-visible:ring-blue-600 min-h-[150px] md:min-h-[250px] transition-all resize-none"
                         />
                       </div>
 

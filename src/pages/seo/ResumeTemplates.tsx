@@ -38,7 +38,7 @@ export default function ResumeTemplates() {
                  </div>
                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">{t.tpl.tag}</span>
               </motion.div>
-              <h1 className="text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
+              <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
                  Layout <br /> <span className="text-blue-600">Dynamics.</span>
               </h1>
               <p className="text-xl text-slate-700 font-medium max-w-xl leading-relaxed">
@@ -103,7 +103,7 @@ export default function ResumeTemplates() {
            <Card className="rounded-[4rem] border-none bg-slate-900 p-16 text-white space-y-10 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-12 opacity-5"><ShieldCheck className="w-64 h-64" /></div>
               <div className="relative z-10 space-y-8">
-                 <h2 className="text-5xl font-black tracking-tighter leading-none uppercase">{t.tpl.whatMakesH2}</h2>
+                 <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-none uppercase">{t.tpl.whatMakesH2}</h2>
                  <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-xl">{t.tpl.whatMakesIntro}</p>
                  <div className="space-y-6 pt-6">
                     {t.tpl.whatMakesList.map((item, i) => (
@@ -119,11 +119,11 @@ export default function ResumeTemplates() {
            </Card>
 
            <div className="space-y-12 py-10">
-              <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">{t.tpl.chooseH2}</h2>
+              <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">{t.tpl.chooseH2}</h2>
               <div className="space-y-8">
                  {t.tpl.chooseItems.map((item, i) => (
                     <div key={i} className="flex gap-6 group">
-                       <span className="text-4xl font-black text-slate-100 group-hover:text-blue-600/20 transition-colors">{String(i + 1).padStart(2, '0')}</span>
+                       <span className="text-2xl md:text-4xl font-black text-slate-100 group-hover:text-blue-600/20 transition-colors">{String(i + 1).padStart(2, '0')}</span>
                        <p className="text-lg font-medium text-slate-600 leading-relaxed pt-2">{item}</p>
                     </div>
                  ))}

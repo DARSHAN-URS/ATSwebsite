@@ -39,7 +39,7 @@ export default function PublicProfile() {
 
   if (error || !resume) return (
     <div className="h-screen bg-slate-950 flex flex-col items-center justify-center space-y-6">
-      <h1 className="text-white text-4xl font-black">404: Identity Not Found</h1>
+      <h1 className="text-white text-2xl md:text-4xl font-black">404: Identity Not Found</h1>
       <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/5 rounded-2xl h-14 px-10 font-black uppercase tracking-widest text-[10px]">
         <Link to="/">Return to Base</Link>
       </Button>

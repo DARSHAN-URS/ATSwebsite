@@ -161,7 +161,7 @@ export default function JobTracker() {
              </div>
              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Pipeline</span>
           </motion.div>
-          <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+          <h1 className="text-2xl md:text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
              Tracking <br /> <span className="text-blue-600">Engine.</span>
           </h1>
         </div>
@@ -169,12 +169,12 @@ export default function JobTracker() {
         <div className="flex items-center gap-8">
            <div className="flex flex-col items-end">
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Success Rate</span>
-              <span className="text-4xl font-black text-slate-900 dark:text-white leading-none">94%</span>
+              <span className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white leading-none">94%</span>
            </div>
            <Separator orientation="vertical" className="h-12 bg-slate-100" />
            <div className="flex flex-col items-end">
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Active Tracks</span>
-              <span className="text-4xl font-black text-blue-600 leading-none">{apps.length}</span>
+              <span className="text-2xl md:text-4xl font-black text-blue-600 leading-none">{apps.length}</span>
            </div>
         </div>
       </div>
@@ -305,7 +305,7 @@ export default function JobTracker() {
                  <div className="w-16 h-16 bg-blue-600 rounded-[1.5rem] flex items-center justify-center mb-10 shadow-2xl shadow-blue-600/30">
                     <Send className="h-8 w-8" />
                  </div>
-                 <DialogTitle className="text-4xl font-black tracking-tight leading-none">Strategic <br /> Outreach.</DialogTitle>
+                 <DialogTitle className="text-2xl md:text-4xl font-black tracking-tight leading-none">Strategic <br /> Outreach.</DialogTitle>
                  <p className="text-slate-400 font-medium mt-4">Draft a high-conversion communication to the internal hiring team.</p>
               </div>
            </div>
@@ -322,7 +322,7 @@ export default function JobTracker() {
               </div>
               <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Message Content</Label>
-                 <Textarea value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className="min-h-[250px] rounded-[2rem] bg-white border-slate-100 font-medium p-8 leading-relaxed focus-visible:ring-blue-600" />
+                 <Textarea value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className="min-h-[150px] md:min-h-[250px] rounded-[2rem] bg-white border-slate-100 font-medium p-8 leading-relaxed focus-visible:ring-blue-600" />
               </div>
               <Button onClick={sendEmail} disabled={sending} className="w-full h-20 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-blue-600 transition-all">
                  {sending ? <Loader2 className="w-6 h-6 animate-spin" /> : "Initiate Dispatch"}

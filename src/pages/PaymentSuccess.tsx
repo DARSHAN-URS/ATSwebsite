@@ -180,7 +180,7 @@ export default function PaymentSuccess() {
       
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-600/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-emerald-600/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
 
       <motion.div 
          initial={{ opacity: 0, y: 40 }} 
@@ -213,7 +213,7 @@ export default function PaymentSuccess() {
                     <Crown className="w-3.5 h-3.5" />
                     <span className="text-[10px] font-black uppercase tracking-widest">Protocol Activated</span>
                  </div>
-                 <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">
+                 <h1 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">
                     Mission <br /> <span className="text-blue-600">Accomplished.</span>
                  </h1>
                  <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-sm mx-auto">
@@ -221,7 +221,7 @@ export default function PaymentSuccess() {
                  </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                  <div className="p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-center space-y-1">
                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Active Plan</p>
                     <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{plan.name}</p>

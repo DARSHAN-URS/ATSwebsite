@@ -26,7 +26,7 @@ const NotFound = () => {
       
       <div className="relative max-w-2xl w-full">
          {/* Background Elements */}
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[100px] -z-10" />
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full lg:w-[500px] h-auto lg:h-[500px] bg-blue-600/5 rounded-full blur-[100px] -z-10" />
          
          <div className="space-y-12">
             <motion.div 
@@ -78,7 +78,7 @@ const NotFound = () => {
          </div>
 
          {/* Technical Decoration */}
-         <div className="mt-24 pt-12 border-t border-slate-100 dark:border-slate-900 grid grid-cols-3 gap-8 opacity-30">
+         <div className="mt-24 pt-12 border-t border-slate-100 dark:border-slate-900 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-30">
             <div className="text-center">
                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{mt.status}</p>
                <p className="text-xs font-black text-rose-600">{mt.terminated}</p>

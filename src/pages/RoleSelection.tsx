@@ -43,7 +43,7 @@ export default function RoleSelection() {
               <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Security Clearance Required</span>
            </motion.div>
            <div className="space-y-2">
-              <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{mt.title}<span className="text-blue-600">.</span></h1>
+              <h1 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{mt.title}<span className="text-blue-600">.</span></h1>
               <p className="text-slate-500 dark:text-slate-400 font-medium text-lg md:text-xl max-w-xl mx-auto">{mt.subtitle}</p>
            </div>
         </div>

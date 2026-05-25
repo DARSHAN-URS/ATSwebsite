@@ -112,7 +112,7 @@ export default function RecruiterAnalytics() {
                <BarChart3 className="w-4 h-4" />
                <span className="text-[9px] font-black uppercase tracking-widest">Operational Intelligence</span>
             </div>
-            <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
                Mission <br /> <span className="text-blue-600">Intelligence.</span>
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">

@@ -160,7 +160,7 @@ export default function EmailOutreach() {
          
          {/* 1. SaaS Hero Section */}
          <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="space-y-4">
@@ -191,7 +191,7 @@ export default function EmailOutreach() {
          </div>
 
          {/* 2. Communication Workspace Grid */}
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[700px]">
+         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-auto lg:h-[400px] lg:min-h-auto lg:h-[700px]">
             
             {/* Left Panel: Configuration */}
             <div className="lg:col-span-4 space-y-6">
@@ -229,7 +229,7 @@ export default function EmailOutreach() {
                      
                      <div className="pt-4 space-y-4">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.tonePersona}</Label>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                            {Object.entries(to.tones).map(([key, label]) => (
                               <button 
                                  key={key}
@@ -334,7 +334,7 @@ export default function EmailOutreach() {
                               value={body} 
                               onChange={e => setBody(e.target.value)} 
                               placeholder={to.startDrafting} 
-                              className="w-full h-full min-h-[400px] bg-transparent border-none focus:outline-none focus:ring-0 outline-none text-sm font-medium text-slate-600 leading-relaxed resize-none placeholder:text-slate-300 transition-all" 
+                              className="w-full h-full min-h-auto lg:h-[400px] bg-transparent border-none focus:outline-none focus:ring-0 outline-none text-sm font-medium text-slate-600 leading-relaxed resize-none placeholder:text-slate-300 transition-all" 
                            />
                         </div>
                      </div>

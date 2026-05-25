@@ -59,7 +59,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
                <Sparkles className="w-4 h-4 text-primary" />
                <span className="text-[10px] font-black uppercase tracking-widest text-primary">Insider Insights</span>
             </motion.div>
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-6xl md:text-8xl font-black text-slate-900 tracking-tight">
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 tracking-tight">
                Master the <span className="text-primary">market.</span>
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-slate-500 font-medium max-w-2xl mx-auto">
@@ -160,7 +160,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
            <div className="rounded-[3rem] bg-slate-900 p-12 md:p-20 text-center space-y-10 relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2" />
               <div className="relative z-10 space-y-6 max-w-xl mx-auto">
-                 <h2 className="text-4xl font-black text-white tracking-tight">Stay <span className="text-primary">Ahead.</span></h2>
+                 <h2 className="text-2xl md:text-4xl font-black text-white tracking-tight">Stay <span className="text-primary">Ahead.</span></h2>
                  <p className="text-slate-400 font-medium">Get exclusive career strategies and resume hacks delivered to your inbox every Sunday.</p>
                  <form className="flex flex-col sm:flex-row gap-3">
                     <Input placeholder="you@example.com" className="bg-white/10 border-white/10 text-white rounded-2xl h-14 px-6 font-medium focus-visible:ring-primary" />

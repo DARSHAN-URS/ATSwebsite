@@ -100,7 +100,7 @@ export default function RecruiterCompany() {
                <Building2 className="w-4 h-4" />
                <span className="text-[9px] font-black uppercase tracking-widest">Organizational Core</span>
             </div>
-            <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
                Company <br /> <span className="text-blue-600">Identity.</span>
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
@@ -163,7 +163,7 @@ export default function RecruiterCompany() {
                             value={form.description}
                             onChange={(e) => setForm({ ...form, description: e.target.value })}
                             placeholder="Define your mission, culture, and architectural goals..."
-                            className="min-h-[200px] rounded-[2rem] bg-white border-slate-100 p-8 font-medium focus:ring-blue-600/10 text-lg leading-relaxed"
+                            className="min-h-[120px] md:min-h-[200px] rounded-[2rem] bg-white border-slate-100 p-8 font-medium focus:ring-blue-600/10 text-lg leading-relaxed"
                          />
                       </div>
                    </div>

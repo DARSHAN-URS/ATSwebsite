@@ -91,7 +91,7 @@ export default function ResetPassword() {
               <span className="text-[10px] font-black uppercase tracking-widest">Secure Credential Reset</span>
            </div>
            <div className="space-y-2">
-              <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{mt.title}<span className="text-blue-600">.</span></h1>
+              <h1 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{mt.title}<span className="text-blue-600">.</span></h1>
               <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{mt.subtitle}</p>
            </div>
         </div>

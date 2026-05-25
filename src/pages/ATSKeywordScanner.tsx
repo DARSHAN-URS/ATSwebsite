@@ -90,7 +90,7 @@ export default function ATSKeywordScanner() {
               </div>
               <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Architectural Audit Protocol</span>
            </motion.div>
-           <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]">
+           <h1 className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]">
               Audit <br /> <span className="text-blue-600">Scanner.</span>
            </h1>
            <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl leading-relaxed">
@@ -116,7 +116,7 @@ export default function ATSKeywordScanner() {
                   </div>
                   <div className="space-y-3">
                      <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Requirements</Label>
-                     <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste the target job description..." className="min-h-[300px] rounded-[2.5rem] bg-white border-slate-100 font-bold p-8" />
+                     <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste the target job description..." className="min-h-[120px] md:min-h-[200px] md:min-h-[300px] rounded-[2.5rem] bg-white border-slate-100 font-bold p-8" />
                   </div>
                </div>
                <Button onClick={scan} disabled={scanning || !selectedResumeId || !jobDescription} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4 hover:scale-[1.02] transition-all">
@@ -139,7 +139,7 @@ export default function ATSKeywordScanner() {
                      <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-10 border-b border-slate-50 dark:border-slate-800 pb-10">
                            <div className="space-y-2 text-center md:text-left">
-                              <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Audit Score</h3>
+                              <h3 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Audit Score</h3>
                               <p className="text-slate-500 font-bold">Overall compatibility with target requirement vectors.</p>
                            </div>
                            <div className="relative w-32 h-32 flex items-center justify-center">

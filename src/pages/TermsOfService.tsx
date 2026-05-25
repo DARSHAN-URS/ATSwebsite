@@ -21,7 +21,7 @@ const TermsOfService = () => {
 
       <main className="max-w-7xl mx-auto px-8 pt-48 pb-40 space-y-20">
         <div className="relative bg-white rounded-[3rem] p-12 md:p-20 overflow-hidden border border-slate-100 shadow-sm">
-           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+           <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
            
            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                <div className="space-y-6">
@@ -30,7 +30,7 @@ const TermsOfService = () => {
                      <span className="text-[10px] font-black uppercase tracking-wider">{tm.legal.legalFramework}</span>
                   </div>
                   <div className="space-y-2">
-                    <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">
+                    <h1 className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">
                        {tt.title}.
                     </h1>
                     <p className="text-slate-500 font-medium text-xl max-w-xl">{tt.lastUpdated} {new Date().toLocaleDateString(locale, { month: "long", day: "numeric", year: "numeric" })}</p>

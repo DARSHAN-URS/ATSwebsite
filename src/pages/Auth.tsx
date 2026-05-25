@@ -62,7 +62,7 @@ export default function Auth() {
             </Link>
             
             <div className="space-y-6">
-               <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+               <h1 className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                   Access <br /> <span className="text-blue-600">Protocol.</span>
                </h1>
                <p className="text-xl text-slate-400 font-medium leading-relaxed">
@@ -99,7 +99,7 @@ export default function Auth() {
                <p className="text-slate-500 font-bold text-sm uppercase tracking-widest">{isLogin ? "Sign in to your account" : "Get started with ResumePro"}</p>
             </div>
 
-            <div className="grid grid-cols-2 p-2 bg-white dark:bg-slate-800 rounded-[2rem]">
+            <div className="grid grid-cols-1 md:grid-cols-2 p-2 bg-white dark:bg-slate-800 rounded-[2rem]">
                <button onClick={() => setIsLogin(true)} className={cn("h-12 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all", isLogin ? "bg-white dark:bg-slate-700 text-blue-600 shadow-xl" : "text-slate-400")}>Login</button>
                <button onClick={() => setIsLogin(false)} className={cn("h-12 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all", !isLogin ? "bg-white dark:bg-slate-700 text-blue-600 shadow-xl" : "text-slate-400")}>Signup</button>
             </div>

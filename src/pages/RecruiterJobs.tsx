@@ -184,7 +184,7 @@ export default function RecruiterJobs() {
                   <Briefcase className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">Mission Management</span>
                </div>
-               <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+               <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
                   Active <br /> <span className="text-blue-600">Missions.</span>
                </h1>
             </div>
@@ -206,7 +206,7 @@ export default function RecruiterJobs() {
                   </div>
                   <div>
                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
-                     <p className="text-4xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+                     <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">{stat.value}</p>
                   </div>
                </Card>
             ))}
@@ -251,7 +251,7 @@ export default function RecruiterJobs() {
                                   <div className="space-y-4">
                                      <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:rotate-6 transition-transform"><Briefcase className="w-6 h-6" /></div>
-                                        <h3 className="text-4xl font-black text-slate-900 tracking-tighter group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
+                                        <h3 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
                                      </div>
                                      <p className="text-slate-500 font-bold text-[11px] uppercase tracking-[0.3em] pl-16">{job.company_name} <span className="mx-3 text-slate-200">|</span> {job.location || "Global Ops"}</p>
                                   </div>
@@ -291,7 +291,7 @@ export default function RecruiterJobs() {
 
                                <div className="flex md:flex-col items-stretch gap-4 w-full md:w-auto">
                                   <Button onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)} className="h-20 px-10 rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-slate-900/10 group-hover:bg-blue-600 transition-all">Manage Pipeline</Button>
-                                  <div className="grid grid-cols-2 gap-4">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                      <Button variant="outline" size="icon" onClick={() => openEdit(job)} className="w-full h-16 rounded-2xl border-slate-100 hover:text-blue-600 transition-all"><Edit className="w-5 h-5" /></Button>
                                      <Button variant="outline" size="icon" onClick={() => handleDelete(job.id)} className="w-full h-16 rounded-2xl border-slate-100 hover:text-red-500 transition-all"><Trash2 className="w-5 h-5" /></Button>
                                   </div>
@@ -314,7 +314,7 @@ export default function RecruiterJobs() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl rounded-[3rem] p-12 border-none shadow-3xl bg-white overflow-y-auto max-h-[90vh]">
           <DialogHeader className="space-y-4 text-left pb-6 border-b border-slate-100 mb-8">
-            <DialogTitle className="text-4xl font-black tracking-tighter uppercase">{editingId ? "Modify" : "Initialize"} Mission</DialogTitle>
+            <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase">{editingId ? "Modify" : "Initialize"} Mission</DialogTitle>
             <DialogDescription className="text-slate-500 font-medium">Configure your operational parameters for talent acquisition.</DialogDescription>
           </DialogHeader>
           <div className="space-y-8">
@@ -350,7 +350,7 @@ export default function RecruiterJobs() {
                <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="min-h-[150px] rounded-2xl bg-white border-slate-100 font-medium p-6" />
             </div>
 
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Min Payload</Label>
                   <Input type="number" value={form.salary_min} onChange={(e) => setForm({ ...form, salary_min: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />

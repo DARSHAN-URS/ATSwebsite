@@ -16,7 +16,7 @@ export default function InterviewPrep() {
          
          {/* 1. Premium Hero Header */}
          <div className="relative bg-white rounded-[2rem] p-10 overflow-hidden border border-slate-200 shadow-sm text-center md:text-left">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/[0.03] rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-full lg:w-[500px] h-auto lg:h-[500px] bg-blue-600/[0.03] rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col items-center md:items-start space-y-5">
                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600 shadow-sm">
@@ -24,7 +24,7 @@ export default function InterviewPrep() {
                   <span className="text-[10px] font-bold uppercase tracking-wider">AI Interview Engine Active</span>
                </div>
                <div className="space-y-2 max-w-2xl">
-                 <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none uppercase">
+                 <h1 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none uppercase">
                     Interview Lab.
                  </h1>
                  <p className="text-slate-500 font-medium text-sm">Welcome to your ultimate interview preparation hub. Launch a real-time mock interview, study common questions, or analyze your past performance metrics.</p>
@@ -37,7 +37,7 @@ export default function InterviewPrep() {
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
                <Card 
                   onClick={() => navigate("/interview-prep/session")}
-                  className="bg-white border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl hover:border-blue-600/30 transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between min-h-[320px]"
+                  className="bg-white border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl hover:border-blue-600/30 transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between min-h-auto lg:h-[320px]"
                >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-600/10 transition-colors" />
                   <div className="space-y-6 relative z-10">
@@ -58,7 +58,7 @@ export default function InterviewPrep() {
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                <Card 
                   onClick={() => navigate("/interview-prep/questions")}
-                  className="bg-white border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl hover:border-emerald-600/30 transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between min-h-[320px]"
+                  className="bg-white border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl hover:border-emerald-600/30 transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between min-h-auto lg:h-[320px]"
                >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-600/5 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2 group-hover:bg-emerald-600/10 transition-colors" />
                   <div className="space-y-6 relative z-10">
@@ -79,7 +79,7 @@ export default function InterviewPrep() {
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                <Card 
                   onClick={() => navigate("/interview-prep/performance")}
-                  className="bg-white border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl hover:border-indigo-600/30 transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between min-h-[320px]"
+                  className="bg-white border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl hover:border-indigo-600/30 transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between min-h-auto lg:h-[320px]"
                >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/5 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2 group-hover:bg-indigo-600/10 transition-colors" />
                   <div className="space-y-6 relative z-10">

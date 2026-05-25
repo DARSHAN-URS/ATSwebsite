@@ -69,7 +69,7 @@ export default function InterviewPerformance() {
          </div>
 
          {/* Stats Row */}
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4 gap-6">
             {[
                { label: "Confidence", value: totalSessions > 0 ? `${averageComm}%` : "--", icon: TrendingUp, color: "text-blue-600", bg: "bg-blue-50" },
                { label: "Technical", value: totalSessions > 0 ? `${averageTech}%` : "--", icon: Code, color: "text-indigo-600", bg: "bg-indigo-50" },

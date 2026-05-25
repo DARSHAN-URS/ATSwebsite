@@ -36,7 +36,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{ta.tagline}</span>
             </motion.div>
             <div className="space-y-8">
-               <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.85]">
+               <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.85]">
                   {ta.heroTitle} <br /><span className="text-blue-600">{ta.heroHighlight}</span>
                </motion.h1>
                <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl md:text-3xl text-slate-500 font-medium max-w-3xl leading-relaxed">
@@ -51,7 +51,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {stats.map((s, i) => (
                <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="p-12 rounded-[3.5rem] bg-slate-50/50 border border-slate-100 text-center space-y-3 hover:bg-white hover:shadow-2xl transition-all">
-                  <p className="text-6xl font-black text-blue-600 tracking-tighter">{s.value}</p>
+                  <p className="text-2xl md:text-4xl md:text-6xl font-black text-blue-600 tracking-tighter">{s.value}</p>
                   <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 leading-tight">{s.label}</p>
                </motion.div>
             ))}
@@ -68,7 +68,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
                      <Target className="w-4 h-4" />
                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{ta.missionTagline}</span>
                   </div>
-                  <h2 className="text-5xl md:text-[5.5rem] font-black text-white tracking-tighter leading-[0.9] uppercase">
+                  <h2 className="text-3xl md:text-5xl md:text-[5.5rem] font-black text-white tracking-tighter leading-[0.9] uppercase">
                      {ta.missionTitle.split(" ").slice(0, 2).join(" ")} <br /> {ta.missionTitle.split(" ").slice(2, -1).join(" ")} <span className="text-blue-500">{ta.missionTitle.split(" ").slice(-1)}</span>
                   </h2>
                   <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-xl">
@@ -100,7 +100,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
       {/* Footer CTA */}
       <section className="py-60 container mx-auto px-8 text-center space-y-16">
          <div className="space-y-6">
-            <h2 className="text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-none uppercase">{ta.ctaTitle.split(" ").slice(0, -1).join(" ")} <span className="text-blue-600">{ta.ctaTitle.split(" ").slice(-1)}</span></h2>
+            <h2 className="text-2xl md:text-4xl md:text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-none uppercase">{ta.ctaTitle.split(" ").slice(0, -1).join(" ")} <span className="text-blue-600">{ta.ctaTitle.split(" ").slice(-1)}</span></h2>
             <p className="text-2xl text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
                {ta.ctaDesc}
             </p>

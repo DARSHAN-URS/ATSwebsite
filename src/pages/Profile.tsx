@@ -101,7 +101,7 @@ export default function Profile() {
               </div>
               <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Account Settings</span>
            </motion.div>
-           <h1 className="text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-[0.85] uppercase">
+           <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-[0.85] uppercase">
               My <br /> <span className="text-blue-600">Account.</span>
            </h1>
            <p className="text-xl text-slate-500 font-medium max-w-xl leading-relaxed">
@@ -116,7 +116,7 @@ export default function Profile() {
                <div className="relative group">
                   <Avatar className="w-40 h-40 rounded-[3rem] border-4 border-white shadow-2xl">
                      <AvatarImage src={resolvedAvatarUrl || ""} />
-                     <AvatarFallback className="bg-blue-600 text-white text-4xl font-black">{name[0]}</AvatarFallback>
+                     <AvatarFallback className="bg-blue-600 text-white text-2xl md:text-4xl font-black">{name[0]}</AvatarFallback>
                   </Avatar>
                   <button onClick={() => photoInputRef.current?.click()} className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all border border-slate-100">
                      {uploadingPhoto ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}

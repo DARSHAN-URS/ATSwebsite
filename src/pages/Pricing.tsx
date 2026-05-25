@@ -155,7 +155,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
               <Sparkles className="w-3.5 h-3.5" />
               <span className="text-[10px] font-black uppercase tracking-widest">{tp.premiumIntelligenceAccess}</span>
            </div>
-           <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none uppercase">
+           <h1 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none uppercase">
               {tl.archHeroTitle.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.heroHighlight || "Career."}</span>
            </h1>
            <p className="text-slate-500 font-medium text-lg leading-relaxed">{tp.subtitle}</p>
@@ -195,7 +195,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                             {plan.highlight && <Zap className="w-8 h-8 text-blue-600" />}
                           </div>
                           <div className="flex items-end gap-3">
-                            <h3 className="text-4xl font-black tracking-tight uppercase leading-none text-slate-900">{plan.name === "FREE" ? tp.freeName : `${pricingConfig.symbol}${plan.price}`}</h3>
+                            <h3 className="text-2xl md:text-4xl font-black tracking-tight uppercase leading-none text-slate-900">{plan.name === "FREE" ? tp.freeName : `${pricingConfig.symbol}${plan.price}`}</h3>
                             {plan.originalPrice && (
                               <p className="text-sm font-bold text-slate-400 line-through pb-1">{pricingConfig.symbol}{plan.originalPrice}</p>
                             )}

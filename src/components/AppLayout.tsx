@@ -172,15 +172,32 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
-      {!isMobile && (
-        <aside className="w-64 h-screen sticky top-0 overflow-hidden z-40 border-r border-slate-200">
+    <div className="flex flex-col md:flex-row min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
+      {!isMobile ? (
+        <aside className="w-64 h-screen sticky top-0 overflow-hidden z-40 border-r border-slate-200 hidden md:block">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
+      ) : (
+        <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-slate-900 text-white border-b border-white/10 md:hidden">
+          <div className="flex items-center gap-2">
+            <Logo variant="light" className="h-8" />
+          </div>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-64 bg-slate-900 border-none">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <SidebarContent user={user} onSignOut={handleSignOut} onNavClick={() => setOpen(false)} />
+            </SheetContent>
+          </Sheet>
+        </header>
       )}
 
       <main className="flex-1 min-w-0 flex flex-col bg-white relative">
-        <div className="flex-1 relative overflow-y-auto p-8 md:p-10">
+        <div className="flex-1 relative overflow-y-auto p-4 md:p-8 lg:p-10">
            <Outlet />
         </div>
         <BugReportWidget />

@@ -138,7 +138,7 @@ export default function Companies() {
          
          {/* 1. SaaS Hero Section */}
          <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="space-y-4">
@@ -223,10 +223,10 @@ export default function Companies() {
          {/* 3. Analytics & Intelligence Workspace */}
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 space-y-6">
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[500px]">
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px]">
                   {searching ? (
                      [1,2,3,4,5,6].map(i => (
-                        <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-[320px] flex flex-col justify-between shadow-sm">
+                        <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-auto lg:h-[320px] flex flex-col justify-between shadow-sm">
                            <div className="space-y-5">
                               <div className="flex items-start justify-between">
                                  <Skeleton className="w-14 h-14 rounded-xl" />
@@ -239,7 +239,7 @@ export default function Companies() {
                                  <Skeleton className="h-5 w-3/4" />
                                  <Skeleton className="h-4 w-1/2" />
                               </div>
-                              <div className="grid grid-cols-2 gap-3 py-4 border-y border-slate-50">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 py-4 border-y border-slate-50">
                                  <div className="space-y-2">
                                     <Skeleton className="h-3 w-16" />
                                     <Skeleton className="h-4 w-12" />
@@ -313,7 +313,7 @@ export default function Companies() {
                                        </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3 py-4 border-y border-slate-50">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 py-4 border-y border-slate-50">
                                        <div className="space-y-1">
                                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Hiring Score</p>
                                           <div className="flex items-center gap-2">

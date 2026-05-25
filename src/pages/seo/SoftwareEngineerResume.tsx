@@ -36,7 +36,7 @@ export default function SoftwareEngineerResume() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.swe.tag}</p>
-          <h1 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter uppercase leading-[0.85]">{t.swe.h1}</h1>
+          <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter uppercase leading-[0.85]">{t.swe.h1}</h1>
           <p className="mt-6 text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">{t.swe.subtitle}</p>
           <Button size="lg" className="gap-2 mt-8" asChild><Link to="/">{t.swe.ctaBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>

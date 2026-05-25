@@ -128,7 +128,7 @@ export default function CoverLetters() {
       <SEOHead title="Narratives — ResumePro" description="Synthesize high-fidelity professional narratives." />
       
       <div className="relative bg-white rounded-[4rem] p-16 md:p-24 overflow-hidden border border-slate-100 shadow-sm">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+         <div className="absolute top-0 right-0 w-full lg:w-[500px] h-auto lg:h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
          
          <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-12 mb-8">
             <div className="space-y-8">
@@ -178,7 +178,7 @@ export default function CoverLetters() {
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Context</Label>
-                        <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[200px] rounded-2xl bg-white border-slate-100 font-bold p-6" />
+                        <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste job description..." className="min-h-[120px] md:min-h-[200px] rounded-2xl bg-white border-slate-100 font-bold p-6" />
                      </div>
                      <Button onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending || !selectedResumeId} className="w-full h-16 bg-blue-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-2xl shadow-blue-600/30 gap-4">
                         {generateMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
@@ -196,7 +196,7 @@ export default function CoverLetters() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
          {lettersLoading ? (
             [1,2,3].map(i => (
-               <Card key={i} className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 relative overflow-hidden h-[280px] flex flex-col justify-end">
+               <Card key={i} className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-10 relative overflow-hidden h-auto lg:h-[280px] flex flex-col justify-end">
                   <Skeleton className="absolute top-8 right-8 w-12 h-12 rounded-xl" />
                   <Skeleton className="absolute top-8 right-24 w-12 h-12 rounded-xl" />
                   <Skeleton className="w-16 h-16 rounded-2xl mb-8" />
