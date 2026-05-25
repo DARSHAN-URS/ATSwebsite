@@ -144,41 +144,41 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
               </div>
               
               <div className="p-12 space-y-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                   <div className="space-y-4 group/input">
-                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Professional Job Title</Label>
+                    <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Professional Job Title</Label>
                     <div className="relative">
-                       <GripVertical className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
+                       <GripVertical className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
                        <Input 
                          value={item.title} 
                          onChange={(e) => updateItem(index, { title: e.target.value })} 
                          placeholder="e.g. Senior Software Engineer"
-                         className="h-16 pl-14 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
+                         className="h-14 md:h-16 pl-12 md:pl-14 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                        />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 gap-4 md:gap-6">
                     <div className="space-y-4 group/input">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Deployment Start</Label>
+                      <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Start Date</Label>
                       <div className="relative">
-                         <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
+                         <Calendar className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
                          <Input 
                            value={item.startDate} 
                            onChange={(e) => updateItem(index, { startDate: e.target.value })} 
                            placeholder="MM / YYYY"
-                           className="h-16 pl-14 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-xs font-bold"
+                           className="h-14 md:h-16 pl-12 md:pl-14 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-xs font-bold"
                          />
                       </div>
                     </div>
                     <div className="space-y-4 group/input">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Deployment End</Label>
+                      <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">End Date</Label>
                       <div className="relative">
-                         <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
+                         <Calendar className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
                          <Input 
                            value={item.endDate} 
                            onChange={(e) => updateItem(index, { endDate: e.target.value })} 
                            placeholder="Present"
-                           className="h-16 pl-14 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-xs font-bold"
+                           className="h-14 md:h-16 pl-12 md:pl-14 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-xs font-bold"
                          />
                       </div>
                     </div>
@@ -186,19 +186,19 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between border-b border-slate-50 pb-4">
-                    <div className="flex items-center gap-3">
-                       <Sparkles className="w-4 h-4 text-blue-600" />
-                       <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900">Mission Achievements</Label>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between items-start gap-4 border-b border-slate-50 pb-4">
+                    <div className="flex items-center gap-2 md:gap-3">
+                       <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                       <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-900 line-clamp-1">Mission Achievements</Label>
                     </div>
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       onClick={() => handleAiAssist(index)}
                       disabled={aiLoading === index}
-                      className="h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest text-blue-600 gap-2 hover:bg-blue-50 transition-all"
+                      className="h-10 px-4 md:px-6 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-blue-600 gap-2 hover:bg-blue-50 transition-all w-full sm:w-auto"
                     >
-                      {aiLoading === index ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />} AI Assist
+                      {aiLoading === index ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5 shrink-0" />} AI Assist
                     </Button>
                   </div>
                   <div className="space-y-4">

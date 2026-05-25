@@ -423,11 +423,11 @@ export default function Resumes() {
       </div>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-         <DialogContent className="rounded-3xl p-8 border-none shadow-2xl max-w-lg bg-white">
+         <DialogContent className="w-[95vw] md:w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 border-none shadow-2xl max-w-lg bg-white">
             <div className="space-y-6">
-               <div className="space-y-2">
-                  <DialogTitle className="text-2xl font-bold tracking-tight">New Resume Build</DialogTitle>
-                  <DialogDescription className="text-sm font-medium text-slate-500">Initialize a new professional identity asset.</DialogDescription>
+               <div className="space-y-2 pt-2 md:pt-0">
+                  <DialogTitle className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">New Resume Build</DialogTitle>
+                  <DialogDescription className="text-xs md:text-sm font-medium text-slate-500">Initialize a new professional identity asset.</DialogDescription>
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Resume Title</Label>
@@ -441,11 +441,11 @@ export default function Resumes() {
       </Dialog>
 
       <Dialog open={shareOpen} onOpenChange={setShareOpen}>
-         <DialogContent className="rounded-3xl p-8 border-none shadow-2xl max-w-lg bg-white">
+         <DialogContent className="w-[95vw] md:w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 border-none shadow-2xl max-w-lg bg-white">
             <div className="space-y-6">
-               <div className="space-y-2">
-                  <DialogTitle className="text-2xl font-bold tracking-tight">Share Identity</DialogTitle>
-                  <DialogDescription className="text-sm font-medium text-slate-500">Global link for professional profile synchronization.</DialogDescription>
+               <div className="space-y-2 pt-2 md:pt-0">
+                  <DialogTitle className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">Share Identity</DialogTitle>
+                  <DialogDescription className="text-xs md:text-sm font-medium text-slate-500">Global link for professional profile synchronization.</DialogDescription>
                </div>
                <div className="flex gap-2">
                   <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-medium text-slate-600 text-xs flex-1" />
