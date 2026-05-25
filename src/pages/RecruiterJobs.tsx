@@ -55,7 +55,11 @@ export default function RecruiterJobs() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState("all");
+  const [tab, setTab] = useState(() => sessionStorage.getItem("recruiterJobs_tab") || "all");
+
+  useEffect(() => {
+    sessionStorage.setItem("recruiterJobs_tab", tab);
+  }, [tab]);
 
   const fetchJobs = async () => {
     if (!user) return;

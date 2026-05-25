@@ -26,7 +26,11 @@ export default function RecruiterCandidates() {
   const navigate = useNavigate();
   const [candidates, setCandidates] = useState<CandidateRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(() => sessionStorage.getItem("recruiterCandidates_search") || "");
+
+  useEffect(() => {
+    sessionStorage.setItem("recruiterCandidates_search", search);
+  }, [search]);
 
   useEffect(() => {
     if (!user) return;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/api-client";
@@ -31,12 +31,26 @@ export default function Companies() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   
-  const [query, setQuery] = useState("");
-  const [location, setLocation] = useState("");
-  const [industry, setIndustry] = useState("");
+  const [query, setQuery] = useState(() => sessionStorage.getItem("companies_query") || "");
+  const [location, setLocation] = useState(() => sessionStorage.getItem("companies_location") || "");
+  const [industry, setIndustry] = useState(() => sessionStorage.getItem("companies_industry") || "");
   
   // State to trigger search queries
-  const [activeSearch, setActiveSearch] = useState<{q: string, l: string, i: string} | null>(null);
+  const [activeSearch, setActiveSearch] = useState<{q: string, l: string, i: string} | null>(() => {
+    const saved = sessionStorage.getItem("companies_activeSearch");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("companies_query", query);
+    sessionStorage.setItem("companies_location", location);
+    sessionStorage.setItem("companies_industry", industry);
+    if (activeSearch) {
+      sessionStorage.setItem("companies_activeSearch", JSON.stringify(activeSearch));
+    } else {
+      sessionStorage.removeItem("companies_activeSearch");
+    }
+  }, [query, location, industry, activeSearch]);
 
   // Cached Query: Pinned Companies
   const { data: pinnedCompanies = [] } = useQuery({

@@ -17,13 +17,24 @@ export default function InterviewQuestions() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState<"role" | "resume">("role");
-  const [position, setPosition] = useState("");
-  const [company, setCompany] = useState("");
+  const [mode, setMode] = useState<"role" | "resume">(() => (sessionStorage.getItem("interviewQ_mode") as any) || "role");
+  const [position, setPosition] = useState(() => sessionStorage.getItem("interviewQ_position") || "");
+  const [company, setCompany] = useState(() => sessionStorage.getItem("interviewQ_company") || "");
   const [resumes, setResumes] = useState<any[]>([]);
-  const [selectedResumeId, setSelectedResumeId] = useState("");
+  const [selectedResumeId, setSelectedResumeId] = useState(() => sessionStorage.getItem("interviewQ_resumeId") || "");
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<{ id: string, text: string, category: string, intent?: string, framework?: string, tip?: string, difficulty?: string }[]>([]);
+  const [questions, setQuestions] = useState<{ id: string, text: string, category: string, intent?: string, framework?: string, tip?: string, difficulty?: string }[]>(() => {
+    const saved = sessionStorage.getItem("interviewQ_questions");
+    return saved ? JSON.parse(saved) : [];
+  });
+  useEffect(() => {
+    sessionStorage.setItem("interviewQ_mode", mode);
+    sessionStorage.setItem("interviewQ_position", position);
+    sessionStorage.setItem("interviewQ_company", company);
+    sessionStorage.setItem("interviewQ_resumeId", selectedResumeId);
+    sessionStorage.setItem("interviewQ_questions", JSON.stringify(questions));
+  }, [mode, position, company, selectedResumeId, questions]);
+
   const [savedQuestions, setSavedQuestions] = useState<string[]>([]);
   const [showingGuides, setShowingGuides] = useState<Record<string, boolean>>({});
   
