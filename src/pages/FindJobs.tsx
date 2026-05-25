@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { invokeFunction } from "@/lib/api-client";
 import { useAuth } from "@/hooks/useAuth";
@@ -42,11 +42,26 @@ export default function FindJobs() {
   const queryClient = useQueryClient();
 
   const [selectedResumeId, setSelectedResumeId] = useState<string>("");
-  const [location, setLocation] = useState("");
-  const [jobType, setJobType] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeSearch, setActiveSearch] = useState<{q: string, l: string, t: string} | null>(null);
-  const [activeTab, setActiveTab] = useState<"ai" | "recruiter" | "external" | "saved">("ai");
+  const [location, setLocation] = useState(() => sessionStorage.getItem("findJobs_location") || "");
+  const [jobType, setJobType] = useState(() => sessionStorage.getItem("findJobs_jobType") || "all");
+  const [searchQuery, setSearchQuery] = useState(() => sessionStorage.getItem("findJobs_searchQuery") || "");
+  const [activeSearch, setActiveSearch] = useState<{q: string, l: string, t: string} | null>(() => {
+    const saved = sessionStorage.getItem("findJobs_activeSearch");
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [activeTab, setActiveTab] = useState<"ai" | "recruiter" | "external" | "saved">(() => (sessionStorage.getItem("findJobs_activeTab") as any) || "ai");
+
+  useEffect(() => {
+    sessionStorage.setItem("findJobs_location", location);
+    sessionStorage.setItem("findJobs_jobType", jobType);
+    sessionStorage.setItem("findJobs_searchQuery", searchQuery);
+    sessionStorage.setItem("findJobs_activeTab", activeTab);
+    if (activeSearch) {
+      sessionStorage.setItem("findJobs_activeSearch", JSON.stringify(activeSearch));
+    } else {
+      sessionStorage.removeItem("findJobs_activeSearch");
+    }
+  }, [location, jobType, searchQuery, activeSearch, activeTab]);
 
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
   const [applyDialogOpen, setApplyDialogOpen] = useState(false);

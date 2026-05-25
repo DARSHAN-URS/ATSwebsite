@@ -34,12 +34,19 @@ export default function JobBoard() {
   const { t } = useLanguage();
   const [jobs, setJobs] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [search, setSearch] = useState(() => sessionStorage.getItem("jobBoard_search") || "");
+  const [typeFilter, setTypeFilter] = useState(() => sessionStorage.getItem("jobBoard_typeFilter") || "all");
+  const [activeTab, setActiveTab] = useState(() => sessionStorage.getItem("jobBoard_activeTab") || "recruiter");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
   const [applyDialogOpen, setApplyDialogOpen] = useState(false);
   const [applyingJob, setApplyingJob] = useState<JobPost | null>(null);
+
+  useEffect(() => {
+    sessionStorage.setItem("jobBoard_search", search);
+    sessionStorage.setItem("jobBoard_typeFilter", typeFilter);
+    sessionStorage.setItem("jobBoard_activeTab", activeTab);
+  }, [search, typeFilter, activeTab]);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -137,7 +144,7 @@ export default function JobBoard() {
         </div>
       </div>
 
-      <Tabs defaultValue="recruiter">
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="recruiter" className="gap-1.5">
             <Briefcase className="h-4 w-4" />{t.jobBoard.recruiterPosts}
