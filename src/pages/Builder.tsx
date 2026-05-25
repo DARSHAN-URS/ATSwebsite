@@ -21,6 +21,7 @@ import type { ResumeData } from "@/components/resume/types";
 import { type TemplateId } from "@/components/resume/pdfTemplates";
 import { useResumeColors } from "@/hooks/useResumeColors";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import PersonalInfoSection from "@/components/resume/PersonalInfoSection";
 import CustomSectionsEditor from "@/components/resume/CustomSectionsEditor";
@@ -50,6 +51,7 @@ export default function Builder() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { colors, activePresetId, applyPreset, setColor, reset: resetColors } = useResumeColors();
+  const isMobile = useIsMobile();
 
   const [loading, setLoading] = useState(!!id);
   const [saving, setSaving] = useState(false);
@@ -179,8 +181,8 @@ export default function Builder() {
       />
 
 
-      <div className="flex-1 overflow-hidden">
-        <PanelGroup direction="horizontal">
+      <div className={cn("flex-1 overflow-hidden", isMobile && "overflow-y-auto pb-20")}>
+        <PanelGroup direction={isMobile ? "vertical" : "horizontal"} className={cn(isMobile && "min-h-[1800px]")}>
           {/* Left: Section Navigation */}
           <Panel defaultSize={20} minSize={15} maxSize={30}>
             <StudioSidebar 
@@ -190,8 +192,11 @@ export default function Builder() {
             />
           </Panel>
 
-          <PanelResizeHandle className="w-2 bg-slate-100 hover:bg-blue-400 active:bg-blue-600 transition-colors cursor-col-resize z-50 flex items-center justify-center">
-            <div className="w-1 h-8 rounded-full bg-slate-300" />
+          <PanelResizeHandle className={cn(
+            "z-50 flex items-center justify-center transition-colors bg-slate-100 hover:bg-blue-400 active:bg-blue-600",
+            isMobile ? "h-2 w-full cursor-row-resize" : "w-2 h-full cursor-col-resize"
+          )}>
+            <div className={cn("rounded-full bg-slate-300", isMobile ? "h-1 w-8" : "w-1 h-8")} />
           </PanelResizeHandle>
 
           {/* Center: Editing Workspace */}
@@ -365,8 +370,11 @@ export default function Builder() {
             </StudioEditor>
           </Panel>
 
-          <PanelResizeHandle className="w-2 bg-slate-100 hover:bg-blue-400 active:bg-blue-600 transition-colors cursor-col-resize z-50 flex items-center justify-center">
-            <div className="w-1 h-8 rounded-full bg-slate-300" />
+          <PanelResizeHandle className={cn(
+            "z-50 flex items-center justify-center transition-colors bg-slate-100 hover:bg-blue-400 active:bg-blue-600",
+            isMobile ? "h-2 w-full cursor-row-resize" : "w-2 h-full cursor-col-resize"
+          )}>
+            <div className={cn("rounded-full bg-slate-300", isMobile ? "h-1 w-8" : "w-1 h-8")} />
           </PanelResizeHandle>
 
           {/* Right: Live Preview Canvas */}

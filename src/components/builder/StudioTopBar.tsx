@@ -28,31 +28,33 @@ export default function StudioTopBar({
   onNavigateSection,
 }: StudioTopBarProps) {
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 px-8 py-4">
-      <div className="bg-white/70 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[2rem] px-8 py-4 flex items-center justify-between">
+    <header className="sticky top-0 left-0 right-0 z-50 px-4 md:px-8 py-4">
+      <div className="bg-white/70 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-2xl md:rounded-[2rem] px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Left: Branding & Title */}
-        <div className="flex items-center gap-6">
-          <Link to="/resumes">
-            <Button variant="ghost" size="icon" className="w-12 h-12 rounded-2xl hover:bg-slate-50 transition-all group">
-              <ChevronLeft className="w-6 h-6 text-slate-400 group-hover:text-slate-900" />
-            </Button>
-          </Link>
-          <div className="h-8 w-px bg-slate-100" />
-          <div className="flex flex-col">
-            <div className="flex items-center gap-3">
-              <input 
-                value={title} 
-                onChange={e => onTitleChange(e.target.value)}
-                className="text-base font-black text-slate-900 bg-transparent border-none p-0 focus:ring-0 w-auto min-w-[150px]"
-                placeholder="Untitled Resume"
-              />
-              <FileText className="w-4 h-4 text-slate-300" />
-            </div>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <div className={cn("w-1.5 h-1.5 rounded-full", saving ? "bg-amber-500 animate-pulse" : "bg-emerald-500")} />
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                {saving ? "Auto-saving..." : "Saved to Cloud"}
-              </span>
+        <div className="flex items-center justify-between w-full md:w-auto gap-4">
+          <div className="flex items-center gap-4">
+            <Link to="/resumes">
+              <Button variant="ghost" size="icon" className="w-10 h-10 md:w-12 md:h-12 rounded-2xl hover:bg-slate-50 transition-all group">
+                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-slate-400 group-hover:text-slate-900" />
+              </Button>
+            </Link>
+            <div className="h-8 w-px bg-slate-100 hidden md:block" />
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 md:gap-3">
+                <input 
+                  value={title} 
+                  onChange={e => onTitleChange(e.target.value)}
+                  className="text-sm md:text-base font-black text-slate-900 bg-transparent border-none p-0 focus:ring-0 w-[120px] md:w-auto min-w-[100px] md:min-w-[150px]"
+                  placeholder="Untitled Resume"
+                />
+                <FileText className="w-3 h-3 md:w-4 md:h-4 text-slate-300" />
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <div className={cn("w-1.5 h-1.5 rounded-full", saving ? "bg-amber-500 animate-pulse" : "bg-emerald-500")} />
+                <span className="text-[8px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                  {saving ? "Saving..." : "Saved"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -87,21 +89,23 @@ export default function StudioTopBar({
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
           <Button 
             onClick={onAiImprove}
-            className="rounded-full bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] px-8 h-12 shadow-xl hover:shadow-slate-900/20 hover:scale-105 active:scale-95 transition-all gap-2 group"
+            className="rounded-full bg-slate-900 text-white font-black uppercase tracking-widest text-[9px] md:text-[10px] px-4 md:px-8 h-10 md:h-12 shadow-xl hover:shadow-slate-900/20 hover:scale-105 active:scale-95 transition-all gap-1.5 md:gap-2 group flex-shrink-0"
           >
-            AI Improve <Sparkles className="w-4 h-4 text-blue-400 group-hover:rotate-12 transition-transform" />
+            <span className="hidden md:inline">AI</span> Improve <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-blue-400 group-hover:rotate-12 transition-transform" />
           </Button>
           {resumeData && (
-             <ATSScannerDialog resumeData={resumeData} onNavigate={onNavigateSection} />
+             <div className="flex-shrink-0">
+               <ATSScannerDialog resumeData={resumeData} onNavigate={onNavigateSection} />
+             </div>
           )}
           <Button 
             onClick={onExport}
-            className="rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] px-8 h-12 shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all gap-2 group"
+            className="rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[9px] md:text-[10px] px-4 md:px-8 h-10 md:h-12 shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all gap-1.5 md:gap-2 group flex-shrink-0"
           >
-            Export <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+            Export <Download className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-y-0.5 transition-transform" />
           </Button>
         </div>
       </div>
