@@ -160,7 +160,7 @@ export default function InterviewPerformance() {
                                  <div className="space-y-3">
                                     <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Strengths</p>
                                     <ul className="space-y-1.5">
-                                       {session.strengths.map((s: string, i: number) => (
+                                       {(session.strengths || []).map((s: string, i: number) => (
                                           <li key={i} className="text-[11px] font-medium text-slate-600 flex items-start gap-2 before:content-['•'] before:text-emerald-500">{s}</li>
                                        ))}
                                     </ul>
@@ -168,7 +168,7 @@ export default function InterviewPerformance() {
                                  <div className="space-y-3">
                                     <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest flex items-center gap-1.5"><Target className="w-3.5 h-3.5" /> Areas to Improve</p>
                                     <ul className="space-y-1.5">
-                                       {session.weaknesses.map((w: string, i: number) => (
+                                       {(session.weaknesses || []).map((w: string, i: number) => (
                                           <li key={i} className="text-[11px] font-medium text-slate-600 flex items-start gap-2 before:content-['•'] before:text-amber-500">{w}</li>
                                        ))}
                                     </ul>

@@ -19,11 +19,18 @@ export default function InterviewQuestions() {
 
   const [mode, setMode] = useState<"role" | "resume">("role");
   const [position, setPosition] = useState("");
+  const [company, setCompany] = useState("");
   const [resumes, setResumes] = useState<any[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState("");
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<{ id: string, text: string, category: string }[]>([]);
+  const [questions, setQuestions] = useState<{ id: string, text: string, category: string, intent?: string, framework?: string, tip?: string, difficulty?: string }[]>([]);
   const [savedQuestions, setSavedQuestions] = useState<string[]>([]);
+  const [showingGuides, setShowingGuides] = useState<Record<string, boolean>>({});
+  
+  const [practicingId, setPracticingId] = useState<string | null>(null);
+  const [answerDraft, setAnswerDraft] = useState("");
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviews, setReviews] = useState<Record<string, any>>({});
   
   useEffect(() => {
     if (user) {
@@ -74,7 +81,8 @@ export default function InterviewQuestions() {
         action: "generate-questions",
         position: mode === "role" ? position : "General role based on resume",
         industry: "General",
-        questionType: "Mixed",
+        company: mode === "role" ? company : undefined,
+        questionType: mode === "resume" ? "resume-based" : "Mixed",
         experienceLevel: "Intermediate",
         resumeData: mode === "resume" ? resumeData : null,
       });
@@ -84,7 +92,11 @@ export default function InterviewQuestions() {
       const generatedQuestions = response.data?.questions?.map((q: any, i: number) => ({
         id: `q-${Date.now()}-${i}`,
         text: q.question,
-        category: q.type || "General"
+        category: q.category || q.type || "General",
+        intent: q.intent,
+        framework: q.framework,
+        tip: q.tip,
+        difficulty: q.difficulty
       })) || [];
 
       setQuestions(generatedQuestions);
@@ -100,6 +112,31 @@ export default function InterviewQuestions() {
       ]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleReviewAnswer = async (qId: string, qText: string) => {
+    if (!answerDraft.trim()) {
+      toast({ title: "Please type an answer first", variant: "destructive" });
+      return;
+    }
+    setReviewLoading(true);
+    try {
+      const response = await invokeFunction("interview-prep", {
+        action: "review-answer",
+        question: qText,
+        answer: answerDraft
+      });
+      if (response.error) throw new Error(response.error);
+      
+      setReviews(prev => ({ ...prev, [qId]: response.data }));
+      setPracticingId(null);
+      setAnswerDraft("");
+      toast({ title: "Feedback received!" });
+    } catch (err: any) {
+      toast({ title: "Failed to get feedback", description: err.message, variant: "destructive" });
+    } finally {
+      setReviewLoading(false);
     }
   };
 
@@ -134,13 +171,23 @@ export default function InterviewQuestions() {
               </div>
 
               {mode === "role" ? (
-                 <div className="space-y-2">
-                    <Input 
-                       value={position} 
-                       onChange={e => setPosition(e.target.value)} 
-                       placeholder="e.g. Product Manager" 
-                       className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs" 
-                    />
+                 <div className="space-y-4">
+                    <div className="space-y-2">
+                       <Input 
+                          value={position} 
+                          onChange={e => setPosition(e.target.value)} 
+                          placeholder="Role (e.g. Product Manager)" 
+                          className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs" 
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <Input 
+                          value={company} 
+                          onChange={e => setCompany(e.target.value)} 
+                          placeholder="Target Company (e.g. Google) - Optional" 
+                          className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs" 
+                       />
+                    </div>
                  </div>
               ) : (
                  <div className="space-y-2">
@@ -198,29 +245,138 @@ export default function InterviewQuestions() {
                  </div>
               ) : (
                  <div className="space-y-4">
-                    {questions.map((q, idx) => (
-                       <div key={q.id} className="group flex items-start gap-4 p-5 rounded-2xl bg-slate-50 hover:bg-emerald-50/50 border border-transparent hover:border-emerald-100 transition-all">
-                          <span className="text-xs font-black text-slate-300 mt-1 w-6">{idx + 1}.</span>
-                          <div className="flex-1 space-y-2">
-                             <div className="flex items-center gap-2">
-                                <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md", 
-                                   q.category === "Behavioral" ? "bg-indigo-100 text-indigo-700" :
-                                   q.category === "Technical" ? "bg-rose-100 text-rose-700" :
-                                   "bg-slate-200 text-slate-700"
-                                )}>
-                                   {q.category}
-                                </span>
+                     {questions.map((q, idx) => (
+                       <div key={q.id} className="group flex flex-col p-5 rounded-2xl bg-slate-50 hover:bg-emerald-50/50 border border-transparent hover:border-emerald-100 transition-all space-y-4">
+                          <div className="flex items-start gap-4">
+                             <span className="text-xs font-black text-slate-300 mt-1 w-6">{idx + 1}.</span>
+                             <div className="flex-1 space-y-2">
+                                <div className="flex items-center gap-2">
+                                   <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md", 
+                                      q.category === "Behavioral" ? "bg-indigo-100 text-indigo-700" :
+                                      q.category === "Technical" ? "bg-rose-100 text-rose-700" :
+                                      "bg-slate-200 text-slate-700"
+                                   )}>
+                                      {q.category}
+                                   </span>
+                                   {q.difficulty && (
+                                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                                         • {q.difficulty}
+                                      </span>
+                                   )}
+                                </div>
+                                <p className="text-sm font-semibold text-slate-800 leading-relaxed">{q.text}</p>
                              </div>
-                             <p className="text-sm font-semibold text-slate-800 leading-relaxed">{q.text}</p>
+                             <div className="flex gap-2">
+                                <Button
+                                   variant="outline"
+                                   size="sm"
+                                   onClick={() => setShowingGuides(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                                   className="h-8 text-xs font-bold text-slate-500 hover:text-emerald-600"
+                                >
+                                   {showingGuides[q.id] ? "Hide Guide" : "Study Guide"}
+                                </Button>
+                                <Button 
+                                   variant="outline" 
+                                   size="sm"
+                                   onClick={() => {
+                                      if (practicingId === q.id) {
+                                        setPracticingId(null);
+                                      } else {
+                                        setPracticingId(q.id);
+                                        setAnswerDraft("");
+                                      }
+                                   }}
+                                   className="h-8 text-xs font-bold"
+                                >
+                                   {practicingId === q.id ? "Cancel" : "Practice"}
+                                </Button>
+                                <Button 
+                                   variant="ghost" 
+                                   size="icon"
+                                   onClick={() => toggleSave(q.id, q.text)}
+                                   className={cn("opacity-0 group-hover:opacity-100 transition-opacity rounded-xl hover:bg-white shadow-sm", savedQuestions.includes(q.id) && "opacity-100 text-amber-500")}
+                                >
+                                   {savedQuestions.includes(q.id) ? <BookmarkCheck className="w-4 h-4 fill-amber-500" /> : <Bookmark className="w-4 h-4 text-slate-400" />}
+                                </Button>
+                             </div>
                           </div>
-                          <Button 
-                             variant="ghost" 
-                             size="icon"
-                             onClick={() => toggleSave(q.id, q.text)}
-                             className={cn("opacity-0 group-hover:opacity-100 transition-opacity rounded-xl hover:bg-white shadow-sm", savedQuestions.includes(q.id) && "opacity-100 text-amber-500")}
-                          >
-                             {savedQuestions.includes(q.id) ? <BookmarkCheck className="w-4 h-4 fill-amber-500" /> : <Bookmark className="w-4 h-4 text-slate-400" />}
-                          </Button>
+
+                          {showingGuides[q.id] && (
+                             <div className="pl-10 space-y-4 pt-2">
+                                <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100/50 space-y-3">
+                                   {q.intent && (
+                                      <div>
+                                         <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Why they ask this</p>
+                                         <p className="text-xs text-slate-700 font-medium">{q.intent}</p>
+                                      </div>
+                                   )}
+                                   {q.framework && (
+                                      <div>
+                                         <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Required Structure</p>
+                                         <p className="text-xs text-slate-700 font-medium">{q.framework}</p>
+                                      </div>
+                                   )}
+                                   {q.tip && (
+                                      <div>
+                                         <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Pro Tip</p>
+                                         <p className="text-xs text-slate-700 font-medium">{q.tip}</p>
+                                      </div>
+                                   )}
+                                </div>
+                             </div>
+                          )}
+
+                          {practicingId === q.id && (
+                             <div className="pl-10 space-y-3">
+                                <textarea
+                                   className="w-full min-h-[100px] p-3 text-sm rounded-xl border border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                   placeholder="Type your answer here..."
+                                   value={answerDraft}
+                                   onChange={e => setAnswerDraft(e.target.value)}
+                                />
+                                <div className="flex justify-end">
+                                   <Button 
+                                      onClick={() => handleReviewAnswer(q.id, q.text)}
+                                      disabled={reviewLoading}
+                                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-8"
+                                   >
+                                      {reviewLoading ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+                                      Get AI Feedback
+                                   </Button>
+                                </div>
+                             </div>
+                          )}
+
+                          {reviews[q.id] && practicingId !== q.id && (
+                             <div className="pl-10 space-y-4 pt-4 border-t border-emerald-100">
+                                <div className="flex items-center gap-2">
+                                   <span className="text-2xl font-black text-emerald-600">{reviews[q.id].score}/10</span>
+                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI Score</span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   <div className="space-y-2">
+                                      <p className="text-xs font-bold text-emerald-700">Strengths</p>
+                                      <ul className="space-y-1">
+                                         {reviews[q.id].strengths?.map((s: string, i: number) => (
+                                            <li key={i} className="text-xs text-slate-600 flex items-start gap-1.5 before:content-['•'] before:text-emerald-500">{s}</li>
+                                         ))}
+                                      </ul>
+                                   </div>
+                                   <div className="space-y-2">
+                                      <p className="text-xs font-bold text-amber-700">To Improve</p>
+                                      <ul className="space-y-1">
+                                         {reviews[q.id].improvements?.map((s: string, i: number) => (
+                                            <li key={i} className="text-xs text-slate-600 flex items-start gap-1.5 before:content-['•'] before:text-amber-500">{s}</li>
+                                         ))}
+                                      </ul>
+                                   </div>
+                                </div>
+                                <div className="bg-emerald-50 rounded-xl p-4 space-y-2">
+                                   <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Ideal Answer Structure</p>
+                                   <p className="text-xs text-slate-700 font-medium leading-relaxed">{reviews[q.id].ideal_structure}</p>
+                                </div>
+                             </div>
+                          )}
                        </div>
                     ))}
                  </div>

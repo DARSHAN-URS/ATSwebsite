@@ -43,6 +43,12 @@ export default function InterviewSession() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [transcript, setTranscript] = useState("");
   const recognitionRef = useRef<any>(null);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const phaseRef = useRef<Phase>("setup");
+
+  useEffect(() => {
+    phaseRef.current = phase;
+  }, [phase]);
   
   const [manualAnswer, setManualAnswer] = useState("");
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
@@ -94,8 +100,26 @@ export default function InterviewSession() {
           console.error("Speech Recognition Error", e);
         };
 
+        rec.onend = () => {
+          if (phaseRef.current === "listening" && voiceEnabled) {
+            try {
+              rec.start();
+            } catch (e) {}
+          }
+        };
+
         recognitionRef.current = rec;
       }
+    }
+  }, []);
+
+  useEffect(() => {
+    const loadVoices = () => {
+      setVoices(synthRef.current.getVoices());
+    };
+    loadVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
     }
   }, []);
 
@@ -123,10 +147,32 @@ export default function InterviewSession() {
     if (!voiceEnabled) { setPhase("idle"); return; }
     synthRef.current.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
+    
+    const preferredVoices = voices.filter(v => 
+      v.lang.startsWith("en") && 
+      (v.name.includes("Natural") || v.name.includes("Google") || v.name.includes("Premium") || v.name.includes("Samantha") || v.name.includes("Aria"))
+    );
+    if (preferredVoices.length > 0) {
+      utterance.voice = preferredVoices[0];
+    } else if (voices.length > 0) {
+      utterance.voice = voices.find(v => v.lang === 'en-US') || voices[0];
+    }
+    
+    utterance.rate = 1.05;
+    utterance.pitch = 1.0;
+    
     utterance.onstart = () => setPhase("speaking");
-    utterance.onend = () => setPhase("listening");
+    utterance.onend = () => {
+       setPhase("listening");
+       // Add a slight delay before listening to avoid echo
+       setTimeout(() => {
+          if (phaseRef.current === "listening") {
+             try { recognitionRef.current?.start(); } catch (e) {}
+          }
+       }, 500);
+    };
     synthRef.current.speak(utterance);
-  }, [voiceEnabled]);
+  }, [voiceEnabled, voices]);
 
   const startSimulation = async () => {
     if (!position) {
@@ -565,6 +611,13 @@ export default function InterviewSession() {
                     {transcript && <span className="text-blue-500">Transcribing...</span>}
                  </div>
                  <div className="relative">
+                    {phase === "listening" && (
+                       <div className="absolute -top-6 left-2 flex items-end gap-1 h-4">
+                          <motion.div animate={{ height: [4, 16, 4] }} transition={{ repeat: Infinity, duration: 1.2 }} className="w-1 bg-emerald-400 rounded-full" />
+                          <motion.div animate={{ height: [8, 20, 8] }} transition={{ repeat: Infinity, duration: 0.9 }} className="w-1 bg-emerald-400 rounded-full" />
+                          <motion.div animate={{ height: [4, 12, 4] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-1 bg-emerald-400 rounded-full" />
+                       </div>
+                    )}
                     <Textarea 
                        value={manualAnswer}
                        onChange={(e) => setManualAnswer(e.target.value)}
