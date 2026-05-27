@@ -224,21 +224,21 @@ export default function Resumes() {
                 </div>
              </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-nowrap items-center gap-3 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
-                      <Plus className="w-3.5 h-3.5" /> New Resume
+                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                      <FileText className="w-3.5 h-3.5" /> Cover Letters
                    </Button>
                  </TooltipTrigger>
-                 <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
-                   Initialize a new resume build
+                 <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                   Go to Narratives
                  </TooltipContent>
                </Tooltip>
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
                       <Download className="w-3.5 h-3.5 rotate-180" /> {importResumeMutation.isPending ? "Importing..." : "Import Resume"}
                    </Button>
                  </TooltipTrigger>
@@ -249,12 +249,12 @@ export default function Resumes() {
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
-                      <FileText className="w-3.5 h-3.5" /> Cover Letters
+                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 shrink-0 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
+                      <Plus className="w-3.5 h-3.5" /> New Resume
                    </Button>
                  </TooltipTrigger>
-                 <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
-                   Go to Narratives
+                 <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                   Initialize a new resume build
                  </TooltipContent>
                </Tooltip>
             </div>
