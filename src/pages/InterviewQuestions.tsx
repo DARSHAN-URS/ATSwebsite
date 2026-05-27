@@ -259,56 +259,58 @@ export default function InterviewQuestions() {
                      {questions.map((q, idx) => (
                        <div key={q.id} className="group flex flex-col p-5 rounded-2xl bg-slate-50 hover:bg-emerald-50/50 border border-transparent hover:border-emerald-100 transition-all space-y-4">
                           <div className="flex items-start gap-4">
-                             <span className="text-xs font-black text-slate-300 mt-1 w-6">{idx + 1}.</span>
-                             <div className="flex-1 space-y-2">
-                                <div className="flex items-center gap-2">
-                                   <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md", 
-                                      q.category === "Behavioral" ? "bg-indigo-100 text-indigo-700" :
-                                      q.category === "Technical" ? "bg-rose-100 text-rose-700" :
-                                      "bg-slate-200 text-slate-700"
-                                   )}>
-                                      {q.category}
-                                   </span>
-                                   {q.difficulty && (
-                                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                                         • {q.difficulty}
+                             <span className="text-xs font-black text-slate-300 mt-1 w-6 shrink-0">{idx + 1}.</span>
+                             <div className="flex-1 space-y-3">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                   <div className="flex items-center gap-2 flex-wrap">
+                                      <span className={cn("text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md whitespace-nowrap", 
+                                         q.category === "Behavioral" ? "bg-indigo-100 text-indigo-700" :
+                                         q.category === "Technical" ? "bg-rose-100 text-rose-700" :
+                                         "bg-slate-200 text-slate-700"
+                                      )}>
+                                         {q.category}
                                       </span>
-                                   )}
+                                      {q.difficulty && (
+                                         <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 whitespace-nowrap">
+                                            • {q.difficulty}
+                                         </span>
+                                      )}
+                                   </div>
+                                   <div className="flex items-center gap-2">
+                                      <Button
+                                         variant="outline"
+                                         size="sm"
+                                         onClick={() => setShowingGuides(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                                         className="h-8 text-xs font-bold text-slate-500 hover:text-emerald-600 rounded-lg"
+                                      >
+                                         {showingGuides[q.id] ? "Hide Guide" : "Study Guide"}
+                                      </Button>
+                                      <Button 
+                                         variant="outline" 
+                                         size="sm"
+                                         onClick={() => {
+                                            if (practicingId === q.id) {
+                                              setPracticingId(null);
+                                            } else {
+                                              setPracticingId(q.id);
+                                              setAnswerDraft("");
+                                            }
+                                         }}
+                                         className="h-8 text-xs font-bold border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-lg"
+                                      >
+                                         {practicingId === q.id ? "Cancel" : "Practice"}
+                                      </Button>
+                                      <Button 
+                                         variant="ghost" 
+                                         size="icon"
+                                         onClick={() => toggleSave(q.id, q.text)}
+                                         className={cn("h-8 w-8 rounded-lg hover:bg-white shadow-sm transition-colors", savedQuestions.includes(q.id) ? "text-amber-500 bg-amber-50/50" : "text-slate-400")}
+                                      >
+                                         {savedQuestions.includes(q.id) ? <BookmarkCheck className="w-4 h-4 fill-amber-500" /> : <Bookmark className="w-4 h-4" />}
+                                      </Button>
+                                   </div>
                                 </div>
-                                <p className="text-sm font-semibold text-slate-800 leading-relaxed">{q.text}</p>
-                             </div>
-                             <div className="flex gap-2">
-                                <Button
-                                   variant="outline"
-                                   size="sm"
-                                   onClick={() => setShowingGuides(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
-                                   className="h-8 text-xs font-bold text-slate-500 hover:text-emerald-600"
-                                >
-                                   {showingGuides[q.id] ? "Hide Guide" : "Study Guide"}
-                                </Button>
-                                <Button 
-                                   variant="outline" 
-                                   size="sm"
-                                   onClick={() => {
-                                      if (practicingId === q.id) {
-                                        setPracticingId(null);
-                                      } else {
-                                        setPracticingId(q.id);
-                                        setAnswerDraft("");
-                                      }
-                                   }}
-                                   className="h-8 text-xs font-bold"
-                                >
-                                   {practicingId === q.id ? "Cancel" : "Practice"}
-                                </Button>
-                                <Button 
-                                   variant="ghost" 
-                                   size="icon"
-                                   onClick={() => toggleSave(q.id, q.text)}
-                                   className={cn("opacity-0 group-hover:opacity-100 transition-opacity rounded-xl hover:bg-white shadow-sm", savedQuestions.includes(q.id) && "opacity-100 text-amber-500")}
-                                >
-                                   {savedQuestions.includes(q.id) ? <BookmarkCheck className="w-4 h-4 fill-amber-500" /> : <Bookmark className="w-4 h-4 text-slate-400" />}
-                                </Button>
+                                <p className="text-sm font-semibold text-slate-800 leading-relaxed max-w-4xl">{q.text}</p>
                              </div>
                           </div>
 
