@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "@/lib/cropImage";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe, Camera, Loader2, Sparkles, AlertCircle, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +24,14 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
   const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState<string | null>(null);
+
+  // Cropper state
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string>("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -39,7 +50,7 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
     onChange({ ...personalInfo, [field]: value });
   };
 
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (fileInputRef.current) fileInputRef.current.value = "";
     if (!file) return;
@@ -47,14 +58,33 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
       toast({ title: "Please select an image file", variant: "destructive" });
       return;
     }
-    setUploading(true);
+    
+    setSelectedFileName(file.name);
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setImageToCrop(reader.result?.toString() || null);
+    });
+    reader.readAsDataURL(file);
+  };
+
+  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const confirmCrop = async () => {
+    if (!imageToCrop || !croppedAreaPixels) return;
     try {
-      const ext = file.name.split(".").pop();
+      setUploading(true);
+      const croppedBlob = await getCroppedImg(imageToCrop, croppedAreaPixels);
+      const ext = selectedFileName.split(".").pop() || "jpg";
       const path = `${userId}/${Date.now()}.${ext}`;
+      
+      const file = new File([croppedBlob], `cropped.${ext}`, { type: "image/jpeg" });
       const { error } = await supabase.storage.from("resume-photos").upload(path, file, { upsert: true });
       if (error) throw error;
       onChange({ ...personalInfo, photoUrl: path });
       toast({ title: "Photo uploaded!" });
+      setImageToCrop(null);
     } catch (err: any) {
       console.error("Photo upload error:", err);
       toast({ title: "Upload failed", variant: "destructive" });
@@ -188,6 +218,36 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
           </div>
         </div>
       </div>
+
+      <Dialog open={!!imageToCrop} onOpenChange={(open) => !open && setImageToCrop(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Crop Image</DialogTitle>
+          </DialogHeader>
+          <div className="relative w-full h-64 bg-slate-100 rounded-lg overflow-hidden">
+            {imageToCrop && (
+              <Cropper
+                image={imageToCrop}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+              />
+            )}
+          </div>
+          <div className="pt-4 flex items-center justify-between">
+            <Button variant="outline" onClick={() => setImageToCrop(null)}>Cancel</Button>
+            <Button onClick={confirmCrop} disabled={uploading}>
+              {uploading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              Save Crop
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

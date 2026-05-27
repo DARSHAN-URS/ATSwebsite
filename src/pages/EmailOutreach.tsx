@@ -191,8 +191,7 @@ export default function EmailOutreach() {
          </div>
 
          {/* 2. Communication Workspace Grid */}
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-auto lg:h-[400px] lg:min-h-auto lg:h-[700px]">
-            
+         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:min-h-[700px]">
             {/* Left Panel: Configuration */}
             <div className="lg:col-span-4 space-y-6">
                <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6 overflow-hidden relative">

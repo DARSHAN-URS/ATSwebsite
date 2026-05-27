@@ -45,6 +45,16 @@ import StudioEditor from "@/components/builder/StudioEditor";
 import StudioPreview from "@/components/builder/StudioPreview";
 import AICopilot from "@/components/builder/AICopilot";
 
+const COMMON_SKILLS = [
+  "JavaScript", "TypeScript", "React", "Node.js", "Python", "Java", "C++", "C#", "Go", "Rust",
+  "HTML", "CSS", "Tailwind CSS", "Next.js", "Vue.js", "Angular", "Svelte",
+  "SQL", "PostgreSQL", "MongoDB", "MySQL", "Redis", "GraphQL", "REST API",
+  "AWS", "Google Cloud", "Azure", "Docker", "Kubernetes", "CI/CD",
+  "Git", "GitHub", "Linux", "Figma", "UI/UX Design", "Project Management",
+  "Agile", "Scrum", "Marketing", "SEO", "Sales", "Communication", "Leadership",
+  "Machine Learning", "Data Analysis", "Tableau", "Excel", "Data Science", "Digital Marketing", "Content Creation"
+];
+
 export default function Builder() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -73,6 +83,7 @@ export default function Builder() {
   });
 
   const [aiLoading, setAiLoading] = useState<string | null>(null);
+  const [skillInput, setSkillInput] = useState("");
 
   const completionData = {
     personal: !!resumeData.personalInfo?.fullName,
@@ -137,6 +148,16 @@ export default function Builder() {
       if (manual) setSaving(false);
     }
   }, [id, user, title, resumeData, selectedTemplate, navigate, toast]);
+
+  const sections = ["personal", "summary", "experience", "education", "skills", "languages", "custom", "design", "templates"];
+  
+  const handleSaveAndContinue = async () => {
+    await saveResume(true);
+    const currentIndex = sections.indexOf(activeSection);
+    if (currentIndex >= 0 && currentIndex < sections.length - 1) {
+      setActiveSection(sections[currentIndex + 1]);
+    }
+  };
 
   const generateSummary = async () => {
     setAiLoading("summary");
@@ -203,7 +224,7 @@ export default function Builder() {
           <Panel defaultSize={40} minSize={30}>
             <StudioEditor 
               activeSection={activeSection}
-              onSave={() => saveResume(true)}
+              onSave={handleSaveAndContinue}
               saving={saving}
             >
           {activeSection === "personal" && (
@@ -312,13 +333,15 @@ export default function Builder() {
                   </div>
                   <div className="relative">
                     <Input 
+                      value={skillInput}
+                      onChange={(e) => setSkillInput(e.target.value)}
                       placeholder="Add a core skill (e.g. React, Python)..."
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                          const val = e.currentTarget.value.trim();
-                          if (val) {
+                          const val = skillInput.trim();
+                          if (val && !resumeData.skills?.includes(val)) {
                             setResumeData(prev => ({ ...prev, skills: [...(prev.skills || []), val] }));
-                            e.currentTarget.value = "";
+                            setSkillInput("");
                           }
                         }
                       }}
@@ -327,6 +350,26 @@ export default function Builder() {
                     <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pointer-events-none">
                        <RotateCcw className="w-3 h-3" /> Press Enter
                     </div>
+                    {skillInput.trim().length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 shadow-2xl rounded-2xl z-50 max-h-60 overflow-y-auto p-2">
+                        {COMMON_SKILLS.filter(s => s.toLowerCase().includes(skillInput.trim().toLowerCase()) && !resumeData.skills?.includes(s)).length > 0 ? (
+                          COMMON_SKILLS.filter(s => s.toLowerCase().includes(skillInput.trim().toLowerCase()) && !resumeData.skills?.includes(s)).map(skill => (
+                            <div
+                              key={skill}
+                              onClick={() => {
+                                setResumeData(prev => ({ ...prev, skills: [...(prev.skills || []), skill] }));
+                                setSkillInput("");
+                              }}
+                              className="px-4 py-3 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700 cursor-pointer rounded-xl transition-colors"
+                            >
+                              {skill}
+                            </div>
+                          ))
+                        ) : (
+                           <div className="px-4 py-3 text-sm font-medium text-slate-400 italic">Press enter to add custom skill</div>
+                        )}
+                      </div>
+                    )}
                   </div>
                </Card>
             </div>

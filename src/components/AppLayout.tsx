@@ -74,9 +74,9 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
 
   return (
     <div className="h-full flex flex-col bg-slate-900 relative overflow-hidden border-r border-white/5">
-      <div className="p-8">
+      <div className="p-6 pt-8 pb-4 flex justify-center lg:justify-start">
         <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-          <Logo variant="light" className="h-10 transition-transform group-hover:scale-105" />
+          <Logo variant="light" className="h-16 w-auto transition-all duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" />
         </div>
       </div>
 
@@ -180,7 +180,7 @@ export default function AppLayout() {
       ) : (
         <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-slate-900 text-white border-b border-white/10 md:hidden">
           <div className="flex items-center gap-2">
-            <Logo variant="light" className="h-8" />
+            <Logo variant="light" className="h-10 drop-shadow-sm" />
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>

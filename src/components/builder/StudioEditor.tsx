@@ -52,7 +52,7 @@ export default function StudioEditor({
              className="h-14 px-12 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] gap-3 shadow-xl shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all"
            >
               {saving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
-              Save Mission
+              Save & Continue
            </Button>
         </div>
       </div>

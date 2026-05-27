@@ -1,4 +1,4 @@
-import { Plus, Trash2, GripVertical, Wand2 } from "lucide-react";
+import { Plus, Trash2, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -99,11 +99,8 @@ export default function CustomSectionsEditor({ sections, onChange }: Props) {
                           value={item}
                           onChange={(e) => updateItem(section.id, index, e.target.value)}
                           placeholder="Add an achievement or detail..."
-                          className="h-11 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-medium pr-10"
+                          className="h-11 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition-all text-sm font-medium"
                         />
-                        <button className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
-                          <Wand2 className="w-3.5 h-3.5" />
-                        </button>
                       </div>
                       <Button
                         variant="ghost"

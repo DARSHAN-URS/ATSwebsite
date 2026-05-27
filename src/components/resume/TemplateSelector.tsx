@@ -3,7 +3,7 @@ import { RESUME_TEMPLATES, type TemplateId } from "./pdfTemplates";
 import { recommendATSTemplate } from "./atsTemplateConfig";
 import { cn } from "@/lib/utils";
 import TemplateThumbnail from "./TemplateThumbnail";
-import { LayoutGrid, FileText, Sparkles, Briefcase, Palette, BookOpen, ScanLine, Shield, Lightbulb } from "lucide-react";
+import { LayoutGrid, FileText, Sparkles, Briefcase, Palette, BookOpen, ScanLine, Shield, Lightbulb, Crown } from "lucide-react";
 
 interface TemplateSelectorProps {
   selected: TemplateId;
@@ -19,6 +19,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   "Creative": <Palette className="w-4 h-4" />,
   "Traditional": <BookOpen className="w-4 h-4" />,
   "ATS": <ScanLine className="w-4 h-4" />,
+  "Premium": <Crown className="w-4 h-4 text-amber-500" />,
 };
 
 export default function TemplateSelector({ selected, onChange, jobTitle }: TemplateSelectorProps) {
@@ -88,8 +89,14 @@ export default function TemplateSelector({ selected, onChange, jobTitle }: Templ
               <TemplateThumbnail templateId={t.id} />
             </div>
             <div className="px-3 pb-2.5 pt-1 text-left">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 flex-wrap">
                 <span className="text-sm font-semibold leading-tight">{t.name}</span>
+                {t.isPremium && (
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[9px] font-bold uppercase tracking-wider">
+                    <Crown className="w-2.5 h-2.5" />
+                    Premium
+                  </span>
+                )}
                 {t.isBestForATS && (
                   <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-bold uppercase tracking-wider">
                     <Shield className="w-2.5 h-2.5" />

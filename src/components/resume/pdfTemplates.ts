@@ -35,7 +35,7 @@ function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, r
 
 import { ATS_TEMPLATES, getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination";
+export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "waterfall" | "vision" | "prism" | "midnight" | "ocean" | "forest" | "rose" | "sunset" | "monochrome" | "ruby" | "emerald" | "sapphire" | "amethyst" | "gold" | "slate" | "coral" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination" | "ats-academic" | "ats-medical" | "ats-legal" | "ats-finance" | "ats-sales" | "ats-marketing" | "ats-remote" | "ats-executive-pro" | "ats-freelance" | "ats-consultant";
 
 export interface ResumeTemplate {
   id: TemplateId;
@@ -45,25 +45,42 @@ export interface ResumeTemplate {
   category?: string;
   isBestForATS?: boolean;
   recommendedFor?: string;
+  isPremium?: boolean;
 }
 
 export const RESUME_TEMPLATES: ResumeTemplate[] = [
   { id: "classic", name: "Classic", description: "Traditional layout with serif-style headers and clean dividers", preview: "📄", category: "Traditional" },
   { id: "modern", name: "Modern", description: "Bold accent bar with contemporary spacing and styling", preview: "🎨", category: "Modern" },
   { id: "minimal", name: "Minimal", description: "Ultra-clean with generous whitespace and subtle typography", preview: "✨", category: "Simple" },
-  { id: "executive", name: "Executive", description: "Professional dark header block with structured sections", preview: "💼", category: "Professional" },
+  { id: "executive", name: "Executive", description: "Professional dark header block with structured sections", preview: "💼", category: "Professional", isPremium: true },
   { id: "sidebar", name: "Sidebar", description: "Two-column layout with a colored sidebar for contact details", preview: "📊", category: "Modern" },
   { id: "twocolumn", name: "Two Column", description: "Balanced two-column design for maximum content density", preview: "📰", category: "Professional" },
-  { id: "creative", name: "Creative", description: "Bold headings with accent colors and modern typography", preview: "🎯", category: "Creative" },
+  { id: "creative", name: "Creative", description: "Bold headings with accent colors and modern typography", preview: "🎯", category: "Creative", isPremium: true },
   { id: "compact", name: "Compact", description: "Dense single-column layout optimized for ATS scanners", preview: "📋", category: "ATS" },
   { id: "professional", name: "Professional", description: "Polished corporate design with navy accents and refined typography", preview: "🏢", category: "Professional" },
   { id: "ats", name: "ATS Optimized", description: "Plain text-friendly format designed to pass all ATS systems", preview: "🤖", category: "ATS" },
   { id: "simple", name: "Simple", description: "Clean and timeless with a classic balanced structure", preview: "📝", category: "Simple" },
   { id: "elegant", name: "Elegant", description: "Sophisticated design with subtle gold accents and fine lines", preview: "👔", category: "Traditional" },
   { id: "ivyleague", name: "Ivy League", description: "Classic recruiter-approved format with clean lines and refined structure", preview: "🎓", category: "Traditional" },
-  { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern" },
+  { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern", isPremium: true },
   { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
-  { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional" },
+  { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional", isPremium: true },
+  { id: "waterfall", name: "Waterfall", description: "Prominent sidebar layout inspired by top builder platforms", preview: "🌊", category: "Premium", isPremium: true },
+  { id: "vision", name: "Vision", description: "Sleek right-sidebar design with dark timeline accents", preview: "👁️", category: "Premium", isPremium: true },
+  { id: "prism", name: "Prism", description: "Geometric section headers and bold color blocks", preview: "💠", category: "Premium", isPremium: true },
+  { id: "midnight", name: "Midnight", description: "Dark variant of the Modern layout", preview: "🌙", category: "Premium", isPremium: true },
+  { id: "ocean", name: "Ocean", description: "Deep teal variant of the Sidebar layout", preview: "🌊", category: "Premium", isPremium: true },
+  { id: "forest", name: "Forest", description: "Emerald green variant of the Creative layout", preview: "🌲", category: "Premium", isPremium: true },
+  { id: "rose", name: "Rose", description: "Soft pink variant of the Elegant layout", preview: "🌹", category: "Premium", isPremium: true },
+  { id: "sunset", name: "Sunset", description: "Warm orange variant of the Polished layout", preview: "🌅", category: "Premium", isPremium: true },
+  { id: "monochrome", name: "Monochrome", description: "Pure grayscale variant of the Two-Column layout", preview: "⚪", category: "Premium", isPremium: true },
+  { id: "ruby", name: "Ruby", description: "Deep red variant of the Timeline layout", preview: "💎", category: "Premium", isPremium: true },
+  { id: "emerald", name: "Emerald", description: "Green variant of the Contemporary profile", preview: "❇️", category: "Premium", isPremium: true },
+  { id: "sapphire", name: "Sapphire", description: "Vibrant blue variant of the Prism layout", preview: "🔵", category: "Premium", isPremium: true },
+  { id: "amethyst", name: "Amethyst", description: "Purple variant of the Waterfall layout", preview: "🔮", category: "Premium", isPremium: true },
+  { id: "gold", name: "Gold", description: "Premium gold variant of the Vision layout", preview: "⭐", category: "Premium", isPremium: true },
+  { id: "slate", name: "Slate", description: "Cool gray variant of the Executive layout", preview: "🪨", category: "Premium", isPremium: true },
+  { id: "coral", name: "Coral", description: "Vibrant coral variant of the Minimal layout", preview: "🪸", category: "Premium", isPremium: true },
   // Config-driven ATS templates
   ...ATS_TEMPLATES.map(t => ({
     id: t.id as TemplateId,
@@ -1474,6 +1491,258 @@ function renderPolished(doc: jsPDF, data: ResumeData, title: string, photoData?:
   doc.setPage(totalPages);
 }
 
+// ─── Waterfall (Premium) ───────────────────────────────
+function renderWaterfall(doc: jsPDF, data: ResumeData, title: string, photoData?: string | null) {
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const ctx: PdfContext = { doc, y: 20, margin: 70, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin - 15;
+  const pi = data.personalInfo || {};
+
+  const drawSidebarBg = () => {
+    doc.setFillColor(44, 62, 80);
+    doc.rect(0, 0, 60, pageHeight, "F");
+  };
+  drawSidebarBg();
+
+  let sy = 16;
+  if (photoData) {
+    addCircularPhoto(doc, photoData, 30, sy + 10, 10, { r: 44, g: 62, b: 80 });
+    sy += 24;
+  }
+
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255);
+  const nameLines = doc.splitTextToSize(pi.fullName || title || "Resume", 50);
+  doc.text(nameLines, 5, sy);
+  sy += nameLines.length * 6 + 6;
+
+  const contactItems = [pi.email, pi.phone, pi.location, pi.linkedin, pi.portfolio].filter(Boolean);
+  if (contactItems.length) {
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(189, 195, 199);
+    doc.text("CONTACT", 5, sy);
+    sy += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(236, 240, 241);
+    contactItems.forEach((item) => {
+      const lines = doc.splitTextToSize(item!, 50);
+      doc.text(lines, 5, sy);
+      sy += lines.length * 4 + 2;
+    });
+    sy += 3;
+  }
+
+  if ((data.skills || []).length > 0) {
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(189, 195, 199);
+    doc.text("SKILLS", 5, sy);
+    sy += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(236, 240, 241);
+    (data.skills || []).forEach((skill) => {
+      if (sy > pageHeight - 10) return;
+      doc.setFillColor(52, 152, 219);
+      doc.rect(5, sy - 2.5, 2.5, 2.5, "F");
+      doc.text(skill, 10, sy);
+      sy += 4.5;
+    });
+  }
+
+  const originalCheckPageBreak = (needed: number) => {
+    const pageBottom = doc.internal.pageSize.getHeight() - 12;
+    if (ctx.y + needed > pageBottom) {
+      doc.addPage();
+      drawSidebarBg();
+      ctx.y = 20;
+    }
+  };
+
+  doc.setTextColor(0);
+  const addSection = (label: string) => {
+    originalCheckPageBreak(12);
+    ctx.y += 4;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(44, 62, 80);
+    doc.text(label.toUpperCase(), ctx.margin, ctx.y);
+    doc.setDrawColor(44, 62, 80);
+    doc.setLineWidth(0.5);
+    doc.line(ctx.margin, ctx.y + 2, ctx.margin + 15, ctx.y + 2);
+    doc.setLineWidth(0.2);
+    doc.setTextColor(0);
+    ctx.y += 8;
+  };
+
+  const dataWithoutSkills = { ...data, skills: [] };
+  renderBody(ctx, dataWithoutSkills, addSection);
+  
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 2; p <= totalPages; p++) {
+    doc.setPage(p);
+    drawSidebarBg();
+  }
+  doc.setPage(totalPages);
+}
+
+// ─── Vision (Premium) ──────────────────────────────────
+function renderVision(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 20, margin: 15, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  const rightColWidth = 65;
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2 - rightColWidth - 10;
+  const pi = data.personalInfo || {};
+
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0);
+  doc.text(pi.fullName || title || "Resume", ctx.margin, ctx.y);
+  ctx.y += 6;
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(100);
+  if (data.summary) {
+    const lines = doc.splitTextToSize(data.summary, ctx.maxWidth + rightColWidth + 10);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * 5 + 4;
+  }
+  doc.setDrawColor(200);
+  doc.line(ctx.margin, ctx.y, ctx.pageWidth - ctx.margin, ctx.y);
+  ctx.y += 6;
+
+  let leftY = ctx.y;
+  let rightY = ctx.y;
+  const pageBottom = doc.internal.pageSize.getHeight() - 12;
+  const checkY = (y: number, needed: number): number => {
+    if (y + needed > pageBottom) { doc.addPage(); return 20; }
+    return y;
+  };
+
+  const addLeftSection = (label: string): number => {
+    leftY = checkY(leftY, 10);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(41, 128, 185);
+    doc.text(label.toUpperCase(), ctx.margin, leftY);
+    doc.setTextColor(0);
+    return leftY + 6;
+  };
+
+  if ((data.experience || []).length > 0) {
+    leftY = addLeftSection("Experience");
+    (data.experience || []).forEach((exp) => {
+      leftY = checkY(leftY, 15);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      const titleLines = doc.splitTextToSize(`${exp.title} — ${exp.company}`, ctx.maxWidth);
+      doc.text(titleLines, ctx.margin, leftY);
+      leftY += titleLines.length * 5;
+      const dateRange = formatDateRangePdf(exp.startDate, exp.endDate);
+      if (dateRange) {
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100);
+        doc.text(dateRange, ctx.margin, leftY);
+        doc.setTextColor(0);
+        leftY += 4;
+      }
+      if (exp.bullets?.length) {
+        doc.setFontSize(9);
+        exp.bullets.forEach((b) => {
+          const lines = doc.splitTextToSize(`• ${b}`, ctx.maxWidth - 2);
+          leftY = checkY(leftY, lines.length * 4.5);
+          doc.text(lines, ctx.margin + 2, leftY);
+          leftY += lines.length * 4.5;
+        });
+      }
+      leftY += 4;
+    });
+  }
+
+  const rightX = ctx.pageWidth - ctx.margin - rightColWidth;
+  doc.setFillColor(245, 247, 250);
+  doc.rect(rightX - 5, ctx.y - 6, rightColWidth + 5, pageBottom, "F");
+
+  const addRightSection = (label: string): number => {
+    rightY = checkY(rightY, 10);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(41, 128, 185);
+    doc.text(label.toUpperCase(), rightX, rightY);
+    doc.setTextColor(0);
+    return rightY + 5;
+  };
+
+  rightY = addRightSection("Contact");
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "normal");
+  [pi.email, pi.phone, pi.location, pi.linkedin, pi.portfolio].filter(Boolean).forEach(item => {
+    rightY = checkY(rightY, 4);
+    const lines = doc.splitTextToSize(item!, rightColWidth);
+    doc.text(lines, rightX, rightY);
+    rightY += lines.length * 4;
+  });
+  rightY += 4;
+
+  if ((data.skills || []).length > 0) {
+    rightY = addRightSection("Skills");
+    doc.setFontSize(8);
+    (data.skills || []).forEach(skill => {
+      rightY = checkY(rightY, 4);
+      doc.text(`• ${skill}`, rightX, rightY);
+      rightY += 4;
+    });
+    rightY += 4;
+  }
+}
+
+// ─── Prism (Premium) ───────────────────────────────────
+function renderPrism(doc: jsPDF, data: ResumeData, title: string) {
+  const ctx: PdfContext = { doc, y: 25, margin: 25, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  doc.setFillColor(155, 89, 182);
+  doc.rect(0, 0, ctx.pageWidth, 8, "F");
+  
+  doc.setFontSize(24);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(142, 68, 173);
+  doc.text((pi.fullName || title || "Resume").toUpperCase(), ctx.pageWidth / 2, ctx.y, { align: "center" });
+  ctx.y += 6;
+  
+  const parts = [pi.email, pi.phone, pi.location].filter(Boolean);
+  if (parts.length) {
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100);
+    doc.text(parts.join("  ◆  "), ctx.pageWidth / 2, ctx.y, { align: "center" });
+    ctx.y += 5;
+  }
+  doc.setTextColor(0);
+  ctx.y += 4;
+
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 14);
+    ctx.y += 6;
+    doc.setFillColor(155, 89, 182);
+    doc.line(ctx.margin, ctx.y + 1, ctx.margin + 3, ctx.y - 2);
+    doc.line(ctx.margin + 3, ctx.y - 2, ctx.margin + 6, ctx.y + 1);
+    doc.line(ctx.margin + 6, ctx.y + 1, ctx.margin + 3, ctx.y + 4);
+    doc.line(ctx.margin + 3, ctx.y + 4, ctx.margin, ctx.y + 1);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(142, 68, 173);
+    doc.text(label.toUpperCase(), ctx.margin + 10, ctx.y + 2);
+    doc.setTextColor(0);
+    ctx.y += 8;
+  };
+
+  renderBody(ctx, data, addSection);
+}
+
 // ─── Main exports ──────────────────────────────────────
 
 export interface PdfColorOverrides {
@@ -1527,11 +1796,34 @@ export async function buildDoc(
   colorOverrides?: PdfColorOverrides,
 ): Promise<jsPDF> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-  applyColorOverrides(doc, colorOverrides);
+  
+  let appliedOverrides = colorOverrides;
+  
+  const themeVariants: Record<string, PdfColorOverrides> = {
+    midnight: { rgbMap: { "37,99,235": [30, 30, 30] } },
+    ocean: { rgbMap: { "30,58,95": [0, 105, 148] } },
+    forest: { rgbMap: { "220,53,69": [39, 174, 96] } },
+    rose: { rgbMap: { "180,145,70": [232, 67, 147] } },
+    sunset: { rgbMap: { "166,72,52": [211, 84, 0] } },
+    monochrome: { rgbMap: { "45,55,72": [60, 60, 60], "0,102,204": [80, 80, 80] } },
+    ruby: { rgbMap: { "41,98,255": [192, 57, 43] } },
+    emerald: { rgbMap: { "16,163,127": [46, 204, 113] } },
+    sapphire: { rgbMap: { "155,89,182": [41, 128, 185], "142,68,173": [52, 152, 219] } },
+    amethyst: { rgbMap: { "44,62,80": [142, 68, 173], "52,152,219": [155, 89, 182] } },
+    gold: { rgbMap: { "41,128,185": [241, 196, 15] } },
+    slate: { rgbMap: { "30,30,30": [112, 123, 124] } },
+    coral: { rgbMap: { "130,130,130": [231, 76, 60] } }
+  };
+
+  if (!appliedOverrides && themeVariants[templateId]) {
+    appliedOverrides = themeVariants[templateId];
+  }
+
+  applyColorOverrides(doc, appliedOverrides);
 
   // Pre-load photo for templates that support it
   const pi = data.personalInfo || {};
-  const photoTemplates: TemplateId[] = ["contemporary", "sidebar", "polished"];
+  const photoTemplates: string[] = ["contemporary", "sidebar", "polished", "waterfall", "ocean", "sunset", "amethyst", "emerald"];
   let photoData: string | null = null;
   if (pi.photoUrl && photoTemplates.includes(templateId)) {
     photoData = await loadImageAsBase64(pi.photoUrl);
@@ -1562,6 +1854,22 @@ export async function buildDoc(
     case "timeline": renderTimeline(doc, data, title); break;
     case "contemporary": await renderContemporary(doc, data, title); break;
     case "polished": renderPolished(doc, data, title, photoData); break;
+    case "waterfall": renderWaterfall(doc, data, title, photoData); break;
+    case "vision": renderVision(doc, data, title); break;
+    case "prism": renderPrism(doc, data, title); break;
+    case "midnight": renderModern(doc, data, title); break;
+    case "ocean": renderSidebar(doc, data, title, photoData); break;
+    case "forest": renderCreative(doc, data, title); break;
+    case "rose": renderElegant(doc, data, title); break;
+    case "sunset": renderPolished(doc, data, title, photoData); break;
+    case "monochrome": renderTwoColumn(doc, data, title); break;
+    case "ruby": renderTimeline(doc, data, title); break;
+    case "emerald": await renderContemporary(doc, data, title); break;
+    case "sapphire": renderPrism(doc, data, title); break;
+    case "amethyst": renderWaterfall(doc, data, title, photoData); break;
+    case "gold": renderVision(doc, data, title); break;
+    case "slate": renderExecutive(doc, data, title); break;
+    case "coral": renderMinimal(doc, data, title); break;
     default: renderClassic(doc, data, title);
   }
   return doc;
