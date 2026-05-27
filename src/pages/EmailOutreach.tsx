@@ -61,7 +61,10 @@ export default function EmailOutreach() {
     queryKey: ["outreach-history", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.from("email_outreach_history").select("*").eq("user_id", user?.id).order("sent_at", { ascending: false });
-      if (error) throw error;
+      if (error) {
+        console.warn("Could not fetch outreach history. The table might not exist yet.", error);
+        return [];
+      }
       return data || [];
     },
     enabled: !!user?.id,
@@ -138,7 +141,9 @@ export default function EmailOutreach() {
           body,
           resume_id: selectedResumeId || null
         });
-        if (dbError) throw dbError;
+        if (dbError) {
+           console.warn("Failed to log email to history (email was still sent). Ensure the email_outreach_history table exists.", dbError);
+        }
       }
     },
     onSuccess: () => {
