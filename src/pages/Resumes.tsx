@@ -210,7 +210,7 @@ export default function Resumes() {
       <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
          <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
-         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
              <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
                    <ShieldCheck className="w-3.5 h-3.5" />
@@ -220,11 +220,11 @@ export default function Resumes() {
                   <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
                      Resumes.
                   </h1>
-                  <p className="text-slate-500 font-medium text-sm max-w-xl">Manage your professional document matrix and synchronize with global mission objectives.</p>
+                  <p className="text-slate-500 font-medium text-sm max-w-md">Manage your professional document matrix and synchronize with <br className="hidden sm:block" /> global mission objectives.</p>
                 </div>
              </div>
 
-            <div className="flex flex-nowrap items-center gap-3 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+            <div className="flex flex-nowrap items-center gap-3 overflow-x-visible w-full lg:w-auto pb-2 lg:pb-0 no-scrollbar">
                <Tooltip>
                  <TooltipTrigger asChild>
                    <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">

@@ -76,7 +76,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
     <div className="h-full flex flex-col bg-slate-900 relative overflow-hidden border-r border-white/5">
       <div className="p-6 pt-8 pb-4 flex justify-center lg:justify-start">
         <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate("/")}>
-          <Logo variant="light" className="h-32 w-auto transition-all duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] -ml-4" />
+          <Logo variant="light" className="h-28 w-auto transition-all duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] -ml-4" />
         </div>
       </div>
 
