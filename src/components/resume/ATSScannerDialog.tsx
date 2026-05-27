@@ -97,7 +97,7 @@ export default function ATSScannerDialog({ resumeData, onNavigate }: ATSScannerD
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder="Paste the full job description here..."
               rows={8}
-              className="min-h-[200px] resize-none bg-slate-50 border-slate-200 rounded-2xl focus-visible:ring-blue-500"
+              className="min-h-[200px] resize-none bg-slate-50 border-slate-200 rounded-2xl focus-visible:ring-blue-500 text-slate-900"
               disabled={loading}
             />
             <Button 

@@ -223,7 +223,7 @@ export default function Companies() {
          {/* 3. Analytics & Intelligence Workspace */}
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 space-y-6">
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px]">
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {searching ? (
                      [1,2,3,4,5,6].map(i => (
                         <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-auto lg:h-[320px] flex flex-col justify-between shadow-sm">
@@ -274,9 +274,9 @@ export default function Companies() {
                         </div>
                      </div>
                   ) : (
-                     <AnimatePresence>
+                     <div className="contents">
                         {companies.map((company, i) => (
-                           <motion.div key={company.name} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                           <div key={company.name}>
                               <Card className="rounded-3xl border border-slate-200 bg-white p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden h-full flex flex-col justify-between">
                                  <div className="space-y-5">
                                     <div className="flex items-start justify-between">
@@ -346,9 +346,9 @@ export default function Companies() {
                                     </Tooltip>
                                  </div>
                               </Card>
-                           </motion.div>
+                           </div>
                         ))}
-                     </AnimatePresence>
+                     </div>
                   )}
                </div>
             </div>

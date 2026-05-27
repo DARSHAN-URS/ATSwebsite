@@ -176,15 +176,26 @@ export default function Resumes() {
                 </div>
              </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => toast({ title: "Export Started", description: "Your assets are being bundled for export." })} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
-                      <Download className="w-3.5 h-3.5" /> Export All
+                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                      <FileText className="w-3.5 h-3.5" /> Cover Letters
                    </Button>
                  </TooltipTrigger>
                  <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
-                   Download all resumes as PDF
+                   Go to Narratives
+                 </TooltipContent>
+               </Tooltip>
+
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <Button onClick={() => toast({ title: "Import Initialized", description: "Upload gateway opening..." })} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                      <Download className="w-3.5 h-3.5 rotate-180" /> Import Resume
+                   </Button>
+                 </TooltipTrigger>
+                 <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                   Import an existing resume
                  </TooltipContent>
                </Tooltip>
 
@@ -431,7 +442,7 @@ export default function Resumes() {
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Resume Title</Label>
-                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm" />
+                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm text-slate-900" />
                </div>
                <Button onClick={handleCreate} disabled={!title.trim() || createResumeMutation.isPending} className="w-full h-12 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20">
                   {createResumeMutation.isPending ? "Initializing..." : "Initialize Build"} <Sparkles className="w-4 h-4" />

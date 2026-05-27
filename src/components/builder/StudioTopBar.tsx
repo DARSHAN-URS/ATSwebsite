@@ -101,14 +101,7 @@ export default function StudioTopBar({
                <ATSScannerDialog resumeData={resumeData} onNavigate={onNavigateSection} />
              </div>
           )}
-          <Link to="/cover-letters">
-            <Button 
-              variant="outline"
-              className="rounded-full border-2 border-slate-200 text-slate-700 font-black uppercase tracking-widest text-[9px] md:text-[10px] px-4 md:px-8 h-10 md:h-12 shadow-xl shadow-slate-200/20 hover:bg-slate-50 hover:border-slate-300 hover:scale-105 active:scale-95 transition-all gap-1.5 md:gap-2 group flex-shrink-0 bg-white"
-            >
-              Cover Letter <FileText className="w-3 h-3 md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
-            </Button>
-          </Link>
+
           <Button 
             onClick={onExport}
             className="rounded-full bg-blue-600 text-white font-black uppercase tracking-widest text-[9px] md:text-[10px] px-4 md:px-8 h-10 md:h-12 shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all gap-1.5 md:gap-2 group flex-shrink-0"

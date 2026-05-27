@@ -460,7 +460,7 @@ export default function FindJobs() {
                      ) : (
                         <div className="space-y-4">
                            {jobs.map((job, i) => (
-                              <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                                 <div key={i} className="mb-4">
                                  <Card className="rounded-3xl border border-slate-200 bg-white p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col md:flex-row gap-6">
                                     <div className="w-14 h-14 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center font-bold text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0">
                                        {job.company.charAt(0)}
@@ -524,7 +524,7 @@ export default function FindJobs() {
                                        </div>
                                     </div>
                                  </Card>
-                              </motion.div>
+                                 </div>
                            ))}
                         </div>
                      )}

@@ -395,7 +395,7 @@ export default function Builder() {
                      Personalize the visual identity of your professional blueprints.
                   </p>
                </div>
-               <ColorPanel colors={colors} activePresetId={activePresetId} onPresetSelect={applyPreset} onColorChange={setColor} onReset={resetColors} />
+               <ColorPanel colors={colors} activePresetId={activePresetId} onApplyPreset={applyPreset} onSetColor={setColor} onReset={resetColors} />
             </div>
           )}
 
