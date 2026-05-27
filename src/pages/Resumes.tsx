@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,6 +27,8 @@ import { format } from "date-fns";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { extractTextFromPDF } from "@/utils/pdfExtractor";
+import { invokeFunction } from "@/lib/api-client";
 
 type Resume = Tables<"resumes">;
 
@@ -56,6 +58,7 @@ export default function Resumes() {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareId, setShareId] = useState("");
   const [copied, setCopied] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Cache API Data: Fetch Resumes
   const { data: resumes = [], isLoading: resumesLoading } = useQuery({
@@ -142,6 +145,51 @@ export default function Resumes() {
     createResumeMutation.mutate(title);
   };
 
+  const importResumeMutation = useMutation({
+    mutationFn: async (file: File) => {
+      let text = "";
+      if (file.type === "application/pdf") {
+        text = await extractTextFromPDF(file);
+      } else {
+        text = await file.text();
+      }
+      
+      if (!text || text.trim().length < 50) {
+        throw new Error("Could not extract enough text from the file.");
+      }
+      
+      const { data: parseData, error: parseError } = await invokeFunction("parse-resume", { text });
+      if (parseError) throw parseError;
+      
+      const resumeData = parseData as ResumeData;
+      
+      const { data, error } = await supabase.from("resumes").insert({
+        user_id: user?.id,
+        title: "Imported Resume",
+        resume_data: resumeData as any,
+      }).select().single();
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["resumes", user?.id] });
+      toast({ title: "Import Successful", description: "Your resume has been parsed." });
+      navigate(`/builder/${data.id}`);
+    },
+    onError: (err: any) => {
+      toast({ title: "Import Failed", description: err.message || "Failed to import resume.", variant: "destructive" });
+    }
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    toast({ title: "Import Initialized", description: "Extracting contents..." });
+    importResumeMutation.mutate(file);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleDelete = (id: string) => {
     deleteResumeMutation.mutate(id);
   };
@@ -179,19 +227,19 @@ export default function Resumes() {
             <div className="flex flex-wrap items-center gap-3">
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
-                      <FileText className="w-3.5 h-3.5" /> Cover Letters
+                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
+                      <Plus className="w-3.5 h-3.5" /> New Resume
                    </Button>
                  </TooltipTrigger>
-                 <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
-                   Go to Narratives
+                 <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
+                   Initialize a new resume build
                  </TooltipContent>
                </Tooltip>
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => toast({ title: "Import Initialized", description: "Upload gateway opening..." })} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
-                      <Download className="w-3.5 h-3.5 rotate-180" /> Import Resume
+                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                      <Download className="w-3.5 h-3.5 rotate-180" /> {importResumeMutation.isPending ? "Importing..." : "Import Resume"}
                    </Button>
                  </TooltipTrigger>
                  <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
@@ -201,16 +249,17 @@ export default function Resumes() {
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
-                      <Plus className="w-3.5 h-3.5" /> New Resume
+                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                      <FileText className="w-3.5 h-3.5" /> Cover Letters
                    </Button>
                  </TooltipTrigger>
-                 <TooltipContent className="bg-blue-600 text-white font-bold text-xs rounded-xl border-none">
-                   Initialize a new resume build
+                 <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
+                   Go to Narratives
                  </TooltipContent>
                </Tooltip>
             </div>
          </div>
+         <input type="file" ref={fileInputRef} hidden accept=".pdf,.txt" onChange={handleFileChange} />
       </div>
 
       {/* 2. Analytics Row */}

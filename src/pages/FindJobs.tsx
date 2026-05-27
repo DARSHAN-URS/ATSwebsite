@@ -680,31 +680,7 @@ export default function FindJobs() {
                   <Button onClick={() => navigate("/resumes")} variant="outline" className="w-full h-10 rounded-xl border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-all">Optimize My Identity</Button>
                </Card>
 
-               {/* Trending Roles Card */}
-               <Card className="rounded-3xl border border-slate-200 bg-slate-900 p-6 shadow-xl relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
-                  <div className="relative z-10 space-y-6">
-                     <div className="flex items-center justify-between">
-                        <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
-                           <TrendingUp className="w-5 h-5" />
-                        </div>
-                        <Badge className="bg-white/10 text-white border-none text-[8px] font-bold uppercase">Trending</Badge>
-                     </div>
-                     <div className="space-y-2">
-                        <h3 className="text-white text-base font-bold tracking-tight">Market Momentum</h3>
-                        <p className="text-slate-400 text-[11px] leading-relaxed">{marketMomentum.text}</p>
-                     </div>
-                     <div className="space-y-2">
-                        {marketMomentum.roles.map(role => (
-                           <div key={role} onClick={() => toast({ title: "Market Alert", description: `Synchronizing deep search for ${role} positions.` })} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-all cursor-pointer">
-                              <span className="text-[11px] font-medium text-slate-300">{role}</span>
-                              <ChevronRight className="w-3 h-3 text-slate-500" />
-                           </div>
-                        ))}
-                     </div>
-                  </div>
-               </Card>
+
             </div>
          </div>
       </div>

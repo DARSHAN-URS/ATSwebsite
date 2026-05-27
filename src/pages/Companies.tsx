@@ -418,23 +418,7 @@ export default function Companies() {
                   </Tooltip>
                </Card>
 
-               {/* Recruiter Activity Sidebar Card */}
-               <Card className="rounded-3xl border border-slate-200 bg-slate-900 p-6 shadow-xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2" />
-                  <div className="relative z-10 space-y-6">
-                     <div className="flex items-center justify-between">
-                        <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
-                           <Users className="w-5 h-5" />
-                        </div>
-                        <Badge className="bg-white/10 text-white border-none text-[8px] font-bold uppercase">Active</Badge>
-                     </div>
-                     <div className="space-y-2">
-                        <h3 className="text-white text-base font-bold tracking-tight">Active Recruiter Hubs</h3>
-                        <p className="text-slate-400 text-[11px] leading-relaxed">Recruiters from <span className="text-blue-400 font-bold">FAANG</span> and <span className="text-blue-400 font-bold">Top Tier Startups</span> are searching for your skill profile.</p>
-                     </div>
-                     <Button onClick={() => navigate("/pricing")} className="w-full h-10 rounded-xl bg-white text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-50 transition-all">Increase Visibility</Button>
-                  </div>
-               </Card>
+
             </div>
          </div>
     </div>
