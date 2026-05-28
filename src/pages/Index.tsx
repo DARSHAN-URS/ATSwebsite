@@ -106,7 +106,7 @@ const Index = () => {
                       <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
                          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
                          <img 
-                           src="/images/hero_editor_mockup.webp" 
+                           src="/images/hero_editor_mockup_v2.webp" 
                            alt="Resume Intelligence Editor" 
                            className="w-full h-auto grayscale-0 group-hover:scale-105 transition-transform duration-1000" 
                          />
@@ -161,8 +161,8 @@ const Index = () => {
 
             {/* Step 1 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/custom_mockup_1.webp" alt="Choose a Template" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+               <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
+                  <img src="/images/custom_mockup_1_v2.webp" alt="Choose a Template" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
                <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
                   <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-black text-3xl">1</div>
@@ -178,15 +178,15 @@ const Index = () => {
                   <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{tl.operationalExcellence}</h3>
                   <p className="text-xl text-slate-600 leading-relaxed font-medium">{tl.smartJobSearch}</p>
                </div>
-               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/custom_mockup_2.webp" alt="Add Experience" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+               <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="order-2 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
+                  <img src="/images/custom_mockup_2_v2.webp" alt="Add Experience" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
             </div>
 
             {/* Step 3 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/interview_prep_mockup_v3.png" alt="Interview Preparation" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src="/images/interview_prep_mockup_v3.webp" alt="Interview Preparation" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
                <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
                   <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-black text-3xl">3</div>
