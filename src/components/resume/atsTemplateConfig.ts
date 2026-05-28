@@ -311,20 +311,6 @@ export function isATSTemplateId(id: string): boolean {
   return id.startsWith("ats-");
 }
 
-/** Auto-recommend an ATS template based on job title */
 export function recommendATSTemplate(jobTitle: string): string {
-  const title = jobTitle.toLowerCase();
-  if (/engineer|developer|devops|sre|architect|programmer|software|backend|frontend|fullstack|data scientist/i.test(title)) return "ats-technical";
-  if (/student|intern|fresher|graduate|junior|entry/i.test(title)) return "ats-fresher";
-  if (/manager|director|vp|head|lead|chief|senior|principal|executive/i.test(title)) return "ats-executive-pro";
-  if (/research|academic|professor|teacher|phd/i.test(title)) return "ats-academic";
-  if (/nurse|doctor|medical|health|clinical/i.test(title)) return "ats-medical";
-  if (/lawyer|attorney|legal|paralegal/i.test(title)) return "ats-legal";
-  if (/finance|banker|accountant|analyst/i.test(title)) return "ats-finance";
-  if (/sales|account manager|business development/i.test(title)) return "ats-sales";
-  if (/marketing|media|content|writer/i.test(title)) return "ats-marketing";
-  if (/consultant|advisor/i.test(title)) return "ats-consultant";
-  if (/freelance|contractor|self-employed/i.test(title)) return "ats-freelance";
-  if (/career change|transition|switching/i.test(title)) return "ats-skills-first";
-  return "ats-classic";
+  return "ats";
 }

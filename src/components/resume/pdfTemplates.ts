@@ -49,7 +49,6 @@ export interface ResumeTemplate {
 }
 
 export const RESUME_TEMPLATES: ResumeTemplate[] = [
-  { id: "classic", name: "Classic", description: "Traditional layout with serif-style headers and clean dividers", preview: "📄", category: "Traditional" },
   { id: "modern", name: "Modern", description: "Bold accent bar with contemporary spacing and styling", preview: "🎨", category: "Modern" },
   { id: "minimal", name: "Minimal", description: "Ultra-clean with generous whitespace and subtle typography", preview: "✨", category: "Simple" },
   { id: "executive", name: "Executive", description: "Professional dark header block with structured sections", preview: "💼", category: "Professional", isPremium: true },
@@ -65,21 +64,6 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
   { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern", isPremium: true },
   { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
   { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional", isPremium: true },
-  { id: "vibrant", name: "Vibrant", description: "Colorful header with modern typography", preview: "🌈", category: "Creative", isPremium: true },
-  { id: "bold", name: "Bold", description: "High-contrast design for striking impact", preview: "🔥", category: "Modern", isPremium: true },
-  { id: "minimalist-plus", name: "Minimalist Plus", description: "Clean lines with subtle accents", preview: "🍃", category: "Simple" },
-  { id: "corporate", name: "Corporate", description: "Standard business layout with improved readability", preview: "🏢", category: "Professional" },
-  { id: "tech", name: "Tech / Engineering", description: "Monospace elements and structured data", preview: "💻", category: "Compact" },
-  // Config-driven ATS templates
-  ...ATS_TEMPLATES.map(t => ({
-    id: t.id as TemplateId,
-    name: t.name,
-    description: t.description,
-    preview: "📋",
-    category: "ATS",
-    isBestForATS: t.isBestForATS,
-    recommendedFor: t.recommendedFor,
-  })),
 ];
 
 interface PdfContext {
