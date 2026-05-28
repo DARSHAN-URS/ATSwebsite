@@ -288,8 +288,6 @@ export default function RecruiterJobs() {
                                   </div>
                                </div>
 
-                               </div>
-
                                <div className="flex flex-col items-stretch gap-3 w-full md:w-48 mt-4 md:mt-0">
                                   <Button onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)} className="h-10 px-4 rounded-xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] shadow-sm hover:bg-blue-600 transition-all">Pipeline</Button>
                                   <div className="grid grid-cols-2 gap-3">
