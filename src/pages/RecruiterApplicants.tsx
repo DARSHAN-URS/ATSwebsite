@@ -78,10 +78,10 @@ export default function RecruiterApplicants() {
       const applicantIds = (appData as any[]).map((a: any) => a.applicant_id);
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("display_name, user_id")
-        .in("user_id", applicantIds);
+        .select("display_name, id")
+        .in("id", applicantIds);
 
-      const profileMap = new Map((profiles || []).map((p) => [p.user_id, p]));
+      const profileMap = new Map((profiles || []).map((p) => [p.id, p]));
       const enriched = (appData as any[]).map((a: any) => ({
         ...a,
         profile: profileMap.get(a.applicant_id),
@@ -312,7 +312,7 @@ export default function RecruiterApplicants() {
 
                                          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                                             <div className="flex gap-2">
-                                               {app.resume_id && <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/10"><FileText className="w-4 h-4" /></div>}
+                                               {app.resume_id && <button onClick={(e) => { e.stopPropagation(); navigate(`/resume-builder/${app.resume_id}`); }} className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/10 hover:bg-blue-600 transition-colors cursor-pointer"><FileText className="w-4 h-4" /></button>}
                                                <button 
                                                   onClick={(e) => { e.stopPropagation(); toggleShortlist(app); }}
                                                   className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-all", app.is_shortlisted ? "bg-amber-100 text-amber-500 shadow-lg shadow-amber-500/10 scale-110" : "bg-slate-50 text-slate-300 hover:text-amber-500 hover:bg-amber-50")}
@@ -412,7 +412,7 @@ export default function RecruiterApplicants() {
                    onChange={(e) => setNotes(e.target.value)} 
                    rows={8} 
                    placeholder="Enter your notes here..." 
-                   className="rounded-[2.5rem] border-slate-100 bg-slate-50 p-10 font-medium text-lg focus-visible:ring-blue-600/20 leading-relaxed shadow-inner"
+                   className="rounded-[2.5rem] border-slate-100 bg-slate-50 p-10 font-medium text-lg text-slate-900 focus-visible:ring-blue-600/20 leading-relaxed shadow-inner"
                  />
                  <Button onClick={saveNotes} className="h-20 w-full bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-slate-900/20 hover:scale-[1.02] transition-all">Save Notes</Button>
               </div>
@@ -431,11 +431,11 @@ export default function RecruiterApplicants() {
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                        <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Interview Date</Label>
-                       <Input type="date" value={interviewDate} onChange={(e) => setInterviewDate(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold" />
+                       <Input type="date" value={interviewDate} onChange={(e) => setInterviewDate(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold text-slate-900" />
                     </div>
                     <div className="space-y-3">
                        <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Interview Time</Label>
-                       <Input type="time" value={interviewTime} onChange={(e) => setInterviewTime(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold" />
+                       <Input type="time" value={interviewTime} onChange={(e) => setInterviewTime(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold text-slate-900" />
                     </div>
                  </div>
                  
