@@ -122,7 +122,6 @@ export default function RecruiterApplicants() {
         }
         toast({ title: "AI Analysis Complete", description: "Applicants have been ranked." });
         fetchData();
-      }
     } catch (e: any) {
       toast({ title: "Analysis Failed", description: e.message, variant: "destructive" });
     } finally {
