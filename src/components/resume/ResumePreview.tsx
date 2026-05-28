@@ -295,20 +295,34 @@ function sectionHeader(label: string, templateId: TemplateId): string {
     case "modern":
     case "bold":
       return `<div style="display:flex;align-items:center;gap:8px;margin:18px 0 10px"><div style="width:4px;height:18px;background:#2563eb;border-radius:2px"></div><span style="font-size:15px;color:#2563eb;${base}">${escapeHtml(label)}</span></div>`;
+    case "timeline":
+      return `<div style="display:flex;align-items:center;gap:8px;margin:18px 0 10px"><div style="width:4px;height:18px;background:#2962ff;border-radius:2px"></div><span style="font-size:15px;color:#2962ff;${base}">${escapeHtml(label)}</span></div>`;
+    case "sidebar":
+      return `<div style="display:flex;align-items:center;gap:8px;margin:18px 0 10px"><div style="width:4px;height:18px;background:#1e3a5f;border-radius:2px"></div><span style="font-size:15px;color:#1e3a5f;${base}">${escapeHtml(label)}</span></div>`;
     case "minimal":
     case "minimalist-plus":
       return `<div style="margin:20px 0 8px"><span style="font-size:13px;color:#888;${base}">${escapeHtml(label)}</span></div>`;
+    case "elegant":
+      return `<div style="margin:20px 0 8px"><span style="font-size:13px;color:#b49146;${base}">${escapeHtml(label)}</span></div>`;
     case "executive":
     case "corporate":
       return `<div style="background:#1e1e1e;color:#fff;padding:6px 12px;margin:15px 0 10px;border-radius:4px"><span style="font-size:13px;${base}">${escapeHtml(label)}</span></div>`;
+    case "twocolumn":
+      return `<div style="background:#2d3748;color:#fff;padding:6px 12px;margin:15px 0 10px;border-radius:4px"><span style="font-size:13px;${base}">${escapeHtml(label)}</span></div>`;
     case "creative":
     case "vibrant":
       return `<div style="margin:18px 0 10px"><span style="font-size:16px;color:#dc3545;${base}">${escapeHtml(label)}</span><div style="width:40px;height:3px;background:#dc3545;margin-top:4px"></div></div>`;
+    case "contemporary":
+      return `<div style="margin:16px 0 8px;border-bottom:2px solid #10a37f;padding-bottom:4px"><span style="font-size:14px;color:#10a37f;${base}">${escapeHtml(label)}</span></div>`;
+    case "polished":
+      return `<div style="margin:16px 0 8px;border-bottom:2px solid #a64834;padding-bottom:4px"><span style="font-size:14px;color:#a64834;${base}">${escapeHtml(label)}</span></div>`;
     case "compact":
     case "tech":
       return `<div style="margin:10px 0 6px;border-bottom:1.5px solid #bbb;padding-bottom:2px"><span style="font-size:13px;font-weight:700;text-transform:uppercase">${escapeHtml(label)}</span></div>`;
     case "professional":
       return `<div style="margin:18px 0 10px"><span style="font-size:15px;color:#192a56;text-transform:uppercase;font-weight:700">${escapeHtml(label)}</span><div style="border-bottom:3px solid #192a56;margin-top:3px"></div></div>`;
+    case "ivyleague":
+      return `<div style="margin:18px 0 10px"><span style="font-size:15px;color:#555;text-transform:uppercase;font-weight:700">${escapeHtml(label)}</span><div style="border-bottom:3px solid #555;margin-top:3px"></div></div>`;
     default:
       return `<div style="border-bottom:1.5px solid #ccc;margin:18px 0 10px;padding-bottom:5px"><span style="font-size:15px;font-weight:700">${escapeHtml(label)}</span></div>`;
   }
@@ -328,11 +342,38 @@ function getTemplateStyles(templateId: TemplateId, photoUrl?: string) {
         contactStyle: "font-size:13px;color:#555;margin:0 0 4px",
         linkStyle: "font-size:13px;color:#2563eb;margin:0 0 8px",
       };
+    case "timeline":
+      return {
+        container: base,
+        headerBefore: `<div style="height:6px;background:#2962ff;margin:0 -50px 30px;border-radius:0"></div>`,
+        headerAfter: "",
+        nameStyle: "font-size:32px;font-weight:800;color:#2962ff;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:13px;color:#555;margin:0 0 4px",
+        linkStyle: "font-size:13px;color:#2962ff;margin:0 0 8px",
+      };
+    case "sidebar":
+      return {
+        container: base,
+        headerBefore: `<div style="height:10px;background:#1e3a5f;margin:0 -50px 30px"></div>`,
+        headerAfter: `<div style="border-bottom:3px solid #1e3a5f;margin:10px 0 15px"></div>`,
+        nameStyle: "font-size:34px;font-weight:800;color:#1e3a5f;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:13px;color:#555;margin:0 0 4px",
+        linkStyle: "font-size:13px;color:#1e3a5f;margin:0 0 8px",
+      };
     case "executive":
     case "corporate":
       return {
         container: base,
         headerBefore: `<div style="background:#1e1e1e;margin:0 -50px 0;padding:40px 50px 30px">`,
+        headerAfter: `</div><div style="height:20px"></div>`,
+        nameStyle: "font-size:32px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:12px;color:#c8c8c8;margin:0",
+        linkStyle: "font-size:12px;color:#c8c8c8;margin:0",
+      };
+    case "twocolumn":
+      return {
+        container: base,
+        headerBefore: `<div style="background:#2d3748;margin:0 -50px 0;padding:40px 50px 30px">`,
         headerAfter: `</div><div style="height:20px"></div>`,
         nameStyle: "font-size:32px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-1px",
         contactStyle: "font-size:12px;color:#c8c8c8;margin:0",
@@ -348,6 +389,24 @@ function getTemplateStyles(templateId: TemplateId, photoUrl?: string) {
         contactStyle: "font-size:13px;color:#555;margin:0 0 4px",
         linkStyle: "font-size:13px;color:#dc3545;margin:0 0 8px",
       };
+    case "contemporary":
+      return {
+        container: base,
+        headerBefore: `<div style="background:#10a37f;margin:0 -50px 25px;padding:40px 50px 35px;display:flex;justify-content:space-between;align-items:center"><div>`,
+        headerAfter: `</div>${photoUrl ? `<img src="${escapeHtml(photoUrl)}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.15);flex-shrink:0;margin-left:20px"/>` : `<div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;margin-left:20px"></div>`}</div>`,
+        nameStyle: "font-size:36px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:13px;color:#dcfff0;margin:0 0 4px",
+        linkStyle: "font-size:13px;color:#dcfff0;margin:0 0 8px",
+      };
+    case "polished":
+      return {
+        container: base,
+        headerBefore: `<div style="background:#a64834;margin:0 -50px 25px;padding:40px 50px 35px;display:flex;justify-content:space-between;align-items:center"><div>`,
+        headerAfter: `</div>${photoUrl ? `<img src="${escapeHtml(photoUrl)}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.15);flex-shrink:0;margin-left:20px"/>` : `<div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;margin-left:20px"></div>`}</div>`,
+        nameStyle: "font-size:36px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:13px;color:#ffd2be;margin:0 0 4px",
+        linkStyle: "font-size:13px;color:#ffd2be;margin:0 0 8px",
+      };
     case "professional":
       return {
         container: base,
@@ -356,6 +415,24 @@ function getTemplateStyles(templateId: TemplateId, photoUrl?: string) {
         nameStyle: "font-size:34px;font-weight:800;color:#192a56;margin-bottom:8px;letter-spacing:-1px",
         contactStyle: "font-size:13px;color:#555;margin:0 0 4px",
         linkStyle: "font-size:13px;color:#192a56;margin:0 0 8px",
+      };
+    case "ivyleague":
+      return {
+        container: base,
+        headerBefore: `<div style="padding-top:40px"></div>`,
+        headerAfter: `<div style="border-bottom:3px solid #555;margin:10px 0 15px"></div>`,
+        nameStyle: "font-size:32px;font-weight:800;color:#555;margin-bottom:8px;letter-spacing:-1px;text-transform:uppercase",
+        contactStyle: "font-size:13px;color:#555;margin:0 0 4px",
+        linkStyle: "font-size:13px;color:#555;margin:0 0 8px",
+      };
+    case "elegant":
+      return {
+        container: base,
+        headerBefore: `<div style="height:3px;background:#b49146;margin:0 -50px 30px"></div>`,
+        headerAfter: "",
+        nameStyle: "font-size:34px;font-weight:400;color:#b49146;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:13px;color:#888;margin:0 0 4px",
+        linkStyle: "font-size:13px;color:#b49146;margin:0 0 8px",
       };
     default: // classic, simple
       return {
