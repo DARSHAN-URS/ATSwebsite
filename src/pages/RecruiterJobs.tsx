@@ -252,7 +252,7 @@ export default function RecruiterJobs() {
                                         <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover:rotate-6 transition-transform"><Briefcase className="w-6 h-6" /></div>
                                         <h3 className="text-xl md:text-3xl font-black text-slate-900 tracking-tighter group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
                                      </div>
-                                     <p className="text-slate-500 font-bold text-[11px] uppercase tracking-[0.2em] pl-16">{job.company_name} <span className="mx-3 text-slate-200">|</span> {job.location || "Global Ops"}</p>p>
+                                     <p className="text-slate-500 font-bold text-[11px] uppercase tracking-[0.2em] pl-16">{job.company_name} <span className="mx-3 text-slate-200">|</span> {job.location || "Global Ops"}</p>
                                   </div>
                                   
                                   <div className="flex flex-wrap gap-4 pl-16">
