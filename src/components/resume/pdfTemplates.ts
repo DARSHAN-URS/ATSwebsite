@@ -35,7 +35,7 @@ function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, r
 
 import { ATS_TEMPLATES, getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "waterfall" | "vision" | "prism" | "midnight" | "ocean" | "forest" | "rose" | "sunset" | "monochrome" | "ruby" | "emerald" | "sapphire" | "amethyst" | "gold" | "slate" | "coral" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination" | "ats-academic" | "ats-medical" | "ats-legal" | "ats-finance" | "ats-sales" | "ats-marketing" | "ats-remote" | "ats-executive-pro" | "ats-freelance" | "ats-consultant";
+export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "vibrant" | "bold" | "minimalist-plus" | "corporate" | "tech" | "waterfall" | "vision" | "prism" | "midnight" | "ocean" | "forest" | "rose" | "sunset" | "monochrome" | "ruby" | "emerald" | "sapphire" | "amethyst" | "gold" | "slate" | "coral" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination" | "ats-academic" | "ats-medical" | "ats-legal" | "ats-finance" | "ats-sales" | "ats-marketing" | "ats-remote" | "ats-executive-pro" | "ats-freelance" | "ats-consultant";
 
 export interface ResumeTemplate {
   id: TemplateId;
@@ -65,6 +65,11 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
   { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern", isPremium: true },
   { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
   { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional", isPremium: true },
+  { id: "vibrant", name: "Vibrant", description: "Colorful header with modern typography", preview: "🌈", category: "Creative", isPremium: true },
+  { id: "bold", name: "Bold", description: "High-contrast design for striking impact", preview: "🔥", category: "Modern", isPremium: true },
+  { id: "minimalist-plus", name: "Minimalist Plus", description: "Clean lines with subtle accents", preview: "🍃", category: "Simple" },
+  { id: "corporate", name: "Corporate", description: "Standard business layout with improved readability", preview: "🏢", category: "Professional" },
+  { id: "tech", name: "Tech / Engineering", description: "Monospace elements and structured data", preview: "💻", category: "Compact" },
   // Config-driven ATS templates
   ...ATS_TEMPLATES.map(t => ({
     id: t.id as TemplateId,

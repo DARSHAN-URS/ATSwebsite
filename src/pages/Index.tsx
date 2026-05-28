@@ -106,7 +106,7 @@ const Index = () => {
                       <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
                          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
                          <img 
-                           src="/images/resume-editor-hero.png" 
+                           src="/images/hero_editor_mockup.png" 
                            alt="Resume Intelligence Editor" 
                            className="w-full h-auto grayscale-0 group-hover:scale-105 transition-transform duration-1000" 
                          />
@@ -151,46 +151,71 @@ const Index = () => {
          </div>
       </section>
 
-      {/* Value Matrix */}
-      <section className="pt-10 pb-40 bg-white relative">
+      {/* How It Works - Visual Steps */}
+      <section className="py-32 bg-white relative">
          <div className="container mx-auto px-8 space-y-32">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
-               <div className="space-y-10">
-                  <div className="inline-flex items-center gap-3 px-5 py-2 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
-                     <Sparkles className="w-4 h-4" />
-                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">{tl.operationalExcellence}</span>
-                  </div>
-                  <h2 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">{tl.builtForScale.split(" ").slice(0, -1).join(" ")} <br /> {tl.builtForScale.split(" ").slice(-1)} <span className="text-blue-600">.</span></h2>
-               </div>
-               <p className="text-xl text-slate-600 font-medium max-w-xl leading-relaxed">
-                  {tl.scaleDesc}
-               </p>
+            <div className="text-center space-y-6 max-w-3xl mx-auto mb-20">
+               <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase">{tl.builtForScale}</h2>
+               <p className="text-xl text-slate-600 font-medium">{tl.scaleDesc}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-               {[
-                 { title: tle.atsResumeBuilder, desc: tl.aiResumeTemplatesDesc, icon: Sparkles, color: "text-blue-600", bg: "bg-blue-50" },
-                 { title: tle.jobSearch, desc: tl.smartJobSearch, icon: Search, color: "text-indigo-600", bg: "bg-indigo-50" },
-                 { title: tle.emailAssistant, desc: tl.emailOutreachDesc, icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
-                 { title: tle.interviewPreparation, desc: tl.interviewPrepDesc, icon: Target, color: "text-emerald-600", bg: "bg-emerald-50" },
-                 { title: tle.trackProgress, desc: tl.jobTrackingDesc, icon: BarChart3, color: "text-amber-600", bg: "bg-amber-50" },
-                 { title: tle.safeSecure, desc: tl.privacyPolicy, icon: ShieldCheck, color: "text-rose-600", bg: "bg-rose-50" }
-               ].map((f, i) => (
-                  <motion.div 
-                    key={i} 
-                    initial={{ opacity: 0, y: 30 }} 
-                    whileInView={{ opacity: 1, y: 0 }} 
-                    viewport={{ once: true }} 
-                    transition={{ delay: i * 0.1 }}
-                    className="group p-12 rounded-[4rem] bg-white border border-slate-100 hover:border-blue-600/20 transition-all duration-500 hover:shadow-3xl relative overflow-hidden"
-                  >
-                     <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center mb-10 transition-transform group-hover:scale-110 group-hover:rotate-3", f.bg, f.color)}>
-                        <f.icon className="w-8 h-8" />
+            {/* Step 1 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
+                  <img src="/images/custom_mockup_1.png" alt="Choose a Template" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+               </motion.div>
+               <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
+                  <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-black text-3xl">1</div>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{tle.atsResumeBuilder}</h3>
+                  <p className="text-xl text-slate-600 leading-relaxed font-medium">{tl.aiResumeTemplatesDesc}</p>
+               </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+               <div className="space-y-6 lg:pr-10">
+                  <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-black text-3xl">2</div>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{tl.operationalExcellence}</h3>
+                  <p className="text-xl text-slate-600 leading-relaxed font-medium">{tl.smartJobSearch}</p>
+               </div>
+               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
+                  <img src="/images/custom_mockup_2.png" alt="Add Experience" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+               </motion.div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
+                  <img src="/images/step3.png" alt="Customize Layout" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+               </motion.div>
+               <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
+                  <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-black text-3xl">3</div>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{tle.interviewPreparation}</h3>
+                  <p className="text-xl text-slate-600 leading-relaxed font-medium">{tl.interviewPrepDesc}</p>
+               </div>
+            </div>
+            
+            {/* Template Gallery */}
+            <div className="pt-20 text-center space-y-12 overflow-hidden">
+               <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{t.landing.seeTemplates}</h3>
+               
+               <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 px-8 -mx-8 scrollbar-hide">
+                  {[
+                     "/images/flowcv-ats.png",
+                     "/images/flowcv-creative.png",
+                     "/images/flowcv-modern.png",
+                     "/images/flowcv-compact.png",
+                     "/images/flowcv-simple.png"
+                  ].map((src, i) => (
+                     <div key={i} className="min-w-[280px] md:min-w-[320px] lg:min-w-[380px] snap-center shrink-0 rounded-[2rem] bg-slate-100 aspect-[1/1.4] shadow-sm border border-slate-200 overflow-hidden group cursor-pointer">
+                        <img src={src} className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105" alt="template"/>
                      </div>
-                     <h3 className="text-2xl font-black text-slate-900 mb-6 tracking-tight uppercase leading-none">{f.title}</h3>
-                     <p className="text-slate-600 font-medium leading-relaxed text-lg">{f.desc}</p>
-                  </motion.div>
-               ))}
+                  ))}
+               </div>
+
+               <Button asChild size="lg" className="h-16 px-10 rounded-2xl bg-slate-900 hover:bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] transition-all">
+                  <Link to="/resume-templates">Explore All Templates</Link>
+               </Button>
             </div>
          </div>
       </section>

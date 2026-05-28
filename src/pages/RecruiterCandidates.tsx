@@ -100,17 +100,17 @@ export default function RecruiterCandidates() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 font-sans">
-      <SEOHead title="Talent Matrix — ResumePro" description="Search candidates across all your job posts." noindex />
+      <SEOHead title="Candidates — ResumePro" description="Search and view all your candidates." noindex />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
          <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
             <div className="space-y-4">
                <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
                   <Users className="w-4 h-4" />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Candidate Intelligence</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest">Candidate Database</span>
                </div>
                <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
-                  Talent <br /> <span className="text-blue-600">Matrix.</span>
+                  All <br /> <span className="text-blue-600">Candidates.</span>
                </h1>
             </div>
 
@@ -128,7 +128,7 @@ export default function RecruiterCandidates() {
          {loading ? (
             <div className="flex flex-col items-center justify-center py-40 space-y-6">
                <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initializing Talent Scan</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Candidates</p>
             </div>
          ) : filtered.length === 0 ? (
             <Card className="rounded-[4rem] border-2 border-dashed border-slate-200 bg-white py-32 text-center space-y-8">
@@ -136,8 +136,8 @@ export default function RecruiterCandidates() {
                   <Users className="w-10 h-10" />
                </div>
                <div className="space-y-2">
-                  <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Zero Matches Detected</h3>
-                  <p className="text-slate-500 font-medium max-w-sm mx-auto">{candidates.length === 0 ? "No applications have been deployed to your active missions yet." : "Adjust your search parameters to re-scan the matrix."}</p>
+                  <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">No Candidates Found</h3>
+                  <p className="text-slate-500 font-medium max-w-sm mx-auto">{candidates.length === 0 ? "No one has applied to your jobs yet." : "Try adjusting your search terms to find candidates."}</p>
                </div>
             </Card>
          ) : (
@@ -146,10 +146,10 @@ export default function RecruiterCandidates() {
                   <Table>
                      <TableHeader className="bg-slate-50/50 border-b border-slate-100">
                         <TableRow className="border-none hover:bg-transparent">
-                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Candidate Identification</TableHead>
-                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Assigned Mission</TableHead>
-                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Operational Status</TableHead>
-                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Deployment Date</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Candidate Name</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Applied Job</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Status</TableHead>
+                           <TableHead className="h-20 px-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Application Date</TableHead>
                            <TableHead className="h-20 px-10 w-20"></TableHead>
                         </TableRow>
                      </TableHeader>
@@ -172,7 +172,7 @@ export default function RecruiterCandidates() {
                               <TableCell className="px-10 py-8">
                                  <div className="space-y-1">
                                     <p className="font-bold text-slate-700">{c.job_title}</p>
-                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Active Mission</p>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Applied Job</p>
                                  </div>
                               </TableCell>
                               <TableCell className="px-10 py-8">

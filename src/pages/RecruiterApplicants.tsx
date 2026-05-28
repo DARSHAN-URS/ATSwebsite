@@ -116,16 +116,15 @@ export default function RecruiterApplicants() {
 
       if (error) throw error;
 
-      if (data?.rankings) {
         for (const rank of data.rankings) {
           const note = `[AI Score: ${rank.score}%] ${rank.fitReason}\nRec: ${rank.recommendation}`;
           await supabase.from("job_post_applications" as any).update({ recruiter_notes: note } as any).eq("id", rank.applicantId);
         }
-        toast({ title: "Intelligence Scan Complete", description: "Applicant matrix has been ranked." });
+        toast({ title: "AI Analysis Complete", description: "Applicants have been ranked." });
         fetchData();
       }
     } catch (e: any) {
-      toast({ title: "Scan Failed", description: e.message, variant: "destructive" });
+      toast({ title: "Analysis Failed", description: e.message, variant: "destructive" });
     } finally {
       setAnalyzing(false);
     }
@@ -150,12 +149,12 @@ export default function RecruiterApplicants() {
     if (!selectedApp) return;
     await supabase.from("job_post_applications" as any).update({ recruiter_notes: notes } as any).eq("id", selectedApp.id);
     setApplicants((prev) => prev.map((a) => a.id === selectedApp.id ? { ...a, recruiter_notes: notes } : a));
-    toast({ title: "Assessment Synchronized" });
+    toast({ title: "Notes Saved" });
   };
 
   const scheduleInterview = async () => {
     if (!selectedApp || !interviewDate || !interviewTime) {
-      toast({ title: "Deployment data incomplete", variant: "destructive" });
+      toast({ title: "Missing Interview Details", variant: "destructive" });
       return;
     }
 
@@ -170,10 +169,10 @@ export default function RecruiterApplicants() {
       });
 
       if (error) throw error;
-      toast({ title: "Mission Scheduled", description: "Zoom deployment synchronized." });
+      toast({ title: "Interview Scheduled", description: "Zoom interview has been scheduled." });
       setInterviewDate(""); setInterviewTime(""); setInterviewDuration("30"); setInterviewNotes("");
     } catch (error: any) {
-      toast({ title: "Deployment Error", description: error.message, variant: "destructive" });
+      toast({ title: "Scheduling Error", description: error.message, variant: "destructive" });
     } finally {
       setSchedulingInterview(false);
     }
@@ -197,8 +196,8 @@ export default function RecruiterApplicants() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 pb-20 font-sans">
-      <SEOHead title={`Mission Ops — ${jobTitle}`} description="Manage your recruitment workflow" />
+    <div className="min-h-screen bg-slate-50 pb-20 font-sans">
+      <SEOHead title={`Applicants — ${jobTitle}`} description="Manage your recruitment workflow" />
       
       <div className="container mx-auto px-8 pt-16 space-y-16 text-left">
          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
@@ -208,18 +207,18 @@ export default function RecruiterApplicants() {
                   onClick={() => navigate("/recruiter/jobs")} 
                   className="p-0 hover:bg-transparent text-slate-400 hover:text-blue-600 transition-colors gap-2 text-[10px] font-black uppercase tracking-widest"
                >
-                  <ArrowLeft className="w-4 h-4" /> Back to Missions
+                  <ArrowLeft className="w-4 h-4" /> Back to Jobs
                </Button>
                <div className="space-y-4">
                   <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
                      <Users className="w-4 h-4" />
-                     <span className="text-[9px] font-black uppercase tracking-widest">Mission Operations</span>
+                     <span className="text-[9px] font-black uppercase tracking-widest">Job Management</span>
                   </div>
-                  <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                     Pipeline <br /> <span className="text-blue-600">Dynamics.</span>
+                  <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+                     Job <br /> <span className="text-blue-600">Applicants.</span>
                   </h1>
                   <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
-                     Managing <span className="text-slate-900 dark:text-white font-black">{jobTitle}</span> mission with {applicants.length} active candidates.
+                     Managing <span className="text-slate-900 font-black">{jobTitle}</span> job with {applicants.length} active applicants.
                   </p>
                </div>
             </div>
@@ -231,7 +230,7 @@ export default function RecruiterApplicants() {
                  className="h-20 px-10 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all gap-4"
                >
                   {analyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-                  Synchronize AI Rankings
+                  Run AI Analysis
                </Button>
             </div>
          </div>
@@ -239,7 +238,7 @@ export default function RecruiterApplicants() {
          {loading ? (
             <div className="flex flex-col items-center justify-center py-40 space-y-6">
                <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initializing Operation Matrix</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Applicants</p>
             </div>
          ) : (
             <div className="flex gap-10 overflow-x-auto pb-20 px-2 -mx-2 snap-x scroll-smooth no-scrollbar">
@@ -290,7 +289,7 @@ export default function RecruiterApplicants() {
                                                <div>
                                                   <p className="text-xl font-black text-slate-900 tracking-tight leading-tight">{app.profile?.display_name || "Unknown Candidate"}</p>
                                                   <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">
-                                                    Deployed {new Date(app.created_at).toLocaleDateString()}
+                                                    Applied {new Date(app.created_at).toLocaleDateString()}
                                                   </p>
                                                </div>
                                             </div>
@@ -299,7 +298,7 @@ export default function RecruiterApplicants() {
                                          {aiScore !== null && (
                                            <div className="space-y-4 bg-slate-50 p-6 rounded-2xl">
                                               <div className="flex items-center justify-between">
-                                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 flex items-center gap-2"><Sparkles className="w-3 h-3" /> Intel Score</span>
+                                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 flex items-center gap-2"><Sparkles className="w-3 h-3" /> AI Score</span>
                                                  <span className="text-lg font-black text-slate-900">{aiScore}%</span>
                                               </div>
                                               <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
@@ -347,18 +346,17 @@ export default function RecruiterApplicants() {
         <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 border-none bg-white font-sans">
            <div className="bg-slate-50 border-b border-slate-100 p-16 text-slate-900 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-full lg:w-[500px] h-auto lg:h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-              <div className="relative z-10 space-y-10">
-                 <div className="flex items-center justify-between">
+              <div className="relative z-10 space-y-10">                  <div className="flex items-center justify-between">
                     <div className="w-24 h-24 rounded-[2rem] bg-blue-600 flex items-center justify-center text-white text-2xl md:text-4xl font-black shadow-2xl">
                        {selectedApp?.profile?.display_name?.charAt(0) || "?"}
                     </div>
                     <Badge className={cn("rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em]", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900" : "bg-slate-100 text-slate-600")}>
-                       {selectedApp?.is_shortlisted ? "Elite Candidate" : "Standard Profile"}
+                       {selectedApp?.is_shortlisted ? "Shortlisted" : "Standard Candidate"}
                     </Badge>
                  </div>
                  <div className="space-y-2">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight text-slate-900">{selectedApp?.profile?.display_name || "Applicant"}</h2>
-                    <p className="text-blue-600 font-black uppercase tracking-[0.3em] text-xs">Mission Component • {selectedApp ? new Date(selectedApp.created_at).toLocaleDateString() : ""}</p>
+                    <p className="text-blue-600 font-black uppercase tracking-[0.3em] text-xs">Application Date • {selectedApp ? new Date(selectedApp.created_at).toLocaleDateString() : ""}</p>
                  </div>
               </div>
            </div>
@@ -366,7 +364,7 @@ export default function RecruiterApplicants() {
            <div className="p-16 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                  <div className="space-y-4">
-                    <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Operational Status</Label>
+                    <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Candidate Status</Label>
                     <Select
                       value={selectedApp?.status}
                       onValueChange={(v) => selectedApp && updateStatus(selectedApp.id, v)}
@@ -385,7 +383,7 @@ export default function RecruiterApplicants() {
                       className={cn("h-16 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900 shadow-xl shadow-amber-400/20" : "bg-slate-900 text-white")}
                     >
                        <Star className={cn("w-5 h-5 mr-3", selectedApp?.is_shortlisted ? "fill-current" : "")} />
-                       {selectedApp?.is_shortlisted ? "De-escalate Rank" : "Escalate to Elite"}
+                       {selectedApp?.is_shortlisted ? "Remove Shortlist" : "Shortlist Candidate"}
                     </Button>
                  </div>
               </div>
@@ -397,7 +395,7 @@ export default function RecruiterApplicants() {
                    </div>
                    <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20"><Sparkles className="w-5 h-5" /></div>
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">AI Intelligence Summary</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">AI Analysis Summary</span>
                    </div>
                    <p className="text-lg font-medium text-slate-700 leading-relaxed italic border-l-4 border-blue-600 pl-8 py-2">
                       {selectedApp.recruiter_notes}
@@ -407,17 +405,17 @@ export default function RecruiterApplicants() {
 
               <div className="space-y-6">
                  <div className="flex items-center justify-between px-4">
-                    <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Internal Assessment</Label>
-                    <div className="flex items-center gap-2"><div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" /><span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Auto-Saving Enabled</span></div>
+                    <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Recruiter Notes</Label>
+                    <div className="flex items-center gap-2"><div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" /><span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Auto-Save Enabled</span></div>
                  </div>
                  <Textarea 
                    value={notes} 
                    onChange={(e) => setNotes(e.target.value)} 
                    rows={8} 
-                   placeholder="Enter private operational notes..." 
+                   placeholder="Enter your notes here..." 
                    className="rounded-[2.5rem] border-slate-100 bg-slate-50 p-10 font-medium text-lg focus-visible:ring-blue-600/20 leading-relaxed shadow-inner"
                  />
-                 <Button onClick={saveNotes} className="h-20 w-full bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-slate-900/20 hover:scale-[1.02] transition-all">Synchronize Assessment</Button>
+                 <Button onClick={saveNotes} className="h-20 w-full bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-slate-900/20 hover:scale-[1.02] transition-all">Save Notes</Button>
               </div>
 
               <div className="space-y-10 pt-16 border-t border-slate-100">
@@ -425,19 +423,19 @@ export default function RecruiterApplicants() {
                     <div className="flex items-center gap-4">
                        <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600"><Video className="w-6 h-6" /></div>
                        <div>
-                          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Deploy Interview</h3>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Direct Zoom Integration</p>
+                          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Schedule Interview</h3>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Zoom Integration</p>
                        </div>
                     </div>
                  </div>
                  
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                       <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Deployment Date</Label>
+                       <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Interview Date</Label>
                        <Input type="date" value={interviewDate} onChange={(e) => setInterviewDate(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold" />
                     </div>
                     <div className="space-y-3">
-                       <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Deployment Time</Label>
+                       <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Interview Time</Label>
                        <Input type="time" value={interviewTime} onChange={(e) => setInterviewTime(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold" />
                     </div>
                  </div>
@@ -447,7 +445,7 @@ export default function RecruiterApplicants() {
                    disabled={schedulingInterview}
                    className="w-full h-20 bg-blue-600 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-blue-600/30 hover:scale-[1.02] transition-all gap-4"
                  >
-                    {schedulingInterview ? <Loader2 className="w-6 h-6 animate-spin" /> : <><Calendar className="w-6 h-6" /> Initialize Deployment</>}
+                    {schedulingInterview ? <Loader2 className="w-6 h-6 animate-spin" /> : <><Calendar className="w-6 h-6" /> Schedule Interview</>}
                  </Button>
               </div>
 

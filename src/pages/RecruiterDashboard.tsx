@@ -160,7 +160,7 @@ export default function RecruiterDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 font-sans">
-      <SEOHead title="Recruiter Command — ResumePro" description="Recruiter centralized control matrix." noindex />
+      <SEOHead title="Recruiter Dashboard — ResumePro" description="Manage your recruiting activities." noindex />
       
       <div className="container mx-auto px-8 pt-16 space-y-12 text-left">
         
@@ -169,21 +169,21 @@ export default function RecruiterDashboard() {
           <div className="space-y-4">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 rounded-full border border-blue-600/20 text-blue-600">
               <ShieldCheck className="w-4 h-4" />
-              <span className="text-[9px] font-black uppercase tracking-widest">Workspace Core</span>
+              <span className="text-[9px] font-black uppercase tracking-widest">Dashboard</span>
             </div>
             <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
-              Command <span className="text-blue-600">Central.</span>
+              Dashboard.
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
-              Welcome back, <span className="text-slate-900 font-black">{recruiterName}</span>. Your talent acquisition matrix is operating optimally.
+              Welcome back, <span className="text-slate-900 font-black">{recruiterName}</span>. Here is an overview of your recruiting activities.
             </p>
           </div>
           <div className="flex gap-4">
             <Button onClick={() => navigate("/recruiter/jobs")} className="h-16 px-8 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] shadow-2xl hover:scale-105 transition-all">
-              Manage Missions
+              Manage Jobs
             </Button>
             <Button onClick={() => navigate("/recruiter/jobs")} className="h-16 px-8 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] shadow-2xl hover:scale-105 transition-all gap-2">
-              <Plus className="w-4 h-4" /> Deploy Mission
+              <Plus className="w-4 h-4" /> Post a Job
             </Button>
           </div>
         </div>
@@ -191,17 +191,17 @@ export default function RecruiterDashboard() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-40 space-y-6">
             <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Telemetry Matrices</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Data</p>
           </div>
         ) : (
           <>
             {/* Telemetry Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {[
-                { label: "Active Deployments", value: activeMissions, icon: Briefcase, color: "text-blue-600", bg: "bg-blue-50" },
-                { label: "Acquisition Flow", value: totalApps, icon: Users, color: "text-indigo-600", bg: "bg-indigo-50" },
-                { label: "Market Reach", value: totalViews, icon: Eye, color: "text-emerald-600", bg: "bg-emerald-50" },
-                { label: "Match Velocity", value: totalApps ? `${Math.round((shortlistedCount / totalApps) * 100)}%` : "0%", icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
+                { label: "Active Jobs", value: activeMissions, icon: Briefcase, color: "text-blue-600", bg: "bg-blue-50" },
+                { label: "Total Applications", value: totalApps, icon: Users, color: "text-indigo-600", bg: "bg-indigo-50" },
+                { label: "Total Views", value: totalViews, icon: Eye, color: "text-emerald-600", bg: "bg-emerald-50" },
+                { label: "Shortlist Rate", value: totalApps ? `${Math.round((shortlistedCount / totalApps) * 100)}%` : "0%", icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
               ].map((stat, i) => (
                 <Card key={i} className="rounded-[2.5rem] border border-slate-100 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex items-center gap-8 group">
                   <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6", stat.bg, stat.color)}>
@@ -218,19 +218,19 @@ export default function RecruiterDashboard() {
             {/* Quick Actions & Job Deployments */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               
-              {/* Left Column: Recent Active Pipelines */}
+              {/* Left Column: Recent Candidates */}
               <div className="lg:col-span-8 space-y-10">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Recent Acquisition Pipelines</h3>
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Recent Candidates</h3>
                   <Button variant="ghost" onClick={() => navigate("/recruiter/candidates")} className="p-0 hover:bg-transparent text-[10px] font-black uppercase tracking-widest text-blue-600 flex items-center gap-1">
-                    Full Matrix <ArrowUpRight className="w-4 h-4" />
+                    View All <ArrowUpRight className="w-4 h-4" />
                   </Button>
                 </div>
 
                 {candidates.length === 0 ? (
                   <Card className="rounded-[3rem] border border-slate-100 bg-white p-12 text-center py-20">
                     <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <p className="text-slate-500 font-medium">No candidates are currently linked to your deployed missions.</p>
+                    <p className="text-slate-500 font-medium">No candidates have applied to your jobs yet.</p>
                   </Card>
                 ) : (
                   <Card className="rounded-[3rem] border border-slate-100 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
@@ -238,8 +238,8 @@ export default function RecruiterDashboard() {
                       <Table>
                         <TableHeader className="bg-slate-50/50 border-b border-slate-100">
                           <TableRow className="border-none">
-                            <TableHead className="h-16 px-8 text-[10px] font-black uppercase tracking-widest text-slate-400">Identification</TableHead>
-                            <TableHead className="h-16 px-8 text-[10px] font-black uppercase tracking-widest text-slate-400">Target Mission</TableHead>
+                            <TableHead className="h-16 px-8 text-[10px] font-black uppercase tracking-widest text-slate-400">Candidate Name</TableHead>
+                            <TableHead className="h-16 px-8 text-[10px] font-black uppercase tracking-widest text-slate-400">Job Title</TableHead>
                             <TableHead className="h-16 px-8 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</TableHead>
                             <TableHead className="h-16 px-8 w-20"></TableHead>
                           </TableRow>
@@ -287,17 +287,17 @@ export default function RecruiterDashboard() {
                 )}
               </div>
 
-              {/* Right Column: Command Shortcuts & Active Nodes */}
+              {/* Right Column: Quick Actions */}
               <div className="lg:col-span-4 space-y-10">
                 <div className="border-b border-slate-100 pb-4">
-                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Operational Commands</h3>
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Quick Actions</h3>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
                   {[
-                    { label: "Acquisition Analytics", desc: "Scan metrics and pipeline growth.", path: "/recruiter/analytics", icon: TrendingUp, color: "text-blue-600", bg: "bg-blue-50" },
-                    { label: "Employer Profile", desc: "Configure your corporate portal.", path: "/recruiter/company", icon: Building2, color: "text-emerald-600", bg: "bg-emerald-50" },
-                    { label: "Talent Matrix Scanner", desc: "Search candidates databases.", path: "/recruiter/candidates", icon: Users, color: "text-indigo-600", bg: "bg-indigo-50" },
+                    { label: "Analytics", desc: "View your hiring performance.", path: "/recruiter/analytics", icon: TrendingUp, color: "text-blue-600", bg: "bg-blue-50" },
+                    { label: "Company Profile", desc: "Update your company information.", path: "/recruiter/company", icon: Building2, color: "text-emerald-600", bg: "bg-emerald-50" },
+                    { label: "Candidate Database", desc: "Search and view all candidates.", path: "/recruiter/candidates", icon: Users, color: "text-indigo-600", bg: "bg-indigo-50" },
                   ].map((cmd, i) => (
                     <Card 
                       key={i} 
@@ -319,19 +319,19 @@ export default function RecruiterDashboard() {
 
             </div>
 
-            {/* Live Job Nodes Summary */}
+            {/* Active Jobs Summary */}
             <div className="space-y-10 pt-10">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Operational Job Posts</h3>
+                <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Active Job Posts</h3>
                 <Button variant="ghost" onClick={() => navigate("/recruiter/jobs")} className="p-0 hover:bg-transparent text-[10px] font-black uppercase tracking-widest text-blue-600 flex items-center gap-1">
-                  All Missions <ArrowUpRight className="w-4 h-4" />
+                  View All Jobs <ArrowUpRight className="w-4 h-4" />
                 </Button>
               </div>
 
               {jobs.length === 0 ? (
                 <Card className="rounded-[3rem] border border-slate-100 bg-white p-12 text-center py-20">
                   <Briefcase className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                  <p className="text-slate-500 font-medium">No live postings detected. Create a job posting to initiate acquisition protocols.</p>
+                  <p className="text-slate-500 font-medium">No active jobs. Create a job post to start receiving applications.</p>
                 </Card>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
