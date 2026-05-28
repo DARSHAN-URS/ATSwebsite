@@ -184,6 +184,28 @@ export default function FindJobs() {
     }
   });
 
+  const handleApplySubmit = async (resumeId: string | null, coverNote: string) => {
+    if (!user || !applyingJob) return;
+    const { error } = await supabase
+      .from("job_post_applications")
+      .insert({ job_post_id: applyingJob.id, applicant_id: user.id, resume_id: resumeId } as any);
+    if (error) {
+      if (error.code === "23505") {
+        toast({ title: "You have already applied to this job." });
+      } else {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      }
+      throw error;
+    } else {
+      setAppliedIds((prev) => {
+        const next = new Set(prev);
+        next.add(applyingJob.id);
+        return next;
+      });
+      toast({ title: "Application Submitted successfully" });
+    }
+  };
+
   const handleSearch = () => {
     if (!searchQuery && activeTab === "ai") return;
     setActiveSearch({ q: searchQuery, l: location, t: jobType });
@@ -280,7 +302,13 @@ export default function FindJobs() {
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-20 font-sans">
       <SEOHead title="Find Jobs - ResumePro" description="Search and apply for jobs with AI." />
-      <ApplyWithResumeDialog open={applyDialogOpen} onOpenChange={setApplyDialogOpen} job={applyingJob} resumes={resumes} onSuccess={() => appliedIds.add(applyingJob?.id || "")} />
+      <ApplyWithResumeDialog 
+        open={applyDialogOpen} 
+        onOpenChange={setApplyDialogOpen} 
+        jobTitle={applyingJob?.title ?? ""}
+        companyName={applyingJob?.company_name ?? ""}
+        onSubmit={handleApplySubmit} 
+      />
       
       {/* 1. SaaS Hero Section */}
       <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
