@@ -186,7 +186,7 @@ const Index = () => {
             {/* Step 3 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/step3.png" alt="Interview Preparation" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src="/images/interview_prep_mockup.png" alt="Interview Preparation" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
                <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
                   <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-black text-3xl">3</div>
