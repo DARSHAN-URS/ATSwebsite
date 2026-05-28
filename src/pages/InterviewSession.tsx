@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { invokeFunction } from "@/lib/api-client";
 import {
-  Mic, MicOff, Volume2, Brain, Loader2, Zap, RotateCcw, Target, Sparkles, User, Clock, CheckCircle2, AlertCircle, ArrowLeft, Settings2, Video, ArrowRight
+  Mic, MicOff, Volume2, Brain, Loader2, Zap, RotateCcw, Target, Sparkles, User, Clock, CheckCircle2, AlertCircle, ArrowLeft, Settings2, Video, ArrowRight, Activity
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
