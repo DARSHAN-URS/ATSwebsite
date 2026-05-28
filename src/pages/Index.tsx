@@ -106,7 +106,7 @@ const Index = () => {
                       <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
                          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
                          <img 
-                           src="/images/hero_editor_mockup.png" 
+                           src="/images/hero_editor_mockup.webp" 
                            alt="Resume Intelligence Editor" 
                            className="w-full h-auto grayscale-0 group-hover:scale-105 transition-transform duration-1000" 
                          />
@@ -162,7 +162,7 @@ const Index = () => {
             {/* Step 1 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/custom_mockup_1.png" alt="Choose a Template" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src="/images/custom_mockup_1.webp" alt="Choose a Template" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
                <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
                   <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-black text-3xl">1</div>
@@ -179,14 +179,14 @@ const Index = () => {
                   <p className="text-xl text-slate-600 leading-relaxed font-medium">{tl.smartJobSearch}</p>
                </div>
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/custom_mockup_2.png" alt="Add Experience" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src="/images/custom_mockup_2.webp" alt="Add Experience" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
             </div>
 
             {/* Step 3 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="order-2 lg:order-1 rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
-                  <img src="/images/step3.png" alt="Customize Layout" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src="/images/step3.webp" alt="Customize Layout" loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                </motion.div>
                <div className="order-1 lg:order-2 space-y-6 lg:pl-10">
                   <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-black text-3xl">3</div>
@@ -201,14 +201,14 @@ const Index = () => {
                
                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 px-8 -mx-8 scrollbar-hide">
                   {[
-                     "/images/flowcv-ats.png",
-                     "/images/flowcv-creative.png",
-                     "/images/flowcv-modern.png",
-                     "/images/flowcv-compact.png",
-                     "/images/flowcv-simple.png"
+                     "/images/flowcv-ats.webp",
+                     "/images/flowcv-creative.webp",
+                     "/images/flowcv-modern.webp",
+                     "/images/flowcv-compact.webp",
+                     "/images/flowcv-simple.webp"
                   ].map((src, i) => (
                      <div key={i} className="min-w-[280px] md:min-w-[320px] lg:min-w-[380px] snap-center shrink-0 rounded-[2rem] bg-slate-100 aspect-[1/1.4] shadow-sm border border-slate-200 overflow-hidden group cursor-pointer">
-                        <img src={src} className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105" alt="template"/>
+                        <img src={src} loading="lazy" className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105" alt="template"/>
                      </div>
                   ))}
                </div>
