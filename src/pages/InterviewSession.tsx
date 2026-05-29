@@ -461,11 +461,11 @@ export default function InterviewSession() {
                           <SelectValue />
                        </SelectTrigger>
                        <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
-                          {["Technical", "Behavioral", "System Design"].map(l => (
-                             <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer">
-                                {l}
-                             </SelectItem>
-                          ))}
+                            {["Technical", "Behavioral", "System Design"].map(l => (
+                               <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                                  {l}
+                               </SelectItem>
+                            ))}
                        </SelectContent>
                     </Select>
                  </div>
@@ -476,11 +476,11 @@ export default function InterviewSession() {
                           <SelectValue />
                        </SelectTrigger>
                        <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
-                          {["Junior", "Intermediate", "Senior", "Executive"].map(l => (
-                             <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer">
-                                {l}
-                             </SelectItem>
-                          ))}
+                            {["Junior", "Intermediate", "Senior", "Executive"].map(l => (
+                               <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                                  {l}
+                               </SelectItem>
+                            ))}
                        </SelectContent>
                     </Select>
                  </div>
@@ -492,14 +492,14 @@ export default function InterviewSession() {
                     <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-sm text-slate-900 shadow-sm">
                        <SelectValue placeholder="Base interview on a specific resume" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
-                       <SelectItem value="none" className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer italic text-slate-400">Do not use resume context</SelectItem>
-                       {resumes.map(r => (
-                          <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer">
-                             {r.title}
-                          </SelectItem>
-                       ))}
-                    </SelectContent>
+                     <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
+                         <SelectItem value="none" className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer italic text-slate-500 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">Do not use resume context</SelectItem>
+                         {resumes.map(r => (
+                            <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                               {r.title}
+                            </SelectItem>
+                         ))}
+                     </SelectContent>
                  </Select>
                  <p className="text-[10px] font-medium text-slate-400 px-1 pt-1">If a resume is selected, the AI will tailor questions to your specific experience.</p>
               </div>

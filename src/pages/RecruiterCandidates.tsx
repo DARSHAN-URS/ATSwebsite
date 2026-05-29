@@ -65,21 +65,34 @@ export default function RecruiterCandidates() {
       const applicantIds = [...new Set((apps as any[]).map((a: any) => a.applicant_id))];
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("display_name, user_id")
-        .in("user_id", applicantIds);
+        .select("display_name, id")
+        .in("id", applicantIds);
 
-      const profileMap = new Map((profiles || []).map((p) => [p.user_id, p.display_name || "Unknown"]));
+      const resumeIds = [...new Set((apps as any[]).map((a: any) => a.resume_id).filter(Boolean))];
+      const { data: resumes } = await supabase
+        .from("resumes")
+        .select("id, resume_data")
+        .in("id", resumeIds);
 
-      const rows: CandidateRow[] = (apps as any[]).map((a: any) => ({
-        id: a.id,
-        applicant_id: a.applicant_id,
-        job_post_id: a.job_post_id,
-        status: a.status,
-        is_shortlisted: a.is_shortlisted,
-        created_at: a.created_at,
-        job_title: jobMap.get(a.job_post_id) || "Unknown",
-        display_name: profileMap.get(a.applicant_id) || "Unknown",
-      }));
+      const profileMap = new Map((profiles || []).map((p) => [p.id, p]));
+      const resumeMap = new Map((resumes || []).map((r) => [r.id, r.resume_data]));
+
+      const rows: CandidateRow[] = (apps as any[]).map((a: any) => {
+        const profile = profileMap.get(a.applicant_id);
+        const resumeData = resumeMap.get(a.resume_id) as any;
+        const displayName = profile?.display_name || resumeData?.personalInfo?.fullName || "Unknown";
+
+        return {
+          id: a.id,
+          applicant_id: a.applicant_id,
+          job_post_id: a.job_post_id,
+          status: a.status,
+          is_shortlisted: a.is_shortlisted,
+          created_at: a.created_at,
+          job_title: jobMap.get(a.job_post_id) || "Unknown",
+          display_name: displayName,
+        };
+      });
 
       setCandidates(rows);
       setLoading(false);

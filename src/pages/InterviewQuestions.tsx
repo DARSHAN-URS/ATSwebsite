@@ -208,7 +208,7 @@ export default function InterviewQuestions() {
                        </SelectTrigger>
                        <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1">
                           {resumes.map(r => (
-                             <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 rounded-lg">
+                             <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 rounded-lg text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
                                 {r.title}
                              </SelectItem>
                           ))}

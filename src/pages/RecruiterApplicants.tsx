@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ResumePreview from "@/components/resume/ResumePreview";
 import { useToast } from "@/hooks/use-toast";
 import { 
   ArrowLeft, Star, StarOff, FileText, Loader2, Users, 
@@ -42,6 +44,7 @@ interface Applicant {
   recruiter_notes: string | null;
   is_shortlisted: boolean;
   profile?: { display_name: string | null; user_id: string };
+  resume?: any;
 }
 
 export default function RecruiterApplicants() {
@@ -62,6 +65,7 @@ export default function RecruiterApplicants() {
   const [interviewDuration, setInterviewDuration] = useState("30");
   const [interviewNotes, setInterviewNotes] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
+  const [viewResume, setViewResume] = useState<{ id: string, data: any, title: string, templateId: string } | null>(null);
 
   const fetchData = async () => {
     if (!user || !jobId) return;
@@ -81,11 +85,27 @@ export default function RecruiterApplicants() {
         .select("display_name, id")
         .in("id", applicantIds);
 
+      const resumeIds = [...new Set((appData as any[]).map((a: any) => a.resume_id).filter(Boolean))];
+      const { data: resumes } = await supabase
+        .from("resumes")
+        .select("id, resume_data, title")
+        .in("id", resumeIds);
+
       const profileMap = new Map((profiles || []).map((p) => [p.id, p]));
-      const enriched = (appData as any[]).map((a: any) => ({
-        ...a,
-        profile: profileMap.get(a.applicant_id),
-      }));
+      const resumeMap = new Map((resumes || []).map((r) => [r.id, r]));
+
+      const enriched = (appData as any[]).map((a: any) => {
+        const profile = profileMap.get(a.applicant_id);
+        const resumeRow = resumeMap.get(a.resume_id) as any;
+        const resumeData = resumeRow?.resume_data;
+        const displayName = profile?.display_name || resumeData?.personalInfo?.fullName || "Candidate";
+
+        return {
+          ...a,
+          profile: { display_name: displayName, user_id: a.applicant_id },
+          resume: resumeRow,
+        };
+      });
       setApplicants(enriched);
     } else {
       setApplicants([]);
@@ -240,7 +260,7 @@ export default function RecruiterApplicants() {
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Applicants</p>
             </div>
          ) : (
-            <div className="flex gap-10 overflow-x-auto pb-20 px-2 -mx-2 snap-x scroll-smooth no-scrollbar">
+            <div className="flex gap-10 overflow-x-auto pb-4 px-2 -mx-2 snap-x scroll-smooth no-scrollbar">
                {PIPELINE_STAGES.map((stage) => {
                  const config = stageConfig[stage];
                  const StageIcon = config.icon;
@@ -312,7 +332,13 @@ export default function RecruiterApplicants() {
 
                                          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                                             <div className="flex gap-2">
-                                               {app.resume_id && <button onClick={(e) => { e.stopPropagation(); navigate(`/resume-builder/${app.resume_id}`); }} className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/10 hover:bg-blue-600 transition-colors cursor-pointer"><FileText className="w-4 h-4" /></button>}
+                                               {app.resume_id && <button onClick={(e) => { 
+                                                    e.stopPropagation(); 
+                                                    if (app.resume) {
+                                                      const rd = app.resume.resume_data;
+                                                      setViewResume({ id: app.resume.id, data: rd, title: app.resume.title, templateId: rd.templateId || "classic" });
+                                                    }
+                                                 }} className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/10 hover:bg-blue-600 transition-colors cursor-pointer"><FileText className="w-4 h-4" /></button>}
                                                <button 
                                                   onClick={(e) => { e.stopPropagation(); toggleShortlist(app); }}
                                                   className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-all", app.is_shortlisted ? "bg-amber-100 text-amber-500 shadow-lg shadow-amber-500/10 scale-110" : "bg-slate-50 text-slate-300 hover:text-amber-500 hover:bg-amber-50")}
@@ -452,6 +478,25 @@ export default function RecruiterApplicants() {
            </div>
         </SheetContent>
       </Sheet>
+
+      {viewResume && (
+        <Dialog open={!!viewResume} onOpenChange={(open) => !open && setViewResume(null)}>
+          <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto p-0 bg-slate-100 border-none">
+            <DialogHeader className="sr-only">
+              <DialogTitle>Resume Preview</DialogTitle>
+            </DialogHeader>
+            <div className="p-8 flex justify-center w-full min-h-max">
+              <div className="bg-white shadow-2xl shrink-0" style={{ width: 794, minHeight: 1123 }}>
+                <ResumePreview
+                  resumeData={viewResume.data}
+                  title={viewResume.title}
+                  templateId={viewResume.templateId as any}
+                />
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
