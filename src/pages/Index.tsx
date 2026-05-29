@@ -44,7 +44,7 @@ const Index = () => {
       
       <Navbar />
 
-      <section className="relative pt-24 pb-12 md:pt-48 md:pb-40 overflow-hidden bg-white">
+      <section className="relative pt-24 pb-32 md:pt-48 md:pb-40 overflow-hidden bg-white">
           <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[5rem] md:rounded-bl-[10rem] -z-10 translate-x-1/4" />
           
           <div className="container mx-auto px-4 md:px-8 relative z-10">
