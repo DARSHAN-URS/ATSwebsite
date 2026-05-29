@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { TemplateId } from "./pdfTemplates";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig } from "./atsTemplateConfig";
+import { ALL_DYNAMIC_TEMPLATES } from "../../data/templates/index";
 
 const DUMMY = {
   name: "John Doe",
@@ -240,6 +241,10 @@ function getThumbnailHTML(templateId: TemplateId): string {
         const config = getATSConfig(templateId);
         if (config) return buildATSThumbnail(config);
       }
+      // Dynamic generated templates
+      const dynamicConfig = ALL_DYNAMIC_TEMPLATES.find(t => t.template_id === templateId);
+      if (dynamicConfig) return buildDynamicThumbnail(dynamicConfig);
+      
       // Classic fallback
       return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3">
         <div style="${s(7)}font-weight:700">${DUMMY.name}</div>
@@ -250,6 +255,34 @@ function getThumbnailHTML(templateId: TemplateId): string {
         <div style="${s(3.5)}">${DUMMY.edu.degree} — ${DUMMY.edu.school}</div>
       </div>`;
     }
+  }
+}
+
+function buildDynamicThumbnail(config: any): string {
+  const s = (fontSize: number) => `font-size:${fontSize}px;`;
+  const layout = config.layout_metadata;
+  const primary = layout.color_palette.primary;
+  
+  if (layout.sidebar_position === 'left' || layout.sidebar_position === 'asymmetrical-left') {
+     return `<div style="display:flex;font-family:Arial,sans-serif;height:100%;color:#222;line-height:1.3">
+        <div style="width:35%;background:${primary};color:#fff;padding:6px 5px">
+          <div style="${s(5)}font-weight:700;margin-bottom:4px">${DUMMY.name}</div>
+          <div style="${s(3)}font-weight:700;margin-bottom:1px">CONTACT</div>
+          <div style="${s(2.5)}">${DUMMY.contact}</div>
+        </div>
+        <div style="flex:1;padding:6px 5px">
+          <div style="${s(3.5)}font-weight:700;color:${primary};border-bottom:1px solid ${primary};margin-bottom:2px">EXPERIENCE</div>
+          ${DUMMY.exp.map((e: any) => `<div style="${s(3)}"><b>${e.title}</b></div>`).join("")}
+        </div>
+      </div>`;
+  } else {
+     return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3">
+        <div style="height:4px;background:${primary};margin:-8px -7px 5px"></div>
+        <div style="${s(7)}font-weight:700;color:${primary}">${DUMMY.name}</div>
+        <div style="${s(3.5)}color:#888;margin-bottom:3px">${DUMMY.contact}</div>
+        <div style="border-bottom:1px solid ${primary};margin:3px 0 2px;padding-bottom:1px"><span style="${s(4)}font-weight:700">EXPERIENCE</span></div>
+        ${DUMMY.exp.map((e: any) => `<div style="${s(3.5)}"><b>${e.title}</b> — ${e.company}</div>`).join("")}
+      </div>`;
   }
 }
 

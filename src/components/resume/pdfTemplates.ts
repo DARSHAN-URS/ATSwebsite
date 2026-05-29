@@ -34,6 +34,7 @@ function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, r
 }
 
 import { ATS_TEMPLATES, getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
+import { ALL_DYNAMIC_TEMPLATES } from "../../data/templates/index";
 
 export type TemplateId = string;
 
@@ -48,7 +49,14 @@ export interface ResumeTemplate {
   isPremium?: boolean;
 }
 
-export const RESUME_TEMPLATES: ResumeTemplate[] = [];
+export const RESUME_TEMPLATES: ResumeTemplate[] = ALL_DYNAMIC_TEMPLATES.map(t => ({
+  id: t.template_id,
+  name: t.template_name,
+  description: t.description,
+  preview: "✨",
+  category: t.category,
+  isPremium: false,
+}));
 
 interface PdfContext {
   doc: jsPDF;
@@ -1963,6 +1971,13 @@ export async function buildDoc(
     }
   }
 
+  // Check for dynamic generated templates
+  const dynamicConfig = ALL_DYNAMIC_TEMPLATES.find(t => t.template_id === templateId);
+  if (dynamicConfig) {
+    renderDynamicConfig(doc, data, title, dynamicConfig);
+    return doc;
+  }
+
   switch (templateId) {
     case "modern": renderModern(doc, data, title); break;
     case "minimal": renderMinimal(doc, data, title); break;
@@ -1999,6 +2014,67 @@ export async function buildDoc(
     default: renderClassic(doc, data, title);
   }
   return doc;
+}
+
+function hexToRgb(hex: string) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : { r: 0, g: 0, b: 0 };
+}
+
+function renderDynamicConfig(doc: jsPDF, data: ResumeData, title: string, config: any) {
+  const layout = config.layout_metadata;
+  const primaryRgb = hexToRgb(layout.color_palette.primary);
+  
+  const ctx: PdfContext = { doc, y: 20, margin: parseInt(layout.spacing.margin) || 15, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  
+  const pi = data.personalInfo || {};
+
+  if (layout.sidebar_position === 'left' || layout.sidebar_position === 'asymmetrical-left') {
+    doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+    doc.rect(0, 0, 60, doc.internal.pageSize.getHeight(), "F");
+    ctx.margin = 65;
+    doc.setTextColor(255);
+    doc.setFontSize(16);
+    doc.text(pi.fullName || title || "Resume", 5, 20);
+    if (pi.email) {
+       doc.setFontSize(9);
+       doc.text(pi.email, 5, 30);
+    }
+  } else {
+    doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+    doc.rect(0, 0, ctx.pageWidth, 30, "F");
+    doc.setTextColor(255);
+    doc.setFontSize(22);
+    doc.text(pi.fullName || title || "Resume", ctx.margin, 20);
+  }
+  
+  ctx.maxWidth = ctx.pageWidth - ctx.margin - 15;
+  ctx.y = 40;
+  
+  doc.setTextColor(0);
+  
+  const addSection = (label: string) => {
+    checkPageBreak(ctx, 14);
+    ctx.y += 5;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    if (layout.visual_emphasis === 'color-blocks') {
+       doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+       doc.rect(ctx.margin, ctx.y - 4, ctx.maxWidth, 6, "F");
+       doc.setTextColor(255);
+    } else {
+       doc.setTextColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+    }
+    doc.text(label.toUpperCase(), ctx.margin + (layout.visual_emphasis === 'color-blocks' ? 2 : 0), ctx.y);
+    doc.setTextColor(0);
+    ctx.y += 8;
+  };
+
+  renderBody(ctx, data, addSection);
 }
 
 export async function generateResumePDF(

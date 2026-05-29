@@ -6,6 +6,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
+import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
 import { cn } from "@/lib/utils";
 import { 
   Search, Building2, CheckCircle2, Sparkles, Zap, ShieldCheck, 
@@ -200,14 +202,16 @@ const Index = () => {
                <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{t.landing.seeTemplates}</h3>
                
                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 px-4 md:px-8 -mx-4 md:-mx-8 scrollbar-hide">
-                  {[
-                  ].map((src, i) => (
-                     <div key={i} className="w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] snap-center shrink-0 rounded-2xl md:rounded-[2rem] bg-slate-100 aspect-[3/4] shadow-sm border border-slate-200 overflow-hidden group cursor-pointer">
-                        <img src={src} loading="lazy" className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105" alt="template"/>
+                  {RESUME_TEMPLATES.map((tpl, i) => (
+                     <div key={i} className="w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] snap-center shrink-0 rounded-2xl md:rounded-[2rem] bg-slate-100 aspect-[595/842] shadow-sm border border-slate-200 overflow-hidden group cursor-pointer relative">
+                        <div className="w-full h-full grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105 origin-top">
+                           <TemplateThumbnail templateId={tpl.id} />
+                        </div>
+                        <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300"></div>
                      </div>
                   ))}
                </div>
-
+               
                <Button asChild size="lg" className="h-14 px-8 md:h-16 md:px-10 rounded-2xl bg-slate-900 hover:bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] transition-all">
                   <Link to="/resume-templates">Explore All Templates</Link>
                </Button>
