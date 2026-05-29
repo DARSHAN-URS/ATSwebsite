@@ -376,10 +376,16 @@ export default function TemplateThumbnail({ templateId, data }: TemplateThumbnai
   return (
     <div
       className="w-full bg-white rounded border border-border overflow-hidden"
-      style={{ aspectRatio: "595 / 842" }}
+      style={{ aspectRatio: "595 / 842", containerType: "inline-size" }}
     >
       <div
-        className="w-full h-full pointer-events-none select-none"
+        className="pointer-events-none select-none"
+        style={{
+          width: "140px",
+          height: "198px",
+          transform: "scale(calc(100cqw / 140))",
+          transformOrigin: "top left",
+        }}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>
