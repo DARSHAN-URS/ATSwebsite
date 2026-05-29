@@ -35,7 +35,7 @@ function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, r
 
 import { ATS_TEMPLATES, getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "vibrant" | "bold" | "minimalist-plus" | "corporate" | "tech" | "waterfall" | "vision" | "prism" | "midnight" | "ocean" | "forest" | "rose" | "sunset" | "monochrome" | "ruby" | "emerald" | "sapphire" | "amethyst" | "gold" | "slate" | "coral" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination" | "ats-academic" | "ats-medical" | "ats-legal" | "ats-finance" | "ats-sales" | "ats-marketing" | "ats-remote" | "ats-executive-pro" | "ats-freelance" | "ats-consultant";
+export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "vibrant" | "bold" | "minimalist-plus" | "corporate" | "tech" | "waterfall" | "vision" | "prism" | "midnight" | "ocean" | "forest" | "rose" | "sunset" | "monochrome" | "ruby" | "emerald" | "sapphire" | "amethyst" | "gold" | "slate" | "coral" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination" | "ats-academic" | "ats-medical" | "ats-legal" | "ats-finance" | "ats-sales" | "ats-marketing" | "ats-remote" | "ats-executive-pro" | "ats-freelance" | "ats-consultant" | "cobalt";
 
 export interface ResumeTemplate {
   id: TemplateId;
@@ -64,6 +64,7 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
   { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern", isPremium: true },
   { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
   { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional", isPremium: true },
+  { id: "cobalt", name: "Cobalt Edge", description: "Sleek blue header with circular profile photo and classic serif body", preview: "🌊", category: "Modern" },
 ];
 
 interface PdfContext {
@@ -1716,6 +1717,174 @@ function renderPrism(doc: jsPDF, data: ResumeData, title: string) {
   renderBody(ctx, data, addSection);
 }
 
+// ─── Cobalt Edge ───────────────────────────────────────
+function renderCobalt(doc: jsPDF, data: ResumeData, title: string, photoData?: string | null) {
+  const ctx: PdfContext = { doc, y: 20, margin: 20, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
+  ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
+  const pi = data.personalInfo || {};
+
+  doc.setFillColor(29, 78, 137);
+  doc.rect(0, 0, ctx.pageWidth, 45, "F");
+
+  if (photoData) {
+    addCircularPhoto(doc, photoData, ctx.pageWidth - 30, 22.5, 14, { r: 29, g: 78, b: 137 });
+  }
+
+  doc.setFontSize(24);
+  doc.setFont("times", "bold");
+  doc.setTextColor(255);
+  doc.text(pi.fullName || title || "Resume", ctx.margin, 20);
+
+  const parts = [pi.email, pi.phone, pi.location, pi.linkedin].filter(Boolean);
+  if (parts.length) {
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(220);
+    doc.text(parts.join("   •   "), ctx.margin, 30);
+  }
+
+  doc.setTextColor(0);
+  ctx.y = 55;
+
+  const pageBottom = doc.internal.pageSize.getHeight() - 12;
+  const checkY = (y: number, needed: number): number => {
+    if (y + needed > pageBottom) {
+      doc.addPage();
+      return 20;
+    }
+    return y;
+  };
+
+  const addSection = (label: string) => {
+    ctx.y = checkY(ctx.y, 14);
+    ctx.y += 4;
+    doc.setFontSize(12);
+    doc.setFont("times", "bold");
+    doc.setTextColor(29, 78, 137);
+    doc.text(label, ctx.margin, ctx.y);
+    const textWidth = doc.getTextWidth(label);
+    doc.setDrawColor(29, 78, 137);
+    doc.setLineWidth(0.5);
+    doc.line(ctx.margin, ctx.y + 1.5, ctx.margin + textWidth, ctx.y + 1.5);
+    doc.setTextColor(0);
+    doc.setLineWidth(0.2); // reset
+    ctx.y += 8;
+  };
+
+  if (data.summary) {
+    addSection("Summary");
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    const lines = doc.splitTextToSize(data.summary, ctx.maxWidth);
+    ctx.y = checkY(ctx.y, lines.length * 5);
+    doc.text(lines, ctx.margin, ctx.y);
+    ctx.y += lines.length * 5 + 4;
+  }
+
+  if ((data.experience || []).length > 0) {
+    addSection("Professional Experience");
+    data.experience!.forEach(exp => {
+      doc.setFontSize(10);
+      doc.setFont("times", "bold");
+      ctx.y = checkY(ctx.y, 5);
+      doc.text(`${exp.title}`, ctx.margin, ctx.y);
+      const dateStr = formatDateRangePdf(exp.startDate, exp.endDate);
+      if (dateStr) {
+        doc.setFontSize(9);
+        doc.setFont("times", "normal");
+        const dw = doc.getTextWidth(dateStr);
+        doc.text(dateStr, ctx.pageWidth - ctx.margin - dw, ctx.y);
+      }
+      ctx.y += 5;
+      doc.setFontSize(10);
+      doc.setFont("times", "italic");
+      ctx.y = checkY(ctx.y, 5);
+      doc.text(`${exp.company}`, ctx.margin, ctx.y);
+      ctx.y += 5;
+
+      doc.setFont("times", "normal");
+      if (exp.bullets?.length) {
+        exp.bullets.forEach((bullet) => {
+          const lines = doc.splitTextToSize(`• ${bullet}`, ctx.maxWidth - 4);
+          ctx.y = checkY(ctx.y, lines.length * 5);
+          doc.text(lines, ctx.margin + 2, ctx.y);
+          ctx.y += lines.length * 5;
+        });
+      } else if (exp.description) {
+        const lines = doc.splitTextToSize(exp.description, ctx.maxWidth);
+        ctx.y = checkY(ctx.y, lines.length * 5);
+        doc.text(lines, ctx.margin, ctx.y);
+        ctx.y += lines.length * 5;
+      }
+      ctx.y += 3;
+    });
+  }
+
+  if ((data.education || []).length > 0) {
+    addSection("Education");
+    data.education!.forEach(edu => {
+      doc.setFontSize(10);
+      doc.setFont("times", "bold");
+      ctx.y = checkY(ctx.y, 5);
+      doc.text(`${edu.degree}`, ctx.margin, ctx.y);
+      const dateStr = formatDateRangePdf(edu.startDate, edu.endDate) || (edu.year || "");
+      if (dateStr) {
+        doc.setFontSize(9);
+        doc.setFont("times", "normal");
+        const dw = doc.getTextWidth(dateStr);
+        doc.text(dateStr, ctx.pageWidth - ctx.margin - dw, ctx.y);
+      }
+      ctx.y += 5;
+      doc.setFontSize(10);
+      doc.setFont("times", "italic");
+      ctx.y = checkY(ctx.y, 5);
+      doc.text(`${edu.school}`, ctx.margin, ctx.y);
+      ctx.y += 6;
+    });
+  }
+
+  if ((data.skills || []).length > 0) {
+    addSection("Skills");
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    const halfWidth = ctx.maxWidth / 2;
+    let tempY = ctx.y;
+    let leftSide = true;
+    data.skills!.forEach((skill, i) => {
+      const x = leftSide ? ctx.margin + 2 : ctx.margin + 2 + halfWidth;
+      tempY = checkY(tempY, 5);
+      doc.text(`• ${skill}`, x, tempY);
+      if (!leftSide) {
+        tempY += 5;
+      }
+      leftSide = !leftSide;
+    });
+    if (!leftSide) tempY += 5;
+    ctx.y = tempY + 2;
+  }
+  
+  if ((data.languages || []).length > 0) {
+    addSection("Languages");
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    const halfWidth = ctx.maxWidth / 2;
+    let tempY = ctx.y;
+    let leftSide = true;
+    data.languages!.forEach((lang) => {
+      const x = leftSide ? ctx.margin + 2 : ctx.margin + 2 + halfWidth;
+      const str = `${lang.name}${lang.proficiency ? ` (${lang.proficiency})` : ""}`;
+      tempY = checkY(tempY, 5);
+      doc.text(`• ${str}`, x, tempY);
+      if (!leftSide) {
+        tempY += 5;
+      }
+      leftSide = !leftSide;
+    });
+    if (!leftSide) tempY += 5;
+    ctx.y = tempY + 2;
+  }
+}
+
 // ─── Main exports ──────────────────────────────────────
 
 export interface PdfColorOverrides {
@@ -1796,7 +1965,7 @@ export async function buildDoc(
 
   // Pre-load photo for templates that support it
   const pi = data.personalInfo || {};
-  const photoTemplates: string[] = ["contemporary", "sidebar", "polished", "waterfall", "ocean", "sunset", "amethyst", "emerald"];
+  const photoTemplates: string[] = ["contemporary", "sidebar", "polished", "waterfall", "ocean", "sunset", "amethyst", "emerald", "cobalt"];
   let photoData: string | null = null;
   if (pi.photoUrl && photoTemplates.includes(templateId)) {
     photoData = await loadImageAsBase64(pi.photoUrl);
@@ -1843,6 +2012,7 @@ export async function buildDoc(
     case "gold": renderVision(doc, data, title); break;
     case "slate": renderExecutive(doc, data, title); break;
     case "coral": renderMinimal(doc, data, title); break;
+    case "cobalt": renderCobalt(doc, data, title, photoData); break;
     default: renderClassic(doc, data, title);
   }
   return doc;

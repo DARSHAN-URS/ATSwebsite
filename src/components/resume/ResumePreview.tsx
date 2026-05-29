@@ -318,6 +318,8 @@ function sectionHeader(label: string, templateId: TemplateId): string {
       return `<div style="margin:18px 0 10px"><span style="font-size:16px;color:#dc3545;${base}">${escapeHtml(label)}</span><div style="width:40px;height:3px;background:#dc3545;margin-top:4px"></div></div>`;
     case "contemporary":
       return `<div style="margin:16px 0 8px;border-bottom:2px solid #10a37f;padding-bottom:4px"><span style="font-size:14px;color:#10a37f;${base}">${escapeHtml(label)}</span></div>`;
+    case "cobalt":
+      return `<div style="margin:18px 0 10px"><span style="font-size:16px;font-family:'Times New Roman',Times,serif;color:#1d4e89;${base}border-bottom:1.5px solid #1d4e89;padding-bottom:2px;display:inline-block;">${escapeHtml(label)}</span></div>`;
     case "polished":
       return `<div style="margin:16px 0 8px;border-bottom:2px solid #a64834;padding-bottom:4px"><span style="font-size:14px;color:#a64834;${base}">${escapeHtml(label)}</span></div>`;
     case "compact":
@@ -401,6 +403,15 @@ function getTemplateStyles(templateId: TemplateId, photoUrl?: string) {
         nameStyle: "font-size:36px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-1px",
         contactStyle: "font-size:13px;color:#dcfff0;margin:0 0 4px",
         linkStyle: "font-size:13px;color:#dcfff0;margin:0 0 8px",
+      };
+    case "cobalt":
+      return {
+        container: "font-family:'Times New Roman', Times, serif;padding:0 50px;color:#222;line-height:1.5;",
+        headerBefore: `<div style="background:#1d4e89;margin:0 -50px 25px;padding:35px 50px 30px;display:flex;justify-content:space-between;align-items:center"><div>`,
+        headerAfter: `</div>${photoUrl ? `<img src="${escapeHtml(photoUrl)}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #1d4e89;box-shadow:0 4px 12px rgba(0,0,0,0.2);flex-shrink:0;margin-left:20px"/>` : `<div style="width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;margin-left:20px"></div>`}</div>`,
+        nameStyle: "font-size:36px;font-family:'Times New Roman',Times,serif;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:-1px",
+        contactStyle: "font-size:13px;font-family:Helvetica,Arial,sans-serif;color:#d0dce8;margin:0 0 4px",
+        linkStyle: "font-size:13px;font-family:Helvetica,Arial,sans-serif;color:#d0dce8;margin:0 0 8px",
       };
     case "polished":
       return {

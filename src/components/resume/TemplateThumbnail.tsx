@@ -217,6 +217,23 @@ function getThumbnailHTML(templateId: TemplateId): string {
         </div>
       </div>`;
 
+    case "cobalt":
+      return `<div style="font-family:'Times New Roman',Times,serif;color:#222;line-height:1.3">
+        <div style="background:#1d4e89;padding:6px 7px 5px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="${s(7)}font-weight:700;color:#fff">${DUMMY.name}</div>
+            <div style="${s(3)}color:#d0dce8;font-family:Arial,sans-serif">${DUMMY.contact}</div>
+          </div>
+          <div style="width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.3)"></div>
+        </div>
+        <div style="padding:4px 7px">
+          <div style="${s(4)}font-weight:700;color:#1d4e89;margin-bottom:2px"><span style="border-bottom:1px solid #1d4e89;padding-bottom:1px;display:inline-block">EXPERIENCE</span></div>
+          ${DUMMY.exp.map(e => `<div style="${s(3.5)}"><b>${e.title}</b> — <i>${e.company}</i></div>`).join("")}
+          <div style="${s(4)}font-weight:700;color:#1d4e89;margin:4px 0 2px"><span style="border-bottom:1px solid #1d4e89;padding-bottom:1px;display:inline-block">EDUCATION</span></div>
+          <div style="${s(3.5)}"><b>${DUMMY.edu.degree}</b> — <i>${DUMMY.edu.school}</i></div>
+        </div>
+      </div>`;
+
     default: {
       // Config-driven ATS templates
       if (isATSTemplateId(templateId)) {

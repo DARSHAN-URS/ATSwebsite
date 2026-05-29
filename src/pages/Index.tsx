@@ -201,6 +201,7 @@ const Index = () => {
                
                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 px-4 md:px-8 -mx-4 md:-mx-8 scrollbar-hide">
                   {[
+                     "/images/flowcv-cobalt.png",
                      "/images/flowcv-ats.webp",
                      "/images/flowcv-creative.webp",
                      "/images/flowcv-modern.webp",
