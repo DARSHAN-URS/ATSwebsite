@@ -1,14 +1,14 @@
 {
-  "template_id": "tpl_ats_001",
-  "template_name": "ATS Optimized Structural Form 1",
-  "category": "ATS Optimized",
-  "description": "A distinct ATS Optimized layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "template_id": "tpl_pho_001",
+  "template_name": "Photo Profiles Structural Form 1",
+  "category": "Photo Profiles",
+  "description": "A distinct Photo Profiles layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "split-even",
-    "structural_alignment": "justified",
-    "information_density": "dense",
-    "visual_emphasis": "white-space",
+    "column_count": 3,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "staggered",
+    "information_density": "variable",
+    "visual_emphasis": "timeline",
     "typography": {
       "heading": "FontStack-0A",
       "body": "FontStack-0B",
@@ -20,12 +20,12 @@
       "section_gap": "16px"
     },
     "color_palette": {
-      "primary": "#270103",
-      "secondary": "#8c4832",
+      "primary": "#54ec28",
+      "secondary": "#c3fac6",
       "text": "#111",
       "background": "#fff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
@@ -43,9 +43,9 @@
       "projects": true
     }
   },
-  "ats_score": 100,
+  "ats_score": 90,
   "suitable_professions": [
-    "ATS Optimized Roles",
+    "Photo Profiles Roles",
     "General Use"
   ]
 }

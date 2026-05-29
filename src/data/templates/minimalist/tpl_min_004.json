@@ -2,13 +2,13 @@
   "template_id": "tpl_min_004",
   "template_name": "Minimalist Structural Form 4",
   "category": "Minimalist",
-  "description": "A distinct Minimalist layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "description": "A distinct Minimalist layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "split-even",
-    "structural_alignment": "justified",
-    "information_density": "dense",
-    "visual_emphasis": "white-space",
+    "column_count": 2,
+    "sidebar_position": "right",
+    "structural_alignment": "right-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
     "typography": {
       "heading": "FontStack-3A",
       "body": "FontStack-3B",
@@ -20,11 +20,12 @@
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#89a1fd",
-      "secondary": "#76a57b",
+      "primary": "#8675ad",
+      "secondary": "#0f8207",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

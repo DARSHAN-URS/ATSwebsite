@@ -1,14 +1,14 @@
 {
-  "template_id": "tpl_mod_002",
-  "template_name": "Modern Structural Form 2",
-  "category": "Modern",
-  "description": "A distinct Modern layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
+  "template_id": "tpl_pho_002",
+  "template_name": "Photo Profiles Structural Form 2",
+  "category": "Photo Profiles",
+  "description": "A distinct Photo Profiles layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "left",
-    "structural_alignment": "center-aligned",
-    "information_density": "standard",
-    "visual_emphasis": "borders",
+    "column_count": 1,
+    "sidebar_position": "split-even",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "white-space",
     "typography": {
       "heading": "FontStack-1A",
       "body": "FontStack-1B",
@@ -20,12 +20,12 @@
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#122f28",
-      "secondary": "#70b669",
+      "primary": "#d48221",
+      "secondary": "#9c691a",
       "text": "#111",
       "background": "#fff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {
@@ -45,7 +45,7 @@
   },
   "ats_score": 85,
   "suitable_professions": [
-    "Modern Roles",
+    "Photo Profiles Roles",
     "General Use"
   ]
 }

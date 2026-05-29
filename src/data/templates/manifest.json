@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-29T14:50:56.387Z",
-  "total_templates": 35,
+  "generated_at": "2026-05-29T15:08:31.710Z",
+  "total_templates": 40,
   "templates": [
     {
       "id": "tpl_mod_001",
@@ -48,49 +48,49 @@
       "id": "tpl_pro_003",
       "name": "Professional Structural Form 3",
       "category": "Professional",
-      "structure": "none"
+      "structure": "left"
     },
     {
       "id": "tpl_pro_004",
       "name": "Professional Structural Form 4",
       "category": "Professional",
-      "structure": "left"
+      "structure": "none"
     },
     {
       "id": "tpl_pro_005",
       "name": "Professional Structural Form 5",
       "category": "Professional",
-      "structure": "right"
+      "structure": "left"
     },
     {
       "id": "tpl_cre_001",
       "name": "Creative Structural Form 1",
       "category": "Creative",
-      "structure": "top-nav"
+      "structure": "right"
     },
     {
       "id": "tpl_cre_002",
       "name": "Creative Structural Form 2",
       "category": "Creative",
-      "structure": "split-even"
+      "structure": "top-nav"
     },
     {
       "id": "tpl_cre_003",
       "name": "Creative Structural Form 3",
       "category": "Creative",
-      "structure": "asymmetrical-left"
+      "structure": "split-even"
     },
     {
       "id": "tpl_cre_004",
       "name": "Creative Structural Form 4",
       "category": "Creative",
-      "structure": "asymmetrical-right"
+      "structure": "asymmetrical-left"
     },
     {
       "id": "tpl_cre_005",
       "name": "Creative Structural Form 5",
       "category": "Creative",
-      "structure": "none"
+      "structure": "asymmetrical-right"
     },
     {
       "id": "tpl_min_001",
@@ -102,115 +102,145 @@
       "id": "tpl_min_002",
       "name": "Minimalist Structural Form 2",
       "category": "Minimalist",
-      "structure": "right"
+      "structure": "none"
     },
     {
       "id": "tpl_min_003",
       "name": "Minimalist Structural Form 3",
       "category": "Minimalist",
-      "structure": "top-nav"
+      "structure": "left"
     },
     {
       "id": "tpl_min_004",
       "name": "Minimalist Structural Form 4",
       "category": "Minimalist",
-      "structure": "split-even"
+      "structure": "right"
     },
     {
       "id": "tpl_min_005",
       "name": "Minimalist Structural Form 5",
       "category": "Minimalist",
-      "structure": "asymmetrical-left"
+      "structure": "top-nav"
     },
     {
       "id": "tpl_ats_001",
       "name": "ATS Optimized Structural Form 1",
       "category": "ATS Optimized",
-      "structure": "asymmetrical-right"
+      "structure": "split-even"
     },
     {
       "id": "tpl_ats_002",
       "name": "ATS Optimized Structural Form 2",
       "category": "ATS Optimized",
-      "structure": "none"
+      "structure": "asymmetrical-left"
     },
     {
       "id": "tpl_ats_003",
       "name": "ATS Optimized Structural Form 3",
       "category": "ATS Optimized",
-      "structure": "left"
+      "structure": "asymmetrical-right"
     },
     {
       "id": "tpl_ats_004",
       "name": "ATS Optimized Structural Form 4",
       "category": "ATS Optimized",
-      "structure": "right"
+      "structure": "left"
     },
     {
       "id": "tpl_ats_005",
       "name": "ATS Optimized Structural Form 5",
       "category": "ATS Optimized",
-      "structure": "top-nav"
+      "structure": "none"
     },
     {
       "id": "tpl_exe_001",
       "name": "Executive Structural Form 1",
       "category": "Executive",
-      "structure": "split-even"
+      "structure": "left"
     },
     {
       "id": "tpl_exe_002",
       "name": "Executive Structural Form 2",
       "category": "Executive",
-      "structure": "asymmetrical-left"
+      "structure": "right"
     },
     {
       "id": "tpl_exe_003",
       "name": "Executive Structural Form 3",
       "category": "Executive",
-      "structure": "asymmetrical-right"
+      "structure": "top-nav"
     },
     {
       "id": "tpl_exe_004",
       "name": "Executive Structural Form 4",
       "category": "Executive",
-      "structure": "none"
+      "structure": "split-even"
     },
     {
       "id": "tpl_exe_005",
       "name": "Executive Structural Form 5",
       "category": "Executive",
-      "structure": "left"
+      "structure": "asymmetrical-left"
     },
     {
       "id": "tpl_tec_001",
       "name": "Technical Structural Form 1",
       "category": "Technical",
-      "structure": "right"
+      "structure": "asymmetrical-right"
     },
     {
       "id": "tpl_tec_002",
       "name": "Technical Structural Form 2",
       "category": "Technical",
-      "structure": "top-nav"
+      "structure": "left"
     },
     {
       "id": "tpl_tec_003",
       "name": "Technical Structural Form 3",
       "category": "Technical",
-      "structure": "split-even"
+      "structure": "none"
     },
     {
       "id": "tpl_tec_004",
       "name": "Technical Structural Form 4",
       "category": "Technical",
-      "structure": "asymmetrical-left"
+      "structure": "left"
     },
     {
       "id": "tpl_tec_005",
       "name": "Technical Structural Form 5",
       "category": "Technical",
+      "structure": "right"
+    },
+    {
+      "id": "tpl_pho_001",
+      "name": "Photo Profiles Structural Form 1",
+      "category": "Photo Profiles",
+      "structure": "top-nav"
+    },
+    {
+      "id": "tpl_pho_002",
+      "name": "Photo Profiles Structural Form 2",
+      "category": "Photo Profiles",
+      "structure": "split-even"
+    },
+    {
+      "id": "tpl_pho_003",
+      "name": "Photo Profiles Structural Form 3",
+      "category": "Photo Profiles",
+      "structure": "asymmetrical-left"
+    },
+    {
+      "id": "tpl_pho_004",
+      "name": "Photo Profiles Structural Form 4",
+      "category": "Photo Profiles",
       "structure": "asymmetrical-right"
+    },
+    {
+      "id": "tpl_pho_005",
+      "name": "Photo Profiles Structural Form 5",
+      "category": "Photo Profiles",
+      "structure": "left"
     }
   ]
 }

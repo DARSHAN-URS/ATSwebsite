@@ -1,8 +1,8 @@
 {
-  "template_id": "tpl_pro_001",
-  "template_name": "Professional Structural Form 1",
-  "category": "Professional",
-  "description": "A distinct Professional layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "template_id": "tpl_pho_003",
+  "template_name": "Photo Profiles Structural Form 3",
+  "category": "Photo Profiles",
+  "description": "A distinct Photo Profiles layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
   "layout_metadata": {
     "column_count": 2,
     "sidebar_position": "asymmetrical-left",
@@ -10,30 +10,30 @@
     "information_density": "spacious",
     "visual_emphasis": "icons",
     "typography": {
-      "heading": "FontStack-0A",
-      "body": "FontStack-0B",
-      "accent": "FontStack-0C"
+      "heading": "FontStack-2A",
+      "body": "FontStack-2B",
+      "accent": "FontStack-2C"
     },
     "spacing": {
-      "margin": "10px",
-      "line_height": 1.2,
-      "section_gap": "16px"
+      "margin": "14px",
+      "line_height": 1.4,
+      "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#7f5dd8",
-      "secondary": "#2f2302",
+      "primary": "#5e35bb",
+      "secondary": "#d39d63",
       "text": "#111",
       "background": "#fff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "summary",
       "experience",
       "education",
-      "skills"
+      "skills",
+      "summary"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,9 @@
       "projects": true
     }
   },
-  "ats_score": 90,
+  "ats_score": 80,
   "suitable_professions": [
-    "Professional Roles",
+    "Photo Profiles Roles",
     "General Use"
   ]
 }

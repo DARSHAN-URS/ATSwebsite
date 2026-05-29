@@ -266,7 +266,8 @@ function buildDynamicThumbnail(config: any): string {
   if (layout.sidebar_position === 'left' || layout.sidebar_position === 'asymmetrical-left') {
      return `<div style="display:flex;font-family:Arial,sans-serif;height:100%;color:#222;line-height:1.3">
         <div style="width:35%;background:${primary};color:#fff;padding:6px 5px">
-          <div style="${s(5)}font-weight:700;margin-bottom:4px">${DUMMY.name}</div>
+          ${layout.has_photo ? `<div style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.3);margin:0 auto 4px"></div>` : ''}
+          <div style="${s(5)}font-weight:700;margin-bottom:4px;text-align:${layout.has_photo ? 'center' : 'left'}">${DUMMY.name}</div>
           <div style="${s(3)}font-weight:700;margin-bottom:1px">CONTACT</div>
           <div style="${s(2.5)}">${DUMMY.contact}</div>
         </div>
@@ -278,8 +279,13 @@ function buildDynamicThumbnail(config: any): string {
   } else {
      return `<div style="font-family:Arial,sans-serif;padding:8px 7px;color:#222;line-height:1.3">
         <div style="height:4px;background:${primary};margin:-8px -7px 5px"></div>
-        <div style="${s(7)}font-weight:700;color:${primary}">${DUMMY.name}</div>
-        <div style="${s(3.5)}color:#888;margin-bottom:3px">${DUMMY.contact}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+           <div>
+              <div style="${s(7)}font-weight:700;color:${primary}">${DUMMY.name}</div>
+              <div style="${s(3.5)}color:#888;margin-bottom:3px">${DUMMY.contact}</div>
+           </div>
+           ${layout.has_photo ? `<div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);margin-right:2px"></div>` : ''}
+        </div>
         <div style="border-bottom:1px solid ${primary};margin:3px 0 2px;padding-bottom:1px"><span style="${s(4)}font-weight:700">EXPERIENCE</span></div>
         ${DUMMY.exp.map((e: any) => `<div style="${s(3.5)}"><b>${e.title}</b> — ${e.company}</div>`).join("")}
       </div>`;

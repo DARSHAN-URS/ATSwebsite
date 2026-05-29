@@ -1,14 +1,14 @@
 {
-  "template_id": "tpl_exe_005",
-  "template_name": "Executive Structural Form 5",
-  "category": "Executive",
-  "description": "A distinct Executive layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "template_id": "tpl_pho_005",
+  "template_name": "Photo Profiles Structural Form 5",
+  "category": "Photo Profiles",
+  "description": "A distinct Photo Profiles layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
   "layout_metadata": {
     "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
-    "structural_alignment": "mixed-alignment",
-    "information_density": "spacious",
-    "visual_emphasis": "icons",
+    "sidebar_position": "left",
+    "structural_alignment": "left-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "photo-led",
     "typography": {
       "heading": "FontStack-4A",
       "body": "FontStack-4B",
@@ -20,12 +20,12 @@
       "section_gap": "32px"
     },
     "color_palette": {
-      "primary": "#88fa6e",
-      "secondary": "#2cc0a7",
+      "primary": "#afa584",
+      "secondary": "#d7a8aa",
       "text": "#111",
       "background": "#fff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
@@ -46,7 +46,7 @@
   },
   "ats_score": 70,
   "suitable_professions": [
-    "Executive Roles",
+    "Photo Profiles Roles",
     "General Use"
   ]
 }

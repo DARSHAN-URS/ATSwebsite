@@ -2,13 +2,13 @@
   "template_id": "tpl_cre_003",
   "template_name": "Creative Structural Form 3",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "description": "A distinct Creative layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
-    "structural_alignment": "mixed-alignment",
-    "information_density": "spacious",
-    "visual_emphasis": "icons",
+    "column_count": 1,
+    "sidebar_position": "split-even",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "white-space",
     "typography": {
       "heading": "FontStack-2A",
       "body": "FontStack-2B",
@@ -20,11 +20,12 @@
       "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#dc2ac5",
-      "secondary": "#f86bdf",
+      "primary": "#c14803",
+      "secondary": "#04054a",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {

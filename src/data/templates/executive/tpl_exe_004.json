@@ -2,13 +2,13 @@
   "template_id": "tpl_exe_004",
   "template_name": "Executive Structural Form 4",
   "category": "Executive",
-  "description": "A distinct Executive layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
+  "description": "A distinct Executive layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
   "layout_metadata": {
     "column_count": 1,
-    "sidebar_position": "none",
-    "structural_alignment": "left-aligned",
-    "information_density": "ultra-compact",
-    "visual_emphasis": "typography",
+    "sidebar_position": "split-even",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "white-space",
     "typography": {
       "heading": "FontStack-3A",
       "body": "FontStack-3B",
@@ -20,11 +20,12 @@
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#54a93e",
-      "secondary": "#b4acfe",
+      "primary": "#5d3793",
+      "secondary": "#5c075e",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

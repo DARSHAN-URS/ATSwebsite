@@ -20,11 +20,12 @@
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#68bedf",
-      "secondary": "#da343e",
+      "primary": "#78c1f5",
+      "secondary": "#62380e",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

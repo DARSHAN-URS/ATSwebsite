@@ -2,13 +2,13 @@
   "template_id": "tpl_tec_002",
   "template_name": "Technical Structural Form 2",
   "category": "Technical",
-  "description": "A distinct Technical layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "description": "A distinct Technical layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
   "layout_metadata": {
-    "column_count": 3,
-    "sidebar_position": "top-nav",
-    "structural_alignment": "staggered",
-    "information_density": "variable",
-    "visual_emphasis": "timeline",
+    "column_count": 2,
+    "sidebar_position": "left",
+    "structural_alignment": "left-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "photo-led",
     "typography": {
       "heading": "FontStack-1A",
       "body": "FontStack-1B",
@@ -20,11 +20,12 @@
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#37f1eb",
-      "secondary": "#3fe603",
+      "primary": "#8b3a5d",
+      "secondary": "#3663fc",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

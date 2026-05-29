@@ -2,13 +2,13 @@
   "template_id": "tpl_tec_004",
   "template_name": "Technical Structural Form 4",
   "category": "Technical",
-  "description": "A distinct Technical layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "description": "A distinct Technical layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
   "layout_metadata": {
     "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
-    "structural_alignment": "mixed-alignment",
-    "information_density": "spacious",
-    "visual_emphasis": "icons",
+    "sidebar_position": "left",
+    "structural_alignment": "center-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "borders",
     "typography": {
       "heading": "FontStack-3A",
       "body": "FontStack-3B",
@@ -20,11 +20,12 @@
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#8174e7",
-      "secondary": "#9f3cfd",
+      "primary": "#e72cd2",
+      "secondary": "#15c062",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

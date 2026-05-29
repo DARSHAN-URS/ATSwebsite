@@ -1,14 +1,14 @@
 {
-  "template_id": "tpl_cre_004",
-  "template_name": "Creative Structural Form 4",
-  "category": "Creative",
-  "description": "A distinct Creative layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "template_id": "tpl_pho_004",
+  "template_name": "Photo Profiles Structural Form 4",
+  "category": "Photo Profiles",
+  "description": "A distinct Photo Profiles layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
-    "structural_alignment": "mixed-alignment",
-    "information_density": "spacious",
-    "visual_emphasis": "icons",
+    "column_count": 1,
+    "sidebar_position": "asymmetrical-right",
+    "structural_alignment": "alternating",
+    "information_density": "hyper-dense",
+    "visual_emphasis": "color-blocks",
     "typography": {
       "heading": "FontStack-3A",
       "body": "FontStack-3B",
@@ -20,12 +20,12 @@
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#e08d39",
-      "secondary": "#3a03d9",
+      "primary": "#8df6c9",
+      "secondary": "#b31523",
       "text": "#111",
       "background": "#fff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {
@@ -45,7 +45,7 @@
   },
   "ats_score": 75,
   "suitable_professions": [
-    "Creative Roles",
+    "Photo Profiles Roles",
     "General Use"
   ]
 }

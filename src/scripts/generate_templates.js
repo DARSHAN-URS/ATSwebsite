@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 const OUTPUT_DIR = path.join(__dirname, '..', 'data', 'templates');
 
 const categories = [
-  "Modern", "Professional", "Creative", "Minimalist", "ATS Optimized", "Executive", "Technical"
+  "Modern", "Professional", "Creative", "Minimalist", "ATS Optimized", "Executive", "Technical", "Photo Profiles"
 ];
 
 // Helper to generate a unique structural template
@@ -16,12 +16,12 @@ function generateTemplate(category, index, globalIndex) {
   const id = `tpl_${catPrefix}_${(index + 1).toString().padStart(3, '0')}`;
   
   // Base properties to ensure maximum structural variety (no minor color/font tweaks)
-  // Using globalIndex (0-34) to guarantee unique structural combinations across all categories
-  const columns = [1, 2, 2, 3, 1, 2, 1][globalIndex % 7];
-  const sidebars = ['none', 'left', 'right', 'top-nav', 'split-even', 'asymmetrical-left', 'asymmetrical-right'][globalIndex % 7];
-  const densities = ['ultra-compact', 'standard', 'airy', 'variable', 'dense', 'spacious', 'hyper-dense'][globalIndex % 7];
-  const emphasis = ['typography', 'borders', 'background-blocks', 'timeline', 'white-space', 'icons', 'color-blocks'][globalIndex % 7];
-  const alignments = ['left-aligned', 'center-aligned', 'right-aligned', 'staggered', 'justified', 'mixed-alignment', 'alternating'][globalIndex % 7];
+  // Base properties to ensure maximum structural variety
+  const columns = [1, 2, 2, 3, 1, 2, 1, 2][globalIndex % 8];
+  const sidebars = ['none', 'left', 'right', 'top-nav', 'split-even', 'asymmetrical-left', 'asymmetrical-right', 'left'][globalIndex % 8];
+  const densities = ['ultra-compact', 'standard', 'airy', 'variable', 'dense', 'spacious', 'hyper-dense', 'standard'][globalIndex % 8];
+  const emphasis = ['typography', 'borders', 'background-blocks', 'timeline', 'white-space', 'icons', 'color-blocks', 'photo-led'][globalIndex % 8];
+  const alignments = ['left-aligned', 'center-aligned', 'right-aligned', 'staggered', 'justified', 'mixed-alignment', 'alternating', 'left-aligned'][globalIndex % 8];
   
   // Sections tailored to category and index
   const sectionVariations = [
@@ -61,6 +61,7 @@ function generateTemplate(category, index, globalIndex) {
         text: '#111',
         background: '#fff'
       },
+      has_photo: category === "Photo Profiles",
       responsive_behavior: index % 2 === 0 ? 'stack-on-mobile' : 'hide-sidebar-on-mobile'
     },
     sections: {

@@ -2,13 +2,13 @@
   "template_id": "tpl_cre_002",
   "template_name": "Creative Structural Form 2",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "description": "A distinct Creative layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "split-even",
-    "structural_alignment": "justified",
-    "information_density": "dense",
-    "visual_emphasis": "white-space",
+    "column_count": 3,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "staggered",
+    "information_density": "variable",
+    "visual_emphasis": "timeline",
     "typography": {
       "heading": "FontStack-1A",
       "body": "FontStack-1B",
@@ -20,11 +20,12 @@
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#854640",
-      "secondary": "#7ba8f3",
+      "primary": "#cee1f8",
+      "secondary": "#fac62a",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

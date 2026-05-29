@@ -2,13 +2,13 @@
   "template_id": "tpl_min_001",
   "template_name": "Minimalist Structural Form 1",
   "category": "Minimalist",
-  "description": "A distinct Minimalist layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
+  "description": "A distinct Minimalist layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
   "layout_metadata": {
     "column_count": 2,
     "sidebar_position": "left",
-    "structural_alignment": "center-aligned",
+    "structural_alignment": "left-aligned",
     "information_density": "standard",
-    "visual_emphasis": "borders",
+    "visual_emphasis": "photo-led",
     "typography": {
       "heading": "FontStack-0A",
       "body": "FontStack-0B",
@@ -20,11 +20,12 @@
       "section_gap": "16px"
     },
     "color_palette": {
-      "primary": "#67a638",
-      "secondary": "#708d92",
+      "primary": "#d88161",
+      "secondary": "#05b025",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {

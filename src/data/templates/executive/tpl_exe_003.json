@@ -2,13 +2,13 @@
   "template_id": "tpl_exe_003",
   "template_name": "Executive Structural Form 3",
   "category": "Executive",
-  "description": "A distinct Executive layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
+  "description": "A distinct Executive layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "asymmetrical-right",
-    "structural_alignment": "alternating",
-    "information_density": "hyper-dense",
-    "visual_emphasis": "color-blocks",
+    "column_count": 3,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "staggered",
+    "information_density": "variable",
+    "visual_emphasis": "timeline",
     "typography": {
       "heading": "FontStack-2A",
       "body": "FontStack-2B",
@@ -20,11 +20,12 @@
       "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#e53a33",
-      "secondary": "#24ffe2",
+      "primary": "#125d34",
+      "secondary": "#a0f3e1",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {

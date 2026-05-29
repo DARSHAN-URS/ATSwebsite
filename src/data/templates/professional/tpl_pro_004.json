@@ -2,13 +2,13 @@
   "template_id": "tpl_pro_004",
   "template_name": "Professional Structural Form 4",
   "category": "Professional",
-  "description": "A distinct Professional layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
+  "description": "A distinct Professional layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "left",
-    "structural_alignment": "center-aligned",
-    "information_density": "standard",
-    "visual_emphasis": "borders",
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "ultra-compact",
+    "visual_emphasis": "typography",
     "typography": {
       "heading": "FontStack-3A",
       "body": "FontStack-3B",
@@ -20,11 +20,12 @@
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#bbc72d",
-      "secondary": "#c80c30",
+      "primary": "#41bc05",
+      "secondary": "#b671d8",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "hide-sidebar-on-mobile"
   },
   "sections": {

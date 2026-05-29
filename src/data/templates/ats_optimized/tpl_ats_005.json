@@ -2,13 +2,13 @@
   "template_id": "tpl_ats_005",
   "template_name": "ATS Optimized Structural Form 5",
   "category": "ATS Optimized",
-  "description": "A distinct ATS Optimized layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "description": "A distinct ATS Optimized layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
   "layout_metadata": {
-    "column_count": 3,
-    "sidebar_position": "top-nav",
-    "structural_alignment": "staggered",
-    "information_density": "variable",
-    "visual_emphasis": "timeline",
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "ultra-compact",
+    "visual_emphasis": "typography",
     "typography": {
       "heading": "FontStack-4A",
       "body": "FontStack-4B",
@@ -20,11 +20,12 @@
       "section_gap": "32px"
     },
     "color_palette": {
-      "primary": "#e30877",
-      "secondary": "#f54270",
+      "primary": "#58298f",
+      "secondary": "#15d2a8",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {

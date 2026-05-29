@@ -2,13 +2,13 @@
   "template_id": "tpl_min_003",
   "template_name": "Minimalist Structural Form 3",
   "category": "Minimalist",
-  "description": "A distinct Minimalist layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "description": "A distinct Minimalist layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
   "layout_metadata": {
-    "column_count": 3,
-    "sidebar_position": "top-nav",
-    "structural_alignment": "staggered",
-    "information_density": "variable",
-    "visual_emphasis": "timeline",
+    "column_count": 2,
+    "sidebar_position": "left",
+    "structural_alignment": "center-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "borders",
     "typography": {
       "heading": "FontStack-2A",
       "body": "FontStack-2B",
@@ -20,11 +20,12 @@
       "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#e4c476",
-      "secondary": "#446cc1",
+      "primary": "#2f0a05",
+      "secondary": "#8b5bd1",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {

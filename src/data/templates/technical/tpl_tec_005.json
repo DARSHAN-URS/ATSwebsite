@@ -2,13 +2,13 @@
   "template_id": "tpl_tec_005",
   "template_name": "Technical Structural Form 5",
   "category": "Technical",
-  "description": "A distinct Technical layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
+  "description": "A distinct Technical layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "asymmetrical-right",
-    "structural_alignment": "alternating",
-    "information_density": "hyper-dense",
-    "visual_emphasis": "color-blocks",
+    "column_count": 2,
+    "sidebar_position": "right",
+    "structural_alignment": "right-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
     "typography": {
       "heading": "FontStack-4A",
       "body": "FontStack-4B",
@@ -20,11 +20,12 @@
       "section_gap": "32px"
     },
     "color_palette": {
-      "primary": "#718378",
-      "secondary": "#bb5483",
+      "primary": "#0328fd",
+      "secondary": "#f0137a",
       "text": "#111",
       "background": "#fff"
     },
+    "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {

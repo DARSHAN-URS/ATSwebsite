@@ -1957,8 +1957,11 @@ export async function buildDoc(
   // Pre-load photo for templates that support it
   const pi = data.personalInfo || {};
   const photoTemplates: string[] = ["contemporary", "sidebar", "polished", "waterfall", "ocean", "sunset", "amethyst", "emerald", "cobalt"];
-  let photoData: string | null = null;
-  if (pi.photoUrl && photoTemplates.includes(templateId)) {
+  // Check for dynamic generated templates to pre-load photo
+  const dynamicConfig = ALL_DYNAMIC_TEMPLATES.find(t => t.template_id === templateId);
+  const isPhotoDynamic = dynamicConfig?.layout_metadata?.has_photo === true;
+
+  if (pi.photoUrl && (photoTemplates.includes(templateId) || isPhotoDynamic)) {
     photoData = await loadImageAsBase64(pi.photoUrl);
   }
 
@@ -1972,9 +1975,8 @@ export async function buildDoc(
   }
 
   // Check for dynamic generated templates
-  const dynamicConfig = ALL_DYNAMIC_TEMPLATES.find(t => t.template_id === templateId);
   if (dynamicConfig) {
-    renderDynamicConfig(doc, data, title, dynamicConfig);
+    renderDynamicConfig(doc, data, title, dynamicConfig, photoData);
     return doc;
   }
 
@@ -2025,7 +2027,7 @@ function hexToRgb(hex: string) {
   } : { r: 0, g: 0, b: 0 };
 }
 
-function renderDynamicConfig(doc: jsPDF, data: ResumeData, title: string, config: any) {
+function renderDynamicConfig(doc: jsPDF, data: ResumeData, title: string, config: any, photoData?: string | null) {
   const layout = config.layout_metadata;
   const primaryRgb = hexToRgb(layout.color_palette.primary);
   
@@ -2037,16 +2039,28 @@ function renderDynamicConfig(doc: jsPDF, data: ResumeData, title: string, config
     doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
     doc.rect(0, 0, 60, doc.internal.pageSize.getHeight(), "F");
     ctx.margin = 65;
+    
+    let textY = 20;
+    if (layout.has_photo && photoData) {
+       addCircularPhoto(doc, photoData, 30, textY + 5, 12, { r: primaryRgb.r, g: primaryRgb.g, b: primaryRgb.b });
+       textY += 30;
+    }
+    
     doc.setTextColor(255);
     doc.setFontSize(16);
-    doc.text(pi.fullName || title || "Resume", 5, 20);
+    doc.text(pi.fullName || title || "Resume", 5, textY);
     if (pi.email) {
        doc.setFontSize(9);
-       doc.text(pi.email, 5, 30);
+       doc.text(pi.email, 5, textY + 10);
     }
   } else {
     doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
-    doc.rect(0, 0, ctx.pageWidth, 30, "F");
+    doc.rect(0, 0, ctx.pageWidth, 36, "F");
+    
+    if (layout.has_photo && photoData) {
+       addCircularPhoto(doc, photoData, ctx.pageWidth - 35, 18, 12, { r: primaryRgb.r, g: primaryRgb.g, b: primaryRgb.b });
+    }
+    
     doc.setTextColor(255);
     doc.setFontSize(22);
     doc.text(pi.fullName || title || "Resume", ctx.margin, 20);
