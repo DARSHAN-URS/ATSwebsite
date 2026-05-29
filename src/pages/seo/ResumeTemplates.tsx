@@ -12,6 +12,8 @@ import { seoTranslations } from "@/i18n/seoTranslations";
 
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
+import TemplateThumbnail from "@/components/resume/TemplateThumbnail";
+import { RESUME_TEMPLATES } from "@/components/resume/pdfTemplates";
 
 export default function ResumeTemplates() {
   const { locale } = useLanguage();
@@ -58,21 +60,17 @@ export default function ResumeTemplates() {
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-             {t.tpl.templates.map((tp, i) => (
+             {RESUME_TEMPLATES.map((tp, i) => (
                <motion.div 
-                   key={tp.name}
+                   key={tp.id}
                    initial={{ opacity: 0, y: 30 }}
                    whileInView={{ opacity: 1, y: 0 }}
-                   transition={{ delay: i * 0.1 }}
+                   transition={{ delay: (i % 10) * 0.1 }}
                    viewport={{ once: true }}
                >
                   <Card className="group relative rounded-[3rem] border-none bg-slate-50 p-10 space-y-8 hover:bg-white transition-all duration-500 hover:shadow-3xl hover:-translate-y-4">
-                     <div className="aspect-[3/4] rounded-3xl bg-white border border-slate-100 overflow-hidden relative shadow-inner group/img">
-                        <img 
-                          src={tp.image} 
-                          alt={tp.name} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
+                     <div className="aspect-[595/842] rounded-3xl bg-white border border-slate-100 overflow-hidden relative shadow-inner group/img pointer-events-none">
+                        <TemplateThumbnail templateId={tp.id} />
                         <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors" />
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
@@ -83,14 +81,16 @@ export default function ResumeTemplates() {
 
                      <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                           <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{tp.name}</h3>
-                           <Badge className="bg-blue-600/10 text-blue-600 border-none text-[9px] font-black uppercase tracking-widest px-3">{tp.best}</Badge>
+                           <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">{tp.name}</h3>
+                           <Badge className="bg-blue-600/10 text-blue-600 border-none text-[9px] font-black uppercase tracking-widest px-3">
+                              {tp.category || "General"}
+                           </Badge>
                         </div>
-                        <p className="text-sm font-medium text-slate-600 leading-relaxed">{tp.desc}</p>
+                        <p className="text-sm font-medium text-slate-600 leading-relaxed line-clamp-2">{tp.description}</p>
                      </div>
 
                      <Button className="w-full h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] group-hover:bg-blue-600 transition-colors" asChild>
-                        <Link to="/">{t.tpl.ctaBtn}</Link>
+                        <Link to={`/builder?template=${tp.id}`}>{t.tpl.ctaBtn}</Link>
                      </Button>
                   </Card>
                </motion.div>

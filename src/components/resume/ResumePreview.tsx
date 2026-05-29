@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { type TemplateId } from "./pdfTemplates";
+import { type TemplateId, ALL_DYNAMIC_TEMPLATES } from "./pdfTemplates";
 import type { ResumeData } from "./types";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig } from "./atsTemplateConfig";
 import { Loader2, FileText } from "lucide-react";
@@ -165,6 +165,120 @@ function formatDateRange(startDate?: string, endDate?: string): string {
   return [startDate, endDate].filter(Boolean).join(" — ");
 }
 
+function buildDynamicPreviewHTML(config: any, data: ResumeData, title: string): string {
+  const layout = config.layout_metadata || {};
+  const primary = (layout.color_palette && layout.color_palette.primary) || "#1f2937";
+  
+  const pi = data.personalInfo || {};
+  const name = escapeHtml(pi.fullName || title || "Resume");
+  const contactLines = [pi.email, pi.phone, pi.location].filter(Boolean).map(escapeHtml).join('<br/>');
+  const contactStr = [pi.email, pi.phone, pi.location].filter(Boolean).map(escapeHtml).join(' • ');
+  const skillsList = (data.skills || []).map(escapeHtml);
+  
+  const hasPhoto = layout.has_photo && pi.photoUrl;
+  const photoHtml = hasPhoto ? `<img src="${escapeHtml(pi.photoUrl!)}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;margin:0 auto 24px;display:block;border:4px solid rgba(255,255,255,0.15);box-shadow:0 4px 12px rgba(0,0,0,0.1)" />` : '';
+
+  const expHtml = (data.experience || []).map(e => `
+    <div style="margin-bottom:16px;page-break-inside:avoid">
+      <div style="font-size:15px"><b>${escapeHtml(e.title)}</b> — ${escapeHtml(e.company)}</div>
+      <div style="font-size:12.5px;color:#666;margin-bottom:4px">${escapeHtml(formatDateRange(e.startDate, e.endDate))}</div>
+      ${e.bullets ? e.bullets.map(b => `<div style="font-size:13.5px;color:#444;margin-left:12px;margin-bottom:3px">• ${escapeHtml(b)}</div>`).join("") : ''}
+      ${e.description && !e.bullets ? `<div style="font-size:13.5px;color:#444">${escapeHtml(e.description)}</div>` : ''}
+    </div>
+  `).join("");
+
+  const eduHtml = (data.education || []).map(e => `
+    <div style="margin-bottom:12px;page-break-inside:avoid">
+      <div style="font-size:15px"><b>${escapeHtml(e.degree)}</b></div>
+      <div style="font-size:14px;color:#444">${escapeHtml(e.school)}</div>
+      <div style="font-size:12.5px;color:#666">${escapeHtml(formatDateRange(e.startDate, e.endDate) || e.year || '')}</div>
+    </div>
+  `).join("");
+
+  // Replicate thumbnail logic exactly but at ~5x scale
+  if (layout.sidebar_position === 'left' || layout.sidebar_position === 'asymmetrical-left') {
+    return `
+      <div style="display:flex;font-family:Arial,sans-serif;min-height:1123px;color:#222;line-height:1.4">
+        <div style="width:35%;background:${primary};color:#fff;padding:40px 30px">
+          ${photoHtml}
+          <div style="font-size:32px;font-weight:700;margin-bottom:24px;text-align:${hasPhoto ? 'center' : 'left'};line-height:1.1">${name}</div>
+          
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px;letter-spacing:1px;opacity:0.9">CONTACT</div>
+          <div style="font-size:13px;margin-bottom:32px;line-height:1.6;opacity:0.9">${contactLines}</div>
+          
+          ${skillsList.length ? `
+            <div style="font-size:14px;font-weight:700;margin-bottom:12px;letter-spacing:1px;opacity:0.9">SKILLS</div>
+            <div style="font-size:13px;line-height:1.6;opacity:0.9">
+              ${skillsList.map(sk => `• ${sk}`).join('<br/>')}
+            </div>
+          ` : ''}
+        </div>
+        <div style="flex:1;padding:50px 40px;background:#fff">
+          ${data.summary ? `
+            <div style="font-size:16px;font-weight:700;color:${primary};border-bottom:2px solid ${primary};margin-bottom:12px;padding-bottom:4px;text-transform:uppercase">SUMMARY</div>
+            <div style="font-size:13.5px;margin-bottom:32px;line-height:1.6;color:#444">${escapeHtml(data.summary)}</div>
+          ` : ''}
+          
+          ${expHtml ? `
+            <div style="font-size:16px;font-weight:700;color:${primary};border-bottom:2px solid ${primary};margin-bottom:16px;padding-bottom:4px;text-transform:uppercase">EXPERIENCE</div>
+            <div style="margin-bottom:32px">${expHtml}</div>
+          ` : ''}
+          
+          ${eduHtml ? `
+            <div style="font-size:16px;font-weight:700;color:${primary};border-bottom:2px solid ${primary};margin-bottom:16px;padding-bottom:4px;text-transform:uppercase">EDUCATION</div>
+            <div>${eduHtml}</div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  } else {
+    // Top header layout
+    const headerPhotoHtml = hasPhoto ? `<img src="${escapeHtml(pi.photoUrl!)}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;margin-left:24px;box-shadow:0 4px 12px rgba(0,0,0,0.1)" />` : '';
+    
+    return `
+      <div style="font-family:Arial,sans-serif;padding:0;color:#222;line-height:1.4;min-height:1123px;background:#fff">
+        <div style="height:20px;background:${primary};width:100%"></div>
+        <div style="padding:40px 50px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px">
+            <div style="flex:1">
+              <div style="font-size:38px;font-weight:800;color:${primary};margin-bottom:8px;line-height:1.1;letter-spacing:-1px">${name}</div>
+              <div style="font-size:14px;color:#666">${contactStr}</div>
+            </div>
+            ${headerPhotoHtml}
+          </div>
+          
+          ${data.summary ? `
+            <div style="font-size:13.5px;margin-bottom:32px;line-height:1.6;color:#444">${escapeHtml(data.summary)}</div>
+          ` : ''}
+          
+          ${skillsList.length ? `
+            <div style="border-bottom:1.5px solid ${primary};margin-bottom:16px;padding-bottom:4px">
+              <span style="font-size:16px;font-weight:700;color:${primary};text-transform:uppercase;letter-spacing:1px">SKILLS</span>
+            </div>
+            <div style="font-size:13.5px;margin-bottom:32px;color:#444;line-height:1.6">
+              ${skillsList.join(' • ')}
+            </div>
+          ` : ''}
+          
+          ${expHtml ? `
+            <div style="border-bottom:1.5px solid ${primary};margin-bottom:16px;padding-bottom:4px">
+              <span style="font-size:16px;font-weight:700;color:${primary};text-transform:uppercase;letter-spacing:1px">EXPERIENCE</span>
+            </div>
+            <div style="margin-bottom:32px">${expHtml}</div>
+          ` : ''}
+          
+          ${eduHtml ? `
+            <div style="border-bottom:1.5px solid ${primary};margin-bottom:16px;padding-bottom:4px">
+              <span style="font-size:16px;font-weight:700;color:${primary};text-transform:uppercase;letter-spacing:1px">EDUCATION</span>
+            </div>
+            <div>${eduHtml}</div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+}
+
 /**
  * Returns an array of HTML blocks. The pagination engine will pack these into A4 pages.
  */
@@ -174,11 +288,15 @@ function buildHTMLBlocks(data: ResumeData, title: string, templateId: TemplateId
     if (config) return buildATSBlocks(data, title, config);
   }
 
+  // Check for dynamic templates (Photo / Profiles)
+  const dynamicConfig = ALL_DYNAMIC_TEMPLATES.find((t: any) => t.template_id === templateId);
+  if (dynamicConfig) {
+    return [buildDynamicPreviewHTML(dynamicConfig, data, title)];
+  }
+
   if (["sidebar", "ocean", "polished", "sunset", "twocolumn", "monochrome"].includes(templateId)) {
     return [buildTwoColumnHTML(data, title, templateId)];
   }
-
-  // Sidebar/TwoColumn layouts are harder to split vertically because of the sidebars.
   // For these, we currently return a single block that might overflow, 
   // OR we can wrap the whole thing in a block. 
   // For exact 1:1, full-page continuous layouts like sidebars require a wrapper per page.
