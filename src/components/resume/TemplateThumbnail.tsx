@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import type { TemplateId } from "./pdfTemplates";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig } from "./atsTemplateConfig";
 import { ALL_DYNAMIC_TEMPLATES } from "../../data/templates/index";
@@ -396,20 +396,37 @@ interface TemplateThumbnailProps {
   data?: ResumeData;
 }
 
+
 export default function TemplateThumbnail({ templateId, data }: TemplateThumbnailProps) {
   const html = useMemo(() => getThumbnailHTML(templateId, data), [templateId, data]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.contentRect.width > 0) {
+          setScale(entry.contentRect.width / 140);
+        }
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
-      className="w-full bg-white rounded border border-border overflow-hidden"
-      style={{ aspectRatio: "595 / 842", containerType: "inline-size" }}
+      ref={containerRef}
+      className="w-full bg-white rounded border border-border overflow-hidden relative"
+      style={{ aspectRatio: "595 / 842" }}
     >
       <div
-        className="pointer-events-none select-none"
+        className="absolute top-0 left-0 pointer-events-none select-none"
         style={{
           width: "140px",
           height: "198px",
-          transform: "scale(calc(100cqw / 140))",
+          transform: `scale(${scale})`,
           transformOrigin: "top left",
         }}
         dangerouslySetInnerHTML={{ __html: html }}
