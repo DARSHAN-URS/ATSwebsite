@@ -31,21 +31,21 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-8",
-        isScrolled ? "py-4" : "py-8"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-4 md:px-8",
+        isScrolled ? "py-2 md:py-4" : "py-4 md:py-8"
       )}
     >
       <div className="container mx-auto max-w-7xl">
         <div
           className={cn(
-            "flex items-center justify-between px-8 py-4 transition-all duration-500 rounded-[2rem]",
+            "flex items-center justify-between px-4 py-3 md:px-8 md:py-4 transition-all duration-500 rounded-2xl md:rounded-[2rem]",
             isScrolled 
               ? "bg-slate-950/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-slate-800/50" 
               : "bg-slate-950/95 backdrop-blur-xl border border-slate-800/30"
           )}
         >
-          <Link to="/" className="flex items-center gap-3 group text-white">
-            <Logo variant="light" className="h-14" />
+          <Link to="/" className="flex items-center gap-2 md:gap-3 group text-white">
+            <Logo variant="light" className="h-8 md:h-14" />
           </Link>
 
           {/* Desktop Menu */}
@@ -77,8 +77,8 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="lg:hidden flex items-center gap-4">
-            <LanguageSwitcher className="h-9 px-3" />
+          <div className="lg:hidden flex items-center gap-2 md:gap-4">
+            <LanguageSwitcher className="h-8 md:h-9 px-2 md:px-3 text-[10px] md:text-sm" />
             <button
               className="text-white p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -96,9 +96,9 @@ export const Navbar = () => {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="lg:hidden absolute top-full left-0 right-0 mt-4 px-8"
+            className="lg:hidden absolute top-full left-0 right-0 mt-2 md:mt-4 px-4 md:px-8"
           >
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 flex flex-col gap-6 shadow-2xl border border-slate-100 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl md:rounded-[2.5rem] p-6 md:p-10 flex flex-col gap-4 md:gap-6 shadow-2xl border border-slate-100 dark:border-slate-800">
               {navLinks.map((link) => (
                 <Link 
                   key={link.name}
