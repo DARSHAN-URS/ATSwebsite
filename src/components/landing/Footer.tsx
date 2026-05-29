@@ -81,7 +81,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-
+        </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-16 md:mt-40 pt-10 md:pt-20 border-t border-slate-100">
           <div className="flex flex-wrap justify-center gap-10">
