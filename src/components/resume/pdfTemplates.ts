@@ -35,7 +35,7 @@ function addCircularPhoto(doc: jsPDF, imgData: string, cx: number, cy: number, r
 
 import { ATS_TEMPLATES, getATSConfig, isATSTemplateId, type ATSTemplateConfig, type ATSSection } from "./atsTemplateConfig";
 
-export type TemplateId = "classic" | "modern" | "minimal" | "executive" | "sidebar" | "twocolumn" | "creative" | "compact" | "professional" | "ats" | "simple" | "elegant" | "ivyleague" | "timeline" | "contemporary" | "polished" | "vibrant" | "bold" | "minimalist-plus" | "corporate" | "tech" | "waterfall" | "vision" | "prism" | "midnight" | "ocean" | "forest" | "rose" | "sunset" | "monochrome" | "ruby" | "emerald" | "sapphire" | "amethyst" | "gold" | "slate" | "coral" | "ats-classic" | "ats-modern-pro" | "ats-skills-first" | "ats-experience" | "ats-fresher" | "ats-technical" | "ats-compact" | "ats-combination" | "ats-academic" | "ats-medical" | "ats-legal" | "ats-finance" | "ats-sales" | "ats-marketing" | "ats-remote" | "ats-executive-pro" | "ats-freelance" | "ats-consultant" | "cobalt";
+export type TemplateId = string;
 
 export interface ResumeTemplate {
   id: TemplateId;
@@ -48,24 +48,7 @@ export interface ResumeTemplate {
   isPremium?: boolean;
 }
 
-export const RESUME_TEMPLATES: ResumeTemplate[] = [
-  { id: "modern", name: "Modern", description: "Bold accent bar with contemporary spacing and styling", preview: "🎨", category: "Modern" },
-  { id: "minimal", name: "Minimal", description: "Ultra-clean with generous whitespace and subtle typography", preview: "✨", category: "Simple" },
-  { id: "executive", name: "Executive", description: "Professional dark header block with structured sections", preview: "💼", category: "Professional", isPremium: true },
-  { id: "sidebar", name: "Sidebar", description: "Two-column layout with a colored sidebar for contact details", preview: "📊", category: "Modern" },
-  { id: "twocolumn", name: "Two Column", description: "Balanced two-column design for maximum content density", preview: "📰", category: "Professional" },
-  { id: "creative", name: "Creative", description: "Bold headings with accent colors and modern typography", preview: "🎯", category: "Creative", isPremium: true },
-  { id: "compact", name: "Compact", description: "Dense single-column layout optimized for ATS scanners", preview: "📋", category: "ATS" },
-  { id: "professional", name: "Professional", description: "Polished corporate design with navy accents and refined typography", preview: "🏢", category: "Professional" },
-  { id: "ats", name: "ATS Optimized", description: "Plain text-friendly format designed to pass all ATS systems", preview: "🤖", category: "ATS" },
-  { id: "simple", name: "Simple", description: "Clean and timeless with a classic balanced structure", preview: "📝", category: "Simple" },
-  { id: "elegant", name: "Elegant", description: "Sophisticated design with subtle gold accents and fine lines", preview: "👔", category: "Traditional" },
-  { id: "ivyleague", name: "Ivy League", description: "Classic recruiter-approved format with clean lines and refined structure", preview: "🎓", category: "Traditional" },
-  { id: "timeline", name: "Timeline", description: "Visual timeline element showing career progression clearly", preview: "📅", category: "Modern", isPremium: true },
-  { id: "contemporary", name: "Contemporary", description: "Modern layout with profile photo support and bold design", preview: "📸", category: "Creative" },
-  { id: "polished", name: "Polished", description: "Refined sidebar with warm accent colors for a premium feel", preview: "💎", category: "Professional", isPremium: true },
-  { id: "cobalt", name: "Cobalt Edge", description: "Sleek blue header with circular profile photo and classic serif body", preview: "🌊", category: "Modern" },
-];
+export const RESUME_TEMPLATES: ResumeTemplate[] = [];
 
 interface PdfContext {
   doc: jsPDF;

@@ -201,12 +201,6 @@ const Index = () => {
                
                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 px-4 md:px-8 -mx-4 md:-mx-8 scrollbar-hide">
                   {[
-                     "/images/flowcv-cobalt.png",
-                     "/images/flowcv-ats.webp",
-                     "/images/flowcv-creative.webp",
-                     "/images/flowcv-modern.webp",
-                     "/images/flowcv-compact.webp",
-                     "/images/flowcv-simple.webp"
                   ].map((src, i) => (
                      <div key={i} className="w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] snap-center shrink-0 rounded-2xl md:rounded-[2rem] bg-slate-100 aspect-[3/4] shadow-sm border border-slate-200 overflow-hidden group cursor-pointer">
                         <img src={src} loading="lazy" className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105" alt="template"/>
