@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_pro_002",
+  "template_name": "Professional Structural Form 2",
+  "category": "Professional",
+  "description": "A distinct Professional layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "asymmetrical-right",
+    "structural_alignment": "alternating",
+    "information_density": "hyper-dense",
+    "visual_emphasis": "color-blocks",
+    "typography": {
+      "heading": "FontStack-1A",
+      "body": "FontStack-1B",
+      "accent": "FontStack-1C"
+    },
+    "spacing": {
+      "margin": "12px",
+      "line_height": 1.3,
+      "section_gap": "20px"
+    },
+    "color_palette": {
+      "primary": "#9bc3e4",
+      "secondary": "#0c93b0",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "skills",
+      "experience",
+      "education"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 85,
+  "suitable_professions": [
+    "Professional Roles",
+    "General Use"
+  ]
+}

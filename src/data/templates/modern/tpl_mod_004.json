@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_mod_004",
+  "template_name": "Modern Structural Form 4",
+  "category": "Modern",
+  "description": "A distinct Modern layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "layout_metadata": {
+    "column_count": 3,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "staggered",
+    "information_density": "variable",
+    "visual_emphasis": "timeline",
+    "typography": {
+      "heading": "FontStack-3A",
+      "body": "FontStack-3B",
+      "accent": "FontStack-3C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.5,
+      "section_gap": "28px"
+    },
+    "color_palette": {
+      "primary": "#68bedf",
+      "secondary": "#da343e",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "education",
+      "experience",
+      "projects",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 75,
+  "suitable_professions": [
+    "Modern Roles",
+    "General Use"
+  ]
+}

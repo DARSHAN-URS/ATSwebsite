@@ -1,0 +1,51 @@
+{
+  "template_id": "tpl_min_005",
+  "template_name": "Minimalist Structural Form 5",
+  "category": "Minimalist",
+  "description": "A distinct Minimalist layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "mixed-alignment",
+    "information_density": "spacious",
+    "visual_emphasis": "icons",
+    "typography": {
+      "heading": "FontStack-4A",
+      "body": "FontStack-4B",
+      "accent": "FontStack-4C"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.6,
+      "section_gap": "32px"
+    },
+    "color_palette": {
+      "primary": "#0c64c1",
+      "secondary": "#6dad79",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "projects",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 70,
+  "suitable_professions": [
+    "Minimalist Roles",
+    "General Use"
+  ]
+}

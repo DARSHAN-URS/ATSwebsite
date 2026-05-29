@@ -1,0 +1,216 @@
+{
+  "generated_at": "2026-05-29T14:50:56.387Z",
+  "total_templates": 35,
+  "templates": [
+    {
+      "id": "tpl_mod_001",
+      "name": "Modern Structural Form 1",
+      "category": "Modern",
+      "structure": "none"
+    },
+    {
+      "id": "tpl_mod_002",
+      "name": "Modern Structural Form 2",
+      "category": "Modern",
+      "structure": "left"
+    },
+    {
+      "id": "tpl_mod_003",
+      "name": "Modern Structural Form 3",
+      "category": "Modern",
+      "structure": "right"
+    },
+    {
+      "id": "tpl_mod_004",
+      "name": "Modern Structural Form 4",
+      "category": "Modern",
+      "structure": "top-nav"
+    },
+    {
+      "id": "tpl_mod_005",
+      "name": "Modern Structural Form 5",
+      "category": "Modern",
+      "structure": "split-even"
+    },
+    {
+      "id": "tpl_pro_001",
+      "name": "Professional Structural Form 1",
+      "category": "Professional",
+      "structure": "asymmetrical-left"
+    },
+    {
+      "id": "tpl_pro_002",
+      "name": "Professional Structural Form 2",
+      "category": "Professional",
+      "structure": "asymmetrical-right"
+    },
+    {
+      "id": "tpl_pro_003",
+      "name": "Professional Structural Form 3",
+      "category": "Professional",
+      "structure": "none"
+    },
+    {
+      "id": "tpl_pro_004",
+      "name": "Professional Structural Form 4",
+      "category": "Professional",
+      "structure": "left"
+    },
+    {
+      "id": "tpl_pro_005",
+      "name": "Professional Structural Form 5",
+      "category": "Professional",
+      "structure": "right"
+    },
+    {
+      "id": "tpl_cre_001",
+      "name": "Creative Structural Form 1",
+      "category": "Creative",
+      "structure": "top-nav"
+    },
+    {
+      "id": "tpl_cre_002",
+      "name": "Creative Structural Form 2",
+      "category": "Creative",
+      "structure": "split-even"
+    },
+    {
+      "id": "tpl_cre_003",
+      "name": "Creative Structural Form 3",
+      "category": "Creative",
+      "structure": "asymmetrical-left"
+    },
+    {
+      "id": "tpl_cre_004",
+      "name": "Creative Structural Form 4",
+      "category": "Creative",
+      "structure": "asymmetrical-right"
+    },
+    {
+      "id": "tpl_cre_005",
+      "name": "Creative Structural Form 5",
+      "category": "Creative",
+      "structure": "none"
+    },
+    {
+      "id": "tpl_min_001",
+      "name": "Minimalist Structural Form 1",
+      "category": "Minimalist",
+      "structure": "left"
+    },
+    {
+      "id": "tpl_min_002",
+      "name": "Minimalist Structural Form 2",
+      "category": "Minimalist",
+      "structure": "right"
+    },
+    {
+      "id": "tpl_min_003",
+      "name": "Minimalist Structural Form 3",
+      "category": "Minimalist",
+      "structure": "top-nav"
+    },
+    {
+      "id": "tpl_min_004",
+      "name": "Minimalist Structural Form 4",
+      "category": "Minimalist",
+      "structure": "split-even"
+    },
+    {
+      "id": "tpl_min_005",
+      "name": "Minimalist Structural Form 5",
+      "category": "Minimalist",
+      "structure": "asymmetrical-left"
+    },
+    {
+      "id": "tpl_ats_001",
+      "name": "ATS Optimized Structural Form 1",
+      "category": "ATS Optimized",
+      "structure": "asymmetrical-right"
+    },
+    {
+      "id": "tpl_ats_002",
+      "name": "ATS Optimized Structural Form 2",
+      "category": "ATS Optimized",
+      "structure": "none"
+    },
+    {
+      "id": "tpl_ats_003",
+      "name": "ATS Optimized Structural Form 3",
+      "category": "ATS Optimized",
+      "structure": "left"
+    },
+    {
+      "id": "tpl_ats_004",
+      "name": "ATS Optimized Structural Form 4",
+      "category": "ATS Optimized",
+      "structure": "right"
+    },
+    {
+      "id": "tpl_ats_005",
+      "name": "ATS Optimized Structural Form 5",
+      "category": "ATS Optimized",
+      "structure": "top-nav"
+    },
+    {
+      "id": "tpl_exe_001",
+      "name": "Executive Structural Form 1",
+      "category": "Executive",
+      "structure": "split-even"
+    },
+    {
+      "id": "tpl_exe_002",
+      "name": "Executive Structural Form 2",
+      "category": "Executive",
+      "structure": "asymmetrical-left"
+    },
+    {
+      "id": "tpl_exe_003",
+      "name": "Executive Structural Form 3",
+      "category": "Executive",
+      "structure": "asymmetrical-right"
+    },
+    {
+      "id": "tpl_exe_004",
+      "name": "Executive Structural Form 4",
+      "category": "Executive",
+      "structure": "none"
+    },
+    {
+      "id": "tpl_exe_005",
+      "name": "Executive Structural Form 5",
+      "category": "Executive",
+      "structure": "left"
+    },
+    {
+      "id": "tpl_tec_001",
+      "name": "Technical Structural Form 1",
+      "category": "Technical",
+      "structure": "right"
+    },
+    {
+      "id": "tpl_tec_002",
+      "name": "Technical Structural Form 2",
+      "category": "Technical",
+      "structure": "top-nav"
+    },
+    {
+      "id": "tpl_tec_003",
+      "name": "Technical Structural Form 3",
+      "category": "Technical",
+      "structure": "split-even"
+    },
+    {
+      "id": "tpl_tec_004",
+      "name": "Technical Structural Form 4",
+      "category": "Technical",
+      "structure": "asymmetrical-left"
+    },
+    {
+      "id": "tpl_tec_005",
+      "name": "Technical Structural Form 5",
+      "category": "Technical",
+      "structure": "asymmetrical-right"
+    }
+  ]
+}

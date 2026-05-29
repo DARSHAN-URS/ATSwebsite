@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_tec_003",
+  "template_name": "Technical Structural Form 3",
+  "category": "Technical",
+  "description": "A distinct Technical layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "split-even",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "white-space",
+    "typography": {
+      "heading": "FontStack-2A",
+      "body": "FontStack-2B",
+      "accent": "FontStack-2C"
+    },
+    "spacing": {
+      "margin": "14px",
+      "line_height": 1.4,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#5726ff",
+      "secondary": "#2f9884",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "education",
+      "skills",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 80,
+  "suitable_professions": [
+    "Technical Roles",
+    "General Use"
+  ]
+}

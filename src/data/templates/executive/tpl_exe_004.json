@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_exe_004",
+  "template_name": "Executive Structural Form 4",
+  "category": "Executive",
+  "description": "A distinct Executive layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "ultra-compact",
+    "visual_emphasis": "typography",
+    "typography": {
+      "heading": "FontStack-3A",
+      "body": "FontStack-3B",
+      "accent": "FontStack-3C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.5,
+      "section_gap": "28px"
+    },
+    "color_palette": {
+      "primary": "#54a93e",
+      "secondary": "#b4acfe",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "education",
+      "experience",
+      "projects",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 75,
+  "suitable_professions": [
+    "Executive Roles",
+    "General Use"
+  ]
+}

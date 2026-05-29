@@ -1,0 +1,51 @@
+{
+  "template_id": "tpl_cre_005",
+  "template_name": "Creative Structural Form 5",
+  "category": "Creative",
+  "description": "A distinct Creative layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "ultra-compact",
+    "visual_emphasis": "typography",
+    "typography": {
+      "heading": "FontStack-4A",
+      "body": "FontStack-4B",
+      "accent": "FontStack-4C"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.6,
+      "section_gap": "32px"
+    },
+    "color_palette": {
+      "primary": "#4651a8",
+      "secondary": "#765f5e",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "projects",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 70,
+  "suitable_professions": [
+    "Creative Roles",
+    "General Use"
+  ]
+}

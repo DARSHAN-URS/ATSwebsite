@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_min_002",
+  "template_name": "Minimalist Structural Form 2",
+  "category": "Minimalist",
+  "description": "A distinct Minimalist layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "right",
+    "structural_alignment": "right-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-1A",
+      "body": "FontStack-1B",
+      "accent": "FontStack-1C"
+    },
+    "spacing": {
+      "margin": "12px",
+      "line_height": 1.3,
+      "section_gap": "20px"
+    },
+    "color_palette": {
+      "primary": "#13c87f",
+      "secondary": "#77fa73",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "skills",
+      "experience",
+      "education"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 85,
+  "suitable_professions": [
+    "Minimalist Roles",
+    "General Use"
+  ]
+}

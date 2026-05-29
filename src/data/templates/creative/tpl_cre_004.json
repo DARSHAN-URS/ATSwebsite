@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_cre_004",
+  "template_name": "Creative Structural Form 4",
+  "category": "Creative",
+  "description": "A distinct Creative layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "asymmetrical-right",
+    "structural_alignment": "alternating",
+    "information_density": "hyper-dense",
+    "visual_emphasis": "color-blocks",
+    "typography": {
+      "heading": "FontStack-3A",
+      "body": "FontStack-3B",
+      "accent": "FontStack-3C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.5,
+      "section_gap": "28px"
+    },
+    "color_palette": {
+      "primary": "#82d1fc",
+      "secondary": "#89bbb3",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "education",
+      "experience",
+      "projects",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 75,
+  "suitable_professions": [
+    "Creative Roles",
+    "General Use"
+  ]
+}

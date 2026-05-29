@@ -1,0 +1,51 @@
+{
+  "template_id": "tpl_exe_005",
+  "template_name": "Executive Structural Form 5",
+  "category": "Executive",
+  "description": "A distinct Executive layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "left",
+    "structural_alignment": "center-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "borders",
+    "typography": {
+      "heading": "FontStack-4A",
+      "body": "FontStack-4B",
+      "accent": "FontStack-4C"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.6,
+      "section_gap": "32px"
+    },
+    "color_palette": {
+      "primary": "#39e2df",
+      "secondary": "#c1882b",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "projects",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 70,
+  "suitable_professions": [
+    "Executive Roles",
+    "General Use"
+  ]
+}

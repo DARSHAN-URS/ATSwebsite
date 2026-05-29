@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_pro_003",
+  "template_name": "Professional Structural Form 3",
+  "category": "Professional",
+  "description": "A distinct Professional layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "ultra-compact",
+    "visual_emphasis": "typography",
+    "typography": {
+      "heading": "FontStack-2A",
+      "body": "FontStack-2B",
+      "accent": "FontStack-2C"
+    },
+    "spacing": {
+      "margin": "14px",
+      "line_height": 1.4,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#73126b",
+      "secondary": "#cc661a",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "education",
+      "skills",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 80,
+  "suitable_professions": [
+    "Professional Roles",
+    "General Use"
+  ]
+}

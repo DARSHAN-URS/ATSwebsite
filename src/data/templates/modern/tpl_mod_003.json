@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_mod_003",
+  "template_name": "Modern Structural Form 3",
+  "category": "Modern",
+  "description": "A distinct Modern layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "right",
+    "structural_alignment": "right-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-2A",
+      "body": "FontStack-2B",
+      "accent": "FontStack-2C"
+    },
+    "spacing": {
+      "margin": "14px",
+      "line_height": 1.4,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#bd6f98",
+      "secondary": "#c95097",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "education",
+      "skills",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 80,
+  "suitable_professions": [
+    "Modern Roles",
+    "General Use"
+  ]
+}

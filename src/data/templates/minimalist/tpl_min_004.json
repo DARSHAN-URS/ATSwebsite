@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_min_004",
+  "template_name": "Minimalist Structural Form 4",
+  "category": "Minimalist",
+  "description": "A distinct Minimalist layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "split-even",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "white-space",
+    "typography": {
+      "heading": "FontStack-3A",
+      "body": "FontStack-3B",
+      "accent": "FontStack-3C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.5,
+      "section_gap": "28px"
+    },
+    "color_palette": {
+      "primary": "#89a1fd",
+      "secondary": "#76a57b",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "education",
+      "experience",
+      "projects",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 75,
+  "suitable_professions": [
+    "Minimalist Roles",
+    "General Use"
+  ]
+}

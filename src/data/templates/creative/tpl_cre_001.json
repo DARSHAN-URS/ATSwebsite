@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_cre_001",
+  "template_name": "Creative Structural Form 1",
+  "category": "Creative",
+  "description": "A distinct Creative layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "layout_metadata": {
+    "column_count": 3,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "staggered",
+    "information_density": "variable",
+    "visual_emphasis": "timeline",
+    "typography": {
+      "heading": "FontStack-0A",
+      "body": "FontStack-0B",
+      "accent": "FontStack-0C"
+    },
+    "spacing": {
+      "margin": "10px",
+      "line_height": 1.2,
+      "section_gap": "16px"
+    },
+    "color_palette": {
+      "primary": "#f78981",
+      "secondary": "#268eb6",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 90,
+  "suitable_professions": [
+    "Creative Roles",
+    "General Use"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_cre_003",
+  "template_name": "Creative Structural Form 3",
+  "category": "Creative",
+  "description": "A distinct Creative layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "mixed-alignment",
+    "information_density": "spacious",
+    "visual_emphasis": "icons",
+    "typography": {
+      "heading": "FontStack-2A",
+      "body": "FontStack-2B",
+      "accent": "FontStack-2C"
+    },
+    "spacing": {
+      "margin": "14px",
+      "line_height": 1.4,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#dc2ac5",
+      "secondary": "#f86bdf",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "education",
+      "skills",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 80,
+  "suitable_professions": [
+    "Creative Roles",
+    "General Use"
+  ]
+}

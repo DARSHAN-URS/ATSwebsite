@@ -1,0 +1,50 @@
+{
+  "template_id": "tpl_ats_004",
+  "template_name": "ATS Optimized Structural Form 4",
+  "category": "ATS Optimized",
+  "description": "A distinct ATS Optimized layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "right",
+    "structural_alignment": "right-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-3A",
+      "body": "FontStack-3B",
+      "accent": "FontStack-3C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.5,
+      "section_gap": "28px"
+    },
+    "color_palette": {
+      "primary": "#903888",
+      "secondary": "#8c5248",
+      "text": "#111",
+      "background": "#fff"
+    },
+    "responsive_behavior": "hide-sidebar-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "education",
+      "experience",
+      "projects",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "ATS Optimized Roles",
+    "General Use"
+  ]
+}
