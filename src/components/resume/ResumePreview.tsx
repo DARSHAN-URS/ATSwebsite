@@ -174,6 +174,10 @@ function buildHTMLBlocks(data: ResumeData, title: string, templateId: TemplateId
     if (config) return buildATSBlocks(data, title, config);
   }
 
+  if (["sidebar", "ocean", "polished", "sunset", "twocolumn", "monochrome"].includes(templateId)) {
+    return [buildTwoColumnHTML(data, title, templateId)];
+  }
+
   // Sidebar/TwoColumn layouts are harder to split vertically because of the sidebars.
   // For these, we currently return a single block that might overflow, 
   // OR we can wrap the whole thing in a block. 
@@ -444,4 +448,124 @@ function getTemplateStyles(templateId: TemplateId, photoUrl?: string) {
         linkStyle: "font-size:13px;color:#0066cc;margin:0 0 8px",
       };
   }
+}
+
+function buildTwoColumnHTML(data: ResumeData, title: string, templateId: TemplateId): string {
+  const pi = data.personalInfo || {};
+  const name = pi.fullName || title || "Resume";
+  const contactParts = [pi.email, pi.phone, pi.location].filter(Boolean);
+  const linkParts = [pi.linkedin, pi.portfolio].filter(Boolean);
+
+  const isPolished = ["polished", "sunset"].includes(templateId);
+  const isTwoColumn = ["twocolumn", "monochrome"].includes(templateId);
+  
+  const leftBg = isPolished ? "#a64834" : isTwoColumn ? "#2d3748" : "#1e3a5f";
+  const leftText = "#fff";
+  const leftMuted = isPolished ? "#f0d0c0" : isTwoColumn ? "#cbd5e0" : "#b4d2ff";
+  const leftAccent = isPolished ? "#ffd2be" : isTwoColumn ? "#fff" : "#ffffff";
+
+  if (isTwoColumn) {
+    let html = `<div style="font-family:'Inter',sans-serif;color:#222;line-height:1.5;min-height:1123px;">`;
+    html += `<div style="background:${leftBg};padding:40px 50px 30px;color:#fff">`;
+    html += `<div style="font-size:32px;font-weight:800;margin-bottom:8px">${escapeHtml(name)}</div>`;
+    html += `<div style="font-size:13px;color:${leftMuted}">${contactParts.join("  •  ")}</div>`;
+    if (linkParts.length) html += `<div style="font-size:13px;color:${leftMuted}">${linkParts.join("  •  ")}</div>`;
+    html += `</div>`;
+    
+    html += `<div style="display:flex;padding:30px 50px;gap:40px">`;
+    html += `<div style="flex:2">`;
+    if (data.summary) {
+       html += `${sectionHeader("Summary", templateId)}<p style="font-size:14px">${escapeHtml(data.summary)}</p>`;
+    }
+    if ((data.experience || []).length > 0) {
+       html += sectionHeader("Experience", templateId);
+       data.experience!.forEach(exp => {
+           const dateStr = formatDateRange(exp.startDate, exp.endDate);
+           html += `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:14px">${escapeHtml(exp.title)}</strong><span style="font-size:14px"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:12px;color:#666">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+           if (exp.bullets) html += `<ul style="margin:4px 0 0 20px;padding:0;list-style:disc">${exp.bullets.map(b => `<li style="font-size:14px">${escapeHtml(b)}</li>`).join("")}</ul>`;
+           html += `</div>`;
+       });
+    }
+    if ((data.education || []).length > 0) {
+       html += sectionHeader("Education", templateId);
+       data.education!.forEach(edu => {
+           const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year || "");
+           html += `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:14px">${escapeHtml(edu.degree)}</strong><span style="font-size:14px"> — ${escapeHtml(edu.school)}</span></div>${dateStr ? `<span style="font-size:12px;color:#666">${escapeHtml(dateStr)}</span>` : ""}</div></div>`;
+       });
+    }
+    html += `</div>`;
+    
+    html += `<div style="flex:1">`;
+    if ((data.skills || []).length > 0) {
+       html += sectionHeader("Skills", templateId);
+       data.skills!.forEach(s => {
+          html += `<div style="font-size:14px;margin-bottom:4px">• ${escapeHtml(s)}</div>`;
+       });
+    }
+    if ((data.languages || []).length > 0) {
+       html += sectionHeader("Languages", templateId);
+       data.languages!.forEach(l => {
+          html += `<div style="font-size:14px;margin-bottom:4px">• ${escapeHtml(l.name)}</div>`;
+       });
+    }
+    html += `</div>`;
+    
+    html += `</div></div>`;
+    return html;
+  }
+
+  let html = `<div style="display:flex;font-family:'Inter',sans-serif;min-height:1123px;color:#222;line-height:1.5">`;
+  html += `<div style="width:35%;background:${leftBg};color:${leftText};padding:40px 30px">`;
+  if (pi.photoUrl) {
+     html += `<img src="${escapeHtml(pi.photoUrl)}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #fff;margin-bottom:20px;display:block;margin-left:auto;margin-right:auto;"/>`;
+  }
+  html += `<div style="font-size:28px;font-weight:800;margin-bottom:20px;line-height:1.2">${escapeHtml(name)}</div>`;
+  
+  html += `<div style="font-size:14px;font-weight:700;color:${leftAccent};margin-bottom:8px;letter-spacing:1px">CONTACT</div>`;
+  contactParts.forEach(p => {
+     html += `<div style="font-size:13px;color:${leftMuted};margin-bottom:6px">${escapeHtml(p)}</div>`;
+  });
+  linkParts.forEach(p => {
+     html += `<div style="font-size:13px;color:${leftMuted};margin-bottom:6px">${escapeHtml(p)}</div>`;
+  });
+  
+  if ((data.skills || []).length > 0) {
+     html += `<div style="font-size:14px;font-weight:700;color:${leftAccent};margin:24px 0 8px;letter-spacing:1px">SKILLS</div>`;
+     data.skills!.forEach(s => {
+        html += `<div style="font-size:13px;color:${leftMuted};margin-bottom:4px">• ${escapeHtml(s)}</div>`;
+     });
+  }
+
+  if ((data.languages || []).length > 0) {
+     html += `<div style="font-size:14px;font-weight:700;color:${leftAccent};margin:24px 0 8px;letter-spacing:1px">LANGUAGES</div>`;
+     data.languages!.forEach(l => {
+        html += `<div style="font-size:13px;color:${leftMuted};margin-bottom:4px">• ${escapeHtml(l.name)}</div>`;
+     });
+  }
+  html += `</div>`;
+
+  html += `<div style="flex:1;padding:40px 40px">`;
+  if (data.summary) {
+    html += `${sectionHeader("Summary", templateId)}<p style="font-size:14px;line-height:1.6">${escapeHtml(data.summary)}</p>`;
+  }
+  if ((data.experience || []).length > 0) {
+    html += sectionHeader("Experience", templateId);
+    data.experience!.forEach(exp => {
+      const dateStr = formatDateRange(exp.startDate, exp.endDate);
+      html += `<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:15px">${escapeHtml(exp.title)}</strong><span style="font-size:14px;color:#555"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:12px;color:#888">${escapeHtml(dateStr)}</span>` : ""}</div>`;
+      if (exp.bullets) html += `<ul style="margin:6px 0 0 20px;padding:0;list-style:disc">${exp.bullets.map(b => `<li style="margin-bottom:4px;font-size:14px;line-height:1.6">${escapeHtml(b)}</li>`).join("")}</ul>`;
+      html += `</div>`;
+    });
+  }
+  if ((data.education || []).length > 0) {
+    html += sectionHeader("Education", templateId);
+    data.education!.forEach(edu => {
+      const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year || "");
+      html += `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:15px">${escapeHtml(edu.degree)}</strong><span style="font-size:14px;color:#555"> — ${escapeHtml(edu.school)}</span></div>${dateStr ? `<span style="font-size:12px;color:#888">${escapeHtml(dateStr)}</span>` : ""}</div></div>`;
+    });
+  }
+  html += `</div>`;
+  html += `</div>`;
+  
+  return html;
 }
