@@ -2,7 +2,7 @@
 export const ALL_DYNAMIC_TEMPLATES = [
   {
     "template_id": "tpl_ats_001",
-    "template_name": "ATS Optimized Structural Form 1",
+    "template_name": "Summit Standard",
     "category": "ATS Optimized",
     "description": "A distinct ATS Optimized layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
     "layout_metadata": {
@@ -53,7 +53,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_ats_002",
-    "template_name": "ATS Optimized Structural Form 2",
+    "template_name": "Apex Clarity",
     "category": "ATS Optimized",
     "description": "A distinct ATS Optimized layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
     "layout_metadata": {
@@ -104,7 +104,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_ats_003",
-    "template_name": "ATS Optimized Structural Form 3",
+    "template_name": "Pinnacle Format",
     "category": "ATS Optimized",
     "description": "A distinct ATS Optimized layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
     "layout_metadata": {
@@ -155,7 +155,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_ats_004",
-    "template_name": "ATS Optimized Structural Form 4",
+    "template_name": "Vantage Point",
     "category": "ATS Optimized",
     "description": "A distinct ATS Optimized layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
     "layout_metadata": {
@@ -206,7 +206,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_ats_005",
-    "template_name": "ATS Optimized Structural Form 5",
+    "template_name": "Merit Framework",
     "category": "ATS Optimized",
     "description": "A distinct ATS Optimized layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
     "layout_metadata": {
@@ -258,7 +258,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_001",
-    "template_name": "Creative Structural Form 1",
+    "template_name": "Neon Canvas",
     "category": "Creative",
     "description": "A distinct Creative layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
     "layout_metadata": {
@@ -309,7 +309,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_002",
-    "template_name": "Creative Structural Form 2",
+    "template_name": "Vivid Expression",
     "category": "Creative",
     "description": "A distinct Creative layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
     "layout_metadata": {
@@ -360,7 +360,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_003",
-    "template_name": "Creative Structural Form 3",
+    "template_name": "Lumina Design",
     "category": "Creative",
     "description": "A distinct Creative layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
     "layout_metadata": {
@@ -411,7 +411,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_004",
-    "template_name": "Creative Structural Form 4",
+    "template_name": "Mosaic Flow",
     "category": "Creative",
     "description": "A distinct Creative layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
     "layout_metadata": {
@@ -462,7 +462,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_005",
-    "template_name": "Creative Structural Form 5",
+    "template_name": "Artisan Profile",
     "category": "Creative",
     "description": "A distinct Creative layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
     "layout_metadata": {
@@ -514,7 +514,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_exe_001",
-    "template_name": "Executive Structural Form 1",
+    "template_name": "Oxford Executive",
     "category": "Executive",
     "description": "A distinct Executive layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
     "layout_metadata": {
@@ -565,7 +565,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_exe_002",
-    "template_name": "Executive Structural Form 2",
+    "template_name": "Cambridge Classic",
     "category": "Executive",
     "description": "A distinct Executive layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
     "layout_metadata": {
@@ -616,7 +616,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_exe_003",
-    "template_name": "Executive Structural Form 3",
+    "template_name": "Sterling Board",
     "category": "Executive",
     "description": "A distinct Executive layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
     "layout_metadata": {
@@ -667,7 +667,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_exe_004",
-    "template_name": "Executive Structural Form 4",
+    "template_name": "Savoy Leadership",
     "category": "Executive",
     "description": "A distinct Executive layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
     "layout_metadata": {
@@ -718,7 +718,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_exe_005",
-    "template_name": "Executive Structural Form 5",
+    "template_name": "Prestige Authority",
     "category": "Executive",
     "description": "A distinct Executive layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
     "layout_metadata": {
@@ -770,7 +770,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_min_001",
-    "template_name": "Minimalist Structural Form 1",
+    "template_name": "Nordic Crisp",
     "category": "Minimalist",
     "description": "A distinct Minimalist layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
     "layout_metadata": {
@@ -821,7 +821,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_min_002",
-    "template_name": "Minimalist Structural Form 2",
+    "template_name": "Zenith Clean",
     "category": "Minimalist",
     "description": "A distinct Minimalist layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
     "layout_metadata": {
@@ -872,7 +872,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_min_003",
-    "template_name": "Minimalist Structural Form 3",
+    "template_name": "Aura Minimal",
     "category": "Minimalist",
     "description": "A distinct Minimalist layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
     "layout_metadata": {
@@ -923,7 +923,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_min_004",
-    "template_name": "Minimalist Structural Form 4",
+    "template_name": "Breeze Layout",
     "category": "Minimalist",
     "description": "A distinct Minimalist layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
     "layout_metadata": {
@@ -974,7 +974,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_min_005",
-    "template_name": "Minimalist Structural Form 5",
+    "template_name": "Clarity Focus",
     "category": "Minimalist",
     "description": "A distinct Minimalist layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
     "layout_metadata": {
@@ -1026,7 +1026,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_mod_001",
-    "template_name": "Modern Structural Form 1",
+    "template_name": "Atlantic Blue",
     "category": "Modern",
     "description": "A distinct Modern layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
     "layout_metadata": {
@@ -1077,7 +1077,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_mod_002",
-    "template_name": "Modern Structural Form 2",
+    "template_name": "Mercury Flow",
     "category": "Modern",
     "description": "A distinct Modern layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
     "layout_metadata": {
@@ -1128,7 +1128,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_mod_003",
-    "template_name": "Modern Structural Form 3",
+    "template_name": "Steady Form",
     "category": "Modern",
     "description": "A distinct Modern layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
     "layout_metadata": {
@@ -1179,7 +1179,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_mod_004",
-    "template_name": "Modern Structural Form 4",
+    "template_name": "Urban Edge",
     "category": "Modern",
     "description": "A distinct Modern layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
     "layout_metadata": {
@@ -1230,7 +1230,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_mod_005",
-    "template_name": "Modern Structural Form 5",
+    "template_name": "Nova Tech",
     "category": "Modern",
     "description": "A distinct Modern layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
     "layout_metadata": {
@@ -1282,7 +1282,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pho_001",
-    "template_name": "Photo Profiles Structural Form 1",
+    "template_name": "Visionary Portrait",
     "category": "Photo Profiles",
     "description": "A distinct Photo Profiles layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
     "layout_metadata": {
@@ -1333,7 +1333,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pho_002",
-    "template_name": "Photo Profiles Structural Form 2",
+    "template_name": "Signature Face",
     "category": "Photo Profiles",
     "description": "A distinct Photo Profiles layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
     "layout_metadata": {
@@ -1384,7 +1384,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pho_003",
-    "template_name": "Photo Profiles Structural Form 3",
+    "template_name": "Gallery Identity",
     "category": "Photo Profiles",
     "description": "A distinct Photo Profiles layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
     "layout_metadata": {
@@ -1435,7 +1435,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pho_004",
-    "template_name": "Photo Profiles Structural Form 4",
+    "template_name": "Persona Studio",
     "category": "Photo Profiles",
     "description": "A distinct Photo Profiles layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
     "layout_metadata": {
@@ -1486,7 +1486,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pho_005",
-    "template_name": "Photo Profiles Structural Form 5",
+    "template_name": "Focus Frame",
     "category": "Photo Profiles",
     "description": "A distinct Photo Profiles layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
     "layout_metadata": {
@@ -1538,7 +1538,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pro_001",
-    "template_name": "Professional Structural Form 1",
+    "template_name": "Corporate Standard",
     "category": "Professional",
     "description": "A distinct Professional layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
     "layout_metadata": {
@@ -1589,7 +1589,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pro_002",
-    "template_name": "Professional Structural Form 2",
+    "template_name": "Enterprise Level",
     "category": "Professional",
     "description": "A distinct Professional layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
     "layout_metadata": {
@@ -1640,7 +1640,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pro_003",
-    "template_name": "Professional Structural Form 3",
+    "template_name": "Business Class",
     "category": "Professional",
     "description": "A distinct Professional layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
     "layout_metadata": {
@@ -1691,7 +1691,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pro_004",
-    "template_name": "Professional Structural Form 4",
+    "template_name": "Industry Leader",
     "category": "Professional",
     "description": "A distinct Professional layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
     "layout_metadata": {
@@ -1742,7 +1742,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_pro_005",
-    "template_name": "Professional Structural Form 5",
+    "template_name": "Career Pro",
     "category": "Professional",
     "description": "A distinct Professional layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
     "layout_metadata": {
@@ -1794,7 +1794,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_tec_001",
-    "template_name": "Technical Structural Form 1",
+    "template_name": "Code Structure",
     "category": "Technical",
     "description": "A distinct Technical layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
     "layout_metadata": {
@@ -1845,7 +1845,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_tec_002",
-    "template_name": "Technical Structural Form 2",
+    "template_name": "Data Matrix",
     "category": "Technical",
     "description": "A distinct Technical layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
     "layout_metadata": {
@@ -1896,7 +1896,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_tec_003",
-    "template_name": "Technical Structural Form 3",
+    "template_name": "Logic Flow",
     "category": "Technical",
     "description": "A distinct Technical layout featuring 1-column structure, none sidebar, and typography-led visual emphasis. Designed with ultra-compact information density and left-aligned text.",
     "layout_metadata": {
@@ -1947,7 +1947,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_tec_004",
-    "template_name": "Technical Structural Form 4",
+    "template_name": "Stack Engineer",
     "category": "Technical",
     "description": "A distinct Technical layout featuring 2-column structure, left sidebar, and borders-led visual emphasis. Designed with standard information density and center-aligned text.",
     "layout_metadata": {
@@ -1998,7 +1998,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_tec_005",
-    "template_name": "Technical Structural Form 5",
+    "template_name": "System Architect",
     "category": "Technical",
     "description": "A distinct Technical layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
     "layout_metadata": {

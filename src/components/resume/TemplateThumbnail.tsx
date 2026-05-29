@@ -5,19 +5,45 @@ import { ALL_DYNAMIC_TEMPLATES } from "../../data/templates/index";
 import type { ResumeData } from "@/types/resume";
 
 const DUMMY = {
-  name: "John Doe",
-  contact: "john@email.com • (555) 123-4567 • New York, NY",
-  summary: "Experienced professional with expertise in project management and team leadership. Proven track record of delivering high-impact solutions.",
-  skills: "React • TypeScript • Node.js • SQL • Python • AWS • Docker • GraphQL • Next.js • TailwindCSS",
+  name: "Camila Rivera",
+  contact: "c.rivera@email.com • +1 (305) 555-0184 • Miami, FL • linkedin.com/in/camila-rivera",
+  summary: "Results-driven sales professional with 6+ years of experience in account growth, client relationship management, and pipeline development across B2B environments. Strong track record of improving conversion rates, supporting revenue targets, and building trust with diverse customer groups. Brings a practical, people-focused approach to sales planning and long-term customer retention.",
+  skills: "Account Management • CRM Management • Sales Forecasting • Negotiation • Client Retention • Pipeline Development",
   exp: [
-    { title: "Senior Developer", company: "Tech Corp", date: "2021 — Present", bullets: ["Led a team of 5 engineers to build a highly scalable microservices architecture.", "Improved application performance by 40% through code optimization.", "Mentored junior developers and established best practices."] },
-    { title: "Full Stack Developer", company: "StartupXYZ", date: "2018 — 2021", bullets: ["Developed and maintained multiple React applications.", "Integrated third-party APIs and payment gateways.", "Reduced deployment time by 50% using CI/CD pipelines."] },
-    { title: "Junior Developer", company: "Web Solutions", date: "2016 — 2018", bullets: ["Built responsive user interfaces using HTML, CSS, and JavaScript.", "Collaborated with designers to implement pixel-perfect layouts."] },
+    { 
+      title: "Sales Manager", 
+      company: "BrightPath Business Solutions", 
+      date: "08/2021 — Present", 
+      bullets: [
+        "Manage a portfolio of mid-market clients across retail and service sectors.",
+        "Lead quarterly sales planning and improved team conversion rates by 14%.",
+        "Build strong client relationships that increased renewals and upsell."
+      ] 
+    },
+    { 
+      title: "Account Manager", 
+      company: "Horizon Office Supply", 
+      date: "03/2019 — 07/2021", 
+      bullets: [
+        "Owned inbound and outbound sales strategy for regional business accounts.",
+        "Delivered tailored product proposals and consistently exceeded revenue goals.",
+        "Coordinated with operations teams to improve customer satisfaction."
+      ] 
+    },
+    { 
+      title: "Sales Representative", 
+      company: "SunPeak Telecom", 
+      date: "06/2016 — 02/2019", 
+      bullets: [
+        "Supported account execs with lead tracking, reporting, and proposal preparation.",
+        "Contributed to pipeline organization and improved follow-up consistency."
+      ] 
+    }
   ],
-  edu: { degree: "B.S. Computer Science", school: "State University", date: "2012 — 2016" },
+  edu: { degree: "Bachelor of Business Administration", school: "Florida International University", date: "2012 — 2016" },
 };
 
-const DUMMY_PHOTO = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
+const DUMMY_PHOTO = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256&h=256";
 
 function mapResumeDataToDummy(data?: ResumeData) {
   if (!data) return DUMMY;
