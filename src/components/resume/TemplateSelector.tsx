@@ -5,10 +5,13 @@ import { cn } from "@/lib/utils";
 import TemplateThumbnail from "./TemplateThumbnail";
 import { LayoutGrid, FileText, Sparkles, Briefcase, Palette, BookOpen, ScanLine, Shield, Lightbulb, Crown } from "lucide-react";
 
+import type { ResumeData } from "@/types/resume";
+
 interface TemplateSelectorProps {
   selected: TemplateId;
   onChange: (id: TemplateId) => void;
   jobTitle?: string;
+  resumeData?: ResumeData;
 }
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
@@ -22,7 +25,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   "Premium": <Crown className="w-4 h-4 text-amber-500" />,
 };
 
-export default function TemplateSelector({ selected, onChange, jobTitle }: TemplateSelectorProps) {
+export default function TemplateSelector({ selected, onChange, jobTitle, resumeData }: TemplateSelectorProps) {
   const categories = Array.from(new Set(RESUME_TEMPLATES.map(t => t.category || "Other")));
   const allTabs = ["All Templates", ...categories];
   const [activeTab, setActiveTab] = useState("All Templates");
@@ -86,7 +89,7 @@ export default function TemplateSelector({ selected, onChange, jobTitle }: Templ
             )}
           >
             <div className="p-1.5">
-              <TemplateThumbnail templateId={t.id} />
+              <TemplateThumbnail templateId={t.id} data={resumeData} />
             </div>
             <div className="px-3 pb-2.5 pt-1 text-left">
               <div className="flex items-center gap-1 flex-wrap">

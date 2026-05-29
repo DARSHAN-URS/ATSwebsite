@@ -407,7 +407,7 @@ export default function Builder() {
                      Select a structural architecture that aligns with your industry mission.
                   </p>
                </div>
-               <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} />
+               <TemplateSelector selected={selectedTemplate} onChange={setSelectedTemplate} resumeData={resumeData} />
             </div>
           )}
             </StudioEditor>
