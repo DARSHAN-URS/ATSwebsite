@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { type TemplateId, ALL_DYNAMIC_TEMPLATES } from "./pdfTemplates";
+import { type TemplateId } from "./pdfTemplates";
+import { ALL_DYNAMIC_TEMPLATES } from "@/data/templates";
 import type { ResumeData } from "./types";
 import { getATSConfig, isATSTemplateId, type ATSTemplateConfig } from "./atsTemplateConfig";
 import { Loader2, FileText } from "lucide-react";
