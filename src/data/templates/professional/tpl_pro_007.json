@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_pro_007",
+  "template_name": "First Job Pro",
+  "category": "Professional",
+  "description": "An engaging split-even format featuring warm amber accents, center alignment, and background-blocks indicators, designed to secure entry-level success.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "split-even",
+    "structural_alignment": "center-aligned",
+    "information_density": "variable",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-P7A",
+      "body": "FontStack-P7B",
+      "accent": "FontStack-P7C"
+    },
+    "spacing": {
+      "margin": "17px",
+      "line_height": 1.25,
+      "section_gap": "18px"
+    },
+    "color_palette": {
+      "primary": "#d97706",
+      "secondary": "#b45309",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": true,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "education",
+      "skills",
+      "summary",
+      "experience"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 90,
+  "suitable_professions": [
+    "High School Graduates",
+    "First Job Applicants",
+    "Retail & Customer Service"
+  ]
+}

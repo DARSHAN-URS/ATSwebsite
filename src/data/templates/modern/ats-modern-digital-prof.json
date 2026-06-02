@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-modern-digital-prof",
+  "template_name": "Digital Professional",
+  "category": "Modern",
+  "description": "A monospace digital-first structure featuring bold divider frames and royal violet styling.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "spacious",
+    "visual_emphasis": "borders",
+    "typography": {
+      "heading": "courier",
+      "body": "courier",
+      "accent": "courier"
+    },
+    "spacing": {
+      "margin": "17px",
+      "line_height": 1.2,
+      "section_gap": "16px"
+    },
+    "color_palette": {
+      "primary": "#7c3aed",
+      "secondary": "#6d28d9",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "skills",
+      "education",
+      "summary",
+      "experience"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Digital Marketers",
+    "Media Specialists",
+    "Tech Roles"
+  ]
+}

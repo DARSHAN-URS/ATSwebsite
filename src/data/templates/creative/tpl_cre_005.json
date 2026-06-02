@@ -1,40 +1,39 @@
 {
   "template_id": "tpl_cre_005",
-  "template_name": "Creative Structural Form 5",
+  "template_name": "Creative Edge",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
+  "description": "An asymmetrical-right layout with high density formatting, midnight black backdrop, lime accents, and bold headers.",
   "layout_metadata": {
-    "column_count": 1,
+    "column_count": 2,
     "sidebar_position": "asymmetrical-right",
-    "structural_alignment": "alternating",
+    "structural_alignment": "justified",
     "information_density": "hyper-dense",
-    "visual_emphasis": "color-blocks",
+    "visual_emphasis": "bold-headers",
     "typography": {
-      "heading": "FontStack-4A",
-      "body": "FontStack-4B",
-      "accent": "FontStack-4C"
+      "heading": "FontStack-C5A",
+      "body": "FontStack-C5B",
+      "accent": "FontStack-C5C"
     },
     "spacing": {
-      "margin": "18px",
-      "line_height": 1.6,
-      "section_gap": "32px"
+      "margin": "12px",
+      "line_height": 1.2,
+      "section_gap": "14px"
     },
     "color_palette": {
-      "primary": "#b2cf10",
-      "secondary": "#3777e3",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#0f172a",
+      "secondary": "#84cc16",
+      "text": "#111111",
+      "background": "#ffffff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "summary",
-      "projects",
       "experience",
       "education",
-      "skills"
+      "skills",
+      "summary"
     ],
     "visibility": {
       "summary": true,
@@ -44,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 70,
+  "ats_score": 83,
   "suitable_professions": [
-    "Creative Roles",
-    "General Use"
+    "Tech Artists",
+    "Digital Designers",
+    "Concept Artists"
   ]
 }

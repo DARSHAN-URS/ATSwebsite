@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-pro-elite",
+  "template_name": "ATS Pro Elite",
+  "category": "ATS Optimized",
+  "description": "Features a distinctive gold accent theme with experience front and center, designed to capture attention.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "hyper-dense",
+    "visual_emphasis": "color-blocks",
+    "typography": {
+      "heading": "times",
+      "body": "times",
+      "accent": "times"
+    },
+    "spacing": {
+      "margin": "20px",
+      "line_height": 1.25,
+      "section_gap": "20px"
+    },
+    "color_palette": {
+      "primary": "#854d0e",
+      "secondary": "#a16207",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "skills",
+      "education",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Consulting",
+    "Legal",
+    "Senior Specialists"
+  ]
+}

@@ -77,6 +77,18 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
       return;
     }
 
+    const currentBullets = item.bullets.filter(b => b.trim().length > 0);
+    const cacheKey = `ai_exp_${item.title}_${item.company}_${currentBullets.join('|')}`.toLowerCase();
+    
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+         updateItem(index, { bullets: JSON.parse(cached) });
+         toast({ title: "Achievements Optimized", description: "Loaded instantly from cache." });
+         return;
+      }
+    } catch (e) {}
+
     setAiLoading(index);
     try {
       const { data, error } = await invokeFunction("resume-assist", {
@@ -85,13 +97,16 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
           context: { 
             jobTitle: item.title, 
             company: item.company,
-            currentBullets: item.bullets.filter(b => b.trim().length > 0)
+            currentBullets
           } 
         }
       });
 
       if (error) throw error;
       if (data?.bullets) {
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(data.bullets));
+        } catch (e) {}
         updateItem(index, { bullets: data.bullets });
         toast({ title: "Achievements Optimized", description: "AI has refined your mission impact statements." });
       }

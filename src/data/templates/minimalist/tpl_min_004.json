@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_min_004",
-  "template_name": "Minimalist Structural Form 4",
+  "template_name": "Essential Resume",
   "category": "Minimalist",
-  "description": "A distinct Minimalist layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
+  "description": "A spacious right-sidebar layout emphasizing clean typography and a professional forest moss palette.",
   "layout_metadata": {
     "column_count": 2,
     "sidebar_position": "right",
-    "structural_alignment": "right-aligned",
-    "information_density": "airy",
-    "visual_emphasis": "background-blocks",
+    "structural_alignment": "left-aligned",
+    "information_density": "spacious",
+    "visual_emphasis": "typography",
     "typography": {
-      "heading": "FontStack-3A",
-      "body": "FontStack-3B",
-      "accent": "FontStack-3C"
+      "heading": "FontStack-M4A",
+      "body": "FontStack-M4B",
+      "accent": "FontStack-M4C"
     },
     "spacing": {
-      "margin": "16px",
-      "line_height": 1.5,
-      "section_gap": "28px"
+      "margin": "22px",
+      "line_height": 1.4,
+      "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#8675ad",
-      "secondary": "#0f8207",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#1e293b",
+      "secondary": "#3f6212",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
-    "responsive_behavior": "hide-sidebar-on-mobile"
+    "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "education",
+      "summary",
       "experience",
-      "projects",
-      "skills"
+      "skills",
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 75,
+  "ats_score": 94,
   "suitable_professions": [
-    "Minimalist Roles",
-    "General Use"
+    "Project Managers",
+    "Operations",
+    "General Business"
   ]
 }

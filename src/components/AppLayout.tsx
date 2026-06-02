@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import ThemeToggle from "@/components/ThemeToggle";
 import { 
   FileText, Search, LayoutDashboard, LogOut, Menu, Building2, BarChart3, 
   Users, CreditCard, Briefcase, Headphones, Mail, Settings, ShieldCheck, Zap,
@@ -131,6 +132,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
 
 
         <div className="p-4 border-t border-white/5 space-y-3">
+          <ThemeToggle className="w-full justify-start bg-white/5 border-white/5 text-slate-300 hover:bg-white/10 hover:text-white h-10 px-4 rounded-xl font-bold uppercase tracking-wider text-[10px] gap-2" />
           <LanguageSwitcher className="w-full justify-start bg-white/5 border-white/5 text-slate-300 hover:bg-white/10 hover:text-white" />
 
           <DropdownMenu>
@@ -172,9 +174,9 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background font-sans selection:bg-blue-600/10 selection:text-blue-600">
       {!isMobile ? (
-        <aside className="w-64 h-screen sticky top-0 overflow-hidden z-40 border-r border-slate-200 hidden md:block">
+        <aside className="w-64 h-screen sticky top-0 overflow-hidden z-40 border-r border-slate-200 dark:border-white/5 hidden md:block">
           <SidebarContent user={user} onSignOut={handleSignOut} />
         </aside>
       ) : (
@@ -196,7 +198,7 @@ export default function AppLayout() {
         </header>
       )}
 
-      <main className="flex-1 min-w-0 flex flex-col bg-white relative">
+      <main className="flex-1 min-w-0 flex flex-col bg-background relative">
         <div className="flex-1 relative overflow-y-auto p-4 md:p-8 lg:p-10">
            <Outlet />
         </div>

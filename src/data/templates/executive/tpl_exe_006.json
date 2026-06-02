@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_exe_006",
+  "template_name": "Strategic Leader",
+  "category": "Executive",
+  "description": "An airy top-navigation layout with deep emerald styling and a staggered structural format.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "staggered",
+    "information_density": "airy",
+    "visual_emphasis": "borders",
+    "typography": {
+      "heading": "FontStack-5A",
+      "body": "FontStack-5B",
+      "accent": "FontStack-5C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.3,
+      "section_gap": "22px"
+    },
+    "color_palette": {
+      "primary": "#064e3b",
+      "secondary": "#78716c",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 94,
+  "suitable_professions": [
+    "Strategy Directors",
+    "Management Consultants",
+    "Chief of Staff"
+  ]
+}

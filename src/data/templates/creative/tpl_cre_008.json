@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_cre_008",
+  "template_name": "Creative Vision",
+  "category": "Creative",
+  "description": "An airy single-column template featuring deep ocean blue accents, staggered section layout, and background-blocks indicators.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "staggered",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-C8A",
+      "body": "FontStack-C8B",
+      "accent": "FontStack-C8C"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.35,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#0284c7",
+      "secondary": "#0369a1",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": true,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "skills",
+      "education",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 83,
+  "suitable_professions": [
+    "Brand Directors",
+    "Creative Strategists",
+    "Copywriters"
+  ]
+}

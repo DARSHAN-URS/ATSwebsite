@@ -1,29 +1,29 @@
 {
   "template_id": "tpl_pro_003",
-  "template_name": "Professional Structural Form 3",
+  "template_name": "Banking Professional",
   "category": "Professional",
-  "description": "A distinct Professional layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
+  "description": "An elegant right-sidebar layout combining dense margins, clean typography, and a warm bronze/charcoal palette.",
   "layout_metadata": {
     "column_count": 2,
-    "sidebar_position": "left",
+    "sidebar_position": "right",
     "structural_alignment": "left-aligned",
-    "information_density": "standard",
-    "visual_emphasis": "photo-led",
+    "information_density": "dense",
+    "visual_emphasis": "typography",
     "typography": {
-      "heading": "FontStack-2A",
-      "body": "FontStack-2B",
-      "accent": "FontStack-2C"
+      "heading": "FontStack-P3A",
+      "body": "FontStack-P3B",
+      "accent": "FontStack-P3C"
     },
     "spacing": {
       "margin": "14px",
-      "line_height": 1.4,
-      "section_gap": "24px"
+      "line_height": 1.18,
+      "section_gap": "14px"
     },
     "color_palette": {
-      "primary": "#8cba04",
-      "secondary": "#35d8d2",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#7c2d12",
+      "secondary": "#374151",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
@@ -31,8 +31,8 @@
   "sections": {
     "order": [
       "experience",
-      "education",
       "skills",
+      "education",
       "summary"
     ],
     "visibility": {
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 80,
+  "ats_score": 95,
   "suitable_professions": [
-    "Professional Roles",
-    "General Use"
+    "Investment Banking",
+    "Financial Advising",
+    "Asset Management"
   ]
 }

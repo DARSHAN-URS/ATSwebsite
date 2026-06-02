@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-pro-corporate",
+  "template_name": "ATS Pro Corporate",
+  "category": "ATS Optimized",
+  "description": "Structured layout with royal blue divider bars, best suited for banking, consulting, and finance roles.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "spacious",
+    "visual_emphasis": "icons",
+    "typography": {
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.25,
+      "section_gap": "18px"
+    },
+    "color_palette": {
+      "primary": "#1e3a8a",
+      "secondary": "#1e4ed8",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "skills",
+      "education"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Corporate Functions",
+    "Finance & Banking",
+    "Operations"
+  ]
+}

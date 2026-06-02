@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-modern-smart-profile",
+  "template_name": "Smart Profile",
+  "category": "Modern",
+  "description": "Elegant serif layout prioritizing skills and certification metrics with warm amber accents.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "hyper-dense",
+    "visual_emphasis": "timeline",
+    "typography": {
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
+    },
+    "spacing": {
+      "margin": "20px",
+      "line_height": 1.25,
+      "section_gap": "23px"
+    },
+    "color_palette": {
+      "primary": "#b45309",
+      "secondary": "#d97706",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "skills",
+      "experience",
+      "education",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Product Management",
+    "Sales Executives",
+    "Account Executives"
+  ]
+}

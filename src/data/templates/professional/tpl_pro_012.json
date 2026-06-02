@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_pro_012",
+  "template_name": "Industry Expert",
+  "category": "Professional",
+  "description": "A focused, dense single-column layout prioritizing left-aligned details, timeline emphasis, and a crimson red brand outline.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "dense",
+    "visual_emphasis": "timeline",
+    "typography": {
+      "heading": "FontStack-P12A",
+      "body": "FontStack-P12B",
+      "accent": "FontStack-P12C"
+    },
+    "spacing": {
+      "margin": "14px",
+      "line_height": 1.24,
+      "section_gap": "15px"
+    },
+    "color_palette": {
+      "primary": "#991b1b",
+      "secondary": "#7f1d1d",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "skills",
+      "education",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 96,
+  "suitable_professions": [
+    "Subject Matter Experts",
+    "Principal Advisors",
+    "Independent Consultants"
+  ]
+}

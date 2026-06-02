@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_cre_003",
-  "template_name": "Creative Structural Form 3",
+  "template_name": "Portfolio Pro",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "description": "An authoritative asymmetrical-left layout featuring high density and bordered layouts with orange branding, optimized for visual portfolios.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "split-even",
-    "structural_alignment": "justified",
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "left-aligned",
     "information_density": "dense",
-    "visual_emphasis": "white-space",
+    "visual_emphasis": "borders",
     "typography": {
-      "heading": "FontStack-2A",
-      "body": "FontStack-2B",
-      "accent": "FontStack-2C"
+      "heading": "FontStack-C3A",
+      "body": "FontStack-C3B",
+      "accent": "FontStack-C3C"
     },
     "spacing": {
-      "margin": "14px",
-      "line_height": 1.4,
-      "section_gap": "24px"
+      "margin": "15px",
+      "line_height": 1.25,
+      "section_gap": "18px"
     },
     "color_palette": {
-      "primary": "#c14803",
-      "secondary": "#04054a",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#ea580c",
+      "secondary": "#d97706",
+      "text": "#111111",
+      "background": "#ffffff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
+      "summary",
       "experience",
       "education",
-      "skills",
-      "summary"
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 80,
+  "ats_score": 87,
   "suitable_professions": [
-    "Creative Roles",
-    "General Use"
+    "Fine Arts",
+    "Exhibition Designers",
+    "Art Portfolio Directors"
   ]
 }

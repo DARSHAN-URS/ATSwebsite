@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_cre_002",
-  "template_name": "Creative Structural Form 2",
+  "template_name": "Creative Studio",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "description": "An expressive single-column layout prioritizing right-aligned headings, elegant pink tones, and generous white space.",
   "layout_metadata": {
-    "column_count": 3,
-    "sidebar_position": "top-nav",
-    "structural_alignment": "staggered",
-    "information_density": "variable",
-    "visual_emphasis": "timeline",
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "right-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "white-space",
     "typography": {
-      "heading": "FontStack-1A",
-      "body": "FontStack-1B",
-      "accent": "FontStack-1C"
+      "heading": "FontStack-C2A",
+      "body": "FontStack-C2B",
+      "accent": "FontStack-C2C"
     },
     "spacing": {
-      "margin": "12px",
+      "margin": "18px",
       "line_height": 1.3,
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#cee1f8",
-      "secondary": "#fac62a",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#db2777",
+      "secondary": "#e11d48",
+      "text": "#111111",
+      "background": "#ffffff"
     },
-    "has_photo": false,
-    "responsive_behavior": "hide-sidebar-on-mobile"
+    "has_photo": true,
+    "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "summary",
-      "skills",
       "experience",
-      "education"
+      "education",
+      "summary",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 85,
+  "ats_score": 82,
   "suitable_professions": [
-    "Creative Roles",
-    "General Use"
+    "Studio Art",
+    "Creative Direction",
+    "Graphic Designers"
   ]
 }

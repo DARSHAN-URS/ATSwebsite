@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_exe_004",
-  "template_name": "Executive Structural Form 4",
+  "template_name": "C-Suite Professional",
   "category": "Executive",
-  "description": "A distinct Executive layout featuring 1-column structure, split-even sidebar, and white-space-led visual emphasis. Designed with dense information density and justified text.",
+  "description": "A premium right-sidebar layout emphasizing key competencies with spacious modern styling and deep teal branding.",
   "layout_metadata": {
     "column_count": 1,
-    "sidebar_position": "split-even",
-    "structural_alignment": "justified",
-    "information_density": "dense",
-    "visual_emphasis": "white-space",
+    "sidebar_position": "right",
+    "structural_alignment": "left-aligned",
+    "information_density": "spacious",
+    "visual_emphasis": "color-blocks",
     "typography": {
       "heading": "FontStack-3A",
       "body": "FontStack-3B",
       "accent": "FontStack-3C"
     },
     "spacing": {
-      "margin": "16px",
-      "line_height": 1.5,
+      "margin": "22px",
+      "line_height": 1.35,
       "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#5d3793",
-      "secondary": "#5c075e",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#115e59",
+      "secondary": "#4b5563",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
-    "responsive_behavior": "hide-sidebar-on-mobile"
+    "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "education",
+      "summary",
+      "skills",
       "experience",
-      "projects",
-      "skills"
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,11 @@
       "projects": true
     }
   },
-  "ats_score": 75,
+  "ats_score": 96,
   "suitable_professions": [
-    "Executive Roles",
-    "General Use"
+    "CEO",
+    "COO",
+    "CFO",
+    "Executive Leadership"
   ]
 }

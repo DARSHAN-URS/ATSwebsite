@@ -33,7 +33,7 @@ export const Footer = () => {
   const tn = t.nav;
   
   return (
-    <footer className="py-16 md:py-40 bg-white border-t border-slate-50 relative overflow-hidden">
+    <footer className="py-16 md:py-20 bg-white border-t border-slate-50 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-600/20 to-transparent" />
       <div className="container mx-auto px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
@@ -83,7 +83,7 @@ export const Footer = () => {
 
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-16 md:mt-40 pt-10 md:pt-20 border-t border-slate-100">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-10 mt-12 md:mt-16 pt-8 md:pt-10 border-t border-slate-100">
           <div className="flex flex-wrap justify-center gap-10">
             <Link to="/privacy" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">{tf.privacyProtocols}</Link>
             <Link to="/terms" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600 transition-colors">{tf.serviceTerms}</Link>

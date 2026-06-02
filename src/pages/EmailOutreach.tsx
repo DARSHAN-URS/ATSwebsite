@@ -92,14 +92,32 @@ export default function EmailOutreach() {
   const generateMutation = useMutation({
     mutationFn: async () => {
       if (!company || !position) throw new Error("Missing company or position");
+
+      const cacheKey = `outreach_${company}_${position}_${selectedResumeId}_${tone}`.toLowerCase();
+      try {
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) {
+          return { ...JSON.parse(cached), _cached: true };
+        }
+      } catch (e) {}
+
       const { data, error } = await invokeFunction("generate-outreach-email", { position, company, resumeId: selectedResumeId || undefined, tone });
       if (error) throw new Error(error.message);
+
+      try {
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      } catch (e) {}
+
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       setSubject(data.subject);
       setBody(data.body);
-      toast({ title: to.draftCreated });
+      if (data._cached) {
+         toast({ title: to.draftCreated, description: "Loaded instantly from cache." });
+      } else {
+         toast({ title: to.draftCreated });
+      }
     },
     onError: (err) => {
       if (err.message === "Missing company or position") {
@@ -222,11 +240,11 @@ export default function EmailOutreach() {
                      <div className="space-y-2">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.contextReference}</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs text-slate-900">
+                           <SelectTrigger className="h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 font-bold text-xs text-slate-900 dark:text-slate-100">
                               <SelectValue placeholder={to.selectResume} />
                            </SelectTrigger>
-                           <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white">
-                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="font-bold text-[10px] p-3 uppercase hover:bg-blue-50 cursor-pointer">{r.title}</SelectItem>)}
+                           <SelectContent className="rounded-xl border border-slate-100 dark:border-slate-700 shadow-2xl bg-white dark:bg-slate-900">
+                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="font-bold text-[10px] p-3 uppercase text-slate-900 dark:text-slate-100 hover:bg-blue-50 dark:hover:bg-slate-800 cursor-pointer">{r.title}</SelectItem>)}
                            </SelectContent>
                         </Select>
                      </div>

@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_pro_011",
+  "template_name": "Senior Leader",
+  "category": "Professional",
+  "description": "An authoritative left-sidebar layout combining justified alignments, airy spacing, and charcoal black background blocks to highlight seasoned tenure.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "left",
+    "structural_alignment": "justified",
+    "information_density": "airy",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-P11A",
+      "body": "FontStack-P11B",
+      "accent": "FontStack-P11C"
+    },
+    "spacing": {
+      "margin": "21px",
+      "line_height": 1.36,
+      "section_gap": "25px"
+    },
+    "color_palette": {
+      "primary": "#111111",
+      "secondary": "#374151",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 95,
+  "suitable_professions": [
+    "Directors",
+    "VP roles",
+    "Senior Managers"
+  ]
+}

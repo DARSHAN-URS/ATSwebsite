@@ -7,6 +7,7 @@ import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,12 +41,12 @@ export const Navbar = () => {
           className={cn(
             "flex items-center justify-between px-4 py-3 md:px-8 md:py-4 transition-all duration-500 md:rounded-[2rem]",
             isScrolled 
-              ? "bg-slate-950/95 backdrop-blur-2xl shadow-sm md:shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-b md:border border-slate-800/50" 
-              : "bg-slate-950/95 backdrop-blur-xl border-b md:border border-slate-800/30"
+              ? "bg-white/95 backdrop-blur-2xl shadow-sm md:shadow-[0_8px_32px_rgba(0,0,0,0.05)] border-b md:border border-slate-100" 
+              : "bg-white/95 backdrop-blur-xl border-b md:border border-slate-100"
           )}
         >
-          <Link to="/" className="flex items-center gap-2 md:gap-3 group text-white">
-            <Logo variant="light" className="h-8 md:h-14" />
+          <Link to="/" className="flex items-center gap-2 md:gap-3 group text-slate-900">
+            <Logo variant="auto" className="h-8 md:h-14" />
           </Link>
 
           {/* Desktop Menu */}
@@ -54,7 +55,7 @@ export const Navbar = () => {
               <Link 
                 key={link.name}
                 to={link.path} 
-                className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-blue-600 transition-colors"
+                className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600 hover:text-blue-600 transition-colors"
               >
                 {link.name}
               </Link>
@@ -62,14 +63,15 @@ export const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
+            <ThemeToggle className="text-[11px] font-black uppercase tracking-widest text-slate-600 hover:text-blue-600" />
             <LanguageSwitcher />
             <Link to="/auth">
-              <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600">
+              <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-600 hover:text-blue-600">
                 {t.nav.logIn}
               </Button>
             </Link>
             <Link to="/auth">
-              <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-[0.2em] text-[10px] rounded-[1.5rem] px-10 h-14 shadow-2xl shadow-slate-900/20 group">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-[0.2em] text-[10px] rounded-[1.5rem] px-10 h-14 shadow-2xl shadow-blue-600/20 group">
                 {t.nav.getStarted}
                 <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -78,9 +80,10 @@ export const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden flex items-center gap-2 md:gap-4">
-            <LanguageSwitcher className="h-8 md:h-9 px-2 md:px-3 text-[10px] md:text-sm" />
+            <ThemeToggle className="h-8 md:h-9 px-2 text-[10px] md:text-sm text-slate-900 dark:text-white" />
+            <LanguageSwitcher className="h-8 md:h-9 px-2 md:px-3 text-[10px] md:text-sm text-slate-900 border-slate-200" />
             <button
-              className="text-white p-2"
+              className="text-slate-900 p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -110,6 +113,7 @@ export const Navbar = () => {
                 </Link>
               ))}
               <div className="h-px bg-slate-100 dark:bg-slate-800 my-2" />
+              <ThemeToggle className="w-full justify-start text-[11px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:text-blue-600" />
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-slate-900 dark:text-white">{t.nav.logIn}</Link>
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full bg-primary text-white font-black uppercase tracking-widest text-xs h-14 rounded-2xl">

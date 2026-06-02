@@ -722,11 +722,14 @@ function renderATSFromConfig(doc: jsPDF, data: ResumeData, title: string, config
   };
   ctx.maxWidth = ctx.pageWidth - ctx.margin * 2;
   const pi = data.personalInfo || {};
+  const primaryRgb = config.primaryColor ? hexToRgb(config.primaryColor) : { r: 0, g: 0, b: 0 };
 
   // Name
   doc.setFontSize(config.nameFontSize);
   doc.setFont(config.fontFamily, "bold");
+  doc.setTextColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
   doc.text(pi.fullName || title || "Resume", ctx.margin, ctx.y);
+  doc.setTextColor(0);
   ctx.y += config.nameFontSize * 0.35 + 2;
 
   // Contact line
@@ -737,7 +740,9 @@ function renderATSFromConfig(doc: jsPDF, data: ResumeData, title: string, config
   if (contactParts.length) {
     doc.setFontSize(config.baseFontSize - 1);
     doc.setFont(config.fontFamily, "normal");
+    doc.setTextColor(80, 80, 80);
     doc.text(contactParts.join("  |  "), ctx.margin, ctx.y);
+    doc.setTextColor(0);
     ctx.y += config.lineSpacing;
   }
   const linkParts: string[] = [];
@@ -746,12 +751,15 @@ function renderATSFromConfig(doc: jsPDF, data: ResumeData, title: string, config
   if (linkParts.length) {
     doc.setFontSize(config.baseFontSize - 1);
     doc.setFont(config.fontFamily, "normal");
+    doc.setTextColor(80, 80, 80);
     doc.text(linkParts.join("  |  "), ctx.margin, ctx.y);
+    doc.setTextColor(0);
     ctx.y += config.lineSpacing;
   }
 
   // Divider under header
-  doc.setDrawColor(0);
+  doc.setDrawColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+  doc.setLineWidth(0.5);
   doc.line(ctx.margin, ctx.y, ctx.pageWidth - ctx.margin, ctx.y);
   ctx.y += 4;
 
@@ -761,9 +769,12 @@ function renderATSFromConfig(doc: jsPDF, data: ResumeData, title: string, config
     ctx.y += 4;
     doc.setFontSize(config.headingFontSize);
     doc.setFont(config.fontFamily, "bold");
+    doc.setTextColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
     doc.text(label.toUpperCase(), ctx.margin, ctx.y);
-    doc.setDrawColor(100);
+    doc.setDrawColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+    doc.setLineWidth(0.4);
     doc.line(ctx.margin, ctx.y + 1.5, ctx.pageWidth - ctx.margin, ctx.y + 1.5);
+    doc.setTextColor(0);
     ctx.y += config.headingFontSize * 0.4 + 3;
   };
 

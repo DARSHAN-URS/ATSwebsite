@@ -1,13 +1,13 @@
 {
   "template_id": "tpl_exe_005",
-  "template_name": "Executive Structural Form 5",
+  "template_name": "Executive Prestige",
   "category": "Executive",
-  "description": "A distinct Executive layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "description": "An asymmetrical-right layout with ultra-dense formatting, rich purple accents, and icon-driven indicators for professional excellence.",
   "layout_metadata": {
     "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
-    "structural_alignment": "mixed-alignment",
-    "information_density": "spacious",
+    "sidebar_position": "asymmetrical-right",
+    "structural_alignment": "alternating",
+    "information_density": "hyper-dense",
     "visual_emphasis": "icons",
     "typography": {
       "heading": "FontStack-4A",
@@ -15,26 +15,25 @@
       "accent": "FontStack-4C"
     },
     "spacing": {
-      "margin": "18px",
-      "line_height": 1.6,
-      "section_gap": "32px"
+      "margin": "12px",
+      "line_height": 1.15,
+      "section_gap": "14px"
     },
     "color_palette": {
-      "primary": "#88fa6e",
-      "secondary": "#2cc0a7",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#581c87",
+      "secondary": "#64748b",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "summary",
-      "projects",
       "experience",
       "education",
-      "skills"
+      "skills",
+      "summary"
     ],
     "visibility": {
       "summary": true,
@@ -44,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 70,
+  "ats_score": 91,
   "suitable_professions": [
-    "Executive Roles",
-    "General Use"
+    "Tech Executives",
+    "Corporate Leaders",
+    "Product Management"
   ]
 }

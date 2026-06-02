@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import type { ResumeData } from "@/components/resume/types";
 import { invokeFunction } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ATSScannerDialogProps {
   resumeData: ResumeData;
@@ -31,12 +33,41 @@ export default function ATSScannerDialog({ resumeData, onNavigate }: ATSScannerD
   const [results, setResults] = useState<AIResult | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const scan = async () => {
     if (!jobDescription.trim()) return;
     setLoading(true);
     
+    const hashStr = (str: string) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash).toString(36);
+    };
+
+    const jdHash = hashStr(jobDescription.trim().toLowerCase());
+    const resumeHash = hashStr(JSON.stringify(resumeData));
+
     try {
+      if (user?.id) {
+        const { data: cached } = await supabase
+          .from("resume_ats_scans")
+          .select("results")
+          .eq("user_id", user.id)
+          .eq("jd_hash", jdHash)
+          .eq("resume_hash", resumeHash)
+          .maybeSingle();
+
+        if (cached && cached.results) {
+          setResults(cached.results as AIResult);
+          setLoading(false);
+          return;
+        }
+      }
+
       const { data, error } = await invokeFunction("grade-resume", {
         resumeData,
         jobDescription
@@ -44,6 +75,15 @@ export default function ATSScannerDialog({ resumeData, onNavigate }: ATSScannerD
       
       if (error) throw new Error(error.message || "Failed to analyze resume.");
       
+      if (user?.id && data) {
+         await supabase.from("resume_ats_scans").insert({
+            user_id: user.id,
+            jd_hash: jdHash,
+            resume_hash: resumeHash,
+            results: data
+         }).catch(() => {});
+      }
+
       setResults(data);
     } catch (err: any) {
       toast({ title: "Analysis Failed", description: err.message, variant: "destructive" });

@@ -224,10 +224,10 @@ export default function Resumes() {
                 </div>
              </div>
 
-            <div className="flex flex-nowrap items-center gap-3 overflow-x-visible w-full lg:w-auto pb-2 lg:pb-0 no-scrollbar">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto pb-2 lg:pb-0">
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 w-full sm:w-auto justify-center shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
                       <FileText className="w-3.5 h-3.5" /> Cover Letters
                    </Button>
                  </TooltipTrigger>
@@ -238,7 +238,7 @@ export default function Resumes() {
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 w-full sm:w-auto justify-center shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
                       <Download className="w-3.5 h-3.5 rotate-180" /> {importResumeMutation.isPending ? "Importing..." : "Import Resume"}
                    </Button>
                  </TooltipTrigger>
@@ -249,7 +249,7 @@ export default function Resumes() {
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 shrink-0 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
+                   <Button onClick={() => setCreateOpen(true)} className="h-12 px-6 w-full sm:w-auto justify-center shrink-0 bg-blue-600 text-white font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-lg shadow-blue-600/20 gap-2 hover:scale-105 transition-all">
                       <Plus className="w-3.5 h-3.5" /> New Resume
                    </Button>
                  </TooltipTrigger>

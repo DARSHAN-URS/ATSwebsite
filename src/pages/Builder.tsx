@@ -160,11 +160,27 @@ export default function Builder() {
   };
 
   const generateSummary = async () => {
+    const currentExperience = resumeData.experience?.map(e => e.title + e.company).join('|');
+    const currentSkills = resumeData.skills?.join('|');
+    const cacheKey = `ai_sum_${title}_${currentSkills}_${currentExperience}`.toLowerCase();
+
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        setResumeData(prev => ({ ...prev, summary: JSON.parse(cached) }));
+        toast({ title: "Summary Created", description: "Loaded instantly from cache." });
+        return;
+      }
+    } catch (e) {}
+
     setAiLoading("summary");
     try {
       const { data, error } = await invokeFunction("resume-assist", { body: { type: "summary", context: { jobTitle: title, skills: resumeData.skills, experience: resumeData.experience } } });
       if (error) throw error;
       if (data?.summary) {
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(data.summary));
+        } catch (e) {}
         setResumeData(prev => ({ ...prev, summary: data.summary }));
         toast({ title: "Summary Created" });
       }
@@ -429,6 +445,8 @@ export default function Builder() {
               colors={colors}
               zoom={zoom}
               onZoomChange={setZoom}
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
             />
           </Panel>
         </PanelGroup>

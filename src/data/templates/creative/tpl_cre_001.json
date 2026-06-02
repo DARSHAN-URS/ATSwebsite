@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_cre_001",
-  "template_name": "Creative Structural Form 1",
+  "template_name": "Creative Spark",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
+  "description": "A high-impact creative format featuring a bold left sidebar, staggered sections, and violet brand styling.",
   "layout_metadata": {
     "column_count": 2,
-    "sidebar_position": "right",
-    "structural_alignment": "right-aligned",
+    "sidebar_position": "left",
+    "structural_alignment": "staggered",
     "information_density": "airy",
-    "visual_emphasis": "background-blocks",
+    "visual_emphasis": "color-blocks",
     "typography": {
-      "heading": "FontStack-0A",
-      "body": "FontStack-0B",
-      "accent": "FontStack-0C"
+      "heading": "FontStack-C1A",
+      "body": "FontStack-C1B",
+      "accent": "FontStack-C1C"
     },
     "spacing": {
-      "margin": "10px",
-      "line_height": 1.2,
-      "section_gap": "16px"
+      "margin": "20px",
+      "line_height": 1.35,
+      "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#bdb974",
-      "secondary": "#f1769b",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#7c3aed",
+      "secondary": "#4f46e5",
+      "text": "#111111",
+      "background": "#ffffff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
       "summary",
+      "skills",
       "experience",
-      "education",
-      "skills"
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 90,
+  "ats_score": 85,
   "suitable_professions": [
     "Creative Roles",
-    "General Use"
+    "Designers",
+    "Artists"
   ]
 }

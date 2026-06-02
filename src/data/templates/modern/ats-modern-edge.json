@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-modern-edge",
+  "template_name": "Modern Edge",
+  "category": "Modern",
+  "description": "A sharp and structured layout featuring clear block layouts and sky blue accents.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "color-blocks",
+    "typography": {
+      "heading": "courier",
+      "body": "courier",
+      "accent": "courier"
+    },
+    "spacing": {
+      "margin": "17px",
+      "line_height": 1.25,
+      "section_gap": "18px"
+    },
+    "color_palette": {
+      "primary": "#0369a1",
+      "secondary": "#0284c7",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "education",
+      "skills",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Technical Specialists",
+    "Designers",
+    "General Use"
+  ]
+}

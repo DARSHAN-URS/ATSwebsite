@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_pro_013",
+  "template_name": "Strategic Professional",
+  "category": "Professional",
+  "description": "An asymmetrical-left sidebar format showcasing spacious staggered section layouts, bordered separations, and teal corporate branding.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "staggered",
+    "information_density": "spacious",
+    "visual_emphasis": "borders",
+    "typography": {
+      "heading": "FontStack-P13A",
+      "body": "FontStack-P13B",
+      "accent": "FontStack-P13C"
+    },
+    "spacing": {
+      "margin": "23px",
+      "line_height": 1.42,
+      "section_gap": "29px"
+    },
+    "color_palette": {
+      "primary": "#115e59",
+      "secondary": "#134e4a",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 95,
+  "suitable_professions": [
+    "Corporate Strategy",
+    "Operations Consultant",
+    "Program Manager"
+  ]
+}

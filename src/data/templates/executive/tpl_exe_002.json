@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_exe_002",
-  "template_name": "Executive Structural Form 2",
+  "template_name": "Leadership Pro",
   "category": "Executive",
-  "description": "A distinct Executive layout featuring 2-column structure, right sidebar, and background-blocks-led visual emphasis. Designed with airy information density and right-aligned text.",
+  "description": "A balanced center-aligned single-column format prioritizing career timeline achievements with rich burgundy accentuation.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "right",
-    "structural_alignment": "right-aligned",
-    "information_density": "airy",
-    "visual_emphasis": "background-blocks",
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "center-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "timeline",
     "typography": {
       "heading": "FontStack-1A",
       "body": "FontStack-1B",
       "accent": "FontStack-1C"
     },
     "spacing": {
-      "margin": "12px",
-      "line_height": 1.3,
+      "margin": "18px",
+      "line_height": 1.25,
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#e1cc43",
-      "secondary": "#993931",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#881337",
+      "secondary": "#374151",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
-    "responsive_behavior": "hide-sidebar-on-mobile"
+    "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "summary",
-      "skills",
       "experience",
-      "education"
+      "education",
+      "summary",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 85,
+  "ats_score": 90,
   "suitable_professions": [
-    "Executive Roles",
-    "General Use"
+    "VP Roles",
+    "General Management",
+    "Operations"
   ]
 }

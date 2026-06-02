@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_exe_008",
+  "template_name": "Leadership Impact",
+  "category": "Executive",
+  "description": "A classic corporate format featuring a left-bordered layout with bold-headers emphasis and spacious staggered sections.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "left-bordered",
+    "structural_alignment": "staggered",
+    "information_density": "airy",
+    "visual_emphasis": "bold-headers",
+    "typography": {
+      "heading": "FontStack-7A",
+      "body": "FontStack-7B",
+      "accent": "FontStack-7C"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.4,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#1e40af",
+      "secondary": "#6b7280",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "skills",
+      "education",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 93,
+  "suitable_professions": [
+    "Corporate Communications",
+    "HR Executives",
+    "Non-profit Leaders"
+  ]
+}

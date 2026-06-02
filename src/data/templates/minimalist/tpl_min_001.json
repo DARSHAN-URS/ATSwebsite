@@ -1,29 +1,29 @@
 {
   "template_id": "tpl_min_001",
-  "template_name": "Minimalist Structural Form 1",
+  "template_name": "Minimal Clean",
   "category": "Minimalist",
-  "description": "A distinct Minimalist layout featuring 2-column structure, left sidebar, and photo-led-led visual emphasis. Designed with standard information density and left-aligned text.",
+  "description": "A low-clutter, clean chronological format designed with spacious white-space emphasis and elegant charcoal tones.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "left",
+    "column_count": 1,
+    "sidebar_position": "none",
     "structural_alignment": "left-aligned",
-    "information_density": "standard",
-    "visual_emphasis": "photo-led",
+    "information_density": "airy",
+    "visual_emphasis": "white-space",
     "typography": {
-      "heading": "FontStack-0A",
-      "body": "FontStack-0B",
-      "accent": "FontStack-0C"
+      "heading": "FontStack-M1A",
+      "body": "FontStack-M1B",
+      "accent": "FontStack-M1C"
     },
     "spacing": {
-      "margin": "10px",
-      "line_height": 1.2,
-      "section_gap": "16px"
+      "margin": "24px",
+      "line_height": 1.35,
+      "section_gap": "28px"
     },
     "color_palette": {
-      "primary": "#d88161",
-      "secondary": "#05b025",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#111111",
+      "secondary": "#4b5563",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 90,
+  "ats_score": 96,
   "suitable_professions": [
-    "Minimalist Roles",
-    "General Use"
+    "General Roles",
+    "Academic",
+    "Consulting"
   ]
 }

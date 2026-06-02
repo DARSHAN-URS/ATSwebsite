@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-pro-classic",
+  "template_name": "ATS Pro Classic",
+  "category": "ATS Optimized",
+  "description": "A clean, highly readable traditional single-column format optimized for enterprise and corporate roles.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "borders",
+    "typography": {
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
+    },
+    "spacing": {
+      "margin": "20px",
+      "line_height": 1.3,
+      "section_gap": "20px"
+    },
+    "color_palette": {
+      "primary": "#1a365d",
+      "secondary": "#4a5568",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Corporate Roles",
+    "Finance",
+    "General Use"
+  ]
+}

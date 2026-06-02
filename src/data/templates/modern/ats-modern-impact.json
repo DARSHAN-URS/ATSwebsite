@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-modern-impact",
+  "template_name": "Modern Impact",
+  "category": "Modern",
+  "description": "Clean monospace layout built for strong readability with crisp crimson divider frames.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "timeline",
+    "typography": {
+      "heading": "courier",
+      "body": "courier",
+      "accent": "courier"
+    },
+    "spacing": {
+      "margin": "22px",
+      "line_height": 1.35,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#dc2626",
+      "secondary": "#b91c1c",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "summary",
+      "skills",
+      "education"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "Media & PR",
+    "Creative Roles",
+    "General Use"
+  ]
+}

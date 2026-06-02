@@ -71,6 +71,18 @@ export default function CoverLetters() {
 
   const generateMutation = useMutation({
     mutationFn: async () => {
+      const { data: existing } = await supabase.from("cover_letters")
+        .select("*")
+        .eq("user_id", user?.id)
+        .eq("resume_id", selectedResumeId)
+        .eq("job_description", jobDescription)
+        .eq("tone", tone)
+        .maybeSingle();
+
+      if (existing) {
+        return { ...existing, _cached: true };
+      }
+
       const { data, error } = await invokeFunction("generate-cover-letter", {
         resumeId: selectedResumeId, jobDescription, tone,
       });
@@ -88,8 +100,12 @@ export default function CoverLetters() {
       if (saveError) throw saveError;
       return saved;
     },
-    onSuccess: () => {
-      toast({ title: "Narrative Synthesized" });
+    onSuccess: (data: any) => {
+      if (data._cached) {
+         toast({ title: "Narrative Restored", description: "Loaded identical cover letter from history." });
+      } else {
+         toast({ title: "Narrative Synthesized" });
+      }
       setCreateOpen(false);
       queryClient.invalidateQueries({ queryKey: ["cover-letters", user?.id] });
     },
@@ -159,25 +175,25 @@ export default function CoverLetters() {
                      <div className="space-y-2">
                         <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Architecture Source</Label>
                         <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                           <SelectTrigger className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm text-slate-900">
-                              <SelectValue placeholder="Select Module" />
-                           </SelectTrigger>
-                           <SelectContent className="rounded-xl border border-slate-200 shadow-xl p-1 bg-white">
-                              {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-lg p-2.5 font-bold text-sm text-slate-900">{r.title}</SelectItem>)}
-                           </SelectContent>
+                            <SelectTrigger className="h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 font-bold text-sm text-slate-900 dark:text-slate-100">
+                               <SelectValue placeholder="Select Module" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl p-1 bg-white dark:bg-slate-900">
+                               {resumes.map(r => <SelectItem key={r.id} value={r.id} className="rounded-lg p-2.5 font-bold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">{r.title}</SelectItem>)}
+                            </SelectContent>
                         </Select>
                      </div>
                      <div className="space-y-2">
                         <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Strategic Tone</Label>
                         <Select value={tone} onValueChange={setTone}>
-                           <SelectTrigger className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm text-slate-900">
-                              <SelectValue />
-                           </SelectTrigger>
-                           <SelectContent className="rounded-xl border border-slate-200 shadow-xl p-1 bg-white">
-                              <SelectItem value="professional" className="rounded-lg p-2.5 font-bold text-sm text-slate-900">Executive Professional</SelectItem>
-                              <SelectItem value="creative" className="rounded-lg p-2.5 font-bold text-sm text-slate-900">Creative Visionary</SelectItem>
-                              <SelectItem value="bold" className="rounded-lg p-2.5 font-bold text-sm text-slate-900">Impact Driven</SelectItem>
-                           </SelectContent>
+                            <SelectTrigger className="h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 font-bold text-sm text-slate-900 dark:text-slate-100">
+                               <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl p-1 bg-white dark:bg-slate-900">
+                               <SelectItem value="professional" className="rounded-lg p-2.5 font-bold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">Executive Professional</SelectItem>
+                               <SelectItem value="creative" className="rounded-lg p-2.5 font-bold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">Creative Visionary</SelectItem>
+                               <SelectItem value="bold" className="rounded-lg p-2.5 font-bold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">Impact Driven</SelectItem>
+                            </SelectContent>
                         </Select>
                      </div>
                      <div className="space-y-2">

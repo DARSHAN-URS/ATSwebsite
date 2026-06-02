@@ -1,0 +1,52 @@
+{
+  "template_id": "ats-pro-minimal",
+  "template_name": "ATS Pro Minimal",
+  "category": "ATS Optimized",
+  "description": "A sleek, low-clutter charcoal design with minimal margins to pack deep expertise cleanly onto one page.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "left-aligned",
+    "information_density": "ultra-compact",
+    "visual_emphasis": "white-space",
+    "typography": {
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
+    },
+    "spacing": {
+      "margin": "15px",
+      "line_height": 1.05,
+      "section_gap": "15px"
+    },
+    "color_palette": {
+      "primary": "#1e293b",
+      "secondary": "#334155",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "skills",
+      "education",
+      "experience"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 100,
+  "suitable_professions": [
+    "General Use",
+    "Engineering",
+    "Finance"
+  ]
+}

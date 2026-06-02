@@ -12,12 +12,105 @@ import { cn } from "@/lib/utils";
 import { 
   Search, Building2, CheckCircle2, Sparkles, Zap, ShieldCheck, 
   ArrowRight, Star, Cpu, Award, TrendingUp, Mail, Lock, ChevronRight,
-  Target, BarChart3, Users, Rocket, HelpCircle, Globe
+  Target, BarChart3, Users, Rocket, HelpCircle, Globe, AlertTriangle, X, Info
 } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Card } from "@/components/ui/card";
 import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "../i18n/LanguageContext";
+
+const reviews = [
+  {
+    text: "After using ATS Pro's resume grader, I got 5 interviews in 2 weeks — including one at Google.",
+    name: "Sarah M.",
+    role: "Software Engineer",
+    company: "Google"
+  },
+  {
+    text: "The one-click tailoring feature is a game-changer. I paste the job description and get a perfectly optimized version in seconds.",
+    name: "James R.",
+    role: "Marketing Manager",
+    company: "HubSpot"
+  },
+  {
+    text: "ATS Pro helped me restructure everything and I landed my first consulting role within a month.",
+    name: "Priya K.",
+    role: "Recent Graduate",
+    company: "Deloitte"
+  },
+  {
+    text: "My resume score went from 45 to 92, and suddenly I was getting recruiter messages on LinkedIn every week.",
+    name: "David L.",
+    role: "Data Analyst",
+    company: "Amazon"
+  },
+  {
+    text: "Clean templates that actually pass ATS scans. Combined with the cover letter generator — the only tool I recommend.",
+    name: "Emily T.",
+    role: "Product Designer",
+    company: "Figma"
+  },
+  {
+    text: "The AI rewrote my bullet points to highlight transferable skills. Within 6 weeks, I had three offers on the table.",
+    name: "Carlos V.",
+    role: "Career Changer",
+    company: "Salesforce"
+  },
+  {
+    text: "Saved me hours of tweaking bullet points. Got a callback from Netflix on my first application using the optimized template.",
+    name: "Marcus G.",
+    role: "DevOps Engineer",
+    company: "Netflix"
+  },
+  {
+    text: "As an HR specialist, I can confirm these resumes are formatted exactly how recruiters want to see them.",
+    name: "Chloe D.",
+    role: "HR Specialist",
+    company: "Workday"
+  },
+  {
+    text: "Excellent metrics tracking. Helped me quantify my achievements which made a massive difference in my interviews.",
+    name: "Rohan A.",
+    role: "Financial Analyst",
+    company: "Goldman Sachs"
+  },
+  {
+    text: "The cover letter match was spot on. Seamlessly integrated my research background into Spotify's values.",
+    name: "Sofia B.",
+    role: "UX Researcher",
+    company: "Spotify"
+  },
+  {
+    text: "The outreach templates are gold. Got a 60% response rate from cold emails using the recruiter mailer.",
+    name: "Liam W.",
+    role: "Sales Executive",
+    company: "Stripe"
+  },
+  {
+    text: "From generic summaries to high-impact elevator pitches. The AI writer knows exactly what phrases stand out.",
+    name: "Jessica H.",
+    role: "Content Writer",
+    company: "Adobe"
+  },
+  {
+    text: "Helped me clean up dense paragraphs into high-impact action bullets. Landing the Nintendo interview was a dream come true.",
+    name: "Kenji T.",
+    role: "Product Manager",
+    company: "Nintendo"
+  },
+  {
+    text: "I was skeptical about AI writers, but the resume grader pointed out real gaps in my operational experience.",
+    name: "Elena P.",
+    role: "Operations Manager",
+    company: "Uber"
+  },
+  {
+    text: "Passed multiple rigorous ATS checks. Highly recommend for technical professionals looking to highlight complex architectures.",
+    name: "Daniel K.",
+    role: "Solutions Architect",
+    company: "AWS"
+  }
+];
 
 const Index = () => {
   const { user } = useAuth();
@@ -46,7 +139,7 @@ const Index = () => {
       
       <Navbar />
 
-      <section className="relative pt-24 pb-32 md:pt-48 md:pb-40 overflow-hidden bg-white">
+      <section className="relative pt-24 pb-16 md:pt-40 md:pb-20 overflow-hidden bg-white">
           <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[5rem] md:rounded-bl-[10rem] -z-10 translate-x-1/4" />
           
           <div className="container mx-auto px-4 md:px-8 relative z-10">
@@ -58,7 +151,7 @@ const Index = () => {
                         initial={{ opacity: 0, y: 30 }} 
                         animate={{ opacity: 1, y: 0 }} 
                         transition={{ delay: 0.1 }} 
-                        className="text-4xl md:text-6xl lg:text-[7.5rem] font-black text-slate-900 tracking-tighter leading-[0.9] md:leading-[0.85]"
+                        className="text-4xl md:text-6xl lg:text-[5.5rem] font-black text-slate-900 tracking-tighter leading-[0.9] md:leading-[1.1]"
                       >
                          {t.landing.archHeroTitle.split(" ").slice(0, 2).join(" ")} <br /> <span className="text-blue-600">{t.landing.archHeroTitle.split(" ").slice(2).join(" ")}</span>
                       </motion.h1>
@@ -135,7 +228,7 @@ const Index = () => {
       </section>
 
       {/* Mission Partners */}
-      <section className="py-8 md:py-12 bg-white relative overflow-hidden">
+      <section className="py-4 md:py-8 bg-white relative overflow-hidden">
          <div className="container mx-auto px-4 md:px-8 relative z-10">
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 border-y border-slate-100 py-10 px-6 md:py-20 md:px-12 rounded-3xl md:rounded-[4rem] bg-slate-50/50">
                <div className="space-y-2 text-center md:text-left">
@@ -153,8 +246,66 @@ const Index = () => {
          </div>
       </section>
 
+      {/* Problem section */}
+      <section className="py-16 md:py-24 bg-slate-50 relative overflow-hidden text-left border-y border-slate-100">
+         <div className="container mx-auto px-4 md:px-8 max-w-5xl relative z-10">
+            <div className="space-y-3">
+               <span className="text-[10px] font-black uppercase text-blue-600 tracking-widest bg-blue-50 border border-blue-100/50 px-3.5 py-1.5 rounded-full inline-block">
+                  The Problem
+               </span>
+               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight uppercase max-w-3xl">
+                  Why 75% of Resumes Never Get Seen by a Recruiter
+               </h2>
+            </div>
+            
+            <div className="space-y-8 mt-12 max-w-2xl">
+               <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-full bg-orange-50 border border-orange-200 text-orange-500 flex items-center justify-center flex-shrink-0">
+                     <AlertTriangle className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                     <h4 className="text-lg font-bold text-slate-900 leading-none">Generic Keywords</h4>
+                     <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                        Most resumes lack tailored ATS-friendly keywords, leading to instant rejection.
+                     </p>
+                  </div>
+               </div>
+               
+               <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-200 text-rose-500 flex items-center justify-center flex-shrink-0">
+                     <X className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                     <h4 className="text-lg font-bold text-slate-900 leading-none">Missing Keywords</h4>
+                     <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                        If your resume doesn't match the specific keywords in a job description, it's filtered out.
+                     </p>
+                  </div>
+               </div>
+               
+               <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-full bg-red-50 border border-red-200 text-red-500 flex items-center justify-center flex-shrink-0">
+                     <Info className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                     <h4 className="text-lg font-bold text-slate-900 leading-none">Poor Readability</h4>
+                     <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                        Dense formatting and generic language block your resume from making it past filters.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            
+            <Button asChild size="lg" className="h-14 sm:h-16 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] gap-2.5 shadow-lg shadow-blue-600/20 hover:scale-105 transition-all mt-12 w-fit">
+               <Link to="/auth">
+                  Fix My Resume Now <ArrowRight className="w-4 h-4" />
+               </Link>
+            </Button>
+         </div>
+      </section>
+
       {/* How It Works - Visual Steps */}
-      <section className="py-20 md:py-32 bg-white relative">
+      <section className="py-10 md:py-16 bg-white relative">
          <div className="container mx-auto px-4 md:px-8 space-y-16 md:space-y-32">
             <div className="text-center space-y-4 md:space-y-6 max-w-3xl mx-auto mb-10 md:mb-20">
                <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none">{tl.builtForScale}</h2>
@@ -220,7 +371,7 @@ const Index = () => {
       </section>
 
       {/* Enterprise Deployment CTA */}
-      <section className="py-10 md:py-20 bg-white relative">
+      <section className="py-8 md:py-16 bg-white relative">
          <div className="container mx-auto px-4 md:px-8 relative">
             <div className="relative rounded-3xl md:rounded-[4.5rem] bg-slate-900 p-8 md:p-32 overflow-hidden shadow-3xl text-center md:text-left">
                <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-600/30 to-transparent pointer-events-none" />
@@ -250,13 +401,37 @@ const Index = () => {
                            <div className="flex items-center justify-between">
                               <Logo variant="light" className="h-10 opacity-50" />
                               <div className="flex -space-x-4">
-                                 {[1,2,3,4].map(i => <div key={i} className="w-10 h-10 rounded-full border-4 border-slate-900 bg-slate-800" />)}
+                                 {["Alex", "Sarah", "Mike", "Emma"].map((name, i) => (
+                                    <img 
+                                       key={i} 
+                                       src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${name}&backgroundColor=b6e3f4,c0aede,d1d4f9`} 
+                                       className="w-10 h-10 rounded-full border-4 border-slate-900 bg-slate-800 object-cover" 
+                                       alt={name}
+                                    />
+                                 ))}
                               </div>
                            </div>
-                           <div className="space-y-6">
-                              <div className="h-3 w-3/4 bg-white/10 rounded-full" />
-                              <div className="h-3 w-1/2 bg-white/10 rounded-full" />
-                              <div className="h-3 w-2/3 bg-white/10 rounded-full" />
+                           <div className="space-y-4">
+                              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                                 <div>
+                                    <p className="text-white font-bold text-sm md:text-base">Senior Engineer Resume</p>
+                                    <p className="text-slate-400 text-xs md:text-sm">Last updated 2 mins ago</p>
+                                 </div>
+                                 <div className="text-right">
+                                    <p className="text-emerald-400 font-black text-sm md:text-base">+24%</p>
+                                    <p className="text-slate-400 text-xs md:text-sm">ATS Score</p>
+                                 </div>
+                              </div>
+                              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                                 <div>
+                                    <p className="text-white font-bold text-sm md:text-base">Product Manager Profile</p>
+                                    <p className="text-slate-400 text-xs md:text-sm">Matched with 12 open roles</p>
+                                 </div>
+                                 <div className="text-right">
+                                    <p className="text-blue-400 font-black text-sm md:text-base">98/100</p>
+                                    <p className="text-slate-400 text-xs md:text-sm">Keyword Match</p>
+                                 </div>
+                              </div>
                            </div>
                            <div className="flex items-center justify-between pt-6 border-t border-white/10">
                               <div className="flex items-center gap-3">
@@ -273,8 +448,54 @@ const Index = () => {
          </div>
       </section>
 
+      {/* 5. User Reviews Section (Side Scrolling) */}
+      <section className="py-16 md:py-24 bg-white relative overflow-hidden text-left border-t border-slate-100">
+         <div className="container mx-auto px-4 md:px-8 space-y-12">
+            <div className="space-y-4 max-w-3xl">
+               <span className="text-[10px] font-black uppercase text-blue-600 tracking-widest bg-blue-50 border border-blue-100/50 px-3.5 py-1.5 rounded-full inline-block">
+                  Success Stories
+               </span>
+               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+                  Trusted by Thousands of Job Seekers
+               </h2>
+               <p className="text-slate-500 font-medium text-sm md:text-base">
+                  See how job seekers restructured their career paths and landed roles at top-tier organizations.
+               </p>
+            </div>
+
+            <div className="flex overflow-x-auto gap-6 pb-8 px-4 md:px-8 -mx-4 md:-mx-8 scrollbar-hide snap-x snap-mandatory">
+               {reviews.map((rev, idx) => (
+                  <Card key={idx} className="w-[300px] md:w-[355px] shrink-0 snap-center rounded-3xl border border-slate-100 bg-white p-8 shadow-sm flex flex-col justify-between hover:shadow-xl hover:border-blue-100/50 transition-all duration-300">
+                     <div className="space-y-4">
+                        <div className="flex text-amber-400 gap-0.5">
+                           {[...Array(5)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-current" />
+                           ))}
+                        </div>
+                        <p className="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
+                           "{rev.text}"
+                        </p>
+                     </div>
+                     
+                     <div className="flex items-center gap-3 mt-6 pt-6 border-t border-slate-50">
+                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+                           {rev.name.charAt(0)}
+                        </div>
+                        <div>
+                           <p className="text-slate-900 font-bold text-xs">{rev.name}</p>
+                           <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">
+                              {rev.role} &rarr; {rev.company}
+                           </p>
+                        </div>
+                     </div>
+                  </Card>
+               ))}
+            </div>
+         </div>
+      </section>
+
       {/* FAQ Infrastructure */}
-      <section className="py-20 md:py-40 bg-slate-50/50 relative">
+      <section className="py-12 md:py-20 bg-slate-50/50 relative">
          <div className="container mx-auto px-4 md:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20">
                <div className="space-y-6 md:space-y-10">

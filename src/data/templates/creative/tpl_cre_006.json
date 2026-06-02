@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_cre_006",
+  "template_name": "Innovative Profile",
+  "category": "Creative",
+  "description": "An alternating top-navigation layout with deep lavender styling, underlines emphasis, and variable density.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "alternating",
+    "information_density": "variable",
+    "visual_emphasis": "underlines",
+    "typography": {
+      "heading": "FontStack-C6A",
+      "body": "FontStack-C6B",
+      "accent": "FontStack-C6C"
+    },
+    "spacing": {
+      "margin": "16px",
+      "line_height": 1.28,
+      "section_gap": "22px"
+    },
+    "color_palette": {
+      "primary": "#6d28d9",
+      "secondary": "#be185d",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": true,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "education",
+      "skills"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 86,
+  "suitable_professions": [
+    "Innovation Directors",
+    "Product Designers",
+    "Marketing Creatives"
+  ]
+}

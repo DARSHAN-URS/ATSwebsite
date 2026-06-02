@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_cre_004",
-  "template_name": "Creative Structural Form 4",
+  "template_name": "Design Impact",
   "category": "Creative",
-  "description": "A distinct Creative layout featuring 2-column structure, asymmetrical-left sidebar, and icons-led visual emphasis. Designed with spacious information density and mixed-alignment text.",
+  "description": "A premium right-sidebar layout prioritizing key competencies with center-aligned text and cyan colors to maximize visual punch.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
-    "structural_alignment": "mixed-alignment",
+    "column_count": 1,
+    "sidebar_position": "right",
+    "structural_alignment": "center-aligned",
     "information_density": "spacious",
-    "visual_emphasis": "icons",
+    "visual_emphasis": "timeline",
     "typography": {
-      "heading": "FontStack-3A",
-      "body": "FontStack-3B",
-      "accent": "FontStack-3C"
+      "heading": "FontStack-C4A",
+      "body": "FontStack-C4B",
+      "accent": "FontStack-C4C"
     },
     "spacing": {
-      "margin": "16px",
-      "line_height": 1.5,
-      "section_gap": "28px"
+      "margin": "22px",
+      "line_height": 1.4,
+      "section_gap": "26px"
     },
     "color_palette": {
-      "primary": "#e08d39",
-      "secondary": "#3a03d9",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#0891b2",
+      "secondary": "#0d9488",
+      "text": "#111111",
+      "background": "#ffffff"
     },
-    "has_photo": false,
-    "responsive_behavior": "hide-sidebar-on-mobile"
+    "has_photo": true,
+    "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
-      "education",
+      "summary",
+      "skills",
       "experience",
-      "projects",
-      "skills"
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 75,
+  "ats_score": 84,
   "suitable_professions": [
-    "Creative Roles",
-    "General Use"
+    "Design Consultants",
+    "Architects",
+    "UI/UX Designers"
   ]
 }

@@ -296,7 +296,7 @@ function getThumbnailHTML(templateId: TemplateId, rawData?: ResumeData): string 
       // Config-driven ATS templates
       if (isATSTemplateId(templateId)) {
         const config = getATSConfig(templateId);
-        if (config) return buildATSThumbnail(config);
+        if (config) return buildATSThumbnail(config, dummyData);
       }
       // Dynamic generated templates
       const dynamicConfig = ALL_DYNAMIC_TEMPLATES.find(t => t.template_id === templateId);
@@ -364,9 +364,10 @@ function buildATSThumbnail(config: ATSTemplateConfig, dummyData: any): string {
   const headSize = Math.min(config.headingFontSize * 0.4, 5);
   const baseSize = Math.min(config.baseFontSize * 0.38, 4);
   const padSize = Math.max(config.marginSize * 0.35, 5);
+  const primary = config.primaryColor || "#000000";
 
   const sectionLabel = (label: string) =>
-    `<div style="border-bottom:1px solid #000;margin:${config.lineSpacing * 0.6}px 0 ${config.lineSpacing * 0.3}px;padding-bottom:1px"><span style="${s(headSize)}font-weight:700;text-transform:uppercase">${label}</span></div>`;
+    `<div style="border-bottom:1px solid ${primary};margin:${config.lineSpacing * 0.6}px 0 ${config.lineSpacing * 0.3}px;padding-bottom:1px"><span style="${s(headSize)}font-weight:700;color:${primary};text-transform:uppercase">${label}</span></div>`;
 
   const sectionBuilders: Record<string, () => string> = {
     summary: () => `${sectionLabel("Summary")}<div style="${s(baseSize)}color:#444">${dummyData.summary}</div>`,
@@ -384,9 +385,9 @@ function buildATSThumbnail(config: ATSTemplateConfig, dummyData: any): string {
     .join("");
 
   return `<div style="font-family:${config.fontFamilyCSS};padding:${padSize}px;color:#222;line-height:1.3">
-    <div style="${s(nameSize)}font-weight:700">${dummyData.name}</div>
+    <div style="${s(nameSize)}font-weight:700;color:${primary}">${dummyData.name}</div>
     <div style="${s(baseSize - 0.5)}color:#888;margin-bottom:2px">${dummyData.contact}</div>
-    <div style="border-bottom:1px solid #000;margin:2px 0 3px"></div>
+    <div style="border-bottom:1px solid ${primary};margin:2px 0 3px"></div>
     ${content}
   </div>`;
 }

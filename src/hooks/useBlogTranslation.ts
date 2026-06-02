@@ -82,24 +82,55 @@ export function useBlogTranslation(
       chunks.push(texts.slice(i, i + CHUNK_SIZE));
     }
 
-    Promise.all(
-      chunks.map(async (chunk) => {
-        const { data, error } = await invokeFunction("translate-blog", {
-          body: { content: chunk, targetLanguage: locale },
-        });
-        if (error) {
-          console.error("Translation error:", error);
-          return chunk; // fallback to original
-        }
-        return data?.translations || chunk;
-      })
-    ).then((results) => {
-      if (cancelled) return;
-      const all = results.flat();
-      setTranslated(all);
-      setCache(cacheKey, all);
-      setIsTranslating(false);
-    });
+    // Try fetching from DB first
+    supabase
+      .from("blog_translations")
+      .select("translations")
+      .eq("hash", hash)
+      .eq("locale", locale)
+      .eq("context", context)
+      .maybeSingle()
+      .then(async ({ data: dbData }) => {
+         if (cancelled) return;
+         
+         if (dbData && dbData.translations && Array.isArray(dbData.translations) && dbData.translations.length === texts.length) {
+            setTranslated(dbData.translations);
+            setCache(cacheKey, dbData.translations);
+            setIsTranslating(false);
+            return;
+         }
+
+         // Fallback to API if not in DB
+         Promise.all(
+           chunks.map(async (chunk) => {
+             const { data, error } = await invokeFunction("translate-blog", {
+               body: { content: chunk, targetLanguage: locale },
+             });
+             if (error) {
+               console.error("Translation error:", error);
+               return chunk; // fallback to original
+             }
+             return data?.translations || chunk;
+           })
+         ).then(async (results) => {
+           if (cancelled) return;
+           const all = results.flat();
+           setTranslated(all);
+           setCache(cacheKey, all);
+           
+           // Save to DB for future global access
+           if (all.length === texts.length) {
+              await supabase.from("blog_translations").insert({
+                 hash,
+                 locale,
+                 context,
+                 translations: all
+              }).catch(() => {}); // Ignore unique constraint errors if someone else inserted concurrently
+           }
+           
+           setIsTranslating(false);
+         });
+      });
 
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps

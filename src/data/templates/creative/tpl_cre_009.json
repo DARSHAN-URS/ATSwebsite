@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_cre_009",
+  "template_name": "Artistic Modern",
+  "category": "Creative",
+  "description": "An elegant right-sidebar layout with center-aligned text block structures, plum/crimson accents, and icon visual emphasis.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "right",
+    "structural_alignment": "center-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "icons",
+    "typography": {
+      "heading": "FontStack-C9A",
+      "body": "FontStack-C9B",
+      "accent": "FontStack-C9C"
+    },
+    "spacing": {
+      "margin": "21px",
+      "line_height": 1.32,
+      "section_gap": "26px"
+    },
+    "color_palette": {
+      "primary": "#dc2626",
+      "secondary": "#86198f",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": true,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "experience",
+      "skills",
+      "education"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 84,
+  "suitable_professions": [
+    "Fine Artists",
+    "Interior Designers",
+    "Art Directors"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_pro_006",
+  "template_name": "Fresh Talent",
+  "category": "Professional",
+  "description": "An airy top-navigation layout with clean green forest vibes, underlined highlights, and left-aligned structured details.",
+  "layout_metadata": {
+    "column_count": 1,
+    "sidebar_position": "top-nav",
+    "structural_alignment": "left-aligned",
+    "information_density": "airy",
+    "visual_emphasis": "underlines",
+    "typography": {
+      "heading": "FontStack-P6A",
+      "body": "FontStack-P6B",
+      "accent": "FontStack-P6C"
+    },
+    "spacing": {
+      "margin": "20px",
+      "line_height": 1.32,
+      "section_gap": "24px"
+    },
+    "color_palette": {
+      "primary": "#15803d",
+      "secondary": "#166534",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "summary",
+      "education",
+      "skills",
+      "experience"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 93,
+  "suitable_professions": [
+    "Entry-level Professionals",
+    "Apprenticeships",
+    "Vocational Graduates"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "template_id": "tpl_min_006",
+  "template_name": "Elegant Professional",
+  "category": "Minimalist",
+  "description": "An asymmetrical-left layout featuring alternating section alignments, variable spacing, and rich deep indigo background blocks.",
+  "layout_metadata": {
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "alternating",
+    "information_density": "variable",
+    "visual_emphasis": "background-blocks",
+    "typography": {
+      "heading": "FontStack-M6A",
+      "body": "FontStack-M6B",
+      "accent": "FontStack-M6C"
+    },
+    "spacing": {
+      "margin": "18px",
+      "line_height": 1.25,
+      "section_gap": "18px"
+    },
+    "color_palette": {
+      "primary": "#1e1b4b",
+      "secondary": "#4c1d95",
+      "text": "#111111",
+      "background": "#ffffff"
+    },
+    "has_photo": false,
+    "responsive_behavior": "stack-on-mobile"
+  },
+  "sections": {
+    "order": [
+      "experience",
+      "skills",
+      "education",
+      "summary"
+    ],
+    "visibility": {
+      "summary": true,
+      "skills": true,
+      "experience": true,
+      "education": true,
+      "projects": true
+    }
+  },
+  "ats_score": 95,
+  "suitable_professions": [
+    "Legal Executive",
+    "Management Director",
+    "Consultant"
+  ]
+}

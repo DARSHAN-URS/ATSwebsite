@@ -369,6 +369,7 @@ function buildATSBlocks(data: ResumeData, title: string, config: ATSTemplateConf
   const blocks: string[] = [];
   const pi = data.personalInfo || {};
   const contactParts = [pi.email, pi.phone, pi.location].filter(Boolean);
+  const primary = config.primaryColor || "#000000";
   
   const fsCss = `${config.baseFontSize * 1.4}px`;
   const headCss = `${config.headingFontSize * 1.4}px`;
@@ -377,37 +378,78 @@ function buildATSBlocks(data: ResumeData, title: string, config: ATSTemplateConf
   
   const blockWrap = (content: string) => `<div style="font-family:${config.fontFamilyCSS};padding:0 ${marginCss};color:#222;line-height:1.5">${content}</div>`;
 
-  // Header
-  let header = `<div style="padding-top:${marginCss};font-size:${nameCss};font-weight:800;margin-bottom:8px;font-family:${config.fontFamilyCSS};letter-spacing:-1px">${escapeHtml(pi.fullName || title || "Resume")}</div>`;
-  if (contactParts.length) header += `<p style="font-size:13px;color:#333;margin:0 0 15px;font-family:${config.fontFamilyCSS}">${contactParts.join("  |  ")}</p>`;
+  // Header Block
+  let header = `<div style="padding-top:${marginCss};font-size:${nameCss};font-weight:800;margin-bottom:8px;font-family:${config.fontFamilyCSS};color:${primary};letter-spacing:-1px">${escapeHtml(pi.fullName || title || "Resume")}</div>`;
+  if (contactParts.length) header += `<p style="font-size:13px;color:#555;margin:0 0 15px;font-family:${config.fontFamilyCSS}">${contactParts.join("  |  ")}</p>`;
   blocks.push(blockWrap(header));
 
-  const sectionHdr = (label: string) => `<div style="margin:25px 0 10px;border-bottom:1.5px solid #000;padding-bottom:4px"><span style="font-size:${headCss};font-weight:700;font-family:${config.fontFamilyCSS};text-transform:uppercase;letter-spacing:1px">${escapeHtml(label)}</span></div>`;
+  const sectionHdr = (label: string) => `<div style="margin:25px 0 10px;border-bottom:1.5px solid ${primary};padding-bottom:4px"><span style="font-size:${headCss};font-weight:700;font-family:${config.fontFamilyCSS};color:${primary};text-transform:uppercase;letter-spacing:1px">${escapeHtml(label)}</span></div>`;
 
-  if (data.summary) {
-    blocks.push(blockWrap(`${sectionHdr("Summary")}<p style="font-size:${fsCss};line-height:1.6;margin:0;font-family:${config.fontFamilyCSS}">${escapeHtml(data.summary)}</p>`));
-  }
+  const renderSummary = () => {
+    if (data.summary) {
+      blocks.push(blockWrap(`${sectionHdr("Summary")}<p style="font-size:${fsCss};line-height:1.6;margin:0;font-family:${config.fontFamilyCSS}">${escapeHtml(data.summary)}</p>`));
+    }
+  };
 
-  if ((data.experience || []).length > 0) {
-    blocks.push(blockWrap(sectionHdr("Experience")));
-    data.experience!.forEach(exp => {
-      const dateStr = formatDateRange(exp.startDate, exp.endDate);
-      const bullets = exp.bullets?.length ? `<ul style="margin:6px 0 0 24px;padding:0;list-style:disc">${exp.bullets.map(b => `<li style="margin-bottom:4px;font-size:${fsCss};line-height:1.6;font-family:${config.fontFamilyCSS}">${escapeHtml(b)}</li>`).join("")}</ul>` : "";
-      blocks.push(blockWrap(`<div style="margin-bottom:15px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:${fsCss};font-family:${config.fontFamilyCSS}">${escapeHtml(exp.title)}</strong><span style="font-size:${fsCss};font-family:${config.fontFamilyCSS}"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:12px;color:#666;white-space:nowrap;font-family:${config.fontFamilyCSS}">${escapeHtml(dateStr)}</span>` : ""}</div>${bullets}</div>`));
+  const renderExperience = () => {
+    if ((data.experience || []).length > 0) {
+      blocks.push(blockWrap(sectionHdr("Experience")));
+      data.experience!.forEach(exp => {
+        const dateStr = formatDateRange(exp.startDate, exp.endDate);
+        const bullets = exp.bullets?.length ? `<ul style="margin:6px 0 0 24px;padding:0;list-style:disc">${exp.bullets.map(b => `<li style="margin-bottom:4px;font-size:${fsCss};line-height:1.6;font-family:${config.fontFamilyCSS}">${escapeHtml(b)}</li>`).join("")}</ul>` : "";
+        blocks.push(blockWrap(`<div style="margin-bottom:15px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><strong style="font-size:${fsCss};font-family:${config.fontFamilyCSS}">${escapeHtml(exp.title)}</strong><span style="font-size:${fsCss};font-family:${config.fontFamilyCSS}"> — ${escapeHtml(exp.company)}</span></div>${dateStr ? `<span style="font-size:12px;color:#666;white-space:nowrap;font-family:${config.fontFamilyCSS}">${escapeHtml(dateStr)}</span>` : ""}</div>${bullets}</div>`));
+      });
+    }
+  };
+
+  const renderEducation = () => {
+    if ((data.education || []).length > 0) {
+      blocks.push(blockWrap(sectionHdr("Education")));
+      data.education!.forEach(edu => {
+        const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year || "");
+        blocks.push(blockWrap(`<div style="display:flex;justify-content:space-between;align-items:baseline;margin:4px 0"><div><strong style="font-size:${fsCss};font-family:${config.fontFamilyCSS}">${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}</div>${dateStr ? `<span style="font-size:12px;color:#666;white-space:nowrap;font-family:${config.fontFamilyCSS}">${escapeHtml(dateStr)}</span>` : ""}</div>`));
+      });
+    }
+  };
+
+  const renderSkills = () => {
+    if ((data.skills || []).length > 0) {
+      blocks.push(blockWrap(`${sectionHdr("Skills")}<p style="font-size:${fsCss};margin:0;font-family:${config.fontFamilyCSS}">${escapeHtml(data.skills!.join("  •  "))}</p>`));
+    }
+  };
+
+  const renderLanguages = () => {
+    const langs = (data.languages || []).filter(l => l.name);
+    if (langs.length > 0) {
+      const langText = langs.map(l => `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`).join("  •  ");
+      blocks.push(blockWrap(`${sectionHdr("Languages")}<p style="font-size:${fsCss};margin:0;font-family:${config.fontFamilyCSS}">${escapeHtml(langText)}</p>`));
+    }
+  };
+
+  const renderCustom = () => {
+    (data.customSections || []).filter(s => s.title).forEach(sec => {
+      let content = `${sectionHdr(sec.title)}`;
+      if (sec.items?.length) {
+        content += `<ul style="margin:6px 0 0 24px;padding:0;list-style:disc">${sec.items.filter(Boolean).map(item => `<li style="margin-bottom:4px;font-size:${fsCss};line-height:1.6;font-family:${config.fontFamilyCSS}">${escapeHtml(item)}</li>`).join("")}</ul>`;
+      }
+      blocks.push(blockWrap(content));
     });
-  }
+  };
 
-  if ((data.education || []).length > 0) {
-    blocks.push(blockWrap(sectionHdr("Education")));
-    data.education!.forEach(edu => {
-      const dateStr = formatDateRange(edu.startDate, edu.endDate) || (edu.year || "");
-      blocks.push(blockWrap(`<div style="display:flex;justify-content:space-between;align-items:baseline;margin:4px 0"><div><strong style="font-size:${fsCss};font-family:${config.fontFamilyCSS}">${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)}</div>${dateStr ? `<span style="font-size:12px;color:#666;white-space:nowrap;font-family:${config.fontFamilyCSS}">${escapeHtml(dateStr)}</span>` : ""}</div>`));
-    });
-  }
-  
-  if ((data.skills || []).length > 0) {
-    blocks.push(blockWrap(`${sectionHdr("Skills")}<p style="font-size:${fsCss};margin:0;font-family:${config.fontFamilyCSS}">${escapeHtml(data.skills!.join("  •  "))}</p>`));
-  }
+  const sectionMap: Record<string, () => void> = {
+    summary: renderSummary,
+    skills: renderSkills,
+    experience: renderExperience,
+    education: renderEducation,
+    languages: renderLanguages,
+    custom: renderCustom
+  };
+
+  config.sectionOrder.forEach(sec => {
+    if (config.sectionVisibility[sec] !== false) {
+      sectionMap[sec]?.();
+    }
+  });
 
   return blocks;
 }

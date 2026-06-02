@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_exe_003",
-  "template_name": "Executive Structural Form 3",
+  "template_name": "Boardroom Resume",
   "category": "Executive",
-  "description": "A distinct Executive layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "description": "An authoritative asymmetrical-left layout featuring high density and justified layout perfect for long-serving board members.",
   "layout_metadata": {
-    "column_count": 3,
-    "sidebar_position": "top-nav",
-    "structural_alignment": "staggered",
-    "information_density": "variable",
-    "visual_emphasis": "timeline",
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "white-space",
     "typography": {
       "heading": "FontStack-2A",
       "body": "FontStack-2B",
       "accent": "FontStack-2C"
     },
     "spacing": {
-      "margin": "14px",
-      "line_height": 1.4,
-      "section_gap": "24px"
+      "margin": "15px",
+      "line_height": 1.2,
+      "section_gap": "16px"
     },
     "color_palette": {
-      "primary": "#125d34",
-      "secondary": "#a0f3e1",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#1e293b",
+      "secondary": "#78350f",
+      "text": "#1e293b",
+      "background": "#ffffff"
     },
     "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
+      "summary",
       "experience",
       "education",
-      "skills",
-      "summary"
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 80,
+  "ats_score": 93,
   "suitable_professions": [
-    "Executive Roles",
-    "General Use"
+    "Board Members",
+    "C-Level Executive",
+    "Advisory Roles"
   ]
 }

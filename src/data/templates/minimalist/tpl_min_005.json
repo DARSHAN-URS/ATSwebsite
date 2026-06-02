@@ -1,29 +1,29 @@
 {
   "template_id": "tpl_min_005",
-  "template_name": "Minimalist Structural Form 5",
+  "template_name": "Minimal Impact",
   "category": "Minimalist",
-  "description": "A distinct Minimalist layout featuring 3-column structure, top-nav sidebar, and timeline-led visual emphasis. Designed with variable information density and staggered text.",
+  "description": "An ultra-compact top-navigation format with crimson accents, staggered section structures, and bold-headers.",
   "layout_metadata": {
-    "column_count": 3,
+    "column_count": 1,
     "sidebar_position": "top-nav",
     "structural_alignment": "staggered",
-    "information_density": "variable",
-    "visual_emphasis": "timeline",
+    "information_density": "hyper-dense",
+    "visual_emphasis": "bold-headers",
     "typography": {
-      "heading": "FontStack-4A",
-      "body": "FontStack-4B",
-      "accent": "FontStack-4C"
+      "heading": "FontStack-M5A",
+      "body": "FontStack-M5B",
+      "accent": "FontStack-M5C"
     },
     "spacing": {
-      "margin": "18px",
-      "line_height": 1.6,
-      "section_gap": "32px"
+      "margin": "10px",
+      "line_height": 1.15,
+      "section_gap": "12px"
     },
     "color_palette": {
-      "primary": "#230997",
-      "secondary": "#f818ba",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#000000",
+      "secondary": "#be123c",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
     "responsive_behavior": "stack-on-mobile"
@@ -31,10 +31,9 @@
   "sections": {
     "order": [
       "summary",
-      "projects",
+      "skills",
       "experience",
-      "education",
-      "skills"
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -44,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 70,
+  "ats_score": 92,
   "suitable_professions": [
-    "Minimalist Roles",
-    "General Use"
+    "Tech Lead",
+    "Product Management",
+    "Digital Marketing"
   ]
 }

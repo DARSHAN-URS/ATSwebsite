@@ -1,39 +1,39 @@
 {
   "template_id": "tpl_pro_002",
-  "template_name": "Professional Structural Form 2",
+  "template_name": "Finance Executive",
   "category": "Professional",
-  "description": "A distinct Professional layout featuring 1-column structure, asymmetrical-right sidebar, and color-blocks-led visual emphasis. Designed with hyper-dense information density and alternating text.",
+  "description": "An authoritative single-column layout with centered titles, dense formatting, and deep navy accents, designed for finance executives.",
   "layout_metadata": {
     "column_count": 1,
-    "sidebar_position": "asymmetrical-right",
-    "structural_alignment": "alternating",
-    "information_density": "hyper-dense",
-    "visual_emphasis": "color-blocks",
+    "sidebar_position": "none",
+    "structural_alignment": "justified",
+    "information_density": "dense",
+    "visual_emphasis": "borders",
     "typography": {
-      "heading": "FontStack-1A",
-      "body": "FontStack-1B",
-      "accent": "FontStack-1C"
+      "heading": "FontStack-P2A",
+      "body": "FontStack-P2B",
+      "accent": "FontStack-P2C"
     },
     "spacing": {
-      "margin": "12px",
-      "line_height": 1.3,
-      "section_gap": "20px"
+      "margin": "15px",
+      "line_height": 1.2,
+      "section_gap": "15px"
     },
     "color_palette": {
-      "primary": "#576033",
-      "secondary": "#826c03",
-      "text": "#111",
-      "background": "#fff"
+      "primary": "#1e3a8a",
+      "secondary": "#b45309",
+      "text": "#111111",
+      "background": "#ffffff"
     },
     "has_photo": false,
-    "responsive_behavior": "hide-sidebar-on-mobile"
+    "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
       "summary",
-      "skills",
       "experience",
-      "education"
+      "education",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,9 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 85,
+  "ats_score": 97,
   "suitable_professions": [
-    "Professional Roles",
-    "General Use"
+    "Finance",
+    "Banking",
+    "Corporate Accounting"
   ]
 }
