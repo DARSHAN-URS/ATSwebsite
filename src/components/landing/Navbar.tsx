@@ -7,7 +7,6 @@ import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,7 +62,6 @@ export const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
-            <ThemeToggle className="text-[11px] font-black uppercase tracking-widest text-slate-600 hover:text-blue-600" />
             <LanguageSwitcher />
             <Link to="/auth">
               <Button variant="ghost" className="text-[11px] font-black uppercase tracking-widest text-slate-600 hover:text-blue-600">
@@ -80,7 +78,6 @@ export const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden flex items-center gap-2 md:gap-4">
-            <ThemeToggle className="h-8 md:h-9 px-2 text-[10px] md:text-sm text-slate-900 dark:text-white" />
             <LanguageSwitcher className="h-8 md:h-9 px-2 md:px-3 text-[10px] md:text-sm text-slate-900 border-slate-200" />
             <button
               className="text-slate-900 p-2"
@@ -113,7 +110,6 @@ export const Navbar = () => {
                 </Link>
               ))}
               <div className="h-px bg-slate-100 dark:bg-slate-800 my-2" />
-              <ThemeToggle className="w-full justify-start text-[11px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:text-blue-600" />
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-slate-900 dark:text-white">{t.nav.logIn}</Link>
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full bg-primary text-white font-black uppercase tracking-widest text-xs h-14 rounded-2xl">

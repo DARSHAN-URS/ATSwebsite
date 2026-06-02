@@ -6,9 +6,9 @@ interface LogoProps {
 export default function Logo({ className = "h-12", variant = "auto" }: LogoProps) {
   return (
     <div className={`relative flex items-center select-none ${className}`}>
-      {/* Dark variant for light backgrounds (logo-main.webp) */}
+      {/* Dark variant for light backgrounds (logo-main-trans.webp) */}
       <img
-        src="/images/logo-main.webp"
+        src="/images/logo-main-trans.webp"
         alt="ATS Pro"
         className={`h-full w-auto object-contain ${
           variant === 'light' 
