@@ -1,4 +1,4 @@
-﻿import { aboutTranslations } from "./aboutTranslations";
+import { aboutTranslations } from "./aboutTranslations";
 import { accountTranslations } from "./accountTranslations";
 import { dashboardExtraTranslations } from "./dashboardExtraTranslations";
 import { landingExtraTranslations } from "./landingExtraTranslations";
@@ -409,10 +409,10 @@ const en = {
     resumeTemplates: "Resume Templates",
     aiResumeGrader: "AI Resume Grader",
     jobTracking: "Job Tracking",
-    aiResumeTemplatesDesc: "Access a curated library of professional, recruiter-approved resume templates designed for 100% ATS compatibility.",
-    smartJobSearch: "Our proprietary AI matching engine scans thousands of live job listings to find the perfect roles for your profile.",
+    aiResumeTemplatesDesc: "Access a curated library of professional, recruiter-approved resume templates designed for 100% ATS compatibility. Build, edit, and tailor your structural blueprints using a robust layout engine designed to bypass screening bots and place your credentials directly in front of engineering leads and hiring managers.",
+    smartJobSearch: "Our proprietary AI matching engine scans thousands of live job listings to find the perfect roles for your profile. Run real-time optimization analyses, compare compatibility metrics, track semantic keyword frequencies, and obtain high-fidelity match scores to refine your job search strategy.",
     emailOutreachDesc: "Automate your recruiter networking with AI-generated, personalized outreach emails that get opened and answered.",
-    interviewPrepDesc: "Practice with our AI interview coach that provides real-time feedback on your answers and body language.",
+    interviewPrepDesc: "Practice with our AI interview coach that provides real-time feedback on your answers and body language. Engage in interactive, role-specific mock interviews, analyze sentiment and response delivery, and master technical questions to build unmatched confidence before deploying into live interviews.",
     jobTrackingDesc: "Centralize your entire job search pipeline in one intuitive dashboard. Track every application from sent to offer.",
     legal: "Legal",
     privacyPolicy: "Privacy Policy",

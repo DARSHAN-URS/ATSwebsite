@@ -58,7 +58,7 @@ export default function Auth() {
          <div className="absolute inset-0 bg-blue-50/50 pointer-events-none" />
          <div className="relative z-10 space-y-12 max-w-lg">
             <Link to="/" className="flex items-center gap-4 group">
-               <Logo variant="auto" className="h-8" />
+               <Logo variant="auto" className="h-16 md:h-20" />
             </Link>
             
             <div className="space-y-6">
