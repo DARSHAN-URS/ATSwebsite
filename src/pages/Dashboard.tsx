@@ -39,8 +39,8 @@ export default function Dashboard() {
   const [checklist, setChecklist] = useState([
     { label: "Keyword Density", done: false },
     { label: "Action Verbs", done: false },
-    { label: "Contact Info Matrix", done: false },
-    { label: "Skills Synchronization", done: false }
+    { label: "Contact Information", done: false },
+    { label: "Core Skills", done: false }
   ]);
   const [optimizationScore, setOptimizationScore] = useState(0);
   const [outreachTasks, setOutreachTasks] = useState([]);
@@ -90,8 +90,8 @@ export default function Dashboard() {
       const steps = [
         { label: "Keyword Density", done: hasWorkExperience },
         { label: "Action Verbs", done: hasActionVerbs },
-        { label: "Contact Info Matrix", done: hasPersonalInfo },
-        { label: "Skills Synchronization", done: hasSkills }
+        { label: "Contact Information", done: hasPersonalInfo },
+        { label: "Core Skills", done: hasSkills }
       ];
       setChecklist(steps);
       const doneCount = steps.filter(s => s.done).length;
@@ -215,32 +215,48 @@ export default function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-20">
       <SEOHead title={`${td.missionBriefing} — ResumePro`} description={td.identityOptimized} />
-      
-      {/* 1. Compact Hero Section */}
-      <div className="relative bg-white rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 shadow-sm">
+       {/* 1. Compact Hero Section */}
+      <div className="relative bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-12 overflow-hidden border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 shadow-sm transition-colors duration-300">
          <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="space-y-6 flex-1">
-               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600">
+               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-950/30 rounded-full border border-blue-100 dark:border-blue-900/50 text-blue-600 dark:text-blue-400">
                   <LayoutDashboard className="w-3.5 h-3.5" />
                   <span className="text-[10px] font-bold uppercase tracking-wider">{td.missionBriefing}</span>
                </div>
                <div className="space-y-1">
-                 <h1 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-[0.9]">
+                 <h1 className="text-2xl md:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[0.9]">
                     {td.welcomeAgent} <br />
                     <span className="text-blue-600">{user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.display_name || user?.email?.split('@')[0] || "Agent"}.</span>
                  </h1>
-                 <p className="text-slate-500 font-medium text-lg max-w-md pt-2">{td.identityOptimized}</p>
+                 <p className="text-slate-500 dark:text-slate-400 font-medium text-lg max-w-md pt-2">
+                    {(() => {
+                      const rawText = td.identityOptimized || "";
+                      const remainingCount = checklist.filter(c => !c.done).length;
+                      return rawText
+                        .replace("84%", `${optimizationScore}%`)
+                        .replace("2 new missions", `${remainingCount} suggestion${remainingCount === 1 ? "" : "s"}`)
+                        .replace("2 nuevas misiones", `${remainingCount} sugerencia${remainingCount === 1 ? "" : "s"}`)
+                        .replace("2 nouvelles missions", `${remainingCount} suggestion${remainingCount === 1 ? "" : "s"}`)
+                        .replace("2 novas missões", `${remainingCount} sugestão${remainingCount === 1 ? "" : "ões"}`)
+                        .replace("2 novas missães", `${remainingCount} sugestão${remainingCount === 1 ? "" : "ões"}`)
+                        .replace("2 neue Missionen", `${remainingCount} Empfehlung${remainingCount === 1 ? "" : "en"}`)
+                        .replace("2", `${remainingCount}`)
+                        .replace("professional identity deployment", "resume optimization")
+                        .replace("despliegue de identidad profesional", "optimización de tu currículum")
+                        .replace("déploiement de votre identité professionnelle", "optimisation de votre CV")
+                        .replace("implantação de identidade profissional", "otimização do seu currículo")
+                        .replace("beruflicher Identitätseinsatz", "Lebenslauf-Optimierung");
+                    })()}
+                 </p>
                </div>
                <div className="flex gap-4">
-                  <Button onClick={() => navigate("/resumes")} className="h-12 px-8 bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px] rounded-2xl shadow-xl shadow-slate-900/10 hover:bg-blue-600 transition-all">
+                  <Button onClick={() => navigate("/resumes")} className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase tracking-widest text-[10px] rounded-2xl shadow-xl shadow-blue-500/10 transition-all">
                     Resume Studio
                   </Button>
                </div>
             </div>
-
-
          </div>
       </div>
 

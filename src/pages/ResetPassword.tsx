@@ -88,7 +88,7 @@ export default function ResetPassword() {
         <div className="text-center space-y-6">
            <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800 mx-auto">
               <Lock className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Secure Credential Reset</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">Secure Password Reset</span>
            </div>
            <div className="space-y-2">
               <h1 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{mt.title}<span className="text-blue-600">.</span></h1>
@@ -128,7 +128,7 @@ export default function ResetPassword() {
 
               <div className="pt-4">
                  <Button type="submit" className="w-full h-18 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] shadow-2xl hover:bg-blue-600 transition-all gap-3" disabled={loading || !isValid}>
-                    {loading ? "Synthesizing..." : mt.updateBtn} <ArrowRight className="w-4 h-4" />
+                    {loading ? mt.updating : mt.updateBtn} <ArrowRight className="w-4 h-4" />
                  </Button>
               </div>
             </CardContent>

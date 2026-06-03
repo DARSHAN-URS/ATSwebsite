@@ -31,7 +31,7 @@ export default function RoleSelection() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 flex flex-col items-center justify-center p-8 font-sans overflow-hidden">
-      <SEOHead title="Identity Selection — ResumePro" description="Choose your operational role." noindex />
+      <SEOHead title="Select Your Role — ATS Pro" description="Select your user profile role to continue." noindex />
       
       {/* Background Ambience */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] -z-10" />
@@ -40,7 +40,7 @@ export default function RoleSelection() {
         <div className="text-center space-y-6">
            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-3 px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Security Clearance Required</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Account Setup</span>
            </motion.div>
            <div className="space-y-2">
               <h1 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{mt.title}<span className="text-blue-600">.</span></h1>
@@ -56,6 +56,7 @@ export default function RoleSelection() {
                  desc: mt.jobSeekerDesc, 
                  icon: Search, 
                  tag: "Discovery",
+                 btnText: mt.jobSeekerBtn,
                  color: "blue"
               },
               { 
@@ -64,6 +65,7 @@ export default function RoleSelection() {
                  desc: mt.recruiterDesc, 
                  icon: Users, 
                  tag: "Talent Acquisition",
+                 btnText: mt.recruiterBtn,
                  color: "slate"
               }
            ].map((item, i) => (
@@ -96,7 +98,7 @@ export default function RoleSelection() {
                           disabled={submitting} 
                           className="w-full h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] gap-3 group-hover:bg-blue-600 transition-all"
                        >
-                          {mt.jobSeekerBtn} <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                          {item.btnText} <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                        </Button>
                     </div>
 
@@ -110,7 +112,7 @@ export default function RoleSelection() {
         </div>
 
         <div className="text-center pt-8">
-           <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Initialize identity module to continue</p>
+           <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Select a profile to customize your workspace</p>
         </div>
       </div>
     </div>
