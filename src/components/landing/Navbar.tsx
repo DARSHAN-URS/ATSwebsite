@@ -45,7 +45,7 @@ export const Navbar = () => {
           )}
         >
           <Link to="/" className="flex items-center gap-2 md:gap-3 group text-slate-900">
-            <Logo variant="auto" className="h-8 md:h-14" />
+            <Logo variant="dark" className="h-8 md:h-14" />
           </Link>
 
           {/* Desktop Menu */}
