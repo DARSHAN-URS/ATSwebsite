@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/lib/cropImage";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe, Camera, Loader2, Sparkles, AlertCircle, Lightbulb } from "lucide-react";
+import { User, Upload, X, Mail, Phone, MapPin, Linkedin, Globe, Camera, Loader2, Sparkles, AlertCircle, Lightbulb, Briefcase } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { resolvePhotoUrl } from "@/lib/storageUtils";
@@ -148,6 +148,19 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
                   className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
                 />
                 <Sparkles className="absolute right-6 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-blue-200 cursor-pointer hover:text-blue-600 transition-colors" />
+              </div>
+            </div>
+
+            <div className="space-y-3 group/input">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Professional Title</Label>
+              <div className="relative">
+                <Briefcase className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
+                <Input 
+                  value={personalInfo.title || ""} 
+                  onChange={(e) => update("title", e.target.value)} 
+                  placeholder="e.g. Vice President of Sales"
+                  className="h-16 pl-14 pr-12 rounded-2xl bg-slate-50/50 border-none focus:bg-white focus:ring-4 focus:ring-blue-600/5 transition-all text-sm font-bold placeholder:text-slate-200"
+                />
               </div>
             </div>
 
