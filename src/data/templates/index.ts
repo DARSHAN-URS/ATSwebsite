@@ -158,7 +158,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "ats-olivia",
-    "template_name": "Olivia Bennett",
+    "template_name": "Olivia",
     "category": "ATS Optimized",
     "description": "Centered, clean sans-serif layout with thin double borders around headers and 4-column grids for Skills/Certificates.",
     "layout_metadata": {
@@ -263,7 +263,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_001",
-    "template_name": "Brian T. Wayne",
+    "template_name": "Brian",
     "category": "Creative",
     "description": "Serif sidebar template with full-height dark slate-blue sidebar and light-gray section bands.",
     "layout_metadata": {
@@ -315,7 +315,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_002",
-    "template_name": "Camila Rivera",
+    "template_name": "Camila",
     "category": "Creative",
     "description": "Clean sans-serif template with top banner and centered horizontal section dividers.",
     "layout_metadata": {
@@ -367,7 +367,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_003",
-    "template_name": "Rohan K. Patel",
+    "template_name": "Rohan",
     "category": "Creative",
     "description": "Sleek sans-serif blue-themed engineering template with section highlights.",
     "layout_metadata": {
@@ -419,7 +419,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_004",
-    "template_name": "Catherine Bale",
+    "template_name": "Catherine",
     "category": "Creative",
     "description": "Modern marketing assistant layout featuring vertical leafy sidebar accent border.",
     "layout_metadata": {
@@ -471,7 +471,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_005",
-    "template_name": "Matteo Ricci",
+    "template_name": "Matteo",
     "category": "Creative",
     "description": "Traditional serif layout with two columns and warm orange section dividers.",
     "layout_metadata": {
@@ -523,7 +523,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_anna",
-    "template_name": "Anna Field",
+    "template_name": "Anna",
     "category": "Creative",
     "description": "Centered layout with light purple/lavender header banner blocks and clean spacing.",
     "layout_metadata": {
@@ -575,7 +575,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_antoine",
-    "template_name": "Antoine Delorme",
+    "template_name": "Antoine",
     "category": "Creative",
     "description": "Two-column layout with light blue header banner containing photo and grid contact.",
     "layout_metadata": {
@@ -627,7 +627,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_lucia",
-    "template_name": "Lucía Navarro Martín",
+    "template_name": "Lucia",
     "category": "Creative",
     "description": "Two-column layout with left-aligned header and centered/framed section lines.",
     "layout_metadata": {
@@ -679,7 +679,7 @@ export const ALL_DYNAMIC_TEMPLATES = [
   },
   {
     "template_id": "tpl_cre_maria",
-    "template_name": "Maria Teresa Villanueva",
+    "template_name": "Maria",
     "category": "Creative",
     "description": "Left-aligned layout with dark gray header banner, orange/gold accents, and custom section icons.",
     "layout_metadata": {

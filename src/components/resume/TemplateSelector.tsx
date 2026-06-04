@@ -51,28 +51,30 @@ export default function TemplateSelector({ selected, onChange, jobTitle, resumeD
                 : "border-border bg-card hover:bg-accent/30"
             )}
           >
-            <div className="p-1.5">
+            <div className="p-1">
               <TemplateThumbnail templateId={t.id} data={resumeData} />
             </div>
-            <div className="px-3 pb-2.5 pt-1 text-left">
-              <div className="flex items-center gap-1 flex-wrap">
-                <span className="text-sm font-semibold leading-tight">{t.name}</span>
-                {t.isPremium && (
-                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[9px] font-bold uppercase tracking-wider">
-                    <Crown className="w-2.5 h-2.5" />
-                    Premium
-                  </span>
-                )}
-                {t.isBestForATS && (
-                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-bold uppercase tracking-wider">
-                    <Shield className="w-2.5 h-2.5" />
-                    Best
-                  </span>
-                )}
+            <div className="px-2 pb-2 pt-1 text-left w-full overflow-hidden">
+              <div className="flex items-center justify-between gap-1 w-full">
+                <span className="text-xs font-bold leading-tight truncate block flex-1" title={t.name}>{t.name}</span>
+                <div className="flex items-center gap-0.5 shrink-0">
+                  {t.isPremium && (
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[8px] font-bold uppercase tracking-wider">
+                      <Crown className="w-2 h-2" />
+                      Prem
+                    </span>
+                  )}
+                  {t.isBestForATS && (
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[8px] font-bold uppercase tracking-wider">
+                      <Shield className="w-2 h-2" />
+                      ATS
+                    </span>
+                  )}
+                </div>
               </div>
-              <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2 mt-0.5">{t.description}</p>
+              <p className="text-[10px] text-muted-foreground leading-snug line-clamp-1 mt-0.5">{t.description}</p>
               {t.recommendedFor && (
-                <p className="text-[10px] text-primary/70 mt-0.5">{t.recommendedFor}</p>
+                <p className="text-[9px] text-primary/70 mt-0.5 truncate">{t.recommendedFor}</p>
               )}
             </div>
             {selected === t.id && (
