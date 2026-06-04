@@ -88,6 +88,8 @@ export default function Companies() {
       return (data?.companies || []) as Company[];
     },
     enabled: !!activeSearch,
+    staleTime: 1000 * 60 * 10, // Cache results as fresh for 10 minutes to prevent repeat API billing on tab changes
+    refetchOnWindowFocus: false, // Disable refetch on browser window focus
   });
 
   const isPinned = (name: string) => pinnedCompanies.some(p => p.company_name === name);
