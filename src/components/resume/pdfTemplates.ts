@@ -4307,26 +4307,23 @@ async function renderCreativeMaria(doc: jsPDF, data: ResumeData, title: string, 
 
   if ((data.skills || []).length > 0) {
     addSection("Skills");
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    let curX = ctx.margin;
-    let curY = ctx.y;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9.5);
+    const colWidth = ctx.maxWidth / 3;
+    let colIndex = 0;
     data.skills!.forEach(s => {
-      const w = doc.getTextWidth(s) + 6;
-      if (curX + w > ctx.pageWidth - ctx.margin) {
-        curX = ctx.margin;
-        curY += 6.5;
+      if (colIndex === 3) {
+        colIndex = 0;
+        ctx.y += 5.5;
+        ctx.y = checkY(ctx.y, 5.5);
       }
-      curY = checkY(curY, 5.5);
-      doc.setFillColor(253, 246, 240); // #fdf6f0
-      doc.setDrawColor(251, 230, 213); // #fbe6d5
-      doc.setLineWidth(0.3);
-      doc.roundedRect(curX, curY - 3.5, w, 5, 1, 1, "FD");
-      doc.setTextColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
-      doc.text(s, curX + 3, curY);
-      curX += w + 2;
+      const curX = ctx.margin + colIndex * colWidth;
+      doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+      doc.circle(curX + 1, ctx.y - 1, 0.6, "F");
+      doc.text(s, curX + 4, ctx.y);
+      colIndex++;
     });
-    ctx.y = curY + 6;
+    ctx.y += 7;
     doc.setTextColor(0);
   }
 
@@ -4348,12 +4345,31 @@ async function renderCreativeMaria(doc: jsPDF, data: ResumeData, title: string, 
     addSection(sec.title);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9.5);
-    sec.items.forEach(item => {
-      const lines = doc.splitTextToSize(`•  ${item}`, ctx.maxWidth - 4);
-      ctx.y = checkY(ctx.y, lines.length * 4.5);
-      doc.text(lines, ctx.margin + 2, ctx.y);
-      ctx.y += lines.length * 4.5;
-    });
+    if (sec.title.toLowerCase().includes("certif")) {
+      const colWidth = ctx.maxWidth / 3;
+      let colIndex = 0;
+      sec.items.forEach(item => {
+        if (colIndex === 3) {
+          colIndex = 0;
+          ctx.y += 5.5;
+          ctx.y = checkY(ctx.y, 5.5);
+        }
+        const curX = ctx.margin + colIndex * colWidth;
+        doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
+        doc.circle(curX + 1, ctx.y - 1, 0.6, "F");
+        doc.text(item, curX + 4, ctx.y);
+        colIndex++;
+      });
+      ctx.y += 7;
+    } else {
+      sec.items.forEach(item => {
+        const lines = doc.splitTextToSize(`•  ${item}`, ctx.maxWidth - 4);
+        ctx.y = checkY(ctx.y, lines.length * 4.5);
+        doc.text(lines, ctx.margin + 2, ctx.y);
+        ctx.y += lines.length * 4.5;
+      });
+      ctx.y += 2.5;
+    }
   });
 }
 
@@ -4505,15 +4521,33 @@ async function renderCreativeLucia(doc: jsPDF, data: ResumeData, title: string, 
 
   if ((data.skills || []).length > 0) {
     rightY = addColumnHeader("Skills", rightX, rightY, rightColWidth);
-    doc.setFont("times", "normal");
-    doc.setFontSize(9);
     data.skills!.forEach(s => {
-      rightY = checkY(rightY, 5);
-      // Draw vertical bullet bar
-      doc.setFillColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
-      doc.rect(rightX, rightY - 3, 1.5, 4.5, "F");
-      doc.text(s, rightX + 4, rightY);
-      rightY += 5;
+      const colonIndex = s.indexOf(":");
+      if (colonIndex !== -1) {
+        const title = s.substring(0, colonIndex).trim();
+        const desc = s.substring(colonIndex + 1).trim();
+        
+        doc.setFont("times", "bold");
+        doc.setFontSize(9.5);
+        const titleLines = doc.splitTextToSize(title, rightColWidth);
+        rightY = checkY(rightY, titleLines.length * 4);
+        doc.text(titleLines, rightX, rightY);
+        rightY += titleLines.length * 4;
+
+        doc.setFont("times", "normal");
+        doc.setFontSize(8.5);
+        const descLines = doc.splitTextToSize(desc, rightColWidth);
+        rightY = checkY(rightY, descLines.length * 3.8);
+        doc.text(descLines, rightX, rightY);
+        rightY += descLines.length * 3.8 + 2;
+      } else {
+        doc.setFont("times", "bold");
+        doc.setFontSize(9.5);
+        const lines = doc.splitTextToSize(s, rightColWidth);
+        rightY = checkY(rightY, lines.length * 4);
+        doc.text(lines, rightX, rightY);
+        rightY += lines.length * 4 + 2;
+      }
     });
   }
 
@@ -4713,48 +4747,18 @@ async function renderCreativeAnna(doc: jsPDF, data: ResumeData, title: string, p
 
   if ((data.skills || []).length > 0) {
     addSection("Skills");
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    
-    let curY = ctx.y;
-    let rowItems: string[] = [];
-    let rowWidth = 0;
-    
-    const flushRow = (items: string[]) => {
-      const totalRowW = items.reduce((acc, it) => acc + doc.getTextWidth(it) + 12 + 4, 0) - 4;
-      let startX = (ctx.pageWidth - totalRowW) / 2;
-      items.forEach(it => {
-        const itW = doc.getTextWidth(it) + 12;
-        doc.setFillColor(lavenderRgb.r, lavenderRgb.g, lavenderRgb.b);
-        doc.setDrawColor(220, 220, 220);
-        doc.setLineWidth(0.2);
-        doc.roundedRect(startX, curY - 3.5, itW, 5.5, 1, 1, "F");
-        doc.setTextColor(primaryRgb.r, primaryRgb.g, primaryRgb.b);
-        doc.text(it, startX + 6, curY);
-        startX += itW + 4;
-      });
-      doc.setTextColor(0);
-    };
-
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9.5);
     data.skills!.forEach(s => {
-      const itemW = doc.getTextWidth(s) + 12;
-      if (rowWidth + itemW + 4 > ctx.maxWidth) {
-        curY = checkY(curY, 7);
-        flushRow(rowItems);
-        rowItems = [s];
-        rowWidth = itemW;
-        curY += 7;
-      } else {
-        rowItems.push(s);
-        rowWidth += itemW + 4;
-      }
+      const lines = doc.splitTextToSize(`•  ${s}`, ctx.maxWidth - 20);
+      lines.forEach(line => {
+        ctx.y = checkY(ctx.y, 4.5);
+        doc.text(line, ctx.margin + 10, ctx.y);
+        ctx.y += 4.5;
+      });
+      ctx.y += 1.5;
     });
-    if (rowItems.length > 0) {
-      curY = checkY(curY, 7);
-      flushRow(rowItems);
-      curY += 7;
-    }
-    ctx.y = curY;
+    ctx.y += 2.5;
   }
 
   if ((data.languages || []).length > 0) {
@@ -4789,8 +4793,8 @@ async function renderCreativeAnna(doc: jsPDF, data: ResumeData, title: string, p
 
 async function renderCreativeAntoine(doc: jsPDF, data: ResumeData, title: string, photoData?: string | null) {
   const ctx: PdfContext = { doc, y: 44, margin: 15, pageWidth: doc.internal.pageSize.getWidth(), maxWidth: 0 };
-  const leftColWidth = 108;
-  const rightColWidth = 66;
+  const leftColWidth = 78;
+  const rightColWidth = 96;
   ctx.maxWidth = leftColWidth;
   const pi = data.personalInfo || {};
   const lightBlueRgb = { r: 224, g: 242, b: 254 }; // Light blue #e0f2fe
@@ -4872,7 +4876,7 @@ async function renderCreativeAntoine(doc: jsPDF, data: ResumeData, title: string
     return yVal + 7;
   };
 
-  // Left Column
+  // Left Column (Summary, Skills, Languages, Certificates/Awards)
   const leftX = ctx.margin;
   if (data.summary) {
     leftY = addColumnHeader("Summary", leftX, leftY, leftColWidth);
@@ -4887,46 +4891,95 @@ async function renderCreativeAntoine(doc: jsPDF, data: ResumeData, title: string
     leftY += 3;
   }
 
+  if ((data.skills || []).length > 0) {
+    leftY = addColumnHeader("Skills", leftX, leftY, leftColWidth);
+    data.skills!.forEach(s => {
+      const colonIndex = s.indexOf(":");
+      if (colonIndex !== -1) {
+        const title = s.substring(0, colonIndex).trim();
+        const desc = s.substring(colonIndex + 1).trim();
+        
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9.5);
+        const titleLines = doc.splitTextToSize(title, leftColWidth);
+        leftY = checkY(leftY, titleLines.length * 4);
+        doc.text(titleLines, leftX, leftY);
+        leftY += titleLines.length * 4;
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+        const descLines = doc.splitTextToSize(desc, leftColWidth);
+        leftY = checkY(leftY, descLines.length * 3.8);
+        doc.text(descLines, leftX, leftY);
+        leftY += descLines.length * 3.8 + 2;
+      } else {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9.5);
+        const lines = doc.splitTextToSize(s, leftColWidth);
+        leftY = checkY(leftY, lines.length * 4);
+        doc.text(lines, leftX, leftY);
+        leftY += lines.length * 4 + 2;
+      }
+    });
+  }
+
+  if ((data.languages || []).length > 0) {
+    leftY = addColumnHeader("Languages", leftX, leftY, leftColWidth);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    const langList = data.languages!.map(l => {
+      return `${l.name}${l.proficiency ? ` (${l.proficiency})` : ""}`;
+    });
+    const langStr = langList.join("   •   ");
+    const langLines = doc.splitTextToSize(langStr, leftColWidth);
+    langLines.forEach(line => {
+      leftY = checkY(leftY, 4.5);
+      doc.text(line, leftX, leftY);
+      leftY += 4.5;
+    });
+    leftY += 2;
+  }
+
+  // Right Column (Experience, Education)
+  const rightX = ctx.margin + leftColWidth + 6;
+
   if ((data.experience || []).length > 0) {
-    leftY = addColumnHeader("Experience", leftX, leftY, leftColWidth);
+    rightY = addColumnHeader("Professional Experience", rightX, rightY, rightColWidth);
     data.experience!.forEach(exp => {
       const dateRange = formatDateRangePdf(exp.startDate, exp.endDate);
-      leftY = checkY(leftY, 12);
+      rightY = checkY(rightY, 12);
       
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
-      doc.text(exp.title, leftX, leftY);
+      doc.text(exp.title, rightX, rightY);
 
       if (dateRange) {
         doc.setFont("helvetica", "normal");
         doc.setFontSize(8);
         doc.setTextColor(80, 80, 80);
-        doc.text(dateRange, leftX + leftColWidth - doc.getTextWidth(dateRange), leftY);
+        doc.text(dateRange, rightX + rightColWidth - doc.getTextWidth(dateRange), rightY);
         doc.setTextColor(0);
       }
-      leftY += 4;
+      rightY += 4;
 
       doc.setFont("helvetica", "italic");
       doc.setFontSize(9);
-      doc.text(`${exp.company} | ${exp.location || ""}`, leftX, leftY);
-      leftY += 5;
+      doc.text(`${exp.company} | ${exp.location || ""}`, rightX, rightY);
+      rightY += 5;
 
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
       if (exp.bullets?.length) {
         exp.bullets.forEach(b => {
-          const lines = doc.splitTextToSize(`• ${b}`, leftColWidth - 2);
-          leftY = checkY(leftY, lines.length * 4.2);
-          doc.text(lines, leftX + 2, leftY);
-          leftY += lines.length * 4.2;
+          const lines = doc.splitTextToSize(`• ${b}`, rightColWidth - 2);
+          rightY = checkY(rightY, lines.length * 4.2);
+          doc.text(lines, rightX + 2, rightY);
+          rightY += lines.length * 4.2;
         });
       }
-      leftY += 2.5;
+      rightY += 2.5;
     });
   }
-
-  // Right Column
-  const rightX = ctx.margin + leftColWidth + 10;
 
   if ((data.education || []).length > 0) {
     rightY = addColumnHeader("Education", rightX, rightY, rightColWidth);
@@ -4953,67 +5006,31 @@ async function renderCreativeAntoine(doc: jsPDF, data: ResumeData, title: string
     });
   }
 
-  if ((data.skills || []).length > 0) {
-    rightY = addColumnHeader("Skills", rightX, rightY, rightColWidth);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    let curX = rightX;
-    let curY = rightY;
-    data.skills!.forEach(s => {
-      const w = doc.getTextWidth(s) + 6;
-      if (curX + w > rightX + rightColWidth) {
-        curX = rightX;
-        curY += 6;
-      }
-      curY = checkY(curY, 5);
-      doc.setFillColor(240, 249, 255); // #f0f9ff
-      doc.setDrawColor(186, 230, 253); // #bae6fd
-      doc.setLineWidth(0.2);
-      doc.roundedRect(curX, curY - 3.5, w, 5, 0.8, 0.8, "FD");
-      doc.setTextColor(3, 105, 161); // #0369a1
-      doc.text(s, curX + 3, curY);
-      curX += w + 2;
-    });
-    rightY = curY + 6;
-    doc.setTextColor(0);
-  }
-
-  if ((data.languages || []).length > 0) {
-    rightY = addColumnHeader("Languages", rightX, rightY, rightColWidth);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    data.languages!.forEach(l => {
-      rightY = checkY(rightY, 5);
-      doc.setFont("helvetica", "bold");
-      doc.text(l.name, rightX, rightY);
-      doc.setFont("helvetica", "normal");
-      doc.text(` (${l.proficiency || ""})`, rightX + doc.getTextWidth(l.name), rightY);
-      rightY += 5;
-    });
-  }
-
   const custom = (data.customSections || []).filter(c => c.title && c.items?.length);
   custom.forEach(sec => {
-    const isRight = sec.title.toLowerCase().includes("cert") || sec.title.toLowerCase().includes("award") || sec.title.toLowerCase().includes("interest");
-    if (isRight) {
-      rightY = addColumnHeader(sec.title, rightX, rightY, rightColWidth);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(8.5);
-      sec.items.forEach(item => {
-        rightY = checkY(rightY, 5);
-        doc.text(`• ${item}`, rightX, rightY);
-        rightY += 5;
-      });
-    } else {
+    const isLeft = sec.title.toLowerCase().includes("cert") || sec.title.toLowerCase().includes("award") || sec.title.toLowerCase().includes("interest");
+    if (isLeft) {
       leftY = addColumnHeader(sec.title, leftX, leftY, leftColWidth);
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       sec.items.forEach(item => {
         const lines = doc.splitTextToSize(`• ${item}`, leftColWidth - 2);
         leftY = checkY(leftY, lines.length * 4.2);
         doc.text(lines, leftX + 2, leftY);
         leftY += lines.length * 4.2;
       });
+      leftY += 2.5;
+    } else {
+      rightY = addColumnHeader(sec.title, rightX, rightY, rightColWidth);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      sec.items.forEach(item => {
+        const lines = doc.splitTextToSize(`• ${item}`, rightColWidth - 2);
+        rightY = checkY(rightY, lines.length * 4.2);
+        doc.text(lines, rightX + 2, rightY);
+        rightY += lines.length * 4.2;
+      });
+      rightY += 2.5;
     }
   });
 }

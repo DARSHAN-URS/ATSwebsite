@@ -610,18 +610,26 @@ function buildATSThumbnail(config: ATSTemplateConfig, dummyData: any): string {
   </div>`;
 }
 
+const STATIC_THUMBNAILS: Record<string, string> = {
+  "ats-olivia": "/templates/thumbnails/ats-olivia.png",
+  "tpl_cre_maria": "/templates/thumbnails/tpl_cre_maria.png",
+  "tpl_cre_lucia": "/templates/thumbnails/tpl_cre_lucia.png",
+  "tpl_cre_anna": "/templates/thumbnails/tpl_cre_anna.png",
+  "tpl_cre_antoine": "/templates/thumbnails/tpl_cre_antoine.png",
+};
+
 interface TemplateThumbnailProps {
   templateId: TemplateId;
   data?: ResumeData;
 }
 
-
 export default function TemplateThumbnail({ templateId, data }: TemplateThumbnailProps) {
-  const html = useMemo(() => getThumbnailHTML(templateId, data), [templateId, data]);
+  const staticSrc = STATIC_THUMBNAILS[templateId];
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
+    if (staticSrc) return;
     if (!containerRef.current) return;
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
@@ -632,7 +640,25 @@ export default function TemplateThumbnail({ templateId, data }: TemplateThumbnai
     });
     observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [staticSrc]);
+
+  if (staticSrc) {
+    return (
+      <div
+        ref={containerRef}
+        className="w-full bg-white rounded border border-border overflow-hidden relative"
+        style={{ aspectRatio: "595 / 842" }}
+      >
+        <img
+          src={staticSrc}
+          alt={templateId}
+          className="w-full h-full object-contain pointer-events-none select-none"
+        />
+      </div>
+    );
+  }
+
+  const html = useMemo(() => getThumbnailHTML(templateId, data), [templateId, data]);
 
   return (
     <div

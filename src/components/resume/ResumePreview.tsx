@@ -2006,9 +2006,12 @@ function buildCreativeMariaHTML(data: ResumeData, title: string): string {
   let skillsHTML = "";
   if ((data.skills || []).length > 0) {
     skillsHTML += sectionHdr("Skills", SVG_ICONS.skills);
-    skillsHTML += `<div style="display:flex;flex-wrap:wrap;gap:8px;font-size:12.5px;">`;
+    skillsHTML += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px;font-size:13px;line-height:1.45;">`;
     data.skills!.forEach(s => {
-      skillsHTML += `<span style="background:#fdf6f0;color:${primary};border:1px solid #fbe6d5;padding:4px 10px;border-radius:20px;font-weight:500;">${escapeHtml(s)}</span>`;
+      skillsHTML += `<div style="display:flex;align-items:baseline;gap:6px;color:#333;">
+        <span style="color:${primary};font-size:14px;line-height:1;">•</span>
+        <span>${escapeHtml(s)}</span>
+      </div>`;
     });
     skillsHTML += `</div>`;
   }
@@ -2029,11 +2032,22 @@ function buildCreativeMariaHTML(data: ResumeData, title: string): string {
   let customHTML = "";
   (data.customSections || []).filter(c => c.title && c.items?.length).forEach(sec => {
     customHTML += sectionHdr(sec.title, SVG_ICONS.folder);
-    customHTML += `<ul style="margin:4px 0 0 16px;padding:0;list-style:disc;font-size:13px;line-height:1.45;">`;
-    sec.items.forEach(item => {
-      customHTML += `<li style="margin-bottom:4.5px;">${escapeHtml(item)}</li>`;
-    });
-    customHTML += `</ul>`;
+    if (sec.title.toLowerCase().includes("certif")) {
+      customHTML += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px;font-size:13px;line-height:1.45;">`;
+      sec.items.forEach(item => {
+        customHTML += `<div style="display:flex;align-items:baseline;gap:6px;color:#333;">
+          <span style="color:${primary};font-size:14px;line-height:1;">•</span>
+          <span>${escapeHtml(item)}</span>
+        </div>`;
+      });
+      customHTML += `</div>`;
+    } else {
+      customHTML += `<ul style="margin:4px 0 0 16px;padding:0;list-style:disc;font-size:13px;line-height:1.45;">`;
+      sec.items.forEach(item => {
+        customHTML += `<li style="margin-bottom:4.5px;">${escapeHtml(item)}</li>`;
+      });
+      customHTML += `</ul>`;
+    }
   });
 
   return `
@@ -2130,11 +2144,23 @@ function buildCreativeLuciaHTML(data: ResumeData, title: string): string {
   }
   if ((data.skills || []).length > 0) {
     rightContent += sectionHdr("Skills");
-    rightContent += `<ul style="margin:0;padding:0;list-style:none;font-size:12px;line-height:1.5;color:#333;">`;
+    rightContent += `<div style="font-size:12px;line-height:1.5;color:#333;text-align:left;">`;
     data.skills!.forEach(s => {
-      rightContent += `<li style="margin-bottom:4px;border-left:2px solid ${primary};padding-left:8px;font-weight:500;">${escapeHtml(s)}</li>`;
+      const colonIndex = s.indexOf(":");
+      if (colonIndex !== -1) {
+        const title = s.substring(0, colonIndex).trim();
+        const desc = s.substring(colonIndex + 1).trim();
+        rightContent += `<div style="margin-bottom:8px;">
+          <strong style="color:#111;font-size:12.5px;display:block;">${escapeHtml(title)}</strong>
+          <div style="margin:2px 0 0;font-size:12px;color:#444;line-height:1.4;">${escapeHtml(desc)}</div>
+        </div>`;
+      } else {
+        rightContent += `<div style="margin-bottom:8px;">
+          <strong style="color:#111;font-size:12.5px;display:block;">${escapeHtml(s)}</strong>
+        </div>`;
+      }
     });
-    rightContent += `</ul>`;
+    rightContent += `</div>`;
   }
   if ((data.languages || []).length > 0) {
     rightContent += sectionHdr("Languages");
@@ -2248,10 +2274,12 @@ function buildCreativeAnnaHTML(data: ResumeData, title: string): string {
   let skillsHTML = "";
   if ((data.skills || []).length > 0) {
     skillsHTML += sectionHdr("Skills");
-    skillsHTML += `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;font-size:12.5px;margin-bottom:10px;">`;
+    skillsHTML += `<div style="max-width:680px;margin:0 auto 10px;text-align:left;font-size:13px;line-height:1.55;color:#333;">`;
+    skillsHTML += `<ul style="margin:4px 0 0 20px;padding:0;list-style:disc;">`;
     data.skills!.forEach(s => {
-      skillsHTML += `<span style="background:${lavenderBg};color:${primary};padding:4px 12px;border-radius:6px;font-weight:500;border:1px dashed #ddd;">${escapeHtml(s)}</span>`;
+      skillsHTML += `<li style="margin-bottom:4.5px;">${escapeHtml(s)}</li>`;
     });
+    skillsHTML += `</ul>`;
     skillsHTML += `</div>`;
   }
 
@@ -2333,13 +2361,38 @@ function buildCreativeAntoineHTML(data: ResumeData, title: string): string {
       <p style="font-size:13px;line-height:1.55;color:#333;margin:0 0 20px;text-align:justify;">${escapeHtml(data.summary)}</p>
     `;
   }
+  if ((data.skills || []).length > 0) {
+    leftContent += sectionHdr("Skills");
+    leftContent += `<div style="display:flex;flex-direction:column;gap:6px;text-align:left;">`;
+    data.skills!.forEach(s => {
+      const colonIndex = s.indexOf(":");
+      if (colonIndex !== -1) {
+        const title = s.substring(0, colonIndex).trim();
+        const desc = s.substring(colonIndex + 1).trim();
+        leftContent += `<div style="font-size:12.5px;line-height:1.4;"><strong style="color:#111;">${escapeHtml(title)}</strong> — <span style="color:#444;">${escapeHtml(desc)}</span></div>`;
+      } else {
+        leftContent += `<div style="font-size:12.5px;line-height:1.4;"><strong style="color:#111;">${escapeHtml(s)}</strong></div>`;
+      }
+    });
+    leftContent += `</div>`;
+  }
+  if ((data.languages || []).length > 0) {
+    leftContent += sectionHdr("Languages");
+    leftContent += `<div style="font-size:12.5px;line-height:1.5;color:#333;text-align:left;">`;
+    leftContent += data.languages!.map(l => {
+      return `<span style="font-weight:600;">${escapeHtml(l.name)}</span>${l.proficiency ? ` (${escapeHtml(l.proficiency)})` : ""}`;
+    }).join(" • ");
+    leftContent += `</div>`;
+  }
+
+  let rightContent = "";
   if ((data.experience || []).length > 0) {
-    leftContent += sectionHdr("Experience");
+    rightContent += sectionHdr("Professional Experience");
     data.experience!.forEach(exp => {
       const dateRange = formatDateRange(exp.startDate, exp.endDate);
       const bullets = exp.bullets?.length ? `<ul style="margin:4px 0 0 16px;padding:0;list-style:disc">${exp.bullets.map(b => `<li style="margin-bottom:3.5px;font-size:12.5px;line-height:1.45;color:#333;">${escapeHtml(b)}</li>`).join("")}</ul>` : "";
-      leftContent += `
-        <div style="margin-bottom:14px;page-break-inside:avoid;font-size:12.5px;">
+      rightContent += `
+        <div style="margin-bottom:14px;page-break-inside:avoid;font-size:12.5px;text-align:left;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;font-weight:bold;color:#111;">
             <div>${escapeHtml(exp.title)}</div>
             <div style="font-weight:normal;font-size:11.5px;color:#666;">${escapeHtml(dateRange)}</div>
@@ -2350,14 +2403,12 @@ function buildCreativeAntoineHTML(data: ResumeData, title: string): string {
       `;
     });
   }
-
-  let rightContent = "";
   if ((data.education || []).length > 0) {
     rightContent += sectionHdr("Education");
     data.education!.forEach(edu => {
       const dateRange = formatDateRange(edu.startDate, edu.endDate) || edu.year || "";
       rightContent += `
-        <div style="margin-bottom:12px;page-break-inside:avoid;font-size:12px;line-height:1.4;">
+        <div style="margin-bottom:12px;page-break-inside:avoid;font-size:12px;line-height:1.4;text-align:left;">
           <div style="font-weight:700;color:#111;">${escapeHtml(edu.degree)}</div>
           <div style="color:#333;">${escapeHtml(edu.school)}</div>
           <div style="font-size:11px;color:#666;">${escapeHtml(dateRange)}</div>
@@ -2365,38 +2416,21 @@ function buildCreativeAntoineHTML(data: ResumeData, title: string): string {
       `;
     });
   }
-  if ((data.skills || []).length > 0) {
-    rightContent += sectionHdr("Skills");
-    rightContent += `<div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11.5px;">`;
-    data.skills!.forEach(s => {
-      rightContent += `<span style="background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;padding:3px 8px;border-radius:4px;font-weight:500;">${escapeHtml(s)}</span>`;
-    });
-    rightContent += `</div>`;
-  }
-  if ((data.languages || []).length > 0) {
-    rightContent += sectionHdr("Languages");
-    rightContent += `<div style="font-size:12px;line-height:1.5;color:#333;">`;
-    data.languages!.forEach(l => {
-      rightContent += `<div style="margin-bottom:6px;display:flex;justify-content:space-between;">
-        <span style="font-weight:500;">${escapeHtml(l.name)}</span>
-        <span style="color:#666;">${escapeHtml(l.proficiency)}</span>
-      </div>`;
-    });
-    rightContent += `</div>`;
-  }
 
   const custom = (data.customSections || []).filter(c => c.title && c.items?.length);
   custom.forEach(sec => {
     let customHtml = sectionHdr(sec.title);
-    customHtml += `<ul style="margin:4px 0 0 16px;padding:0;list-style:disc;font-size:12px;line-height:1.45;color:#333;">`;
+    customHtml += `<ul style="margin:4px 0 0 16px;padding:0;list-style:disc;font-size:12px;line-height:1.45;color:#333;text-align:left;">`;
     sec.items.forEach(item => {
       customHtml += `<li style="margin-bottom:4.5px;">${escapeHtml(item)}</li>`;
     });
     customHtml += `</ul>`;
+    
+    // Certificates and awards go to left column, other custom go to right column
     if (sec.title.toLowerCase().includes("cert") || sec.title.toLowerCase().includes("award") || sec.title.toLowerCase().includes("interest")) {
-      rightContent += customHtml;
-    } else {
       leftContent += customHtml;
+    } else {
+      rightContent += customHtml;
     }
   });
 
@@ -2414,10 +2448,10 @@ function buildCreativeAntoineHTML(data: ResumeData, title: string): string {
       </div>
       
       <div style="padding:24px 40px 40px;display:flex;gap:36px;">
-        <div style="width:60%;display:flex;flex-direction:column;">
+        <div style="width:45%;display:flex;flex-direction:column;">
           ${leftContent}
         </div>
-        <div style="width:40%;display:flex;flex-direction:column;">
+        <div style="width:55%;display:flex;flex-direction:column;">
           ${rightContent}
         </div>
       </div>
