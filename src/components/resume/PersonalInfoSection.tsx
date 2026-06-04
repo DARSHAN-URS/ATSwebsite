@@ -127,7 +127,7 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
               </button>
             </div>
             <div className="space-y-2 text-center md:text-left">
-               <h3 className="text-xl font-black text-slate-900 tracking-tight">Identity Image</h3>
+               <h3 className="text-xl font-black text-slate-900 tracking-tight">Profile Photo</h3>
                <p className="text-sm text-slate-500 font-medium">Upload a professional high-resolution headshot.</p>
                <div className="flex items-center gap-4 pt-2">
                   <Button variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()} className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-blue-600 hover:bg-blue-50">Change Photo</Button>
@@ -178,7 +178,7 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
             </div>
 
             <div className="space-y-3 group/input">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Email Vector</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Email Address</Label>
               <div className="relative">
                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 
@@ -191,7 +191,7 @@ export default function PersonalInfoSection({ personalInfo, onChange, userId }: 
             </div>
 
             <div className="space-y-3 group/input">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Phone Link</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Phone Number</Label>
               <div className="relative">
                 <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />
                 <Input 

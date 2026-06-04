@@ -144,7 +144,7 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
                     />
                     <div className="flex items-center gap-2">
                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Employment Module</span>
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Job Entry</span>
                     </div>
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
               <div className="p-12 space-y-12">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                   <div className="space-y-4 group/input">
-                    <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Professional Job Title</Label>
+                    <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-400 group-focus-within/input:text-blue-600 transition-colors">Job Title</Label>
                     <div className="relative">
                        <GripVertical className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-200 group-focus-within/input:text-blue-600 transition-colors" />
                        <Input 
@@ -204,7 +204,7 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between items-start gap-4 border-b border-slate-50 pb-4">
                     <div className="flex items-center gap-2 md:gap-3">
                        <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
-                       <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-900 line-clamp-1">Mission Achievements</Label>
+                       <Label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest md:tracking-[0.2em] text-slate-900 line-clamp-1">Achievements & Responsibilities</Label>
                     </div>
                     <Button 
                       variant="ghost" 
@@ -248,7 +248,7 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
                       onClick={() => addBullet(index)}
                       className="w-full h-16 rounded-2xl border-2 border-dashed border-slate-100 bg-transparent text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all font-bold text-xs gap-3"
                     >
-                      <Plus className="w-5 h-5" /> Add Achievement Vector
+                      <Plus className="w-5 h-5" /> Add Bullet Point
                     </Button>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export default function ExperienceEditor({ experience, onChange }: Props) {
         onClick={addItem}
         className="w-full h-24 rounded-[3rem] border-2 border-dashed border-slate-100 bg-transparent text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all font-black uppercase tracking-[0.2em] text-xs gap-4 shadow-sm"
       >
-        <Plus className="w-6 h-6" /> Initialize New Experience Module
+        <Plus className="w-6 h-6" /> Add Work Experience
       </Button>
     </div>
   );
