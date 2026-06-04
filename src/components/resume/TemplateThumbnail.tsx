@@ -292,6 +292,224 @@ function getThumbnailHTML(templateId: TemplateId, rawData?: ResumeData): string 
         </div>
       </div>`;
 
+    case "ats-olivia":
+      return `<div style="font-family:Arial,sans-serif;padding:8px 8px;color:#222;line-height:1.25;text-align:center">
+        <div style="${s(6)}font-weight:700;color:#0f3c5f;margin-bottom:1px">${dummyData.name}</div>
+        <div style="${s(3)}color:#555;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">Head of Customer Service</div>
+        <div style="${s(2.8)}color:#666;margin-bottom:3px">${dummyData.contact}</div>
+        
+        <div style="border-top:1px solid #0f3c5f;border-bottom:1px solid #0f3c5f;padding:1px 0;margin:3px auto 2px;width:90%">
+          <span style="${s(3.2)}font-weight:700;color:#0f3c5f;text-transform:uppercase;letter-spacing:0.5px">Summary</span>
+        </div>
+        <div style="${s(2.8)}color:#444;margin-bottom:4px">${dummyData.summary.slice(0, 100)}…</div>
+        
+        <div style="border-top:1px solid #0f3c5f;border-bottom:1px solid #0f3c5f;padding:1px 0;margin:3px auto 2px;width:90%">
+          <span style="${s(3.2)}font-weight:700;color:#0f3c5f;text-transform:uppercase;letter-spacing:0.5px">Experience</span>
+        </div>
+        <div style="text-align:left;padding:0 4px">
+          ${dummyData.exp.slice(0, 2).map((e: any) => `
+            <div style="margin-bottom:2px">
+              <div style="display:flex;justify-content:space-between;${s(2.8)}">
+                <b>${e.title}</b>
+                <span style="color:#666">${e.date.split(" — ")[1] || e.date}</span>
+              </div>
+              <div style="${s(2.5)}color:#555;font-style:italic">${e.company}</div>
+            </div>
+          `).join("")}
+        </div>
+        
+        <div style="border-top:1px solid #0f3c5f;border-bottom:1px solid #0f3c5f;padding:1px 0;margin:3px auto 2px;width:90%">
+          <span style="${s(3.2)}font-weight:700;color:#0f3c5f;text-transform:uppercase;letter-spacing:0.5px">Skills</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;${s(2.6)};padding:0 4px">
+          ${dummyData.skills.split(" • ").slice(0, 8).map((sk: string) => `<div style="text-align:center">• ${sk}</div>`).join("")}
+        </div>
+      </div>`;
+
+    case "tpl_cre_maria":
+      return `<div style="font-family:Arial,sans-serif;color:#222;line-height:1.25">
+        <div style="background:#2c3e50;padding:6px 8px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+          <div style="flex:1">
+            <div style="${s(6)}font-weight:700">${dummyData.name}</div>
+            <div style="${s(3)}color:#e67e22;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-top:1px">Head of Operations</div>
+            <div style="${s(2.5)}color:#ccc;margin-top:2px;display:flex;gap:4px">${dummyData.contact.split(" • ").slice(0, 3).join(" • ")}</div>
+          </div>
+          <div style="width:14px;height:14px;border-radius:50%;background:#eee;border:1px solid #e67e22;flex-shrink:0;margin-left:4px"></div>
+        </div>
+        <div style="padding:4px 8px">
+          <div style="display:flex;align-items:center;gap:3px;border-bottom:1px solid #e67e22;padding-bottom:1px;margin:3px 0 2px">
+            <span style="${s(3.2)}font-weight:700;text-transform:uppercase;color:#111">Summary</span>
+          </div>
+          <div style="${s(2.8)}color:#444;margin-bottom:3px">${dummyData.summary.slice(0, 100)}…</div>
+          
+          <div style="display:flex;align-items:center;gap:3px;border-bottom:1px solid #e67e22;padding-bottom:1px;margin:3px 0 2px">
+            <span style="${s(3.2)}font-weight:700;text-transform:uppercase;color:#111">Experience</span>
+          </div>
+          ${dummyData.exp.slice(0, 2).map((e: any) => `
+            <div style="margin-bottom:2px;${s(2.8)}">
+              <div style="display:flex;justify-content:space-between;font-weight:bold;color:#111">
+                <span>${e.title}</span>
+                <span style="font-weight:normal;color:#666">${e.date.split(" — ")[1] || e.date}</span>
+              </div>
+              <div style="color:#555;font-style:italic">${e.company}</div>
+            </div>
+          `).join("")}
+          
+          <div style="display:flex;align-items:center;gap:3px;border-bottom:1px solid #e67e22;padding-bottom:1px;margin:3px 0 2px">
+            <span style="${s(3.2)}font-weight:700;text-transform:uppercase;color:#111">Skills</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">
+            ${dummyData.skills.split(" • ").slice(0, 5).map((sk: string) => `
+              <span style="background:#fdf6f0;color:#e67e22;border:0.5px solid #fbe6d5;padding:1px 3px;border-radius:6px;${s(2.5)};font-weight:500">${sk}</span>
+            `).join("")}
+          </div>
+        </div>
+      </div>`;
+
+    case "tpl_cre_lucia":
+      return `<div style="font-family:Georgia,serif;padding:6px 8px;color:#222;line-height:1.25">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #eee;padding-bottom:3px;margin-bottom:3px">
+          <div>
+            <div style="${s(5.5)}font-weight:700;color:#111">${dummyData.name}</div>
+            <div style="${s(3)}color:#555;font-style:italic;margin-top:1px">Director of Strategic Planning</div>
+            <div style="${s(2.5)}color:#666;margin-top:1px">${dummyData.contact.split(" • ").slice(0, 3).join(" | ")}</div>
+          </div>
+          <div style="width:14px;height:14px;border-radius:50%;background:#eee;border:0.5px solid #ddd;flex-shrink:0"></div>
+        </div>
+        
+        <div style="display:flex;gap:6px">
+          <div style="width:60%">
+            <div style="text-align:center;margin:3px 0 2px">
+              <div style="border-top:0.8px solid #8e44ad;border-bottom:0.8px solid #8e44ad;padding:0.5px 0">
+                <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#8e44ad;letter-spacing:0.5px">Profile</span>
+              </div>
+            </div>
+            <div style="${s(2.6)}color:#333;margin-bottom:3px">${dummyData.summary.slice(0, 70)}…</div>
+            
+            <div style="text-align:center;margin:3px 0 2px">
+              <div style="border-top:0.8px solid #8e44ad;border-bottom:0.8px solid #8e44ad;padding:0.5px 0">
+                <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#8e44ad;letter-spacing:0.5px">Experience</span>
+              </div>
+            </div>
+            ${dummyData.exp.slice(0, 2).map((e: any) => `
+              <div style="margin-bottom:2px;${s(2.6)}">
+                <div style="font-weight:bold;color:#111">${e.title}</div>
+                <div style="color:#555;font-style:italic">${e.company}</div>
+              </div>
+            `).join("")}
+          </div>
+          
+          <div style="width:40%">
+            <div style="text-align:center;margin:3px 0 2px">
+              <div style="border-top:0.8px solid #8e44ad;border-bottom:0.8px solid #8e44ad;padding:0.5px 0">
+                <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#8e44ad;letter-spacing:0.5px">Education</span>
+              </div>
+            </div>
+            <div style="${s(2.5)};color:#333">
+              <b>BBA</b><br/>
+              <span style="color:#555">Florida Intl Univ</span>
+            </div>
+            
+            <div style="text-align:center;margin:3px 0 2px">
+              <div style="border-top:0.8px solid #8e44ad;border-bottom:0.8px solid #8e44ad;padding:0.5px 0">
+                <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#8e44ad;letter-spacing:0.5px">Skills</span>
+              </div>
+            </div>
+            <div style="${s(2.5)};color:#333">
+              ${dummyData.skills.split(" • ").slice(0, 4).map((sk: string) => `
+                <div style="border-left:1px solid #8e44ad;padding-left:3px;margin-bottom:1.5px;font-weight:500">${sk}</div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    case "tpl_cre_anna":
+      return `<div style="font-family:Arial,sans-serif;color:#222;line-height:1.25;text-align:center">
+        <div style="background:#f5f3ff;padding:6px 8px;border-bottom:1.5px solid #7c3aed">
+          <div style="width:14px;height:14px;border-radius:50%;background:#eee;border:1px solid #fff;margin:0 auto 2px;box-shadow:0 1px 3px rgba(0,0,0,0.1)"></div>
+          <div style="${s(5.5)}font-weight:700;color:#7c3aed">${dummyData.name}</div>
+          <div style="${s(2.8)}color:#555;text-transform:uppercase;letter-spacing:0.3px">Junior Project Manager</div>
+          <div style="${s(2.5)}color:#666;margin-top:1.5px">${dummyData.contact.split(" • ").slice(0, 3).join(" • ")}</div>
+        </div>
+        <div style="padding:4px 8px">
+          <div style="margin:3px auto;background:#f5f3ff;padding:1px 6px;border-radius:3px;display:inline-block;border-bottom:1px solid #7c3aed">
+            <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#7c3aed">Profile</span>
+          </div>
+          <div style="${s(2.6)}color:#333;margin-bottom:3px">${dummyData.summary.slice(0, 80)}…</div>
+          
+          <div style="margin:3px auto;background:#f5f3ff;padding:1px 6px;border-radius:3px;display:inline-block;border-bottom:1px solid #7c3aed">
+            <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#7c3aed">Experience</span>
+          </div>
+          <div style="text-align:left">
+            ${dummyData.exp.slice(0, 2).map((e: any) => `
+              <div style="margin-bottom:2px;${s(2.6)}">
+                <div style="font-weight:bold;color:#111">${e.title} <span style="font-weight:normal;font-style:italic;color:#555">— ${e.company}</span></div>
+              </div>
+            `).join("")}
+          </div>
+          
+          <div style="margin:3px auto;background:#f5f3ff;padding:1px 6px;border-radius:3px;display:inline-block;border-bottom:1px solid #7c3aed">
+            <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#7c3aed">Skills</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:2px">
+            ${dummyData.skills.split(" • ").slice(0, 5).map((sk: string) => `
+              <span style="background:#f5f3ff;color:#7c3aed;padding:1px 3px;border-radius:3px;border:0.5px dashed #ccc;${s(2.5)}">${sk}</span>
+            `).join("")}
+          </div>
+        </div>
+      </div>`;
+
+    case "tpl_cre_antoine":
+      return `<div style="font-family:Arial,sans-serif;color:#222;line-height:1.25">
+        <div style="background:#e0f2fe;padding:6px 8px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="${s(5.5)}font-weight:700;color:#111">${dummyData.name}</div>
+            <div style="${s(2.8)}color:#0284c7;font-weight:600;margin-top:1px">Consulting Director</div>
+            <div style="${s(2.4)}color:#444;margin-top:1.5px;display:grid;grid-template-columns:1fr 1fr;gap:1px 4px">
+              ${dummyData.contact.split(" • ").slice(0, 4).map((c: string) => `<div>${c.slice(0, 15)}</div>`).join("")}
+            </div>
+          </div>
+          <div style="width:16px;height:16px;border-radius:3px;background:#eee;border:1px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.1);flex-shrink:0"></div>
+        </div>
+        <div style="display:flex;padding:4px 8px;gap:6px">
+          <div style="width:60%">
+            <div style="border-bottom:1px solid #0284c7;padding-bottom:0.5px;margin:3px 0 2px">
+              <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#0284c7">Summary</span>
+            </div>
+            <div style="${s(2.6)}color:#333;margin-bottom:3px">${dummyData.summary.slice(0, 80)}…</div>
+            
+            <div style="border-bottom:1px solid #0284c7;padding-bottom:0.5px;margin:3px 0 2px">
+              <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#0284c7">Experience</span>
+            </div>
+            ${dummyData.exp.slice(0, 2).map((e: any) => `
+              <div style="margin-bottom:2px;${s(2.6)}">
+                <div style="font-weight:bold;color:#111">${e.title}</div>
+                <div style="color:#555;font-style:italic">${e.company}</div>
+              </div>
+            `).join("")}
+          </div>
+          <div style="width:40%">
+            <div style="border-bottom:1px solid #0284c7;padding-bottom:0.5px;margin:3px 0 2px">
+              <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#0284c7">Education</span>
+            </div>
+            <div style="${s(2.5)};color:#333">
+              <b>BBA</b><br/>
+              <span style="color:#555">Florida Intl Univ</span>
+            </div>
+            
+            <div style="border-bottom:1px solid #0284c7;padding-bottom:0.5px;margin:3px 0 2px">
+              <span style="${s(3)}font-weight:700;text-transform:uppercase;color:#0284c7">Skills</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:1.5px;margin-top:2px">
+              ${dummyData.skills.split(" • ").slice(0, 4).map((sk: string) => `
+                <span style="background:#f0f9ff;border:0.5px solid #bae6fd;color:#0369a1;padding:1px 3px;border-radius:2px;${s(2.3)};font-weight:500">${sk}</span>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      </div>`;
+
     default: {
       // Config-driven ATS templates
       if (isATSTemplateId(templateId)) {
