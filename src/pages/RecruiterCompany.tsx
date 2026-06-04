@@ -108,7 +108,7 @@ export default function RecruiterCompany() {
                <Building2 className="w-4 h-4" />
                <span className="text-[9px] font-black uppercase tracking-widest">Company Profile</span>
             </div>
-            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                Company <br /> <span className="text-blue-600">Profile.</span>
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
@@ -119,16 +119,16 @@ export default function RecruiterCompany() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
              <div className="lg:col-span-8">
                 {isEditing ? (
-                <Card className="rounded-[4rem] border border-slate-100 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 space-y-10">
+                <Card className="rounded-[4rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 space-y-10">
                    <div className="space-y-8">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                          <div className="space-y-3">
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
-                            <Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} placeholder="Acme Inc." className="h-20 rounded-[2rem] bg-white border-slate-100 px-8 font-bold text-lg focus:ring-blue-600/10" />
+                            <Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} placeholder="Acme Inc." className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 px-8 font-bold text-lg focus:ring-blue-600/10" />
                          </div>
                          <div className="space-y-3">
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Logo URL</Label>
-                            <Input value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} placeholder="https://..." className="h-20 rounded-[2rem] bg-white border-slate-100 px-8 font-bold focus:ring-blue-600/10" />
+                            <Input value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} placeholder="https://..." className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 px-8 font-bold focus:ring-blue-600/10" />
                          </div>
                       </div>
 
@@ -137,14 +137,14 @@ export default function RecruiterCompany() {
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4 flex items-center gap-2">
                                <Globe className="w-3 h-3" /> Website
                             </Label>
-                            <Input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://example.com" className="h-20 rounded-[2rem] bg-white border-slate-100 px-8 font-bold focus:ring-blue-600/10" />
+                            <Input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://example.com" className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 px-8 font-bold focus:ring-blue-600/10" />
                          </div>
                          <div className="space-y-3">
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4 flex items-center gap-2">
                                <Users className="w-3 h-3" /> Company Size
                             </Label>
                             <Select value={form.company_size} onValueChange={(v) => setForm({ ...form, company_size: v })}>
-                               <SelectTrigger className="h-20 rounded-[2rem] bg-white border-slate-100 px-8 font-bold focus:ring-blue-600/10">
+                               <SelectTrigger className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 px-8 font-bold focus:ring-blue-600/10">
                                   <SelectValue placeholder="Select size" />
                                </SelectTrigger>
                                <SelectContent className="rounded-2xl border-none shadow-2xl">
@@ -157,7 +157,7 @@ export default function RecruiterCompany() {
                       <div className="space-y-3">
                          <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Industry</Label>
                          <Select value={form.industry} onValueChange={(v) => setForm({ ...form, industry: v })}>
-                            <SelectTrigger className="h-20 rounded-[2rem] bg-white border-slate-100 px-8 font-bold focus:ring-blue-600/10">
+                            <SelectTrigger className="h-20 rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 px-8 font-bold focus:ring-blue-600/10">
                                <SelectValue placeholder="Select industry" />
                             </SelectTrigger>
                             <SelectContent className="rounded-2xl border-none shadow-2xl">
@@ -172,7 +172,7 @@ export default function RecruiterCompany() {
                             value={form.description}
                             onChange={(e) => setForm({ ...form, description: e.target.value })}
                             placeholder="Describe your company, its mission, and its culture..."
-                            className="min-h-[120px] md:min-h-[200px] rounded-[2rem] bg-white border-slate-100 p-8 font-medium focus:ring-blue-600/10 text-lg leading-relaxed"
+                            className="min-h-[120px] md:min-h-[200px] rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 p-8 font-medium focus:ring-blue-600/10 text-lg leading-relaxed"
                          />
                       </div>
                    </div>
@@ -190,7 +190,7 @@ export default function RecruiterCompany() {
                    </div>
                 </Card>
                 ) : (
-                   <Card className="rounded-[4rem] border border-slate-100 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 space-y-10">
+                   <Card className="rounded-[4rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 space-y-10">
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
                          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
                             {form.logo_url ? (
@@ -201,11 +201,11 @@ export default function RecruiterCompany() {
                                </div>
                             )}
                             <div className="mt-2">
-                               <h2 className="text-3xl font-black text-slate-900 tracking-tight">{form.company_name}</h2>
+                               <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{form.company_name}</h2>
                                <p className="text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">{form.industry || "No Industry"} <span className="mx-2 opacity-50">•</span> {form.company_size || "No Size"} Employees</p>
                             </div>
                          </div>
-                         <Button onClick={() => setIsEditing(true)} variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 text-blue-600 font-black uppercase tracking-widest text-[10px] w-full sm:w-auto">Edit Profile</Button>
+                         <Button onClick={() => setIsEditing(true)} variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 dark:border-slate-800 text-blue-600 font-black uppercase tracking-widest text-[10px] w-full sm:w-auto">Edit Profile</Button>
                       </div>
                       
                       <div className="pt-8 border-t border-slate-100 space-y-8">
@@ -219,7 +219,7 @@ export default function RecruiterCompany() {
                          </div>
                          <div>
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 block">Company Description</Label>
-                            <p className="text-slate-700 font-medium leading-relaxed whitespace-pre-wrap text-lg bg-slate-50 p-6 rounded-[2rem] border border-slate-100">{form.description || "No description provided."}</p>
+                            <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed whitespace-pre-wrap text-lg bg-slate-50 p-6 rounded-[2rem] border border-slate-100">{form.description || "No description provided."}</p>
                          </div>
                       </div>
                    </Card>
@@ -227,9 +227,9 @@ export default function RecruiterCompany() {
              </div>
 
             <div className="lg:col-span-4 space-y-8">
-               <Card className="rounded-[3rem] border border-slate-100 bg-white p-10 text-slate-900 space-y-6 relative overflow-hidden">
+               <Card className="rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 p-10 text-slate-900 dark:text-white space-y-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-10"><Building2 className="w-24 h-24 text-slate-400" /></div>
-                  <h4 className="text-2xl font-black tracking-tight leading-tight text-slate-900">Company <br /> Details.</h4>
+                  <h4 className="text-2xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">Company <br /> Details.</h4>
                   <p className="text-sm font-medium text-slate-500 leading-relaxed">Your company profile is what candidates see first. Make sure your details are accurate to attract the best talent.</p>
                   <div className="pt-4 flex items-center gap-4">
                      <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
@@ -237,12 +237,12 @@ export default function RecruiterCompany() {
                      </div>
                      <div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Profile Visibility</p>
-                        <p className="text-sm font-bold text-slate-900">Public Profile</p>
+                        <p className="text-sm font-bold text-slate-900 dark:text-white">Public Profile</p>
                      </div>
                   </div>
                </Card>
 
-               <div className="p-10 rounded-[3rem] border border-slate-100 bg-white space-y-6">
+               <div className="p-10 rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 space-y-6">
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Employer Branding</h4>
                   <p className="text-xs text-slate-500 font-medium leading-relaxed">Organizations with a defined identity see a 40% increase in candidate response rates.</p>
                   <Button variant="outline" className="w-full h-14 rounded-2xl border-slate-100 text-blue-600 font-black uppercase tracking-widest text-[9px]">Preview Profile</Button>

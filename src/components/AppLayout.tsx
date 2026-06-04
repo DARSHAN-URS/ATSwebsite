@@ -81,7 +81,7 @@ function SidebarContent({ user, onSignOut, onNavClick }: { user: any; onSignOut:
         </div>
       </div>
 
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto pt-4">
+        <nav className="flex-1 px-4 space-y-1 overflow-y-auto pt-4 scrollbar-hide">
           <div className="px-4 mb-4 flex items-center justify-between">
             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">{t.common?.mainMenu || "Main Menu"}</p>
           </div>

@@ -14,7 +14,7 @@ export default function InterviewPreparation() {
   const featIcons = [<Mic className="h-5 w-5" />, <Brain className="h-5 w-5" />, <Target className="h-5 w-5" />, <BookOpen className="h-5 w-5" />];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead
         title="Interview Preparation — AI Mock Interviews & Question Bank"
         description="Prepare for your next job interview with AI-powered mock interviews, resume-based question generation, STAR method coaching, and readiness scoring. Free interview prep tools."
@@ -47,7 +47,7 @@ export default function InterviewPreparation() {
           <h2 className="font-display text-2xl font-extrabold text-center mb-10">{t.interview.featuresH2}</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {t.interview.features.map((f, i) => (
-              <div key={i} className="rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-xl transition-all">
+              <div key={i} className="rounded-2xl border border-slate-100 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl transition-all">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{featIcons[i]}</div>
                 <h3 className="text-sm font-bold mb-1">{f.title}</h3>
                 <p className="text-sm text-muted-foreground">{f.desc}</p>
@@ -83,7 +83,7 @@ export default function InterviewPreparation() {
           <h2 className="font-display text-2xl font-extrabold text-center mb-8">{t.interview.faqH2}</h2>
           <Accordion type="single" collapsible className="w-full">
             {t.interview.faqs.map((item, i) => (
-              <AccordionItem key={i} value={`faq-${i}`} className="border-none bg-white rounded-2xl px-6 mb-4 shadow-sm">
+              <AccordionItem key={i} value={`faq-${i}`} className="border-none bg-white dark:bg-slate-900 rounded-2xl px-6 mb-4 shadow-sm">
                 <AccordionTrigger className="text-left text-sm font-medium">{item.q}</AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground">{item.a}</AccordionContent>
               </AccordionItem>
@@ -111,7 +111,7 @@ export default function InterviewPreparation() {
         </div>
       </section>
 
-      <footer className="border-t border-slate-100 py-8 text-center bg-white">
+      <footer className="border-t border-slate-100 py-8 text-center bg-white dark:bg-slate-900">
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ATS Pro Resume Builder. <Link to="/privacy" className="underline">{t.nav.privacy}</Link> · <Link to="/terms" className="underline">{t.nav.terms}</Link></p>
       </footer>
 

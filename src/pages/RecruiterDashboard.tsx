@@ -171,11 +171,11 @@ export default function RecruiterDashboard() {
               <ShieldCheck className="w-4 h-4" />
               <span className="text-[9px] font-black uppercase tracking-widest">Dashboard</span>
             </div>
-            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
               Dashboard.
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
-              Welcome back, <span className="text-slate-900 font-black">{recruiterName}</span>. Here is an overview of your recruiting activities.
+              Welcome back, <span className="text-slate-900 dark:text-white font-black">{recruiterName}</span>. Here is an overview of your recruiting activities.
             </p>
           </div>
           <div className="flex gap-4">
@@ -203,13 +203,13 @@ export default function RecruiterDashboard() {
                 { label: "Total Views", value: totalViews, icon: Eye, color: "text-emerald-600", bg: "bg-emerald-50" },
                 { label: "Shortlist Rate", value: totalApps ? `${Math.round((shortlistedCount / totalApps) * 100)}%` : "0%", icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
               ].map((stat, i) => (
-                <Card key={i} className="rounded-[2.5rem] border border-slate-100 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex items-center gap-8 group">
+                <Card key={i} className="rounded-[2.5rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex items-center gap-8 group">
                   <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6", stat.bg, stat.color)}>
                     <stat.icon className="w-8 h-8" />
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
-                    <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+                    <p className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</p>
                   </div>
                 </Card>
               ))}
@@ -221,19 +221,19 @@ export default function RecruiterDashboard() {
               {/* Left Column: Recent Candidates */}
               <div className="lg:col-span-8 space-y-10">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Recent Candidates</h3>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Recent Candidates</h3>
                   <Button variant="ghost" onClick={() => navigate("/recruiter/candidates")} className="p-0 hover:bg-transparent text-[10px] font-black uppercase tracking-widest text-blue-600 flex items-center gap-1">
                     View All <ArrowUpRight className="w-4 h-4" />
                   </Button>
                 </div>
 
                 {candidates.length === 0 ? (
-                  <Card className="rounded-[3rem] border border-slate-100 bg-white p-12 text-center py-20">
+                  <Card className="rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 p-12 text-center py-20">
                     <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                     <p className="text-slate-500 font-medium">No candidates have applied to your jobs yet.</p>
                   </Card>
                 ) : (
-                  <Card className="rounded-[3rem] border border-slate-100 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
+                  <Card className="rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
                     <div className="overflow-x-auto">
                       <Table>
                         <TableHeader className="bg-slate-50/50 border-b border-slate-100">
@@ -257,13 +257,13 @@ export default function RecruiterDashboard() {
                                     {c.display_name[0]}
                                   </div>
                                   <div>
-                                    <p className="text-md font-black text-slate-900 tracking-tight">{c.display_name}</p>
+                                    <p className="text-md font-black text-slate-900 dark:text-white tracking-tight">{c.display_name}</p>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Applied {new Date(c.created_at).toLocaleDateString()}</p>
                                   </div>
                                 </div>
                               </TableCell>
                               <TableCell className="px-8 py-6">
-                                <span className="font-bold text-slate-700">{c.job_title}</span>
+                                <span className="font-bold text-slate-700 dark:text-slate-300">{c.job_title}</span>
                               </TableCell>
                               <TableCell className="px-8 py-6">
                                 <Badge className={cn("rounded-xl px-4 py-1.5 text-[8px] font-black uppercase tracking-widest", c.status === "pending" ? "bg-amber-50 text-amber-600 border border-amber-100" : "bg-emerald-50 text-emerald-600 border border-emerald-100")}>
@@ -290,7 +290,7 @@ export default function RecruiterDashboard() {
               {/* Right Column: Quick Actions */}
               <div className="lg:col-span-4 space-y-10">
                 <div className="border-b border-slate-100 pb-4">
-                  <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Quick Actions</h3>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Quick Actions</h3>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
@@ -302,13 +302,13 @@ export default function RecruiterDashboard() {
                     <Card 
                       key={i} 
                       onClick={() => navigate(cmd.path)}
-                      className="rounded-[2.5rem] border border-slate-100 bg-white p-8 hover:shadow-[0_15px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-start gap-6"
+                      className="rounded-[2.5rem] border border-slate-100 bg-white dark:bg-slate-900 p-8 hover:shadow-[0_15px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-start gap-6"
                     >
                       <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0", cmd.bg, cmd.color)}>
                         <cmd.icon className="w-6 h-6" />
                       </div>
                       <div className="space-y-1 flex-1">
-                        <h4 className="font-black text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors uppercase text-sm">{cmd.label}</h4>
+                        <h4 className="font-black text-slate-900 dark:text-white tracking-tight leading-tight group-hover:text-blue-600 transition-colors uppercase text-sm">{cmd.label}</h4>
                         <p className="text-xs text-slate-400 font-bold">{cmd.desc}</p>
                       </div>
                       <ChevronRight className="w-5 h-5 text-slate-200 group-hover:text-blue-600 group-hover:translate-x-1 transition-all self-center" />
@@ -322,14 +322,14 @@ export default function RecruiterDashboard() {
             {/* Active Jobs Summary */}
             <div className="space-y-10 pt-10">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Active Job Posts</h3>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Active Job Posts</h3>
                 <Button variant="ghost" onClick={() => navigate("/recruiter/jobs")} className="p-0 hover:bg-transparent text-[10px] font-black uppercase tracking-widest text-blue-600 flex items-center gap-1">
                   View All Jobs <ArrowUpRight className="w-4 h-4" />
                 </Button>
               </div>
 
               {jobs.length === 0 ? (
-                <Card className="rounded-[3rem] border border-slate-100 bg-white p-12 text-center py-20">
+                <Card className="rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 p-12 text-center py-20">
                   <Briefcase className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                   <p className="text-slate-500 font-medium">No active jobs. Create a job post to start receiving applications.</p>
                 </Card>
@@ -339,20 +339,20 @@ export default function RecruiterDashboard() {
                     <Card 
                       key={job.id} 
                       onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)}
-                      className="rounded-[3rem] border border-slate-100 bg-white p-8 shadow-[0_10px_35px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.06)] hover:-translate-y-1 cursor-pointer transition-all duration-500 group relative overflow-hidden"
+                      className="rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 p-8 shadow-[0_10px_35px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.06)] hover:-translate-y-1 cursor-pointer transition-all duration-500 group relative overflow-hidden"
                     >
                       <div className="flex justify-between items-start gap-4 mb-6">
                         <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600"><Briefcase className="w-6 h-6" /></div>
-                        <Badge className={cn("rounded-xl px-3 py-1 text-[8px] font-black uppercase tracking-widest", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}>{job.status}</Badge>
+                        <Badge className={cn("rounded-xl px-3 py-1 text-[8px] font-black uppercase tracking-widest", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200 dark:border-slate-800")}>{job.status}</Badge>
                       </div>
                       <div className="space-y-2 mb-6">
-                        <h4 className="font-black text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors uppercase text-lg leading-tight line-clamp-1">{job.title}</h4>
+                        <h4 className="font-black text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 transition-colors uppercase text-lg leading-tight line-clamp-1">{job.title}</h4>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{job.company_name}</p>
                       </div>
                       <div className="flex justify-between items-center pt-6 border-t border-slate-50">
                         <div className="flex items-center gap-1 text-slate-400">
                           <Eye className="w-4 h-4" />
-                          <span className="text-xs font-black text-slate-700">{job.viewCount} views</span>
+                          <span className="text-xs font-black text-slate-700 dark:text-slate-300">{job.viewCount} views</span>
                         </div>
                         <div className="flex items-center gap-1 text-blue-600">
                           <Users className="w-4 h-4" />

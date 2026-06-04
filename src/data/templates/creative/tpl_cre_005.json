@@ -1,28 +1,28 @@
 {
   "template_id": "tpl_cre_005",
-  "template_name": "Creative Edge",
+  "template_name": "Matteo Ricci",
   "category": "Creative",
-  "description": "An asymmetrical-right layout with high density formatting, midnight black backdrop, lime accents, and bold headers.",
+  "description": "Traditional serif layout with two columns and warm orange section dividers.",
   "layout_metadata": {
     "column_count": 2,
-    "sidebar_position": "asymmetrical-right",
-    "structural_alignment": "justified",
-    "information_density": "hyper-dense",
-    "visual_emphasis": "bold-headers",
+    "sidebar_position": "asymmetrical-left",
+    "structural_alignment": "left-aligned",
+    "information_density": "variable",
+    "visual_emphasis": "underlines",
     "typography": {
-      "heading": "FontStack-C5A",
-      "body": "FontStack-C5B",
-      "accent": "FontStack-C5C"
+      "heading": "times",
+      "body": "times",
+      "accent": "times"
     },
     "spacing": {
-      "margin": "12px",
-      "line_height": 1.2,
-      "section_gap": "14px"
+      "margin": "20px",
+      "line_height": 1.35,
+      "section_gap": "22px"
     },
     "color_palette": {
-      "primary": "#0f172a",
-      "secondary": "#84cc16",
-      "text": "#111111",
+      "primary": "#e67e22",
+      "secondary": "#ffffff",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": true,
@@ -30,10 +30,10 @@
   },
   "sections": {
     "order": [
-      "experience",
-      "education",
+      "summary",
       "skills",
-      "summary"
+      "experience",
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 83,
+  "ats_score": 85,
   "suitable_professions": [
-    "Tech Artists",
-    "Digital Designers",
-    "Concept Artists"
+    "Head of Operations",
+    "Product Director",
+    "General Manager"
   ]
 }

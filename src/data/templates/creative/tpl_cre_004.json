@@ -1,18 +1,18 @@
 {
   "template_id": "tpl_cre_004",
-  "template_name": "Design Impact",
+  "template_name": "Catherine Bale",
   "category": "Creative",
-  "description": "A premium right-sidebar layout prioritizing key competencies with center-aligned text and cyan colors to maximize visual punch.",
+  "description": "Modern marketing assistant layout featuring vertical leafy sidebar accent border.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "right",
-    "structural_alignment": "center-aligned",
+    "column_count": 2,
+    "sidebar_position": "left-bordered",
+    "structural_alignment": "left-aligned",
     "information_density": "spacious",
-    "visual_emphasis": "timeline",
+    "visual_emphasis": "underlines",
     "typography": {
-      "heading": "FontStack-C4A",
-      "body": "FontStack-C4B",
-      "accent": "FontStack-C4C"
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
     },
     "spacing": {
       "margin": "22px",
@@ -20,9 +20,9 @@
       "section_gap": "26px"
     },
     "color_palette": {
-      "primary": "#0891b2",
-      "secondary": "#0d9488",
-      "text": "#111111",
+      "primary": "#2e7d32",
+      "secondary": "#ffffff",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": true,
@@ -31,9 +31,9 @@
   "sections": {
     "order": [
       "summary",
-      "skills",
       "experience",
-      "education"
+      "education",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 84,
+  "ats_score": 82,
   "suitable_professions": [
-    "Design Consultants",
-    "Architects",
-    "UI/UX Designers"
+    "Marketing Assistant",
+    "Creative Director",
+    "Content Creator"
   ]
 }

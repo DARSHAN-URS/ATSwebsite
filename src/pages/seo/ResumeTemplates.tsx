@@ -20,7 +20,7 @@ export default function ResumeTemplates() {
   const t = seoTranslations[locale];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead
         title="ATS-Friendly Resume Templates — Free Professional Layouts"
         description="Browse 8+ free ATS-friendly resume templates designed to pass applicant tracking systems. Professional layouts for engineers, freshers, seniors, and career changers."
@@ -40,10 +40,10 @@ export default function ResumeTemplates() {
                  </div>
                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">{t.tpl.tag}</span>
               </motion.div>
-              <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
+              <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.8] uppercase">
                  Layout <br /> <span className="text-blue-600">Dynamics.</span>
               </h1>
-              <p className="text-xl text-slate-700 font-medium max-w-xl leading-relaxed">
+              <p className="text-xl text-slate-700 dark:text-slate-300 font-medium max-w-xl leading-relaxed">
                  {t.tpl.subtitle}
               </p>
            </div>
@@ -52,7 +52,7 @@ export default function ResumeTemplates() {
         {/* Template Grid */}
         <section className="space-y-16">
            <div className="flex items-center justify-between border-b border-slate-100 pb-8">
-              <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">{t.tpl.browseH2}</h2>
+              <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">{t.tpl.browseH2}</h2>
               <div className="flex items-center gap-3">
                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Global Library v2.4</span>
@@ -69,11 +69,11 @@ export default function ResumeTemplates() {
                    viewport={{ once: true }}
                >
                   <Card className="group relative rounded-[3rem] border-none bg-slate-50 p-10 space-y-8 hover:bg-white transition-all duration-500 hover:shadow-3xl hover:-translate-y-4">
-                     <div className="aspect-[595/842] rounded-3xl bg-white border border-slate-100 overflow-hidden relative shadow-inner group/img pointer-events-none">
+                     <div className="aspect-[595/842] rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 overflow-hidden relative shadow-inner group/img pointer-events-none">
                         <TemplateThumbnail templateId={tp.id} />
                         <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors" />
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                           <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
+                           <div className="w-20 h-20 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center text-blue-600 shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
                               <Sparkles className="w-8 h-8" />
                            </div>
                         </div>
@@ -81,7 +81,7 @@ export default function ResumeTemplates() {
 
                      <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                           <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">{tp.name}</h3>
+                           <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.name}</h3>
                            <Badge className="bg-blue-600/10 text-blue-600 border-none text-[9px] font-black uppercase tracking-widest px-3">
                               {tp.category || "General"}
                            </Badge>
@@ -119,7 +119,7 @@ export default function ResumeTemplates() {
            </Card>
 
            <div className="space-y-12 py-10">
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">{t.tpl.chooseH2}</h2>
+              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">{t.tpl.chooseH2}</h2>
               <div className="space-y-8">
                  {t.tpl.chooseItems.map((item, i) => (
                     <div key={i} className="flex gap-6 group">

@@ -53,7 +53,7 @@ export default function ResetPassword() {
 
   if (!isRecovery) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col items-center justify-center p-8 text-center font-sans">
         <div className="space-y-6 max-w-md">
            <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-600 mx-auto">
               <ShieldCheck className="w-8 h-8 opacity-20" />
@@ -103,7 +103,7 @@ export default function ResetPassword() {
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{mt.newPassword}</Label>
                     <div className="relative">
-                       <Input id="new-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="h-14 rounded-2xl bg-white border-slate-100 font-bold px-6 pr-12 focus-visible:ring-blue-600" />
+                       <Input id="new-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="h-14 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 pr-12 focus-visible:ring-blue-600" />
                        <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors" onClick={() => setShowPassword(!showPassword)}>
                           {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                        </button>
@@ -117,7 +117,7 @@ export default function ResetPassword() {
                  
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{mt.confirmPassword}</Label>
-                    <Input id="confirm-password" type={showPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="h-14 rounded-2xl bg-white border-slate-100 font-bold px-6 focus-visible:ring-blue-600" />
+                    <Input id="confirm-password" type={showPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="h-14 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 focus-visible:ring-blue-600" />
                     {confirmPassword && (
                        <div className="pt-1">
                           <Requirement met={passwordsMatch} text={passwordsMatch ? mt.match : mt.noMatch} />

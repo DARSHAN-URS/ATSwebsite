@@ -1,18 +1,18 @@
 {
-  "template_id": "tpl_min_002",
-  "template_name": "Pure Professional",
-  "category": "Minimalist",
-  "description": "A refined left-sidebar structure combining standard information density and distinct bordered separations.",
+  "template_id": "ats-classic-serif",
+  "template_name": "ATS Classic Serif",
+  "category": "ATS Optimized",
+  "description": "Traditional centered layout with elegant serif typography and horizontal dividers.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "left",
-    "structural_alignment": "justified",
+    "column_count": 1,
+    "sidebar_position": "none",
+    "structural_alignment": "centered",
     "information_density": "standard",
     "visual_emphasis": "borders",
     "typography": {
-      "heading": "FontStack-M2A",
-      "body": "FontStack-M2B",
-      "accent": "FontStack-M2C"
+      "heading": "times",
+      "body": "times",
+      "accent": "times"
     },
     "spacing": {
       "margin": "20px",
@@ -20,8 +20,8 @@
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#1e293b",
-      "secondary": "#334155",
+      "primary": "#111111",
+      "secondary": "#4a5568",
       "text": "#111111",
       "background": "#ffffff"
     },
@@ -31,9 +31,9 @@
   "sections": {
     "order": [
       "summary",
-      "skills",
       "experience",
-      "education"
+      "education",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 93,
+  "ats_score": 100,
   "suitable_professions": [
     "Corporate Roles",
     "Finance",
-    "Legal"
+    "Management"
   ]
 }

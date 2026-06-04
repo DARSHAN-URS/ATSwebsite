@@ -112,7 +112,7 @@ export default function RecruiterAnalytics() {
                <BarChart3 className="w-4 h-4" />
                <span className="text-[9px] font-black uppercase tracking-widest">Analytics Dashboard</span>
             </div>
-            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                Job <br /> <span className="text-blue-600">Analytics.</span>
             </h1>
             <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
@@ -126,12 +126,12 @@ export default function RecruiterAnalytics() {
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Analytics Data</p>
             </div>
          ) : analytics.length === 0 ? (
-            <Card className="rounded-[4rem] border border-slate-200 bg-white py-32 text-center space-y-8">
+            <Card className="rounded-[4rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-32 text-center space-y-8">
                <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-200">
                   <BarChart3 className="w-10 h-10" />
                </div>
                <div className="space-y-2">
-                  <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">No Analytics Data</h3>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">No Analytics Data</h3>
                   <p className="text-slate-500 font-medium max-w-sm mx-auto">No data available. Post a new job to start gathering analytics.</p>
                </div>
             </Card>
@@ -144,12 +144,12 @@ export default function RecruiterAnalytics() {
                      { label: "Active Jobs", value: activeJobs, icon: Briefcase, color: "text-emerald-600", bg: "bg-emerald-50" },
                      { label: "Average Views/Job", value: analytics.length ? Math.round(totalViews / analytics.length) : 0, icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
                   ].map((s, i) => (
-                     <Card key={i} className="rounded-[2.5rem] border border-slate-100 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex flex-col items-center text-center space-y-4 group">
+                     <Card key={i} className="rounded-[2.5rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-10 flex flex-col items-center text-center space-y-4 group">
                         <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110", s.bg, s.color)}>
                            <s.icon className="w-6 h-6" />
                         </div>
                         <div className="space-y-1">
-                           <p className="text-3xl font-black text-slate-900 tracking-tight">{s.value}</p>
+                           <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{s.value}</p>
                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
                         </div>
                      </Card>
@@ -157,9 +157,9 @@ export default function RecruiterAnalytics() {
                </div>
 
                <div className="grid gap-12 md:grid-cols-2">
-                  <Card className="rounded-[3.5rem] border border-slate-100 bg-white shadow-[0_25px_60px_rgba(0,0,0,0.03)] p-12 space-y-10">
+                  <Card className="rounded-[3.5rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_25px_60px_rgba(0,0,0,0.03)] p-12 space-y-10">
                      <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Job Performance</h3>
+                        <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Job Performance</h3>
                         <div className="flex gap-2">
                            <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-600" /><span className="text-[9px] font-black uppercase text-slate-400">Views</span></div>
                            <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-300" /><span className="text-[9px] font-black uppercase text-slate-400">Apps</span></div>
@@ -179,8 +179,8 @@ export default function RecruiterAnalytics() {
                      </div>
                   </Card>
 
-                  <Card className="rounded-[3.5rem] border border-slate-100 bg-white shadow-[0_25px_60px_rgba(0,0,0,0.03)] p-12 space-y-10">
-                     <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight px-2 text-center md:text-left">Pipeline Status</h3>
+                  <Card className="rounded-[3.5rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_25px_60px_rgba(0,0,0,0.03)] p-12 space-y-10">
+                     <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight px-2 text-center md:text-left">Pipeline Status</h3>
                      <div className="h-[300px] flex items-center justify-center">
                         <ResponsiveContainer width="100%" height="100%">
                            <PieChart>
@@ -196,7 +196,7 @@ export default function RecruiterAnalytics() {
                            {pieData.map((d, i) => (
                               <div key={i} className="flex items-center gap-3">
                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: STATUS_COLORS[d.name] || '#e2e8f0' }} />
-                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">{d.name} <span className="text-slate-900 ml-2">{d.value}</span></p>
+                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">{d.name} <span className="text-slate-900 dark:text-white ml-2">{d.value}</span></p>
                               </div>
                            ))}
                         </div>
@@ -206,26 +206,26 @@ export default function RecruiterAnalytics() {
 
                <div className="space-y-10">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-6">
-                     <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">Job Postings</h2>
+                     <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Job Postings</h2>
                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Status</p>
                   </div>
                   <div className="grid grid-cols-1 gap-6">
                      {analytics.map((job) => (
-                        <Card key={job.id} className="rounded-[2.5rem] border border-slate-100 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.02)] p-8 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300">
+                        <Card key={job.id} className="rounded-[2.5rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.02)] p-8 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300">
                            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                               <div className="space-y-1">
-                                 <p className="text-xl font-black text-slate-900 tracking-tight">{job.title}</p>
+                                 <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{job.title}</p>
                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{job.company_name} <span className="mx-2 opacity-30">•</span> {new Date(job.created_at).toLocaleDateString()}</p>
                               </div>
                               <div className="flex flex-wrap items-center gap-8">
-                                 <Badge className={cn("rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}>{job.status}</Badge>
+                                 <Badge className={cn("rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200 dark:border-slate-800")}>{job.status}</Badge>
                                  <div className="flex items-center gap-10">
                                     <div className="text-center">
-                                       <p className="text-lg font-black text-slate-900">{job.views}</p>
+                                       <p className="text-lg font-black text-slate-900 dark:text-white">{job.views}</p>
                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Views</p>
                                     </div>
                                     <div className="text-center">
-                                       <p className="text-lg font-black text-slate-900">{job.applications}</p>
+                                       <p className="text-lg font-black text-slate-900 dark:text-white">{job.applications}</p>
                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Apps</p>
                                     </div>
                                  </div>

@@ -44,7 +44,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
   const ALL_CATEGORIES = ["All", ...Array.from(new Set(SEED_ARTICLES.map((a) => a.category)))];
 
   return (
-    <div className={cn("min-h-screen font-sans", !isInternal ? "bg-white" : "bg-transparent")}>
+    <div className={cn("min-h-screen font-sans", !isInternal ? "bg-white dark:bg-slate-900" : "bg-transparent")}>
       <SEOHead title="Career Blog — ResumePro" description="Expert career advice on ATS resumes, interview preparation, and job search strategies." />
 
       {!isInternal && <Navbar />}
@@ -59,14 +59,14 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
                <Sparkles className="w-4 h-4 text-primary" />
                <span className="text-[10px] font-black uppercase tracking-widest text-primary">Insider Insights</span>
             </motion.div>
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 tracking-tight">
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tight">
                Master the <span className="text-primary">market.</span>
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-slate-500 font-medium max-w-2xl mx-auto">
                Expert-written guides on landing interviews, negotiating salary, and building an elite professional brand.
             </motion.p>
 
-            <form onSubmit={(e) => { e.preventDefault(); setSearch(searchInput); }} className="max-w-xl mx-auto flex gap-3 p-2 bg-slate-100 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5 mt-12">
+            <form onSubmit={(e) => { e.preventDefault(); setSearch(searchInput); }} className="max-w-xl mx-auto flex gap-3 p-2 bg-slate-100 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-900/5 mt-12">
                <div className="flex-1 relative">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <Input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search articles..." className="pl-12 bg-transparent border-none focus-visible:ring-0 h-12 font-medium" />
@@ -85,7 +85,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
                  onClick={() => setActiveCategory(cat)}
                  className={cn(
                    "px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
-                   activeCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white text-slate-400 hover:text-slate-600"
+                   activeCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white dark:bg-slate-900 text-slate-400 hover:text-slate-600"
                  )}
                >
                   {cat}
@@ -107,7 +107,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
                   <Link to={isInternal ? `/dashboard/blog/${article.slug}` : `/blog/${article.slug}`} className="group block h-full">
                      <Card className="rounded-[4rem] border-none bg-slate-50/50 shadow-sm hover:shadow-3xl hover:bg-white transition-all overflow-hidden h-full flex flex-col group-hover:-translate-y-4">
                         <div className="p-4">
-                           <div className="aspect-[16/10] bg-white relative overflow-hidden rounded-[3rem]">
+                           <div className="aspect-[16/10] bg-white dark:bg-slate-900 relative overflow-hidden rounded-[3rem]">
                               <img 
                                 src={`https://images.unsplash.com/photo-${i % 2 === 0 ? '1454165833767-13a6cdba79a7' : '1504384308090-c894fdcc538d'}?q=80&w=800&auto=format&fit=crop`}
                                 alt={article.title}
@@ -115,7 +115,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-60" />
                               <div className="absolute bottom-6 left-6">
-                                 <Badge className={cn("rounded-full px-5 py-2 font-black text-[9px] uppercase tracking-[0.2em] border-none shadow-xl", CATEGORY_COLORS[article.category] || "bg-white text-primary")}>
+                                 <Badge className={cn("rounded-full px-5 py-2 font-black text-[9px] uppercase tracking-[0.2em] border-none shadow-xl", CATEGORY_COLORS[article.category] || "bg-white dark:bg-slate-900 text-primary")}>
                                     {article.category}
                                  </Badge>
                               </div>
@@ -126,7 +126,7 @@ export default function Blog({ isInternal = false }: { isInternal?: boolean }) {
                               <span className="flex items-center gap-2"><Calendar className="w-3.5 h-3.5" /> {new Date(article.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                               <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5" /> {article.readTime}</span>
                            </div>
-                           <h3 className="text-2xl font-black text-slate-900 leading-[1.2] tracking-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
+                           <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-[1.2] tracking-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
                               {article.title}
                            </h3>
                            <p className="text-slate-500 font-medium line-clamp-3 text-base leading-relaxed">

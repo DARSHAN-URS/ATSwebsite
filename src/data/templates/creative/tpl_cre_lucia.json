@@ -1,28 +1,28 @@
 {
-  "template_id": "ats-pro-modern",
-  "template_name": "ATS Pro Modern",
-  "category": "ATS Optimized",
-  "description": "Modern professional look with deep teal headers, tighter spacing, and contemporary layout.",
+  "template_id": "tpl_cre_lucia",
+  "template_name": "Lucía Navarro Martín",
+  "category": "Creative",
+  "description": "Two-column layout with left-aligned header and centered/framed section lines.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "none",
+    "column_count": 2,
+    "sidebar_position": "asymmetrical-right",
     "structural_alignment": "left-aligned",
-    "information_density": "airy",
-    "visual_emphasis": "background-blocks",
+    "information_density": "dense",
+    "visual_emphasis": "borders",
     "typography": {
       "heading": "helvetica",
       "body": "helvetica",
       "accent": "helvetica"
     },
     "spacing": {
-      "margin": "18px",
-      "line_height": 1.12,
+      "margin": "16px",
+      "line_height": 1.25,
       "section_gap": "18px"
     },
     "color_palette": {
-      "primary": "#0f766e",
-      "secondary": "#115e59",
-      "text": "#111111",
+      "primary": "#333333",
+      "secondary": "#555555",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": false,
@@ -31,9 +31,9 @@
   "sections": {
     "order": [
       "summary",
-      "skills",
       "experience",
-      "education"
+      "education",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 100,
+  "ats_score": 85,
   "suitable_professions": [
-    "Technology",
-    "Startups",
-    "Product Management"
+    "Director of Strategic Planning",
+    "Business Analyst",
+    "Strategy Manager"
   ]
 }

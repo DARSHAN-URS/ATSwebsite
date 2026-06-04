@@ -14,7 +14,7 @@ export default function SoftwareEngineerResume() {
   const catIcons = [<Code className="h-5 w-5" />, <Globe className="h-5 w-5" />, <Cpu className="h-5 w-5" />, <Database className="h-5 w-5" />];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-sans selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead
         title="Software Engineer Resume Builder — ATS-Optimized for Tech"
         description="Build an ATS-optimized software engineer resume with our free builder. Technical resume templates with grouped skills, project sections, and engineering-focused formatting."
@@ -36,7 +36,7 @@ export default function SoftwareEngineerResume() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">{t.swe.tag}</p>
-          <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter uppercase leading-[0.85]">{t.swe.h1}</h1>
+          <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-[0.85]">{t.swe.h1}</h1>
           <p className="mt-6 text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">{t.swe.subtitle}</p>
           <Button size="lg" className="gap-2 mt-8" asChild><Link to="/">{t.swe.ctaBtn} <ArrowRight className="h-4 w-4" /></Link></Button>
         </div>
@@ -44,11 +44,11 @@ export default function SoftwareEngineerResume() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-5xl px-4">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-8 text-center uppercase tracking-tight">{t.swe.skillsH2}</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-8 text-center uppercase tracking-tight">{t.swe.skillsH2}</h2>
           <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-8">{t.swe.skillsSub}</p>
           <div className="grid md:grid-cols-4 gap-4">
             {t.swe.skillCats.map((cat, i) => (
-              <div key={i} className="rounded-[2.5rem] border border-slate-100 bg-white p-8 space-y-4 hover:shadow-xl transition-all group">
+              <div key={i} className="rounded-[2.5rem] border border-slate-100 bg-white dark:bg-slate-900 p-8 space-y-4 hover:shadow-xl transition-all group">
                 <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{catIcons[i]}</div>
                 <h3 className="text-sm font-bold mb-1">{cat.title}</h3>
                 <p className="text-xs text-muted-foreground">{cat.examples}</p>
@@ -60,7 +60,7 @@ export default function SoftwareEngineerResume() {
 
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-12 uppercase tracking-tight">{t.swe.howH2}</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-12 uppercase tracking-tight">{t.swe.howH2}</h2>
           <div className="space-y-4 text-sm text-muted-foreground">
             <p>{t.swe.howIntro}</p>
             {t.swe.howSections.map((s, i) => (
@@ -75,7 +75,7 @@ export default function SoftwareEngineerResume() {
 
       <section className="border-t border-border/60 bg-secondary/30 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-12 uppercase tracking-tight">{t.swe.checklistH2}</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-12 uppercase tracking-tight">{t.swe.checklistH2}</h2>
           <ul className="space-y-3">
             {t.swe.checklist.map((item, i) => (
               <li key={i} className="flex gap-3 text-sm text-muted-foreground">
@@ -89,7 +89,7 @@ export default function SoftwareEngineerResume() {
 
       <section className="py-16">
         <div className="mx-auto max-w-3xl px-4">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 text-center mb-16 uppercase tracking-tight">{t.swe.faqH2}</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white text-center mb-16 uppercase tracking-tight">{t.swe.faqH2}</h2>
           <Accordion type="single" collapsible className="w-full">
             {t.swe.faqs.map((item, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
@@ -120,7 +120,7 @@ export default function SoftwareEngineerResume() {
         </div>
       </section>
 
-      <footer className="border-t border-slate-100 py-12 text-center bg-white">
+      <footer className="border-t border-slate-100 py-12 text-center bg-white dark:bg-slate-900">
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ATS Pro Resume Builder. <Link to="/privacy" className="underline">{t.nav.privacy}</Link> · <Link to="/terms" className="underline">{t.nav.terms}</Link></p>
       </footer>
     </div>

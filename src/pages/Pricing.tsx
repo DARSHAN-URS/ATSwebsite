@@ -144,7 +144,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
   ];
 
   return (
-    <div className={cn("min-h-screen text-slate-900 font-sans", !isInternal && "bg-white")}>
+    <div className={cn("min-h-screen text-slate-900 dark:text-white font-sans", !isInternal && "bg-white dark:bg-slate-900")}>
       <SEOHead title={`${tp.title} — ResumePro`} description={tp.subtitle} />
       
       {!isInternal && <Navbar />}
@@ -155,7 +155,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
               <Sparkles className="w-3.5 h-3.5" />
               <span className="text-[10px] font-black uppercase tracking-widest">{tp.premiumIntelligenceAccess}</span>
            </div>
-           <h1 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none uppercase">
+           <h1 className="text-3xl md:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">
               {tl.archHeroTitle.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.heroHighlight || "Career."}</span>
            </h1>
            <p className="text-slate-500 font-medium text-lg leading-relaxed">{tp.subtitle}</p>
@@ -195,7 +195,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                             {plan.highlight && <Zap className="w-8 h-8 text-blue-600" />}
                           </div>
                           <div className="flex items-end gap-3">
-                            <h3 className="text-2xl md:text-4xl font-black tracking-tight uppercase leading-none text-slate-900">{plan.name === "FREE" ? tp.freeName : `${pricingConfig.symbol}${plan.price}`}</h3>
+                            <h3 className="text-2xl md:text-4xl font-black tracking-tight uppercase leading-none text-slate-900 dark:text-white">{plan.name === "FREE" ? tp.freeName : `${pricingConfig.symbol}${plan.price}`}</h3>
                             {plan.originalPrice && (
                               <p className="text-sm font-bold text-slate-400 line-through pb-1">{pricingConfig.symbol}{plan.originalPrice}</p>
                             )}
@@ -231,7 +231,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                                 </div>
                                 <span className={cn(
                                    "text-[11px] font-bold tracking-tight uppercase tracking-wider flex-1",
-                                   f.included ? "text-slate-700" : "text-slate-400 line-through"
+                                   f.included ? "text-slate-700 dark:text-slate-300" : "text-slate-400 line-through"
                                 )}>{f.text}</span>
                                 {/* Free plan: show upgrade link on excluded features */}
                                 {!f.included && !plan.highlight && (
@@ -268,7 +268,7 @@ export default function Pricing({ isInternal = false }: { isInternal?: boolean }
                              "w-full h-16 rounded-2xl font-black uppercase tracking-widest text-[11px] gap-3 transition-all",
                              plan.highlight 
                                 ? "bg-blue-600 text-white hover:bg-blue-700 shadow-xl shadow-blue-600/20" 
-                                : "bg-white border-2 border-blue-600/20 text-blue-600 hover:bg-blue-50"
+                                : "bg-white dark:bg-slate-900 border-2 border-blue-600/20 text-blue-600 hover:bg-blue-50"
                           )}
                        >
                           {loading === plan.name.toLowerCase() ? <Loader2 className="w-4 h-4 animate-spin" /> : null}

@@ -1,18 +1,18 @@
 {
   "template_id": "tpl_cre_003",
-  "template_name": "Portfolio Pro",
+  "template_name": "Rohan K. Patel",
   "category": "Creative",
-  "description": "An authoritative asymmetrical-left layout featuring high density and bordered layouts with orange branding, optimized for visual portfolios.",
+  "description": "Sleek sans-serif blue-themed engineering template with section highlights.",
   "layout_metadata": {
-    "column_count": 2,
-    "sidebar_position": "asymmetrical-left",
+    "column_count": 1,
+    "sidebar_position": "none",
     "structural_alignment": "left-aligned",
     "information_density": "dense",
-    "visual_emphasis": "borders",
+    "visual_emphasis": "color-blocks",
     "typography": {
-      "heading": "FontStack-C3A",
-      "body": "FontStack-C3B",
-      "accent": "FontStack-C3C"
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
     },
     "spacing": {
       "margin": "15px",
@@ -20,8 +20,8 @@
       "section_gap": "18px"
     },
     "color_palette": {
-      "primary": "#ea580c",
-      "secondary": "#d97706",
+      "primary": "#0a3a60",
+      "secondary": "#f0f4f8",
       "text": "#111111",
       "background": "#ffffff"
     },
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 87,
+  "ats_score": 90,
   "suitable_professions": [
-    "Fine Arts",
-    "Exhibition Designers",
-    "Art Portfolio Directors"
+    "Project Engineer",
+    "Software Developer",
+    "Technical Specialist"
   ]
 }

@@ -1,39 +1,39 @@
 {
-  "template_id": "ats-pro-classic",
-  "template_name": "ATS Pro Classic",
-  "category": "ATS Optimized",
-  "description": "A clean, highly readable traditional single-column format optimized for enterprise and corporate roles.",
+  "template_id": "tpl_cre_antoine",
+  "template_name": "Antoine Delorme",
+  "category": "Creative",
+  "description": "Two-column layout with light blue header banner containing photo and grid contact.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "none",
+    "column_count": 2,
+    "sidebar_position": "left",
     "structural_alignment": "left-aligned",
     "information_density": "standard",
-    "visual_emphasis": "borders",
+    "visual_emphasis": "underlines",
     "typography": {
       "heading": "helvetica",
       "body": "helvetica",
       "accent": "helvetica"
     },
     "spacing": {
-      "margin": "20px",
+      "margin": "18px",
       "line_height": 1.3,
-      "section_gap": "20px"
+      "section_gap": "22px"
     },
     "color_palette": {
-      "primary": "#1a365d",
-      "secondary": "#4a5568",
-      "text": "#111111",
+      "primary": "#3b82f6",
+      "secondary": "#e3edf7",
+      "text": "#222222",
       "background": "#ffffff"
     },
-    "has_photo": false,
+    "has_photo": true,
     "responsive_behavior": "stack-on-mobile"
   },
   "sections": {
     "order": [
       "summary",
+      "skills",
       "experience",
-      "education",
-      "skills"
+      "education"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 100,
+  "ats_score": 83,
   "suitable_professions": [
-    "Corporate Roles",
-    "Finance",
-    "General Use"
+    "Consulting Director",
+    "Executive Consultant",
+    "Advisory Leader"
   ]
 }

@@ -1,14 +1,14 @@
 {
-  "template_id": "ats-pro-elite",
-  "template_name": "ATS Pro Elite",
+  "template_id": "ats-executive-dots",
+  "template_name": "ATS Executive Serif",
   "category": "ATS Optimized",
-  "description": "Features a distinctive gold accent theme with experience front and center, designed to capture attention.",
+  "description": "Executive centered format featuring serif headings and inline language proficiency ratings.",
   "layout_metadata": {
     "column_count": 1,
     "sidebar_position": "none",
-    "structural_alignment": "left-aligned",
-    "information_density": "hyper-dense",
-    "visual_emphasis": "color-blocks",
+    "structural_alignment": "centered",
+    "information_density": "standard",
+    "visual_emphasis": "underlines",
     "typography": {
       "heading": "times",
       "body": "times",
@@ -16,12 +16,12 @@
     },
     "spacing": {
       "margin": "20px",
-      "line_height": 1.25,
+      "line_height": 1.3,
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#854d0e",
-      "secondary": "#a16207",
+      "primary": "#111111",
+      "secondary": "#555555",
       "text": "#111111",
       "background": "#ffffff"
     },
@@ -30,10 +30,10 @@
   },
   "sections": {
     "order": [
+      "summary",
       "experience",
-      "skills",
       "education",
-      "summary"
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -45,8 +45,8 @@
   },
   "ats_score": 100,
   "suitable_professions": [
-    "Consulting",
-    "Legal",
-    "Senior Specialists"
+    "Product Management",
+    "Project Management",
+    "Strategy & Operations"
   ]
 }

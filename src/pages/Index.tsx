@@ -134,12 +134,12 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white overflow-x-hidden font-sans selection:bg-blue-600/10 selection:text-blue-600">
       <SEOHead title={`ResumePro — ${t.landing.archHeroTitle}`} description={t.landing.archHeroDesc} />
       
       <Navbar />
 
-      <section className="relative pt-24 pb-16 md:pt-40 md:pb-20 overflow-hidden bg-white">
+      <section className="relative pt-24 pb-16 md:pt-40 md:pb-20 overflow-hidden bg-white dark:bg-slate-900">
           <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[5rem] md:rounded-bl-[10rem] -z-10 translate-x-1/4" />
           
           <div className="container mx-auto px-4 md:px-8 relative z-10">
@@ -151,7 +151,7 @@ const Index = () => {
                         initial={{ opacity: 0, y: 30 }} 
                         animate={{ opacity: 1, y: 0 }} 
                         transition={{ delay: 0.1 }} 
-                        className="text-4xl md:text-6xl lg:text-[5.5rem] font-black text-slate-900 tracking-tighter leading-[0.9] md:leading-[1.1]"
+                        className="text-4xl md:text-6xl lg:text-[5.5rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9] md:leading-[1.1]"
                       >
                          {t.landing.archHeroTitle.split(" ").slice(0, 2).join(" ")} <br /> <span className="text-blue-600">{t.landing.archHeroTitle.split(" ").slice(2).join(" ")}</span>
                       </motion.h1>
@@ -159,7 +159,7 @@ const Index = () => {
                         initial={{ opacity: 0, y: 20 }} 
                         animate={{ opacity: 1, y: 0 }} 
                         transition={{ delay: 0.2 }} 
-                        className="text-lg md:text-2xl text-slate-700 font-medium max-w-xl leading-relaxed"
+                        className="text-lg md:text-2xl text-slate-700 dark:text-slate-300 font-medium max-w-xl leading-relaxed"
                       >
                          {t.landing.archHeroDesc}
                       </motion.p>
@@ -174,7 +174,7 @@ const Index = () => {
                       <Button asChild size="lg" className="w-full sm:w-auto h-16 sm:h-20 px-8 sm:px-12 rounded-2xl sm:rounded-[2rem] bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] sm:text-xs gap-4 shadow-2xl shadow-blue-600/30 hover:scale-105 transition-all">
                          <Link to="/auth">{t.landing.startBuilding} <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" /></Link>
                       </Button>
-                      <Button asChild variant="ghost" size="lg" className="w-full sm:w-auto h-16 sm:h-20 px-8 sm:px-12 rounded-2xl sm:rounded-[2rem] border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-[10px] sm:text-xs gap-4 hover:bg-slate-50 transition-all">
+                      <Button asChild variant="ghost" size="lg" className="w-full sm:w-auto h-16 sm:h-20 px-8 sm:px-12 rounded-2xl sm:rounded-[2rem] border border-slate-100 text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] sm:text-xs gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all">
                          <Link to="/resume-templates">{t.landing.seeTemplates}</Link>
                       </Button>
                    </motion.div>
@@ -182,7 +182,7 @@ const Index = () => {
                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 pt-10 md:pt-16 border-t border-slate-100">
                       {stats.map((s, i) => (
                         <div key={i} className="space-y-1 md:space-y-2">
-                           <p className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{s.value}</p>
+                           <p className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">{s.value}</p>
                            <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-500">{s.label}</p>
                         </div>
                       ))}
@@ -198,7 +198,7 @@ const Index = () => {
                      className="relative z-10 w-full"
                    >
                       <div className="absolute inset-0 bg-blue-600/20 blur-[150px] rounded-full scale-150" />
-                      <div className="relative rounded-[4rem] border-8 border-white bg-white shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
+                      <div className="relative rounded-[4rem] border-8 border-white bg-white dark:bg-slate-900 shadow-[0_50px_100px_rgba(0,0,0,0.12)] overflow-hidden group">
                          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent pointer-events-none" />
                          <img 
                            src="/images/hero_editor_mockup_v2.webp" 
@@ -211,14 +211,14 @@ const Index = () => {
                       <motion.div 
                         animate={{ y: [0, -20, 0] }} 
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute left-0 -bottom-4 md:-left-12 md:bottom-20 p-4 md:p-8 bg-white rounded-2xl md:rounded-[2.5rem] shadow-3xl border border-slate-50 z-20 space-y-2 md:space-y-4 scale-75 md:scale-100 origin-bottom-left"
+                        className="absolute left-0 -bottom-4 md:-left-12 md:bottom-20 p-4 md:p-8 bg-white dark:bg-slate-900 rounded-2xl md:rounded-[2.5rem] shadow-3xl border border-slate-50 z-20 space-y-2 md:space-y-4 scale-75 md:scale-100 origin-bottom-left"
                       >
                          <div className="w-8 h-8 md:w-12 md:h-12 bg-blue-50 rounded-xl md:rounded-2xl flex items-center justify-center text-blue-600">
                             <Sparkles className="w-4 h-4 md:w-6 md:h-6" />
                          </div>
                          <div>
                             <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-slate-400">ATS Rating</p>
-                            <p className="text-lg md:text-2xl font-black text-slate-900">98.2%</p>
+                            <p className="text-lg md:text-2xl font-black text-slate-900 dark:text-white">98.2%</p>
                          </div>
                       </motion.div>
                    </motion.div>
@@ -228,19 +228,19 @@ const Index = () => {
       </section>
 
       {/* Mission Partners */}
-      <section className="py-4 md:py-8 bg-white relative overflow-hidden">
+      <section className="py-4 md:py-8 bg-white dark:bg-slate-900 relative overflow-hidden">
          <div className="container mx-auto px-4 md:px-8 relative z-10">
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 border-y border-slate-100 py-10 px-6 md:py-20 md:px-12 rounded-3xl md:rounded-[4rem] bg-slate-50/50">
                <div className="space-y-2 text-center md:text-left">
-                  <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">{tl.trustedInfrastructure}</h3>
+                  <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">{tl.trustedInfrastructure}</h3>
                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{tl.eliteProfessionals}</p>
                </div>
                <div className="flex flex-wrap justify-center items-center gap-6 md:gap-16 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
-                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 uppercase">Google</span>
-                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 uppercase">Microsoft</span>
-                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 uppercase">Meta</span>
-                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 uppercase">Amazon</span>
-                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 uppercase">Netflix</span>
+                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Google</span>
+                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Microsoft</span>
+                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Meta</span>
+                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Amazon</span>
+                  <span className="text-lg md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Netflix</span>
                </div>
             </div>
          </div>
@@ -253,7 +253,7 @@ const Index = () => {
                <span className="text-[10px] font-black uppercase text-blue-600 tracking-widest bg-blue-50 border border-blue-100/50 px-3.5 py-1.5 rounded-full inline-block">
                   The Problem
                </span>
-               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight uppercase max-w-3xl">
+               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight uppercase max-w-3xl">
                   Why 75% of Resumes Never Get Seen by a Recruiter
                </h2>
             </div>
@@ -264,7 +264,7 @@ const Index = () => {
                      <AlertTriangle className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
-                     <h4 className="text-lg font-bold text-slate-900 leading-none">Generic Keywords</h4>
+                     <h4 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Generic Keywords</h4>
                      <p className="text-slate-500 font-medium text-sm leading-relaxed">
                         Most resumes lack tailored ATS-friendly keywords, leading to instant rejection.
                      </p>
@@ -276,7 +276,7 @@ const Index = () => {
                      <X className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
-                     <h4 className="text-lg font-bold text-slate-900 leading-none">Missing Keywords</h4>
+                     <h4 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Missing Keywords</h4>
                      <p className="text-slate-500 font-medium text-sm leading-relaxed">
                         If your resume doesn't match the specific keywords in a job description, it's filtered out.
                      </p>
@@ -288,7 +288,7 @@ const Index = () => {
                      <Info className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
-                     <h4 className="text-lg font-bold text-slate-900 leading-none">Poor Readability</h4>
+                     <h4 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Poor Readability</h4>
                      <p className="text-slate-500 font-medium text-sm leading-relaxed">
                         Dense formatting and generic language block your resume from making it past filters.
                      </p>
@@ -305,10 +305,10 @@ const Index = () => {
       </section>
 
       {/* How It Works - Visual Steps */}
-      <section className="py-10 md:py-16 bg-white relative">
+      <section className="py-10 md:py-16 bg-white dark:bg-slate-900 relative">
          <div className="container mx-auto px-4 md:px-8 space-y-16 md:space-y-32">
             <div className="text-center space-y-4 md:space-y-6 max-w-3xl mx-auto mb-10 md:mb-20">
-               <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none">{tl.builtForScale}</h2>
+               <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">{tl.builtForScale}</h2>
                <p className="text-lg md:text-xl text-slate-600 font-medium">{tl.scaleDesc}</p>
             </div>
 
@@ -319,7 +319,7 @@ const Index = () => {
                </motion.div>
                <div className="order-1 lg:order-2 space-y-4 md:space-y-6 lg:pl-10">
                   <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-black text-xl md:text-3xl">1</div>
-                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">{tle.atsResumeBuilder}</h3>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">{tle.atsResumeBuilder}</h3>
                   <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">{tl.aiResumeTemplatesDesc}</p>
                </div>
             </div>
@@ -328,7 +328,7 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                <div className="space-y-4 md:space-y-6 lg:pr-10">
                   <div className="w-12 h-12 md:w-16 md:h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-black text-xl md:text-3xl">2</div>
-                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">{tl.operationalExcellence}</h3>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">{tl.operationalExcellence}</h3>
                   <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">{tl.smartJobSearch}</p>
                </div>
                <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="order-2 rounded-3xl md:rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden bg-slate-50">
@@ -343,18 +343,18 @@ const Index = () => {
                </motion.div>
                <div className="order-1 lg:order-2 space-y-4 md:space-y-6 lg:pl-10">
                   <div className="w-12 h-12 md:w-16 md:h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-black text-xl md:text-3xl">3</div>
-                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">{tle.interviewPreparation}</h3>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">{tle.interviewPreparation}</h3>
                   <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">{tl.interviewPrepDesc}</p>
                </div>
             </div>
             
             {/* Template Gallery */}
             <div className="pt-10 md:pt-20 text-center space-y-8 md:space-y-12 overflow-hidden">
-               <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">{t.landing.seeTemplates}</h3>
+               <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">{t.landing.seeTemplates}</h3>
                
                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 px-4 md:px-8 -mx-4 md:-mx-8 scrollbar-hide">
                   {RESUME_TEMPLATES.map((tpl, i) => (
-                     <div key={i} className="w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] snap-center shrink-0 rounded-2xl md:rounded-[2rem] bg-slate-100 aspect-[595/842] shadow-sm border border-slate-200 overflow-hidden group cursor-pointer relative">
+                     <div key={i} className="w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] snap-center shrink-0 rounded-2xl md:rounded-[2rem] bg-slate-100 aspect-[595/842] shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden group cursor-pointer relative">
                         <div className="w-full h-full grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 hover:scale-105 origin-top">
                            <TemplateThumbnail templateId={tpl.id} />
                         </div>
@@ -371,7 +371,7 @@ const Index = () => {
       </section>
 
       {/* Enterprise Deployment CTA */}
-      <section className="py-8 md:py-16 bg-white relative">
+      <section className="py-8 md:py-16 bg-white dark:bg-slate-900 relative">
          <div className="container mx-auto px-4 md:px-8 relative">
             <div className="relative rounded-3xl md:rounded-[4.5rem] bg-slate-900 p-8 md:p-32 overflow-hidden shadow-3xl text-center md:text-left">
                <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-600/30 to-transparent pointer-events-none" />
@@ -449,13 +449,13 @@ const Index = () => {
       </section>
 
       {/* 5. User Reviews Section (Side Scrolling) */}
-      <section className="py-16 md:py-24 bg-white relative overflow-hidden text-left border-t border-slate-100">
+      <section className="py-16 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden text-left border-t border-slate-100">
          <div className="container mx-auto px-4 md:px-8 space-y-12">
             <div className="space-y-4 max-w-3xl">
                <span className="text-[10px] font-black uppercase text-blue-600 tracking-widest bg-blue-50 border border-blue-100/50 px-3.5 py-1.5 rounded-full inline-block">
                   Success Stories
                </span>
-               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+               <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                   Trusted by Thousands of Job Seekers
                </h2>
                <p className="text-slate-500 font-medium text-sm md:text-base">
@@ -465,7 +465,7 @@ const Index = () => {
 
             <div className="flex overflow-x-auto gap-6 pb-8 px-4 md:px-8 -mx-4 md:-mx-8 scrollbar-hide snap-x snap-mandatory">
                {reviews.map((rev, idx) => (
-                  <Card key={idx} className="w-[300px] md:w-[355px] shrink-0 snap-center rounded-3xl border border-slate-100 bg-white p-8 shadow-sm flex flex-col justify-between hover:shadow-xl hover:border-blue-100/50 transition-all duration-300">
+                  <Card key={idx} className="w-[300px] md:w-[355px] shrink-0 snap-center rounded-3xl border border-slate-100 bg-white dark:bg-slate-900 p-8 shadow-sm flex flex-col justify-between hover:shadow-xl hover:border-blue-100/50 transition-all duration-300">
                      <div className="space-y-4">
                         <div className="flex text-amber-400 gap-0.5">
                            {[...Array(5)].map((_, i) => (
@@ -482,7 +482,7 @@ const Index = () => {
                            {rev.name.charAt(0)}
                         </div>
                         <div>
-                           <p className="text-slate-900 font-bold text-xs">{rev.name}</p>
+                           <p className="text-slate-900 dark:text-white font-bold text-xs">{rev.name}</p>
                            <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">
                               {rev.role} &rarr; {rev.company}
                            </p>
@@ -503,7 +503,7 @@ const Index = () => {
                      <HelpCircle className="w-4 h-4" />
                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{tl.operationalSupport}</span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9] uppercase">{tl.commonQuestions.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.commonQuestions.split(" ").slice(-1)}</span></h2>
+                  <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9] uppercase">{tl.commonQuestions.split(" ").slice(0, -1).join(" ")} <br /> <span className="text-blue-600">{tl.commonQuestions.split(" ").slice(-1)}</span></h2>
                   <p className="text-lg md:text-xl text-slate-600 font-medium max-w-md leading-relaxed">{tl.supportDesc}</p>
                </div>
                
@@ -514,8 +514,8 @@ const Index = () => {
                     { q: tle.archFaq3Q, a: tle.archFaq3A },
                     { q: tle.archFaq4Q, a: tle.archFaq4A }
                   ].map((faq, i) => (
-                     <div key={i} className="p-6 md:p-10 rounded-3xl md:rounded-[3rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all space-y-2 md:space-y-4">
-                        <h4 className="text-base md:text-lg font-black text-slate-900 tracking-tight uppercase">{faq.q}</h4>
+                     <div key={i} className="p-6 md:p-10 rounded-3xl md:rounded-[3rem] bg-white dark:bg-slate-900 border border-slate-100 shadow-sm hover:shadow-xl transition-all space-y-2 md:space-y-4">
+                        <h4 className="text-base md:text-lg font-black text-slate-900 dark:text-white tracking-tight uppercase">{faq.q}</h4>
                         <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">{faq.a}</p>
                      </div>
                   ))}

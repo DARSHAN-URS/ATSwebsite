@@ -174,7 +174,7 @@ export default function RecruiterJobs() {
   const totalApps = jobs.reduce((s, j) => s + (j.appCount || 0), 0);
 
   return (
-    <div className="w-full bg-white pb-12">
+    <div className="w-full bg-white dark:bg-slate-900 pb-12">
       <SEOHead title="Manage Jobs — ResumePro" description="Manage your job postings." noindex />
       
       <div className="w-full max-w-6xl mx-auto space-y-10 text-left">
@@ -184,7 +184,7 @@ export default function RecruiterJobs() {
                   <Briefcase className="w-4 h-4" />
                   <span className="text-[9px] font-black uppercase tracking-widest">Job Management</span>
                </div>
-               <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
+               <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                   Active <span className="text-blue-600">Jobs.</span>
                </h1>
             </div>
@@ -200,13 +200,13 @@ export default function RecruiterJobs() {
                { label: "Total Views", value: totalViews, icon: Eye, color: "text-indigo-600", bg: "bg-indigo-50" },
                { label: "Total Candidates", value: totalApps, icon: Users, color: "text-emerald-600", bg: "bg-emerald-50" }
             ].map((stat, i) => (
-               <Card key={i} className="rounded-2xl border border-slate-100 bg-white shadow-sm p-5 flex items-center gap-5 group hover:shadow-md transition-all">
+               <Card key={i} className="rounded-2xl border border-slate-100 bg-white dark:bg-slate-900 shadow-sm p-5 flex items-center gap-5 group hover:shadow-md transition-all">
                   <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110", stat.bg, stat.color)}>
                      <stat.icon className="w-6 h-6" />
                   </div>
                   <div>
                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
-                     <p className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+                     <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</p>
                   </div>
                </Card>
             ))}
@@ -230,27 +230,27 @@ export default function RecruiterJobs() {
                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Jobs</p>
                   </div>
                ) : filteredJobs.length === 0 ? (
-                  <Card className="rounded-3xl border border-slate-200 bg-white py-24 text-center space-y-6">
+                  <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-24 text-center space-y-6">
                      <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300">
                         <Briefcase className="w-8 h-8" />
                      </div>
                      <div className="space-y-2">
-                        <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">No Active Jobs</h3>
+                        <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">No Active Jobs</h3>
                         <p className="text-slate-500 font-medium max-w-sm mx-auto">You don't have any active jobs. Post a new job to start receiving applications.</p>
                      </div>
-                     <Button onClick={openNew} variant="outline" className="h-12 px-8 rounded-xl border-slate-200 text-blue-600 font-black uppercase tracking-widest text-[10px] gap-3">
+                     <Button onClick={openNew} variant="outline" className="h-12 px-8 rounded-xl border-slate-200 dark:border-slate-800 text-blue-600 font-black uppercase tracking-widest text-[10px] gap-3">
                         <Plus className="w-4 h-4" /> Post Job
                      </Button>
                   </Card>
                ) : (                    <div className="grid grid-cols-1 gap-6">
                       {filteredJobs.map((job) => (
-                         <Card key={job.id} className="rounded-2xl border border-slate-100 bg-white shadow-sm p-6 hover:shadow-md transition-all duration-300 group relative overflow-hidden">
+                         <Card key={job.id} className="rounded-2xl border border-slate-100 bg-white dark:bg-slate-900 shadow-sm p-6 hover:shadow-md transition-all duration-300 group relative overflow-hidden">
                             <div className="flex flex-col md:flex-row items-start justify-between gap-6 relative z-10">
                                <div className="space-y-5 flex-1">
                                   <div className="space-y-2">
                                      <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><Briefcase className="w-5 h-5" /></div>
-                                        <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
+                                        <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 transition-colors uppercase leading-none">{job.title}</h3>
                                      </div>
                                      <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em] pl-14">{job.company_name} <span className="mx-2 text-slate-200">|</span> {job.location || "Global Ops"}</p>
                                   </div>
@@ -258,7 +258,7 @@ export default function RecruiterJobs() {
                                   <div className="flex flex-wrap gap-3 pl-14">
                                      <Badge className="rounded-xl px-4 py-1.5 bg-blue-600 text-white border-none text-[9px] font-black uppercase tracking-widest">{job.job_type}</Badge>
                                      {job.salary_min && (
-                                        <Badge variant="outline" className="rounded-xl px-4 py-1.5 border-slate-200 text-slate-500 text-[9px] font-black uppercase tracking-widest">
+                                        <Badge variant="outline" className="rounded-xl px-4 py-1.5 border-slate-200 dark:border-slate-800 text-slate-500 text-[9px] font-black uppercase tracking-widest">
                                            {job.salary_currency} {job.salary_min.toLocaleString()} - {job.salary_max?.toLocaleString()}
                                         </Badge>
                                      )}
@@ -275,14 +275,14 @@ export default function RecruiterJobs() {
                                         <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all"><Eye className="w-4 h-4" /></div>
                                         <div>
                                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Total Views</p>
-                                           <p className="text-base font-black text-slate-900">{job.viewCount || 0} Views</p>
+                                           <p className="text-base font-black text-slate-900 dark:text-white">{job.viewCount || 0} Views</p>
                                         </div>
                                      </div>
                                      <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-all"><Users className="w-4 h-4" /></div>
                                         <div>
                                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Candidates</p>
-                                           <p className="text-base font-black text-slate-900">{job.appCount || 0} Active</p>
+                                           <p className="text-base font-black text-slate-900 dark:text-white">{job.appCount || 0} Active</p>
                                         </div>
                                      </div>
                                   </div>
@@ -295,7 +295,7 @@ export default function RecruiterJobs() {
                                      <Button variant="outline" size="icon" onClick={() => handleDelete(job.id)} className="w-full h-10 rounded-xl border-slate-100 hover:text-red-500 transition-all"><Trash2 className="w-4 h-4" /></Button>
                                   </div>
                                   <Badge 
-                                     className={cn("h-10 rounded-xl px-4 flex items-center justify-center cursor-pointer text-[10px] font-black uppercase tracking-widest transition-all", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200")}
+                                     className={cn("h-10 rounded-xl px-4 flex items-center justify-center cursor-pointer text-[10px] font-black uppercase tracking-widest transition-all", job.status === "active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-slate-100 text-slate-500 border border-slate-200 dark:border-slate-800")}
                                      onClick={() => toggleStatus(job)}
                                   >
                                      {job.status === "active" ? "Active" : "Closed"}
@@ -311,32 +311,32 @@ export default function RecruiterJobs() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl rounded-[3rem] p-12 border-none shadow-3xl bg-white text-slate-900 overflow-y-auto max-h-[90vh]">
+        <DialogContent className="max-w-2xl rounded-[3rem] p-12 border-none shadow-3xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white overflow-y-auto max-h-[90vh]">
           <DialogHeader className="space-y-4 text-left pb-6 border-b border-slate-100 mb-8">
-            <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase text-slate-900">{editingId ? "Edit" : "Post"} Job</DialogTitle>
+            <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">{editingId ? "Edit" : "Post"} Job</DialogTitle>
             <DialogDescription className="text-slate-500 font-medium">Enter the details for your job posting.</DialogDescription>
           </DialogHeader>
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Title</Label>
-                  <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900 placeholder:text-slate-400" placeholder="e.g. Lead System Architect" />
+                  <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="e.g. Lead System Architect" />
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Company Name</Label>
-                  <Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900 placeholder:text-slate-400" />
+                  <Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white placeholder:text-slate-400" />
                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Location</Label>
-                  <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900 placeholder:text-slate-400" placeholder="e.g. Remote, NY" />
+                  <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="e.g. Remote, NY" />
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Type</Label>
                   <Select value={form.job_type} onValueChange={(v) => setForm({ ...form, job_type: v })}>
-                     <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900"><SelectValue /></SelectTrigger>
+                     <SelectTrigger className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white"><SelectValue /></SelectTrigger>
                      <SelectContent className="rounded-xl border-none shadow-2xl">
                         {["full-time", "part-time", "contract", "remote"].map(v => <SelectItem key={v} value={v} className="rounded-lg font-bold uppercase text-[10px] tracking-widest">{v}</SelectItem>)}
                      </SelectContent>
@@ -346,22 +346,22 @@ export default function RecruiterJobs() {
 
             <div className="space-y-2">
                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Job Description</Label>
-               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="min-h-[150px] rounded-2xl bg-white border-slate-100 font-medium p-6 text-slate-900 placeholder:text-slate-400" />
+               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="min-h-[150px] rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-medium p-6 text-slate-900 dark:text-white placeholder:text-slate-400" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Min Salary</Label>
-                  <Input type="number" value={form.salary_min} onChange={(e) => setForm({ ...form, salary_min: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900 placeholder:text-slate-400" />
+                  <Input type="number" value={form.salary_min} onChange={(e) => setForm({ ...form, salary_min: e.target.value })} className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white placeholder:text-slate-400" />
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Max Salary</Label>
-                  <Input type="number" value={form.salary_max} onChange={(e) => setForm({ ...form, salary_max: e.target.value })} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900 placeholder:text-slate-400" />
+                  <Input type="number" value={form.salary_max} onChange={(e) => setForm({ ...form, salary_max: e.target.value })} className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white placeholder:text-slate-400" />
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4">Currency</Label>
                   <Select value={form.salary_currency} onValueChange={(v) => setForm({ ...form, salary_currency: v })}>
-                     <SelectTrigger className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6 text-slate-900"><SelectValue /></SelectTrigger>
+                     <SelectTrigger className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6 text-slate-900 dark:text-white"><SelectValue /></SelectTrigger>
                      <SelectContent className="rounded-xl border-none shadow-2xl h-64 overflow-y-auto">
                         {["USD", "EUR", "GBP", "INR", "AED", "SAR", "CAD", "AUD"].map(v => <SelectItem key={v} value={v} className="rounded-lg font-bold">{v}</SelectItem>)}
                      </SelectContent>

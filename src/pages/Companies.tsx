@@ -152,14 +152,14 @@ export default function Companies() {
       
       {/* 1. Header Section */}
       <div className="space-y-1 py-4 border-b border-slate-100">
-         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Companies</h1>
+         <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Companies</h1>
          <p className="text-slate-500 font-medium text-sm">Discover companies and their open positions</p>
       </div>
 
       {/* 2. Pinned Companies Section (Carousel style) */}
       {pinnedCompanies.length > 0 && (
          <div className="space-y-4">
-            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-2">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mt-2">
                <span className="text-[#3b82f6]">📌</span> Pinned Companies
             </h2>
             
@@ -178,9 +178,9 @@ export default function Companies() {
                {pinnedCompanies[pinnedIndex] && (() => {
                   const pComp = pinnedCompanies[pinnedIndex];
                   return (
-                     <Card className="flex-1 rounded-xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                     <Card className="flex-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div className="flex gap-4 items-start w-full">
-                           <div className="w-14 h-14 rounded-xl bg-white border border-slate-100 p-2 flex items-center justify-center flex-shrink-0 shadow-sm">
+                           <div className="w-14 h-14 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 p-2 flex items-center justify-center flex-shrink-0 shadow-sm">
                               {pComp.company_logo ? (
                                  <img src={pComp.company_logo} alt={pComp.company_name} className="w-full h-full object-contain" />
                               ) : (
@@ -189,7 +189,7 @@ export default function Companies() {
                            </div>
                            <div className="space-y-3 flex-1">
                               <div>
-                                 <h3 className="text-base font-bold text-slate-900">{pComp.company_name}</h3>
+                                 <h3 className="text-base font-bold text-slate-900 dark:text-white">{pComp.company_name}</h3>
                                  <div className="flex flex-wrap items-center gap-2 mt-1">
                                     <span className="inline-flex items-center gap-1 text-[11px] text-slate-500 font-medium">
                                        <MapPin className="w-3.5 h-3.5 text-slate-400" /> {pComp.city || "Dubai"}, {pComp.country || "AE"}
@@ -205,7 +205,7 @@ export default function Companies() {
                                     onClick={() => togglePinMutation.mutate({ name: pComp.company_name, logo: pComp.company_logo, website: pComp.company_website, city: pComp.city, country: pComp.country, open_jobs: [] })}
                                     variant="outline" 
                                     size="sm" 
-                                    className="h-9 px-3 rounded-lg border-slate-200 hover:bg-slate-50 text-[10px] font-bold text-slate-600 gap-1.5 uppercase transition-colors"
+                                    className="h-9 px-3 rounded-lg border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-[10px] font-bold text-slate-600 gap-1.5 uppercase transition-colors"
                                  >
                                     <PinOff className="w-3.5 h-3.5" /> Unpin
                                  </Button>
@@ -216,7 +216,7 @@ export default function Companies() {
                                     }}
                                     variant="outline" 
                                     size="sm" 
-                                    className="h-9 px-3 rounded-lg border-slate-200 hover:bg-slate-50 text-[10px] font-bold text-slate-600 gap-1.5 uppercase transition-colors"
+                                    className="h-9 px-3 rounded-lg border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-[10px] font-bold text-slate-600 gap-1.5 uppercase transition-colors"
                                  >
                                     <Share2 className="w-3.5 h-3.5" /> Share
                                  </Button>
@@ -224,7 +224,7 @@ export default function Companies() {
                                     onClick={() => window.open(pComp.company_website || "#", "_blank")}
                                     variant="outline" 
                                     size="sm" 
-                                    className="h-9 px-3 rounded-lg border-slate-200 hover:bg-slate-50 text-[10px] font-bold text-slate-600 gap-1.5 uppercase transition-colors"
+                                    className="h-9 px-3 rounded-lg border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-[10px] font-bold text-slate-600 gap-1.5 uppercase transition-colors"
                                  >
                                        <Globe className="w-3.5 h-3.5" /> Website
                                  </Button>
@@ -249,45 +249,45 @@ export default function Companies() {
       )}
 
       {/* 3. Horizontal Search Form */}
-      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm w-full">
+      <Card className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm w-full">
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
             <div className="lg:col-span-3 space-y-1.5 text-left">
-               <Label className="text-xs font-semibold text-slate-700">Company or Keyword</Label>
+               <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Company or Keyword</Label>
                <Input 
                   value={query} 
                   onChange={e => setQuery(e.target.value)} 
                   placeholder="e.g. Google, startup" 
-                  className="h-11 rounded-lg border-slate-200 bg-white focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900"
+                  className="h-11 rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900 dark:text-white"
                />
             </div>
             
             <div className="lg:col-span-2 space-y-1.5 text-left">
-               <Label className="text-xs font-semibold text-slate-700">Industry</Label>
+               <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Industry</Label>
                <Input 
                   value={industry} 
                   onChange={e => setIndustry(e.target.value)} 
                   placeholder="e.g. Technology, Finance" 
-                  className="h-11 rounded-lg border-slate-200 bg-white focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900"
+                  className="h-11 rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900 dark:text-white"
                />
             </div>
             
             <div className="lg:col-span-2 space-y-1.5 text-left">
-               <Label className="text-xs font-semibold text-slate-700">Technology</Label>
+               <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Technology</Label>
                <Input 
                   value={technology} 
                   onChange={e => setTechnology(e.target.value)} 
                   placeholder="e.g. React, Python" 
-                  className="h-11 rounded-lg border-slate-200 bg-white focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900"
+                  className="h-11 rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900 dark:text-white"
                />
             </div>
 
             <div className="lg:col-span-2 space-y-1.5 text-left">
-               <Label className="text-xs font-semibold text-slate-700">Location</Label>
+               <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Location</Label>
                <Input 
                   value={location} 
                   onChange={e => setLocation(e.target.value)} 
                   placeholder="e.g. New York, Remote" 
-                  className="h-11 rounded-lg border-slate-200 bg-white focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900"
+                  className="h-11 rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all font-medium text-xs text-slate-900 dark:text-white"
                />
             </div>
 
@@ -310,14 +310,14 @@ export default function Companies() {
             {/* Search Results */}
                <div className="space-y-4">
                   {(searching || companies.length > 0 || activeSearch) && (
-                    <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
+                    <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
                        <Target className="w-4 h-4 text-slate-400" /> Intelligence Results
                     </h2>
                   )}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {searching ? (
                      [1,2,3,4,5,6].map(i => (
-                        <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-auto lg:h-[320px] flex flex-col justify-between shadow-sm">
+                        <Card key={i} className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 h-auto lg:h-[320px] flex flex-col justify-between shadow-sm">
                            <div className="space-y-5">
                               <div className="flex items-start justify-between">
                                  <Skeleton className="w-14 h-14 rounded-xl" />
@@ -345,22 +345,22 @@ export default function Companies() {
                         </Card>
                      ))
                   ) : companies.length === 0 && activeSearch ? (
-                     <div className="col-span-full py-32 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
+                     <div className="col-span-full py-32 text-center space-y-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 border-dashed">
                         <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mx-auto border border-slate-100">
                            <Search className="w-10 h-10" />
                         </div>
                         <div className="space-y-2">
-                           <h3 className="text-xl font-bold text-slate-900 tracking-tight uppercase">No Entities Found</h3>
+                           <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight uppercase">No Entities Found</h3>
                            <p className="text-slate-500 font-medium text-sm">Adjust your parameters and initialize search again.</p>
                         </div>
                      </div>
                   ) : companies.length === 0 ? (
-                     <div className="col-span-full py-32 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
+                     <div className="col-span-full py-32 text-center space-y-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 border-dashed">
                         <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mx-auto border border-slate-100">
                            <ShieldCheck className="w-10 h-10" />
                         </div>
                         <div className="space-y-2">
-                           <h3 className="text-xl font-bold text-slate-900 tracking-tight uppercase">Intelligence Matrix Standby</h3>
+                           <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight uppercase">Intelligence Matrix Standby</h3>
                            <p className="text-slate-500 font-medium text-sm">Initialize parameters to synchronize with target entities.</p>
                         </div>
                      </div>
@@ -368,7 +368,7 @@ export default function Companies() {
                      <div className="contents">
                         {companies.map((company, i) => (
                            <div key={company.name}>
-                              <Card className="rounded-3xl border border-slate-200 bg-white p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden h-full flex flex-col justify-between">
+                              <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden h-full flex flex-col justify-between">
                                  <div className="space-y-5">
                                     <div className="flex items-start justify-between">
                                        <div className="w-14 h-14 bg-slate-50 rounded-xl overflow-hidden flex items-center justify-center border border-slate-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
@@ -377,7 +377,7 @@ export default function Companies() {
                                        <div className="flex gap-2">
                                           <Tooltip>
                                             <TooltipTrigger asChild>
-                                              <Button onClick={() => toast({ title: "Intelligence Shared", description: "Entity parameters have been synchronized to your clipboard." })} variant="ghost" size="icon" className="w-9 h-9 rounded-lg hover:bg-slate-50"><Share2 className="w-4 h-4 text-slate-400" /></Button>
+                                              <Button onClick={() => toast({ title: "Intelligence Shared", description: "Entity parameters have been synchronized to your clipboard." })} variant="ghost" size="icon" className="w-9 h-9 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/40"><Share2 className="w-4 h-4 text-slate-400" /></Button>
                                             </TooltipTrigger>
                                             <TooltipContent className="bg-slate-900 text-white font-bold text-xs rounded-xl border-none">
                                               Share entity data
@@ -398,7 +398,7 @@ export default function Companies() {
                                     </div>
 
                                     <div className="space-y-1">
-                                       <h3 className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1">{company.name}</h3>
+                                       <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1">{company.name}</h3>
                                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                           <MapPin className="w-3 h-3" /> {company.city}, {company.country}
                                        </div>
@@ -414,7 +414,7 @@ export default function Companies() {
                                        </div>
                                        <div className="space-y-1">
                                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Open Roles</p>
-                                          <p className="text-xs font-bold text-slate-900">{company.open_jobs.length}</p>
+                                          <p className="text-xs font-bold text-slate-900 dark:text-white">{company.open_jobs.length}</p>
                                        </div>
                                     </div>
 
@@ -427,7 +427,7 @@ export default function Companies() {
                                  <div className="pt-6 space-y-3">
                                     <Tooltip>
                                       <TooltipTrigger asChild>
-                                        <Button onClick={() => window.open(company.website || '#', '_blank')} variant="outline" className="w-full h-11 rounded-xl border-slate-100 text-slate-900 font-bold uppercase tracking-widest text-[9px] gap-2 hover:bg-slate-900 hover:text-white transition-all">
+                                        <Button onClick={() => window.open(company.website || '#', '_blank')} variant="outline" className="w-full h-11 rounded-xl border-slate-100 text-slate-900 dark:text-white font-bold uppercase tracking-widest text-[9px] gap-2 hover:bg-slate-900 hover:text-white transition-all">
                                            Launch Intelligence <ExternalLink className="w-3.5 h-3.5" />
                                         </Button>
                                       </TooltipTrigger>
@@ -444,8 +444,8 @@ export default function Companies() {
                                              </AccordionTrigger>
                                              <AccordionContent className="pt-3 pb-0 space-y-2">
                                                 {company.open_jobs.slice(0, 5).map((job, jdx) => (
-                                                   <div key={jdx} className="p-3 bg-white border border-slate-100 rounded-xl hover:border-blue-200 transition-colors">
-                                                      <h4 className="text-[11px] font-bold text-slate-900 line-clamp-1">{job.job_title}</h4>
+                                                   <div key={jdx} className="p-3 bg-white dark:bg-slate-900 border border-slate-100 rounded-xl hover:border-blue-200 transition-colors">
+                                                      <h4 className="text-[11px] font-bold text-slate-900 dark:text-white line-clamp-1">{job.job_title}</h4>
                                                       <div className="flex items-center gap-2 mt-1 mb-3 text-[9px] font-bold text-slate-400 uppercase">
                                                          <Briefcase className="w-3 h-3" /> {job.job_type || "Full-time"} 
                                                          <MapPin className="w-3 h-3 ml-1" /> {job.location || "Remote"}
@@ -476,9 +476,9 @@ export default function Companies() {
 
             {/* AI Insights Sidebar */}
             <div className="lg:col-span-4 space-y-8">
-               <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+               <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm space-y-6">
                   <div className="flex items-center justify-between">
-                     <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                     <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-blue-600" /> Entity Analysis
                      </h3>
                      <Badge className="bg-blue-50 text-blue-600 border-none text-[8px] font-bold uppercase">Live</Badge>
@@ -494,11 +494,11 @@ export default function Companies() {
                      </div>
 
                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
-                        <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                        <h4 className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                            <TrendingUp className="w-3.5 h-3.5 text-blue-600" /> Growth Velocity
                         </h4>
                         <div className="flex items-center gap-4">
-                           <div className="flex-1 h-8 bg-white border border-slate-100 rounded-lg flex items-center justify-center">
+                           <div className="flex-1 h-8 bg-white dark:bg-slate-900 border border-slate-100 rounded-lg flex items-center justify-center">
                               <div className="flex gap-0.5 items-end h-4">
                                  {[40, 60, 45, 80, 55, 90, 75].map((h, i) => (
                                     <div key={i} className="w-1.5 bg-blue-600/20 rounded-t-[1px]" style={{ height: `${h}%` }} />
@@ -506,14 +506,14 @@ export default function Companies() {
                               </div>
                            </div>
                            <div className="text-right">
-                              <p className="text-[10px] font-bold text-slate-900">+14.2%</p>
+                              <p className="text-[10px] font-bold text-slate-900 dark:text-white">+14.2%</p>
                               <p className="text-[8px] font-bold text-slate-400 uppercase">QoQ Headcount</p>
                            </div>
                         </div>
                      </div>
 
                      <div className="space-y-4">
-                        <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider">Trending Sectors</h4>
+                        <h4 className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-wider">Trending Sectors</h4>
                         {[
                            { label: "Fintech", value: "High Growth", icon: BarChart3, color: "text-blue-500" },
                            { label: "AI Infrastructure", value: "Surging", icon: Zap, color: "text-amber-500" },
@@ -523,7 +523,7 @@ export default function Companies() {
                               <span className="text-[11px] font-medium text-slate-500 flex items-center gap-2">
                                  <sector.icon className={cn("w-3.5 h-3.5", sector.color)} /> {sector.label}
                               </span>
-                              <span className="text-[10px] font-bold text-slate-900 uppercase">{sector.value}</span>
+                              <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase">{sector.value}</span>
                            </div>
                         ))}
                      </div>

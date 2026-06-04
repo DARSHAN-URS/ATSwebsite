@@ -14,13 +14,13 @@ const PrivacyPolicy = () => {
   const tm = t.misc;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-sans">
       <SEOHead title={`${tp.title} — ResumePro`} description="Learn how ResumePro protects your personal information." />
       
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-8 pt-48 pb-40 space-y-20">
-        <div className="relative bg-white rounded-[3rem] p-12 md:p-20 overflow-hidden border border-slate-100 shadow-sm">
+        <div className="relative bg-white dark:bg-slate-900 rounded-[3rem] p-12 md:p-20 overflow-hidden border border-slate-100 shadow-sm">
            <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
            
            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -30,7 +30,7 @@ const PrivacyPolicy = () => {
                      <span className="text-[10px] font-black uppercase tracking-wider">{tm.legal.privacyProtocol}</span>
                   </div>
                   <div className="space-y-2">
-                    <h1 className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none uppercase">
+                    <h1 className="text-2xl md:text-4xl md:text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">
                        {tp.title}.
                     </h1>
                     <p className="text-slate-500 font-medium text-xl max-w-xl">{tp.lastUpdated} {new Date().toLocaleDateString(locale, { month: "long", day: "numeric", year: "numeric" })}</p>
@@ -41,33 +41,33 @@ const PrivacyPolicy = () => {
 
         <div className="space-y-20 text-lg leading-relaxed max-w-4xl mx-auto">
           <section className="space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s1Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s1Title}</h2>
              <p className="font-medium text-slate-600">{tp.s1Content}</p>
           </section>
           <section className="space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s2Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s2Title}</h2>
              <ul className="list-disc pl-8 space-y-4 font-medium text-slate-600">
                 {tp.s2Items.map((item, i) => <li key={i}>{item}</li>)}
              </ul>
           </section>
           <section className="space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s3Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s3Title}</h2>
              <p className="font-medium text-slate-600">{tp.s3Content}</p>
           </section>
           <section className="space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s4Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s4Title}</h2>
              <p className="font-medium text-slate-600">{tp.s4Content}</p>
           </section>
           <section className="space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s5Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s5Title}</h2>
              <p className="font-medium text-slate-600">{tp.s5Content}</p>
           </section>
           <section className="space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s6Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s6Title}</h2>
              <p className="font-medium text-slate-600">{tp.s6Content}</p>
           </section>
           <section className="p-16 rounded-[3.5rem] bg-slate-50 border border-slate-100 space-y-6">
-             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{tp.s7Title}</h2>
+             <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{tp.s7Title}</h2>
              <p className="font-medium text-slate-600 text-xl leading-relaxed">{tp.s7Content} <span className="text-blue-600 font-black">support@atsproresumebuilder.com</span>.</p>
           </section>
         </div>

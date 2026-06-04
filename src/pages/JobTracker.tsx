@@ -161,7 +161,7 @@ export default function JobTracker() {
              </div>
              <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Operational Pipeline</span>
           </motion.div>
-          <h1 className="text-2xl md:text-4xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none">
+          <h1 className="text-2xl md:text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
              Tracking <br /> <span className="text-blue-600">Engine.</span>
           </h1>
         </div>
@@ -169,7 +169,7 @@ export default function JobTracker() {
         <div className="flex items-center gap-8">
            <div className="flex flex-col items-end">
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Success Rate</span>
-              <span className="text-2xl md:text-4xl font-black text-slate-900 leading-none">94%</span>
+              <span className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white leading-none">94%</span>
            </div>
            <Separator orientation="vertical" className="h-12 bg-slate-100" />
            <div className="flex flex-col items-end">
@@ -183,7 +183,7 @@ export default function JobTracker() {
         {isLoading ? (
           <div className="space-y-6">
              {[1, 2, 3].map(i => (
-                <Card key={i} className="group relative rounded-[3rem] border-none bg-white p-8 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.02)]">
+                <Card key={i} className="group relative rounded-[3rem] border-none bg-white dark:bg-slate-900 p-8 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.02)]">
                   <div className="flex flex-col xl:flex-row items-center gap-10">
                     <div className="flex items-center gap-8 flex-1 w-full">
                       <Skeleton className="w-20 h-20 rounded-[2rem]" />
@@ -211,11 +211,11 @@ export default function JobTracker() {
              ))}
           </div>
         ) : apps.length === 0 ? (
-          <Card className="rounded-[4rem] border border-slate-100 bg-white flex flex-col items-center justify-center py-40 text-center shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+          <Card className="rounded-[4rem] border border-slate-100 bg-white dark:bg-slate-900 flex flex-col items-center justify-center py-40 text-center shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
              <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 flex items-center justify-center mb-10 shadow-sm border border-slate-100">
                 <Search className="w-10 h-10 text-slate-300" />
              </div>
-             <h3 className="text-3xl font-black text-slate-900 tracking-tight">Pipeline is clear.</h3>
+             <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Pipeline is clear.</h3>
              <p className="text-slate-500 font-medium max-w-sm mt-3 mb-12">Your career pipeline is currently idle. Let's initialize new tracks from the job board.</p>
              <Button onClick={() => navigate("/job-board")} className="bg-blue-600 text-white font-black uppercase tracking-widest text-[10px] h-16 px-12 rounded-2xl shadow-xl shadow-blue-600/20">Discovery Engine</Button>
           </Card>
@@ -223,14 +223,14 @@ export default function JobTracker() {
           <div className="space-y-6">
              {apps.map((app, i) => (
                <motion.div key={app.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
-                 <Card className="group relative rounded-[3rem] border border-slate-100 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 overflow-hidden">
+                 <Card className="group relative rounded-[3rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 overflow-hidden">
                     <div className="p-8 flex flex-col xl:flex-row items-center gap-10">
                        <div className="flex items-center gap-8 flex-1">
                           <div className="w-20 h-20 rounded-[2rem] bg-slate-50 flex items-center justify-center font-black text-3xl text-blue-600 shadow-sm border border-slate-100 group-hover:rotate-6 transition-transform">
                              {app.company.charAt(0)}
                           </div>
                           <div>
-                             <h3 className="text-2xl font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">{app.position}</h3>
+                             <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 transition-colors">{app.position}</h3>
                              <div className="flex items-center gap-4 mt-2">
                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{app.company}</span>
                                 <Separator orientation="vertical" className="h-3 bg-slate-200" />
@@ -249,7 +249,7 @@ export default function JobTracker() {
                                 <span>{statusConfig[app.status || "applied"].label}</span>
                              </div>
                              <Select value={app.status || "applied"} onValueChange={(v) => updateStatusMutation.mutate({ id: app.id, status: v })}>
-                                <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white font-black uppercase tracking-widest text-[10px] focus:ring-blue-600">
+                                <SelectTrigger className="h-12 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-black uppercase tracking-widest text-[10px] focus:ring-blue-600">
                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-none shadow-2xl p-2">
@@ -309,20 +309,20 @@ export default function JobTracker() {
                  <p className="text-slate-400 font-medium mt-4">Draft a high-conversion communication to the internal hiring team.</p>
               </div>
            </div>
-           <div className="p-12 space-y-8 bg-white max-h-[70vh] overflow-y-auto">
+           <div className="p-12 space-y-8 bg-white dark:bg-slate-900 max-h-[70vh] overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Recipient Address</Label>
-                    <Input value={emailTo} onChange={(e) => setEmailTo(e.target.value)} placeholder="recruiter@company.com" className="h-14 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+                    <Input value={emailTo} onChange={(e) => setEmailTo(e.target.value)} placeholder="recruiter@company.com" className="h-14 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6" />
                  </div>
                  <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Subject Protocol</Label>
-                    <Input value={emailSubject} onChange={(e) => setEmailSubject(e.target.value)} className="h-14 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+                    <Input value={emailSubject} onChange={(e) => setEmailSubject(e.target.value)} className="h-14 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6" />
                  </div>
               </div>
               <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Message Content</Label>
-                 <Textarea value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className="min-h-[150px] md:min-h-[250px] rounded-[2rem] bg-white border-slate-100 font-medium p-8 leading-relaxed focus-visible:ring-blue-600" />
+                 <Textarea value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className="min-h-[150px] md:min-h-[250px] rounded-[2rem] bg-white dark:bg-slate-900 border-slate-100 font-medium p-8 leading-relaxed focus-visible:ring-blue-600" />
               </div>
               <Button onClick={sendEmail} disabled={sending} className="w-full h-20 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-blue-600 transition-all">
                  {sending ? <Loader2 className="w-6 h-6 animate-spin" /> : "Initiate Dispatch"}

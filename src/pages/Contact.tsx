@@ -55,7 +55,7 @@ export default function Contact({ isInternal = false }: ContactProps) {
   };
 
   return (
-    <div className={cn("min-h-screen text-slate-900 font-sans", isInternal ? "bg-transparent" : "bg-white")}>
+    <div className={cn("min-h-screen text-slate-900 dark:text-white font-sans", isInternal ? "bg-transparent" : "bg-white dark:bg-slate-900")}>
       <SEOHead 
         title="Contact — ResumePro" 
         description="Initialize communication with our support modules for architectural guidance."

@@ -1,28 +1,28 @@
 {
-  "template_id": "ats-modern-nextgen",
-  "template_name": "NextGen Resume",
-  "category": "Modern",
-  "description": "Clean sans-serif template utilizing distinct borders and deep indigo highlight accents.",
+  "template_id": "tpl_cre_maria",
+  "template_name": "Maria Teresa Villanueva",
+  "category": "Creative",
+  "description": "Left-aligned layout with dark gray header banner, orange/gold accents, and custom section icons.",
   "layout_metadata": {
     "column_count": 1,
     "sidebar_position": "none",
     "structural_alignment": "left-aligned",
-    "information_density": "variable",
-    "visual_emphasis": "typography",
+    "information_density": "standard",
+    "visual_emphasis": "underlines",
     "typography": {
       "heading": "helvetica",
       "body": "helvetica",
       "accent": "helvetica"
     },
     "spacing": {
-      "margin": "20px",
-      "line_height": 1.3,
-      "section_gap": "21px"
+      "margin": "18px",
+      "line_height": 1.35,
+      "section_gap": "22px"
     },
     "color_palette": {
-      "primary": "#4f46e5",
-      "secondary": "#4338ca",
-      "text": "#111111",
+      "primary": "#e67e22",
+      "secondary": "#333333",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": false,
@@ -30,10 +30,10 @@
   },
   "sections": {
     "order": [
-      "skills",
-      "education",
+      "summary",
       "experience",
-      "summary"
+      "education",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 100,
+  "ats_score": 88,
   "suitable_professions": [
-    "Software Engineering",
-    "Technology Graduates",
-    "Digital Fields"
+    "Head of Operations",
+    "Operations Manager",
+    "Director"
   ]
 }

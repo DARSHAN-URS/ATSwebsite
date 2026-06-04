@@ -194,12 +194,12 @@ export default function Builder() {
   if (loading) return (
     <div className="h-screen flex flex-col items-center justify-center bg-[#F5F7FB] space-y-6">
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full" />
-      <p className="text-slate-900 font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Initializing Workspace</p>
+      <p className="text-slate-900 dark:text-white font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Initializing Workspace</p>
     </div>
   );
 
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden font-sans text-left selection:bg-blue-600/10">
+    <div className="h-screen flex flex-col bg-white dark:bg-slate-900 overflow-hidden font-sans text-left selection:bg-blue-600/10">
       <ModernOnboarding />
       
       {/* Top Floating Glass Header */}
@@ -246,7 +246,7 @@ export default function Builder() {
           {activeSection === "personal" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Personal Information</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Personal Information</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Your identity is the core of your professional blueprint. Ensure all communication links are active.
                   </p>
@@ -263,7 +263,7 @@ export default function Builder() {
             <div className="space-y-12">
                <div className="flex items-end justify-between">
                   <div className="space-y-4">
-                     <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Professional Summary</h2>
+                     <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Professional Summary</h2>
                      <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                         Summarize your career mission in 2-3 powerful sentences.
                      </p>
@@ -272,12 +272,12 @@ export default function Builder() {
                      {aiLoading === "summary" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />} AI Optimize
                   </Button>
                </div>
-               <Card className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 group focus-within:shadow-[0_40px_80px_rgba(0,0,0,0.08)] transition-all duration-700">
+               <Card className="rounded-[3rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 group focus-within:shadow-[0_40px_80px_rgba(0,0,0,0.08)] transition-all duration-700">
                   <Textarea 
                      value={resumeData.summary} 
                      onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))}
                      placeholder="Craft your career mission..." 
-                     className="min-h-[120px] md:min-h-[200px] md:min-h-[350px] bg-transparent border-none p-0 focus-visible:ring-0 text-xl leading-relaxed resize-none font-medium text-slate-700 placeholder:text-slate-200"
+                     className="min-h-[120px] md:min-h-[200px] md:min-h-[350px] bg-transparent border-none p-0 focus-visible:ring-0 text-xl leading-relaxed resize-none font-medium text-slate-700 dark:text-slate-300 placeholder:text-slate-200"
                   />
                   <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-between">
                      <div className="flex items-center gap-3">
@@ -293,7 +293,7 @@ export default function Builder() {
           {activeSection === "experience" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Work Experience</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Work Experience</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Your career timeline is a sequence of successful mission deployments.
                   </p>
@@ -308,7 +308,7 @@ export default function Builder() {
           {activeSection === "education" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Education</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Education</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Where did you acquire your foundational technical knowledge?
                   </p>
@@ -323,19 +323,19 @@ export default function Builder() {
           {activeSection === "skills" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Core Skills</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Core Skills</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Identify your primary technical vectors and professional capabilities.
                   </p>
                </div>
-               <Card className="rounded-[3rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 space-y-10">
+               <Card className="rounded-[3rem] border-none bg-white dark:bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 space-y-10">
                   <div className="flex flex-wrap gap-3">
                     {(resumeData.skills || []).map((skill, i) => (
                       <motion.div 
                         key={i} 
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="px-6 py-3 rounded-2xl bg-slate-50 border border-slate-100 text-xs font-black text-slate-700 flex items-center gap-3 group hover:border-blue-600 hover:bg-blue-50 transition-all cursor-default uppercase tracking-widest"
+                        className="px-6 py-3 rounded-2xl bg-slate-50 border border-slate-100 text-xs font-black text-slate-700 dark:text-slate-300 flex items-center gap-3 group hover:border-blue-600 hover:bg-blue-50 transition-all cursor-default uppercase tracking-widest"
                       >
                         {skill}
                         <button 
@@ -367,7 +367,7 @@ export default function Builder() {
                        <RotateCcw className="w-3 h-3" /> Press Enter
                     </div>
                     {skillInput.trim().length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 shadow-2xl rounded-2xl z-50 max-h-60 overflow-y-auto p-2">
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-100 shadow-2xl rounded-2xl z-50 max-h-60 overflow-y-auto p-2">
                         {COMMON_SKILLS.filter(s => s.toLowerCase().includes(skillInput.trim().toLowerCase()) && !resumeData.skills?.includes(s)).length > 0 ? (
                           COMMON_SKILLS.filter(s => s.toLowerCase().includes(skillInput.trim().toLowerCase()) && !resumeData.skills?.includes(s)).map(skill => (
                             <div
@@ -376,7 +376,7 @@ export default function Builder() {
                                 setResumeData(prev => ({ ...prev, skills: [...(prev.skills || []), skill] }));
                                 setSkillInput("");
                               }}
-                              className="px-4 py-3 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700 cursor-pointer rounded-xl transition-colors"
+                              className="px-4 py-3 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer rounded-xl transition-colors"
                             >
                               {skill}
                             </div>
@@ -394,7 +394,7 @@ export default function Builder() {
           {activeSection === "languages" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Languages</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Languages</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      What communication protocols do you support for global collaboration?
                   </p>
@@ -406,7 +406,7 @@ export default function Builder() {
           {activeSection === "design" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Aesthetic Engine</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Aesthetic Engine</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Personalize the visual identity of your professional blueprints.
                   </p>
@@ -418,7 +418,7 @@ export default function Builder() {
           {activeSection === "templates" && (
             <div className="space-y-12">
                <div className="space-y-4">
-                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase">Templates</h2>
+                  <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Templates</h2>
                   <p className="text-lg text-slate-500 font-medium max-w-xl leading-relaxed">
                      Select a structural architecture that aligns with your industry mission.
                   </p>

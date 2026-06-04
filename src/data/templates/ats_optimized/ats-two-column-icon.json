@@ -1,13 +1,13 @@
 {
-  "template_id": "ats-pro-corporate",
-  "template_name": "ATS Pro Corporate",
+  "template_id": "ats-two-column-icon",
+  "template_name": "ATS Two Column Icon",
   "category": "ATS Optimized",
-  "description": "Structured layout with royal blue divider bars, best suited for banking, consulting, and finance roles.",
+  "description": "Modern two-column layout with section icons, left-hand skills and languages, and right-hand professional history.",
   "layout_metadata": {
-    "column_count": 1,
-    "sidebar_position": "none",
+    "column_count": 2,
+    "sidebar_position": "left",
     "structural_alignment": "left-aligned",
-    "information_density": "spacious",
+    "information_density": "standard",
     "visual_emphasis": "icons",
     "typography": {
       "heading": "helvetica",
@@ -20,8 +20,8 @@
       "section_gap": "18px"
     },
     "color_palette": {
-      "primary": "#1e3a8a",
-      "secondary": "#1e4ed8",
+      "primary": "#111111",
+      "secondary": "#4a5568",
       "text": "#111111",
       "background": "#ffffff"
     },
@@ -31,9 +31,10 @@
   "sections": {
     "order": [
       "summary",
-      "experience",
+      "education",
       "skills",
-      "education"
+      "experience",
+      "languages"
     ],
     "visibility": {
       "summary": true,
@@ -45,8 +46,8 @@
   },
   "ats_score": 100,
   "suitable_professions": [
-    "Corporate Functions",
-    "Finance & Banking",
-    "Operations"
+    "Marketing",
+    "Creative Roles",
+    "Product Management"
   ]
 }

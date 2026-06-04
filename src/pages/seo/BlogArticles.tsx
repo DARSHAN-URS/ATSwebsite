@@ -2432,7 +2432,7 @@ export function BlogArticlePage({ isInternal = false }: { isInternal?: boolean }
 
   if (!article) {
     return (
-      <div className={cn("min-h-screen flex items-center justify-center font-sans", !isInternal ? "bg-white" : "bg-transparent")}>
+      <div className={cn("min-h-screen flex items-center justify-center font-sans", !isInternal ? "bg-white dark:bg-slate-900" : "bg-transparent")}>
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-2">Article Not Found</h1>
           <Button asChild><Link to={isInternal ? "/dashboard/blog" : "/blog"}>Back to Blog</Link></Button>
@@ -2449,7 +2449,7 @@ export function BlogArticlePage({ isInternal = false }: { isInternal?: boolean }
     : article.content;
 
   return (
-    <div className={cn("min-h-screen text-slate-900 font-sans selection:bg-blue-600/10 selection:text-blue-600", !isInternal ? "bg-white" : "bg-transparent")}>
+    <div className={cn("min-h-screen text-slate-900 dark:text-white font-sans selection:bg-blue-600/10 selection:text-blue-600", !isInternal ? "bg-white dark:bg-slate-900" : "bg-transparent")}>
       <SEOHead
         title={article.seoTitle}
         description={article.description}
@@ -2494,14 +2494,14 @@ export function BlogArticlePage({ isInternal = false }: { isInternal?: boolean }
               <Clock className="h-3 w-3" />{article.readTime}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4 uppercase">{tTitle}</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-4 uppercase">{tTitle}</h1>
           <p className="text-lg text-slate-500 font-medium leading-relaxed">{tDescription}</p>
         </header>
 
         <article className="prose prose-neutral max-w-none">
           {tContent.map((block, i) => {
             if (block.startsWith("## ")) {
-              return <h2 key={i} className="text-xl font-black mt-12 mb-6 text-slate-900 uppercase tracking-tight">{block.replace("## ", "")}</h2>;
+              return <h2 key={i} className="text-xl font-black mt-12 mb-6 text-slate-900 dark:text-white uppercase tracking-tight">{block.replace("## ", "")}</h2>;
             }
             const rendered = block
               .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")

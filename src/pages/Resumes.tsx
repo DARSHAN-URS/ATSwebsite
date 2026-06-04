@@ -207,7 +207,7 @@ export default function Resumes() {
       <SEOHead title="My Resumes - ResumePro" description="Create and manage your professional resumes." />
       
       {/* 1. SaaS Hero Section */}
-      <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
+      <div className="relative bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
          <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
          
          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
@@ -217,7 +217,7 @@ export default function Resumes() {
                    <span className="text-[10px] font-bold uppercase tracking-wider">Asset Management</span>
                 </div>
                 <div className="space-y-1">
-                  <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+                  <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                      Resumes.
                   </h1>
                   <p className="text-slate-500 font-medium text-sm max-w-md">Manage your professional document matrix and synchronize with <br className="hidden sm:block" /> global mission objectives.</p>
@@ -227,7 +227,7 @@ export default function Resumes() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto pb-2 lg:pb-0">
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 w-full sm:w-auto justify-center shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                   <Button onClick={() => navigate('/cover-letters')} variant="outline" className="h-12 w-full sm:w-auto justify-center shrink-0 rounded-xl border-slate-200 dark:border-slate-800 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                       <FileText className="w-3.5 h-3.5" /> Cover Letters
                    </Button>
                  </TooltipTrigger>
@@ -238,7 +238,7 @@ export default function Resumes() {
 
                <Tooltip>
                  <TooltipTrigger asChild>
-                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 w-full sm:w-auto justify-center shrink-0 rounded-xl border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50">
+                   <Button onClick={() => fileInputRef.current?.click()} disabled={importResumeMutation.isPending} variant="outline" className="h-12 w-full sm:w-auto justify-center shrink-0 rounded-xl border-slate-200 dark:border-slate-800 text-slate-600 font-bold uppercase tracking-wider text-[10px] gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                       <Download className="w-3.5 h-3.5 rotate-180" /> {importResumeMutation.isPending ? "Importing..." : "Import Resume"}
                    </Button>
                  </TooltipTrigger>
@@ -275,13 +275,13 @@ export default function Resumes() {
                if (stat.label === "Avg. ATS Score") navigate("/resumes");
                if (stat.label === "Active Deployments") navigate("/job-tracker");
                if (stat.label === "Asset Quality") navigate("/resumes");
-            }} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm cursor-pointer hover:border-blue-600/20 transition-all">
+            }} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm cursor-pointer hover:border-blue-600/20 transition-all">
               <div className="flex items-center gap-4">
                  <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                     <stat.icon className="w-5 h-5" />
                  </div>
                  <div>
-                    <p className="text-lg font-bold text-slate-900 leading-none mb-1">{stat.value}</p>
+                    <p className="text-lg font-bold text-slate-900 dark:text-white leading-none mb-1">{stat.value}</p>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{stat.label}</p>
                  </div>
               </div>
@@ -295,18 +295,18 @@ export default function Resumes() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
             <Input 
               placeholder="Search document matrix..." 
-              className="h-12 rounded-xl bg-white border border-slate-200 pl-11 pr-16 font-medium text-sm focus:ring-4 focus:ring-blue-600/5 transition-all w-full" 
+              className="h-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 pl-11 pr-16 font-medium text-sm focus:ring-4 focus:ring-blue-600/5 transition-all w-full" 
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-1.5 py-0.5 bg-slate-50 border border-slate-200 rounded text-[9px] font-bold text-slate-400 uppercase">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-1.5 py-0.5 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded text-[9px] font-bold text-slate-400 uppercase">
                <span>⌘</span>
                <span>K</span>
             </div>
          </div>
          <div className="flex items-center gap-2 w-full md:w-auto">
-            <Button variant="outline" className="h-12 px-4 rounded-xl border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-500 gap-2 hover:bg-white transition-all flex-1 md:flex-none">
+            <Button variant="outline" className="h-12 px-4 rounded-xl border-slate-200 dark:border-slate-800 text-[10px] font-bold uppercase tracking-wider text-slate-500 gap-2 hover:bg-white transition-all flex-1 md:flex-none">
                <Filter className="w-3.5 h-3.5" /> Filter
             </Button>
-            <Button variant="outline" className="h-12 px-4 rounded-xl border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-500 gap-2 hover:bg-white transition-all flex-1 md:flex-none">
+            <Button variant="outline" className="h-12 px-4 rounded-xl border-slate-200 dark:border-slate-800 text-[10px] font-bold uppercase tracking-wider text-slate-500 gap-2 hover:bg-white transition-all flex-1 md:flex-none">
                <Clock className="w-3.5 h-3.5" /> Recent
             </Button>
          </div>
@@ -318,7 +318,7 @@ export default function Resumes() {
             {resumesLoading ? (
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[1,2,3,4].map(i => (
-                     <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-6 h-64 flex flex-col justify-between shadow-sm">
+                     <Card key={i} className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 h-64 flex flex-col justify-between shadow-sm">
                         <div className="space-y-6">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-4">
@@ -353,12 +353,12 @@ export default function Resumes() {
                   ))}
                </div>
             ) : resumes.length === 0 ? (
-               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-24 text-center space-y-6 bg-white rounded-3xl border border-slate-200 border-dashed">
+               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-24 text-center space-y-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 border-dashed">
                   <div className="w-20 h-20 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-300 mx-auto">
                      <FileText className="w-10 h-10" />
                   </div>
                   <div className="space-y-2">
-                     <h3 className="text-xl font-bold text-slate-900 tracking-tight">No active assets found</h3>
+                     <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">No active assets found</h3>
                      <p className="text-sm text-slate-500 font-medium">Your document matrix is currently empty.</p>
                   </div>
                   <Button onClick={() => setCreateOpen(true)} className="bg-slate-900 text-white rounded-xl h-10 px-6 text-[11px] font-bold uppercase tracking-widest">Initialize First Build</Button>
@@ -377,7 +377,7 @@ export default function Resumes() {
                               transition={{ delay: i * 0.05 }}
                               layout
                            >
-                            <Card className="rounded-3xl border border-slate-200 bg-white p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between">
+                            <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hover:border-blue-600/30 hover:shadow-xl transition-all duration-300 group cursor-pointer relative overflow-hidden h-full flex flex-col justify-between">
                                  <div className="space-y-6 relative z-10">
                                     <div className="flex items-start justify-between">
                                        <div className="flex items-center gap-4">
@@ -385,7 +385,7 @@ export default function Resumes() {
                                              <FileText className="w-5 h-5" />
                                           </div>
                                           <div>
-                                             <h3 className="text-base font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors truncate max-w-[150px]">{resume.title}</h3>
+                                             <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 transition-colors truncate max-w-[150px]">{resume.title}</h3>
                                              <div className="flex items-center gap-2">
                                                 <Badge variant="secondary" className="bg-emerald-50 text-emerald-600 border-emerald-100 text-[8px] px-1.5 h-4 font-bold uppercase tracking-widest">Optimized</Badge>
                                                 <span className="text-[9px] text-slate-400 font-medium">v1.2</span>
@@ -394,11 +394,11 @@ export default function Resumes() {
                                        </div>
                                        <DropdownMenu>
                                           <DropdownMenuTrigger asChild>
-                                             <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-slate-50"><MoreVertical className="w-4 h-4 text-slate-400" /></Button>
+                                             <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/40"><MoreVertical className="w-4 h-4 text-slate-400" /></Button>
                                           </DropdownMenuTrigger>
-                                          <DropdownMenuContent align="end" className="rounded-xl border border-slate-100 shadow-xl p-1.5 w-48 bg-white">
-                                             <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 text-slate-700 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /> Edit Build</DropdownMenuItem>
-                                             <DropdownMenuItem onClick={() => { setShareId(resume.id); setShareOpen(true); }} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 text-slate-700 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Share2 className="w-3.5 h-3.5" /> Share Link</DropdownMenuItem>
+                                          <DropdownMenuContent align="end" className="rounded-xl border border-slate-100 shadow-xl p-1.5 w-48 bg-white dark:bg-slate-900">
+                                             <DropdownMenuItem onClick={() => navigate(`/builder/${resume.id}`)} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 text-slate-700 dark:text-slate-300 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /> Edit Build</DropdownMenuItem>
+                                             <DropdownMenuItem onClick={() => { setShareId(resume.id); setShareOpen(true); }} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 text-slate-700 dark:text-slate-300 focus:bg-blue-50 focus:text-blue-600 cursor-pointer"><Share2 className="w-3.5 h-3.5" /> Share Link</DropdownMenuItem>
                                              <DropdownMenuSeparator className="my-1.5 bg-slate-100" />
                                              <DropdownMenuItem onClick={() => handleDelete(resume.id)} className="rounded-lg p-2 text-[10px] font-bold uppercase tracking-widest gap-3 text-red-500 focus:bg-red-50 cursor-pointer"><Trash2 className="w-3.5 h-3.5" /> Delete Asset</DropdownMenuItem>
                                           </DropdownMenuContent>
@@ -409,7 +409,7 @@ export default function Resumes() {
                                        <div className="space-y-1">
                                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ATS Score</p>
                                           <div className="flex items-center gap-2">
-                                             <span className="text-sm font-bold text-slate-900">{score}%</span>
+                                             <span className="text-sm font-bold text-slate-900 dark:text-white">{score}%</span>
                                              <div className="flex-1 h-1 bg-slate-50 rounded-full overflow-hidden">
                                                 <div className={cn("h-full rounded-full", score > 80 ? "bg-emerald-500" : score > 50 ? "bg-blue-500" : "bg-amber-500")} style={{ width: `${score}%` }} />
                                              </div>
@@ -452,9 +452,9 @@ export default function Resumes() {
 
          {/* Right Sidebar: Activity & Insights */}
          <div className="lg:col-span-4 space-y-8">
-            <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+            <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm space-y-6">
                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                      <TrendingUp className="w-4 h-4 text-blue-600" /> Recent Activity
                   </h3>
                   <Badge className="bg-blue-50 text-blue-600 border-none text-[8px] font-bold uppercase">Live</Badge>
@@ -470,7 +470,7 @@ export default function Resumes() {
                           <act.icon className="w-4 h-4" />
                        </div>
                        <div className="space-y-1">
-                          <p className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{act.title}</p>
+                          <p className="text-[11px] font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{act.title}</p>
                           <p className="text-[10px] text-slate-500 font-medium leading-tight">{act.desc}</p>
                           <p className="text-[9px] text-slate-400 font-medium">{act.time}</p>
                        </div>
@@ -483,15 +483,15 @@ export default function Resumes() {
       </div>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-         <DialogContent className="w-[95vw] md:w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 border-none shadow-2xl max-w-lg bg-white">
+         <DialogContent className="w-[95vw] md:w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 border-none shadow-2xl max-w-lg bg-white dark:bg-slate-900">
             <div className="space-y-6">
                <div className="space-y-2 pt-2 md:pt-0">
-                  <DialogTitle className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">New Resume Build</DialogTitle>
+                  <DialogTitle className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">New Resume Build</DialogTitle>
                   <DialogDescription className="text-xs md:text-sm font-medium text-slate-500">Initialize a new professional identity asset.</DialogDescription>
                </div>
                <div className="space-y-2">
                   <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Resume Title</Label>
-                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-bold text-sm text-slate-900" />
+                  <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="h-12 rounded-xl bg-slate-50 border border-slate-200 dark:border-slate-800 px-4 font-bold text-sm text-slate-900 dark:text-white" />
                </div>
                <Button onClick={handleCreate} disabled={!title.trim() || createResumeMutation.isPending} className="w-full h-12 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest text-[10px] gap-3 shadow-lg shadow-blue-600/20">
                   {createResumeMutation.isPending ? "Initializing..." : "Initialize Build"} <Sparkles className="w-4 h-4" />
@@ -501,14 +501,14 @@ export default function Resumes() {
       </Dialog>
 
       <Dialog open={shareOpen} onOpenChange={setShareOpen}>
-         <DialogContent className="w-[95vw] md:w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 border-none shadow-2xl max-w-lg bg-white">
+         <DialogContent className="w-[95vw] md:w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 border-none shadow-2xl max-w-lg bg-white dark:bg-slate-900">
             <div className="space-y-6">
                <div className="space-y-2 pt-2 md:pt-0">
-                  <DialogTitle className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">Share Identity</DialogTitle>
+                  <DialogTitle className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Share Identity</DialogTitle>
                   <DialogDescription className="text-xs md:text-sm font-medium text-slate-500">Global link for professional profile synchronization.</DialogDescription>
                </div>
                <div className="flex gap-2">
-                  <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-12 rounded-xl bg-slate-50 border border-slate-200 px-4 font-medium text-slate-600 text-xs flex-1" />
+                  <Input readOnly value={`${window.location.origin}/profile/${shareId}`} className="h-12 rounded-xl bg-slate-50 border border-slate-200 dark:border-slate-800 px-4 font-medium text-slate-600 text-xs flex-1" />
                   <Button onClick={() => copyShareLink(shareId)} className="h-12 w-12 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 flex items-center justify-center">
                      {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                   </Button>

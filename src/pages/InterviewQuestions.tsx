@@ -164,19 +164,19 @@ export default function InterviewQuestions() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Left Sidebar - Controls */}
         <div className="md:col-span-4 space-y-6">
-           <Card className="bg-white border border-slate-200 p-6 rounded-[2rem] shadow-sm space-y-6">
+           <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-[2rem] shadow-sm space-y-6">
               <div className="space-y-1">
-                 <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Search className="w-4 h-4 text-emerald-600" /> Discovery Mode
                  </h3>
                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Generate Questions</p>
               </div>
 
               <div className="flex gap-2 p-1 bg-slate-50 rounded-xl">
-                 <button onClick={() => setMode("role")} className={cn("flex-1 py-2 rounded-lg text-xs font-bold transition-all", mode === "role" ? "bg-white shadow-sm text-emerald-600" : "text-slate-500 hover:text-slate-900")}>
+                 <button onClick={() => setMode("role")} className={cn("flex-1 py-2 rounded-lg text-xs font-bold transition-all", mode === "role" ? "bg-white dark:bg-slate-900 shadow-sm text-emerald-600" : "text-slate-500 hover:text-slate-900")}>
                     By Role
                  </button>
-                 <button onClick={() => setMode("resume")} className={cn("flex-1 py-2 rounded-lg text-xs font-bold transition-all", mode === "resume" ? "bg-white shadow-sm text-emerald-600" : "text-slate-500 hover:text-slate-900")}>
+                 <button onClick={() => setMode("resume")} className={cn("flex-1 py-2 rounded-lg text-xs font-bold transition-all", mode === "resume" ? "bg-white dark:bg-slate-900 shadow-sm text-emerald-600" : "text-slate-500 hover:text-slate-900")}>
                     By Resume
                  </button>
               </div>
@@ -188,7 +188,7 @@ export default function InterviewQuestions() {
                           value={position} 
                           onChange={e => setPosition(e.target.value)} 
                           placeholder="Role (e.g. Product Manager)" 
-                          className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs" 
+                          className="h-11 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-xs" 
                        />
                     </div>
                     <div className="space-y-2">
@@ -196,19 +196,19 @@ export default function InterviewQuestions() {
                           value={company} 
                           onChange={e => setCompany(e.target.value)} 
                           placeholder="Target Company (e.g. Google) - Optional" 
-                          className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs" 
+                          className="h-11 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-xs" 
                        />
                     </div>
                  </div>
               ) : (
                  <div className="space-y-2">
                     <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                       <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs">
+                       <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-xs">
                           <SelectValue placeholder="Select Context Resume" />
                        </SelectTrigger>
-                       <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1">
+                       <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white dark:bg-slate-900 p-1">
                           {resumes.map(r => (
-                             <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 rounded-lg text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                             <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 rounded-lg text-slate-700 dark:text-slate-300 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
                                 {r.title}
                              </SelectItem>
                           ))}
@@ -226,9 +226,9 @@ export default function InterviewQuestions() {
               </Button>
            </Card>
 
-           <Card className="bg-white border border-slate-200 p-6 rounded-[2rem] shadow-sm space-y-4">
+           <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-[2rem] shadow-sm space-y-4">
               <div className="space-y-1">
-                 <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <BookmarkCheck className="w-4 h-4 text-amber-500" /> Bookmarked
                  </h3>
                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{savedQuestions.length} saved questions</p>
@@ -238,13 +238,13 @@ export default function InterviewQuestions() {
 
         {/* Right Main Area - Results */}
         <div className="md:col-span-8">
-           <Card className="bg-white border border-slate-200 p-8 rounded-[2rem] shadow-sm min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px]">
+           <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-[2rem] shadow-sm min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px]">
               <div className="flex items-center gap-3 mb-8 pb-6 border-b border-slate-100">
                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <BookOpen className="w-5 h-5" />
                  </div>
                  <div>
-                    <h2 className="text-xl font-black text-slate-900">Question Bank</h2>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white">Question Bank</h2>
                     <p className="text-xs font-medium text-slate-500">Study AI-generated questions tailored to your profile.</p>
                  </div>
               </div>
@@ -266,7 +266,7 @@ export default function InterviewQuestions() {
                                       <span className={cn("text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md whitespace-nowrap", 
                                          q.category === "Behavioral" ? "bg-indigo-100 text-indigo-700" :
                                          q.category === "Technical" ? "bg-rose-100 text-rose-700" :
-                                         "bg-slate-200 text-slate-700"
+                                         "bg-slate-200 text-slate-700 dark:text-slate-300"
                                       )}>
                                          {q.category}
                                       </span>
@@ -310,7 +310,7 @@ export default function InterviewQuestions() {
                                       </Button>
                                    </div>
                                 </div>
-                                <p className="text-sm font-semibold text-slate-800 leading-relaxed max-w-4xl">{q.text}</p>
+                                <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 leading-relaxed max-w-4xl">{q.text}</p>
                              </div>
                           </div>
 
@@ -320,19 +320,19 @@ export default function InterviewQuestions() {
                                    {q.intent && (
                                       <div>
                                          <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Why they ask this</p>
-                                         <p className="text-xs text-slate-700 font-medium">{q.intent}</p>
+                                         <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">{q.intent}</p>
                                       </div>
                                    )}
                                    {q.framework && (
                                       <div>
                                          <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Required Structure</p>
-                                         <p className="text-xs text-slate-700 font-medium">{q.framework}</p>
+                                         <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">{q.framework}</p>
                                       </div>
                                    )}
                                    {q.tip && (
                                       <div>
                                          <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Pro Tip</p>
-                                         <p className="text-xs text-slate-700 font-medium">{q.tip}</p>
+                                         <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">{q.tip}</p>
                                       </div>
                                    )}
                                 </div>
@@ -342,7 +342,7 @@ export default function InterviewQuestions() {
                           {practicingId === q.id && (
                              <div className="pl-10 space-y-3">
                                 <textarea
-                                   className="w-full min-h-[100px] p-3 text-sm rounded-xl border border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                   className="w-full min-h-[100px] p-3 text-sm rounded-xl border border-emerald-200 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                                    placeholder="Type your answer here..."
                                    value={answerDraft}
                                    onChange={e => setAnswerDraft(e.target.value)}
@@ -386,7 +386,7 @@ export default function InterviewQuestions() {
                                 </div>
                                 <div className="bg-emerald-50 rounded-xl p-4 space-y-2">
                                    <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Ideal Answer Structure</p>
-                                   <p className="text-xs text-slate-700 font-medium leading-relaxed">{reviews[q.id].ideal_structure}</p>
+                                   <p className="text-xs text-slate-700 dark:text-slate-300 font-medium leading-relaxed">{reviews[q.id].ideal_structure}</p>
                                 </div>
                              </div>
                           )}

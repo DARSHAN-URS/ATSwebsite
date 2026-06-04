@@ -182,7 +182,7 @@ export default function EmailOutreach() {
       <SEOHead title={to.seoTitle} description={to.seoDesc} />
          
          {/* 1. SaaS Hero Section */}
-         <div className="relative bg-white rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 shadow-sm">
+         <div className="relative bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-10 overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -192,7 +192,7 @@ export default function EmailOutreach() {
                       <span className="text-[10px] font-bold uppercase tracking-wider">{to.engineActive}</span>
                    </div>
                    <div className="space-y-1">
-                     <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+                     <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none uppercase">
                         {to.title}
                      </h1>
                      <p className="text-slate-500 font-medium text-sm max-w-xl">{to.subtitle}</p>
@@ -201,7 +201,7 @@ export default function EmailOutreach() {
 
                <div className="flex items-center gap-6">
                   <div className="text-right">
-                     <p className="text-2xl font-bold text-slate-900 leading-none">42</p>
+                     <p className="text-2xl font-bold text-slate-900 dark:text-white leading-none">42</p>
                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{to.sentToday}</p>
                   </div>
                   <div className="w-px h-10 bg-slate-100" />
@@ -217,12 +217,12 @@ export default function EmailOutreach() {
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:min-h-[700px]">
             {/* Left Panel: Configuration */}
             <div className="lg:col-span-4 space-y-6">
-               <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6 overflow-hidden relative">
+               <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm space-y-6 overflow-hidden relative">
                   <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
-                     <Settings2 className="w-20 h-20 text-slate-900" />
+                     <Settings2 className="w-20 h-20 text-slate-900 dark:text-white" />
                   </div>
                   <div className="space-y-1">
-                     <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                     <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <Target className="w-4 h-4 text-blue-600" /> {to.parameters}
                      </h3>
                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{to.missionConfig}</p>
@@ -231,11 +231,11 @@ export default function EmailOutreach() {
                   <div className="space-y-4 relative z-10">
                      <div className="space-y-2">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.targetEntity}</Label>
-                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all" />
+                        <Input value={company} onChange={e => setCompany(e.target.value)} placeholder="e.g. Google" className="h-11 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-xs focus:bg-white transition-all" />
                      </div>
                      <div className="space-y-2">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.functionalArea}</Label>
-                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Senior Backend Engineer" className="h-11 rounded-xl bg-slate-50 border-slate-200 font-bold text-xs focus:bg-white transition-all" />
+                        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Senior Backend Engineer" className="h-11 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-xs focus:bg-white transition-all" />
                      </div>
                      <div className="space-y-2">
                         <Label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1">{to.contextReference}</Label>
@@ -258,7 +258,7 @@ export default function EmailOutreach() {
                                  onClick={() => setTone(key)}
                                  className={cn(
                                     "px-3 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest border transition-all",
-                                    tone === key ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20" : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-white hover:border-blue-600/30"
+                                    tone === key ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20" : "bg-slate-50 text-slate-500 border-slate-200 dark:border-slate-800 hover:bg-white hover:border-blue-600/30"
                                  )}
                               >
                                  {label}
@@ -275,9 +275,9 @@ export default function EmailOutreach() {
                   </div>
                </Card>
 
-               <Card className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+               <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
-                     <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                     <h3 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                         <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> {to.safetyProtocols}
                      </h3>
                      <Badge className="bg-emerald-50 text-emerald-600 border-none text-[8px] font-bold uppercase">{to.active}</Badge>
@@ -303,19 +303,19 @@ export default function EmailOutreach() {
 
             {/* Middle Panel: Superhuman Composer */}
             <div className="lg:col-span-8 h-full">
-               <Card className="rounded-3xl border border-slate-200 bg-white shadow-xl h-full flex flex-col relative overflow-hidden group">
+               <Card className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl h-full flex flex-col relative overflow-hidden group">
                   <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-50" />
                   
                   {/* Composer Header */}
-                  <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white relative z-10">
+                  <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white dark:bg-slate-900 relative z-10">
                      <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                            <MessageSquare className="w-4 h-4" />
                         </div>
-                        <h3 className="text-sm font-bold text-slate-900 tracking-tight uppercase">{to.intelligenceComposer}</h3>
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight uppercase">{to.intelligenceComposer}</h3>
                      </div>
                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-[8px] font-bold text-slate-400 border-slate-200 px-2 py-0.5">{to.draftMode}</Badge>
+                        <Badge variant="outline" className="text-[8px] font-bold text-slate-400 border-slate-200 dark:border-slate-800 px-2 py-0.5">{to.draftMode}</Badge>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></Button>
@@ -338,7 +338,7 @@ export default function EmailOutreach() {
                                  value={recruiterEmail} 
                                  onChange={e => setRecruiterEmail(e.target.value)} 
                                  placeholder="recruiter@company.com" 
-                                 className="w-full bg-transparent border-none focus:outline-none focus:ring-0 outline-none pl-7 text-sm font-bold text-slate-900 placeholder:text-slate-300 transition-all" 
+                                 className="w-full bg-transparent border-none focus:outline-none focus:ring-0 outline-none pl-7 text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-300 transition-all" 
                               />
                            </div>
                         </div>
@@ -348,7 +348,7 @@ export default function EmailOutreach() {
                               value={subject} 
                               onChange={e => setSubject(e.target.value)} 
                               placeholder="Application for [Mission Title]..." 
-                              className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 outline-none text-sm font-bold text-slate-900 placeholder:text-slate-300 transition-all" 
+                              className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 outline-none text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-300 transition-all" 
                            />
                         </div>
                         <div className="pt-4 flex-1">
@@ -364,12 +364,12 @@ export default function EmailOutreach() {
 
                   {/* Composer Footer */}
                   <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row items-center justify-between gap-4">
-                     <div className="flex items-center gap-4 px-4 py-2 bg-white border border-slate-200 rounded-xl">
+                     <div className="flex items-center gap-4 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
                         <div className="flex items-center gap-2">
                            <Paperclip className="w-4 h-4 text-slate-400" />
                            <span className="text-[10px] font-bold text-slate-500 uppercase">Resume.pdf</span>
                         </div>
-                        <Checkbox checked={attachResume} onCheckedChange={(c) => setAttachResume(!!c)} className="w-4 h-4 border-slate-200 data-[state=checked]:bg-blue-600 rounded" />
+                        <Checkbox checked={attachResume} onCheckedChange={(c) => setAttachResume(!!c)} className="w-4 h-4 border-slate-200 dark:border-slate-800 data-[state=checked]:bg-blue-600 rounded" />
                      </div>
                      
                      <div className="flex items-center gap-3">
@@ -389,7 +389,7 @@ export default function EmailOutreach() {
          {/* 3. Recent Activity Section */}
          <div className="space-y-6">
             <div className="flex items-center justify-between px-2">
-               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight flex items-center gap-2">
+               <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
                   <History className="w-4 h-4 text-blue-600" /> {to.recentCommunications}
                </h3>
                <Button variant="ghost" size="sm" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">{to.viewFullHistory}</Button>
@@ -398,7 +398,7 @@ export default function EmailOutreach() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                {loadingHistory ? (
                   [1,2,3].map(i => (
-                     <Card key={i} className="rounded-3xl border border-slate-200 bg-white p-5">
+                     <Card key={i} className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
                         <div className="flex justify-between items-start mb-4">
                            <Skeleton className="w-10 h-10 rounded-xl" />
                            <Skeleton className="w-16 h-5 rounded-full" />
@@ -414,14 +414,14 @@ export default function EmailOutreach() {
                      </Card>
                   ))
                ) : history.length === 0 ? (
-                  <div className="col-span-full py-16 text-center space-y-4 bg-white rounded-3xl border border-slate-200 border-dashed w-full">
+                  <div className="col-span-full py-16 text-center space-y-4 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 border-dashed w-full">
                      <Mail className="w-8 h-8 text-slate-300 mx-auto" />
                      <p className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">No recent communications</p>
                      <p className="text-slate-400 text-xs max-w-xs mx-auto">Create and synthesize your first outreach parameters above to get in touch with hiring recruiters!</p>
                   </div>
                ) : (
                   history.map((item) => (
-                     <Card key={item.id} className="rounded-3xl border border-slate-200 bg-white p-5 hover:border-blue-600/30 hover:shadow-md transition-all group cursor-pointer">
+                     <Card key={item.id} className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 hover:border-blue-600/30 hover:shadow-md transition-all group cursor-pointer">
                         <div className="flex justify-between items-start mb-4">
                            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
                               {item.company.charAt(0)}
@@ -431,7 +431,7 @@ export default function EmailOutreach() {
                            </Badge>
                         </div>
                         <div className="space-y-1 mb-4">
-                           <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{item.position}</h4>
+                           <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{item.position}</h4>
                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.company}</p>
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t border-slate-50">
@@ -440,7 +440,7 @@ export default function EmailOutreach() {
                            </div>
                            <div className="flex items-center gap-1.5">
                               <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                              <span className="text-[9px] font-bold text-slate-900">95% {to.optimised}</span>
+                              <span className="text-[9px] font-bold text-slate-900 dark:text-white">95% {to.optimised}</span>
                            </div>
                         </div>
                      </Card>

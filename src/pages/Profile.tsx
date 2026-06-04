@@ -90,7 +90,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6 md:p-10 space-y-16 font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-900 p-6 md:p-10 space-y-16 font-sans">
       <SEOHead title="Account Architecture — ResumePro" description="Manage your professional infrastructure and authentication protocols." />
       
       <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12">
@@ -101,7 +101,7 @@ export default function Profile() {
               </div>
               <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Account Settings</span>
            </motion.div>
-           <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-[0.85] uppercase">
+           <h1 className="text-2xl md:text-4xl md:text-6xl md:text-[7rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.85] uppercase">
               My <br /> <span className="text-blue-600">Account.</span>
            </h1>
            <p className="text-xl text-slate-500 font-medium max-w-xl leading-relaxed">
@@ -118,12 +118,12 @@ export default function Profile() {
                      <AvatarImage src={resolvedAvatarUrl || ""} />
                      <AvatarFallback className="bg-blue-600 text-white text-2xl md:text-4xl font-black">{name[0]}</AvatarFallback>
                   </Avatar>
-                  <button onClick={() => photoInputRef.current?.click()} className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all border border-slate-100">
+                  <button onClick={() => photoInputRef.current?.click()} className="absolute bottom-0 right-0 w-12 h-12 bg-white dark:bg-slate-900 rounded-2xl shadow-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all border border-slate-100">
                      {uploadingPhoto ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
                   </button>
                   <input type="file" ref={photoInputRef} onChange={handlePhotoUpload} className="hidden" accept="image/*" />
                </div>
-               <h2 className="text-3xl font-black text-slate-900 mt-8 tracking-tight">{name}</h2>
+               <h2 className="text-3xl font-black text-slate-900 dark:text-white mt-8 tracking-tight">{name}</h2>
                <p className="text-slate-500 font-bold text-sm uppercase tracking-widest mt-1">{user?.email}</p>
                
                <div className="w-full mt-10 space-y-4">
@@ -151,7 +151,7 @@ export default function Profile() {
          </div>
 
          <div className="xl:col-span-8 space-y-10">
-            <Card className="rounded-[4rem] border-none bg-white shadow-[0_40px_80px_rgba(0,0,0,0.06)] p-12 border border-slate-50">
+            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_40px_80px_rgba(0,0,0,0.06)] p-12 border border-slate-50">
                <div className="space-y-10">
                   <div className="flex items-center gap-3">
                      <User className="w-5 h-5 text-blue-600" />
@@ -160,7 +160,7 @@ export default function Profile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Name</Label>
-                        <Input value={name} onChange={e => setName(e.target.value)} className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+                        <Input value={name} onChange={e => setName(e.target.value)} className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Address</Label>
@@ -168,11 +168,11 @@ export default function Profile() {
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Phone Number</Label>
-                        <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 555-000-0000" className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+                        <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 555-000-0000" className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6" />
                      </div>
                      <div className="space-y-3">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Location</Label>
-                        <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" className="h-16 rounded-2xl bg-white border-slate-100 font-bold px-6" />
+                        <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" className="h-16 rounded-2xl bg-white dark:bg-slate-900 border-slate-100 font-bold px-6" />
                      </div>
                   </div>
                   <div className="flex justify-end pt-6">
@@ -184,7 +184,7 @@ export default function Profile() {
                </div>
             </Card>
 
-            <Card className="rounded-[4rem] border-none bg-white shadow-[0_40px_80px_rgba(0,0,0,0.06)] p-12 border border-slate-50">
+            <Card className="rounded-[4rem] border-none bg-white dark:bg-slate-900 shadow-[0_40px_80px_rgba(0,0,0,0.06)] p-12 border border-slate-50">
                <div className="space-y-10">
                   <div className="flex items-center gap-3">
                      <Crown className="w-5 h-5 text-blue-600" />
@@ -194,7 +194,7 @@ export default function Profile() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 rounded-3xl bg-slate-50 border border-slate-100">
                      <div className="space-y-2">
                         <div className="flex items-center gap-3">
-                           <span className="text-xl font-black text-slate-900">{isPro ? "Pro Subscription" : "Free Tier"}</span>
+                           <span className="text-xl font-black text-slate-900 dark:text-white">{isPro ? "Pro Subscription" : "Free Tier"}</span>
                            {isPro && <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest">Active</span>}
                         </div>
                         <p className="text-sm font-medium text-slate-500">
@@ -210,7 +210,7 @@ export default function Profile() {
                            </Button>
                         ) : (
                            <>
-                              <Button onClick={() => window.location.href = "/upgrade"} variant="outline" className="h-12 px-8 border-slate-200 text-slate-600 font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-100 transition-all">
+                              <Button onClick={() => window.location.href = "/upgrade"} variant="outline" className="h-12 px-8 border-slate-200 dark:border-slate-800 text-slate-600 font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-100 transition-all">
                                  Change Plan
                               </Button>
                               <Button onClick={handleCancelSubscription} disabled={cancelling} variant="ghost" className="h-12 px-8 text-rose-500 hover:bg-rose-50 font-black uppercase tracking-widest text-xs rounded-xl transition-all">
@@ -229,7 +229,7 @@ export default function Profile() {
                   <h3 className="text-xl font-black text-rose-600 tracking-tight">Delete Account</h3>
                   <p className="text-rose-600/70 font-medium text-sm">Permanently delete all your data and account information.</p>
                </div>
-               <Button variant="ghost" className="h-14 px-10 rounded-2xl bg-white text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all gap-3">
+               <Button variant="ghost" className="h-14 px-10 rounded-2xl bg-white dark:bg-slate-900 text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all gap-3">
                   <Trash2 className="w-4 h-4" /> Delete Forever
                </Button>
             </Card>

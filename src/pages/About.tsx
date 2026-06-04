@@ -28,7 +28,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
       {!isInternal && <Navbar />}
 
       {/* Hero */}
-      <section className={cn("relative pb-32 overflow-hidden bg-white", isInternal ? "pt-10" : "pt-48")}>
+      <section className={cn("relative pb-32 overflow-hidden bg-white dark:bg-slate-900", isInternal ? "pt-10" : "pt-48")}>
          <div className="absolute top-0 right-0 w-[80%] h-full bg-blue-50/50 rounded-bl-[10rem] -z-10 translate-x-1/4" />
          <div className="container mx-auto px-8 relative z-10 space-y-12">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 px-5 py-2 bg-blue-600 text-white rounded-full">
@@ -36,7 +36,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{ta.tagline}</span>
             </motion.div>
             <div className="space-y-8">
-               <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 tracking-tighter leading-[0.85]">
+               <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-4xl md:text-6xl md:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.85]">
                   {ta.heroTitle} <br /><span className="text-blue-600">{ta.heroHighlight}</span>
                </motion.h1>
                <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl md:text-3xl text-slate-500 font-medium max-w-3xl leading-relaxed">
@@ -100,7 +100,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
       {/* Footer CTA */}
       <section className="py-60 container mx-auto px-8 text-center space-y-16">
          <div className="space-y-6">
-            <h2 className="text-2xl md:text-4xl md:text-6xl md:text-[7rem] font-black text-slate-900 tracking-tighter leading-none uppercase">{ta.ctaTitle.split(" ").slice(0, -1).join(" ")} <span className="text-blue-600">{ta.ctaTitle.split(" ").slice(-1)}</span></h2>
+            <h2 className="text-2xl md:text-4xl md:text-6xl md:text-[7rem] font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">{ta.ctaTitle.split(" ").slice(0, -1).join(" ")} <span className="text-blue-600">{ta.ctaTitle.split(" ").slice(-1)}</span></h2>
             <p className="text-2xl text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
                {ta.ctaDesc}
             </p>
@@ -109,7 +109,7 @@ export default function About({ isInternal = false }: { isInternal?: boolean }) 
             <Button asChild className="h-20 px-16 bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] shadow-3xl shadow-blue-600/30 hover:scale-105 transition-all group">
                <Link to="/auth" className="flex items-center gap-4">{ta.ctaBtn1} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" /></Link>
             </Button>
-            <Button asChild variant="outline" className="h-20 px-16 border-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] hover:bg-slate-50">
+            <Button asChild variant="outline" className="h-20 px-16 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-[2rem] hover:bg-slate-50 dark:hover:bg-slate-800/40">
                <Link to="/pricing">{ta.ctaBtn2}</Link>
             </Button>
          </div>

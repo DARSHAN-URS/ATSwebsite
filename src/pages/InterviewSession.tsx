@@ -359,13 +359,13 @@ export default function InterviewSession() {
       </div>
 
       {!started && !isLoadingFeedback ? (
-        <Card className="bg-white border border-slate-200 p-8 md:p-12 rounded-[2.5rem] shadow-xl space-y-8 relative overflow-hidden">
+        <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 md:p-12 rounded-[2.5rem] shadow-xl space-y-8 relative overflow-hidden">
            <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-              <Settings2 className="w-32 h-32 text-slate-900" />
+              <Settings2 className="w-32 h-32 text-slate-900 dark:text-white" />
            </div>
            
            <div className="space-y-2 relative z-10">
-              <h1 className="text-3xl font-black text-slate-900 flex items-center gap-3">
+              <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
                  <Video className="w-8 h-8 text-blue-600" /> Interview Setup
               </h1>
               <p className="text-sm font-medium text-slate-500">Configure your parameters to launch a hyper-realistic AI mock interview.</p>
@@ -382,7 +382,7 @@ export default function InterviewSession() {
                           onFocus={() => setShowRoleSuggestions(true)}
                           onBlur={() => setTimeout(() => setShowRoleSuggestions(false), 200)}
                           placeholder="e.g. Senior Frontend Dev" 
-                          className="h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-sm focus:bg-white transition-all shadow-sm" 
+                          className="h-12 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-sm focus:bg-white transition-all shadow-sm" 
                        />
                        <AnimatePresence>
                           {showRoleSuggestions && (
@@ -390,7 +390,7 @@ export default function InterviewSession() {
                                 initial={{ opacity: 0, y: 5 }} 
                                 animate={{ opacity: 1, y: 0 }} 
                                 exit={{ opacity: 0, y: 5 }}
-                                className="absolute z-50 w-full mt-1 bg-white border border-slate-100 rounded-xl shadow-xl max-h-48 overflow-y-auto overflow-x-hidden p-1"
+                                className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-900 border border-slate-100 rounded-xl shadow-xl max-h-48 overflow-y-auto overflow-x-hidden p-1"
                              >
                                 {ROLE_SUGGESTIONS
                                    .filter(r => r.toLowerCase().includes(position.toLowerCase()))
@@ -402,7 +402,7 @@ export default function InterviewSession() {
                                          setPosition(role);
                                          setShowRoleSuggestions(false);
                                       }}
-                                      className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
+                                      className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
                                    >
                                       {role}
                                    </button>
@@ -421,7 +421,7 @@ export default function InterviewSession() {
                           onFocus={() => setShowIndustrySuggestions(true)}
                           onBlur={() => setTimeout(() => setShowIndustrySuggestions(false), 200)}
                           placeholder="e.g. Fintech or Google" 
-                          className="h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-sm focus:bg-white transition-all shadow-sm" 
+                          className="h-12 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-sm focus:bg-white transition-all shadow-sm" 
                        />
                        <AnimatePresence>
                           {showIndustrySuggestions && (
@@ -429,7 +429,7 @@ export default function InterviewSession() {
                                 initial={{ opacity: 0, y: 5 }} 
                                 animate={{ opacity: 1, y: 0 }} 
                                 exit={{ opacity: 0, y: 5 }}
-                                className="absolute z-50 w-full mt-1 bg-white border border-slate-100 rounded-xl shadow-xl max-h-48 overflow-y-auto overflow-x-hidden p-1"
+                                className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-900 border border-slate-100 rounded-xl shadow-xl max-h-48 overflow-y-auto overflow-x-hidden p-1"
                              >
                                 {INDUSTRY_SUGGESTIONS
                                    .filter(i => i.toLowerCase().includes(industry.toLowerCase()))
@@ -441,7 +441,7 @@ export default function InterviewSession() {
                                          setIndustry(ind);
                                          setShowIndustrySuggestions(false);
                                       }}
-                                      className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
+                                      className="w-full text-left px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
                                    >
                                       {ind}
                                    </button>
@@ -457,12 +457,12 @@ export default function InterviewSession() {
                  <div className="space-y-2">
                     <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Interview Type</Label>
                     <Select value={interviewType} onValueChange={setInterviewType}>
-                       <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-sm text-slate-900 shadow-sm">
+                       <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-sm text-slate-900 dark:text-white shadow-sm">
                           <SelectValue />
                        </SelectTrigger>
-                       <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
+                       <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white dark:bg-slate-900 p-1 z-[100]">
                             {["Technical", "Behavioral", "System Design"].map(l => (
-                               <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                               <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 dark:text-slate-300 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
                                   {l}
                                </SelectItem>
                             ))}
@@ -472,12 +472,12 @@ export default function InterviewSession() {
                  <div className="space-y-2">
                     <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Experience Level</Label>
                     <Select value={difficulty} onValueChange={setDifficulty}>
-                       <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-sm text-slate-900 shadow-sm">
+                       <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-sm text-slate-900 dark:text-white shadow-sm">
                           <SelectValue />
                        </SelectTrigger>
-                       <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
+                       <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white dark:bg-slate-900 p-1 z-[100]">
                             {["Junior", "Intermediate", "Senior", "Executive"].map(l => (
-                               <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                               <SelectItem key={l} value={l} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 dark:text-slate-300 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
                                   {l}
                                </SelectItem>
                             ))}
@@ -489,13 +489,13 @@ export default function InterviewSession() {
               <div className="space-y-2">
                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Context Reference (Optional)</Label>
                  <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                    <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-sm text-slate-900 shadow-sm">
+                    <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 dark:border-slate-800 font-bold text-sm text-slate-900 dark:text-white shadow-sm">
                        <SelectValue placeholder="Base interview on a specific resume" />
                     </SelectTrigger>
-                     <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white p-1 z-[100]">
+                     <SelectContent className="rounded-xl border border-slate-100 shadow-2xl bg-white dark:bg-slate-900 p-1 z-[100]">
                          <SelectItem value="none" className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer italic text-slate-500 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">Do not use resume context</SelectItem>
                          {resumes.map(r => (
-                            <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
+                            <SelectItem key={r.id} value={r.id} className="text-xs font-semibold py-2.5 pl-8 pr-4 rounded-lg cursor-pointer text-slate-700 dark:text-slate-300 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white">
                                {r.title}
                             </SelectItem>
                          ))}
@@ -525,17 +525,17 @@ export default function InterviewSession() {
            </div>
         </Card>
       ) : isLoadingFeedback ? (
-        <Card className="bg-white border border-slate-200 rounded-[2.5rem] shadow-xl relative min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px] flex flex-col items-center justify-center p-8 text-center space-y-6">
+        <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-xl relative min-h-[120px] md:min-h-[200px] md:min-h-[300px] lg:min-h-auto lg:h-[500px] flex flex-col items-center justify-center p-8 text-center space-y-6">
            <div className="w-24 h-24 rounded-full bg-blue-50 flex items-center justify-center">
               <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
            </div>
            <div className="space-y-2">
-              <h2 className="text-2xl font-black text-slate-900">Compiling Evaluation</h2>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white">Compiling Evaluation</h2>
               <p className="text-slate-500 font-medium max-w-sm mx-auto">Our AI is analyzing your responses against millions of successful interview data points. You will be redirected shortly.</p>
            </div>
         </Card>
       ) : (
-        <Card className="bg-white border border-slate-200 rounded-[2.5rem] shadow-xl relative overflow-hidden min-h-[600px] flex flex-col group">
+        <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-xl relative overflow-hidden min-h-[600px] flex flex-col group">
            <div className="absolute top-0 right-0 w-full lg:w-[400px] h-auto lg:h-[400px] bg-blue-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
            
            <div className="flex items-center justify-between p-6 md:p-8 border-b border-slate-100 bg-white/50 backdrop-blur-sm relative z-10">
@@ -548,7 +548,7 @@ export default function InterviewSession() {
                     {phase === "listening" && <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />}
                  </div>
                  <div>
-                    <h3 className="text-sm font-black text-slate-900 tracking-tight uppercase">AI Interviewer</h3>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">AI Interviewer</h3>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
                        <Activity className={cn("w-3 h-3", phase === "speaking" ? "text-blue-500" : phase === "listening" ? "text-emerald-500 animate-pulse" : "text-slate-300")} />
                        {phase === "listening" ? "Listening..." : phase === "speaking" ? "Speaking..." : "Processing"}
@@ -559,13 +559,13 @@ export default function InterviewSession() {
               <div className="flex items-center gap-4">
                  <div className="hidden md:flex flex-col text-right">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Question</span>
-                    <span className="text-sm font-black text-slate-900">{currentQuestionIndex + 1} / {questions.length}</span>
+                    <span className="text-sm font-black text-slate-900 dark:text-white">{currentQuestionIndex + 1} / {questions.length}</span>
                  </div>
                  <Button 
                     variant="outline" 
                     size="icon"
                     onClick={() => setVoiceEnabled(!voiceEnabled)}
-                    className={cn("rounded-xl border-slate-200 transition-colors", !voiceEnabled && "text-rose-500 bg-rose-50 border-rose-200 hover:bg-rose-100 hover:text-rose-600")}
+                    className={cn("rounded-xl border-slate-200 dark:border-slate-800 transition-colors", !voiceEnabled && "text-rose-500 bg-rose-50 border-rose-200 hover:bg-rose-100 hover:text-rose-600")}
                  >
                     {voiceEnabled ? <Volume2 className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
                  </Button>
@@ -583,7 +583,7 @@ export default function InterviewSession() {
                     <div className={cn(
                        "max-w-[85%] rounded-[2rem] p-6 text-sm font-medium leading-relaxed shadow-sm",
                        m.role === "assistant" 
-                       ? "bg-slate-50 text-slate-700 border border-slate-100 rounded-tl-sm" 
+                       ? "bg-slate-50 text-slate-700 dark:text-slate-300 border border-slate-100 rounded-tl-sm" 
                        : "bg-blue-600 text-white shadow-blue-600/20 rounded-tr-sm"
                     )}>
                        {m.content}
@@ -622,7 +622,7 @@ export default function InterviewSession() {
                        value={manualAnswer}
                        onChange={(e) => setManualAnswer(e.target.value)}
                        placeholder={voiceEnabled ? "Start speaking, or type your response here..." : "Type your response here..."}
-                       className="min-h-[120px] rounded-2xl bg-white border-slate-200 focus:border-blue-500/50 focus:ring-blue-500/20 resize-none text-sm font-medium p-4 pr-16 shadow-inner"
+                       className="min-h-[120px] rounded-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:border-blue-500/50 focus:ring-blue-500/20 resize-none text-sm font-medium p-4 pr-16 shadow-inner"
                     />
                     <Button 
                        onClick={handleNextQuestion}

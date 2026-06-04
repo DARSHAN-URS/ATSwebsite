@@ -48,7 +48,7 @@ export default function InterviewPrep() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 -mt-20 pt-28 pb-20 px-4 md:px-8 overflow-hidden relative">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:text-white -mt-20 pt-28 pb-20 px-4 md:px-8 overflow-hidden relative">
       <SEOHead title="Interview Intelligence - ResumePro" description="Practice your interview skills with AI." />
       
       {/* Background Ambient Glows */}
@@ -66,7 +66,7 @@ export default function InterviewPrep() {
               transition={{ delay: 0.1 }}
               className="space-y-6 max-w-3xl mx-auto"
             >
-              <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter">
+              <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter">
                  INTERVIEW <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">LAB.</span>
               </h1>
               <p className="text-lg md:text-xl text-slate-600 font-medium leading-relaxed">
@@ -87,7 +87,7 @@ export default function InterviewPrep() {
                   <div 
                      onClick={() => navigate(card.path)}
                      className={cn(
-                        "h-full bg-white border border-slate-200 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 group relative overflow-hidden flex flex-col justify-between min-h-[340px] shadow-sm hover:-translate-y-1",
+                        "h-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 group relative overflow-hidden flex flex-col justify-between min-h-[340px] shadow-sm hover:-translate-y-1",
                         card.bgHover
                      )}
                   >
@@ -99,13 +99,13 @@ export default function InterviewPrep() {
                            )}>
                               {card.icon}
                            </div>
-                           <div className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600">
+                           <div className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-600">
                               {card.stats}
                            </div>
                         </div>
                         
                         <div className="space-y-4">
-                           <h3 className="text-2xl font-black text-slate-900 tracking-tight">{card.title}</h3>
+                           <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{card.title}</h3>
                            <p className="text-sm font-medium text-slate-500 leading-relaxed">{card.desc}</p>
                         </div>
                      </div>
@@ -126,7 +126,7 @@ export default function InterviewPrep() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-wrap justify-center gap-8 md:gap-16 pt-10 border-t border-slate-200"
+            className="flex flex-wrap justify-center gap-8 md:gap-16 pt-10 border-t border-slate-200 dark:border-slate-800"
          >
             <div className="flex items-center gap-3 text-slate-500">
                <Shield className="w-5 h-5 text-emerald-500" />

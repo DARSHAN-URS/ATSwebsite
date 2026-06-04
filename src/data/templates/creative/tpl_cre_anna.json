@@ -1,14 +1,14 @@
 {
-  "template_id": "ats-modern-smart-profile",
-  "template_name": "Smart Profile",
-  "category": "Modern",
-  "description": "Elegant serif layout prioritizing skills and certification metrics with warm amber accents.",
+  "template_id": "tpl_cre_anna",
+  "template_name": "Anna Field",
+  "category": "Creative",
+  "description": "Centered layout with light purple/lavender header banner blocks and clean spacing.",
   "layout_metadata": {
     "column_count": 1,
     "sidebar_position": "none",
-    "structural_alignment": "left-aligned",
-    "information_density": "hyper-dense",
-    "visual_emphasis": "timeline",
+    "structural_alignment": "center-aligned",
+    "information_density": "standard",
+    "visual_emphasis": "background-blocks",
     "typography": {
       "heading": "helvetica",
       "body": "helvetica",
@@ -16,13 +16,13 @@
     },
     "spacing": {
       "margin": "20px",
-      "line_height": 1.25,
-      "section_gap": "23px"
+      "line_height": 1.35,
+      "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#b45309",
-      "secondary": "#d97706",
-      "text": "#111111",
+      "primary": "#2563eb",
+      "secondary": "#eaeefb",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": false,
@@ -30,10 +30,10 @@
   },
   "sections": {
     "order": [
-      "skills",
+      "summary",
       "experience",
       "education",
-      "summary"
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 100,
+  "ats_score": 92,
   "suitable_professions": [
-    "Product Management",
-    "Sales Executives",
-    "Account Executives"
+    "Project Manager",
+    "Product Manager",
+    "Coordinator"
   ]
 }

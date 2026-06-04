@@ -1,8 +1,8 @@
 {
   "template_id": "tpl_cre_001",
-  "template_name": "Creative Spark",
+  "template_name": "Brian T. Wayne",
   "category": "Creative",
-  "description": "A high-impact creative format featuring a bold left sidebar, staggered sections, and violet brand styling.",
+  "description": "Serif sidebar template with full-height dark slate-blue sidebar and light-gray section bands.",
   "layout_metadata": {
     "column_count": 2,
     "sidebar_position": "left",
@@ -10,9 +10,9 @@
     "information_density": "airy",
     "visual_emphasis": "color-blocks",
     "typography": {
-      "heading": "FontStack-C1A",
-      "body": "FontStack-C1B",
-      "accent": "FontStack-C1C"
+      "heading": "times",
+      "body": "times",
+      "accent": "times"
     },
     "spacing": {
       "margin": "20px",
@@ -20,9 +20,9 @@
       "section_gap": "24px"
     },
     "color_palette": {
-      "primary": "#7c3aed",
-      "secondary": "#4f46e5",
-      "text": "#111111",
+      "primary": "#1e2d3d",
+      "secondary": "#f1f3f5",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": true,
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 85,
+  "ats_score": 80,
   "suitable_professions": [
-    "Creative Roles",
-    "Designers",
-    "Artists"
+    "Business Development",
+    "Consulting",
+    "Management"
   ]
 }

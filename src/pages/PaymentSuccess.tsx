@@ -107,7 +107,7 @@ export default function PaymentSuccess() {
 
   if ((!plan && !sessionId && !activePlanId) || (!token && !sessionId)) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col items-center justify-center p-8 text-center font-sans">
         <SEOHead title="Payment — ResumePro" description="Payment confirmation page." />
         <div className="space-y-6 max-w-md">
            <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-600 mx-auto">
@@ -125,7 +125,7 @@ export default function PaymentSuccess() {
 
   if (authLoading || (activating && !error)) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col items-center justify-center p-8 text-center font-sans">
         <div className="space-y-6">
            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto" />
            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] animate-pulse">Initializing Premium Architecture...</p>
@@ -136,7 +136,7 @@ export default function PaymentSuccess() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col items-center justify-center p-8 text-center font-sans">
         <SEOHead title="Payment — ResumePro" description="Payment confirmation page." />
         <div className="space-y-8 max-w-md">
            <div className="w-20 h-20 bg-blue-50 rounded-[2rem] flex items-center justify-center text-blue-600 mx-auto shadow-2xl shadow-blue-600/10">
@@ -158,7 +158,7 @@ export default function PaymentSuccess() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col items-center justify-center p-8 text-center font-sans">
         <SEOHead title="Activation Error — ResumePro" description="Payment activation error." />
         <div className="space-y-6 max-w-md">
            <div className="w-20 h-20 bg-rose-50 rounded-[2rem] flex items-center justify-center text-rose-600 mx-auto">

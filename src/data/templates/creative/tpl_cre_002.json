@@ -1,18 +1,18 @@
 {
   "template_id": "tpl_cre_002",
-  "template_name": "Creative Studio",
+  "template_name": "Camila Rivera",
   "category": "Creative",
-  "description": "An expressive single-column layout prioritizing right-aligned headings, elegant pink tones, and generous white space.",
+  "description": "Clean sans-serif template with top banner and centered horizontal section dividers.",
   "layout_metadata": {
     "column_count": 1,
     "sidebar_position": "none",
-    "structural_alignment": "right-aligned",
+    "structural_alignment": "center-aligned",
     "information_density": "standard",
-    "visual_emphasis": "white-space",
+    "visual_emphasis": "background-blocks",
     "typography": {
-      "heading": "FontStack-C2A",
-      "body": "FontStack-C2B",
-      "accent": "FontStack-C2C"
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
     },
     "spacing": {
       "margin": "18px",
@@ -20,9 +20,9 @@
       "section_gap": "20px"
     },
     "color_palette": {
-      "primary": "#db2777",
-      "secondary": "#e11d48",
-      "text": "#111111",
+      "primary": "#eef1f5",
+      "secondary": "#333333",
+      "text": "#222222",
       "background": "#ffffff"
     },
     "has_photo": true,
@@ -30,9 +30,9 @@
   },
   "sections": {
     "order": [
+      "summary",
       "experience",
       "education",
-      "summary",
       "skills"
     ],
     "visibility": {
@@ -43,10 +43,10 @@
       "projects": true
     }
   },
-  "ats_score": 82,
+  "ats_score": 85,
   "suitable_professions": [
-    "Studio Art",
-    "Creative Direction",
-    "Graphic Designers"
+    "Sales Manager",
+    "Marketing Manager",
+    "Business Executive"
   ]
 }

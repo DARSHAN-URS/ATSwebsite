@@ -233,11 +233,11 @@ export default function RecruiterApplicants() {
                      <Users className="w-4 h-4" />
                      <span className="text-[9px] font-black uppercase tracking-widest">Job Management</span>
                   </div>
-                  <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+                  <h1 className="text-2xl md:text-4xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                      Job <br /> <span className="text-blue-600">Applicants.</span>
                   </h1>
                   <p className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed">
-                     Managing <span className="text-slate-900 font-black">{jobTitle}</span> job with {applicants.length} active applicants.
+                     Managing <span className="text-slate-900 dark:text-white font-black">{jobTitle}</span> job with {applicants.length} active applicants.
                   </p>
                </div>
             </div>
@@ -269,14 +269,14 @@ export default function RecruiterApplicants() {
                       <div className="flex items-center justify-between px-6 border-l-4 border-blue-600 h-10">
                          <div className="flex items-center gap-4">
                             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">{config.label}</h3>
-                            <span className="text-2xl font-black text-slate-900 leading-none">{grouped[stage].length}</span>
+                            <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">{grouped[stage].length}</span>
                          </div>
                          <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", `bg-blue-50 text-blue-600`)}>
                             <StageIcon className="w-5 h-5" />
                           </div>
                       </div>
 
-                      <div className="space-y-6 min-h-[600px] bg-slate-100/50 rounded-[3rem] p-6 border border-slate-200">
+                      <div className="space-y-6 min-h-[600px] bg-slate-100/50 rounded-[3rem] p-6 border border-slate-200 dark:border-slate-800">
                          <AnimatePresence mode="popLayout">
                             {grouped[stage].map((app) => {
                               const aiScore = getAiScore(app.recruiter_notes);
@@ -292,7 +292,7 @@ export default function RecruiterApplicants() {
                                 >
                                    <Card 
                                      onClick={() => openDrawer(app)}
-                                     className="rounded-[2.5rem] border border-slate-100 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer overflow-hidden relative"
+                                     className="rounded-[2.5rem] border border-slate-100 bg-white dark:bg-slate-900 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer overflow-hidden relative"
                                    >
                                       {aiScore !== null && aiScore > 85 && (
                                          <div className="absolute top-0 right-0 p-6">
@@ -306,7 +306,7 @@ export default function RecruiterApplicants() {
                                                   {app.profile?.display_name?.charAt(0) || "?"}
                                                </div>
                                                <div>
-                                                  <p className="text-xl font-black text-slate-900 tracking-tight leading-tight">{app.profile?.display_name || "Unknown Candidate"}</p>
+                                                  <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">{app.profile?.display_name || "Unknown Candidate"}</p>
                                                   <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">
                                                     Applied {new Date(app.created_at).toLocaleDateString()}
                                                   </p>
@@ -318,7 +318,7 @@ export default function RecruiterApplicants() {
                                            <div className="space-y-4 bg-slate-50 p-6 rounded-2xl">
                                               <div className="flex items-center justify-between">
                                                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 flex items-center gap-2"><Sparkles className="w-3 h-3" /> AI Score</span>
-                                                 <span className="text-lg font-black text-slate-900">{aiScore}%</span>
+                                                 <span className="text-lg font-black text-slate-900 dark:text-white">{aiScore}%</span>
                                               </div>
                                               <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
                                                  <motion.div 
@@ -355,7 +355,7 @@ export default function RecruiterApplicants() {
                             })}
                          </AnimatePresence>
                          {grouped[stage].length === 0 && (
-                           <div className="h-40 border-4 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center text-center p-10 opacity-40">
+                           <div className="h-40 border-4 border-dashed border-slate-200 dark:border-slate-800 rounded-[3rem] flex flex-col items-center justify-center text-center p-10 opacity-40">
                               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Neutral Zone</p>
                            </div>
                          )}
@@ -368,19 +368,19 @@ export default function RecruiterApplicants() {
       </div>
 
       <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 border-none bg-white font-sans">
-           <div className="bg-slate-50 border-b border-slate-100 p-16 text-slate-900 relative overflow-hidden">
+        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 border-none bg-white dark:bg-slate-900 font-sans">
+           <div className="bg-slate-50 border-b border-slate-100 p-16 text-slate-900 dark:text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-full lg:w-[500px] h-auto lg:h-[500px] bg-blue-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
               <div className="relative z-10 space-y-10">                  <div className="flex items-center justify-between">
                     <div className="w-24 h-24 rounded-[2rem] bg-blue-600 flex items-center justify-center text-white text-2xl md:text-4xl font-black shadow-2xl">
                        {selectedApp?.profile?.display_name?.charAt(0) || "?"}
                     </div>
-                    <Badge className={cn("rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em]", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900" : "bg-slate-100 text-slate-600")}>
+                    <Badge className={cn("rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em]", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900 dark:text-white" : "bg-slate-100 text-slate-600")}>
                        {selectedApp?.is_shortlisted ? "Shortlisted" : "Standard Candidate"}
                     </Badge>
                  </div>
                  <div className="space-y-2">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight text-slate-900">{selectedApp?.profile?.display_name || "Applicant"}</h2>
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight text-slate-900 dark:text-white">{selectedApp?.profile?.display_name || "Applicant"}</h2>
                     <p className="text-blue-600 font-black uppercase tracking-[0.3em] text-xs">Application Date • {selectedApp ? new Date(selectedApp.created_at).toLocaleDateString() : ""}</p>
                  </div>
               </div>
@@ -405,7 +405,7 @@ export default function RecruiterApplicants() {
                  <div className="flex flex-col justify-end">
                     <Button 
                       onClick={() => selectedApp && toggleShortlist(selectedApp)}
-                      className={cn("h-16 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900 shadow-xl shadow-amber-400/20" : "bg-slate-900 text-white")}
+                      className={cn("h-16 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all", selectedApp?.is_shortlisted ? "bg-amber-400 text-slate-900 dark:text-white shadow-xl shadow-amber-400/20" : "bg-slate-900 text-white")}
                     >
                        <Star className={cn("w-5 h-5 mr-3", selectedApp?.is_shortlisted ? "fill-current" : "")} />
                        {selectedApp?.is_shortlisted ? "Remove Shortlist" : "Shortlist Candidate"}
@@ -422,7 +422,7 @@ export default function RecruiterApplicants() {
                       <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20"><Sparkles className="w-5 h-5" /></div>
                       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">AI Analysis Summary</span>
                    </div>
-                   <p className="text-lg font-medium text-slate-700 leading-relaxed italic border-l-4 border-blue-600 pl-8 py-2">
+                   <p className="text-lg font-medium text-slate-700 dark:text-slate-300 leading-relaxed italic border-l-4 border-blue-600 pl-8 py-2">
                       {selectedApp.recruiter_notes}
                    </p>
                 </div>
@@ -438,7 +438,7 @@ export default function RecruiterApplicants() {
                    onChange={(e) => setNotes(e.target.value)} 
                    rows={8} 
                    placeholder="Enter your notes here..." 
-                   className="rounded-[2.5rem] border-slate-100 bg-slate-50 p-10 font-medium text-lg text-slate-900 focus-visible:ring-blue-600/20 leading-relaxed shadow-inner"
+                   className="rounded-[2.5rem] border-slate-100 bg-slate-50 p-10 font-medium text-lg text-slate-900 dark:text-white focus-visible:ring-blue-600/20 leading-relaxed shadow-inner"
                  />
                  <Button onClick={saveNotes} className="h-20 w-full bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-slate-900/20 hover:scale-[1.02] transition-all">Save Notes</Button>
               </div>
@@ -448,7 +448,7 @@ export default function RecruiterApplicants() {
                     <div className="flex items-center gap-4">
                        <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600"><Video className="w-6 h-6" /></div>
                        <div>
-                          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Schedule Interview</h3>
+                          <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Schedule Interview</h3>
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Zoom Integration</p>
                        </div>
                     </div>
@@ -457,11 +457,11 @@ export default function RecruiterApplicants() {
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                        <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Interview Date</Label>
-                       <Input type="date" value={interviewDate} onChange={(e) => setInterviewDate(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold text-slate-900" />
+                       <Input type="date" value={interviewDate} onChange={(e) => setInterviewDate(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold text-slate-900 dark:text-white" />
                     </div>
                     <div className="space-y-3">
                        <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-4">Interview Time</Label>
-                       <Input type="time" value={interviewTime} onChange={(e) => setInterviewTime(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold text-slate-900" />
+                       <Input type="time" value={interviewTime} onChange={(e) => setInterviewTime(e.target.value)} className="h-16 rounded-2xl border-slate-100 bg-slate-50 px-6 font-bold text-slate-900 dark:text-white" />
                     </div>
                  </div>
                  
@@ -486,7 +486,7 @@ export default function RecruiterApplicants() {
               <DialogTitle>Resume Preview</DialogTitle>
             </DialogHeader>
             <div className="p-8 flex justify-center w-full min-h-max">
-              <div className="bg-white shadow-2xl shrink-0" style={{ width: 794, minHeight: 1123 }}>
+              <div className="bg-white dark:bg-slate-900 shadow-2xl shrink-0" style={{ width: 794, minHeight: 1123 }}>
                 <ResumePreview
                   resumeData={viewResume.data}
                   title={viewResume.title}

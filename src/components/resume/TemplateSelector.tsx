@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { RESUME_TEMPLATES, type TemplateId } from "./pdfTemplates";
 import { recommendATSTemplate } from "./atsTemplateConfig";
 import { cn } from "@/lib/utils";
 import TemplateThumbnail from "./TemplateThumbnail";
-import { LayoutGrid, FileText, Sparkles, Briefcase, Palette, BookOpen, ScanLine, Shield, Lightbulb, Crown } from "lucide-react";
+import { Lightbulb, Shield, Crown } from "lucide-react";
 
 import type { ResumeData } from "@/types/resume";
 
@@ -14,26 +14,7 @@ interface TemplateSelectorProps {
   resumeData?: ResumeData;
 }
 
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  "All Templates": <LayoutGrid className="w-4 h-4" />,
-  "Simple": <FileText className="w-4 h-4" />,
-  "Modern": <Sparkles className="w-4 h-4" />,
-  "Professional": <Briefcase className="w-4 h-4" />,
-  "Creative": <Palette className="w-4 h-4" />,
-  "Traditional": <BookOpen className="w-4 h-4" />,
-  "ATS": <ScanLine className="w-4 h-4" />,
-  "Premium": <Crown className="w-4 h-4 text-amber-500" />,
-};
-
 export default function TemplateSelector({ selected, onChange, jobTitle, resumeData }: TemplateSelectorProps) {
-  const categories = Array.from(new Set(RESUME_TEMPLATES.map(t => t.category || "Other")));
-  const allTabs = ["All Templates", ...categories];
-  const [activeTab, setActiveTab] = useState("All Templates");
-
-  const filtered = activeTab === "All Templates"
-    ? RESUME_TEMPLATES
-    : RESUME_TEMPLATES.filter(t => (t.category || "Other") === activeTab);
-
   const recommendedId = useMemo(() => {
     if (!jobTitle) return null;
     return recommendATSTemplate(jobTitle);
@@ -58,26 +39,8 @@ export default function TemplateSelector({ selected, onChange, jobTitle, resumeD
         </div>
       )}
 
-      <div className="flex flex-wrap gap-2">
-        {allTabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={cn(
-              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border",
-              activeTab === tab
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 hover:text-slate-800 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white"
-            )}
-          >
-            {CATEGORY_ICONS[tab] || <FileText className="w-4 h-4" />}
-            {tab}
-          </button>
-        ))}
-      </div>
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-        {filtered.map((t) => (
+        {RESUME_TEMPLATES.map((t) => (
           <button
             key={t.id}
             onClick={() => onChange(t.id)}

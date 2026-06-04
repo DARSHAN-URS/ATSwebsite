@@ -71,7 +71,7 @@ const NotFound = () => {
                      <ArrowLeft className="w-4 h-4" /> {mt.returnHome}
                   </Link>
                </Button>
-               <Button asChild variant="outline" className="h-16 px-10 border-slate-200 text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900">
+               <Button asChild variant="outline" className="h-16 px-10 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900">
                   <Link to="/contact">{mt.reportAnomaly}</Link>
                </Button>
             </motion.div>

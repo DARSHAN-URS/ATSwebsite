@@ -1,27 +1,27 @@
 {
-  "template_id": "ats-modern-urban",
-  "template_name": "Urban Modern",
-  "category": "Modern",
-  "description": "An elegant monospace structure featuring slate gray formatting and relaxed line spacing.",
+  "template_id": "ats-modern-blue",
+  "template_name": "ATS Modern Blue",
+  "category": "ATS Optimized",
+  "description": "Sleek left-aligned layout with blue accent headings and styled language proficiencies.",
   "layout_metadata": {
     "column_count": 1,
     "sidebar_position": "none",
     "structural_alignment": "left-aligned",
-    "information_density": "variable",
-    "visual_emphasis": "white-space",
+    "information_density": "standard",
+    "visual_emphasis": "color-blocks",
     "typography": {
-      "heading": "courier",
-      "body": "courier",
-      "accent": "courier"
+      "heading": "helvetica",
+      "body": "helvetica",
+      "accent": "helvetica"
     },
     "spacing": {
       "margin": "18px",
       "line_height": 1.25,
-      "section_gap": "20px"
+      "section_gap": "18px"
     },
     "color_palette": {
-      "primary": "#475569",
-      "secondary": "#64748b",
+      "primary": "#2b5c8f",
+      "secondary": "#3b82f6",
       "text": "#111111",
       "background": "#ffffff"
     },
@@ -32,8 +32,8 @@
     "order": [
       "summary",
       "experience",
-      "skills",
-      "education"
+      "education",
+      "skills"
     ],
     "visibility": {
       "summary": true,
@@ -45,8 +45,8 @@
   },
   "ats_score": 100,
   "suitable_professions": [
-    "Operations",
-    "Administration",
-    "General Use"
+    "Sales",
+    "Marketing",
+    "Business Development"
   ]
 }
