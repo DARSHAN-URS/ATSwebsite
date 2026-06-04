@@ -45,6 +45,20 @@ const DUMMY = {
 
 const DUMMY_PHOTO = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256&h=256";
 
+const THUMB_SVG_ICONS = {
+  mapPin: `<svg style="width:4px;height:4px;display:inline-block;vertical-align:middle;margin-right:1px;color:#555;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  mail: `<svg style="width:4px;height:4px;display:inline-block;vertical-align:middle;margin-right:1px;color:#555;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+  phone: `<svg style="width:4px;height:4px;display:inline-block;vertical-align:middle;margin-right:1px;color:#555;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+  linkedin: `<svg style="width:4px;height:4px;display:inline-block;vertical-align:middle;margin-right:1px;color:#555;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>`,
+  user: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  education: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>`,
+  languages: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`,
+  skills: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  experience: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>`,
+  folder: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H18a2 2 0 0 1 2 2v2"/></svg>`,
+  award: `<svg style="width:4.5px;height:4.5px;display:inline-block;vertical-align:middle;margin-right:1.5px;color:#111;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg>`
+};
+
 function mapResumeDataToDummy(data?: ResumeData) {
   if (!data) return DUMMY;
   
@@ -289,6 +303,62 @@ function getThumbnailHTML(templateId: TemplateId, rawData?: ResumeData): string 
           ${dummyData.exp.map((e: any) => `<div style="${s(3.5)}"><b>${e.title}</b> — <i>${e.company}</i></div>`).join("")}
           <div style="${s(4)}font-weight:700;color:#1d4e89;margin:4px 0 2px"><span style="border-bottom:1px solid #1d4e89;padding-bottom:1px;display:inline-block">EDUCATION</span></div>
           <div style="${s(3.5)}"><b>${dummyData.edu.degree}</b> — <i>${dummyData.edu.school}</i></div>
+        </div>
+      </div>`;
+
+    case "ats-two-column-icon":
+      return `<div style="display:flex;font-family:Arial,sans-serif;height:100%;color:#111;line-height:1.25;padding:8px 6px;background:#fff;overflow:hidden;">
+        <!-- Left column -->
+        <div style="width:38%;padding-right:6px;border-right:0.5px solid #e2e8f0;">
+          <div style="${s(5)}font-weight:800;color:#111;line-height:1.1">${dummyData.name}</div>
+          <div style="${s(3)}color:#333;font-weight:500;margin-top:1px;margin-bottom:4px">Marketing Director</div>
+          
+          <div style="${s(2.5)}color:#444;display:flex;flex-direction:column;gap:1.5px;margin-bottom:5px;">
+            <div style="display:flex;align-items:center;">${THUMB_SVG_ICONS.mapPin}<span style="margin-left:1px">${dummyData.contact.split(" • ")[3] || "Miami, FL"}</span></div>
+            <div style="display:flex;align-items:center;">${THUMB_SVG_ICONS.phone}<span style="margin-left:1px">${dummyData.contact.split(" • ")[1] || "+1 (305) 555-0184"}</span></div>
+            <div style="display:flex;align-items:center;">${THUMB_SVG_ICONS.mail}<span style="margin-left:1px">${(dummyData.contact.split(" • ")[0] || "c.rivera@email.com").slice(0, 14)}</span></div>
+          </div>
+
+          <div style="display:flex;align-items:center;border-bottom:0.5px solid #e2e8f0;padding-bottom:1px;margin:4px 0 2px;">
+            ${THUMB_SVG_ICONS.user}
+            <span style="${s(3)}font-weight:800;text-transform:uppercase;color:#111;margin-left:1.5px">Summary</span>
+          </div>
+          <div style="${s(2.5)}color:#444;line-height:1.3;text-align:justify;">${dummyData.summary.slice(0, 80)}…</div>
+
+          <div style="display:flex;align-items:center;border-bottom:0.5px solid #e2e8f0;padding-bottom:1px;margin:4px 0 2px;">
+            ${THUMB_SVG_ICONS.education}
+            <span style="${s(3)}font-weight:800;text-transform:uppercase;color:#111;margin-left:1.5px">Education</span>
+          </div>
+          <div style="${s(2.5)};color:#333;margin-bottom:2px;">
+            <div style="font-weight:700;">${dummyData.edu.degree.slice(0, 15)}</div>
+            <div style="color:#555;font-size:2.2px;">${dummyData.edu.school.slice(0, 20)}</div>
+          </div>
+
+          <div style="display:flex;align-items:center;border-bottom:0.5px solid #e2e8f0;padding-bottom:1px;margin:4px 0 2px;">
+            ${THUMB_SVG_ICONS.skills}
+            <span style="${s(3)}font-weight:800;text-transform:uppercase;color:#111;margin-left:1.5px">Skills</span>
+          </div>
+          <div style="${s(2.3)};color:#333;line-height:1.2;">
+            ${dummyData.skills.split(" • ").slice(0, 4).map((sk: string) => `<div>• ${sk}</div>`).join("")}
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div style="flex:1;padding-left:6px;">
+          <div style="display:flex;align-items:center;border-bottom:0.8px solid #111;padding-bottom:1.5px;margin-bottom:4px;">
+            ${THUMB_SVG_ICONS.experience}
+            <span style="${s(3.2)}font-weight:800;text-transform:uppercase;color:#111;margin-left:1.5px">Experience</span>
+          </div>
+          ${dummyData.exp.slice(0, 2).map((e: any) => `
+            <div style="margin-bottom:3.5px;${s(2.5)}">
+              <div style="font-weight:700;color:#111;font-size:2.7px;">${e.title}</div>
+              <div style="color:#555;font-weight:500;">${e.company}</div>
+              <div style="color:#888;font-size:2.2px;margin-bottom:1px;">${e.date.split(" — ")[1] || e.date}</div>
+              <div style="color:#666;font-size:2.2px;line-height:1.2;">
+                ${e.bullets.slice(0, 2).map((b: string) => `• ${b.slice(0, 40)}…`).join("<br/>")}
+              </div>
+            </div>
+          `).join("")}
         </div>
       </div>`;
 
